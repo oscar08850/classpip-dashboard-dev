@@ -1,0 +1,51 @@
+<form class="contenedorNavbar">
+
+    <div>
+        <button routerLink = aboutClasspip mat-button [matMenuTriggerFor]="Classpip" >
+            <h1><img width="40" src="./assets/Icono Classpip.png"></h1>
+              <h1 class="class">class</h1>
+              <h1 class="pip">pip</h1>
+          </button>
+        <mat-menu  #Classpip="matMenu">
+        </mat-menu>
+
+
+    <button routerLink = {{URLInicio}} mat-button [matMenuTriggerFor]="Inicio" class="btnNavbar" > Inicio </button>
+    <mat-menu  #Inicio="matMenu">
+    </mat-menu>
+
+    <button mat-button [matMenuTriggerFor]="Grupos" class="btnNavbar"> Grupos </button>
+  <mat-menu #Grupos="matMenu" class="mat-menu">
+    <button mat-menu-item routerLink= {{URLMisGrupos}}> Mis Grupos </button>
+    <button mat-menu-item routerLink= {{URLCrearGrupo}} > Crear Grupo </button>
+  </mat-menu>
+
+  <button mat-button [matMenuTriggerFor]="Cuestionarios" class="btnNavbar"> Cuestionarios </button>
+  <mat-menu #Cuestionarios="matMenu" >
+    <button mat-menu-item > Mis Cuestionarios </button>
+    <button mat-menu-item> Crear Cuestionario </button>
+  </mat-menu>
+
+  <button mat-button [matMenuTriggerFor]="Coleccion" class="btnNavbar"> Colecciones </button>
+  <mat-menu #Coleccion="matMenu" class="mat-menu">
+    <button mat-menu-item routerLink= {{URLMisColecciones}}> Mis Colecciones </button>
+    <button mat-menu-item routerLink = {{URLCrearColeccion}}> Crear Colecciones </button>
+  </mat-menu>
+
+  <button mat-button [matMenuTriggerFor]="PuntosInsignias" class="btnNavbar"> Puntos e Insignias </button>
+  <mat-menu #PuntosInsignias="matMenu">
+      <button mat-menu-item routerLink= "{{URLMisPuntos}}"> Mis Puntos e Insignias </button>
+      <button mat-menu-item routerLink= "{{URLCrearPuntos}}"> Crear Puntos e Insignias </button>
+  </mat-menu>
+</div>
+  <div>
+  <button mat-button [matMenuTriggerFor]="NombreProfesor" class="btnNavbar"> {{profesor.Nombre}} {{profesor.Apellido}} </button>
+  <mat-menu #NombreProfesor="matMenu">
+      <button mat-menu-item routerLink= "{{URLConfiguracionn}}"> Configuración </button>
+      <button mat-menu-item> Cerrar sesión </button>
+  </mat-menu>
+</div>
+
+</form>
+
+

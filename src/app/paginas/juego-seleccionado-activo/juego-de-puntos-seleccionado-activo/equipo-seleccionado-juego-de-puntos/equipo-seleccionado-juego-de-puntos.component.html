@@ -1,0 +1,114 @@
+<div class="titulo"><h2>{{juegoSeleccionado.Tipo}}</h2></div>
+<div class="subtitulo"><h3>Información del equipo</h3></div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+<div class="contenedor3">
+  <div>
+      <img *ngIf="imagenPerfil" class = "imagen" hight = "200" width = "200" mat-card-image [src]="imagenPerfil" >
+  </div>
+  <div>
+  <div>
+      <p style="font-size: 110%">
+        <span style="font-weight: bold;">Nombre:</span>
+        {{equipoSeleccionado[0].Nombre}}
+      </p>
+      <p style="font-size: 110%">
+          <span style="font-weight: bold;">Puntos:</span>
+          {{equipoJuegoDePuntos[0].PuntosTotalesEquipo}}
+      </p>
+      <p style="font-size: 110%">
+        <span style="font-weight: bold;">Posición Total:</span>
+        {{posicion}}º
+      </p>
+
+  </div>
+  <div  class="contenedor2">
+
+      <div *ngIf="nivel"  style="font-size: 110%">
+          <span style="font-weight: bold; ">Nivel:</span> {{nivel.Nombre}}
+      </div>
+
+      <div class="progress" style="width: 100%">
+        <div *ngIf="siguienteNivel" class="progress-bar progress-easy" [style.width]="porcentaje()*100+'%'" role="progressbar" aria-valuenow = "equipoJuegoDePuntos[0].PuntosTotalesEquipo"
+        aria-valuemin="nivel.PuntosAlcanzar" aria-valuemax="siguienteNivel.PuntosAlcanzar">{{equipoJuegoDePuntos[0].PuntosTotalesEquipo}}</div>
+
+        <div *ngIf="siguienteNivel === undefined" class="progress-bar progress-easy" [style.width]="porcentaje()*100+'%'" role="progressbar" aria-valuenow = "equipoJuegoDePuntos[0].PuntosTotalesEquipo"
+        aria-valuemin="nivel.PuntosAlcanzar" aria-valuemax="nivel.PuntosAlcanzar">Nivel máximo alcanzado</div>
+
+      </div>
+
+      <div *ngIf="siguienteNivel" style="font-size: 110%">
+        ({{equipoJuegoDePuntos[0].PuntosTotalesEquipo}}/{{siguienteNivel.PuntosAlcanzar}}) PX
+      </div>
+      <div *ngIf="siguienteNivel === undefined"  style="font-size: 110%">
+        ({{nivel.PuntosAlcanzar}}/{{nivel.PuntosAlcanzar}}) PX
+      </div>
+    </div>
+  </div>
+</div>
+
+<form style="margin: 15px">
+  <h4>Historial de puntos</h4>
+<mat-form-field>
+  <mat-label>Punto</mat-label>
+  <select matNativeControl [(ngModel)]="puntoSeleccionadoId" name="punto" (change) = "MostrarHistorialSeleccionado()">
+    <option *ngFor="let punto of listaSeleccionable" [value]="punto.id">
+      {{punto.Nombre}}
+    </option>
+  </select>
+</mat-form-field>
+</form>
+
+<form>
+
+  <table align="center" *ngIf="historial[0];else No_Tiene_Puntos"  mat-table [dataSource]="historial" class="example-container mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Nombre Column -->
+    <ng-container matColumnDef="nombre">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 25%"> Nombre </th>
+      <td mat-cell *matCellDef="let punto"> {{punto.nombre}} </td>
+    </ng-container>
+
+    <!-- Descripción Column -->
+    <ng-container matColumnDef="descripcion">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Descripción </th>
+      <td mat-cell *matCellDef="let punto"> {{punto.descripcion}} </td>
+    </ng-container>
+
+    <!-- Valor Punto Column -->
+    <ng-container matColumnDef="valorPunto">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Valor Punto </th>
+      <td mat-cell *matCellDef="let punto"> {{punto.valorPunto}} </td>
+    </ng-container>
+
+    <!-- Fecha Column -->
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Fecha Asignación </th>
+      <td mat-cell *matCellDef="let punto"> {{punto.fecha}} </td>
+    </ng-container>
+
+    <!-- More Column -->
+    <ng-container matColumnDef=" ">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 10%"></th>
+      <td mat-cell *matCellDef="let punto">
+          <button (click) = "AbrirDialogoConfirmacionBorrarPunto(punto)" mat-icon-button matTooltip="Eliminar punto al equipo">
+            <i class="material-icons red md-36">delete</i>
+          </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnos; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnos;"></tr>
+
+  </table>
+  <div class="contenedor">
+  <ng-template #No_Tiene_Puntos> Todavía no tiene puntos</ng-template>
+  </div>
+</form>
+
+
+</div>

@@ -1,0 +1,50 @@
+.btnContraseña:hover {
+  text-decoration:underline;
+  color: rgb(51, 122, 183) ;
+}
+.btnContraseña{
+  color: rgb(51, 122, 183);
+  width: auto;
+  background-color: transparent;
+  border: solid transparent;
+}
+
+.contenedorInicioSesion{
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border: 10px solid rgb(63, 81, 181);
+  background-color: rgb(63, 81, 181);
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+
+h1{
+  display: inline-block;
+}
+
+.class{
+  color:#000;
+  font-size:170%;
+}
+
+.pip{
+  color:white;
+  font-size:170%;
+}
+
+.btnNavbar{
+  color:white;
+  background-color: rgb(63, 81, 181);
+  border: 5px solid transparent;
+}
+.btnNavbar:hover {
+  color: black !important;
+}

@@ -1,0 +1,101 @@
+
+table {
+  width: 60%;
+  text-align: center;
+  align-content: center;
+}
+
+
+.filter {
+  width: 60%;
+  font-size: 14px;
+  margin-left: 20%;
+}
+
+.mat-row:hover {
+  cursor: pointer !important;
+}
+
+input[type=text] {
+  border: none;
+  border-bottom: 1px solid rgb(63, 81, 181);
+}
+.texto{
+  margin: 5px;
+  width: auto;
+  height: auto;
+  background-color:transparent;
+  text-align: center;
+
+}
+
+.contenedor{
+
+  width: 70%;
+  margin-left: 15%;
+  height: auto;
+  padding: 10px;
+  border: 10px solid transparent;
+  background-color: transparent;
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: center;
+  align-items: center;
+}
+.contenedor2{
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: left ;
+  flex-direction: column;
+  // align-items: flex-start;
+  border: solid transparent;
+
+}
+.contenedor3{
+  justify-content: space-between;
+  border: solid transparent;
+
+}
+.elemento{
+/* color:rgba(0,0,0,.87); */
+margin: 5px;
+width: auto;
+height: auto;
+background-color:transparent;
+text-align: center;
+align-items: center;
+
+}
+.material-icons{
+  width: 15px;
+  height: 15px;
+}
+
+.elemento{
+  /* color:rgba(0,0,0,.87); */
+  margin: 5px;
+  width: auto;
+  height: auto;
+  background-color:transparent;
+  text-align: center;
+
+}
+
+.texto{
+  // margin: 5px;
+  width: auto;
+  height: auto;
+  background-color:transparent;
+  text-align: center;
+  font-size: 110% !important;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}

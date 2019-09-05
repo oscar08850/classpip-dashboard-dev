@@ -1,0 +1,169 @@
+<div class="titulo"><h2>Asignar Puntos</h2></div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+<h5>Seleccione el punto que desee asignar y su valor:</h5>
+<div class="contenedor2">
+<div>
+<mat-form-field>
+  <mat-label>Tipo de punto</mat-label>
+  <select matNativeControl (change) = "Disabled()" [(ngModel)]="puntoSeleccionadoId" name="punto">
+    <option *ngFor="let punto of puntosDelJuego" [value]="punto.id">
+      {{punto.Nombre}}
+    </option>
+  </select>
+</mat-form-field>
+</div>
+<div style="margin-top: 15px">
+<span>Valor del punto: </span>
+<input (keyup)="Disabled()" type="number" name="valorPunto" placeholder="Escribe su valor" requiered [(ngModel)]="valorPunto">
+</div>
+<div style="margin-top: 10px">
+<button type="button"class="btn Aceptar" [disabled]="isDisabled" (click) = AsignarPuntos()>Asignar</button>
+</div>
+</div>
+<form>
+  <table align="center" *ngIf="rankingJuegoDePuntos[0]" mat-table [dataSource]="rankingJuegoDePuntos" class="mat-elevation-z8">
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera">
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      (click) = "SeleccionarTodos();"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row; let i = index" (click) = "Seleccionar(i);">
+        <mat-checkbox (click)="$event.stopPropagation()"
+          (click) = "Seleccionar(i);"
+          (change)="$event ? selection.toggle(row) : null"
+          [checked]="selection.isSelected(row)"
+          [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+
+      </td>
+    </ng-container>
+
+    <!-- Posición Column -->
+    <ng-container matColumnDef="posicion">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Posicion </th>
+      <td mat-cell *matCellDef="let alumno"> {{alumno.posicion}} </td>
+    </ng-container>
+
+    <!-- Nombre Alumno Column -->
+    <ng-container matColumnDef="nombreAlumno">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Nombre </th>
+      <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.nombre}} </td>
+    </ng-container>
+
+    <!-- Primer Apellido Column -->
+    <ng-container matColumnDef="primerApellido">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Primer Apellido </th>
+      <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.primerApellido}} </td>
+    </ng-container>
+
+    <!-- Segundo Apellido Column -->
+    <ng-container matColumnDef="segundoApellido">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Segundo Apellido </th>
+      <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.segundoApellido}} </td>
+    </ng-container>
+
+    <!-- Puntos Column -->
+    <ng-container matColumnDef="puntos">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Puntos </th>
+      <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.puntos}} </td>
+    </ng-container>
+
+    <!-- Nivel Column -->
+    <ng-container matColumnDef="nivel">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Nivel </th>
+      <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.nivel}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumno"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumno;"
+        (click)="selection.toggle(row)">
+    </tr>
+  </table>
+</form>
+
+  <table align="center" *ngIf="rankingEquiposJuegoDePunto[0]" mat-table [dataSource]="rankingEquiposJuegoDePunto" class="mat-elevation-z8">
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera">
+        <mat-checkbox (change)="$event ? masterToggleEquipos() : null"
+                      (click) = "SeleccionarTodosEquipos();"
+                      [checked]="selectionEquipos.hasValue() && isAllSelectedEquipos()"
+                      [indeterminate]="selectionEquipos.hasValue() && !isAllSelectedEquipos()"
+                      [aria-label]="checkboxLabelEquipo()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row; let i = index" (click) = "SeleccionarEquipo(i);">
+        <mat-checkbox (click)="$event.stopPropagation()"
+          (click) = "SeleccionarEquipo(i);"
+          (change)="$event ? selectionEquipos.toggle(row) : null"
+          [checked]="selectionEquipos.isSelected(row)"
+          [aria-label]="checkboxLabelEquipo(row)">
+        </mat-checkbox>
+
+      </td>
+    </ng-container>
+
+    <!-- Posición Column -->
+    <ng-container matColumnDef="posicion">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Posicion </th>
+      <td mat-cell *matCellDef="let equipo"> {{equipo.posicion}} </td>
+    </ng-container>
+
+    <!-- Nombre Alumno Column -->
+    <ng-container matColumnDef="nombreEquipo">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Nombre </th>
+      <td mat-cell *matCellDef="let equipo; let i = index" (click) = "SeleccionarEquipo(i);"> {{equipo.nombre}} </td>
+    </ng-container>
+
+    <!-- Miembros Column -->
+    <ng-container matColumnDef="miembros">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Miembros </th>
+      <td mat-cell *matCellDef="let equipo"><button mat-icon-button matTooltip="Ver miembros de {{equipo.nombre}}" color="primary"
+        [mdePopoverTriggerFor]="appPopover" (click) = "AlumnosDelEquipo(equipo)"
+        mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+        <i class="material-icons">group</i>
+      </button>
+
+      <mde-popover #appPopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+          <mat-card style="max-width: 300px">
+            <mat-card-content>
+              <mat-list>
+                <mat-list-item *ngFor="let alumno of alumnosEquipo">
+                  <p class="md-body-1" mat-line>{{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</p>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-content>
+          </mat-card>
+      </mde-popover>
+    </td>
+    </ng-container>
+
+    <!-- Puntos Column -->
+    <ng-container matColumnDef="puntos">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Puntos </th>
+      <td mat-cell *matCellDef="let equipo; let i = index" (click) = "SeleccionarEquipo(i);"> {{equipo.puntos}} </td>
+    </ng-container>
+
+    <!-- Nivel Column -->
+    <ng-container matColumnDef="nivel">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Nivel </th>
+      <td mat-cell *matCellDef="let equipo; let i = index" (click) = "SeleccionarEquipo(i);"> {{equipo.nivel}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsEquipos"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsEquipos;"
+        (click)="selectionEquipos.toggle(row)">
+    </tr>
+  </table>
+
+<div class="contenedor"></div>
+</div>

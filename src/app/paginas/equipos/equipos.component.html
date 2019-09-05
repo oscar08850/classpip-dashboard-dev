@@ -1,0 +1,146 @@
+<div class="titulo"><h2>Equipos</h2></div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+
+
+<div class="contenedor">
+
+<mat-tab-group [color]="primary" [backgroundColor]="primary" #tabs>
+
+
+  <!-- LISTA DE EQUIPOS -->
+  <mat-tab index = "0" label="Lista de equipos">
+    <form>
+      <mat-accordion *ngIf="listaEquipos;else Aviso_no_equipos">
+        <mat-expansion-panel *ngFor="let equipo of listaEquipos" (click) = "AlumnosYLogoDelEquipo(equipo)">
+          <mat-expansion-panel-header>
+
+            <mat-panel-title>
+              {{equipo.Nombre}}
+            </mat-panel-title>
+            <!-- <mat-panel-description>
+              Información sobre {{equipo.Nombre}}
+            </mat-panel-description> -->
+          </mat-expansion-panel-header>
+            <div class="contenedor2">
+                <div>
+                <img class ="logo" *ngIf="imagenLogo" mat-card-image [src]="imagenLogo" >
+                </div>
+                <div style="margin-right: 20%">
+                <span style="font-weight: bold; margin-left: 16px; font-size: 130%;">Miembros del equipo</span>
+                <mat-list role="list" *ngFor="let alumno of alumnosEquipo">
+                  <mat-list-item role="listitem">{{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</mat-list-item>
+                </mat-list>
+                </div>
+                <div class="contenedor3" style="margin-right: 2% ">
+                  <div class="elemento">
+                    <button type="button" class="btn Editar" routerLink= "editarEquipo" (click) = "EnviarEquipoEditar(equipo, alumnosEquipo)">Editar Equipo <i class="material-icons">
+                      edit </i>  </button>
+                  </div>
+                  <div class="elemento">
+                    <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrar(equipo)">Eliminar Equipo <i class="material-icons">
+                      delete
+                      </i></button>
+                  </div>
+
+                </div>
+            </div>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <ng-template #Aviso_no_equipos>Todavía no hay equipos en este grupo</ng-template>
+
+    </form>
+  </mat-tab>
+
+
+
+  <!-- CREAR EQUIPO -->
+  <mat-tab label="Crear equipo">
+
+    <!-- STEPPER -->
+    <form [formGroup]="myForm">
+
+      <mat-card class="panel">
+
+        <mat-card-content>
+
+        <mat-horizontal-stepper #linearHorizontalStepper="matHorizontalStepper" [linear]="true" #stepper>
+
+
+          <!-- PRIMER PASO -->
+          <mat-step [stepControl]="myForm">
+            <ng-template matStepLabel>Nombre y logo</ng-template>
+            <div>
+            <mat-form-field >
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="nombreEquipo" required>
+              <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
+
+            <div>
+                <input #file id = "input" type="file" accept= 'image/*' (change)="ExaminarLogo($event)" style="display:none">
+                <img class="foto" *ngIf="logo" hight = "100" width = "100" mat-card-image [src]="logo" style="margin: 5px" >
+                <button  (click) = "ActivarInput()" type="button" class="btn Agregar">
+                  Agregar logo <i style="margin: 5px" class="material-icons">add_photo_alternate</i>
+                </button>
+            </div>
+          </div>
+
+            <div class="btnCambiarStep">
+              <button *ngIf="equipoYaCreado === false"  type="button" class="btn Next" matStepperNext (click)= CrearEquipo()>Siguiente</button>
+              <button *ngIf="equipoYaCreado === true"  type="button" class="btn Next"  matStepperNext (click)= EditarEquipo() >Siguiente</button>
+            </div>
+          </mat-step>
+
+
+          <!-- SEGUNDO PASO -->
+          <mat-step optional>
+            <ng-template matStepLabel>
+              <div>Añadir alumnos</div>
+            </ng-template>
+            <div>
+                <button type="button" class="btn Agregar" (click) = AbrirDialogoAgregarAlumnosEquipo()>
+                  Agregar alumno <i class="material-icons">group_add</i></button>
+            </div>
+
+            <form *ngIf="alumnosEquipoCreado;else Aviso_no_alumnos">
+              <div>
+            <p>
+              Se han añadido correctamente los alumnos.
+            </p>
+              </div>
+            </form>
+
+            <ng-template #Aviso_no_alumnos>Este equipo no tiene alumnos.</ng-template>
+
+
+            <div class="btnCambiarStep">
+              <button  type="button"  class="btn Back"  matStepperPrevious>Atrás</button>
+              <button  type="button" class="btn Next"  matStepperNext>Siguiente</button>
+            </div>
+          </mat-step>
+
+
+          <!-- PASO FINALIZAR -->
+          <mat-step>
+            <ng-template matStepLabel>Finalizar</ng-template>
+           <div>
+            <p>Equipo creado correctamente. </p>
+            <p> Haga click en "Finalizar" para guardar los cambios.</p>
+           </div>
+
+            <div class="btnCambiarStep">
+              <button  type="button" class="btn Back"  matStepperPrevious>Atrás</button>
+              <button  type="button" class="btn Aceptar" (click) = "Finalizar()">Finalizar</button>
+            </div>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </mat-card-content>
+    </mat-card>
+    </form>
+
+
+  </mat-tab>
+</mat-tab-group>
+</div>

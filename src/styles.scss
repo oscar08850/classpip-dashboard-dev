@@ -1,0 +1,220 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+// Opciones gráficas título
+.titulo{
+  width: 70%;
+  margin-left: 15%;
+  height: 60px;
+  padding: 10px;
+  color: rgb(63, 81, 181);
+  // color: rgb(181, 87, 63);
+}
+
+.subtitulo{
+  width: 70%;
+  margin-left: 15%;
+  height: 45px;
+  padding: 10px;
+  color: rgb(63, 81, 181);
+  // color: rgb(181, 87, 63);
+}
+
+.h2, h2 {
+  font-size: 2.5rem !important;
+}
+.lineaDivisoria{
+  width: 70%;
+  margin-left : 15% !important;
+}
+
+// Opciones gráficas tablas
+.mat-header-row{
+  text-align: center;
+  background-color:rgb(63, 81, 181);
+  // background-color:rgb(63, 181, 79);
+}
+
+.mat-row:hover {
+  background-color: rgb(204, 197, 197);
+}
+
+.letraCabecera{
+  color:white;
+  text-align: center !important;
+  font-weight: bold;
+  font-size: 90%;
+}
+
+// Opciones gráficas botones
+.btn{
+  margin: 5px;
+  align-items: center;
+  color: white;
+  width: 170px;
+  // border-top-left-radius: 15px !important;
+  // border-top-right-radius: 15px !important;
+  // border-bottom-left-radius: 15px !important;
+  // border-bottom-right-radius: 15px !important;
+}
+.btn:hover {
+  color: black !important;
+}
+
+    // Colores de los botones
+.btn.Agregar{
+ background-color: rgb(65, 178, 212);
+}
+.btn.Info{
+  background-color: rgb(240, 173, 78);
+}
+.btn.Back{
+  background-color: rgb(240, 173, 78);
+}
+.btn.Aceptar{
+  background-color: rgb(92, 184, 92);
+}
+
+.btn.Eliminar{
+  background-color: rgb(212, 57, 52);
+}
+.btn.Editar{
+  background-color: rgb(65, 178, 212);
+}
+.btn.Next{
+  background-color: rgb(51, 122, 183);
+}
+.btn.PasarLista{
+  background-color: rgb(240, 173, 78);
+}
+.btn.Juegos{
+  background-color: rgb(51, 122, 183);
+}
+.btn.Equipos{
+  background-color: rgb(92, 184, 92);
+}
+
+// .btn.Eliminar{
+//   background-color: rgb(212, 169, 52);
+// }
+// .btn.Editar{
+//   background-color: rgb(212, 65, 200);
+// }
+// .btn.Next{
+//   background-color: rgb(51, 183, 51);
+// }
+// .btn.PasarLista{
+//   background-color: rgb(240, 78, 78);
+// }
+// .btn.Juegos{
+//   background-color: rgb(82, 183, 51);
+// }
+// .btn.Equipos{
+//   background-color: rgb(169, 92, 184);
+// }
+
+.btn.Cerrar{
+  background-color: rgb(240, 173, 78);
+}
+.btn.IncioSesion{
+  background-color: rgb(51, 122, 183);
+}
+
+// Prueba cambiado colores
+
+.btnCambiarStep{
+display: flex;
+justify-content: flex-end;
+}
+
+// Opciones gráficas cromos
+
+.imagenCromo {
+  max-width: 200px;
+  max-height: 150px;
+  margin-top: 0px !important;
+  margin: 5px;
+}
+.cromo {
+  max-width: 300px;
+  max-height: 300px;
+  width: 300px;
+  height: 300px;
+}
+
+.Diamante {
+  background-color: rgb(62, 177, 163);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(50, 150, 138) !important;
+}
+
+.Platino {
+  background-color: rgb(222, 60, 151);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(187, 50, 128) !important;
+}
+
+.Oro {
+  background-color: rgb(222, 193, 89);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(206, 179, 81) !important;
+}
+
+.Plata {
+  background-color: rgb(143, 157, 160);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(126, 138, 141) !important;
+}
+
+.Bronce {
+  background-color: rgb(180, 135, 75);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(133, 103, 64) !important;
+}
+
+// Cromo que se oscurecerá en el componente album-del-alumno, si el alumno no tiene el cromo
+.Falti {
+  opacity: 0.5 !important;
+  background-color: rgb(235, 235, 228) !important;
+  color: rgb(84, 84, 84) !important;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  box-shadow: 0px 3px 6px 0px  rgb(126, 138, 141) !important;
+}
+// Tabs que ocupen el 50% del espacio total cada uno
+.mat-tab-label {
+  width: 50%;
+}
+
+// Opciones gráficas inicio sesión
+.cartaInicioSesion {
+  margin-top: 100px;
+  margin-bottom: 100px;
+  max-width: 300px;
+  max-height: 325px;
+  width: 300px;
+  height: 325px;
+  background-color: rgb(190, 206, 204);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(154, 167, 165) !important;
+}

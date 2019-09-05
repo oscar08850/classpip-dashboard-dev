@@ -1,0 +1,11 @@
+<div class="titulo"><h2>{{juegoSeleccionado.Tipo}}</h2></div>
+<div class="subtitulo"><h3>{{juegoSeleccionado.Modo}}</h3></div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Puntos'">
+  <app-juego-de-puntos-seleccionado-activo></app-juego-de-puntos-seleccionado-activo>
+</div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Colección'">
+  <app-juego-de-coleccion-seleccionado-activo></app-juego-de-coleccion-seleccionado-activo>
+</div>

@@ -1,0 +1,36 @@
+<div class="titulo"><h2>Editar Punto</h2></div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+
+<div class="contenedor contenedor3">
+    <mat-card class="panel">
+        <mat-card-content>
+          <div class="contenedor2" style=" text-align: left;">
+              <div class="texto" style=" text-align: left;">
+                  <p>
+                    <span style="font-weight: bold;">Nombre: </span>
+                    <mat-form-field style="width: 100%; border: none; ">
+                        <textarea matInput  requiered [(ngModel)]="nombrePunto">Escribe el nombre</textarea>
+                      </mat-form-field>
+                  </p>
+                </div>
+                <div class="texto" style=" text-align: left;">
+                  <p>
+                      <span  style="font-weight: bold;">Descripción: </span>
+                      <mat-form-field style="width: 100%; border: none; ">
+                        <textarea matInput  requiered [(ngModel)]="descripcionPunto">Escribe la descripción</textarea>
+                      </mat-form-field>
+                    </p>
+                </div>
+
+            <div>
+
+                <div class="elemento">
+                    <button type="button" class="btn Aceptar" (click)= "EditarPunto()">Aceptar Cambios <i class="material-icons">
+                      check </i></button>
+              </div>
+
+            </div>
+          </div>
+  </mat-card-content>
+</mat-card>
+</div>

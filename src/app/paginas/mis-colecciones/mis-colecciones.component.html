@@ -1,0 +1,50 @@
+<div class="titulo"><h2>Mis Colecciones</h2></div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+
+<div class="contenedor">
+    <mat-card class="panel">
+        <mat-card-content>
+    <form>
+        <mat-accordion *ngIf="coleccionesProfesor;else Aviso_no_colecciones">
+            <mat-expansion-panel *ngFor="let coleccion of coleccionesProfesor" (click) = "CromosEImagenDeLaColeccion(coleccion)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{coleccion.Nombre}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+                <div class="contenedor2">
+                    <div>
+                        <img class ="logo" *ngIf="imagenColeccion" mat-card-image [src]="imagenColeccion" >
+                    </div>
+                    <div style="margin-right: 20%">
+                    <span style="font-weight: bold; margin-left: 16px; font-size: 130%;">Número de cromos</span>
+
+                    <div>
+                      <span style="margin-left: 12%; font-size: 110%;"> {{numeroDeCromos}} </span>
+                    </div>
+
+                    </div>
+                    <div class="contenedor3" style="margin-right: 2% ">
+                      <div class="elemento">
+                        <button type="button" class="btn Editar" style="width: 180px; "routerLink= "editarColeccion" (click) = "EnviarColeccionEditar(coleccion, cromosColeccion)">Editar Colección <i class="material-icons">
+                          edit </i>  </button>
+                      </div>
+                      <div class="elemento">
+                        <button type="button" class="btn Eliminar" style="width: 180px; " (click) = "AbrirDialogoConfirmacionBorrarColeccion(coleccion)">Eliminar Colección <i class="material-icons">
+                          delete
+                          </i></button>
+                      </div>
+
+                    </div>
+                </div>
+
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <ng-template #Aviso_no_insignias>Todavía no hay insignias creadas.</ng-template>
+
+
+    </form>
+</mat-card-content>
+</mat-card>
+</div>

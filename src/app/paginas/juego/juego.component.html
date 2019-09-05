@@ -1,0 +1,222 @@
+<div class="titulo"><h2>Juegos</h2></div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+
+
+<div class="contenedor">
+
+<mat-tab-group [color]="primary" [backgroundColor]="primary" #tabs>
+
+  <!-- ///////////////////////////////////////// LISTA DE JUEGOS  //////////////////////////////////////////////////-->
+
+  <mat-tab index = "0" label="Lista de juegos">
+    <form>
+      <mat-form-field style="margin: 15px;">
+        <mat-label>Mostrar lista de: </mat-label>
+          <select matNativeControl [(ngModel)]="opcionSeleccionada" name="opcion" (change) = "ListaJuegoSeleccionado()">
+            <option *ngFor="let opcion of opcionesMostrar" [value]="opcion.id">
+                {{opcion.nombre}}
+            </option>
+          </select>
+      </mat-form-field>
+
+        <div >
+          <mat-list >
+
+            <!-- ///////////////////////// LISTA DE JUEGOS ACTIVOS /////////////////////////////////-->
+            <h3 class = "CabeceraActivos" mat-subheader>Juegos Activos</h3>
+              <form *ngIf="ListaJuegosSeleccionadoActivo;else Aviso_no_juegos_activos">
+                <form *ngIf="ListaJuegosSeleccionadoActivo[0];else Aviso_no_juegos_activos">
+                  <mat-list-item  *ngFor="let juego of ListaJuegosSeleccionadoActivo" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionado">
+                    <mat-icon mat-list-icon><i class="material-icons green">check_circle_outline</i></mat-icon>
+                    <h4 mat-line>{{juego.Tipo}}</h4>
+                    <p mat-line> {{juego.Modo}} </p>
+                  </mat-list-item>
+                </form>
+              </form>
+
+            <ng-template #Aviso_no_juegos_activos>
+                <label class = "AvisoNoJuegosActivo"><i class="material-icons green">error_outline</i>
+                  No hay juegos activos</label>
+            </ng-template>
+
+            <!-- ///////////////////////// LISTA DE JUEGOS INACTIVOS /////////////////////////////////-->
+            <h3 class = "CabeceraInactivos" mat-subheader>Juegos Inactivos</h3>
+              <form *ngIf="ListaJuegosSeleccionadoInactivo;else Aviso_no_juegos_inactivos">
+                <form *ngIf="ListaJuegosSeleccionadoInactivo[0];else Aviso_no_juegos_inactivos">
+                  <mat-list-item *ngFor="let juego of ListaJuegosSeleccionadoInactivo" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionadoInactivo">
+                    <mat-icon mat-list-icon><i class="material-icons red">history</i></mat-icon>
+                    <h4 class= "ItemsInactivos" mat-line>{{juego.Tipo}}</h4>
+                    <p class= "ItemsInactivos" mat-line> {{juego.Modo}} </p>
+                  </mat-list-item>
+                </form>
+              </form>
+          </mat-list>
+
+            <ng-template #Aviso_no_juegos_inactivos>
+              <label class = "AvisoNoJuegosActivo"><i class="material-icons red">error_outline</i>
+                No hay juegos inactivos</label>
+            </ng-template>
+
+        </div>
+
+    </form>
+  </mat-tab>
+
+
+
+
+
+ <!-- ////////////////////////////////////////////// CREAR JUEGO  //////////////////////////////////////////////////-->
+
+  <mat-tab label="Crear juego">
+
+    <form>
+      <mat-card class="panel">
+
+        <mat-card-content>
+          <mat-horizontal-stepper #stepper #linearHorizontalStepper="matHorizontalStepper" [linear]="true">
+
+
+        <!-- /////////////////////// PRIMER PASO: SELECCIÓN DEL TIPO DE JUEGO ////////////////////////////////-->
+          <mat-step>
+            <ng-template matStepLabel>Tipo De Juego</ng-template>
+
+              <div class = "colorsChips">
+
+                <label class = "LabelStepper">Selecciona un tipo de juego:</label>
+                <mat-chip-list class="mat-chip-list-stacked">
+                    <mat-chip *ngFor="let tipo of seleccionTipoJuego; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoJuego[i].selected}}"
+                    (click)="TipoDeJuegoSeleccionado(seleccionTipoJuego[i])" [value]="tipo.nombre" [selectable]="true">
+                      {{tipo.nombre}}
+                    </mat-chip>
+                </mat-chip-list>
+
+              </div>
+
+              <div class="btnCambiarStep">
+                <button [disabled]="isDisabled" type="button" class="btn Next" matStepperNext>Siguiente</button>
+              </div>
+
+          </mat-step>
+
+
+
+          <!-- //////////////////////// SEGUNDO PASO: SELECCIÓN DEL MODO DE JUEGO ///////////////////////// -->
+          <mat-step>
+            <ng-template matStepLabel><div>Modo De Juego</div></ng-template>
+
+              <div class = "colorsChips">
+
+                <label class = "LabelStepper">Selecciona un modo de juego:</label>
+                <mat-chip-list class="mat-chip-list-stacked">
+                  <mat-chip *ngFor="let tipo of seleccionModoJuego; let i = index" selected [color]="tipo.color"  selected="{{seleccionModoJuego[i].selected}}"
+                     (click)="ModoDeJuegoSeleccionado(seleccionModoJuego[i])" [value]="tipo.nombre" [selectable]="true" >
+                      {{tipo.nombre}}
+                  </mat-chip>
+                </mat-chip-list>
+
+              </div>
+
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
+              </div>
+          </mat-step>
+
+
+          <!-- ////////////////////////////SI ESCOGEMOS EL JUEGO DE TIPO DE PUNTOS ////////////////////////////////-->
+
+          <div *ngIf="(tipoDeJuegoSeleccionado === 'Juego De Puntos' && juegoCreado === true)">
+
+            <!-- TERCER PASO: ASIGNACIÓN DE PUNTO AL JUEGO -->
+            <mat-step>
+              <ng-template matStepLabel><div>Asignación De Puntos</div></ng-template>
+
+              <label class = "LabelStepper">Selecciona los tipos de puntos para el juego</label>
+
+              <app-asignacion-punto-juego></app-asignacion-punto-juego>
+
+            </mat-step>
+
+
+            <!-- CUARTO PASO: CREACIÓN DE NIVELES-->
+            <mat-step>
+              <ng-template matStepLabel><div>Creación de Niveles</div></ng-template>
+
+                <label class = "LabelStepper">Añade todos los niveles que desee al juego</label>
+
+                  <app-crear-nivel ></app-crear-nivel>
+
+                  <div class="btnCambiarStep">
+                      <button *ngIf="juego.Modo === 'Individual'" (click)="InscribirAlumnosJuego()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                      <button *ngIf="juego.Modo === 'Equipos'" (click)="InscribirEquiposJuego()" type="button" class="btn Next"  matStepperNext>Siguiente</button>
+                  </div>
+
+            </mat-step>
+          </div>
+
+
+          <!-- ////////////////////////////SI ESCOGEMOS EL JUEGO DE TIPO DE COLECCIÓN ////////////////////////////////-->
+
+          <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Colección'">
+            <div *ngIf="juegoCreado === true">
+
+
+
+            <!-- TERCER PASO: ASIGNACIÓN DE COLECCIÓN AL JUEGO -->
+            <mat-step>
+                <ng-template matStepLabel><div>Asignación De La Colección</div></ng-template>
+
+                <label class = "LabelStepper">Selecciona una colección para el juego</label>
+                <app-asignacion-coleccion-juego></app-asignacion-coleccion-juego>
+
+              </mat-step>
+            </div>
+          </div>
+
+
+          <!-- ////////////////////// SI ESCOGEMOS EL JUEGO DE TIPO DE COMPETICIÓN ////////////////////////////////-->
+
+          <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Competición'">
+
+            <!-- TERCER PASO: ASIGNACIÓN DE PUNTO AL JUEGO -->
+
+            <mat-step>
+                <ng-template matStepLabel><div>Tipo De Competición</div></ng-template>
+
+                <div class = "colorsChips">
+
+                    <label class = "LabelStepper">Selecciona un tipo de competición para el juego:</label>
+                    <mat-chip-list class="mat-chip-list-stacked">
+                      <mat-chip *ngFor="let tipo of seleccionTipoJuegoCompeticion; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoJuegoCompeticion[i].selected}}"
+                         (click)="TipoDeJuegoCompeticionSeleccionado(seleccionTipoJuegoCompeticion[i])" [value]="tipo.nombre" [selectable]="true">
+                          {{tipo.nombre}}
+                      </mat-chip>
+                    </mat-chip-list>
+
+                </div>
+
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+          </div>
+
+
+          <mat-step>
+            <ng-template matStepLabel>Finalizar</ng-template>
+              Juego creado correctamente
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Aceptar" (click) = "Finalizar();">Finalizar</button>
+              </div>
+          </mat-step>
+
+          </mat-horizontal-stepper>
+        </mat-card-content>
+      </mat-card>
+    </form>
+  </mat-tab>
+</mat-tab-group>
+
+</div>

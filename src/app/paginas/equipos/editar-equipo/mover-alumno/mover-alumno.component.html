@@ -1,0 +1,88 @@
+<h4>Seleccione el equipo al que desee mover los alumnos</h4>
+<mat-divider></mat-divider>
+
+<mat-form-field style="margin: 5px">
+  <mat-label>Equipo</mat-label>
+  <select matNativeControl [(ngModel)]="equipoSeleccionadoId" name="equipo">
+    <option value="" selected></option>
+    <option *ngFor="let equipo of listaEquipos" [value]="equipo.id">
+      {{equipo.Nombre}}
+    </option>
+  </select>
+</mat-form-field>
+
+<div>
+  <form>
+    <table align="center" *ngIf="alumnosEquipo;else Aviso_no_alumnos" mat-table [dataSource]="alumnosEquipo" class="mat-elevation-z8">
+
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef class="letraCabecera">
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        (click) = "SeleccionarTodos();"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        [aria-label]="checkboxLabel()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row; let i = index" (click) = "Seleccionar(i);">
+          <mat-checkbox (click)="$event.stopPropagation()"
+            (click) = "Seleccionar(i);"
+            (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)"
+            [aria-label]="checkboxLabel(row)">
+          </mat-checkbox>
+
+        </td>
+      </ng-container>
+
+      <!-- Nombre Alumno Column -->
+      <ng-container matColumnDef="nombreAlumno">
+        <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Nombre </th>
+        <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.Nombre}} </td>
+      </ng-container>
+
+      <!-- Primer Apellido Column -->
+      <ng-container matColumnDef="primerApellido">
+        <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Primer Apellido </th>
+        <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.PrimerApellido}} </td>
+      </ng-container>
+
+      <!-- Segundo Apellido Column -->
+      <ng-container matColumnDef="segundoApellido">
+        <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Segundo Apellido </th>
+        <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.SegundoApellido}} </td>
+      </ng-container>
+
+      <!-- alumnoId Column -->
+      <ng-container matColumnDef="alumnoId">
+        <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Identificador Alumno </th>
+        <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.id}} </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          (click)="selection.toggle(row)">
+      </tr>
+    </table>
+
+    <div>
+      <ng-template #Aviso_no_alumnos>Todavía no hay alumnos en este grupo</ng-template>
+  </div>
+
+  </form>
+</div>
+
+<mat-dialog-actions align= "end">
+
+    <div>
+        <button class="btn Aceptar" (click) = "AbrirDialogoConfirmacionMoverAlumno()" >Mover Alumnos</button>
+      </div>
+    <button mat-button [mat-dialog-close] class="btn Cerrar">Cerrar</button>
+</mat-dialog-actions>
+<!-- <div>
+  <button [mat-dialog-close]="alumnosEquipo">Cerrar</button>
+  <button (click)=prueba();>prieba</button>
+</div> -->
+

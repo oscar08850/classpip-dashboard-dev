@@ -1,0 +1,11 @@
+.posicionImagen{
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  align-items: center;
+  justify-content: center;
+  max-width: 250px;
+  max-height: 250px;
+  border: solid transparent;
+}

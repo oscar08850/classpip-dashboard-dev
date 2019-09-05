@@ -1,0 +1,43 @@
+
+.contenedorNavbar{
+  width: auto;
+  height: 50px;
+  padding: 10px;
+  border: 10px solid rgb(63, 81, 181);
+  background-color: rgb(63, 81, 181);
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+
+h1{
+  display: inline-block;
+}
+
+.class{
+  color:#000;
+  font-size:170%;
+}
+
+.pip{
+  color:white;
+  font-size:170%;
+}
+
+.btnNavbar{
+  color:white;
+  background-color: transparent;
+  border: 5px solid transparent;
+}
+.btnNavbar:hover {
+  color: black !important;
+  background-color: transparent;
+}
+
+

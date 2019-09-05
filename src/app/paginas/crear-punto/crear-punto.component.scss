@@ -1,0 +1,81 @@
+
+.contenedor{
+
+  width: 70%;
+  margin-left: 15%;
+  height: auto;
+  padding: 10px;
+  border: 10px solid transparent;
+  background-color: transparent;
+
+}
+
+.panel{
+
+  background-color: rgb(63, 81, 181);
+  margin: 20px;
+  width: 400px;
+}
+
+.panelInsignia {
+  background-color: rgb(232, 12, 122);
+  margin: 20px;
+  width: 400px;
+}
+
+table {
+  width: 100%;
+  text-align: center;
+  align-content: center;
+  table-layout: fixed;
+}
+
+mat-card-title {
+  color: white
+}
+
+mat-card-subtitle{
+  color: white;
+}
+
+label{
+  color: white;
+}
+
+.btn-aceptarInsignia {
+  background-color: rgb(97, 10, 203);
+  border-color: rgb(97, 10, 203);
+  color: white;
+}
+
+
+.foto {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+
+.contenedor4{
+  width: auto;
+  height: auto;
+  border: 10px solid transparent;
+  background-color: transparent;
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  // align-items: center;
+}
+.contenedor2{
+  border: 5px solid transparent;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* Colores de iconos */
+.material-icons.red { color: rgb(228, 8, 8); }
+
+/* Tamaños de los botones */
+.material-icons.md-36 { font-size: 36px; }

@@ -1,0 +1,66 @@
+<div class="titulo"><h2>Editar Cromo</h2></div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+
+<div class="contenedor contenedor3">
+<mat-card class="panel">
+    <mat-card-content>
+
+        <div class="contenedor2" style=" text-align: left;">
+            <div class="contenedor3">
+
+          <div>
+            <div class="texto" style=" text-align: left;">
+                <mat-form-field style="margin: 15px;">
+                    <input matInput type="text" placeholder="Nombre" required [(ngModel)]="nombreCromo">
+
+                  </mat-form-field>
+              </div>
+
+              <div class="texto" style=" text-align: left;">
+                  <mat-form-field style="margin: 15px; ">
+                      <mat-label>Nivel </mat-label>
+                        <select matNativeControl [(ngModel)]="opcionSeleccionadaNivel" name="opcion" (change) = "OpcionNivelSeleccionado()">
+                          <option *ngFor="let opcion of opcionesNivel" [value]="opcion.id">
+                              {{opcion.nombre}}
+                          </option>
+                        </select>
+                    </mat-form-field>
+
+              </div>
+              <div class="texto" style=" text-align: left;">
+                  <mat-form-field style="margin: 15px;">
+                      <mat-label>Probabilidad </mat-label>
+                        <select matNativeControl [(ngModel)]="opcionSeleccionadaProbabilidad" name="opcion" (change) = "OpcionProbabilidadSeleccionada()">
+                          <option   *ngFor="let opcion of opcionesProbabilidad" [value]="opcion.id">
+                              {{opcion.nombre}}
+                          </option>
+                        </select>
+                    </mat-form-field>
+
+              </div>
+            </div>
+             <div class="agregarImagen" >
+                <div>
+                    <button (click) = "ActivarInput()" type="button" class="btn Agregar">
+                      Agregar Logo<i class="material-icons">add_photo_alternate</i>
+                    </button>
+                  </div>
+              <div>
+                  <input #file id = "input" type="file" accept= 'image/*' (change)="Mostrar($event)" style="display:none">
+                  <img class ="logo" *ngIf="imagenCromo" hight = "150" width = "150" mat-card-image [src]="imagenCromo" >
+                </div>
+
+             </div>
+            </div>
+          <div>
+              <div class="elemento">
+                  <button type="button" class="btn Aceptar"  (click)= "EditarCromo()">Aceptar Cambios <i class="material-icons">
+                    check </i></button>
+
+            </div>
+
+          </div>
+        </div>
+</mat-card-content>
+</mat-card>
+</div>

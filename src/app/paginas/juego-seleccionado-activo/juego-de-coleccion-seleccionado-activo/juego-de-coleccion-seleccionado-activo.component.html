@@ -1,0 +1,146 @@
+
+<div class="contenedor">
+  <div class="elemento">
+    <button type="button" class="btn Info" (click) = Informacion(); routerLink = "informacionJuegoColeccion">Información<i class="material-icons">info</i></button>
+  </div>
+  <div class="elemento">
+    <button type="button" class="btn Agregar" routerLink = "asignarCromos">Asignar Cromos<i class="material-icons">add</i></button>
+  </div>
+  <div class="elemento">
+    <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionDesactivar()"> Desactivar<i class="material-icons">history</i></button>
+  </div>
+</div>
+
+<form *ngIf="alumnosDelJuego">
+
+  <div class = "filter">
+    <mat-form-field style=" width: 95% !important;">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
+        <i class="material-icons" matSuffix>search</i>
+      </mat-form-field>
+  </div>
+
+  <!-- <mat-list>
+    <h3 mat-subheader>Folders</h3>
+    <mat-list-item *ngFor="let alumno of pruebaTabla">
+      <mat-icon mat-list-icon>folder</mat-icon>
+      <h4 mat-line>{{alumno.nombre}} {{alumno.primerApellido}} {{alumno.segundoApellido}}</h4>
+      <p mat-line>{{alumno.cromo}}</p>
+    </mat-list-item>
+
+
+  </mat-list> -->
+
+  <!-- [dataSource]="pruebaTabla" -->
+
+  <table align="center" mat-table [dataSource]="datasourceAlumno" class="example-container mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+
+
+    <!-- Nombre Alumno Column -->
+    <ng-container matColumnDef="nombreAlumno">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Nombre </th>
+      <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+    </ng-container>
+
+    <!-- Primer Apellido Column -->
+    <ng-container matColumnDef="primerApellido">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Primer Apellido </th>
+      <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+    </ng-container>
+
+    <!-- Segundo Apellido Column -->
+    <ng-container matColumnDef="segundoApellido">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Segundo Apellido </th>
+      <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+    </ng-container>
+
+    <!-- Cromos Column -->
+    <!-- <ng-container matColumnDef="cromos">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Cromos </th>
+      <td mat-cell *matCellDef="let alumno"> {{alumno.cromo}} </td>
+    </ng-container> -->
+
+    <!-- More Column -->
+    <ng-container matColumnDef=" ">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 10%"></th>
+      <td mat-cell *matCellDef="let alumno">
+          <button (click) = "AccederAlumno(alumno)" routerLink = "informacionAlumnoJuegoColeccion" mat-icon-button matTooltip="Ver progreso de {{alumno.Nombre}} en el juego">
+              <i class="material-icons">more_horiz</i>
+          </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnos; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnos;"></tr>
+
+  </table>
+</form>
+
+<form *ngIf="equiposDelJuego">
+
+  <div class = "filter">
+    <mat-form-field  style=" width: 95% !important;">
+        <input matInput (keyup)="applyFilterEquipo($event.target.value)" placeholder="Filtro para buscar equipo...">
+        <i class="material-icons" matSuffix>search</i>
+      </mat-form-field>
+  </div>
+
+  <table  align="center" mat-table [dataSource]="datasourceEquipo" class="example-container mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+
+    <!-- Nombre Alumno Column -->
+    <ng-container matColumnDef="nombreEquipo">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Nombre </th>
+      <td mat-cell *matCellDef="let equipo"> {{equipo.Nombre}} </td>
+    </ng-container>
+
+
+    <!-- Miembros Column -->
+    <ng-container matColumnDef="miembros">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 18%"> Miembros </th>
+      <td mat-cell *matCellDef="let equipo"><button mat-icon-button matTooltip="Ver miembros de {{equipo.nombre}}" color="primary"
+        [mdePopoverTriggerFor]="appPopover" (click) = "AlumnosDelEquipo(equipo)"
+        mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+        <i class="material-icons">group</i>
+      </button>
+
+      <mde-popover #appPopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+          <mat-card style="max-width: 300px">
+            <mat-card-content>
+              <mat-list>
+                <mat-list-item *ngFor="let alumno of alumnosEquipo">
+                  <!-- <mat-icon mat-list-icon>folder</mat-icon> -->
+                  <p class="md-body-1" mat-line>{{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</p>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-content>
+          </mat-card>
+      </mde-popover>
+    </td>
+    </ng-container>
+
+
+        <!-- More Column -->
+    <ng-container matColumnDef=" ">
+      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"></th>
+      <td mat-cell *matCellDef="let equipo">
+          <button (click) = "AccederEquipo(equipo)" routerLink = "informacionEquipoJuegoColeccion" mat-icon-button matTooltip="Ver progreso de {{equipo.nombre}} en el juego">
+              <i class="material-icons">more_horiz</i>
+          </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsEquipos; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsEquipos;"></tr>
+
+  </table>
+
+</form>
+

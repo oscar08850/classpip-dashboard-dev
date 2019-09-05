@@ -1,0 +1,21 @@
+.example-container {
+  overflow: auto;
+}
+
+table {
+  width: 95%;
+  text-align: center;
+  align-content: center;
+  table-layout:fixed;
+}
+
+.material-icons{
+  width: 15px;
+  height: 15px;
+}
+/* Colores de iconos */
+.material-icons.red { color: rgb(228, 8, 8); }
+.material-icons.green { color: rgb(49, 151, 2); }
+
+/* Tamaños de los botones */
+.material-icons.md-36 { font-size: 36px; }

@@ -1,0 +1,46 @@
+<div class="titulo"><h2>Editar Insigna</h2></div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+
+<div class="contenedor contenedor3">
+    <mat-card class="panel">
+        <mat-card-content>
+          <div class="contenedor2" style=" text-align: left;">
+              <div class="texto" style=" text-align: left;">
+                  <p>
+                    <span style="font-weight: bold;">Nombre: </span>
+                    <mat-form-field style="width: 100%; border: none; ">
+                        <textarea matInput  requiered [(ngModel)]="nombreInsignia">Escribe el nombre</textarea>
+                      </mat-form-field>
+                  </p>
+                </div>
+                <div class="texto" style=" text-align: left;">
+                  <p>
+                      <span  style="font-weight: bold;">Descripción: </span>
+                      <mat-form-field style="width: 100%; border: none; ">
+                        <textarea matInput  requiered [(ngModel)]="descripcionInsignia">Escribe la descripción</textarea>
+                      </mat-form-field>
+                    </p>
+                </div>
+               <div class="agregarImagen" >
+                  <div>
+                      <button (click) = "ActivarInput()" type="button" class="btn Agregar">
+                        Agregar logo<i class="material-icons">add_photo_alternate</i>
+                      </button>
+                    </div>
+                <div>
+                    <input #file id = "input" type="file" accept= 'image/*' (change)="Mostrar($event)" style="display:none">
+                    <img class ="logo" *ngIf="imagenInsignia" hight = "130" width = "130" mat-card-image [src]="imagenInsignia" >
+                  </div>
+
+               </div>
+            <div>
+                <div class="elemento">
+                    <button type="button" class="btn Aceptar"  (click)= "EditarInsignia()">Aceptar Cambios <i class="material-icons">
+                      check </i></button>
+              </div>
+
+            </div>
+          </div>
+  </mat-card-content>
+</mat-card>
+</div>

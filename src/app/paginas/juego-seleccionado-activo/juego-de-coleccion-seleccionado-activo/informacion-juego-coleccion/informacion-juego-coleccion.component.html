@@ -1,0 +1,52 @@
+<div class="titulo"><h2>Información Juego De Colección</h2></div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+
+<div class="contenedor contenedor3">
+  <div class="contenedor3" style=" text-align: left;">
+      <div class="elemento">
+          <img class ="logo" style="margin-top: 5px" *ngIf="imagenColeccion" hight = "200" width = "200" mat-card-image [src]="imagenColeccion" >
+      </div>
+      <div style="margin-top: 20px">
+          <p>
+              <span style="font-weight: bold;">Nombre:</span>
+                    {{nombreColeccion}}
+                  </p>
+      </div>
+
+
+  </div>
+
+</div>
+
+
+<mat-grid-list cols="3" rowHeight="100px" style="width: 70%; margin-left : 15%" >
+  <mat-grid-tile
+      *ngFor="let cromo of cromosColeccion; let i = index"
+      [colspan]="1"
+      [rowspan]="4"
+      [style.background]="white">
+      <mat-card class="cromo" [ngClass]="{
+        'Diamante' : cromo.Nivel === 'Diamante',
+        'Platino' : cromo.Nivel === 'Platino',
+        'Oro' : cromo.Nivel === 'Oro',
+        'Plata' : cromo.Nivel === 'Plata',
+        'Bronce' : cromo.Nivel === 'Bronce'}">
+        <mat-card-header>
+          <div style="display: flex; justify-content:space-between; width: 250px ">
+          <div  >
+          <mat-card-title>{{cromo.Nombre}}</mat-card-title>
+          <mat-card-subtitle><p style="margin-bottom: -2px;">Nivel: {{cromo.Nivel}} </p><p style="margin-bottom: -2px;">Probabilidad: {{cromo.Probabilidad}} </p></mat-card-subtitle>
+        </div>
+          <div class="elementoCromo">
+          </div>
+        </div>
+        </mat-card-header>
+        <mat-card-content style="display: flex; align-items: center;justify-content: center;">
+        <div class="posicionImagen" >
+        <img class ="imagenCromo" *ngIf="imagenCromoArray[i]" mat-card-image [src]="imagenCromoArray[i]" >
+      </div>
+    </mat-card-content>
+      </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
