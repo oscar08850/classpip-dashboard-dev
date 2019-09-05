@@ -1,6 +1,8 @@
 # Classpip Administration Dashboard
 [![Classpip Badge](https://img.shields.io/badge/classpip-dashboard-brightgreen.svg)](https://github.com/classpip/classpip-dashboard)
 
+[![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/classpip/classpip/blob/master/LICENSE)
+
 # Dashboard
 
 This repository contains the [main dashboard panel administration](http://admin.classpip.com) for the classpip project. With this admin panel you could manage all the classpip opertations and data for the website. The project is created using [angular CLI](https://github.com/angular/angular-cli) and some operations are related to this client.
