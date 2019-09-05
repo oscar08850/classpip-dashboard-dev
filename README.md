@@ -11,7 +11,7 @@ The software architecture is composed by a mobile application for performing “
 
 # Dashboard
 
-This repository contains the [main dashboard panel administration](http://admin.classpip.com) for the classpip project. With this admin panel you could manage all the classpip opertations and data for the website. The project is created using [angular CLI](https://github.com/angular/angular-cli) and some operations are related to this client.
+This repository contains the main dashboard panel administration for the classpip project. With this admin panel you could manage all the classpip opertations and data for the website. The project is created using [angular CLI](https://github.com/angular/angular-cli) and some operations are related to this client.
 
 [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
 
