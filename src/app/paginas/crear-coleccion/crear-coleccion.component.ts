@@ -8,6 +8,10 @@ import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 // Servicios
 import { ColeccionService, ProfesorService } from '../../servicios/index';
 
+
+// Servicios
+import { SesionService, PeticionesAPIService } from '../../servicios/index';
+
 // Clases
 import { Coleccion, Cromo } from '../../clases/index';
 
@@ -95,13 +99,15 @@ export class CrearColeccionComponent implements OnInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
+    public sesion: SesionService,
+    public peticionesAPI: PeticionesAPIService,
     private formBuilder: FormBuilder) { }
 
   ngOnInit() {
 
     // REALMENTE LA APP FUNCIONARÁ COGIENDO AL PROFESOR DEL SERVICIO, NO OBSTANTE AHORA LO RECOGEMOS DE LA URL
     // this.profesorId = this.profesorService.RecibirProfesorIdDelServicio();
-    this.profesorId = Number (this.route.snapshot.paramMap.get('id'));
+    this.profesorId = this.sesion.DameProfesor().id;
 
 
     // Constructor myForm
@@ -127,20 +133,21 @@ export class CrearColeccionComponent implements OnInit {
     console.log(this.nombreImagen);
 
     // Hace el POST del equipo
-    this.coleccionService.POST_Coleccion(new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
+    this.coleccionService.POST_Coleccion (new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
+    //this.peticionesAPI.CreaColeccion(new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
     .subscribe((res) => {
       if (res != null) {
+        console.log ('COLECCION CREADA: ' + res.id );
         console.log(res);
         this.coleccionYaCreada = true; // Si tiro atrás y cambio algo se hará un PUT y no otro POST
         this.coleccionCreada = res; // Lo metemos en coleccionCreada, y no en coleccion!!
-
         // Hago el POST de la imagen SOLO si hay algo cargado. Ese boolean se cambiará en la función ExaminarImagen
         if (this.imagenCargado === true) {
 
           // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagen
           const formData: FormData = new FormData();
           formData.append(this.nombreImagen, this.file);
-          this.coleccionService.POST_ImagenColeccion(formData)
+          this.peticionesAPI.PonImagenColeccion(formData)
           .subscribe(() => console.log('Imagen cargado'));
         }
 
@@ -160,7 +167,7 @@ export class CrearColeccionComponent implements OnInit {
 
     nombreColeccion = this.myForm.value.nombreColeccion;
 
-    this.coleccionService.PUT_Coleccion(new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId, this.coleccionCreada.id)
+    this.peticionesAPI.ModificaColeccion(new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId, this.coleccionCreada.id)
     .subscribe((res) => {
       if (res != null) {
         console.log('Voy a editar la coleccion con id ' + this.coleccionCreada.id);
@@ -171,7 +178,7 @@ export class CrearColeccionComponent implements OnInit {
           // HACEMOS EL POST DE LA NUEVA IMAGEN EN LA BASE DE DATOS
           const formData: FormData = new FormData();
           formData.append(this.nombreImagen, this.file);
-          this.coleccionService.POST_ImagenColeccion(formData)
+          this.peticionesAPI.PonImagenColeccion(formData)
           .subscribe(() => console.log('Imagen cargada'));
         }
 
@@ -188,12 +195,15 @@ export class CrearColeccionComponent implements OnInit {
     console.log('Entro a asignar el cromo a la coleccionID' + this.coleccionCreada.id);
     console.log(this.nombreImagenCromo );
 
-    this.coleccionService.POST_CromoColeccion(
+    this.peticionesAPI.PonCromoColeccion(
       new Cromo(this.nombreCromo, this.nombreImagenCromo , this.probabilidadCromo, this.nivelCromo), this.coleccionCreada.id)
     .subscribe((res) => {
       if (res != null) {
         console.log('asignado correctamente');
-        this.CromosAgregados(res);
+        // Añadimos el cromo a la lista
+        this.cromosAgregados.push(res);
+        this.cromosAgregados = this.cromosAgregados.filter(result => result.Nombre !== '');
+        // this.CromosAgregados(res);
 
          // Hago el POST de la imagen SOLO si hay algo cargado. Ese boolean se cambiará en la función ExaminarImagenCromo
         if (this.imagenCargadoCromo === true) {
@@ -201,7 +211,7 @@ export class CrearColeccionComponent implements OnInit {
           // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagenCromo
           const formData: FormData = new FormData();
           formData.append(this.nombreImagenCromo, this.fileCromo);
-          this.coleccionService.POST_ImagenCromo(formData)
+          this.peticionesAPI.PonImagenCromo(formData)
           .subscribe(() => console.log('Imagen cargado'));
         }
         this.LimpiarCampos();
@@ -210,29 +220,31 @@ export class CrearColeccionComponent implements OnInit {
       }
     });
   }
-  // Lista de los cromos añadidos a la coleccion
+ /*  // Lista de los cromos añadidos a la coleccion
   CromosAgregados(cromo: Cromo) {
     this.cromosAgregados.push(cromo);
     this.cromosAgregados = this.cromosAgregados.filter(res => res.Nombre !== '');
     return this.cromosAgregados;
-  }
+  } */
 
   // Utilizamos esta función para eliminar un cromo de la base de datos y de la lista de añadidos recientemente
   BorrarCromo(cromo: Cromo) {
     console.log('Id cromo ' + this.coleccionCreada.id);
-    this.coleccionService.DELETE_Cromo(cromo.id, this.coleccionCreada.id)
+    this.peticionesAPI.BorrarCromo(cromo.id, this.coleccionCreada.id)
     .subscribe(() => {
-      this.CromosEliminados(cromo);
+      // Elimino el cromo de la lista
+      this.cromosAgregados = this.cromosAgregados.filter(res => res.id !== cromo.id);
+     // this.CromosEliminados(cromo);
       console.log('Cromo borrado correctamente');
 
     });
   }
-  // Elimina el cromo de la lista de añadidos a la coleccion
+ /*  // Elimina el cromo de la lista de añadidos a la coleccion
   CromosEliminados(cromo: Cromo) {
     this.cromosAgregados = this.cromosAgregados.filter(res => res.id !== cromo.id);
     return this.cromosAgregados;
   }
-
+ */
   // Activa la función ExaminarImagenColeccion
   ActivarInputColeccion() {
     console.log('Activar input');
@@ -278,7 +290,7 @@ export class CrearColeccionComponent implements OnInit {
       this.imagenCromo = reader.result.toString();
     };
   }
-
+/*
   // Una vez seleccionada la probabilidad se asigna a la varible del cromo
   OpcionProbabilidadSeleccionada() {
     // Opcion selecionada para probabilidad
@@ -301,7 +313,7 @@ export class CrearColeccionComponent implements OnInit {
       this.probabilidadCromo = 'Muy Alta';
     }
   }
-
+ */
   OpcionNivelSeleccionado() {
     console.log(this.opcionSeleccionadaNivel);
     // Opcion selecionada para nivel

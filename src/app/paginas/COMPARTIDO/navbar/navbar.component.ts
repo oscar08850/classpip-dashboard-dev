@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Profesor } from '../../../clases/index';
 
 // Servicios
-import {ProfesorService} from '../../../servicios/index';
+import {SesionService} from '../../../servicios/index';
 
 @Component({
   selector: 'app-navbar',
@@ -31,8 +31,9 @@ export class NavbarComponent implements OnInit {
   URLMisColecciones: string;
   URLCrearColeccion: string;
   URLConfiguracion: string;
+  URLDesarrolladores: string;
 
-  constructor( private profesorService: ProfesorService,
+  constructor( private sesion: SesionService,
                private router: Router) { }
 
   ngOnInit() {
@@ -45,10 +46,11 @@ export class NavbarComponent implements OnInit {
     this.URLCrearPuntos = this.URLInicio + '/crearPuntos';
     this.URLMisColecciones = this.URLInicio + '/misColecciones';
     this.URLCrearColeccion = this.URLInicio + '/crearColeccion';
+    this.URLDesarrolladores = this.URLInicio + '/desarrolladores';
     this.URLConfiguracion = this.URLInicio + '/configuracionProfesor';
 
 
-    this.profesor = this.profesorService.RecibirProfesorDelServicio();
+    this.profesor = this.sesion.DameProfesor();
 
   }
 

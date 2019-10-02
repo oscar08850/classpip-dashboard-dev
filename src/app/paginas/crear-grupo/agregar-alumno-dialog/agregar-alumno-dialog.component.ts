@@ -5,6 +5,9 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 // Servicios
 import {ProfesorService, MatriculaService, AlumnoService} from '../../../servicios/index';
 
+// Servicios
+import {PeticionesAPIService} from '../../../servicios/index';
+
 // Clases
 import { Grupo, Alumno, Matricula } from '../../../clases/index';
 
@@ -31,6 +34,7 @@ export class AgregarAlumnoDialogComponent implements OnInit {
   constructor(private matriculaService: MatriculaService,
               private alumnoService: AlumnoService,
               private formBuilder: FormBuilder,
+              private peticionesAPI: PeticionesAPIService,
               public dialogRef: MatDialogRef<AgregarAlumnoDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) { }
 
@@ -53,202 +57,73 @@ export class AgregarAlumnoDialogComponent implements OnInit {
 
   }
 
-
-
-   // MATRICULA A UN ALUMNO CONCRETO EN UN GRUPO CONCRETO MEDIANTE SUS IDENTIFICADORES
-   MatricularAlumno() {
-
-    console.log('voy a entrar a matricular al alumno con id y grupo ' + this.alumno.id + ' ' + this.grupoId);
-    this.matriculaService.POST_Matricula(new Matricula (this.alumno.id, this.grupoId))
-    .subscribe((resMatricula) => {
-      if (resMatricula != null) {
-        console.log('Matricula: ' + resMatricula);
-
-        this.AgregarAlumnoListaAgregados(this.alumno);
-
-        // Una vez matriculado el alumno, limpiamos el form para poder añadir un alumno nuevo
-        this.myForm.reset();
-      } else {
-        console.log('fallo en la matriculación');
-      }
-    });
-
-  }
-
-  // PARA AGREGAR UN ALUMNO NUEVO A LA BASE DE DATOS DEBEMOS HACERLO DESDE LAS VENTANAS DE CREAR GRUPO O EDITAR GRUPO.
-  // CREARÁ AL ALUMNO Y LO MATRICULARÁ EN EL GRUPO QUE ESTAMOS CREANDO/EDITANDO
-  AgregarAlumnoNuevoGrupo() {
-
-    let nombreAlumno: string;
-    let primerApellido: string;
-    let segundoApellido: string;
-
-    nombreAlumno = this.myForm.value.nombreAlumno;
-    primerApellido = this.myForm.value.primerApellido;
-    segundoApellido = this.myForm.value.segundoApellido;
-
-    this.alumnoService.POST_AlumnosAlProfesor(
-      new Alumno (nombreAlumno, primerApellido, segundoApellido), this.profesorId)
-      .subscribe(res => {
-        if (res != null) {
-          console.log('Voy a añadir a ' + res);
-          this.alumno = res;
-          this.MatricularAlumno();
-
-        } else {
-          console.log('fallo añadiendo');
-        }
-      });
-  }
-
-  AgregarAlumnoListaAgregados(alumno: Alumno): Alumno[] {
-
-    // Pasamos el alumno que ya esta en la base de datos
-    this.alumnosAgregados.push(alumno);
-
-    this.alumnosAgregados = this.alumnosAgregados.filter(res => res.Nombre !== '');
-    console.log('Añado alumno a Lista Agregados');
-    console.log(this.alumnosAgregados);
-    return this.alumnosAgregados;
-  }
-
-  BorrarAlumnoDeListaAgregados(alumnoId: number): Alumno[] {
-    this.alumnosAgregados = this.alumnosAgregados.filter(alumno => alumno.id !== alumnoId);
-    return this.alumnosAgregados;
-  }
-
-  BorrarAlumnosAgregados(alumno: Alumno) {
-    console.log('voy a borrar a ' + alumno.id);
-    console.log(alumno.Nombre + ' seleccionado');
-
-        // Recupero la matrícula del alumno en este grupo
-    this.matriculaService.GET_MatriculaAlumno(alumno.id, this.grupoId)
-    .subscribe(matricula => {
-          console.log('Doy la matricula de ' + alumno.Nombre);
-          console.log(matricula[0]);
-
-          // Una vez recupero la matrícula, la borro
-          this.matriculaService.DELETE_Matricula(matricula[0].id)
-          .subscribe(res => {
-            console.log(alumno.Nombre + ' borrado correctamente');
-            this.BorrarAlumnoDeListaAgregados(alumno.id);
-
-          });
-        });
-  }
-
-  // A LA HORA DE AÑADIR UN ALUMNO AL GRUPO, PRIMERO COMPRUEBA SI ESE ALUMNO YA ESTA REGISTRADO EN LA BASE DE DATOS.
-  // EN CASO DE ESTAR REGISTRADO, SOLO HACE LA MATRICULA. SINO, LO AGREGA Y HACE LA MATRICULA
-  BuscarAlumnoBaseDeDatos() {
+  // Esta función es la que se llama desde el formulario cuando ya hemos introducido
+  // los datos del alumno que vamos a asignar
+  // Simplemente preparamos el alumno y llamamos a la función de asignar alumno
+  AsignacionIndividual() {
     console.log('voy a entrar a buscar alumno');
 
-    let nombreAlumno: string;
-    let primerApellido: string;
-    let segundoApellido: string;
-
-    nombreAlumno = this.myForm.value.nombreAlumno;
-    primerApellido = this.myForm.value.primerApellido;
-    segundoApellido = this.myForm.value.segundoApellido;
-
-    this.alumnoService.GET_AlumnoConcreto(
-      new Alumno (nombreAlumno, primerApellido, segundoApellido), this.profesorId)
-      .subscribe((respuesta) => {
-        if (respuesta[0] !== undefined) {
-        console.log('El alumno existe. Solo voy a matricularlo en este grupo');
-        this.alumno = respuesta[0];
-        console.log(this.alumno);
-        this.MatricularAlumno();
-       } else {
-        console.log('El alumno no existe. Voy a agregarlo y matricularlo');
-        this.AgregarAlumnoNuevoGrupo();
-        }
-      });
+    const nombreAlumno = this.myForm.value.nombreAlumno;
+    const primerApellido = this.myForm.value.primerApellido;
+    const segundoApellido = this.myForm.value.segundoApellido;
+    const alumno = new Alumno (nombreAlumno, primerApellido, segundoApellido);
+    this.AsignaAlumno (alumno);
   }
 
+  // Esta función es la que se llama desde el formulario cuando están preparados los
+  // datos de los alumnos para asignación masiva
+  // Simplemente procesamos la linea de texto con los nombres de los alumnos para
+  // asignarlos uno a uno
 
-  Aceptar() {
-    console.log('Alumnos añadidos. Cierro el dialogo');
-  }
-
-////////////////////////////////////////////// PARA TEXTO ////////////////////////////////////////////////
-
-
-    // A LA HORA DE AÑADIR UN ALUMNO AL GRUPO, PRIMERO COMPRUEBA SI ESE ALUMNO YA ESTA REGISTRADO EN LA BASE DE DATOS.
-    // EN CASO DE ESTAR REGISTRADO, SOLO HACE LA MATRICULA. SINO, LO AGREGA Y HACE LA MATRICULA
-
-    BuscarAlumnoBaseDeDatosTexto() {
+  AsignacionMasiva() {
 
     let textoAlumnos: string;
 
     textoAlumnos = this.myForm2.value.textoAlumnos;
 
     for (let i = 0; i < textoAlumnos.split(';').length; i++) {
-
-      if (textoAlumnos) {
-
-        let nombreAlumno: string;
-        let primerApellido: string;
-        let segundoApellido: string;
-        let nombreCompleto: string;
-
-        nombreCompleto = textoAlumnos.split('; ')[0 + i];
-
-        nombreAlumno = nombreCompleto.split(' ')[0];
-        primerApellido = nombreCompleto.split(' ')[1];
-        segundoApellido = nombreCompleto.split(' ')[2];
-
+      // Vamos a preparar el siguiente alumno
+        const nombreCompleto = textoAlumnos.split('; ')[0 + i];
+        const nombreAlumno = nombreCompleto.split(' ')[0];
+        const primerApellido = nombreCompleto.split(' ')[1];
+        const segundoApellido = nombreCompleto.split(' ')[2];
+        const alumno = new Alumno (nombreAlumno, primerApellido, segundoApellido);
         console.log(nombreCompleto);
-
-        this.alumnoService.GET_AlumnoConcreto(
-          new Alumno (nombreAlumno, primerApellido, segundoApellido), this.profesorId)
-          .subscribe((respuesta) => {
-            if (respuesta[0] !== undefined) {
-            console.log('El alumno existe. Solo voy a matricularlo en este grupo');
-            this.alumno = respuesta[0];
-            console.log(this.alumno);
-            this.MatricularAlumnoTexto(respuesta[0]);
-          } else {
-            console.log('El alumno no existe. Voy a agregarlo y matricularlo');
-            this.AgregarAlumnoNuevoGrupoTexto(nombreAlumno, primerApellido, segundoApellido);
-            }
-          });
-      }
-
-   }
+        this.AsignaAlumno (alumno);
+    }
   }
 
+  // Para asignar al alumno primero vemos si ya está en la base de datos
+  // en cuyo caso ya podemos matricularlo directamente en el grupo
+  // o si no está en la base de datos, en cuyo caso hay que ponerlo en la base
+  // de datos antes de matricularlo
+  AsignaAlumno(alumno: Alumno) {
 
-  // PARA AGREGAR UN ALUMNO NUEVO A LA BASE DE DATOS DEBEMOS HACERLO DESDE LAS VENTANAS DE CREAR GRUPO O EDITAR GRUPO.
-  // CREARÁ AL ALUMNO Y LO MATRICULARÁ EN EL GRUPO QUE ESTAMOS CREANDO/EDITANDO
-  AgregarAlumnoNuevoGrupoTexto(nombreAlumno: string, primerApellido: string, segundoApellido: string) {
-
-
-    this.alumnoService.POST_AlumnosAlProfesor(
-      new Alumno (nombreAlumno, primerApellido, segundoApellido), this.profesorId)
-      .subscribe(res => {
-        if (res != null) {
-          console.log('Voy a añadir a ' + res);
-          this.alumno = res;
-          this.MatricularAlumnoTexto(res);
-
-        } else {
-          console.log('fallo añadiendo');
+    this.peticionesAPI.DameAlumnoConcreto(alumno, this.profesorId)
+      .subscribe((respuesta) => {
+        if (respuesta[0] !== undefined) {
+          // el alumno ya está en la base de datos
+          console.log ('Ya esta en la base de datos');
+          this.MatricularAlumno(respuesta[0] );
+       } else {
+          // el alumno no está en la base de datos.
+          console.log ('NO esta en la base de datos');
+          this.AgregarAlumnoNuevoGrupo(alumno );
         }
       });
   }
 
-  // MATRICULA A UN ALUMNO CONCRETO EN UN GRUPO CONCRETO MEDIANTE SUS IDENTIFICADORES
-   MatricularAlumnoTexto(alumno: Alumno) {
-
-    console.log('voy a entrar a matricular al alumno con id y grupo ' + alumno.id + ' ' + this.grupoId);
-    this.matriculaService.POST_Matricula(new Matricula (alumno.id, this.grupoId))
+   // Para matricularlo enviamos la matricula a la base de datos y
+   // agregamos al alumno en la lista de alumnos inscritos que se muestra en pantalla
+   MatricularAlumno(alumno: Alumno) {
+    console.log ('Voy a metricular:  ' + alumno.id);
+    this.peticionesAPI.MatriculaAlumnoEnGrupo(new Matricula (alumno.id, this.grupoId))
     .subscribe((resMatricula) => {
       if (resMatricula != null) {
-        console.log('Matricula: ' + resMatricula);
-
-        this.AgregarAlumnoListaAgregados(alumno);
-
-        // Una vez matriculado el alumno, limpiamos el form para poder añadir un alumno nuevo
+        // Añadimos el alumno a la lista que hay que mostrar
+        console.log ('Ya esta matriculado');
+        this.alumnosAgregados.push(alumno);
+        this.alumnosAgregados = this.alumnosAgregados.filter(res => res.Nombre !== '');
         this.myForm.reset();
       } else {
         console.log('fallo en la matriculación');
@@ -256,8 +131,47 @@ export class AgregarAlumnoDialogComponent implements OnInit {
     });
 
   }
+  // Si el alumno no está en la base de datos lo enviamos a la base de datos (asignado al profesor)
+  // y lo matriculamos en el grupo
+  AgregarAlumnoNuevoGrupo(alumno: Alumno) {
+    console.log ('voy a agregar alumno nuevo: ' + alumno);
+    this.peticionesAPI.AsignaAlumnoAlProfesor( alumno, this.profesorId)
+      .subscribe(res => {
+        if (res != null) {
+          console.log('Voy a añadir a ' + res);
+          this.MatricularAlumno(res);
+
+        } else {
+          console.log('fallo añadiendo');
+        }
+      });
+  }
 
 
 
+  // Para borrar al alumno del grupo primero recuperamos la matricula del alumno en el grupo
+  // y luego eliminamos esa matricula
+  BorrarAlumno(alumno: Alumno) {
+    console.log('voy a borrar a ' + alumno.id);
+    console.log(alumno.Nombre + ' seleccionado');
+
+    // Recupero la matrícula del alumno en este grupo
+    this.peticionesAPI.DameMatriculaAlumno(alumno.id, this.grupoId)
+    .subscribe(matricula => {
+          console.log('Doy la matricula de ' + alumno.Nombre);
+          console.log(matricula[0]);
+
+          // Una vez recupero la matrícula, la borro
+          this.peticionesAPI.BorraMatricula(matricula[0].id)
+          .subscribe(res => {
+            console.log(alumno.Nombre + ' borrado correctamente');
+            // Ahora saco al alumno de la tabla que se muestra en pantalla
+            const id = alumno.id;
+            // tslint:disable-next-line:no-shadowed-variable
+            this.alumnosAgregados = this.alumnosAgregados.filter(alumno => alumno.id !== id);
+
+          });
+        });
+  }
 
 }

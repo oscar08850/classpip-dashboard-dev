@@ -5,6 +5,10 @@ import { MatSnackBar } from '@angular/material';
 // Servicios
 import { JuegoService, JuegoDePuntosService } from '../../../servicios/index';
 
+// Servicios
+import { SesionService, PeticionesAPIService } from '../../../servicios/index';
+
+
 // Clases
 import { Nivel, Insignia, Juego } from '../../../clases/index';
 
@@ -43,12 +47,14 @@ export class CrearNivelComponent implements OnInit {
 
   constructor( private juegoService: JuegoService,
                private juegoDePuntosService: JuegoDePuntosService,
+               private sesion: SesionService,
+               private peticionesAPI: PeticionesAPIService,
                public snackBar: MatSnackBar ) { }
 
   ngOnInit() {
 
     console.log('Inicio el componente crear nivel');
-    this.juego = this.juegoService.RecibirJuegoDelServicio();
+    this.juego = this.sesion.DameJuego();
 
 
   }
@@ -100,7 +106,7 @@ export class CrearNivelComponent implements OnInit {
    CrearNivel() {
     this.juegoDePuntosId = this.juego.id;
 
-    this.juegoDePuntosService.POST_Nivel(new Nivel (this.nombreNivel, this.puntosAlcanzar, this.privilegiosDelNivel,
+    this.peticionesAPI.CreaNivel(new Nivel (this.nombreNivel, this.puntosAlcanzar, this.privilegiosDelNivel,
       this.nombreLogo), this.juegoDePuntosId).subscribe(nivel => {
         if (nivel !== undefined) {
           console.log('Nivel añadido correctamente');
@@ -115,11 +121,11 @@ export class CrearNivelComponent implements OnInit {
             // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagen
             const formData: FormData = new FormData();
             formData.append(this.nombreLogo, this.file);
-            this.juegoDePuntosService.POST_ImagenNivel(formData)
+            this.peticionesAPI.PonImagenNivel(formData)
             .subscribe(() => console.log('Logo cargado'));
           }
 
-          this.NivelAgregados(nivel); // Añadimos la insignia a la lista insignias agregadas
+          //this.NivelAgregados(nivel); // Añadimos la insignia a la lista insignias agregadas
           this.LimpiarCampos(); // Limpiamos todos los campos
         } else {
              console.log('Fallo añadiendo');

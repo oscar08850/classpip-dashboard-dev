@@ -50,6 +50,8 @@ import { ConfiguracionProfesorComponent } from './paginas/COMPARTIDO/configuraci
 
 
 import { AppComponent } from './app.component';
+import { ElementosComponent } from './elementos/elementos.component';
+import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.component';
 
 const routes: Routes = [
 
@@ -61,11 +63,14 @@ const routes: Routes = [
 
   ////////////////////////////// RUTAS DESDE EL INICIO A LOS COMPONENTES PRINCIPALES DEL NAVBAR ////////////////////
 
+
   // CLASSPIP
   { path: 'aboutClasspip', component: AboutClasspipComponent },
 
   // INICIO
   { path: 'inicio/:id', component: InicioComponent },
+
+  { path: 'inicio/:id/desarrolladores', component: DesarrolladoresComponent },
 
   // GRUPOS
   { path: 'inicio/:id/crearGrupo', component: CrearGrupoComponent },

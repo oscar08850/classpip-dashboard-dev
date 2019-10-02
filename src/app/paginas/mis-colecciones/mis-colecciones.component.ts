@@ -10,6 +10,10 @@ import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion
 // Servicios
 import { ColeccionService, ProfesorService } from '../../servicios/index';
 
+
+// Servicios
+import { SesionService, PeticionesAPIService } from '../../servicios/index';
+
 // Clases
 import { Coleccion, Cromo } from '../../clases/index';
 
@@ -39,6 +43,8 @@ export class MisColeccionesComponent implements OnInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
+    public sesion: SesionService,
+    public peticionesAPI: PeticionesAPIService,
     private http: Http
   ) { }
 
@@ -46,26 +52,26 @@ export class MisColeccionesComponent implements OnInit {
 
     // REALMENTE LA APP FUNCIONARÁ COGIENDO AL PROFESOR DEL SERVICIO, NO OBSTANTE AHORA LO RECOGEMOS DE LA URL
     // this.profesorId = this.profesorService.RecibirProfesorIdDelServicio();
-    this.profesorId = Number (this.route.snapshot.paramMap.get('id'));
+    this.profesorId = this.sesion.DameProfesor().id;
 
     console.log(this.profesorId);
 
-    this.ColeccionesDelProfesor();
+    this.TraeColeccionesDelProfesor();
     console.log(this.coleccionesProfesor);
 
 
   }
 
   // Obtenemos todas las colecciones del profesor
-  ColeccionesDelProfesor() {
+  TraeColeccionesDelProfesor() {
 
-    this.coleccionService.GET_ColeccionesDelProfesor(this.profesorId)
+    this.peticionesAPI.DameColeccionesDelProfesor(this.profesorId)
     .subscribe(coleccion => {
       if (coleccion[0] !== undefined) {
         console.log('Voy a dar la lista');
         this.coleccionesProfesor = coleccion;
         console.log(this.coleccionesProfesor);
-        this.profesorService.EnviarProfesorIdAlServicio(this.profesorId);
+        // this.profesorService.EnviarProfesorIdAlServicio(this.profesorId);
       } else {
         this.coleccionesProfesor = undefined;
       }
@@ -74,7 +80,7 @@ export class MisColeccionesComponent implements OnInit {
   }
 
  // Le pasamos la coleccion y buscamos la imagen que tiene y sus cromos
- CromosEImagenDeLaColeccion(coleccion: Coleccion) {
+ DameCromosEImagenDeLaColeccion(coleccion: Coleccion) {
 
   console.log('entro a buscar cromos y foto');
   console.log(coleccion.ImagenColeccion);
@@ -107,7 +113,7 @@ export class MisColeccionesComponent implements OnInit {
   console.log('voy a mostrar los cromos de la coleccion ' + coleccion.id);
 
   // Busca los cromos dela coleccion en la base de datos
-  this.coleccionService.GET_CromosColeccion(coleccion.id)
+  this.peticionesAPI.DameCromosColeccion(coleccion.id)
   .subscribe(res => {
     if (res[0] !== undefined) {
       this.cromosColeccion = res;
@@ -121,36 +127,29 @@ export class MisColeccionesComponent implements OnInit {
   });
   }
 
-  // Una vez seleccionado una coleccion, lo podemos editar o eliminar. Esta función se activará si clicamos en editar.
-  // Envía la coleccion específico al componente editar-coleccion
-  EnviarColeccionEditar(coleccion: Coleccion, cromosColeccion: Cromo[]) {
-    console.log('voy a enviar');
-    this.coleccionService.EnviarColeccionAlServicio(coleccion);
-    console.log(cromosColeccion);
-    if (cromosColeccion !== undefined) {
-      this.coleccionService.EnviarCromosColeccionAlServicio(cromosColeccion);
-    } else {
-      this.coleccionService.EnviarCromosColeccionAlServicio(cromosColeccion);
-      console.log('no hay cromos en esta coleccion');
-    }
-
+  // Envialos la colecció y los cromos al servicio sesión porque los necesitaremos en los componentes
+  // editar y agregar
+  GuardarColeccion(coleccion: Coleccion) {
+    this.sesion.TomaColeccion(coleccion);
+    this.sesion.TomaCromos (this.cromosColeccion);
   }
 
   // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
   BorrarColeccion(coleccion: Coleccion) {
-    this.coleccionService.DELETE_Coleccion(coleccion.id, coleccion.profesorId)
+    this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
     .subscribe(() => {
-      this.ColeccionesEliminadas(coleccion);
+      this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
+      //this.ColeccionesEliminadas(coleccion);
       console.log('Coleccion borrada correctamente');
       console.log(this.coleccionesProfesor);
     });
   }
-
+/*
   // Borramos la colección de la lista de colecciones del profesor
   ColeccionesEliminadas(coleccion: Coleccion) {
     this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
     return this.coleccionesProfesor;
-  }
+  } */
 
 
   // Si queremos borrar un equipo, antes nos saldrá un aviso para confirmar la acción como medida de seguridad. Esto se

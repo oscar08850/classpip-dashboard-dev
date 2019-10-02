@@ -9,4 +9,7 @@ export * from './juego.service';
 export * from './coleccion.service';
 export * from './juego-de-puntos.service';
 export * from './juego-de-coleccion.service';
+export * from './sesion.service';
+export * from './peticiones-api.service';
+export * from './calculos.service';
 

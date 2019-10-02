@@ -13,6 +13,15 @@ import { JuegoService, EquipoService, JuegoDePuntosService } from '../../../../s
   styleUrls: ['./asignar-puntos.component.scss']
 })
 export class AsignarPuntosComponent implements OnInit {
+  puntoSeleccionadoId: number;
+  puntosDelJuego: Punto[];
+  /* Estructura necesaria para determinar que filas son las que se han seleccionado */
+  selection = new SelectionModel<any>(true, []);
+  // Muestra la posición del alumno, el nombre y los apellidos del alumno, los puntos y el nivel
+  rankingJuegoDePuntos: TablaAlumnoJuegoDePuntos[] = [];
+
+  // tslint:disable-next-line:no-inferrable-types
+  valorPunto: number = 1;
 
   fechaAsignacionPunto: Date;
   fechaString: string;
@@ -22,20 +31,18 @@ export class AsignarPuntosComponent implements OnInit {
   // Recupera la informacion del juego, los alumnos o los equipos, los puntos y los niveles del juego
   alumnosDelJuego: Alumno[];
   equiposDelJuego: Equipo[];
-  puntosDelJuego: Punto[];
   nivelesDelJuego: Nivel[];
+  aaaa: AlumnoJuegoDePuntos[];
 
   // Recoge la inscripción de un alumno en el juego ordenada por puntos
   listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDePuntos[];
   listaEquiposOrdenadaPorPuntos: EquipoJuegoDePuntos[];
 
-  // Muestra la posición del alumno, el nombre y los apellidos del alumno, los puntos y el nivel
-  rankingJuegoDePuntos: TablaAlumnoJuegoDePuntos[] = [];
 
   rankingEquiposJuegoDePunto: TablaEquipoJuegoDePuntos[] = [];
 
   displayedColumnsAlumno: string[] = ['select', 'posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos', 'nivel'];
-  selection = new SelectionModel<TablaAlumnoJuegoDePuntos>(true, []);
+  // selection = new SelectionModel<TablaAlumnoJuegoDePuntos>(true, []);
 
   displayedColumnsEquipos: string[] = ['select', 'posicion', 'nombreEquipo', 'miembros', 'puntos', 'nivel'];
   selectionEquipos = new SelectionModel<TablaEquipoJuegoDePuntos>(true, []);
@@ -43,10 +50,8 @@ export class AsignarPuntosComponent implements OnInit {
   seleccionados: boolean[];
   seleccionadosEquipos: boolean[];
 
-  puntoSeleccionadoId: number;
 
-  // tslint:disable-next-line:no-inferrable-types
-  valorPunto: number = 1;
+
 
   alumnosEquipo: Alumno[];
 
@@ -58,15 +63,21 @@ export class AsignarPuntosComponent implements OnInit {
                private juegoDePuntosService: JuegoDePuntosService ) { }
 
   ngOnInit() {
+    this.puntosDelJuego = this.juegoDePuntosService.RecibirPuntosDelServicio();
+    this.juegoSeleccionado = this.juegoService.RecibirJuegoDelServicio();
+    this.juegoDePuntosService.GET_InscripcionesAlumnoJuegoDePuntos (this.juegoSeleccionado.id)
+    .subscribe ( res => {
+                            this.aaaa = res;
+                            console.log ('Ya estan');
+                            console.log (this.aaaa);
+    });
+    this.rankingJuegoDePuntos = this.juegoDePuntosService.RecibirRankingJuegoPuntosDelServicio();
 
     this.juegoSeleccionado = this.juegoService.RecibirJuegoDelServicio();
     this.alumnosDelJuego = this.juegoService.RecibirAlumnoJuegoDelServicio();
-
-    this.puntosDelJuego = this.juegoDePuntosService.RecibirPuntosDelServicio();
     this.nivelesDelJuego = this.juegoDePuntosService.RecibirNivelesDelServicio();
     this.listaAlumnosOrdenadaPorPuntos = this.juegoDePuntosService.RecibirListaOrdenadaJuegoPuntosDelServicio();
 
-    this.rankingJuegoDePuntos = this.juegoDePuntosService.RecibirRankingJuegoPuntosDelServicio();
     this.seleccionados = Array(this.rankingJuegoDePuntos.length).fill(false);
 
     this.equiposDelJuego = this.juegoService.RecibirEquipoJuegoDelServicio();
@@ -212,7 +223,7 @@ export class AsignarPuntosComponent implements OnInit {
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
       console.log('el juego es individual');
-      this.AsignarPuntosAlumnos();
+      this.AsignarPuntosAlumnos2();
 
     } else {
       console.log('El juego es en equipo');
@@ -226,6 +237,14 @@ export class AsignarPuntosComponent implements OnInit {
     this.seleccionadosEquipos = Array(this.rankingEquiposJuegoDePunto.length).fill(false);
   }
 
+  AsignarPuntosAlumnos2() {
+    this.rankingJuegoDePuntos.forEach(row => {
+      if (this.selection.isSelected(row))  {
+          console.log ('XXXX');
+      }
+    });
+
+  }
   AsignarPuntosAlumnos() {
 
     for (let i = 0; i < this.seleccionados.length; i++) {
@@ -580,6 +599,15 @@ export class AsignarPuntosComponent implements OnInit {
     } else {
       console.log('no hay nada');
       this.isDisabled = true;
+    }
+  }
+   /* Esta función decide si el boton debe estar activo (si hay al menos
+  una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
+  ActualizarBoton() {
+    if (this.selection.selected.length === 0) {
+      this.isDisabled = true;
+    } else {
+      this.isDisabled = false;
     }
   }
 

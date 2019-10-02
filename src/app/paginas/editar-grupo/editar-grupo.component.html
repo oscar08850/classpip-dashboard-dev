@@ -1,3 +1,4 @@
+R
 <div class="titulo"><h2>Editar Grupos</h2></div>
 <mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
 
@@ -6,18 +7,18 @@
   <div class="texto" style=" text-align: left;">
     <p>
       <span style="font-weight: bold;">Nombre: </span>
-      <input style="background-color: transparent" type="text" name="nombre" placeholder="Escribe el nombre" requiered [(ngModel)]="nombreGrupo">
+      <input style="background-color: transparent" type="text" name="nombre" requiered [(ngModel)]="nombreGrupo">
     </p>
   </div>
   <div class="texto" style=" text-align: left;">
     <p>
         <span  style="font-weight: bold;">Descripción: </span>
-        <input style="background-color: transparent" type="text" name="descripcion" placeholder="Escribe la descripción" requiered [(ngModel)]="descripcionGrupo">
+        <input style="background-color: transparent" type="text" name="descripcion"  requiered [(ngModel)]="descripcionGrupo">
     </p>
   </div>
 </div>
 <div>
-  <div class="elemento"><button type="button"  class="btn Aceptar" (click)= "EditarGrupo()"> Aceptar Cambios <i class="material-icons">
+  <div class="elemento"><button type="button"  class="btn Aceptar" (click)= "ModificarGrupo()"> Aceptar Cambios <i class="material-icons">
     check </i>  </button></div>
 
 </div>
@@ -27,11 +28,11 @@
   <div class="elemento"><button type="button" class="btn Agregar" (click) = "AbrirDialogoAgregarAlumnos()">  Añadir Alumno<i class="material-icons">
     person_add </i></button></div>
 
-  <div class="elemento"> <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrar()"> Eliminar Alumnos <i class="material-icons">
+  <div class="elemento"> <button type="button"  [disabled]="botonTablaDesactivado" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrar()"> Eliminar Alumnos <i class="material-icons">
     delete </i></button> </div>
 </div>
 
-  <form *ngIf="alumnosGrupoSeleccionado[0];else Aviso_no_alumnos">
+  <form *ngIf="alumnosGrupoSeleccionado;else Aviso_no_alumnos">
 
     <div class = "filter">
       <mat-form-field>
@@ -40,59 +41,63 @@
       </mat-form-field>
     </div>
 
+
+<!--    Esta es la tabla. Se identifica dónde están los datos y se indica que habrá ordenación-->
+<!-- <table mat-table [dataSource]="dataSource" matSort  class="mat-elevation-z8"> -->
     <table align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-      <!-- Checkbox Column -->
-      <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef class="letraCabecera">
-          <mat-checkbox (change)="$event ? masterToggle() : null"
-                        (click) = "SeleccionarTodos();"
-                        [checked]="selection.hasValue() && isAllSelected()"
-                        [indeterminate]="selection.hasValue() && !isAllSelected()"
-                        [aria-label]="checkboxLabel()">
-          </mat-checkbox>
-        </th>
-        <td mat-cell *matCellDef="let row; let i = index" (click) = "Seleccionar(i);">
-          <mat-checkbox (click)="$event.stopPropagation()"
-            (click) = "Seleccionar(i);"
-            (change)="$event ? selection.toggle(row) : null"
-            [checked]="selection.isSelected(row)"
-            [aria-label]="checkboxLabel(row)">
-          </mat-checkbox>
+    <!--    La primera columna será un checkbox -->
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef class="letraCabecera">
 
-        </td>
-      </ng-container>
+                    <mat-checkbox
+                        (change)="$event ? MasterToggle() : null; ActualizarBotonTabla ();"
+                        [checked]="selection.hasValue() && IsAllSelected()"
+                        [indeterminate]="selection.hasValue() && !IsAllSelected()">
+                    </mat-checkbox>
+
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-checkbox
+                                  (click)="$event.stopPropagation()"
+                                  (change)="$event ? selection.toggle(row) : null; ActualizarBotonTabla ();"
+                                  [checked]="selection.isSelected(row)">
+                    </mat-checkbox>
+
+                </td>
+            </ng-container>
 
       <!-- Nombre Alumno Column -->
-      <ng-container matColumnDef="nombreAlumno">
-        <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Nombre </th>
-        <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.Nombre}} </td>
-      </ng-container>
+        <ng-container matColumnDef="nombreAlumno">
+          <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Nombre </th>
+          <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+        </ng-container>
 
-      <!-- Primer Apellido Column -->
-      <ng-container matColumnDef="primerApellido">
-        <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Primer Apellido </th>
-        <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.PrimerApellido}} </td>
-      </ng-container>
+        <!-- Primer Apellido Column -->
+        <ng-container matColumnDef="primerApellido">
+          <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Primer Apellido </th>
+          <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+        </ng-container>
 
-      <!-- Segundo Apellido Column -->
-      <ng-container matColumnDef="segundoApellido">
-        <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Segundo Apellido </th>
-        <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.SegundoApellido}} </td>
-      </ng-container>
+        <!-- Segundo Apellido Column -->
+        <ng-container matColumnDef="segundoApellido">
+          <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Segundo Apellido </th>
+          <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+        </ng-container>
 
-      <!-- alumnoId Column -->
-      <ng-container matColumnDef="alumnoId">
-        <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Identificador Alumno </th>
-        <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.id}} </td>
-      </ng-container>
+        <!-- alumnoId Column -->
+        <ng-container matColumnDef="alumnoId">
+          <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Identificador Alumno </th>
+          <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
+        </ng-container>
 
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-          (click)="selection.toggle(row)">
-      </tr>
-    </table>
+    <!-- Aquí indicamos de donde saca los identificadores de las columnas-->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          </table>
+
   </form>
 
   <div class="contenedor">

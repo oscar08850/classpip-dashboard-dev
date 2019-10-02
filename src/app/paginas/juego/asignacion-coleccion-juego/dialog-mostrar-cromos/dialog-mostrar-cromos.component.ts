@@ -5,6 +5,9 @@ import { ResponseContentType, Http, Response } from '@angular/http';
 // Servicios
 import { ColeccionService } from '../../../../servicios/index';
 
+// Servicios
+import { PeticionesAPIService } from '../../../../servicios/index';
+
 // Clases
 import { Coleccion, Cromo } from '../../../../clases/index';
 
@@ -19,7 +22,7 @@ export class DialogMostrarCromosComponent implements OnInit {
   coleccion: Coleccion;
   cromosColeccion: Cromo[];
 
-  imagenCromoArray: string[] = [];
+  imagenesCromos: string[] = [];
 
 
   cromo: Cromo;
@@ -30,6 +33,7 @@ export class DialogMostrarCromosComponent implements OnInit {
   constructor( public dialogRef: MatDialogRef<DialogMostrarCromosComponent>,
                @Inject(MAT_DIALOG_DATA) public data: any,
                private coleccionService: ColeccionService,
+               private peticionesAPI: PeticionesAPIService,
                private http: Http) { }
 
   ngOnInit() {
@@ -39,13 +43,13 @@ export class DialogMostrarCromosComponent implements OnInit {
 
   ObtenerCromos() {
     // Busca los cromos dela coleccion en la base de datos
-    this.coleccionService.GET_CromosColeccion(this.coleccion.id)
+    this.peticionesAPI.DameCromosColeccion(this.coleccion.id)
     .subscribe(res => {
       if (res[0] !== undefined) {
         this.cromosColeccion = res;
         console.log(res);
 
-        this.GET_ImagenCromo();
+        this.DameImagenesCromos();
       } else {
         console.log('No hay cromos en esta coleccion');
         this.cromosColeccion = undefined;
@@ -53,7 +57,7 @@ export class DialogMostrarCromosComponent implements OnInit {
     });
   }
   // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
-  GET_ImagenCromo() {
+  DameImagenesCromos() {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.cromosColeccion.length; i++) {
@@ -68,7 +72,7 @@ export class DialogMostrarCromosComponent implements OnInit {
 
         const reader = new FileReader();
         reader.addEventListener('load', () => {
-          this.imagenCromoArray[i] = reader.result.toString();
+          this.imagenesCromos[i] = reader.result.toString();
         }, false);
 
         if (blob) {
