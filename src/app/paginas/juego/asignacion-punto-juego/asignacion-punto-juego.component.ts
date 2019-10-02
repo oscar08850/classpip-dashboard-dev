@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material';
+import {MatTableDataSource} from '@angular/material/table';
+
 
 // Clases
 import { Alumno, Equipo, Juego, Punto, AsignacionPuntosJuego} from '../../../clases/index';
 
 // Services
 import { JuegoService, GrupoService, PuntosInsigniasService, ProfesorService, JuegoDePuntosService } from '../../../servicios/index';
+
+// Services
+import { SesionService, PeticionesAPIService } from '../../../servicios/index';
 
 @Component({
   selector: 'app-asignacion-punto-juego',
@@ -21,7 +26,7 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   isDisabled: Boolean = true;
 
-  puntosSeleccionables: Punto[];
+  tiposPuntos: Punto[];
   seleccionados: boolean[];
 
   displayedColumns: string[] = ['select', 'nombrePunto', 'descripcionPunto'];
@@ -29,29 +34,43 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
 
   juego: Juego;
 
+  dataSource;
 
   puntosSeleccionados: Punto[] = [];
-
+  botonTablaDesactivado = false;
 
   constructor( private juegoService: JuegoService,
                private profesorService: ProfesorService,
                private grupoService: GrupoService,
                private juegoDePuntosService: JuegoDePuntosService,
                public snackBar: MatSnackBar,
+               private sesion: SesionService,
+               private peticionesAPI: PeticionesAPIService,
+
                private puntosInsigniasService: PuntosInsigniasService) { }
 
   ngOnInit() {
 
     console.log('Inicio el componente');
-    this.grupoId = this.grupoService.RecibirGrupoIdDelServicio();
-    this.juego = this.juegoService.RecibirJuegoDelServicio();
+    this.grupoId = this.sesion.DameGrupo().id;
+    this.juego = this.sesion.DameJuego();
+    this.profesorId = this.sesion.DameProfesor().id;
     console.log(this.juego);
-    this.RecogerPuntos();
+
+    // traigo los tipos de puntos entre los que se puede seleccionar
+    this.peticionesAPI.DameTiposDePuntos(this.profesorId)
+    .subscribe(puntos => {
+      this.tiposPuntos = puntos;
+      this.seleccionados = Array(this.tiposPuntos.length).fill(false);
+      console.log(this.seleccionados);
+      this.dataSource = new MatTableDataSource (this.tiposPuntos);
+    });
+    //this.RecogerPuntos();
   }
 
   ////////////////////////////////////////////// PARA JUEGO DE PUNTOS ////////////////////////////////////////////////
 
-  RecogerPuntos() {
+ /*  RecogerPuntos() {
     if (this.profesorService.RecibirProfesorIdDelServicio() !== undefined) {
       console.log('profesor id');
       this.profesorId = this.profesorService.RecibirProfesorIdDelServicio();
@@ -60,85 +79,53 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
   }
 
   PuntosParaAsignar() {
-    this.puntosInsigniasService.GET_Puntos(this.profesorId)
+    this.peticionesAPI.DameTiposDePuntos(this.profesorId)
     .subscribe(puntos => {
-      this.puntosSeleccionables = puntos;
-      this.seleccionados = Array(this.puntosSeleccionables.length).fill(false);
+      this.tiposPuntosSeleccionables = puntos;
+      this.seleccionados = Array(this.tiposPuntosSeleccionables.length).fill(false);
       console.log(this.seleccionados);
     });
-  }
-
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
+  } */
+  /* Para averiguar si todas las filas están seleccionadas */
+  IsAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.puntosSeleccionables.length;
+    const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.puntosSeleccionables.forEach(row => {
-          this.selection.select(row);
-        });
-  }
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
 
-  toggleCheckbox(row) {
-    this.selection.toggle(row);
-    row.selected = !row.selected;
-    console.log(row);
-    console.log(this.selection.toggle(row));
-
-  }
-
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: Punto): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row`;
-  }
-
-  // Pone a true o false la posición del vector seleccionados que le pasamos (i) en función de su estado
-  Seleccionar(i: number) {
-
-    if (!this.selection.isSelected(this.puntosSeleccionables[i]) === true) {
-      this.seleccionados[i] = true;
+  MasterToggle() {
+    if (this.IsAllSelected()) {
+      this.selection.clear(); // Desactivamos todos
     } else {
-      this.seleccionados[i] = false;
+      // activamos todos
+      this.dataSource.data.forEach(row => this.selection.select(row));
     }
-    console.log(this.seleccionados);
+  }
+  /* Esta función decide si el boton debe estar activo (si hay al menos
+  una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
+  ActualizarBotonTabla() {
+    if (this.selection.selected.length === 0) {
+      this.botonTablaDesactivado = true;
+    } else {
+      this.botonTablaDesactivado = false;
+    }
   }
 
-  // Pone a true or false todo el vector seleccionado
-  SeleccionarTodos() {
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.puntosSeleccionables.length; i++) {
+  AgregarTiposPuntosAlJuego() {
+    this.dataSource.data.forEach
+    (row => {
+              if (this.selection.isSelected(row))  {
+                const punto = row;
+                this.peticionesAPI.AsignaPuntoJuego(new AsignacionPuntosJuego(punto.id, this.juego.id))
+                .subscribe();
+              }
+          }
+    );
 
-      if (!this.isAllSelected() === true) {
-        this.seleccionados[i] = true;
-      } else {
-        this.seleccionados[i] = false;
-      }
-
-    }
-    console.log(this.seleccionados);
-  }
-
-  AgregarPuntosAlJuego() {
-
-    for (let i = 0; i < this.seleccionados.length; i++) {
-
-      if (this.seleccionados [i]) {
-        let punto: Punto;
-        punto = this.puntosSeleccionables[i];
-        console.log(punto.Nombre + ' seleccionado');
-
-        this.juegoDePuntosService.POST_AsignacionPuntoJuego(new AsignacionPuntosJuego(punto.id, this.juego.id))
-        .subscribe(asignacion => console.log(asignacion));
-      }
-    }
     this.selection.clear();
 
     this.snackBar.open('Puntos añadidos correctamente', 'Cerrar', {

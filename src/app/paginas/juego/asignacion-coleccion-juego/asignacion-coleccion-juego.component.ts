@@ -11,6 +11,9 @@ import { Coleccion, Juego, Alumno, Equipo, AlumnoJuegoDeColeccion,
 import { JuegoService, GrupoService, ColeccionService, ProfesorService,
    JuegoDeColeccionService, EquipoService } from '../../../servicios/index';
 
+   // Services
+import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
+
 @Component({
   selector: 'app-asignacion-coleccion-juego',
   templateUrl: './asignacion-coleccion-juego.component.html',
@@ -46,23 +49,27 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
                private equipoService: EquipoService,
                private juegoDeColeccionService: JuegoDeColeccionService,
                private coleccionService: ColeccionService,
+               private calculos: CalculosService,
+               private sesion: SesionService,
+               private peticionesAPI: PeticionesAPIService,
                public dialog: MatDialog) { }
 
   ngOnInit() {
 
-    this.juego = this.juegoService.RecibirJuegoDelServicio();
-    this.coleccionService.RecibirColeccionDelServicio();
-    this.alumnos = this.grupoService.RecibirAlumnosGrupoDelServicio();
-    this.EquiposDelGrupo();
-    this.GET_ListaColecciones();
+    this.profesorId = this.sesion.DameProfesor().id;
+    this.juego = this.sesion.DameJuego();
+   // this.coleccionService.RecibirColeccionDelServicio();
+    this.alumnos = this.sesion.DameAlumnosGrupo();
+    this.TraeEquiposDelGrupo();
+    this.TraeListaDeColecciones();
     console.log(this.juegoService.RecibirJuegoDelServicio());
 
     this.grupoId = this.juego.grupoId;
   }
 
   // RECUPERA LOS EQUIPOS DEL GRUPO
-  EquiposDelGrupo() {
-    this.equipoService.GET_EquiposDelGrupo(this.juego.grupoId)
+  TraeEquiposDelGrupo() {
+    this.peticionesAPI.DameEquiposDelGrupo(this.juego.grupoId)
     .subscribe(equipos => {
       if (equipos !== undefined) {
         console.log('Hay equipos');
@@ -84,13 +91,8 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
     this.selectedRowIndex = row.id;
   }
 
-  GET_ListaColecciones() {
-    this.profesorId = this.profesorService.RecibirProfesorIdDelServicio();
-    this.ListaDeColecciones();
-  }
-
-  ListaDeColecciones() {
-    this.coleccionService.GET_ColeccionesDelProfesor(this.profesorId)
+  TraeListaDeColecciones() {
+    this.peticionesAPI.DameColeccionesDelProfesor(this.profesorId)
     .subscribe(colecciones => {
       this.colecciones = colecciones;
       this.datasourceColecciones = new MatTableDataSource(this.colecciones);
@@ -104,7 +106,8 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
   }
 
   AsignarColeccionJuego() {
-    this.juegoService.PUT_JuegoDeColeccion(new Juego (this.juego.Tipo, this.juego.Modo, this.coleccionSeleccionada.id),
+    // Añadimos la colección elegida al juego de colección (que ya se había creado)
+    this.peticionesAPI.CompletaJuegoDeColeccion(new Juego (this.juego.Tipo, this.juego.Modo, this.coleccionSeleccionada.id),
      this.grupoId, this.juego.id).subscribe(res => {
       this.InscribirParticipantesJuego();
       console.log(res);
@@ -118,7 +121,7 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.alumnos.length; i++) {
         console.log(this.alumnos[i]);
-        this.juegoDeColeccionService.POST_AlumnoJuegoDeColeccion(new AlumnoJuegoDeColeccion (this.alumnos[i].id, this.juego.id))
+        this.peticionesAPI.InscribeAlumnoJuegoDeColeccion(new AlumnoJuegoDeColeccion (this.alumnos[i].id, this.juego.id))
         .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente en el juego de coleccion'));
       }
     } else {
@@ -126,7 +129,7 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.equipos.length; i++) {
         console.log(this.equipos[i]);
-        this.juegoDeColeccionService.POST_EquipoJuegoDeColeccion(new EquipoJuegoDeColeccion(this.equipos[i].id, this.juego.id))
+        this.peticionesAPI.InscribeEquipoJuegoDeColeccion(new EquipoJuegoDeColeccion(this.equipos[i].id, this.juego.id))
         .subscribe(equiposJuego => console.log(equiposJuego));
       }
     }

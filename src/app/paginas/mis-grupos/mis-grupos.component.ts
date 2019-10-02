@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 import { Location } from '@angular/common';
-import { DataSource } from '@angular/cdk/collections';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 
 // Servicios
-import { ProfesorService, GrupoService } from '../../servicios/index';
+import { SesionService, PeticionesAPIService, CalculosService } from '../../servicios/index';
 
 // Clases
-import { Grupo } from '../../clases/index';
+import { Grupo, Profesor } from '../../clases/index';
+import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 
 @Component({
@@ -29,39 +28,40 @@ export class MisGruposComponent implements OnInit {
 
   // IDENTIFICADOR ÚNICO DEL PROFESOR QUE LO RECUPERAREMOS DE LA URL
   identificadorProfesor: number;
+  profesor: Profesor;
 
+
+  gruposObservable: any;
 
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private location: Location,
-              private profesorService: ProfesorService,
-              private grupoService: GrupoService) { }
+              private sesion: SesionService,
+              private calculos: CalculosService,
+              private peticionesAPI: PeticionesAPIService) { }
 
   ngOnInit() {
 
     // tslint:disable-next-line:no-string-literal
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/grupo';
-
-    // RECUPERAMOS EL ID DEL PROFESOR DE LA URL
-    this.identificadorProfesor = Number (this.route.snapshot.paramMap.get('id'));
-
-
+    this.profesor = this.sesion.DameProfesor();
     // CUANDO INICIEMOS EL COMPONENTE NOS LISTARÁ LOS GRUPOS DEL PROFESOR QUE RECUPERAMOS EL ID DE LA URL
     this.GruposDelProfesor();
+
+
 
   }
 
   // LE PASAMOS EL IDENTIFICADOR DEL PROFESOR Y NOS DEVUELVE UNA LISTA CON LOS GRUPOS QUE TIENE
   GruposDelProfesor() {
 
-    this.grupoService.GET_GruposDelProfesor(this.identificadorProfesor)
+    this.peticionesAPI.DameGruposProfesor(this.profesor.id)
     .subscribe(res => {
       if (res[0] !== undefined) {
         console.log('Voy a dar la lista');
         this.listaGrupos = res;
         console.log(this.listaGrupos);
-        this.profesorService.EnviarProfesorIdAlServicio(this.identificadorProfesor);
       } else {
         this.listaGrupos = undefined;
       }
@@ -70,10 +70,10 @@ export class MisGruposComponent implements OnInit {
   }
 
   // CUANDO CLICKEMOS ENCIMA DE UNA FILA, ENTRAREMOS EN ESTA FUNCIÓN QUE IDENTIFICA SOBRE EL GRUPO QUE HEMOS CLICKADO
-  EntrarGrupo(grupo) {
+  EntrarGrupo(grupo: Grupo) {
 
     // AHORA SE LO ENVIO AL SERVICIO
-    this.grupoService.EnviarGrupoAlServicio(grupo);
+    this.sesion.TomaGrupo (grupo);
 
     // HAGO LA RUTA AL COMPONENTE GRUPO
     this.router.navigate([this.returnUrl, grupo.id]);

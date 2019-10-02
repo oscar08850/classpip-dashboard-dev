@@ -1,11 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input , ViewChild} from '@angular/core';
 import { Location } from '@angular/common';
+
+import {MatTableDataSource} from '@angular/material/table';
+
+/* Necesario para controlar qué filas están seleccionadas */
+import {SelectionModel} from '@angular/cdk/collections';
+
+/* Imports necesarios para la ordenación y la paginación */
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 
 // Clases
 import { Profesor } from '../../clases/index';
 
 // Servicios
-import {ProfesorService} from '../../servicios/index';
+import {SesionService} from '../../servicios/index';
+import { TrustedString } from '@angular/core/src/sanitization/bypass';
+
+
 
 
 @Component({
@@ -14,16 +26,12 @@ import {ProfesorService} from '../../servicios/index';
   styleUrls: ['./inicio.component.scss']
 })
 export class InicioComponent implements OnInit {
-  profesor: any = [];
 
+  constructor() { }
 
-  constructor(private servicioProfesor: ProfesorService,
-              private location: Location) { }
 
   ngOnInit() {
 
-    // LE PIDO AL SERVICIO QUE ME DE LOS DATOS DEL PROFESOR QUE ME HAN ENVIADO
-    this.profesor = this.servicioProfesor.RecibirProfesorDelServicio();
   }
 
 }

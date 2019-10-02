@@ -7,6 +7,9 @@ import { AgregarAlumnoDialogComponent } from './agregar-alumno-dialog/agregar-al
 // Servicios
 import { GrupoService } from '../../servicios/index';
 
+// Servicios
+import { SesionService, PeticionesAPIService } from '../../servicios/index';
+
 // Clases
 import { Grupo } from '../../clases/index';
 
@@ -43,6 +46,8 @@ export class CrearGrupoComponent implements OnInit {
               private router: Router,
               private grupoService: GrupoService,
               public dialog: MatDialog,
+              public sesion: SesionService,
+              public peticionesAPI: PeticionesAPIService,
               // tslint:disable-next-line:variable-name
               private _formBuilder: FormBuilder) { }
 
@@ -51,7 +56,7 @@ export class CrearGrupoComponent implements OnInit {
 
     // REALMENTE LA APP FUNCIONARÁ COGIENDO AL PROFESOR DEL SERVICIO, NO OBSTANTE AHORA LO RECOGEMOS DE LA URL
     // this.profesorId = this.profesorService.RecibirProfesorIdDelServicio();
-    this.profesorId = Number (this.route.snapshot.paramMap.get('id'));
+    this.profesorId = this.sesion.DameProfesor().id;
 
     // tslint:disable-next-line:no-string-literal
     this.URLVueltaInicio = this.route.snapshot.queryParams['URLVueltaInicio'] || '/inicio';
@@ -73,10 +78,10 @@ export class CrearGrupoComponent implements OnInit {
 
     console.log('Entro a crear el grupo ' + nombreGrupo);
 
-    this.grupoService.POST_Grupo(new Grupo(nombreGrupo, descripcionGrupo), this.profesorId)
+    this.peticionesAPI.CreaGrupo(new Grupo(nombreGrupo, descripcionGrupo), this.profesorId)
     .subscribe((res) => {
       if (res != null) {
-        console.log(res);
+        console.log('Ya se ha creado el grupo ' + res);
         this.grupoYaCreado = true; // Si tiro atrás y cambio algo se hará un PUT y no otro POST
         this.grupo = res;
       } else {
@@ -95,7 +100,7 @@ export class CrearGrupoComponent implements OnInit {
     nombreGrupo = this.myForm.value.nombreGrupo;
     descripcionGrupo = this.myForm.value.descripcionGrupo;
 
-    this.grupoService.PUT_Grupo(new Grupo(nombreGrupo, descripcionGrupo), this.profesorId, this.grupo.id)
+    this.peticionesAPI.ModificaGrupo(new Grupo(nombreGrupo, descripcionGrupo), this.profesorId, this.grupo.id)
     .subscribe((res) => {
       if (res != null) {
         console.log('Voy a editar el equipo con id ' + this.grupo.id);
