@@ -1,3 +1,4 @@
+R
 <div class="titulo"><h2>Editar Colección</h2></div>
 <mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
 
@@ -60,7 +61,7 @@
             </div>
             <div class="elementoCromo">
 
-              <button type="button" style="width: 50px !important;" class="btn Editar" routerLink= "editarCromo" (click) = "EnviarCromoEditar(cromo)">
+              <button type="button" style="width: 50px !important;" class="btn Editar" routerLink= "editarCromo" (click) = "GuardarCromo(cromo)">
                 <i style="margin-top: 3px; margin-right: 8px;" class="material-icons">edit </i>
               </button>
 
@@ -73,7 +74,7 @@
         </mat-card-header>
         <mat-card-content style="display: flex; align-items: center;justify-content: center;">
           <div class="posicionImagen" >
-            <img class ="imagenCromo" *ngIf="imagenCromoArray[i]" mat-card-image [src]="imagenCromoArray[i]" >
+            <img class ="imagenCromo" *ngIf="imagenesCromos[i]" mat-card-image [src]="imagenesCromos[i]" >
           </div>
         </mat-card-content>
       </mat-card>

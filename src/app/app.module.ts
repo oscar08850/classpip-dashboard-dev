@@ -29,6 +29,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MdePopoverModule } from '@material-extended/mde';
+import {MatSortModule} from '@angular/material/sort';
+import {MatPaginatorModule} from '@angular/material/paginator';
+
+
+
 
 
 // IMPORTs COMPONENTES
@@ -99,6 +104,9 @@ import { JuegoDeColeccionSeleccionadoInactivoComponent } from './paginas/juego-s
 // COMPONENTES EN COMPARTIDO
 import { DialogoConfirmacionComponent } from './paginas/COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import { NavbarComponent } from './paginas/COMPARTIDO/navbar/navbar.component';
+import { ElementosComponent } from './elementos/elementos.component';
+import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.component';
+import { DialogoComponent } from './desarrolladores/dialogo/dialogo.component';
 
 
 @NgModule({
@@ -150,7 +158,10 @@ import { NavbarComponent } from './paginas/COMPARTIDO/navbar/navbar.component';
     AlbumEquipoComponent,
     ConfiguracionProfesorComponent,
     FooterComponent,
-    JuegoDeColeccionSeleccionadoInactivoComponent
+    JuegoDeColeccionSeleccionadoInactivoComponent,
+    ElementosComponent,
+    DesarrolladoresComponent,
+    DialogoComponent
   ],
   imports: [
     BrowserModule,
@@ -181,14 +192,15 @@ import { NavbarComponent } from './paginas/COMPARTIDO/navbar/navbar.component';
     MatToolbarModule,
     MatGridListModule,
     MdePopoverModule,
+    MatSortModule,
+    MatPaginatorModule,
 
     HttpClientModule
-
-
   ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, DialogMostrarCromosComponent,
-    AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent ],
+    AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
+    DialogoComponent ],
   providers: [],
   bootstrap: [AppComponent]
 })

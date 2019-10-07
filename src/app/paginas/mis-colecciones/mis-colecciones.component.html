@@ -1,3 +1,4 @@
+R
 <div class="titulo"><h2>Mis Colecciones</h2></div>
 <mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
 
@@ -6,7 +7,7 @@
         <mat-card-content>
     <form>
         <mat-accordion *ngIf="coleccionesProfesor;else Aviso_no_colecciones">
-            <mat-expansion-panel *ngFor="let coleccion of coleccionesProfesor" (click) = "CromosEImagenDeLaColeccion(coleccion)">
+            <mat-expansion-panel *ngFor="let coleccion of coleccionesProfesor" (click) = "DameCromosEImagenDeLaColeccion(coleccion)">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   {{coleccion.Nombre}}
@@ -26,7 +27,7 @@
                     </div>
                     <div class="contenedor3" style="margin-right: 2% ">
                       <div class="elemento">
-                        <button type="button" class="btn Editar" style="width: 180px; "routerLink= "editarColeccion" (click) = "EnviarColeccionEditar(coleccion, cromosColeccion)">Editar Colección <i class="material-icons">
+                        <button type="button" class="btn Editar" style="width: 180px; "routerLink= "editarColeccion" (click) = "GuardarColeccion(coleccion)">Editar Colección <i class="material-icons">
                           edit </i>  </button>
                       </div>
                       <div class="elemento">
@@ -41,7 +42,7 @@
             </mat-expansion-panel>
           </mat-accordion>
 
-          <ng-template #Aviso_no_insignias>Todavía no hay insignias creadas.</ng-template>
+          <ng-template #Aviso_no_colecciones>Todavía no hay colecciones creadas.</ng-template>
 
 
     </form>

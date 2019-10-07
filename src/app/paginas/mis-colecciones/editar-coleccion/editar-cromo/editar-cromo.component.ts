@@ -9,6 +9,9 @@ import { Cromo, Coleccion } from '../../../../clases/index';
 // Servicios
 import { ColeccionService } from '../../../../servicios/index';
 
+// Servicios
+import { SesionService, PeticionesAPIService } from '../../../../servicios/index';
+
 export interface OpcionSeleccionada {
   nombre: string;
   id: string;
@@ -64,11 +67,13 @@ export class EditarCromoComponent implements OnInit {
               private coleccionService: ColeccionService,
               public dialog: MatDialog,
               private location: Location,
+              private sesion: SesionService,
+              private peticionesAPI: PeticionesAPIService,
               private http: Http
   ) { }
 
   ngOnInit() {
-    this.cromo = this.coleccionService.RecibirCromoDelServicio();
+    this.cromo = this.sesion.DameCromo();
     this.nombreCromo = this.cromo.Nombre;
     this.nivelCromo = this.cromo.Nivel;
     this.probabilidadCromo = this.cromo.Probabilidad;
@@ -77,14 +82,14 @@ export class EditarCromoComponent implements OnInit {
     this.opcionSeleccionadaProbabilidad = this.cromo.Probabilidad;
     console.log(this.cromo);
     // Cargo el imagen del cromo
-    this.GET_Imagen();
+    this.TraeImagenCromo();
   }
 
-      EditarCromo() {
+  EditarCromo() {
         console.log('Entro a editar');
         console.log(this.probabilidadCromo);
         // tslint:disable-next-line:max-line-length
-        this.coleccionService.PUT_CromoColeccion(new Cromo(this.nombreCromo, this.nombreImagenCromo, this.probabilidadCromo, this.nivelCromo), this.cromo.coleccionId, this.cromo.id)
+        this.peticionesAPI.ModificaCromoColeccion(new Cromo(this.nombreCromo, this.nombreImagenCromo, this.probabilidadCromo, this.nivelCromo), this.cromo.coleccionId, this.cromo.id)
         .subscribe((res) => {
           if (res != null) {
             console.log('Voy a editar el cromo con id ' + this.cromo.id);
@@ -94,7 +99,7 @@ export class EditarCromoComponent implements OnInit {
               // HACEMOS EL POST DE LA NUEVA IMAGEN EN LA BASE DE DATOS
               const formData: FormData = new FormData();
               formData.append(this.nombreImagenCromo, this.file);
-              this.coleccionService.POST_ImagenCromo(formData)
+              this.peticionesAPI.PonImagenCromo(formData)
               .subscribe(() => console.log('Imagen cargado'));
             }
           } else {
@@ -102,12 +107,11 @@ export class EditarCromoComponent implements OnInit {
           }
         });
         this.goBack();
-      }
+  }
 
-      // Busca el logo que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
-      GET_Imagen() {
+  TraeImagenCromo() {
 
-        if (this.cromo.Imagen !== undefined ) {
+    if (this.cromo.Imagen !== undefined ) {
           // Busca en la base de datos la imágen con el nombre registrado en cromo.Imagen y la recupera
           this.http.get('http://localhost:3000/api/imagenes/ImagenCromo/download/' + this.cromo.Imagen,
           { responseType: ResponseContentType.Blob })
@@ -123,17 +127,17 @@ export class EditarCromoComponent implements OnInit {
               reader.readAsDataURL(blob);
             }
         });
-        }
-      }
+    }
+  }
       // AL CLICAR EN AGREGAR LOGO NOS ACTIVARÁ LA FUNCIÓN MOSTRAR DE ABAJO
-      ActivarInput() {
+  ActivarInput() {
         console.log('Activar input');
         document.getElementById('input').click();
-      }
+  }
 
 
        // Seleccionamos una foto y guarda el nombre de la foto en la variable logo
-      Mostrar($event) {
+  Mostrar($event) {
         this.file = $event.target.files[0];
 
         console.log('fichero ' + this.file.name);
@@ -146,10 +150,11 @@ export class EditarCromoComponent implements OnInit {
           this.imagenCambiada = true;
           this.imagenCromo = reader.result.toString();
         };
-      }
+  }
 
+/*
+  OpcionProbabilidadSeleccionada() {
 
-      OpcionProbabilidadSeleccionada() {
         // Opcion selecionada para probabilidad
         if (this.opcionSeleccionadaProbabilidad === 'Muy Baja') {
           this.probabilidadCromo = 'Muy Baja';
@@ -169,9 +174,9 @@ export class EditarCromoComponent implements OnInit {
         if (this.opcionSeleccionadaProbabilidad === 'Muy Alta') {
           this.probabilidadCromo = 'Muy Alta';
         }
-      }
-
-      OpcionNivelSeleccionado() {
+  }
+ */
+  OpcionNivelSeleccionado() {
         console.log(this.opcionSeleccionadaNivel);
         // Opcion selecionada para nivel
         if (this.opcionSeleccionadaNivel === 'Diamante') {
@@ -203,9 +208,9 @@ export class EditarCromoComponent implements OnInit {
           this.probabilidadCromo = 'Muy Alta';
           this.opcionSeleccionadaProbabilidad = 'Muy Alta';
         }
-      }
+  }
 
-      goBack() {
-        this.location.back();
-      }
+  goBack() {
+    this.location.back();
+  }
 }

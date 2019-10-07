@@ -1,0 +1,20 @@
+
+<!-- Este dialogo solo tiene un formulario que muestra la opinión actual y recoge la
+nueva opinión -->
+        <form (ngSubmit)="ModificarOpinion();" [formGroup]="myForm">
+            <p style="font-weight: bold;">Opinión actual: {{opinion}}</p>
+            <p style="font-weight: bold;">Escribe tu nueva opinión</p>
+
+              <div class="centrado2">
+              <mat-form-field>
+                <mat-label>Opinión</mat-label>
+                  <input matInput placeholder="Escribe aquí" formControlName="opinion" required>
+                <mat-error>Tienes que escribir algo</mat-error>
+              </mat-form-field>
+              </div>
+
+              <div class="centrado2">
+                <button class="btn Agregar" >Modificar opinión <i class="material-icons">
+                    done </i></button>
+              </div>
+        </form>

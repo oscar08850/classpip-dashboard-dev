@@ -12,7 +12,7 @@ import { JuegoService, EquipoService, AlumnoService, JuegoDePuntosService } from
 // Imports para abrir diálogo y snackbar
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
-
+import {SesionService, PeticionesAPIService, CalculosService} from '../../../servicios/index';
 
 
 @Component({
@@ -65,11 +65,14 @@ export class JuegoDePuntosSeleccionadoActivoComponent implements OnInit {
                private juegoDePuntosService: JuegoDePuntosService,
                public dialog: MatDialog,
                public snackBar: MatSnackBar,
+               private calculos: CalculosService,
+               private sesion: SesionService,
+               private peticionesAPI: PeticionesAPIService,
                private location: Location ) { }
 
   ngOnInit() {
 
-    this.juegoSeleccionado = this.juegoService.RecibirJuegoDelServicio();
+    this.juegoSeleccionado = this.sesion.DameJuego();
     this.listaSeleccionable[0] =  new Punto('Totales');
 
     this.PuntosDelJuego();
@@ -93,8 +96,9 @@ export class JuegoDePuntosSeleccionadoActivoComponent implements OnInit {
 
   // Recupera los alumnos que pertenecen al juego
   AlumnosDelJuego() {
-    this.juegoDePuntosService.GET_AlumnosJuegoDePuntos(this.juegoSeleccionado.id)
+    this.peticionesAPI.DameAlumnosJuegoDePuntos(this.juegoSeleccionado.id)
     .subscribe(alumnosJuego => {
+      console.log ('Ya tengo los alumnos');
       console.log(alumnosJuego);
       this.alumnosDelJuego = alumnosJuego;
       this.RecuperarInscripcionesAlumnoJuego();
@@ -114,10 +118,11 @@ export class JuegoDePuntosSeleccionadoActivoComponent implements OnInit {
 
   // Recupera los puntos que se pueden asignar en el juego
   PuntosDelJuego() {
-    this.juegoDePuntosService.GET_PuntosJuegoDePuntos(this.juegoSeleccionado.id)
+    this.peticionesAPI.DamePuntosJuegoDePuntos(this.juegoSeleccionado.id)
     .subscribe(puntos => {
       this.puntosDelJuego = puntos;
-
+      this.listaSeleccionable = [];
+      this.listaSeleccionable[0] =  new Punto('Totales');
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.puntosDelJuego.length; i ++) {
         this.listaSeleccionable.push(this.puntosDelJuego[i]);
@@ -128,7 +133,7 @@ export class JuegoDePuntosSeleccionadoActivoComponent implements OnInit {
 
   // Recupera los niveles de los que dispone el juego
   NivelesDelJuego() {
-    this.juegoDePuntosService.GET_NivelesJuegoDePuntos(this.juegoSeleccionado.id)
+    this.peticionesAPI.DameNivelesJuegoDePuntos(this.juegoSeleccionado.id)
     .subscribe(niveles => {
       this.nivelesDelJuego = niveles;
       console.log(this.nivelesDelJuego);
@@ -138,7 +143,7 @@ export class JuegoDePuntosSeleccionadoActivoComponent implements OnInit {
 
   // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen y los ordena de mayor a menor valor
   RecuperarInscripcionesAlumnoJuego() {
-    this.juegoDePuntosService.GET_InscripcionesAlumnoJuegoDePuntos(this.juegoSeleccionado.id)
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(this.juegoSeleccionado.id)
     .subscribe(inscripciones => {
       this.listaAlumnosOrdenadaPorPuntos = inscripciones;
       this.OrdenarPorPuntos();
@@ -178,9 +183,17 @@ export class JuegoDePuntosSeleccionadoActivoComponent implements OnInit {
   }
 
   // En función del modo, recorremos la lisa de Alumnos o de Equipos y vamos rellenando el rankingJuegoDePuntos
+  // ESTO DEBERIA IR AL SERVICIO DE CALCULO, PERO DE MOMENTO NO LO HAGO PORQUE SE GENERAN DOS TABLAS
+  // Y NO COMPRENDO BIEN LA NECESIDAD DE LAS DOS
   TablaClasificacionTotal() {
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
+      this.datasourceAlumno = this.calculos.PrepararTablaRankingIndividual (
+        this.listaAlumnosOrdenadaPorPuntos,
+        this.alumnosDelJuego,
+        this.nivelesDelJuego
+      );
+      console.log ('Ya tengo la tabla');
 
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.listaAlumnosOrdenadaPorPuntos.length; i++) {
@@ -196,21 +209,21 @@ export class JuegoDePuntosSeleccionadoActivoComponent implements OnInit {
         }
 
         if (nivel !== undefined) {
-          this.rankingJuegoDePuntos[i] = new TablaAlumnoJuegoDePuntos (i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+ /*          this.rankingJuegoDePuntos[i] = new TablaAlumnoJuegoDePuntos (i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
             this.listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno, nivel.Nombre);
-
+ */
           this.rankingJuegoDePuntosTotal[i] = new TablaAlumnoJuegoDePuntos (i + 1, alumno.Nombre, alumno.PrimerApellido,
             alumno.SegundoApellido, this.listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno, nivel.Nombre);
         } else {
-          this.rankingJuegoDePuntos[i] = new TablaAlumnoJuegoDePuntos (i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+  /*         this.rankingJuegoDePuntos[i] = new TablaAlumnoJuegoDePuntos (i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
             this.listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno);
-
+ */
           this.rankingJuegoDePuntosTotal[i] = new TablaAlumnoJuegoDePuntos (i + 1, alumno.Nombre, alumno.PrimerApellido,
             alumno.SegundoApellido, this.listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno);
         }
       }
 
-      this.datasourceAlumno = new MatTableDataSource(this.rankingJuegoDePuntos);
+      // this.datasourceAlumno = new MatTableDataSource(this.rankingJuegoDePuntos);
 
     } else {
           // tslint:disable-next-line:prefer-for-of

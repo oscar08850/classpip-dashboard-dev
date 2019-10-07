@@ -4,10 +4,11 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 
 // Clases
-import { Alumno, Equipo, Juego, Punto, AlumnoJuegoDePuntos, EquipoJuegoDePuntos} from '../../clases/index';
+import { Alumno, Equipo, Juego, Punto, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo} from '../../clases/index';
 
 // Services
 import { JuegoService, GrupoService, PuntosInsigniasService, EquipoService, JuegoDePuntosService } from '../../servicios/index';
+import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
 
 export interface OpcionSeleccionada {
   nombre: string;
@@ -31,7 +32,7 @@ export class JuegoComponent implements OnInit {
 
   ///////////////////////////////////// PARÁMETROS GENERALES PARA EL COMPONENTE ///////////////////////////////////
 
-  grupoId: number;
+  grupo: Grupo;
   alumnosGrupo: Alumno[];
   equiposGrupo: Equipo[];
   @ViewChild('stepper') stepper;
@@ -55,34 +56,12 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juegos de competición', id: 'juegosDeCompeticion'},
   ];
 
-  // Recogemos los tres tipos de juegos que tenemos y las metemos en una lista, tanto activos como inactivos
-  juegosDePuntos: Juego[];
-  juegosDeColeccion: Juego[];
-  juegosDeCompeticion: Juego[];
-
-  // AHORA SEPARAMOS ENTRE LOS JUEGOS ACTIVOS E INACTIVOS DE CADA TIPO DE JUEGO
-
-  // Separamos entre juegos de puntos activos e inactivos
-  juegosDePuntosActivos: Juego[] = [];
-  juegosDePuntosInactivos: Juego[] = [];
-
-  // Separamos entre juegos de coleccion activos e inactivos
-  juegosDeColeccionActivos: Juego[] = [];
-  juegosDeColeccionInactivos: Juego[] = [];
-
-  // Separamos entre juegos de competición activos e inactivos
-  juegosDeCompeticionActivos: Juego[] = [];
-  juegosDeCompeticionInactivos: Juego[] = [];
-
 
   // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS E INACTIVOS DE LOS TRES TIPOS DE JUEGOS
-  todosLosJuegosActivos: Juego[] = [];
-  todosLosJuegosInactivos: Juego[] = [];
+  juegosActivos: Juego[];
+  juegosInactivos: Juego[];
 
-  // Al seleccionar el tipo de juego que deseo mostrar de la lista desplegable (OpcionSeleccionada), copiaremos esa lista
-  // en este vector, ya que será de donde se sacará la información que se mostrará
-  ListaJuegosSeleccionadoActivo: Juego[];
-  ListaJuegosSeleccionadoInactivo: Juego[];
+
 
   // tslint:disable-next-line:no-inferrable-types
   opcionSeleccionada: string = 'todosLosJuegos';
@@ -126,155 +105,54 @@ export class JuegoComponent implements OnInit {
   isDisabledModo: Boolean = true;
 
 
+  tipoJuegoElegido: string;
 
   constructor( private juegoService: JuegoService,
                private grupoService: GrupoService,
                private equipoService: EquipoService,
                private juegoDePuntosService: JuegoDePuntosService,
                public snackBar: MatSnackBar,
-               private puntosInsigniasService: PuntosInsigniasService) { }
+               private puntosInsigniasService: PuntosInsigniasService,
+               private calculos: CalculosService,
+               private sesion: SesionService,
+               private peticionesAPI: PeticionesAPIService
+               ) { }
+
 
   ngOnInit() {
-    this.grupoId = this.grupoService.RecibirGrupoIdDelServicio();
-    this.alumnosGrupo = this.grupoService.RecibirAlumnosGrupoDelServicio();
-    this.EquiposDelGrupo();
+    this.grupo = this.sesion.DameGrupo();
+    this.alumnosGrupo = this.sesion.DameAlumnosGrupo();
+    // La lista de equipos del grupo no esta en el servicio sesión. Asi que hay que
+    // ir a buscarla
+    this.TraeEquiposDelGrupo ();
+    console.log ('Alumnos grupo' + this.alumnosGrupo);
+    this.calculos.DameListaJuegos(this.grupo.id)
+    .subscribe ( listas => {
+            this.juegosActivos = listas.activos;
+            // Si la lista aun esta vacia la dejo como indefinida para que me
+            // salga el mensaje de que aun no hay juegos
+            if (this.juegosActivos.length === 0) {
+              this.juegosActivos = undefined;
+            }
+            this.juegosInactivos = listas.inactivos;
+            if (this.juegosInactivos.length === 0) {
+              this.juegosInactivos = undefined;
+            }
 
-    // Recupera la lista de juegos que tiene el grupo (primero el de puntos, después de colección y después los totales)
-    // y los va clasificando en activo e inactivo
-    this.ListaJuegosDePuntos();
+    });
+    console.log ('Ya he traido los juegos');
+
   }
-
 
   //////////////////////////////////////// FUNCIONES PARA LISTAR JUEGOS ///////////////////////////////////////////////
 
 
   // Busca la lista de juego de puntos y la clasifica entre activo e inactivo, y activa la función ListaJuegosDeColeccion
-  ListaJuegosDePuntos() {
-    this.juegoDePuntosService.GET_JuegoDePuntos(this.grupoId)
-    .subscribe(juegos => {
-      console.log('He recibido los juegos de puntos');
-      console.log(juegos);
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < juegos.length; i++) {
-        if (juegos[i].JuegoActivo === true) {
-          this.juegosDePuntosActivos.push(juegos[i]);
-        } else {
-          console.log('Juego inactivo');
-          console.log(juegos[i]);
-          this.juegosDePuntosInactivos.push(juegos[i]);
-        }
-      }
-      this.ListaJuegosDeColeccion();
-    });
-  }
-
-
-  // Busca la lista de juego de coleccion y la clasifica entre activo e inactivo, y activa la función ListaJuegosDeCompeticion
-  ListaJuegosDeColeccion() {
-    this.juegoService.GET_JuegoDeColeccion(this.grupoId)
-    .subscribe(juegos => {
-      console.log('He recibido los juegos de coleccion');
-
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < juegos.length; i++) {
-        if (juegos[i].JuegoActivo === true) {
-          this.juegosDeColeccionActivos.push(juegos[i]);
-        } else {
-          this.juegosDeColeccionInactivos.push(juegos[i]);
-        }
-      }
-      this.ListaJuegosDeCompeticion();
-    });
-  }
-
-
-  // Busca la lista de juego de competicion y la clasifica entre activo e inactivo, y activa la función ListaJuegosTotales
-  ListaJuegosDeCompeticion() {
-    this.juegoService.GET_JuegoDeCompeticion(this.grupoId)
-    .subscribe(juegos => {
-      console.log('He recibido los juegos de competición');
-
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < juegos.length; i++) {
-        if (juegos[i].JuegoActivo === true) {
-          this.juegosDeCompeticionActivos.push(juegos[i]);
-        } else {
-          this.juegosDeCompeticionInactivos.push(juegos[i]);
-        }
-      }
-      this.ListaJuegosTotales();
-    });
-  }
-
-
-  // Una vez recibidos los juegos de puntos y colección y clasificados en activos e inactivos, los metemos dentro de la
-  // lista total de juegos activos e inactivos
-  ListaJuegosTotales() {
-
-    for (let i = 0; i < (this.juegosDePuntosActivos.length); i++ ) {
-      this.todosLosJuegosActivos.push(this.juegosDePuntosActivos[i]);
-    }
-
-    for (let i = 0; i < (this.juegosDePuntosInactivos.length); i++ ) {
-      this.todosLosJuegosInactivos.push(this.juegosDePuntosInactivos[i]);
-    }
-
-    for (let i = 0; i < (this.juegosDeColeccionActivos.length); i++ ) {
-      this.todosLosJuegosActivos.push(this.juegosDeColeccionActivos[i]);
-    }
-
-    for (let i = 0; i < (this.juegosDeColeccionInactivos.length); i++ ) {
-      this.todosLosJuegosInactivos.push(this.juegosDeColeccionInactivos[i]);
-    }
-
-    for (let i = 0; i < (this.juegosDeCompeticionActivos.length); i++ ) {
-      this.todosLosJuegosActivos.push(this.juegosDeCompeticionActivos[i]);
-    }
-
-    for (let i = 0; i < (this.juegosDeCompeticionInactivos.length); i++ ) {
-      this.todosLosJuegosInactivos.push(this.juegosDeCompeticionInactivos[i]);
-    }
-
-    // Por defecto al principio mostraremos la lista de todos los juegos, con lo que la lista seleccionada para mostrar
-    // será la de todos los juegos
-    this.ListaJuegosSeleccionadoActivo = this.todosLosJuegosActivos;
-    this.ListaJuegosSeleccionadoInactivo = this.todosLosJuegosInactivos;
-  }
-
-
-  // En función de la opción que deseemos muestrear (opcionSeleccionada) en la lista de juegos, el vector
-  // ListaJuegosSeleccionadoActivo y ListaJuegosSeleccionadoInactivo tomará un valor u otro
-  ListaJuegoSeleccionado() {
-
-    console.log('Busquemos la lista correspondiente');
-    console.log(this.opcionSeleccionada);
-
-    if (this.opcionSeleccionada === 'todosLosJuegos') {
-      this.ListaJuegosSeleccionadoActivo = this.todosLosJuegosActivos;
-      this.ListaJuegosSeleccionadoInactivo = this.todosLosJuegosInactivos;
-    }
-    if (this.opcionSeleccionada === 'juegosDePuntos') {
-      this.ListaJuegosSeleccionadoActivo = this.juegosDePuntosActivos;
-      this.ListaJuegosSeleccionadoInactivo = this.juegosDePuntosInactivos;
-    }
-
-    if (this.opcionSeleccionada === 'juegosDeColeccion') {
-      this.ListaJuegosSeleccionadoActivo = this.juegosDeColeccionActivos;
-      this.ListaJuegosSeleccionadoInactivo = this.juegosDeColeccionInactivos;
-    }
-
-    if (this.opcionSeleccionada === 'juegosDeCompeticion') {
-
-      this.ListaJuegosSeleccionadoActivo = this.juegosDeCompeticionActivos;
-      this.ListaJuegosSeleccionadoInactivo = this.juegosDeCompeticionInactivos;
-    }
-  }
 
   // Función que usaremos para clicar en un juego y entrar en él, enviándolo al servicio
   JuegoSeleccionado(juego: Juego) {
-    this.juegoService.EnviarJuegoAlServicio(juego);
+    this.sesion.TomaJuego(juego);
   }
-
 
 
 
@@ -282,8 +160,8 @@ export class JuegoComponent implements OnInit {
   ///////////////////////////////////////// FUNCIONES PARA CREAR JUEGO ///////////////////////////////////////////////
 
   // RECUPERA LOS EQUIPOS DEL GRUPO
-  EquiposDelGrupo() {
-    this.equipoService.GET_EquiposDelGrupo(this.grupoId)
+  TraeEquiposDelGrupo() {
+    this.peticionesAPI.DameEquiposDelGrupo(this.grupo.id)
     .subscribe(equipos => {
       if (equipos !== undefined) {
         console.log('Hay equipos');
@@ -319,9 +197,9 @@ export class JuegoComponent implements OnInit {
       }
 
     } else {
-      if (this.equiposGrupo[0] === undefined) {
+      if (this.equiposGrupo === undefined) {
         this.isDisabledModo = true;
-        console.log('No se puede crear juego pq no hay alumnos');
+        console.log('No se puede crear juego pq no hay equipos');
       } else {
         this.isDisabledModo = false;
         console.log('Hay equipos, puedo crear');
@@ -332,23 +210,23 @@ export class JuegoComponent implements OnInit {
 
   // Función que usaremos para crear un juego de puntos. Hay que diferenciar entre los tres juegos porque la URL es diferente
   CrearJuegoDePuntos() {
-    this.juegoDePuntosService.POST_JuegoDePuntos(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupoId)
+    this.peticionesAPI.CreaJuegoDePuntos(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       console.log(juegoCreado);
       console.log('Juego creado correctamente');
-      this.juegoService.EnviarJuegoAlServicio(juegoCreado);
+      this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
     });
   }
 
   CrearJuegoDeColeccion() {
-    this.juegoService.POST_JuegoDeColeccion(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupoId)
+    this.peticionesAPI.CreaJuegoDeColeccion(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       console.log(juegoCreado);
       console.log('Juego creado correctamente');
-      this.juegoService.EnviarJuegoAlServicio(juegoCreado);
+      this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
     });
   }
@@ -382,7 +260,7 @@ export class JuegoComponent implements OnInit {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.alumnosGrupo.length; i++) {
       console.log(this.alumnosGrupo[i]);
-      this.juegoDePuntosService.POST_AlumnoJuegoDePuntos(new AlumnoJuegoDePuntos(this.alumnosGrupo[i].id, this.juego.id))
+      this.peticionesAPI.InscribeAlumnoJuegoDePuntos(new AlumnoJuegoDePuntos(this.alumnosGrupo[i].id, this.juego.id))
       .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
     }
   }
@@ -395,37 +273,19 @@ export class JuegoComponent implements OnInit {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.equiposGrupo.length; i++) {
       console.log(this.equiposGrupo[i]);
-      this.juegoDePuntosService.POST_EquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
+      this.peticionesAPI.InscribeEquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
       .subscribe(equiposJuego => console.log(equiposJuego));
     }
   }
 
   Finalizar() {
-    this.ListaJuegosDePuntos();
+    // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+    if (this.juegosActivos === undefined) {
+      // Si la lista aun no se ha creado no podre hacer el push
+      this.juegosActivos = [];
+    }
+    this.juegosActivos.push (this.juego);
 
-    // AHORA SEPARAMOS ENTRE LOS JUEGOS ACTIVOS E INACTIVOS DE CADA TIPO DE JUEGO
-
-    // Separamos entre juegos de puntos activos e inactivos
-    this.juegosDePuntosActivos = [];
-    this.juegosDePuntosInactivos = [];
-
-    // Separamos entre juegos de coleccion activos e inactivos
-    this.juegosDeColeccionActivos = [];
-    this.juegosDeColeccionInactivos  = [];
-
-    // Separamos entre juegos de competición activos e inactivos
-    this.juegosDeCompeticionActivos = [];
-    this.juegosDeCompeticionInactivos = [];
-
-
-    // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS E INACTIVOS DE LOS TRES TIPOS DE JUEGOS
-    this.todosLosJuegosActivos = [];
-    this.todosLosJuegosInactivos = [];
-
-    // Al seleccionar el tipo de juego que deseo mostrar de la lista desplegable (OpcionSeleccionada), copiaremos esa lista
-    // en este vector, ya que será de donde se sacará la información que se mostrará
-    this.ListaJuegosSeleccionadoActivo = [];
-    this.ListaJuegosSeleccionadoInactivo = [];
 
     this.juegoCreado = false;
 

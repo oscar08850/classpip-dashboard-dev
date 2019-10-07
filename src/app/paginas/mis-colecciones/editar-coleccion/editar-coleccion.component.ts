@@ -10,6 +10,9 @@ import { Cromo, Coleccion } from '../../../clases/index';
 
 // Servicios
 import { ColeccionService } from '../../../servicios/index';
+// Servicios
+import { SesionService, PeticionesAPIService } from '../../../servicios/index';
+
 
 @Component({
   selector: 'app-editar-coleccion',
@@ -23,7 +26,7 @@ export class EditarColeccionComponent implements OnInit {
 
   cromo: Cromo;
   imagenCromo: string;
-  imagenCromoArray: string[] = [];
+  imagenesCromos: string[] = [];
 
   nombreColeccion: string;
   // imagen coleccion
@@ -43,16 +46,19 @@ export class EditarColeccionComponent implements OnInit {
               public dialog: MatDialog,
               private location: Location,
               private http: Http,
+              private sesion: SesionService,
+              private peticionesAPI: PeticionesAPIService,
               public snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
-    this.coleccion = this.coleccionService.RecibirColeccionDelServicio();
+    this.coleccion = this.sesion.DameColeccion();
     this.nombreColeccion = this.coleccion.Nombre;
-
-    this.CromosEImagenDeLaColeccion(this.coleccion);
+    this.cromosColeccion = this.sesion.DameCromos();
+    // Me traigo la imagen de la colección y las imagenes de cada cromo
+    this.TraeImagenesColeccion(this.coleccion);
     // Cargo el imagen de la coleccion
-    this.GET_Imagen();
+    // this.GET_Imagen();
   }
 
   // Se hace un PUT de la coleccion seleccionada para editar
@@ -60,7 +66,7 @@ export class EditarColeccionComponent implements OnInit {
     console.log('Entro a editar');
 
     // tslint:disable-next-line:max-line-length
-    this.coleccionService.PUT_Coleccion(new Coleccion(this.nombreColeccion, this.nombreImagenColeccion), this.coleccion.profesorId, this.coleccion.id)
+    this.peticionesAPI.ModificaColeccion(new Coleccion(this.nombreColeccion, this.nombreImagenColeccion), this.coleccion.profesorId, this.coleccion.id)
     .subscribe((res) => {
       if (res != null) {
         console.log('Voy a editar la coleccion con id ' + this.coleccion.id);
@@ -81,7 +87,7 @@ export class EditarColeccionComponent implements OnInit {
     this.goBack();
   }
 
-
+/*
     // Busca la imagen que tiene el nombre del coleccion.ImagenColeccion y lo carga en imagenColeccion
     GET_Imagen() {
 
@@ -103,10 +109,10 @@ export class EditarColeccionComponent implements OnInit {
       });
 
       }
-    }
+    } */
 
   // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
-  GET_ImagenCromo() {
+  TraeImagenesCromos() {
 
       // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.cromosColeccion.length; i++) {
@@ -122,7 +128,7 @@ export class EditarColeccionComponent implements OnInit {
 
           const reader = new FileReader();
           reader.addEventListener('load', () => {
-            this.imagenCromoArray[i] = reader.result.toString();
+            this.imagenesCromos[i] = reader.result.toString();
           }, false);
 
           if (blob) {
@@ -175,16 +181,16 @@ export class EditarColeccionComponent implements OnInit {
      // RECUPERAREMOS LA NUEVA LISTA DE LOS CROMO Y VOLVEREMOS A BUSCAR LOS CROMOS QUE TIENE LA COLECCION
     dialogRef.afterClosed().subscribe(cromo => {
 
-    this.CromosEImagenDeLaColeccion(this.coleccion);
+    this.cromosColeccion.push (cromo);
+    this.TraeImagenesColeccion(this.coleccion);
 
      });
   }
 
-  // Una vez seleccionado un cromo, lo podemos editar o eliminar. Esta función se activará si clicamos en editar.
-  // Envía el cromo específico al componente editar-cromo
-  EnviarCromoEditar(cromo: Cromo) {
+  // Guardo cromo en sesión, porque lo necesitará el componente de editar cromo
+  GuardarCromo(cromo: Cromo) {
     console.log('voy a enviar');
-    this.coleccionService.EnviarCromoAlServicio(cromo);
+    this.sesion.TomaCromo(cromo);
 
 
   }
@@ -216,9 +222,19 @@ export class EditarColeccionComponent implements OnInit {
 
   // Utilizamos esta función para eliminar un cromo de la base de datos y actualiza la lista de cromos
   BorrarCromo(cromo: Cromo) {
-    this.coleccionService.DELETE_Cromo(cromo.id, this.coleccion.id)
+    this.peticionesAPI.BorrarCromo(cromo.id, this.coleccion.id)
     .subscribe(() => {
-      this.CromosEImagenDeLaColeccion(this.coleccion);
+      // Eliminamos el cromo de la colección
+      console.log ('coleccion:' + this.coleccion);
+      const i = this.cromosColeccion.indexOf(cromo);
+      console.log ('posicion ' + i);
+      this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
+      this.TraeImagenesCromos();
+      // En teoria debería poder ahorrarme traer otra vez los cromos
+      // de la base de datos, eliminando la imagen del vector de imagenes
+      // con la sentencia siguiente:
+      // this.imagenesCromos = this.imagenesCromos.slice(i, 1);
+      // Sin embargo, no funciona.
 
     });
   }
@@ -231,8 +247,8 @@ export class EditarColeccionComponent implements OnInit {
 
   // }
 
-  // Le pasamos la coleccion y buscamos la imagen que tiene y sus cromos
- CromosEImagenDeLaColeccion(coleccion: Coleccion) {
+  // Le pasamos la coleccion y buscamos la imagen que tiene y las imagenes de sus cromos
+ TraeImagenesColeccion(coleccion: Coleccion) {
 
   console.log('entro a buscar cromos y foto');
   console.log(coleccion.ImagenColeccion);
@@ -264,19 +280,21 @@ export class EditarColeccionComponent implements OnInit {
   // Una vez tenemos el logo del equipo seleccionado, buscamos sus alumnos
   console.log('voy a mostrar los cromos de la coleccion ' + coleccion.id);
 
-  // Busca los cromos dela coleccion en la base de datos
-  this.coleccionService.GET_CromosColeccion(coleccion.id)
-  .subscribe(res => {
-    if (res[0] !== undefined) {
-      this.cromosColeccion = res;
-      this.OrdenarCromos();
-      this.GET_ImagenCromo();
-      console.log(res);
-    } else {
-      console.log('No hay cromos en esta coleccion');
-      this.cromosColeccion = undefined;
-    }
-  });
+  // Ordena los cromos por nombre. Asi si tengo algun cromo repetido, salen juntos
+  this.cromosColeccion.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+  this.TraeImagenesCromos();
+  // this.coleccionService.GET_CromosColeccion(coleccion.id)
+  // .subscribe(res => {
+  //   if (res[0] !== undefined) {
+  //     this.cromosColeccion = res;
+  //     this.OrdenarCromos();
+
+  //     console.log(res);
+  //   } else {
+  //     console.log('No hay cromos en esta coleccion');
+  //     this.cromosColeccion = undefined;
+  //   }
+  //});
 }
   goBack() {
     this.location.back();

@@ -1,3 +1,4 @@
+R
 <div class="titulo"><h2>Equipos</h2></div>
 <mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
 
@@ -79,7 +80,7 @@
             </mat-form-field>
 
             <div>
-                <input #file id = "input" type="file" accept= 'image/*' (change)="ExaminarLogo($event)" style="display:none">
+                <input #file id = "input" type="file" accept= 'image/*' (change)="BuscarLogo($event)" style="display:none">
                 <img class="foto" *ngIf="logo" hight = "100" width = "100" mat-card-image [src]="logo" style="margin: 5px" >
                 <button  (click) = "ActivarInput()" type="button" class="btn Agregar">
                   Agregar logo <i style="margin: 5px" class="material-icons">add_photo_alternate</i>
