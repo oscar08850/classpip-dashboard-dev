@@ -7,8 +7,6 @@ import {MatTableDataSource} from '@angular/material/table';
 // Clases
 import { Alumno, Equipo, Juego, Punto, AsignacionPuntosJuego} from '../../../clases/index';
 
-// Services
-import { JuegoService, GrupoService, PuntosInsigniasService, ProfesorService, JuegoDePuntosService } from '../../../servicios/index';
 
 // Services
 import { SesionService, PeticionesAPIService } from '../../../servicios/index';
@@ -39,15 +37,11 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
   puntosSeleccionados: Punto[] = [];
   botonTablaDesactivado = false;
 
-  constructor( private juegoService: JuegoService,
-               private profesorService: ProfesorService,
-               private grupoService: GrupoService,
-               private juegoDePuntosService: JuegoDePuntosService,
+  constructor(
                public snackBar: MatSnackBar,
                private sesion: SesionService,
-               private peticionesAPI: PeticionesAPIService,
-
-               private puntosInsigniasService: PuntosInsigniasService) { }
+               private peticionesAPI: PeticionesAPIService
+  ){}
 
   ngOnInit() {
 
@@ -65,27 +59,7 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
       console.log(this.seleccionados);
       this.dataSource = new MatTableDataSource (this.tiposPuntos);
     });
-    //this.RecogerPuntos();
   }
-
-  ////////////////////////////////////////////// PARA JUEGO DE PUNTOS ////////////////////////////////////////////////
-
- /*  RecogerPuntos() {
-    if (this.profesorService.RecibirProfesorIdDelServicio() !== undefined) {
-      console.log('profesor id');
-      this.profesorId = this.profesorService.RecibirProfesorIdDelServicio();
-      this.PuntosParaAsignar();
-    }
-  }
-
-  PuntosParaAsignar() {
-    this.peticionesAPI.DameTiposDePuntos(this.profesorId)
-    .subscribe(puntos => {
-      this.tiposPuntosSeleccionables = puntos;
-      this.seleccionados = Array(this.tiposPuntosSeleccionables.length).fill(false);
-      console.log(this.seleccionados);
-    });
-  } */
   /* Para averiguar si todas las filas están seleccionadas */
   IsAllSelected() {
     const numSelected = this.selection.selected.length;

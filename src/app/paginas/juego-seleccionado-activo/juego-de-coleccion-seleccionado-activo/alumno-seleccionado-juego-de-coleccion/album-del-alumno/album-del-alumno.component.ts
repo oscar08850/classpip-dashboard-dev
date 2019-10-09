@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ResponseContentType, Http, Response } from '@angular/http';
 
 // Clases
-import { Cromo, Coleccion, AlbumDelAlumno } from '../../../../../clases/index';
+import { Cromo, Coleccion, AlbumDelAlumno, Alumno } from '../../../../../clases/index';
 
 // Servicios
-import { ColeccionService } from '../../../../../servicios/index';
+import { SesionService, PeticionesAPIService } from '../../../../../servicios/index';
 
 @Component({
   selector: 'app-album-del-alumno',
@@ -24,13 +24,17 @@ export class AlbumDelAlumnoComponent implements OnInit {
   cromosAlumno: Cromo[];
 
   AlbumDelAlumno: AlbumDelAlumno[] = [];
+  alumno: Alumno;
 
-  constructor( private coleccionService: ColeccionService,
-               private http: Http) { }
+  constructor(
+                private sesion: SesionService,
+                private peticionesAPI: PeticionesAPIService,
+                private http: Http) { }
 
   ngOnInit() {
-    this.coleccion = this.coleccionService.RecibirColeccionDelServicio();
-    this.cromosAlumno = this.coleccionService.RecibirCromosAlumnoDelServicio();
+    this.coleccion = this.sesion.DameColeccion();
+    this.cromosAlumno = this.sesion.DameCromos();
+    this.alumno = this.sesion.DameAlumno();
     this.CromosDeLaColeccion(this.coleccion);
   }
 
@@ -41,23 +45,24 @@ export class AlbumDelAlumnoComponent implements OnInit {
     console.log('voy a mostrar los cromos de la coleccion ' + coleccion.id);
 
     // Busca los cromos dela coleccion en la base de datos
-    this.coleccionService.GET_CromosColeccion(coleccion.id)
+    this.peticionesAPI.DameCromosColeccion(coleccion.id)
     .subscribe(res => {
       if (res[0] !== undefined) {
         this.cromosColeccion = res;
-        this.OrdenarCromos();
-        this.GET_ImagenCromo();
-        this.VerAlbum();
+        this.cromosColeccion.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+        this.GET_ImagenesCromos();
+        this.PreparaAlbum();
         console.log(res);
       } else {
         console.log('No hay cromos en esta coleccion');
+        // Mensaje usuario
         this.cromosColeccion = undefined;
       }
     });
   }
 
   // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
-  GET_ImagenCromo() {
+  GET_ImagenesCromos() {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.cromosColeccion.length; i++) {
@@ -85,7 +90,7 @@ export class AlbumDelAlumnoComponent implements OnInit {
     }
   }
 
-  VerAlbum() {
+  PreparaAlbum() {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.cromosColeccion.length; i++) {
@@ -104,15 +109,5 @@ export class AlbumDelAlumnoComponent implements OnInit {
           this.cromosColeccion[i].Probabilidad, this.cromosColeccion[i].Nivel, false);
       }
     }
-  }
-
-  // Ordena los cromos por nombre. Asi es más fácil identificar los cromos que tengo
-  OrdenarCromos() {
-    this.cromosColeccion.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
-  }
-
-  prueba() {
-    console.log(this.AlbumDelAlumno);
-
   }
 }

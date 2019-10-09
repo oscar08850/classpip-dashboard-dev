@@ -169,10 +169,7 @@ export class JuegoDePuntosService {
     return this.http.delete<HistorialPuntosEquipo[]>(this.APIURLHistorialPuntosEquipo + '/' + historialPuntosEquipoId);
   }
 
-  // CAMBIA EL ESTADO DEL JUEGO DE COLECCIÓN DE ACTIVO A INACTIVO O VICEVERSA
-  PUT_EstadoJuegoDePuntos(juegoDePuntos: Juego, juegoDePuntosId: number, grupoId: number): Observable<Juego> {
-    return this.http.put<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegoDePuntos/' + juegoDePuntosId, juegoDePuntos);
-  }
+
 
   // ELIMINA EL JUEGO DE COLECCIÓN QUE PASAMOS COMO PARÁMETRO
   DELETE_JuegoDePuntos(juegoDePuntosId: number, grupoId: number): Observable<Juego> {

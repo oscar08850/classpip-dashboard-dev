@@ -7,7 +7,6 @@ import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 import { Alumno, Equipo, Juego, Punto, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo} from '../../clases/index';
 
 // Services
-import { JuegoService, GrupoService, PuntosInsigniasService, EquipoService, JuegoDePuntosService } from '../../servicios/index';
 import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
 
 export interface OpcionSeleccionada {
@@ -42,19 +41,6 @@ export class JuegoComponent implements OnInit {
   juegoCreado: Boolean = false;
 
   juego: Juego;
-
-
-
-
-  ///////////////////////////////////// PARÁMETROS PARA PÁGINA LISTA DE JUEGOS ////////////////////////////////////
-
-  // Opciones para mostrar en la lista desplegable para seleccionar el tipo de juego que listar
-  opcionesMostrar: OpcionSeleccionada[] = [
-    {nombre: 'Todos los juegos', id: 'todosLosJuegos'},
-    {nombre: 'Juegos de puntos', id: 'juegosDePuntos'},
-    {nombre: 'Juegos de colección', id: 'juegosDeColeccion'},
-    {nombre: 'Juegos de competición', id: 'juegosDeCompeticion'},
-  ];
 
 
   // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS E INACTIVOS DE LOS TRES TIPOS DE JUEGOS
@@ -107,12 +93,8 @@ export class JuegoComponent implements OnInit {
 
   tipoJuegoElegido: string;
 
-  constructor( private juegoService: JuegoService,
-               private grupoService: GrupoService,
-               private equipoService: EquipoService,
-               private juegoDePuntosService: JuegoDePuntosService,
+  constructor(
                public snackBar: MatSnackBar,
-               private puntosInsigniasService: PuntosInsigniasService,
                private calculos: CalculosService,
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService
@@ -124,8 +106,21 @@ export class JuegoComponent implements OnInit {
     this.alumnosGrupo = this.sesion.DameAlumnosGrupo();
     // La lista de equipos del grupo no esta en el servicio sesión. Asi que hay que
     // ir a buscarla
-    this.TraeEquiposDelGrupo ();
-    console.log ('Alumnos grupo' + this.alumnosGrupo);
+    this.peticionesAPI.DameEquiposDelGrupo(this.grupo.id)
+    .subscribe(equipos => {
+      if (equipos !== undefined) {
+        console.log('Hay equipos');
+        this.equiposGrupo = equipos;
+        console.log(this.equiposGrupo);
+      } else {
+        // mensaje al usuario
+        console.log('Este grupo aun no tiene equipos');
+      }
+
+    });
+
+    // Ahora traemos la lista de juegos
+    // esta operacion es complicada. Por eso está en calculos
     this.calculos.DameListaJuegos(this.grupo.id)
     .subscribe ( listas => {
             this.juegosActivos = listas.activos;
@@ -149,7 +144,8 @@ export class JuegoComponent implements OnInit {
 
   // Busca la lista de juego de puntos y la clasifica entre activo e inactivo, y activa la función ListaJuegosDeColeccion
 
-  // Función que usaremos para clicar en un juego y entrar en él, enviándolo al servicio
+  // Función que usaremos para clicar en un juego y entrar en él,
+  // Enviamos juego a la sesión
   JuegoSeleccionado(juego: Juego) {
     this.sesion.TomaJuego(juego);
   }
@@ -168,6 +164,7 @@ export class JuegoComponent implements OnInit {
         this.equiposGrupo = equipos;
         console.log(this.equiposGrupo);
       } else {
+        // mensaje al usuario
         console.log('Este grupo aun no tiene equipos');
       }
 
@@ -208,7 +205,8 @@ export class JuegoComponent implements OnInit {
     }
   }
 
-  // Función que usaremos para crear un juego de puntos. Hay que diferenciar entre los tres juegos porque la URL es diferente
+  // Función que usaremos para crear un juego de puntos.
+  //Hay que diferenciar entre los tres juegos porque la URL es diferente
   CrearJuegoDePuntos() {
     this.peticionesAPI.CreaJuegoDePuntos(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupo.id)
     .subscribe(juegoCreado => {

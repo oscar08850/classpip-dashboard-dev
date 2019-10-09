@@ -1,8 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
-// Servicios
-import {EquipoService, MatriculaService} from '../../../servicios/index';
 
 
 // Servicios
@@ -32,7 +30,6 @@ export class AgregarAlumnoEquipoComponent implements OnInit {
 
   constructor( public dialogRef: MatDialogRef<AgregarAlumnoEquipoComponent>,
                @Inject(MAT_DIALOG_DATA) public data: any,
-               private equipoService: EquipoService,
                private peticionesAPI: PeticionesAPIService) {
 
                dialogRef.disableClose = true;
@@ -77,19 +74,7 @@ export class AgregarAlumnoEquipoComponent implements OnInit {
     });
   }
 
-/*
-  // Añadimos a la lista de alumnos sin equipo al alumno que paso como parámetro
-  AgregarAlumnoListaSinEquipo(alumno: Alumno): Alumno[] {
-    this.alumnosSinEquipo.push(alumno);
-
-    // Hacemos esto para que nos actualice la tabla. No se sabe por que al hacer el push actualiza la lista pero no la
-    // tabla. Asi que hacemos un filtrado que nos devuelve la lista excepto el alumno con nombre '' (cosa que no puede pasar)
-    this.alumnosSinEquipo = this.alumnosSinEquipo.filter(res => res.Nombre !== '');
-
-    return this.alumnosSinEquipo;
-  } */
-
-  // Borro al alumno del equipo mediante la base de datos
+  // Borro al alumno del equipo
   BorrarAlumnoEquipo(alumno: Alumno) {
     console.log('voy a borrar a ' + alumno.id);
     // PRIMERO BUSCO LA ASIGNACIÓN QUE VINCULA EL ALUMNO CON ID QUE PASO COMO PARÁMETRO Y EL EQUIPO EN EL QUE ESTOY
@@ -110,7 +95,6 @@ export class AgregarAlumnoEquipoComponent implements OnInit {
             // Hacemos esto para que nos actualice la tabla. No se sabe por que al hacer el push actualiza la lista pero no la
             // tabla. Asi que hacemos un filtrado que nos devuelve la lista excepto el alumno con nombre '' (cosa que no puede pasar)
             this.alumnosSinEquipo = this.alumnosSinEquipo.filter(result => result.Nombre !== '');
-            //this.AgregarAlumnoListaSinEquipo(alumno); // ACTUALIZAMOS LA TABLA ALUMNOS SIN EQUIPO
             console.log(this.alumnosSinEquipo);
           } else {
             console.log('No se ha podido eliminar');

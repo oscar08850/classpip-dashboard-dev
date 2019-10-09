@@ -1,10 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-
-// Servicios
-import {ProfesorService, MatriculaService, AlumnoService} from '../../../servicios/index';
-
 // Servicios
 import {PeticionesAPIService} from '../../../servicios/index';
 
@@ -31,8 +27,7 @@ export class AgregarAlumnoDialogComponent implements OnInit {
   myForm: FormGroup;
   myForm2: FormGroup;
 
-  constructor(private matriculaService: MatriculaService,
-              private alumnoService: AlumnoService,
+  constructor(
               private formBuilder: FormBuilder,
               private peticionesAPI: PeticionesAPIService,
               public dialogRef: MatDialogRef<AgregarAlumnoDialogComponent>,
@@ -40,10 +35,13 @@ export class AgregarAlumnoDialogComponent implements OnInit {
 
   ngOnInit() {
 
-    // Recogemos los datos que le pasamos del otro componente
+    // Recogemos los datos que le pasamos desde el componente que nos llama
+    // Podríamos recogerlos de la sesión, pero en el caso de los dialogos
+    // estamos usando el mecanismo de pasarle parametos, que es sencillo
     this.grupoId = this.data.grupoId;
     this.profesorId = this.data.profesorId;
 
+    // Usaremos dos formularios, que tienen los campos que se indican
 
     this.myForm = this.formBuilder.group({
       nombreAlumno: ['', Validators.required],
@@ -51,6 +49,7 @@ export class AgregarAlumnoDialogComponent implements OnInit {
       segundoApellido: ['', Validators.required],
       textoAlumnos: ['', Validators.required],
     });
+
     this.myForm2 = this.formBuilder.group({
       textoAlumnos: ['', Validators.required],
     });
@@ -69,6 +68,27 @@ export class AgregarAlumnoDialogComponent implements OnInit {
     const alumno = new Alumno (nombreAlumno, primerApellido, segundoApellido);
     this.AsignaAlumno (alumno);
   }
+
+  // Para asignar al alumno primero vemos si ya está en la base de datos
+  // en cuyo caso ya podemos matricularlo directamente en el grupo
+  // o si no está en la base de datos, en cuyo caso hay que ponerlo en la base
+  // de datos antes de matricularlo
+  AsignaAlumno(alumno: Alumno) {
+
+    this.peticionesAPI.DameAlumnoConcreto(alumno, this.profesorId)
+      .subscribe((respuesta) => {
+        if (respuesta[0] !== undefined) {
+          // el alumno ya está en la base de datos
+          console.log ('Ya esta en la base de datos');
+          this.MatricularAlumno(respuesta[0] );
+       } else {
+          // el alumno no está en la base de datos.
+          console.log ('NO esta en la base de datos');
+          this.AgregarAlumnoNuevoGrupo(alumno );
+        }
+      });
+  }
+
 
   // Esta función es la que se llama desde el formulario cuando están preparados los
   // datos de los alumnos para asignación masiva
@@ -93,39 +113,19 @@ export class AgregarAlumnoDialogComponent implements OnInit {
     }
   }
 
-  // Para asignar al alumno primero vemos si ya está en la base de datos
-  // en cuyo caso ya podemos matricularlo directamente en el grupo
-  // o si no está en la base de datos, en cuyo caso hay que ponerlo en la base
-  // de datos antes de matricularlo
-  AsignaAlumno(alumno: Alumno) {
-
-    this.peticionesAPI.DameAlumnoConcreto(alumno, this.profesorId)
-      .subscribe((respuesta) => {
-        if (respuesta[0] !== undefined) {
-          // el alumno ya está en la base de datos
-          console.log ('Ya esta en la base de datos');
-          this.MatricularAlumno(respuesta[0] );
-       } else {
-          // el alumno no está en la base de datos.
-          console.log ('NO esta en la base de datos');
-          this.AgregarAlumnoNuevoGrupo(alumno );
-        }
-      });
-  }
 
    // Para matricularlo enviamos la matricula a la base de datos y
    // agregamos al alumno en la lista de alumnos inscritos que se muestra en pantalla
    MatricularAlumno(alumno: Alumno) {
-    console.log ('Voy a metricular:  ' + alumno.id);
     this.peticionesAPI.MatriculaAlumnoEnGrupo(new Matricula (alumno.id, this.grupoId))
     .subscribe((resMatricula) => {
       if (resMatricula != null) {
         // Añadimos el alumno a la lista que hay que mostrar
-        console.log ('Ya esta matriculado');
         this.alumnosAgregados.push(alumno);
         this.alumnosAgregados = this.alumnosAgregados.filter(res => res.Nombre !== '');
         this.myForm.reset();
       } else {
+        // Aqui habria que mostrar algun mensaje al usuario
         console.log('fallo en la matriculación');
       }
     });
@@ -134,7 +134,6 @@ export class AgregarAlumnoDialogComponent implements OnInit {
   // Si el alumno no está en la base de datos lo enviamos a la base de datos (asignado al profesor)
   // y lo matriculamos en el grupo
   AgregarAlumnoNuevoGrupo(alumno: Alumno) {
-    console.log ('voy a agregar alumno nuevo: ' + alumno);
     this.peticionesAPI.AsignaAlumnoAlProfesor( alumno, this.profesorId)
       .subscribe(res => {
         if (res != null) {
@@ -142,6 +141,8 @@ export class AgregarAlumnoDialogComponent implements OnInit {
           this.MatricularAlumno(res);
 
         } else {
+          // Aqui habria que mostrar algun mensaje al usuario
+
           console.log('fallo añadiendo');
         }
       });

@@ -39,7 +39,6 @@ R
         </mat-checkbox>
 
       </th>
-      <!-- <td mat-cell *matCellDef="let row; let i = index" (click) = "Seleccionar(i);"> -->
       <td mat-cell *matCellDef="let row">
 
         <mat-checkbox
@@ -57,8 +56,6 @@ R
     <!-- Nombre Alumno Column -->
     <ng-container matColumnDef="nombreAlumno">
       <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Nombre </th>
-  <!--     <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.Nombre}} </td>
-    -->
       <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
 
     </ng-container>
@@ -66,7 +63,6 @@ R
     <!-- Primer Apellido Column -->
     <ng-container matColumnDef="primerApellido">
       <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Primer Apellido </th>
-      <!-- <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.PrimerApellido}} </td> -->
       <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
 
     </ng-container>
@@ -74,7 +70,6 @@ R
     <!-- Segundo Apellido Column -->
     <ng-container matColumnDef="segundoApellido">
       <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Segundo Apellido </th>
-      <!-- <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.SegundoApellido}} </td> -->
       <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
 
     </ng-container>
@@ -82,7 +77,6 @@ R
     <!-- alumnoId Column -->
     <ng-container matColumnDef="alumnoId">
       <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Identificador Alumno </th>
-      <!-- <td mat-cell *matCellDef="let alumno; let i = index" (click) = "Seleccionar(i);"> {{alumno.id}} </td> -->
       <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
 
     </ng-container>
@@ -90,7 +84,6 @@ R
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-        <!-- (click)="selection.toggle(row)"> -->
     </tr>
   </table>
 </form>

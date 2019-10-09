@@ -8,6 +8,8 @@ import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion }
 // Services
 import { JuegoService, EquipoService, AlumnoService, JuegoDeColeccionService, ColeccionService} from '../../../servicios/index';
 
+import { SesionService, CalculosService, PeticionesAPIService } from '../../../servicios/index';
+
 // Imports para abrir diálogo y snackbar
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
@@ -45,7 +47,11 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
   inscripcionesAlumnos: AlumnoJuegoDeColeccion[];
   inscripcionesEquipos: EquipoJuegoDeColeccion[];
 
-  constructor(private juegoService: JuegoService,
+  constructor(
+              private sesion: SesionService,
+              private peticionesAPI: PeticionesAPIService,
+              private calculos: CalculosService,
+              private juegoService: JuegoService,
               private alumnoService: AlumnoService,
               private equipoService: EquipoService,
               private coleccionService: ColeccionService,
@@ -55,7 +61,7 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
               private location: Location) { }
 
   ngOnInit() {
-    this.juegoSeleccionado = this.juegoService.RecibirJuegoDelServicio();
+    this.juegoSeleccionado = this.sesion.DameJuego();
 
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
@@ -75,19 +81,20 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
 
   // Recupera los alumnos que pertenecen al juego
   AlumnosDelJuego() {
-    this.juegoDeColeccionService.GET_AlumnosJuegoDeColeccion(this.juegoSeleccionado.id)
+    this.peticionesAPI. DameAlumnosJuegoDeColeccion(this.juegoSeleccionado.id)
     .subscribe(alumnosJuego => {
       console.log(alumnosJuego);
       this.alumnosDelJuego = alumnosJuego;
       this.RecuperarInscripcionesAlumnoJuego();
       this.ColeccionDelJuego();
-      this.juegoService.EnviarAlumnoJuegoAlServicio(this.alumnosDelJuego);
+      this.sesion.TomaAlumnosDelJuego (this.alumnosDelJuego);
+      this.datasourceAlumno = new MatTableDataSource(this.alumnosDelJuego);
     });
   }
 
   // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen y los ordena de mayor a menor valor
   RecuperarInscripcionesAlumnoJuego() {
-    this.juegoDeColeccionService.GET_InscripcionesAlumnoJuegoDeColeccion(this.juegoSeleccionado.id)
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeColeccion(this.juegoSeleccionado.id)
     .subscribe(inscripciones => {
       this.inscripcionesAlumnos = inscripciones;
       console.log(this.inscripcionesAlumnos);
@@ -96,13 +103,13 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
 
   // Recupera los equipos que pertenecen al juego
   EquiposDelJuego() {
-    this.juegoDeColeccionService.GET_EquiposJuegoDeColeccion(this.juegoSeleccionado.id)
+    this.peticionesAPI.DameEquiposJuegoDeColeccion(this.juegoSeleccionado.id)
     .subscribe(equiposJuego => {
       this.equiposDelJuego = equiposJuego;
       console.log(equiposJuego);
       this.RecuperarInscripcionesEquiposJuego();
       this.ColeccionDelJuego();
-      this.juegoService.EnviarEquipoJuegoAlServicio(this.equiposDelJuego);
+      this.sesion.TomaEquiposDelJuego (this.equiposDelJuego);
     });
   }
 
@@ -110,13 +117,11 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
     // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen y los ordena de mayor a menor valor
   RecuperarInscripcionesEquiposJuego() {
 
-    this.juegoDeColeccionService.GET_InscripcionesEquipoJuegoDeColeccion(this.juegoSeleccionado.id)
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDeColeccion(this.juegoSeleccionado.id)
     .subscribe(inscripciones => {
       this.inscripcionesEquipos = inscripciones;
       console.log(this.inscripcionesEquipos);
       this.datasourceEquipo = new MatTableDataSource(this.equiposDelJuego);
-      // this.OrdenarPorPuntosEquipos();
-      // this.TablaClasificacionTotal();
     });
   }
 
@@ -124,12 +129,13 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
   AlumnosDelEquipo(equipo: Equipo) {
     console.log(equipo);
 
-    this.equipoService.GET_AlumnosEquipo(equipo.id)
+    this.peticionesAPI.DameAlumnosEquipo(equipo.id)
     .subscribe(res => {
       if (res[0] !== undefined) {
         this.alumnosEquipo = res;
         console.log(res);
       } else {
+        // Mensaje al usuario
         console.log('No hay alumnos en este equipo');
         this.alumnosEquipo = undefined;
       }
@@ -139,40 +145,31 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
 
   AccederAlumno(alumno: Alumno) {
 
-    this.alumnoService.EnviarAlumnoAlServicio(alumno);
-
-    // tslint:disable-next-line:max-line-length
-    this.juegoService.EnviarInscripcionAlServicio(this.inscripcionesAlumnos.filter(res => res.alumnoId === alumno.id)[0]);
+    this.sesion.TomaAlumno (alumno);
+    this.sesion.TomaInscripcionAlumno (this.inscripcionesAlumnos.filter(res => res.alumnoId === alumno.id)[0]);
 
 
   }
 
 
   AccederEquipo(equipo: Equipo) {
-
-    this.equipoService.EnviarEquipoAlServicio(equipo);
-
-    this.juegoService.EnviarInscripcionEquipoAlServicio(this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0]);
+    this.sesion.TomaEquipo(equipo);
+    this.sesion.TomaInscripcionEquipo(this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0]);
 
   }
 
-  // Le enviaremos solo la colección del juego
-  Informacion() {
-
-
-  }
 
   ColeccionDelJuego() {
-    this.coleccionService.GET_Coleccion(this.juegoSeleccionado.coleccionId)
+    this.peticionesAPI.DameColeccion(this.juegoSeleccionado.coleccionId)
     .subscribe(coleccion => {
       console.log('voy a enviar la coleccion');
-      this.coleccionService.EnviarColeccionAlServicio(coleccion);
+      this.sesion.TomaColeccion(coleccion);
     });
   }
 
   ReactivarJuego() {
     console.log(this.juegoSeleccionado);
-    this.juegoDeColeccionService.PUT_EstadoJuegoDeColeccion(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
+    this.peticionesAPI.CambiaEstadoJuegoDeColeccion(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
       undefined, true), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
         if (res !== undefined) {
           console.log(res);
@@ -203,7 +200,7 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
   }
 
   EliminarJuego() {
-    this.juegoDeColeccionService.DELETE_JuegoDeColeccion(this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
+    this.peticionesAPI.BorraJuegoDeColeccion(this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
     .subscribe(res => {
       console.log('Juego eliminado');
       this.location.back();

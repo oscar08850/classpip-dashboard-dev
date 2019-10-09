@@ -1,3 +1,4 @@
+R
 <div class="titulo"><h2>Información Juego De Puntos</h2></div>
 <mat-divider class="lineaDivisoria"></mat-divider>
 
@@ -52,7 +53,7 @@
   <mat-tab label="Puntos Del Juego">
       <div class="contenedor"></div>
     <form>
-      <table align="center" *ngIf="puntosDelJuego;else Aviso_no_puntos" mat-table [dataSource]="puntosDelJuego" class="mat-elevation-z8">
+      <table align="center" *ngIf="tiposPuntosDelJuego;else Aviso_no_puntos" mat-table [dataSource]="tiposPuntosDelJuego" class="mat-elevation-z8">
 
         <!-- Nombre Punto Column -->
         <ng-container matColumnDef="nombre">

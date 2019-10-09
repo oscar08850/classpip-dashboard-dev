@@ -8,8 +8,6 @@ import { DialogMostrarCromosComponent } from './dialog-mostrar-cromos/dialog-mos
 import { Coleccion, Juego, Alumno, Equipo, AlumnoJuegoDeColeccion,
  EquipoJuegoDeColeccion} from 'src/app/clases/index';
 // Services
-import { JuegoService, GrupoService, ColeccionService, ProfesorService,
-   JuegoDeColeccionService, EquipoService } from '../../../servicios/index';
 
    // Services
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
@@ -43,13 +41,7 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
   selectedRowIndex = -1;
 
 
-  constructor( private juegoService: JuegoService,
-               private profesorService: ProfesorService,
-               private grupoService: GrupoService,
-               private equipoService: EquipoService,
-               private juegoDeColeccionService: JuegoDeColeccionService,
-               private coleccionService: ColeccionService,
-               private calculos: CalculosService,
+  constructor(
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
                public dialog: MatDialog) { }
@@ -62,7 +54,6 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
     this.alumnos = this.sesion.DameAlumnosGrupo();
     this.TraeEquiposDelGrupo();
     this.TraeListaDeColecciones();
-    console.log(this.juegoService.RecibirJuegoDelServicio());
 
     this.grupoId = this.juego.grupoId;
   }
@@ -72,10 +63,9 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
     this.peticionesAPI.DameEquiposDelGrupo(this.juego.grupoId)
     .subscribe(equipos => {
       if (equipos !== undefined) {
-        console.log('Hay equipos');
         this.equipos = equipos;
-        console.log(this.equipos);
       } else {
+        // Mensaje al usuario
         console.log('Este grupo aun no tiene equipos');
       }
 
@@ -94,8 +84,13 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
   TraeListaDeColecciones() {
     this.peticionesAPI.DameColeccionesDelProfesor(this.profesorId)
     .subscribe(colecciones => {
-      this.colecciones = colecciones;
-      this.datasourceColecciones = new MatTableDataSource(this.colecciones);
+      if (colecciones !== undefined) {
+        this.colecciones = colecciones;
+        this.datasourceColecciones = new MatTableDataSource(this.colecciones);
+      } else {
+        // Mensaje al usuario
+        console.log('Este profesor no tiene colecciones');
+      }
     });
   }
 

@@ -45,7 +45,7 @@ export class GrupoComponent implements OnInit {
 
   ngOnInit() {
 
-    // LE PIDO AL SERVICIO QUE ME DE LOS DATOS DEL PROFESOR QUE ME HAN ENVIADO
+    // Recupero de la sesión el grupo y el id del profesor (que está en el grupo)
     this.grupo = this.sesion.DameGrupo();
     this.profesorId = this.grupo.profesorId;
 
@@ -73,37 +73,8 @@ export class GrupoComponent implements OnInit {
       }
     });
   }
-
-  // FUNCIONES DE LAS DIFERENTES OPCIONES QUE TENEMOS CON EL GRUPO
- /*  EntrarPasarLista() {
-
-    // ENVIO AL SERVICIO LOS PARÁMETROS QUE NECESITO
-    this.grupoService.EnviarGrupoAlServicio(this.grupoSeleccionado);
-    this.alumnoService.EnviarListaAlumnosAlServicio(this.alumnosGrupoSeleccionado);
-  } */
-
-  // ENVIO AL SERVICIO LOS PARÁMETROS QUE NECESITO
- /*  EntrarEditarGrupo() {
-    this.grupoService.EnviarGrupoAlServicio(this.grupoSeleccionado);
-    this.alumnoService.EnviarListaAlumnosAlServicio(this.alumnosGrupoSeleccionado);
-  } */
-
-  // ENVIAMOS EL IDENTIFICADOR Y LOS ALUMNOS DEL GRUPO SELECCIONADO
-/*   EntrarEquipos() {
-    this.grupoService.EnviarGrupoIdAlServicio(this.grupoSeleccionado.id);
-    this.grupoService.EnviarAlumnosGrupoAlServicio(this.alumnosGrupoSeleccionado);
-  } */
-
-  // ENVIO AL SERVICIO LOS PARÁMETROS QUE NECESITO
-  /* EntrarJuegos() {
-    this.grupoService.EnviarGrupoIdAlServicio(this.grupoSeleccionado.id);
-    this.grupoService.EnviarAlumnosGrupoAlServicio(this.alumnosGrupoSeleccionado);
-  } */
-
-  // ESTA FUNCIÓN BORRARÁ EL GRUPO DE ID QUE PASEMOS DEL PROFESOR CON ID QUE PASEMOS Y VOLVERÁ A LA PÁGINA DE LISTAR
-  // ACTUALIZANDO LA TABLA
   EliminarGrupo() {
-
+    // Para eliminar grupo hay muchas cosas que hacer. Estar en el servicio de calculos
     this.calculos.EliminarGrupo ();
     this.goBack();
   }
@@ -111,7 +82,6 @@ export class GrupoComponent implements OnInit {
   // SI QUEREMOS BORRA UN GRUPO, ANTES NOS SALDRÁ UN AVISO PARA CONFIRMAR LA ACCIÓN COMO MEDIDA DE SEGURIDAD. ESTO SE HARÁ
   // MEDIANTE UN DIÁLOGO
   AbrirDialogoConfirmacionBorrar(): void {
-
     const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
       height: '150px',
       data: {
@@ -130,6 +100,8 @@ export class GrupoComponent implements OnInit {
     });
   }
 
+  // Guardamos los alumnos del grupo en la sesión porque los necesitaremos si saltamos a
+  // equipos, pasar lista o juegos
   GuardarGrupo() {
     this.sesion.TomaAlumnosGrupo (this.alumnosGrupoSeleccionado);
   }

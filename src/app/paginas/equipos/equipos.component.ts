@@ -13,9 +13,6 @@ import { AgregarAlumnoEquipoComponent } from './agregar-alumno-equipo/agregar-al
 // Clases
 import { Equipo, Alumno, AsignacionEquipo } from '../../clases/index';
 
-// Servicios
-import { GrupoService, EquipoService, AlumnoService } from '../../servicios/index';
-
 
 // Servicios
 import { SesionService, PeticionesAPIService, CalculosService } from '../../servicios/index';
@@ -34,7 +31,8 @@ export class EquiposComponent implements OnInit {
   myForm: FormGroup;
 
 
-  // Como estamos en un mismo controlador y una misma vista, hay que diferenciar las variables de equipo cuando manipulamos
+  // Como estamos en un mismo controlador y una misma vista,
+  // hay que diferenciar las variables de equipo cuando manipulamos
   // la lista y cuando creamos un nuevo equipo
 
   // LISTAR EQUIPOS
@@ -79,11 +77,9 @@ export class EquiposComponent implements OnInit {
   mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
 
 
-  constructor( private grupoService: GrupoService,
-               private equipoService: EquipoService,
+  constructor(
                public dialog: MatDialog,
                public snackBar: MatSnackBar,
-               private alumnoService: AlumnoService,
                private location: Location,
                private formBuilder: FormBuilder,
                private sesion: SesionService,
@@ -104,7 +100,7 @@ export class EquiposComponent implements OnInit {
       nombreEquipo: ['', Validators.required]
     });
   }
-
+/*
    // LE PASAMOS EL IDENTIFICADOR DEL GRUPO Y BUSCAMOS LOS ALUMNOS QUE TIENE
    AlumnosDelGrupo() {
 
@@ -114,12 +110,13 @@ export class EquiposComponent implements OnInit {
       if (res[0] !== undefined) {
         this.alumnosGrupo  = res;
       } else {
+        // Informar al usuario
         console.log('No hay alumnos en este grupo');
       }
     });
   }
 
-
+ */
   /////////////////////////////////// FUNCIONES PARA MAT-TAB LISTAR EQUIPOS /////////////////////////////////////////////
 
   // Coge el identificador del grupo que le pasamos del otro componente a través del servicio y busca los equipos que tiene
@@ -131,6 +128,7 @@ export class EquiposComponent implements OnInit {
 
         this.listaEquipos = res;
       } else {
+        // Informar al usuario
         console.log('Este grupo no tiene equipos');
       }
     });
@@ -176,28 +174,20 @@ export class EquiposComponent implements OnInit {
         this.alumnosEquipo = res;
 
       } else {
+        // Mensaje al usuario
         console.log('No hay alumnos en este equipo');
         this.alumnosEquipo = undefined;
       }
     });
   }
 
-
-
-  // Una vez seleccionado un equipo, lo podemos editar o eliminar. La primera se activará si clicamos en editar.
-  // Envía el equipo y los alumnos de un equipo específico al componente editar-equipo
+  // Metemos en la sesión la información que se necesita para edicar el equipo
   EnviarEquipoEditar(equipo: Equipo, alumnosEquipo: Alumno[]) {
 
     // Envio el equipo al servicio para posteriormente recuperarlo en el componente editar-equipo
     this.sesion.TomaEquipo(equipo);
     this.sesion.TomaAlumnosEquipo (alumnosEquipo);
 
-    // if (alumnosEquipo !== undefined) {
-    //   this.alumnoService.EnviarListaAlumnosAlServicio(alumnosEquipo);
-    // } else {
-    //   this.alumnoService.EnviarListaAlumnosAlServicio(alumnosEquipo);
-    //   console.log('no hay alumnos en este equipo');
-    // }
   }
 
   // Si queremos borrar un equipo, antes nos saldrá un aviso para confirmar la acción como medida de seguridad. Esto se
@@ -225,7 +215,6 @@ export class EquiposComponent implements OnInit {
     });
   }
 
-  // Esta función borra el equipo que le pasamos como parámetro y actualiza la lista
   EliminarEquipo(equipo: Equipo) {
 
     this.peticionesAPI.BorraEquipoDelGrupo(equipo)
@@ -240,8 +229,6 @@ export class EquiposComponent implements OnInit {
     });
   }
 
-  // Esta función recupera todas las asignaciones del equipo que vamos a borrar y después las borra.
-  // Esto lo hacemos para no dejar asignaciones a equipos que no nos sirven en la base de datos
   EliminarAsignacionesEquipo(equipo: Equipo) {
     this.peticionesAPI.DameAsignacionesDelEquipo(equipo)
     .subscribe(asignaciones => {
@@ -256,6 +243,7 @@ export class EquiposComponent implements OnInit {
           });
         }
       } else {
+        // Mensaje al usuario
         console.log('No hay asignaciones a equipos');
       }
     });
@@ -287,8 +275,6 @@ export class EquiposComponent implements OnInit {
         this.equipoYaCreado = true; // Si tiro atrás y cambio algo se hará un PUT y no otro POST
         this.equipoCreado = res; // Lo metemos en equipoCreado, y no en equipo!!
 
-        // Cuando creo un equipo separo entre alumnos con equipo y sin equipo para el segundo paso
-        //this.ClasificacionAlumnos();
         this.calculos.DameListasAlumnosConYSinEquipo (this.equipoCreado, this.alumnosGrupo)
         .subscribe (result => {
                               this.alumnosConEquipo = result.con;
@@ -421,6 +407,7 @@ export class EquiposComponent implements OnInit {
         console.log(res);
       } else {
         console.log('No hay alumnos en este equipo');
+        // Mensaje al usuario
         this.alumnosEquipoCreado = undefined;
       }
     });
@@ -445,7 +432,7 @@ export class EquiposComponent implements OnInit {
           // SI SE BORRA CORRECTAMENTE NOS DEVUELVE NULL
           if (res === null) {
             console.log('eliminado correctamente');
-            this.AlumnosEquipoCreado(); // ACTUALIZAMOS LA
+            this.AlumnosEquipoCreado(); // Actualizamos los alumnos del equipo
             // Elimino al alumno de la lista de los que tiene equipo
             this.alumnosConEquipo = this.alumnosConEquipo.filter(result => result.id !== alumno.id);
             // Lo añado a la lista de los que no tienen equipo

@@ -1,3 +1,4 @@
+M
 <form>
 
 <h4>Clasificación por puntos:</h4>
@@ -23,7 +24,8 @@
     </div>
   </div>
 
-<form *ngIf="rankingJuegoDePuntos[0]">
+
+<form *ngIf="juegoSeleccionado.Modo === 'Individual'">
 
   <div class = "filter">
     <mat-form-field style=" width: 95% !important;">
@@ -92,7 +94,7 @@
 
 
  <!-- ////////////////////////////////////// CLASIFICACIÓN EQUIPOS ////////////////////////////////////////////////////-->
-<form *ngIf="rankingEquiposJuegoDePuntos[0]">
+<form *ngIf="juegoSeleccionado.Modo != 'Individual'">
 
   <div class = "filter">
     <mat-form-field  style=" width: 95% !important;">

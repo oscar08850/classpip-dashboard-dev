@@ -6,6 +6,8 @@ import { Cromo, Coleccion } from '../../../../clases/index';
 
 // Servicios
 import { ColeccionService } from '../../../../servicios/index';
+import { SesionService, PeticionesAPIService } from '../../../../servicios/index';
+
 
 @Component({
   selector: 'app-informacion-juego-coleccion',
@@ -33,11 +35,13 @@ export class InformacionJuegoColeccionComponent implements OnInit {
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
 
-  constructor( private coleccionService: ColeccionService,
-               private http: Http) { }
+  constructor(  private coleccionService: ColeccionService,
+                private sesion: SesionService,
+                private peticionesAPI: PeticionesAPIService,
+                private http: Http) { }
 
   ngOnInit() {
-    this.coleccion = this.coleccionService.RecibirColeccionDelServicio();
+    this.coleccion = this.sesion.DameColeccion();
 
     this.nombreColeccion = this.coleccion.Nombre;
 
@@ -103,7 +107,7 @@ export class InformacionJuegoColeccionComponent implements OnInit {
   console.log('voy a mostrar los cromos de la coleccion ' + coleccion.id);
 
   // Busca los cromos dela coleccion en la base de datos
-  this.coleccionService.GET_CromosColeccion(coleccion.id)
+  this.peticionesAPI.DameCromosColeccion(coleccion.id)
   .subscribe(res => {
     if (res[0] !== undefined) {
       this.cromosColeccion = res;
@@ -144,7 +148,4 @@ for (let i = 0; i < this.cromosColeccion.length; i++) {
 }
 }
 
-prueba() {
-  console.log(this.coleccion);
-}
 }

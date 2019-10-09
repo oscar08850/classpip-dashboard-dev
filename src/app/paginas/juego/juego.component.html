@@ -22,7 +22,7 @@ R
                 <h3 class = "CabeceraActivos" mat-subheader>Juegos Activos</h3>
 
                 <form *ngIf="juegosActivos;else Aviso_no_juegos_activos">
-                  <mat-list-item *ngFor="let juego of juegosActivos" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionado">
+                  <mat-list-item *ngFor="let juego of juegosActivos" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionadoActivo">
 
                     <mat-icon mat-list-icon><i class="material-icons green">check_circle_outline</i></mat-icon>
                     <h4 mat-line>{{juego.Tipo}}</h4>
