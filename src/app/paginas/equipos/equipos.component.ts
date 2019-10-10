@@ -100,23 +100,9 @@ export class EquiposComponent implements OnInit {
       nombreEquipo: ['', Validators.required]
     });
   }
-/*
-   // LE PASAMOS EL IDENTIFICADOR DEL GRUPO Y BUSCAMOS LOS ALUMNOS QUE TIENE
-   AlumnosDelGrupo() {
 
-    this.peticionesAPI.DameAlumnosGrupo(this.grupoId)
-    .subscribe(res => {
 
-      if (res[0] !== undefined) {
-        this.alumnosGrupo  = res;
-      } else {
-        // Informar al usuario
-        console.log('No hay alumnos en este grupo');
-      }
-    });
-  }
 
- */
   /////////////////////////////////// FUNCIONES PARA MAT-TAB LISTAR EQUIPOS /////////////////////////////////////////////
 
   // Coge el identificador del grupo que le pasamos del otro componente a través del servicio y busca los equipos que tiene
@@ -224,7 +210,11 @@ export class EquiposComponent implements OnInit {
       this.EliminarAsignacionesEquipo(equipo);
 
       // Actualizo la tabla de equipos
-      this.EquiposDelGrupo();
+      this.listaEquipos = this.listaEquipos.filter (eq => eq.id !== equipo.id);
+      if (this.listaEquipos.length === 0 ) {
+        this.listaEquipos = null;
+      }
+
 
     });
   }
@@ -335,6 +325,8 @@ export class EquiposComponent implements OnInit {
       if (res != null) {
 
         this.equipoCreado = res;
+        // Modifico el nombre del equipo en la lista que se muestra en pantalla
+        this.listaEquipos.filter (eq => eq.id === res.id)[0].Nombre = res.Nombre;
 
         // Hago el POST de la imagen SOLO si hay algo cargado
         if (this.logoCargado === true) {
@@ -342,7 +334,8 @@ export class EquiposComponent implements OnInit {
           const formData: FormData = new FormData();
           formData.append(this.nombreLogo, this.file);
           this.peticionesAPI.PonLogoEquipo(formData)
-          .subscribe(() => console.log('Logo cargado'));
+          // recojo el nuevo logo de la sesión para actualizar la lista que ve el usuario
+          .subscribe(() => this.imagenLogo = this.sesion.DameImagenLogoEquipo());
         }
 
       } else {

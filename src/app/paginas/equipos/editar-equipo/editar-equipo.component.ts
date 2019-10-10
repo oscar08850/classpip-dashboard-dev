@@ -83,6 +83,8 @@ export class EditarEquipoComponent implements OnInit {
         const reader = new FileReader();
         reader.addEventListener('load', () => {
           this.imagenLogo = reader.result.toString();
+          // La necesitaremos al regresar para actualizar el logo en la lista que ve el usuario
+          this.sesion.TomaImagenLogoEquipo (this.imagenLogo);
         }, false);
 
         if (blob) {

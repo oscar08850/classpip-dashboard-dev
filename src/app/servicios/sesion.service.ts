@@ -34,6 +34,9 @@ export class SesionService {
   alumno: any;
   inscripcionAlumno: any;
   inscripcionEquipo: any;
+  listaGrupos: any;
+  imagenLogoEquipo: any;
+  // listaEquiposGrupo: any;
 
   constructor() { }
   public TomaProfesor(profesor: Profesor){
@@ -45,9 +48,27 @@ export class SesionService {
   public TomaGrupo(grupo: Grupo) {
     this.grupo = grupo;
   }
+
+  public TomaListaGrupos(listaGrupos: any) {
+    this.listaGrupos = listaGrupos;
+  }
+
+  public DameListaGrupos(): any {
+    return this.listaGrupos;
+  }
+
   public  DameGrupo(): Grupo {
     return this.grupo;
   }
+
+  // public TomaEquiposGrupo(listaEquipos: any) {
+  //   this.listaEquiposGrupo = listaEquipos;
+  // }
+
+  // public DameEquiposGrupo(): any {
+  //   return this.listaEquiposGrupo;
+  // }
+
   public TomaJuego(juego: Juego) {
     this.juego = juego;
   }
@@ -240,5 +261,13 @@ export class SesionService {
 
   public DameInscripcionEquipo(): any {
     return this.inscripcionEquipo;
+  }
+
+  public TomaImagenLogoEquipo(imagenLogoEquipo: any) {
+    this.imagenLogoEquipo = imagenLogoEquipo;
+  }
+
+  public DameImagenLogoEquipo(): any {
+    return this.imagenLogoEquipo;
   }
 }

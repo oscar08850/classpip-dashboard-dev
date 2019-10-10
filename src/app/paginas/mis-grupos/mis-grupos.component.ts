@@ -67,6 +67,8 @@ export class MisGruposComponent implements OnInit {
 
     // Envio el grupo a la sesión
     this.sesion.TomaGrupo (grupo);
+    // Envio la lista de grupos porque se necesitará si el grupo elegido es eliminado
+    this.sesion.TomaListaGrupos (this.listaGrupos);
 
     // Navegamos al componente Grupo
     // Aqui tambien pasa eso de que no sería necesario enviarle el identificador de

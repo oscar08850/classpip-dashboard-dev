@@ -41,6 +41,11 @@ export class CalculosService {
     .subscribe(() => {
 
       this.EliminarMatriculas();
+
+      // Ahora elimino el grupo de la lista de grupos para que desaparezca de la pantalla al regresar
+      let lista = this.sesion.DameListaGrupos();
+      lista = lista.filter (g => g.id !== this.sesion.DameGrupo().id);
+      this.sesion.TomaListaGrupos (lista);
     });
   }
 
