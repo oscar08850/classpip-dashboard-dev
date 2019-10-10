@@ -103,25 +103,27 @@ const routes: Routes = [
 
   // GRUPOS --> JUEGOS
   { path: 'grupo/:id/juegos', component: JuegoComponent },
-  { path: 'grupo/:id/juegos/juegoSeleccionado', component: JuegoSeleccionadoActivoComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo', component: JuegoSeleccionadoActivoComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo', component: JuegoSeleccionadoInactivoComponent },
 
   // GRUPOS --> JUEGOS --> JUEGO DE PUNTOS
-  { path: 'grupo/:id/juegos/juegoSeleccionado/asignarPuntos', component: AsignarPuntosComponent },
-  { path: 'grupo/:id/juegos/juegoSeleccionado/informacionAlumnoJuego', component: AlumnoSeleccionadoJuegoDePuntosComponent },
-  { path: 'grupo/:id/juegos/juegoSeleccionado/informacionJuego', component: InformacionJuegoPuntosComponent },
-  { path: 'grupo/:id/juegos/juegoSeleccionado/informacionEquipoJuego', component: EquipoSeleccionadoJuegoDePuntosComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/asignarPuntos', component: AsignarPuntosComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionAlumnoJuego', component: AlumnoSeleccionadoJuegoDePuntosComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuego', component: InformacionJuegoPuntosComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionEquipoJuego', component: EquipoSeleccionadoJuegoDePuntosComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionJuego', component: InformacionJuegoPuntosComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionAlumnoJuego', component: AlumnoSeleccionadoJuegoDePuntosComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionEquipoJuego', component: EquipoSeleccionadoJuegoDePuntosComponent },
 
   // GRUPOS --> JUEGOS --> JUEGO DE COLECCIÓN
-  { path: 'grupo/:id/juegos/juegoSeleccionado/asignarCromos', component: AsignarCromosComponent },
-  { path: 'grupo/:id/juegos/juegoSeleccionado/informacionJuegoColeccion', component: InformacionJuegoColeccionComponent },
-  { path: 'grupo/:id/juegos/juegoSeleccionado/informacionAlumnoJuegoColeccion', component: AlumnoSeleccionadoJuegoDeColeccionComponent },
-  { path: 'grupo/:id/juegos/juegoSeleccionado/informacionEquipoJuegoColeccion', component: EquipoSeleccionadoJuegoDeColeccionComponent },
-  { path: 'grupo/:id/juegos/juegoSeleccionado/informacionAlumnoJuegoColeccion/Album', component: AlbumDelAlumnoComponent },
-  { path: 'grupo/:id/juegos/juegoSeleccionado/informacionEquipoJuegoColeccion/AlbumEquipo', component: AlbumEquipoComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/asignarCromos', component: AsignarCromosComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoColeccion', component: InformacionJuegoColeccionComponent },
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionAlumnoJuegoColeccion', component: AlumnoSeleccionadoJuegoDeColeccionComponent },
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionEquipoJuegoColeccion', component: EquipoSeleccionadoJuegoDeColeccionComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionAlumnoJuegoColeccion/Album', component: AlbumDelAlumnoComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionEquipoJuegoColeccion/AlbumEquipo', component: AlbumEquipoComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionJuegoColeccion', component: InformacionJuegoColeccionComponent },
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionAlumnoJuegoColeccion', component: AlumnoSeleccionadoJuegoDeColeccionComponent },

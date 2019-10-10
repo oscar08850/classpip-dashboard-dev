@@ -12,11 +12,11 @@
     <div>
     <p style="font-size: 110%">
       <span style="font-weight: bold;">Nombre:</span>
-      {{alumnoSeleccionado[0].Nombre}} {{alumnoSeleccionado[0].PrimerApellido}} {{alumnoSeleccionado[0].SegundoApellido}}
+      {{alumnoSeleccionado.Nombre}} {{alumnoSeleccionado.PrimerApellido}} {{alumnoSeleccionado.SegundoApellido}}
     </p>
     <p style="font-size: 110%">
       <span style="font-weight: bold;">Puntos:</span>
-      {{alumnoJuegoDePuntos[0].PuntosTotalesAlumno}}
+      {{alumnoJuegoDePuntos.PuntosTotalesAlumno}}
     </p>
     <p style="font-size: 110%">
       <span style="font-weight: bold;">Posición Total:</span>
@@ -30,16 +30,16 @@
         </div>
 
         <div class="progress" style="width: 100%">
-          <div *ngIf="siguienteNivel" class="progress-bar progress-easy" [style.width]="porcentaje()*100+'%'" role="progressbar" aria-valuenow = "alumnoJuegoDePuntos[0].PuntosTotalesAlumno"
-          aria-valuemin="nivel.PuntosAlcanzar" aria-valuemax="siguienteNivel.PuntosAlcanzar">{{alumnoJuegoDePuntos[0].PuntosTotalesAlumno}}</div>
+          <div *ngIf="siguienteNivel" class="progress-bar progress-easy" [style.width]="Porcentaje()*100+'%'" role="progressbar" aria-valuenow = "alumnoJuegoDePuntos.PuntosTotalesAlumno"
+          aria-valuemin="nivel.PuntosAlcanzar" aria-valuemax="siguienteNivel.PuntosAlcanzar">{{alumnoJuegoDePuntos.PuntosTotalesAlumno}}</div>
 
-          <div *ngIf="siguienteNivel === undefined" class="progress-bar progress-easy" [style.width]="porcentaje()*100+'%'" role="progressbar" aria-valuenow = "alumnoJuegoDePuntos[0].PuntosTotalesAlumno"
+          <div *ngIf="siguienteNivel === undefined" class="progress-bar progress-easy" [style.width]="Porcentaje()*100+'%'" role="progressbar" aria-valuenow = "alumnoJuegoDePuntos.PuntosTotalesAlumno"
           aria-valuemin="nivel.PuntosAlcanzar" aria-valuemax="nivel.PuntosAlcanzar">Nivel máximo alcanzado</div>
 
         </div>
 
         <div *ngIf="siguienteNivel" style="font-size: 110%">
-          ({{alumnoJuegoDePuntos[0].PuntosTotalesAlumno}}/{{siguienteNivel.PuntosAlcanzar}}) PX
+          ({{alumnoJuegoDePuntos.PuntosTotalesAlumno}}/{{siguienteNivel.PuntosAlcanzar}}) PX
         </div>
         <div *ngIf="siguienteNivel === undefined"  style="font-size: 110%"
         >

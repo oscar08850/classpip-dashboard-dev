@@ -28,7 +28,6 @@ import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion
 })
 export class EditarGrupoComponent implements OnInit {
 
-  // PARÁMETROS QUE RECOGEMOS DEL COMPONENTE GRUPO
   grupoSeleccionado: Grupo;
   profesorId: number;
   alumnosGrupoSeleccionado: Alumno[];
@@ -51,9 +50,7 @@ export class EditarGrupoComponent implements OnInit {
     Debe estar activo si hay al menos un elemento de la lista seleccionado */
   botonTablaDesactivado = true;
 
-  constructor( private grupoService: GrupoService,
-               private matriculaService: MatriculaService,
-               private alumnoService: AlumnoService,
+  constructor(
                public dialog: MatDialog,
                public snackBar: MatSnackBar,
                public sesion: SesionService,
@@ -62,7 +59,7 @@ export class EditarGrupoComponent implements OnInit {
 
   ngOnInit() {
 
-    // Recogemos los parámetros del grupo del servicio
+    // Recogemos información de la sesión
     this.grupoSeleccionado = this.sesion.DameGrupo();
     this.profesorId = this.grupoSeleccionado.profesorId;
     this.peticionesAPI.DameAlumnosGrupo (this.grupoSeleccionado.id)
@@ -76,14 +73,6 @@ export class EditarGrupoComponent implements OnInit {
     // Inicio los parámetros de los inputs con los valores actuales
     this.nombreGrupo = this.grupoSeleccionado.Nombre;
     this.descripcionGrupo = this.grupoSeleccionado.Descripcion;
-
-    // // Si el grupo tiene alumnos, creamos un vector de boolean de la misma longitud que los alumnos
-    // // y creamos un datasource
-    // if (this.alumnosGrupoSeleccionado !== undefined) {
-    //   // Al principio no hay alumnos seleccionados para eliminar
-    //   this.seleccionados = Array(this.alumnosGrupoSeleccionado.length).fill(false);
-    //   this.dataSource = new MatTableDataSource(this.alumnosGrupoSeleccionado);
-    // }
   }
 
   // Filtro para buscar alumnos de la tabla
@@ -139,35 +128,14 @@ export class EditarGrupoComponent implements OnInit {
   }
 
 
-
-
-  // // LE PASAMOS EL IDENTIFICADOR DEL GRUPO Y BUSCAMOS LOS ALUMNOS QUE TIENE
-  // AlumnosDelGrupo() {
-
-  //   this.alumnoService.GET_AlumnosDelGrupo(this.grupoSeleccionado.id)
-  //   .subscribe(res => {
-
-  //     if (res[0] !== undefined) {
-
-  //       this.alumnosGrupoSeleccionado = res;
-  //       this.dataSource = new MatTableDataSource(this.alumnosGrupoSeleccionado);
-  //       this.seleccionados = Array(this.alumnosGrupoSeleccionado.length).fill(false);
-
-  //     } else {
-
-  //       this.alumnosGrupoSeleccionado = undefined;
-  //       this.seleccionados = [];
-
-  //     }
-  //   });
-  // }
-
   // SI QUEREMOS AÑADIR ALUMNOS MANUALMENTE LO HAREMOS EN UN DIALOGO
   AbrirDialogoAgregarAlumnos(): void {
     const dialogRef = this.dialog.open(AgregarAlumnoDialogComponent, {
       width: '900px',
       maxHeight: '600px',
       // Le pasamos solo los id del grupo y profesor ya que es lo único que hace falta para vincular los alumnos
+      // En realidad el dialogo podría recuperar esta información de la sesión,
+      // pero en el caso de los dialogos usamos el mecanismo de paso de parámetros porque es sencillo
       data: {
         grupoId: this.grupoSeleccionado.id,
         profesorId: this.profesorId
@@ -175,6 +143,7 @@ export class EditarGrupoComponent implements OnInit {
     });
 
     dialogRef.beforeClosed().subscribe(result => {
+      // Cuando vuelvo de agragar alumnos vuelvo a traer los alumnos del grupo
       this.peticionesAPI.DameAlumnosGrupo (this.grupoSeleccionado.id)
       .subscribe (res => {
                             this.alumnosGrupoSeleccionado = res;
@@ -183,8 +152,6 @@ export class EditarGrupoComponent implements OnInit {
                           }
                   );
 
-      // // Antes de que se cierre actualizaré la lista de alumnos
-      // this.AlumnosDelGrupo();
     });
   }
 
@@ -223,12 +190,8 @@ export class EditarGrupoComponent implements OnInit {
                     this.peticionesAPI.BorraMatricula (matricula[0].id)
                     .subscribe(result => {
                       // Despues de borrar actualizo la lista que se muestra en la tabla
-                      this.peticionesAPI.DameAlumnosGrupo (this.grupoSeleccionado.id)
-                      .subscribe (res => {
-                                            this.alumnosGrupoSeleccionado = res;
-                                            this.dataSource = new MatTableDataSource(this.alumnosGrupoSeleccionado);
-                                          }
-                                  );
+                      this.alumnosGrupoSeleccionado = this.alumnosGrupoSeleccionado.filter (al => al.Nombre !== alumno.Nombre);
+                      this.dataSource = new MatTableDataSource(this.alumnosGrupoSeleccionado);
                     });
                   });
 

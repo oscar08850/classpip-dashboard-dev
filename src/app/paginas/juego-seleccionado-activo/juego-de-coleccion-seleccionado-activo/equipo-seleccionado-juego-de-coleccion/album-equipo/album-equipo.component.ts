@@ -5,7 +5,7 @@ import { ResponseContentType, Http, Response } from '@angular/http';
 import { Cromo, Coleccion, AlbumDelAlumno } from '../../../../../clases/index';
 
 // Servicios
-import { ColeccionService } from '../../../../../servicios/index';
+import { SesionService, PeticionesAPIService } from '../../../../../servicios/index';
 
 @Component({
   selector: 'app-album-equipo',
@@ -21,17 +21,20 @@ export class AlbumEquipoComponent implements OnInit {
 
   cromo: Cromo;
 
-  cromosAlumno: Cromo[];
+  cromosEquipo: Cromo[];
 
   AlbumDelEquipo: AlbumDelAlumno[] = [];
+  equipo: any;
 
-  constructor( private coleccionService: ColeccionService,
-               private http: Http) { }
+  constructor(  private sesion: SesionService,
+                private peticionesAPI: PeticionesAPIService,
+                private http: Http) { }
 
   ngOnInit() {
 
-    this.coleccion = this.coleccionService.RecibirColeccionDelServicio();
-    this.cromosAlumno = this.coleccionService.RecibirCromosAlumnoDelServicio();
+    this.equipo = this.sesion.DameEquipo();
+    this.coleccion = this.sesion.DameColeccion();
+    this.cromosEquipo = this.sesion.DameCromos();
     this.CromosDeLaColeccion(this.coleccion);
   }
 
@@ -42,13 +45,13 @@ export class AlbumEquipoComponent implements OnInit {
     console.log('voy a mostrar los cromos de la coleccion ' + coleccion.id);
 
     // Busca los cromos dela coleccion en la base de datos
-    this.coleccionService.GET_CromosColeccion(coleccion.id)
+    this.peticionesAPI.DameCromosColeccion(coleccion.id)
     .subscribe(res => {
       if (res[0] !== undefined) {
         this.cromosColeccion = res;
-        this.OrdenarCromos();
-        this.GET_ImagenCromo();
-        this.VerAlbum();
+        this.cromosColeccion.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+        this.GET_ImagenesCromos();
+        this.PreparaAlbum();
         console.log(res);
       } else {
         console.log('No hay cromos en esta coleccion');
@@ -58,7 +61,7 @@ export class AlbumEquipoComponent implements OnInit {
   }
 
   // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
-  GET_ImagenCromo() {
+  GET_ImagenesCromos() {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.cromosColeccion.length; i++) {
@@ -86,12 +89,12 @@ export class AlbumEquipoComponent implements OnInit {
     }
   }
 
-  VerAlbum() {
+  PreparaAlbum() {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.cromosColeccion.length; i++) {
 
-      this.cromo = this.cromosAlumno.filter(res => res.id === this.cromosColeccion[i].id)[0];
+      this.cromo = this.cromosEquipo.filter(res => res.id === this.cromosColeccion[i].id)[0];
 
 
       if (this.cromo !== undefined) {
@@ -107,8 +110,5 @@ export class AlbumEquipoComponent implements OnInit {
     }
   }
 
-  // Ordena los cromos por nombre. Asi es más fácil identificar los cromos que tengo
-  OrdenarCromos() {
-    this.cromosColeccion.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
-  }
+
 }

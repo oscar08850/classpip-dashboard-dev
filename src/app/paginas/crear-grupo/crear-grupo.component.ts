@@ -4,8 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { AgregarAlumnoDialogComponent } from './agregar-alumno-dialog/agregar-alumno-dialog.component';
 
-// Servicios
-import { GrupoService } from '../../servicios/index';
 
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../servicios/index';
@@ -44,7 +42,6 @@ export class CrearGrupoComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private grupoService: GrupoService,
               public dialog: MatDialog,
               public sesion: SesionService,
               public peticionesAPI: PeticionesAPIService,

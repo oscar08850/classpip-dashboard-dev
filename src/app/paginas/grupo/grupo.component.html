@@ -36,14 +36,17 @@ R
 
     </div>
 
-           <div class="elemento"> <button type="button" class="btn Equipos" (click)= "GuardarGrupo();" routerLink= "equiposGrupo">Equipos <i class="material-icons">
+    <div class="elemento"> <button type="button" class="btn Equipos" (click)= "GuardarGrupo();" routerLink= "equiposGrupo">Equipos <i class="material-icons">
             group
             </i></button>
-          </div>
-          <div class="elemento"> <button type="button" class="btn Juegos" (click)= "GuardarGrupo();" routerLink = "juegos">Juegos <i class="material-icons">
+
+
+
+    </div>
+    <div class="elemento"> <button type="button" class="btn Juegos" (click)= "GuardarGrupo();" routerLink = "juegos">Juegos <i class="material-icons">
             videogame_asset
             </i></button>
-          </div>
+    </div>
 </div>
 
 <form *ngIf="alumnosGrupoSeleccionado;else Aviso_no_alumnos">

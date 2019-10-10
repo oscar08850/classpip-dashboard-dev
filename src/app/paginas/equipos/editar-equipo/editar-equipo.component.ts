@@ -9,9 +9,6 @@ import { ResponseContentType, Http } from '@angular/http';
 import { Equipo, Alumno, AsignacionEquipo } from '../../../clases/index';
 
 // Servicios
-import { EquipoService, AlumnoService, GrupoService } from '../../../servicios/index';
-
-// Servicios
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
 
 @Component({
@@ -49,15 +46,13 @@ export class EditarEquipoComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   logoCambiado: Boolean = false;
 
-  constructor( private equipoService: EquipoService,
-               private alumnoService: AlumnoService,
-               private grupoService: GrupoService,
-               public dialog: MatDialog,
-               private location: Location,
-               private sesion: SesionService,
-               private calculos: CalculosService,
-               private peticionesAPI: PeticionesAPIService,
-               private http: Http ) { }
+  constructor(
+                public dialog: MatDialog,
+                private location: Location,
+                private sesion: SesionService,
+                private calculos: CalculosService,
+                private peticionesAPI: PeticionesAPIService,
+                private http: Http ) { }
 
   ngOnInit() {
     this.equipo = this.sesion.DameEquipo();
@@ -88,6 +83,8 @@ export class EditarEquipoComponent implements OnInit {
         const reader = new FileReader();
         reader.addEventListener('load', () => {
           this.imagenLogo = reader.result.toString();
+          // La necesitaremos al regresar para actualizar el logo en la lista que ve el usuario
+          this.sesion.TomaImagenLogoEquipo (this.imagenLogo);
         }, false);
 
         if (blob) {
@@ -106,6 +103,7 @@ export class EditarEquipoComponent implements OnInit {
     if (res[0] !== undefined) {
       this.alumnosEquipo = res;
     } else {
+      // Mensaje al usuario
       console.log('No hay alumnos en este grupo');
       this.alumnosEquipo = undefined;
       }
@@ -126,7 +124,7 @@ export class EditarEquipoComponent implements OnInit {
           // SI SE BORRA CORRECTAMENTE NOS DEVUELVE NULL
           if (res === null) {
             console.log('eliminado correctamente');
-            this.AlumnosDelEquipo(this.equipo.id); // ACTUALIZAMOS LA TABLA
+            this.AlumnosDelEquipo(this.equipo.id); // Actualizados los alumnos del equipo
             // Actualizamos las listas de alumnos del grupo con y sin equipo
             this.alumnosConEquipo = this.alumnosConEquipo.filter(result => result.id !== alumno.id);
             this.alumnosSinEquipo.push(alumno);

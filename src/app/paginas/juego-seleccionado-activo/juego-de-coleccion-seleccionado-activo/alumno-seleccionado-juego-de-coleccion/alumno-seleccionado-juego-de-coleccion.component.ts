@@ -5,9 +5,8 @@ import {Sort} from '@angular/material/sort';
 import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion,
   Album, AlbumEquipo, Coleccion, Cromo } from '../../../../clases/index';
 
-// Servicios
-import { AlumnoService, JuegoService, EquipoService, ColeccionService, JuegoDeColeccionService } from '../../../../servicios/index';
-import { JuegoComponent } from 'src/app/paginas/juego/juego.component';
+import { SesionService, PeticionesAPIService, CalculosService } from '../../../../servicios/index';
+
 
 @Component({
   selector: 'app-alumno-seleccionado-juego-de-coleccion',
@@ -22,7 +21,7 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
 
   juegoSeleccionado: Juego;
 
-  ListaCromos: Cromo[];
+  listaCromos: Cromo[];
   cromo: Cromo;
 
   imagenCromoArray: string[] = [];
@@ -30,17 +29,17 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   // imagen
   imagenPerfil: string;
 
-  constructor( private alumnoService: AlumnoService,
-               private juegoService: JuegoService,
-               private juegoDeColeccionService: JuegoDeColeccionService,
-               private http: Http,
-               private coleccionService: ColeccionService ) { }
+  constructor(
+               private sesion: SesionService,
+               private peticionesAPI: PeticionesAPIService,
+               private http: Http
+  ) {}
 
   ngOnInit() {
-    this.juegoSeleccionado = this.juegoService.RecibirJuegoDelServicio();
+    this.juegoSeleccionado = this.sesion.DameJuego();
 
-    this.inscripcionAlumno = this.juegoService.RecibirInscripcionAlumnoDelServicio();
-    this.alumno = this.alumnoService.RecibirAlumnoDelServicio();
+    this.inscripcionAlumno = this.sesion.DameInscripcionAlumno();
+    this.alumno = this.sesion.DameAlumno();
     this.CromosDelAlumno();
     this.GET_ImagenPerfil();
 
@@ -72,29 +71,22 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
 
 
   CromosDelAlumno() {
-    this.juegoDeColeccionService.GET_CromosAlumno(this.inscripcionAlumno.id)
+    this.peticionesAPI.DameCromosAlumno(this.inscripcionAlumno.id)
     .subscribe(cromos => {
-      this.ListaCromos = cromos;
-      this.coleccionService.EnviarCromosAlumnoAlServicio(this.ListaCromos);
-      this.OrdenarCromos();
-      this.GET_ImagenCromo();
-      console.log(this.ListaCromos);
-
+      this.listaCromos = cromos;
+      this.sesion.TomaCromos(this.listaCromos);
+      this.listaCromos.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+      this.GET_ImagenesCromos();
     });
   }
 
-  // Ordena los cromos por nombre. Asi es más fácil identificar los cromos que tengo
-  OrdenarCromos() {
-    this.ListaCromos.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
-  }
 
-
-  GET_ImagenCromo() {
+  GET_ImagenesCromos() {
 
     // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.ListaCromos.length; i++) {
+    for (let i = 0; i < this.listaCromos.length; i++) {
 
-      this.cromo = this.ListaCromos[i];
+      this.cromo = this.listaCromos[i];
 
       if (this.cromo.Imagen !== undefined ) {
 
@@ -116,9 +108,5 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
         });
       }
     }
-  }
-
-  prueba() {
-    console.log(this.imagenCromoArray);
   }
 }

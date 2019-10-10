@@ -50,6 +50,7 @@ export class NavbarComponent implements OnInit {
     this.URLConfiguracion = this.URLInicio + '/configuracionProfesor';
 
 
+    // Recupero al profesor porque se muestra en la barra de navegación
     this.profesor = this.sesion.DameProfesor();
 
   }

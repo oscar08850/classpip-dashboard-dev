@@ -4,8 +4,9 @@ import { ResponseContentType, Http, Response } from '@angular/http';
 import { Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, EquipoJuegoDePuntos,
   TablaAlumnoJuegoDePuntos, HistorialPuntosAlumno, TablaHistorialPuntosAlumno } from '../../../../clases/index';
 
+
 // Services
-import { JuegoService, JuegoDePuntosService, AlumnoService } from '../../../../servicios/index';
+import { SesionService, CalculosService, PeticionesAPIService } from '../../../../servicios/index';
 
 // Imports para abrir diálogo
 import { MatDialog, MatSnackBar } from '@angular/material';
@@ -49,25 +50,41 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
   posicion: number;
 
 
-  constructor( private juegoService: JuegoService,
-               private alumnoService: AlumnoService,
-               private juegoDePuntosService: JuegoDePuntosService,
+  constructor(
                public dialog: MatDialog,
                public snackBar: MatSnackBar,
+               public sesion: SesionService,
+               public calculos: CalculosService,
+               public peticionesAPI: PeticionesAPIService,
                private http: Http  ) { }
 
-  ngOnInit() {
-    this.nivelesDelJuego = this.juegoDePuntosService.RecibirNivelesDelServicio();
-    this.alumnoSeleccionado = this.alumnoService.RecibirAlumnoDelServicio();
-    this.juegoSeleccionado = this.juegoService.RecibirJuegoDelServicio();
-    this.alumnoJuegoDePuntos = this.juegoDePuntosService.RecibirInscripcionDelServicio();
 
-    this.puntosDelJuego = this.juegoDePuntosService.RecibirPuntosDelServicio();
-    this.posicion = this.juegoDePuntosService.RecibirPosicionDelServicio();
+  ngOnInit() {
+
+    const datos = this.sesion.DameDatosEvolucionAlumnoJuegoPuntos();
+    this.posicion = datos.posicion;
+    this.puntosDelJuego = datos.tiposPuntosDelJuego;
+    this.nivelesDelJuego = datos.nivelesDelJuego;
+    this.alumnoSeleccionado = datos.alumnoSeleccionado;
+    this.alumnoJuegoDePuntos = datos.inscripcionAlumnoJuego;
+    console.log ('Alumno ' + this.alumnoSeleccionado.id);
+    console.log ('Alumno juego' + this.alumnoJuegoDePuntos.alumnoId);
+    console.log ('Puntos totales juego' + this.alumnoJuegoDePuntos.PuntosTotalesAlumno);
+
+    this.juegoSeleccionado = this.sesion.DameJuego();
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.puntosDelJuego.length; i ++) {
+      this.listaSeleccionable.push(this.puntosDelJuego[i]);
+    }
+
     console.log('muestro la posicion ' + this.posicion);
     console.log(this.posicion);
 
-    this.Nivel();
+    const niveles = this.calculos.DameNivelActualYSiguiente (this.nivelesDelJuego , this.alumnoJuegoDePuntos);
+    this.nivel = niveles.n;
+    this.siguienteNivel = niveles.sn;
+    // this.Nivel();
     this.GET_ImagenPerfil();
 
     this.listaSeleccionable[0] =  new Punto('Totales');
@@ -78,8 +95,8 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
   // Busca el logo que tiene el nombre del equipo.FotoEquipo y lo carga en imagenLogo
   GET_ImagenPerfil() {
 
-    if (this.alumnoSeleccionado[0].ImagenPerfil !== undefined ) {
-      this.http.get('http://localhost:3000/api/imagenes/imagenAlumno/download/' + this.alumnoSeleccionado[0].ImagenPerfil,
+    if (this.alumnoSeleccionado.ImagenPerfil !== undefined ) {
+      this.http.get('http://localhost:3000/api/imagenes/imagenAlumno/download/' + this.alumnoSeleccionado.ImagenPerfil,
       { responseType: ResponseContentType.Blob })
       .subscribe(response => {
 
@@ -93,101 +110,14 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
         if (blob) {
           reader.readAsDataURL(blob);
         }
-
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < this.puntosDelJuego.length; i ++) {
-          this.listaSeleccionable.push(this.puntosDelJuego[i]);
-        }
       });
     }
 
   }
 
-
-  Nivel() {
-
-    this.OrdenarNiveles();
-    this.nivel = this.BuscarNivelActual(this.alumnoJuegoDePuntos[0].nivelId);
-    console.log(this.nivel);
-
-
-    // Si el alumno ya ha alcanzado algun nivel, buscamos cual es el siguiente nivel del que ya tiene. Sino el siguiente
-    // nivel será el primero
-    if (this.alumnoJuegoDePuntos[0].nivelId !== undefined) {
-
-      // Si no estoy en el último nivel, busco el siguiente nivel
-      if (this.alumnoJuegoDePuntos[0].nivelId !== this.nivelesDelJuego[this.nivelesDelJuego.length - 1].id) {
-        this.siguienteNivel = this.BuscarSiguienteNivel(this.alumnoJuegoDePuntos[0].nivelId);
-      } else {
-        this.siguienteNivel = undefined;
-      }
-      this.porcentaje();
-    } else {
-      console.log(this.nivelesDelJuego[0]);
-      this.siguienteNivel = this.nivelesDelJuego[0];
-      this.porcentaje();
-    }
+  Porcentaje(): any {
+    return this.calculos.Porcentaje (this.nivel, this.siguienteNivel, this.alumnoJuegoDePuntos, this.nivelesDelJuego);
   }
-
-  OrdenarNiveles() {
-
-    // tslint:disable-next-line:only-arrow-functions
-    this.nivelesDelJuego = this.nivelesDelJuego.sort(function(obj1, obj2) {
-      return obj1.PuntosAlcanzar - obj2.PuntosAlcanzar;
-    });
-    return this.nivelesDelJuego;
-  }
-
-  BuscarSiguienteNivel(nivelId: number): Nivel {
-
-    console.log('Voy a buscar el siguiente nivel');
-    // tslint:disable-next-line:no-inferrable-types
-    let encontrado: boolean = false;
-    let i = 0;
-    while ((i < this.nivelesDelJuego.length) && (encontrado === false)) {
-
-      if (this.nivelesDelJuego[i].id === nivelId) {
-        encontrado = true;
-      }
-      i = i + 1;
-    }
-
-    return this.nivelesDelJuego[i];
-  }
-
-  BuscarNivelActual(nivelId: number): Nivel {
-
-    console.log(this.nivelesDelJuego.filter(res => res.id === nivelId)[0]);
-
-    this.nivel = this.nivelesDelJuego.filter(res => res.id === nivelId)[0];
-
-    return this.nivel;
-  }
-
-  porcentaje(): number {
-
-    let porcentaje: number;
-
-    if (this.nivel !== undefined) {
-      // Si no estoy en el útlimo nivel, busco el porcentaje. Sino el porcentaje es 1.
-      if (this.alumnoJuegoDePuntos[0].nivelId !== this.nivelesDelJuego[this.nivelesDelJuego.length - 1].id) {
-        porcentaje = (this.alumnoJuegoDePuntos[0].PuntosTotalesAlumno - this.nivel.PuntosAlcanzar) /
-        (this.siguienteNivel.PuntosAlcanzar - this.nivel.PuntosAlcanzar);
-        console.log('no estoy en el ultimo nivel');
-
-      } else {
-        porcentaje = 1;
-      }
-
-    } else {
-      console.log('El sigueinte nivel es el primero');
-
-      porcentaje = (this.alumnoJuegoDePuntos[0].PuntosTotalesAlumno - 0) / (this.siguienteNivel.PuntosAlcanzar - 0);
-    }
-
-    return porcentaje;
-  }
-
   MostrarHistorialSeleccionado() {
 
     // Si es indefinido muestro la tabla del total de puntos
@@ -208,14 +138,20 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
     console.log('Voy a por el historial');
     this.historial = [];
 
-    this.juegoDePuntosService.GET_HistorialPuntosAlumno(this.alumnoJuegoDePuntos[0].id)
+    this.peticionesAPI.DameHistorialPuntosAlumno(this.alumnoJuegoDePuntos.id)
     .subscribe(historial => {
-      console.log(historial);
+      console.log ('Historial ' + historial );
+
 
       if (historial[0] !== null) {
         for (let i = 0; i < historial.length; i++) {
-          this.historial[i] = new TablaHistorialPuntosAlumno (this.BuscarPunto(historial[i].puntoId).Nombre,
-          this.BuscarPunto(historial[i].puntoId).Descripcion, historial[i].ValorPunto, historial[i].fecha,
+          console.log ('Historial ' + i);
+          console.log (historial[i] );
+          let punto: Punto;
+          punto = this.puntosDelJuego.filter(res => res.id === historial[i].puntoId)[0];
+
+          this.historial[i] = new TablaHistorialPuntosAlumno (punto.Nombre,
+          punto.Descripcion, historial[i].ValorPunto, historial[i].fecha,
           historial[i].alumnoJuegoDePuntosId, historial[i].id, historial[i].puntoId);
         }
       } else {
@@ -235,93 +171,29 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
     this.historial = this.historial.filter(historial => historial.puntoId === Number(this.puntoSeleccionadoId));
     return this.historial;
   }
-
-  BuscarPunto(puntoId: number): Punto {
-
-    let punto: Punto;
-    punto = this.puntosDelJuego.filter(res => res.id === puntoId)[0];
-    return (punto);
-  }
-
   BorrarPunto(punto: TablaHistorialPuntosAlumno) {
-    console.log(punto);
+    // tslint:disable-next-line:max-line-length
+    this.calculos.BorrarPunto (punto, this.alumnoJuegoDePuntos, this.nivel, this.siguienteNivel, this.nivelesDelJuego, this.alumnoSeleccionado, this.juegoSeleccionado)
+    .subscribe (res => {
+                            console.log ('regreso de borrar alumno' + this.alumnoJuegoDePuntos);
+                            this.alumnoJuegoDePuntos = res.alumno;
+                            console.log ('ALUMNO ' + this.alumnoJuegoDePuntos);
+                            this.nivel = res.n;
+                            console.log ('nivel ' + this.nivel);
+                            this.siguienteNivel = res.sn;
+                            this.MostrarHistorialSeleccionado();
 
-    // Buscamos los nuevos puntos
-    let nuevosPuntos: number;
-    nuevosPuntos = (Number(this.alumnoJuegoDePuntos[0].PuntosTotalesAlumno) - Number(punto.valorPunto));
-    console.log(nuevosPuntos);
-    this.alumnoJuegoDePuntos[0].PuntosTotalesAlumno = nuevosPuntos;
-
-    this.juegoDePuntosService.DELETE_PuntosAlumno(punto.historialId).subscribe();
-
-
-
-    console.log('Borro los puntos y miro que puntos totales tengo');
-
-    // Comprobamos si subimos de nivel o no
-    // tslint:disable-next-line:curly
-    if (this.nivel !== undefined) {
-      if (nuevosPuntos < this.nivel.PuntosAlcanzar) {
-        if (this.nivel !== undefined) {
-          console.log('Voy a bajar de nivel');
-          this.siguienteNivel = this.nivel;
-          this.nivel = this.BuscarNivelAnterior(this.nivel.id);
-        }
-
-      } else {
-        console.log('mantengo el nivel');
-      }
-    }
-
-    console.log('Voy a editar la base de datos y actualizar la tabla');
-    if (this.nivel !== undefined) {
-      this.juegoDePuntosService.PUT_PuntosJuegoDePuntos( new AlumnoJuegoDePuntos(this.alumnoSeleccionado[0].id, this.juegoSeleccionado.id,
-        nuevosPuntos, this.nivel.id), this.alumnoJuegoDePuntos[0].id).subscribe(res => {
-          console.log(res);
-          this.alumnoJuegoDePuntos[0] = res;
-          this.MostrarHistorialSeleccionado();
-        });
-    } else {
-      this.juegoDePuntosService.PUT_PuntosJuegoDePuntos( new AlumnoJuegoDePuntos(this.alumnoSeleccionado[0].id, this.juegoSeleccionado.id,
-        nuevosPuntos), this.alumnoJuegoDePuntos[0].id).subscribe(res => {
-          console.log(res);
-          this.alumnoJuegoDePuntos[0] = res;
-          this.MostrarHistorialSeleccionado();
-        });
-    }
-
-  }
-
-
-  BuscarNivelAnterior(nivelId: number): Nivel {
-
-    // tslint:disable-next-line:no-inferrable-types
-    let encontrado: boolean = false;
-    let i = 0;
-    while ((i < this.nivelesDelJuego.length) && (encontrado === false)) {
-
-      if (this.nivelesDelJuego[i].id === nivelId) {
-        encontrado = true;
-      }
-      i = i + 1;
-    }
-    if (i >= 2) {
-      return this.nivelesDelJuego[i - 2];
-      console.log('punto plata o mas');
-    } else {
-      return undefined;
-      console.log('punto bronce');
-    }
-
+    });
   }
 
   AbrirDialogoConfirmacionBorrarPunto(punto: TablaHistorialPuntosAlumno): void {
+
 
     const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
       height: '150px',
       data: {
         mensaje: this.mensaje,
-        nombre: this.alumnoSeleccionado[0].Nombre,
+        nombre: this.alumnoSeleccionado.Nombre,
       }
     });
 
@@ -335,13 +207,4 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
     });
   }
 
-
-  prueba() {
-    console.log(this.juegoSeleccionado.id);
-    console.log(this.BuscarNivelAnterior(this.nivel.id));
-  }
-
-  prueba2() {
-    console.log(this.historial);
-  }
 }

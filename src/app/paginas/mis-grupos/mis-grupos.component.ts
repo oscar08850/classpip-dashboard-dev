@@ -7,7 +7,6 @@ import { SesionService, PeticionesAPIService, CalculosService } from '../../serv
 
 // Clases
 import { Grupo, Profesor } from '../../clases/index';
-import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 
 @Component({
@@ -38,7 +37,6 @@ export class MisGruposComponent implements OnInit {
               private router: Router,
               private location: Location,
               private sesion: SesionService,
-              private calculos: CalculosService,
               private peticionesAPI: PeticionesAPIService) { }
 
   ngOnInit() {
@@ -53,29 +51,29 @@ export class MisGruposComponent implements OnInit {
 
   }
 
-  // LE PASAMOS EL IDENTIFICADOR DEL PROFESOR Y NOS DEVUELVE UNA LISTA CON LOS GRUPOS QUE TIENE
   GruposDelProfesor() {
-
     this.peticionesAPI.DameGruposProfesor(this.profesor.id)
     .subscribe(res => {
       if (res[0] !== undefined) {
-        console.log('Voy a dar la lista');
         this.listaGrupos = res;
-        console.log(this.listaGrupos);
       } else {
         this.listaGrupos = undefined;
       }
-
     });
   }
 
   // CUANDO CLICKEMOS ENCIMA DE UNA FILA, ENTRAREMOS EN ESTA FUNCIÓN QUE IDENTIFICA SOBRE EL GRUPO QUE HEMOS CLICKADO
   EntrarGrupo(grupo: Grupo) {
 
-    // AHORA SE LO ENVIO AL SERVICIO
+    // Envio el grupo a la sesión
     this.sesion.TomaGrupo (grupo);
+    // Envio la lista de grupos porque se necesitará si el grupo elegido es eliminado
+    this.sesion.TomaListaGrupos (this.listaGrupos);
 
-    // HAGO LA RUTA AL COMPONENTE GRUPO
+    // Navegamos al componente Grupo
+    // Aqui tambien pasa eso de que no sería necesario enviarle el identificador de
+    // grupo porque el grupo ya está en la sesión. Pero habría que cambiar las rutas y
+    // de momento lo dejamos asi.
     this.router.navigate([this.returnUrl, grupo.id]);
   }
 

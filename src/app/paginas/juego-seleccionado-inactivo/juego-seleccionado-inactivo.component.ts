@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Juego } from '../../clases/index';
 
 // Services
-import { JuegoService } from '../../servicios/index';
+import { SesionService } from '../../servicios/index';
 
 @Component({
   selector: 'app-juego-seleccionado-inactivo',
@@ -15,11 +15,11 @@ export class JuegoSeleccionadoInactivoComponent implements OnInit {
 
   juegoSeleccionado: Juego;
 
-  constructor( private juegoService: JuegoService ) { }
+  constructor( private sesion: SesionService ) { }
 
 
   ngOnInit() {
-    this.juegoSeleccionado = this.juegoService.RecibirJuegoDelServicio();
+    this.juegoSeleccionado = this.sesion.DameJuego();
   }
 
 }

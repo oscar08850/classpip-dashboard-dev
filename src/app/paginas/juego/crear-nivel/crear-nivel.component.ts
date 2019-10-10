@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { MatSnackBar } from '@angular/material';
 
-// Servicios
-import { JuegoService, JuegoDePuntosService } from '../../../servicios/index';
 
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../../servicios/index';
@@ -45,8 +43,7 @@ export class CrearNivelComponent implements OnInit {
 
 
 
-  constructor( private juegoService: JuegoService,
-               private juegoDePuntosService: JuegoDePuntosService,
+  constructor(
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
                public snackBar: MatSnackBar ) { }
@@ -125,7 +122,6 @@ export class CrearNivelComponent implements OnInit {
             .subscribe(() => console.log('Logo cargado'));
           }
 
-          //this.NivelAgregados(nivel); // Añadimos la insignia a la lista insignias agregadas
           this.LimpiarCampos(); // Limpiamos todos los campos
         } else {
              console.log('Fallo añadiendo');
@@ -134,22 +130,5 @@ export class CrearNivelComponent implements OnInit {
     }
 
 
-  // Añade la nueva insignia a la lista insignias agregadas
-  NivelAgregados(nivel: Nivel) {
-    this.nivelAgregados.push(nivel);
-    this.nivelAgregados = this.nivelAgregados.filter(res => res.Nombre !== '');
-    return this.nivelAgregados;
-  }
-
-  BorrarNivel(nivel: Nivel) {
-    console.log(nivel);
-  }
-
-
-
-
-  prueba() {
-    console.log(this.nivelAgregados);
-  }
 
 }

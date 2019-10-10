@@ -4,8 +4,10 @@ import { ResponseContentType, Http, Response } from '@angular/http';
 import { Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, EquipoJuegoDePuntos,
   TablaAlumnoJuegoDePuntos, HistorialPuntosAlumno } from '../../../../clases/index';
 
+
+
 // Services
-import { JuegoService, JuegoDePuntosService } from '../../../../servicios/index';
+import { SesionService } from '../../../../servicios/index';
 
 @Component({
   selector: 'app-informacion-juego-puntos',
@@ -15,21 +17,20 @@ import { JuegoService, JuegoDePuntosService } from '../../../../servicios/index'
 export class InformacionJuegoPuntosComponent implements OnInit {
 
   nivelesDelJuego: Nivel;
-  puntosDelJuego: Punto;
+  tiposPuntosDelJuego: Punto;
   imagenNivel: string;
 
   displayedColumns: string[] = ['nombre', 'descripcion'];
 
-  constructor( private juegoService: JuegoService,
-               private juegoDePuntosService: JuegoDePuntosService,
+  constructor(
+               private sesion: SesionService,
                private http: Http ) { }
 
   ngOnInit() {
 
-    this.nivelesDelJuego = this.juegoDePuntosService.RecibirNivelesDelServicio();
-    this.puntosDelJuego = this.juegoDePuntosService.RecibirPuntosDelServicio();
-    console.log(this.nivelesDelJuego);
-    console.log(this.puntosDelJuego);
+    const datos = this.sesion.DameInformacionJuego ();
+    this.nivelesDelJuego = datos.nivelesDelJuego;
+    this.tiposPuntosDelJuego = datos.tiposPuntosDelJuego;
 
   }
 

@@ -33,28 +33,20 @@ export class PasarListaComponent implements OnInit {
   displayedColumns: string[] = ['select', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'alumnoId'];
   selection = new SelectionModel<Alumno>(true, []);
 
-  seleccionados: boolean[];
 
 
-  constructor( private grupoService: GrupoService,
-               private alumnoService: AlumnoService,
+  constructor(
                public dialog: MatDialog,
                public snackBar: MatSnackBar,
-               private sesion: SesionService,
-               private peticiones: PeticionesAPIService,
-               private location: Location) { }
+               private sesion: SesionService) { }
 
   ngOnInit() {
+    // Recupero de la sesión la información que necesito
     this.grupoSeleccionado = this.sesion.DameGrupo();
     this.profesorId = this.grupoSeleccionado.profesorId;
     this.alumnosGrupoSeleccionado = this.sesion.DameAlumnosGrupo();
-    console.log(this.grupoSeleccionado);
-    console.log(this.profesorId);
-    console.log(this.alumnosGrupoSeleccionado);
-
     if (this.alumnosGrupoSeleccionado !== undefined) {
       // Al principio no hay alumnos seleccionados para eliminar
-      this.seleccionados = Array(this.alumnosGrupoSeleccionado.length).fill(false);
       this.dataSource = new MatTableDataSource(this.alumnosGrupoSeleccionado);
     }
   }
@@ -80,48 +72,6 @@ export class PasarListaComponent implements OnInit {
             this.selection.select(row);
           });
     }
-
-    toggleCheckbox(row) {
-      this.selection.toggle(row);
-      row.selected = !row.selected;
-      console.log(row);
-      console.log(this.selection.toggle(row));
-    }
-
-    /** The label for the checkbox on the passed row */
-    checkboxLabel(row?: Alumno): string {
-      if (!row) {
-        return `${this.IsAllSelected() ? 'select' : 'deselect'} all`;
-      }
-      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row`;
-    }
-
-    // Pone a true o false la posición del vector seleccionados que le pasamos (i) en función de su estado
-    Seleccionar(i: number) {
-
-      if (!this.selection.isSelected(this.alumnosGrupoSeleccionado[i]) === true) {
-        this.seleccionados[i] = true;
-      } else {
-        this.seleccionados[i] = false;
-      }
-      console.log(this.seleccionados);
-    }
-
-    // Pone a true or false todo el vector seleccionado
-    SeleccionarTodos() {
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.alumnosGrupoSeleccionado.length; i++) {
-
-        if (!this.IsAllSelected() === true) {
-          this.seleccionados[i] = true;
-        } else {
-          this.seleccionados[i] = false;
-        }
-
-      }
-      console.log(this.seleccionados);
-    }
-
 
   /* Esta función decide si el boton debe estar activo (si hay al menos
   una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */

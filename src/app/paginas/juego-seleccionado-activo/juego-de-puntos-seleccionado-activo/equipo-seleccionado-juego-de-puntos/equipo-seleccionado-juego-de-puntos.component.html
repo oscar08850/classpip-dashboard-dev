@@ -11,11 +11,11 @@
   <div>
       <p style="font-size: 110%">
         <span style="font-weight: bold;">Nombre:</span>
-        {{equipoSeleccionado[0].Nombre}}
+        {{equipoSeleccionado.Nombre}}
       </p>
       <p style="font-size: 110%">
           <span style="font-weight: bold;">Puntos:</span>
-          {{equipoJuegoDePuntos[0].PuntosTotalesEquipo}}
+          {{equipoJuegoDePuntos.PuntosTotalesEquipo}}
       </p>
       <p style="font-size: 110%">
         <span style="font-weight: bold;">Posición Total:</span>
@@ -30,16 +30,16 @@
       </div>
 
       <div class="progress" style="width: 100%">
-        <div *ngIf="siguienteNivel" class="progress-bar progress-easy" [style.width]="porcentaje()*100+'%'" role="progressbar" aria-valuenow = "equipoJuegoDePuntos[0].PuntosTotalesEquipo"
-        aria-valuemin="nivel.PuntosAlcanzar" aria-valuemax="siguienteNivel.PuntosAlcanzar">{{equipoJuegoDePuntos[0].PuntosTotalesEquipo}}</div>
+        <div *ngIf="siguienteNivel" class="progress-bar progress-easy" [style.width]="porcentaje()*100+'%'" role="progressbar" aria-valuenow = "equipoJuegoDePuntos.PuntosTotalesEquipo"
+        aria-valuemin="nivel.PuntosAlcanzar" aria-valuemax="siguienteNivel.PuntosAlcanzar">{{equipoJuegoDePuntos.PuntosTotalesEquipo}}</div>
 
-        <div *ngIf="siguienteNivel === undefined" class="progress-bar progress-easy" [style.width]="porcentaje()*100+'%'" role="progressbar" aria-valuenow = "equipoJuegoDePuntos[0].PuntosTotalesEquipo"
+        <div *ngIf="siguienteNivel === undefined" class="progress-bar progress-easy" [style.width]="porcentaje()*100+'%'" role="progressbar" aria-valuenow = "equipoJuegoDePuntos.PuntosTotalesEquipo"
         aria-valuemin="nivel.PuntosAlcanzar" aria-valuemax="nivel.PuntosAlcanzar">Nivel máximo alcanzado</div>
 
       </div>
 
       <div *ngIf="siguienteNivel" style="font-size: 110%">
-        ({{equipoJuegoDePuntos[0].PuntosTotalesEquipo}}/{{siguienteNivel.PuntosAlcanzar}}) PX
+        ({{equipoJuegoDePuntos.PuntosTotalesEquipo}}/{{siguienteNivel.PuntosAlcanzar}}) PX
       </div>
       <div *ngIf="siguienteNivel === undefined"  style="font-size: 110%">
         ({{nivel.PuntosAlcanzar}}/{{nivel.PuntosAlcanzar}}) PX

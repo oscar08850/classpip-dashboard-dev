@@ -39,7 +39,6 @@ export class MoverAlumnoComponent implements OnInit {
 
   constructor( public dialogRef: MatDialogRef<MoverAlumnoComponent>,
                @Inject(MAT_DIALOG_DATA) public data: any,
-               private equipoService: EquipoService,
                public dialog: MatDialog,
                public sesion: SesionService,
                public peticionesAPI: PeticionesAPIService,
@@ -73,6 +72,7 @@ export class MoverAlumnoComponent implements OnInit {
       this.alumnosEquipo = res;
       console.log ('****' + this.alumnosEquipo);
     } else {
+      // Mensaje al usuario
       console.log('No hay alumnos en este grupo');
       this.alumnosEquipo = undefined;
       }
@@ -106,6 +106,7 @@ export class MoverAlumnoComponent implements OnInit {
   }
 
   MoverAlumno() {
+    // cambio de equipo a cada uno de los alumnos seleccionados
 
     this.dataSource.data.forEach
     (row => {
@@ -124,8 +125,6 @@ export class MoverAlumnoComponent implements OnInit {
                     console.log(asig);
                     this.alumnosEquipo = this.alumnosEquipo.filter(al => al.Nombre !== alumno.Nombre);
                     this.dataSource = new MatTableDataSource (this.alumnosEquipo);
-
-                    //this.AlumnosDelEquipo();
                   });
                 });
               }
@@ -135,14 +134,6 @@ export class MoverAlumnoComponent implements OnInit {
   }
 
 
-  prueba() {
-
-    console.log(this.equipoSeleccionadoNombre);
-
-  }
-
-
-  // FUNCIONES PARA LA TABLA CON
   /* Esta función decide si el boton debe estar activo (si hay al menos
   una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
   ActualizarBotonTabla() {
@@ -170,47 +161,4 @@ export class MoverAlumnoComponent implements OnInit {
           this.selection.select(row);
         });
   }
-
-  // toggleCheckbox(row) {
-  //   this.selection.toggle(row);
-  //   row.selected = !row.selected;
-  //   console.log(row);
-  //   console.log(this.selection.toggle(row));
-
-  // }
-
-  // /** The label for the checkbox on the passed row */
-  // checkboxLabel(row?: Alumno): string {
-  //   if (!row) {
-  //     return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-  //   }
-  //   return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row`;
-  // }
-/*
-  // Pone a true o false la posición del vector seleccionados que le pasamos (i) en función de su estado
-  Seleccionar(i: number) {
-
-    if (!this.selection.isSelected(this.alumnosEquipo[i]) === true) {
-      this.alumnosSeleccionados[i] = true;
-    } else {
-      this.alumnosSeleccionados[i] = false;
-    }
-    console.log(this.alumnosSeleccionados);
-  }
-
-  // Pone a true or false todo el vector seleccionado
-  SeleccionarTodos() {
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.alumnosEquipo.length; i++) {
-
-      if (!this.isAllSelected() === true) {
-        this.alumnosSeleccionados[i] = true;
-      } else {
-        this.alumnosSeleccionados[i] = false;
-      }
-
-    }
-    console.log(this.alumnosSeleccionados);
-  }
- */
 }

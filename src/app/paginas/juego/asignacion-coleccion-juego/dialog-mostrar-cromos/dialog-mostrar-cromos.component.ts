@@ -3,7 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ResponseContentType, Http, Response } from '@angular/http';
 
 // Servicios
-import { ColeccionService } from '../../../../servicios/index';
 
 // Servicios
 import { PeticionesAPIService } from '../../../../servicios/index';
@@ -32,7 +31,6 @@ export class DialogMostrarCromosComponent implements OnInit {
 
   constructor( public dialogRef: MatDialogRef<DialogMostrarCromosComponent>,
                @Inject(MAT_DIALOG_DATA) public data: any,
-               private coleccionService: ColeccionService,
                private peticionesAPI: PeticionesAPIService,
                private http: Http) { }
 
@@ -81,11 +79,6 @@ export class DialogMostrarCromosComponent implements OnInit {
     });
   }
     }
-  }
-
-  prueba() {
-    console.log(this.coleccion);
-    console.log(this.cromosColeccion);
   }
 
 }
