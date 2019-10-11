@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatDialog, MatSnackBar } from '@angular/material';
 
 // Servicios
-import { PuntosInsigniasService, ProfesorService } from '../../servicios/index';
+import { PuntosInsigniasService, ProfesorService, PeticionesAPIService } from '../../servicios/index';
 
 // Clases
 import { Punto, Insignia } from '../../clases/index';
@@ -53,6 +53,7 @@ export class CrearPuntoComponent implements OnInit {
   logoCargado: Boolean = false;
 
   constructor( private puntosInsigniasService: PuntosInsigniasService,
+               private peticionesAPI: PeticionesAPIService,
                private profesorService: ProfesorService,
                private route: ActivatedRoute,
                public dialog: MatDialog,
@@ -71,7 +72,7 @@ export class CrearPuntoComponent implements OnInit {
   // Función para crear punto
   CrearPunto() {
 
-    this.puntosInsigniasService.POST_Punto(new Punto(this.nombrePunto, this.descripcionPunto), this.profesorId)
+    this.peticionesAPI.POST_Punto(new Punto(this.nombrePunto, this.descripcionPunto), this.profesorId)
     .subscribe(res => {
       if (res !== undefined) {
 
@@ -104,7 +105,7 @@ export class CrearPuntoComponent implements OnInit {
 
   // Utilizamos esta función para eliminar un punto de la base de datos y de la lista de añadidos recientemente
   BorrarPunto(punto: Punto) {
-    this.puntosInsigniasService.DELETE_Punto(punto.id, punto.profesorId)
+    this.peticionesAPI.DELETE_Punto(punto.id, punto.profesorId)
     .subscribe(() => {
       this.PuntosEliminados(punto);
     });
@@ -163,7 +164,7 @@ export class CrearPuntoComponent implements OnInit {
   // Una vez examinado el logo (o no), procedemos a hacer el POST de la nueva insignia
   CrearInsignia() {
 
-    this.puntosInsigniasService.POST_Insignia(new Insignia(this.nombreInsignia, this.descripcionInsignia, this.nombreLogo)
+    this.peticionesAPI.POST_Insignia(new Insignia(this.nombreInsignia, this.descripcionInsignia, this.nombreLogo)
     , this.profesorId).subscribe(insignia => {
       if (insignia !== undefined) {
 
@@ -177,7 +178,7 @@ export class CrearPuntoComponent implements OnInit {
           // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagen
           const formData: FormData = new FormData();
           formData.append(this.nombreLogo, this.file);
-          this.puntosInsigniasService.POST_ImagenInsignia(formData)
+          this.peticionesAPI.POST_ImagenInsignia(formData)
           .subscribe(() => console.log('Logo cargado'));
         }
 
@@ -220,7 +221,7 @@ export class CrearPuntoComponent implements OnInit {
 
   // Borra la insignia que le pasamos de la API
   BorrarInsignia(insignia: Insignia) {
-    this.puntosInsigniasService.DELETE_Insignia(insignia.id, insignia.profesorId)
+    this.peticionesAPI.DELETE_Insignia(insignia.id, insignia.profesorId)
     .subscribe(() => {
       this.InsigniasEliminadas(insignia);
       console.log('punto borrado correctamente');

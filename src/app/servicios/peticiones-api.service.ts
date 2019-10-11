@@ -6,7 +6,7 @@ import { ResponseContentType } from '@angular/http';
 import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDePuntos,
         Equipo, AsignacionEquipo, AsignacionPuntosJuego, EquipoJuegoDePuntos, Coleccion,
         AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Cromo, HistorialPuntosAlumno, HistorialPuntosEquipo,
-        Album, AlbumEquipo } from '../clases/index';
+        Album, AlbumEquipo, Insignia } from '../clases/index';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +19,12 @@ export class PeticionesAPIService {
   private APIUrlMatriculas = 'http://localhost:3000/api/Matriculas';
   private APIRUrlJuegoDePuntos = 'http://localhost:3000/api/JuegosDePuntos';
   private APIUrlAlumnoJuegoDePuntos = 'http://localhost:3000/api/AlumnoJuegosDePuntos';
-  private APIUrlLogoEquipo = 'http://localhost:3000/api/imagenes/LogosEquipos/download/'
+  private APIUrlLogoEquipo = 'http://localhost:3000/api/imagenes/LogosEquipos/download/';
   private APIUrlEquipos = 'http://localhost:3000/api/Equipos';
   private APIUrlLogosEquipos = 'http://localhost:3000/api/imagenes/LogosEquipos';
   private APIUrlPuntosJuego = 'http://localhost:3000/api/AsignacionPuntosJuego';
   private APIUrlImagenNivel = 'http://localhost:3000/api/imagenes/imagenNivel';
+  private APIURLImagenInsignia = 'http://localhost:3000/api/imagenes/ImagenInsignia';
 
   private APIUrlAlumnoJuegoPuntos = 'http://localhost:3000/api/AlumnoJuegosDePuntos';
   private APIUrlEquipoJuegoPuntos = 'http://localhost:3000/api/EquiposJuegosDePuntos';
@@ -493,4 +494,57 @@ export class PeticionesAPIService {
   public BorraJuegoDeColeccion(juegoDeColeccionId: number, grupoId: number): Observable<Juego> {
     return this.http.delete<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeColeccions/' + juegoDeColeccionId);
   }
+//////////////////////////////
+  // PARA CREAR UN PUNTO NUEVO DEL PROFESOR
+  public POST_Punto(punto: Punto, profesorId: number): Observable<Punto> {
+    return this.http.post<Punto>(this.APIUrlProfesores + '/' + profesorId + '/puntos', punto);
+  }
+
+  // PARA EDITAR UN PUNTO DEL PROFESOR
+  public PUT_Punto(punto: Punto, profesorId: number, puntoId: number): Observable<Punto> {
+    return this.http.put<Punto>(this.APIUrlProfesores + '/' + profesorId + '/puntos/' + puntoId, punto);
+  }
+
+  // PARA BORRAR UN PUNTO DEL PROFESOR
+  public DELETE_Punto(puntoId: number, profesorId: number): Observable<any> {
+    return this.http.delete<any>(this.APIUrlProfesores + '/' + profesorId + '/puntos/' + puntoId);
+  }
+
+  // PARA CREAR UNA INSIGNIA NUEVO DEL PROFESOR
+  public POST_Insignia(insignia: Insignia, profesorId: number): Observable<Insignia> {
+    return this.http.post<Insignia>(this.APIUrlProfesores + '/' + profesorId + '/insignia', insignia);
+  }
+
+  // PARA EDITAR UNA INSIGNIA DEL PROFESOR
+  public PUT_Insignia(insignia: Insignia, profesorId: number, insigniaId: number): Observable<Insignia> {
+    return this.http.put<Insignia>(this.APIUrlProfesores + '/' + profesorId + '/insignia/' + insigniaId, insignia);
+  }
+
+  // PARA BORRAR UNA INSIGNIA DEL PROFESOR
+  public DELETE_Insignia(insigniaId: number, profesorId: number): Observable<any> {
+    return this.http.delete<any>(this.APIUrlProfesores + '/' + profesorId + '/insignia/' + insigniaId);
+  }
+
+  // PARA PONER UNA IMAGEN A UNA INSIGNIA
+  public POST_ImagenInsignia(formData: FormData): Observable<any> {
+    return this.http.post<any>(this.APIURLImagenInsignia + '/upload', formData);
+  }
+
+  // DEVUELVE LOS PUNTOS CREADOS POR EL PROFESOR
+  public GET_Puntos(profesorId: number): Observable<Punto[]> {
+    return this.http.get<Punto[]>(this.APIUrlProfesores + '/' + profesorId + '/puntos');
+  }
+
+  // DEVUELVE LAS INSIGNIAS CREADAS POR EL PROFESOR
+  public GET_Insignias(profesorId: number): Observable<Insignia[]> {
+    return this.http.get<Insignia[]>(this.APIUrlProfesores + '/' + profesorId + '/insignia');
+  }
+
+  // DEVUELVE LA IMAGEN CORRESPONDIENTE A CADA INSIGNIA
+  public GET_ImagenInsignia(ImagenInsignia: string): Observable<any> {
+    return this.http.get<any>(this.APIURLImagenInsignia + '/download/' + ImagenInsignia);
+  }
+
+
+
 }

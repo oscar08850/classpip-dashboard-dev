@@ -4,7 +4,7 @@ import { ResponseContentType, Http, Response } from '@angular/http';
 
 
 // Servicios
-import { PuntosInsigniasService} from '../../../servicios/index';
+import { PuntosInsigniasService, PeticionesAPIService} from '../../../servicios/index';
 
 // Clases
 import { Insignia} from '../../../clases/index';
@@ -32,6 +32,7 @@ export class EditarInsigniaComponent implements OnInit {
   // tslint:disable-next-line:no-shadowed-variable
   constructor(  private PuntosInsigniasService: PuntosInsigniasService,
                 private location: Location,
+                private peticionesAPI: PeticionesAPIService,
                 private http: Http ) { }
 
   ngOnInit() {
@@ -46,7 +47,7 @@ export class EditarInsigniaComponent implements OnInit {
     console.log('Entro a editar');
 
     // tslint:disable-next-line:max-line-length
-    this.PuntosInsigniasService.PUT_Insignia(new Insignia(this.nombreInsignia, this.descripcionInsignia, this.nombreImagen), this.insignia.profesorId, this.insignia.id)
+    this.peticionesAPI.PUT_Insignia(new Insignia(this.nombreInsignia, this.descripcionInsignia, this.nombreImagen), this.insignia.profesorId, this.insignia.id)
     .subscribe((res) => {
       if (res != null) {
         console.log('Voy a editar la insignia con id ' + this.insignia.id);
@@ -56,7 +57,7 @@ export class EditarInsigniaComponent implements OnInit {
           // HACEMOS EL POST DE LA NUEVA IMAGEN EN LA BASE DE DATOS
           const formData: FormData = new FormData();
           formData.append(this.nombreImagen, this.file);
-          this.PuntosInsigniasService.POST_ImagenInsignia(formData)
+          this.peticionesAPI.POST_ImagenInsignia(formData)
           .subscribe(() => console.log('Logo cargado'));
         }
 
