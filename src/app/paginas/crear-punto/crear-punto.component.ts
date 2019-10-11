@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatDialog, MatSnackBar } from '@angular/material';
 
 // Servicios
-import { PuntosInsigniasService, ProfesorService, PeticionesAPIService } from '../../servicios/index';
+import { ProfesorService, PeticionesAPIService } from '../../servicios/index';
 
 // Clases
 import { Punto, Insignia } from '../../clases/index';
@@ -52,8 +52,7 @@ export class CrearPuntoComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   logoCargado: Boolean = false;
 
-  constructor( private puntosInsigniasService: PuntosInsigniasService,
-               private peticionesAPI: PeticionesAPIService,
+  constructor( private peticionesAPI: PeticionesAPIService,
                private profesorService: ProfesorService,
                private route: ActivatedRoute,
                public dialog: MatDialog,

@@ -8,7 +8,7 @@ import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
 // Servicios
-import { PuntosInsigniasService, ProfesorService, PeticionesAPIService } from '../../servicios/index';
+import { ProfesorService, PeticionesAPIService, SesionService } from '../../servicios/index';
 
 // Clases
 import { Punto, Insignia } from '../../clases/index';
@@ -34,9 +34,9 @@ export class MisPuntosComponent implements OnInit {
   mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
 
   constructor(
-    private puntosInsigniasService: PuntosInsigniasService,
     private profesorService: ProfesorService,
     private route: ActivatedRoute,
+    private sesion: SesionService,
     private peticionesAPI: PeticionesAPIService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
@@ -79,7 +79,7 @@ export class MisPuntosComponent implements OnInit {
   // Envía el punto específico al componente editar-punto
   EnviarPuntoEditar(punto: Punto) {
     console.log('voy a enviar');
-    this.puntosInsigniasService.EnviarPuntoAlServicio(punto);
+    this.sesion.EnviarPuntoAlServicio(punto);
     console.log(punto.Nombre);
 
   }
@@ -147,7 +147,7 @@ export class MisPuntosComponent implements OnInit {
     // Lo mismo que con el punto
      EnviarInsigniaEditar(insigna: Insignia) {
       console.log('voy a enviar');
-      this.puntosInsigniasService.EnviarInsigniaAlServicio(insigna);
+      this.sesion.EnviarInsigniaAlServicio(insigna);
       console.log(insigna.Nombre);
     }
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
 // Servicios
-import { PuntosInsigniasService, PeticionesAPIService} from '../../../servicios/index';
+import { PeticionesAPIService, SesionService} from '../../../servicios/index';
 
 // Clases
 import { Punto} from '../../../clases/index';
@@ -20,12 +20,12 @@ export class EditarPuntoComponent implements OnInit {
 
 
   // tslint:disable-next-line:no-shadowed-variable
-  constructor(  private PuntosInsigniasService: PuntosInsigniasService,
-                private peticionesAPI: PeticionesAPIService,
+  constructor(  private peticionesAPI: PeticionesAPIService,
+                private sesion: SesionService,
                 private location: Location ) { }
 
   ngOnInit() {
-    this.punto = this.PuntosInsigniasService.RecibirPuntoDelServicio();
+    this.punto = this.sesion.RecibirPuntoDelServicio();
     this.nombrePunto = this.punto.Nombre;
     this.descripcionPunto = this.punto.Descripcion;
   }

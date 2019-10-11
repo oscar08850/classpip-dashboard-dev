@@ -4,7 +4,7 @@ import { ResponseContentType, Http, Response } from '@angular/http';
 
 
 // Servicios
-import { PuntosInsigniasService, PeticionesAPIService} from '../../../servicios/index';
+import { PeticionesAPIService, SesionService} from '../../../servicios/index';
 
 // Clases
 import { Insignia} from '../../../clases/index';
@@ -30,13 +30,13 @@ export class EditarInsigniaComponent implements OnInit {
 
 
   // tslint:disable-next-line:no-shadowed-variable
-  constructor(  private PuntosInsigniasService: PuntosInsigniasService,
-                private location: Location,
+  constructor(  private location: Location,
+                private sesion: SesionService,
                 private peticionesAPI: PeticionesAPIService,
                 private http: Http ) { }
 
   ngOnInit() {
-    this.insignia = this.PuntosInsigniasService.RecibirInsigniaDelServicio();
+    this.insignia = this.sesion.RecibirInsigniaDelServicio();
     this.nombreInsignia = this.insignia.Nombre;
     this.descripcionInsignia = this.insignia.Descripcion;
     // Cargo el logo
