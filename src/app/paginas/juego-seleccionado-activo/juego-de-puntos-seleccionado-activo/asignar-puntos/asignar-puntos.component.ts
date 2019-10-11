@@ -160,8 +160,6 @@ export class AsignarPuntosComponent implements OnInit {
       this.AsignarPuntosEquipos();
     }
 
-    this.selection.clear();
-    this.botonTablaDesactivado = true;
   }
 
 
@@ -184,11 +182,14 @@ export class AsignarPuntosComponent implements OnInit {
             this.listaAlumnosOrdenadaPorPuntos = res.lista;
             console.log ('Llega lista ' + this.listaAlumnosOrdenadaPorPuntos);
             this.rankingJuegoDePuntos = res.ranking;
+            console.log ('222222 ' + i);
             this.dataSource = new MatTableDataSource (this.rankingJuegoDePuntos);
           }
         );
       }
     }
+    this.selection.clear();
+    this.botonTablaDesactivado = true;
   }
 
   AsignarPuntosEquipos() {
@@ -212,6 +213,8 @@ export class AsignarPuntosComponent implements OnInit {
         );
       }
     }
+    this.selection.clear();
+    this.botonTablaDesactivado = true;
 
   }
 

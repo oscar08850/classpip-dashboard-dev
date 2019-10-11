@@ -849,6 +849,10 @@ public AsignarPuntosAlumno(
                 rankingJuegoDePuntos[j].posicion = j + 1;
             }
             rankingJuegoDePuntos = rankingJuegoDePuntos.filter(result => result.nombre !== '');
+            if (i === 7) {
+              console.log ('111111 ' + rankingJuegoDePuntos[i]);
+            }
+
             const resultado = {
                                   lista: listaAlumnosOrdenadaPorPuntos,
                                   ranking: rankingJuegoDePuntos

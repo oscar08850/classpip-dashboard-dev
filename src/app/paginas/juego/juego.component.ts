@@ -252,31 +252,26 @@ export class JuegoComponent implements OnInit {
   }
 
 
-  InscribirAlumnosJuego() {
-    console.log('Voy a inscribir a los alumnos del grupo');
-
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.alumnosGrupo.length; i++) {
-      console.log(this.alumnosGrupo[i]);
-      this.peticionesAPI.InscribeAlumnoJuegoDePuntos(new AlumnoJuegoDePuntos(this.alumnosGrupo[i].id, this.juego.id))
-      .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
-    }
-  }
-
-
-  // INSCRIBE A TODOS LOS EQUIPOS DEL GRUPO DONDE SE CREA EL JUEGO Y PONE SUS PUNTOS A 0
-  InscribirEquiposJuego() {
-    console.log('Voy a inscribir los equipos al grupo');
-
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.equiposGrupo.length; i++) {
-      console.log(this.equiposGrupo[i]);
-      this.peticionesAPI.InscribeEquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
-      .subscribe(equiposJuego => console.log(equiposJuego));
-    }
-  }
-
   Finalizar() {
+    if (this.juego.Modo === 'Individual') {
+      console.log('Voy a inscribir a los alumnos del grupo');
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.alumnosGrupo.length; i++) {
+        console.log(this.alumnosGrupo[i]);
+        this.peticionesAPI.InscribeAlumnoJuegoDePuntos(new AlumnoJuegoDePuntos(this.alumnosGrupo[i].id, this.juego.id))
+        .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
+      }
+    } else {
+      console.log('Voy a inscribir los equipos al grupo');
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.equiposGrupo.length; i++) {
+        console.log(this.equiposGrupo[i]);
+        this.peticionesAPI.InscribeEquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
+        .subscribe(equiposJuego => console.log(equiposJuego));
+      }
+    }
     // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
     if (this.juegosActivos === undefined) {
       // Si la lista aun no se ha creado no podre hacer el push
