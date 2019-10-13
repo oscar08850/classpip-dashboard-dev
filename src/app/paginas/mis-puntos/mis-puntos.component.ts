@@ -8,7 +8,7 @@ import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
 // Servicios
-import { PuntosInsigniasService, ProfesorService } from '../../servicios/index';
+import { ProfesorService, PeticionesAPIService, SesionService } from '../../servicios/index';
 
 // Clases
 import { Punto, Insignia } from '../../clases/index';
@@ -34,9 +34,10 @@ export class MisPuntosComponent implements OnInit {
   mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
 
   constructor(
-    private puntosInsigniasService: PuntosInsigniasService,
     private profesorService: ProfesorService,
     private route: ActivatedRoute,
+    private sesion: SesionService,
+    private peticionesAPI: PeticionesAPIService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     private http: Http) { }
@@ -60,7 +61,7 @@ export class MisPuntosComponent implements OnInit {
   ////////////////////////////////////////////// PARA PUNTOS ////////////////////////////////////////////////
   PuntosDelProfesor() {
 
-    this.puntosInsigniasService.GET_Puntos(this.profesorId)
+    this.peticionesAPI.GET_Puntos(this.profesorId)
     .subscribe(puntos => {
       if (puntos[0] !== undefined) {
         console.log('Voy a dar la lista');
@@ -78,7 +79,7 @@ export class MisPuntosComponent implements OnInit {
   // Envía el punto específico al componente editar-punto
   EnviarPuntoEditar(punto: Punto) {
     console.log('voy a enviar');
-    this.puntosInsigniasService.EnviarPuntoAlServicio(punto);
+    this.sesion.EnviarPuntoAlServicio(punto);
     console.log(punto.Nombre);
 
   }
@@ -111,7 +112,7 @@ export class MisPuntosComponent implements OnInit {
 
   // Utilizamos esta función para eliminar un punto de la base de datos y actualiza la lista de puntos
   BorrarPunto(punto: Punto) {
-    this.puntosInsigniasService.DELETE_Punto(punto.id, punto.profesorId)
+    this.peticionesAPI.DELETE_Punto(punto.id, punto.profesorId)
     .subscribe(() => {
       this.PuntosEliminados(punto);
       console.log('punto borrado correctamente');
@@ -128,7 +129,7 @@ export class MisPuntosComponent implements OnInit {
     ////////////////////////////////////////////// PARA INSIGNIAS ////////////////////////////////////////////////
     InsigniasDelProfesor() {
 
-      this.puntosInsigniasService.GET_Insignias(this.profesorId)
+      this.peticionesAPI.GET_Insignias(this.profesorId)
       .subscribe(insignas => {
         if (insignas[0] !== undefined) {
           console.log('Voy a dar la lista');
@@ -146,7 +147,7 @@ export class MisPuntosComponent implements OnInit {
     // Lo mismo que con el punto
      EnviarInsigniaEditar(insigna: Insignia) {
       console.log('voy a enviar');
-      this.puntosInsigniasService.EnviarInsigniaAlServicio(insigna);
+      this.sesion.EnviarInsigniaAlServicio(insigna);
       console.log(insigna.Nombre);
     }
 
@@ -176,7 +177,7 @@ export class MisPuntosComponent implements OnInit {
 
     // Utilizamos esta función para eliminar una insignia de la base de datos y de la lista de añadidos recientemente
     BorrarInsignia(insignas: Insignia) {
-      this.puntosInsigniasService.DELETE_Insignia(insignas.id, insignas.profesorId)
+      this.peticionesAPI.DELETE_Insignia(insignas.id, insignas.profesorId)
       .subscribe(() => {
         this.InsigniasEliminadas(insignas);
         console.log('insignia borrada correctamente');

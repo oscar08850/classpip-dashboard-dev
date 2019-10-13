@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo } from '../clases';
+import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia } from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 @Injectable({
@@ -36,10 +36,14 @@ export class SesionService {
   inscripcionEquipo: any;
   listaGrupos: any;
   imagenLogoEquipo: any;
+
+  punto: Punto;
+  insignia: Insignia;
+
   // listaEquiposGrupo: any;
 
   constructor() { }
-  public TomaProfesor(profesor: Profesor){
+  public TomaProfesor(profesor: Profesor) {
     this.profesor = profesor;
   }
   public  DameProfesor(): Profesor {
@@ -269,5 +273,21 @@ export class SesionService {
 
   public DameImagenLogoEquipo(): any {
     return this.imagenLogoEquipo;
+  }
+
+  public EnviarPuntoAlServicio(punto: any) {
+    this.punto = punto;
+  }
+
+  public RecibirPuntoDelServicio(): any {
+    return this.punto;
+  }
+
+  public EnviarInsigniaAlServicio(insignia: any) {
+    this.insignia = insignia;
+  }
+
+  public RecibirInsigniaDelServicio(): any {
+    return this.insignia;
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
 // Servicios
-import { PuntosInsigniasService} from '../../../servicios/index';
+import { PeticionesAPIService, SesionService} from '../../../servicios/index';
 
 // Clases
 import { Punto} from '../../../clases/index';
@@ -20,11 +20,12 @@ export class EditarPuntoComponent implements OnInit {
 
 
   // tslint:disable-next-line:no-shadowed-variable
-  constructor(  private PuntosInsigniasService: PuntosInsigniasService,
+  constructor(  private peticionesAPI: PeticionesAPIService,
+                private sesion: SesionService,
                 private location: Location ) { }
 
   ngOnInit() {
-    this.punto = this.PuntosInsigniasService.RecibirPuntoDelServicio();
+    this.punto = this.sesion.RecibirPuntoDelServicio();
     this.nombrePunto = this.punto.Nombre;
     this.descripcionPunto = this.punto.Descripcion;
   }
@@ -32,7 +33,7 @@ export class EditarPuntoComponent implements OnInit {
   EditarPunto() {
     console.log('Entro a editar');
 
-    this.PuntosInsigniasService.PUT_Punto(new Punto(this.nombrePunto, this.descripcionPunto), this.punto.profesorId, this.punto.id)
+    this.peticionesAPI.PUT_Punto(new Punto(this.nombrePunto, this.descripcionPunto), this.punto.profesorId, this.punto.id)
     .subscribe((res) => {
       if (res != null) {
         console.log('Voy a editar el punto con id ' + this.punto.id);
