@@ -275,7 +275,6 @@ export class SesionService {
     return this.imagenLogoEquipo;
   }
 
-  ////////////////////////////////////
   public EnviarPuntoAlServicio(punto: any) {
     this.punto = punto;
   }

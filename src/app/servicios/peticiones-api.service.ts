@@ -494,7 +494,7 @@ export class PeticionesAPIService {
   public BorraJuegoDeColeccion(juegoDeColeccionId: number, grupoId: number): Observable<Juego> {
     return this.http.delete<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeColeccions/' + juegoDeColeccionId);
   }
-//////////////////////////////
+
   // PARA CREAR UN PUNTO NUEVO DEL PROFESOR
   public POST_Punto(punto: Punto, profesorId: number): Observable<Punto> {
     return this.http.post<Punto>(this.APIUrlProfesores + '/' + profesorId + '/puntos', punto);
