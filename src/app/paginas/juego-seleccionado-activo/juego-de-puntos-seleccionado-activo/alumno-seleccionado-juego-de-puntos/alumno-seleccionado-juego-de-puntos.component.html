@@ -22,13 +22,22 @@
       <span style="font-weight: bold;">Posición Total:</span>
       {{posicion}}º
     </p>
-    </div>
-    <div  class="contenedor2">
+
+    <div   *ngIf="nivelesDelJuego">
 
         <div *ngIf="nivel"  style="font-size: 110%">
-          <span style="font-weight: bold; ">Nivel:</span> {{nivel.Nombre}}
+          <span style="font-weight: bold; ">Nivel: </span> {{nivel.Nombre}}
         </div>
+        <div *ngIf="siguienteNivel"  style="font-size: 110%">
+            <span style="font-weight: bold; ">Puntos que te faltan para el siguiente nivel: </span> {{siguienteNivel.PuntosAlcanzar - alumnoJuegoDePuntos.PuntosTotalesAlumno}}
+        </div>
+        <div *ngIf="siguienteNivel === undefined"  style="font-size: 110%">
+            <span style="font-weight: bold; ">Estas en el máximo nivel</span>
+        </div>
+    </div>
+  </div>
 
+<!--
         <div class="progress" style="width: 100%">
           <div *ngIf="siguienteNivel" class="progress-bar progress-easy" [style.width]="Porcentaje()*100+'%'" role="progressbar" aria-valuenow = "alumnoJuegoDePuntos.PuntosTotalesAlumno"
           aria-valuemin="nivel.PuntosAlcanzar" aria-valuemax="siguienteNivel.PuntosAlcanzar">{{alumnoJuegoDePuntos.PuntosTotalesAlumno}}</div>
@@ -45,7 +54,7 @@
         >
           ({{nivel.PuntosAlcanzar}}/{{nivel.PuntosAlcanzar}}) PX
         </div>
-      </div>
+      </div> -->
 
   </div>
 </div>

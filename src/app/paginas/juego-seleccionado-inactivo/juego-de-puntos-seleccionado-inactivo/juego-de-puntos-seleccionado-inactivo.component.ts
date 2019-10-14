@@ -80,7 +80,7 @@ export class JuegoDePuntosSeleccionadoInactivoComponent implements OnInit {
     this.juegoSeleccionado = this.sesion.DameJuego()
     this.listaSeleccionable[0] =  new Punto('Totales');
 
-    this.PuntosDelJuego();
+    this.TraeTiposPuntosDelJuego();
     this.NivelesDelJuego();
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
@@ -121,11 +121,12 @@ export class JuegoDePuntosSeleccionadoInactivoComponent implements OnInit {
 
 
   // Recupera los puntos que se pueden asignar en el juego
-  PuntosDelJuego() {
+  TraeTiposPuntosDelJuego() {
     this.peticionesAPI.DamePuntosJuegoDePuntos(this.juegoSeleccionado.id)
     .subscribe(puntos => {
       this.tiposPuntosDelJuego = puntos;
-
+      this.listaSeleccionable = [];
+      this.listaSeleccionable[0] =  new Punto('Totales');
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.tiposPuntosDelJuego.length; i ++) {
         this.listaSeleccionable.push(this.tiposPuntosDelJuego[i]);
@@ -188,48 +189,45 @@ export class JuegoDePuntosSeleccionadoInactivoComponent implements OnInit {
       );
       console.log ('Ya tengo la tabla');
       // tslint:disable-next-line:max-line-length
-      this.rankingJuegoDePuntosTotal = this.calculos.DameRanking (this.listaAlumnosOrdenadaPorPuntos, this.alumnosDelJuego, this.nivelesDelJuego);
+     // this.rankingJuegoDePuntosTotal = this.calculos.DameRanking (this.listaAlumnosOrdenadaPorPuntos, this.alumnosDelJuego, this.nivelesDelJuego);
       this.datasourceAlumno = new MatTableDataSource(this.rankingJuegoDePuntos);
 
     } else {
 
-      const resultado = this.calculos.PrepararTablaRankingEquipos (
+      this.rankingEquiposJuegoDePuntos = this.calculos.PrepararTablaRankingEquipos (
         this.listaEquiposOrdenadaPorPuntos, this.equiposDelJuego, this.nivelesDelJuego
       );
-
-      this.rankingEquiposJuegoDePuntosTotal = resultado.rankingTotal;
-      this.rankingEquiposJuegoDePuntos = resultado.ranking;
       console.log ('ranking ' + this.rankingEquiposJuegoDePuntos);
       this.datasourceEquipo = new MatTableDataSource(this.rankingEquiposJuegoDePuntos);
 
     }
   }
 
-  BuscarAlumno(alumnoId: number): Alumno {
+  // BuscarAlumno(alumnoId: number): Alumno {
 
-    let alumno: Alumno;
-    // tslint:disable-next-line:no-unused-expression
-    alumno = this.alumnosDelJuego.filter(res => res.id === alumnoId)[0];
-    return alumno;
-  }
+  //   let alumno: Alumno;
+  //   // tslint:disable-next-line:no-unused-expression
+  //   alumno = this.alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+  //   return alumno;
+  // }
 
-  BuscarEquipo(equipoId: number): Equipo {
+  // BuscarEquipo(equipoId: number): Equipo {
 
-    let equipo: Equipo;
-    // tslint:disable-next-line:no-unused-expression
-    equipo = this.equiposDelJuego.filter(res => res.id === equipoId)[0];
-    return equipo;
-  }
+  //   let equipo: Equipo;
+  //   // tslint:disable-next-line:no-unused-expression
+  //   equipo = this.equiposDelJuego.filter(res => res.id === equipoId)[0];
+  //   return equipo;
+  // }
 
-  BuscarNivel(nivelId: number): Nivel {
+  // BuscarNivel(nivelId: number): Nivel {
 
-    let nivel: Nivel;
-    console.log(this.nivelesDelJuego.filter(res => res.id === nivelId)[0]);
+  //   let nivel: Nivel;
+  //   console.log(this.nivelesDelJuego.filter(res => res.id === nivelId)[0]);
 
-    nivel = this.nivelesDelJuego.filter(res => res.id === nivelId)[0];
+  //   nivel = this.nivelesDelJuego.filter(res => res.id === nivelId)[0];
 
-    return nivel;
-  }
+  //   return nivel;
+  // }
 
   Informacion() {
     this.sesion.TomaInformacionJuego (this.nivelesDelJuego, this.tiposPuntosDelJuego);
@@ -292,17 +290,12 @@ export class JuegoDePuntosSeleccionadoInactivoComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       console.log('Voy a por la clasficiacion del punto de tipo ' + this.puntoSeleccionadoId);
       // tslint:disable-next-line:max-line-length
-      this.calculos.DameRanking2 (this.listaAlumnosOrdenadaPorPuntos, this.alumnosDelJuego, this.nivelesDelJuego, this.puntoSeleccionadoId).
-      subscribe ( res => {  this.rankingJuegoDePuntos = res;
-                            console.log ('RECIBO RANKING ' + this.rankingJuegoDePuntos);
-                            this.datasourceAlumno = new MatTableDataSource(res);
-                          });
+      this.calculos.DameRankingPuntoSeleccionadoAlumnos (this.listaAlumnosOrdenadaPorPuntos, this.alumnosDelJuego, this.nivelesDelJuego, this.puntoSeleccionadoId).
+      subscribe ( res => this.datasourceAlumno = new MatTableDataSource(res));
     } else {
       // tslint:disable-next-line:max-line-length
-      this.calculos.DameRankingEquipos (this.listaEquiposOrdenadaPorPuntos, this.equiposDelJuego, this.nivelesDelJuego, this.puntoSeleccionadoId).
-      subscribe ( res => {  this.rankingEquiposJuegoDePuntos = res;
-                            this.datasourceEquipo = new MatTableDataSource(res);
-                          });
+      this.calculos.DameRankingPuntoSeleccionadoEquipos (this.listaEquiposOrdenadaPorPuntos, this.equiposDelJuego, this.nivelesDelJuego, this.puntoSeleccionadoId).
+      subscribe ( res => this.datasourceEquipo = new MatTableDataSource(res));
     }
 
   }

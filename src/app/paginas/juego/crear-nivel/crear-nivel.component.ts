@@ -101,11 +101,11 @@ export class CrearNivelComponent implements OnInit {
   }
 
    CrearNivel() {
-    if ((this.puntosAlcanzar === undefined) || (this.puntosAlcanzar === 0)) {
-      this.snackBar.open('El numero de puntos a alcanzar no puede ser 0', 'Cerrar', {
-        duration: 2000,
-      });
-    } else {
+    // if ((this.puntosAlcanzar === undefined) || (this.puntosAlcanzar === 0)) {
+    //   this.snackBar.open('El numero de puntos a alcanzar no puede ser 0', 'Cerrar', {
+    //     duration: 2000,
+    //   });
+    // } else {
       this.juegoDePuntosId = this.juego.id;
 
       this.peticionesAPI.CreaNivel(new Nivel (this.nombreNivel, this.puntosAlcanzar, this.privilegiosDelNivel,
@@ -132,7 +132,7 @@ export class CrearNivelComponent implements OnInit {
               console.log('Fallo añadiendo');
           }
         });
-    }
+    // }
   }
 
 
