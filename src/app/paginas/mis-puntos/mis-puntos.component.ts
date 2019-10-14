@@ -23,8 +23,8 @@ export class MisPuntosComponent implements OnInit {
   profesorId: number;
 
 
-  puntosProfesor: Punto[];
-  insigniasProfesor: Insignia[];
+  tiposPuntos: Punto[];
+  insignias: Insignia[];
 
   imagenInsignia: string;
 
@@ -51,25 +51,24 @@ export class MisPuntosComponent implements OnInit {
     console.log(this.profesorId);
 
     this.PuntosDelProfesor();
-    console.log(this.puntosProfesor);
 
     this.InsigniasDelProfesor();
-    console.log(this.insigniasProfesor);
+
 
   }
 
   ////////////////////////////////////////////// PARA PUNTOS ////////////////////////////////////////////////
   PuntosDelProfesor() {
 
-    this.peticionesAPI.GET_Puntos(this.profesorId)
+    this.peticionesAPI.DameTiposDePuntos(this.profesorId)
     .subscribe(puntos => {
       if (puntos[0] !== undefined) {
         console.log('Voy a dar la lista');
-        this.puntosProfesor = puntos;
-        console.log(this.puntosProfesor);
-        this.profesorService.EnviarProfesorIdAlServicio(this.profesorId);
+        this.tiposPuntos = puntos;
+        //console.log(this.puntosProfesor);
+        //this.profesorService.EnviarProfesorIdAlServicio(this.profesorId);
       } else {
-        this.puntosProfesor = undefined;
+        this.tiposPuntos = undefined;
       }
 
     });
@@ -77,9 +76,9 @@ export class MisPuntosComponent implements OnInit {
 
   // Una vez seleccionado un punto, lo podemos editar o eliminar. Esta función se activará si clicamos en editar.
   // Envía el punto específico al componente editar-punto
-  EnviarPuntoEditar(punto: Punto) {
+  EnviarTipoPuntoEditar(punto: Punto) {
     console.log('voy a enviar');
-    this.sesion.EnviarPuntoAlServicio(punto);
+    this.sesion.TomaTipoPunto(punto);
     console.log(punto.Nombre);
 
   }
@@ -112,32 +111,23 @@ export class MisPuntosComponent implements OnInit {
 
   // Utilizamos esta función para eliminar un punto de la base de datos y actualiza la lista de puntos
   BorrarPunto(punto: Punto) {
-    this.peticionesAPI.DELETE_Punto(punto.id, punto.profesorId)
-    .subscribe(() => {
-      this.PuntosEliminados(punto);
-      console.log('punto borrado correctamente');
-      console.log(this.puntosProfesor);
-    });
+    this.peticionesAPI.BorraTipoDePunto(punto.id, punto.profesorId)
+    .subscribe(() => this.tiposPuntos = this.tiposPuntos.filter(res => res.id !== punto.id)
+    );
   }
 
-  // Borramos el punto de la lista de puntos agregados
-  PuntosEliminados(punto: Punto) {
-    this.puntosProfesor = this.puntosProfesor.filter(res => res.id !== punto.id);
-    return this.puntosProfesor;
-  }
+
 
     ////////////////////////////////////////////// PARA INSIGNIAS ////////////////////////////////////////////////
     InsigniasDelProfesor() {
 
-      this.peticionesAPI.GET_Insignias(this.profesorId)
+      this.peticionesAPI.DameInsignias(this.profesorId)
       .subscribe(insignas => {
         if (insignas[0] !== undefined) {
           console.log('Voy a dar la lista');
-          this.insigniasProfesor = insignas;
-          console.log(this.insigniasProfesor);
-          this.profesorService.EnviarProfesorIdAlServicio(this.profesorId);
+          this.insignias = insignas;
         } else {
-          this.insigniasProfesor = undefined;
+          this.insignias = undefined;
         }
 
       });
@@ -147,7 +137,7 @@ export class MisPuntosComponent implements OnInit {
     // Lo mismo que con el punto
      EnviarInsigniaEditar(insigna: Insignia) {
       console.log('voy a enviar');
-      this.sesion.EnviarInsigniaAlServicio(insigna);
+      this.sesion.TomaInsignia(insigna);
       console.log(insigna.Nombre);
     }
 
@@ -177,19 +167,11 @@ export class MisPuntosComponent implements OnInit {
 
     // Utilizamos esta función para eliminar una insignia de la base de datos y de la lista de añadidos recientemente
     BorrarInsignia(insignas: Insignia) {
-      this.peticionesAPI.DELETE_Insignia(insignas.id, insignas.profesorId)
-      .subscribe(() => {
-        this.InsigniasEliminadas(insignas);
-        console.log('insignia borrada correctamente');
-        console.log(this.insigniasProfesor);
-      });
+      this.peticionesAPI.BorraInsignia(insignas.id, insignas.profesorId)
+      .subscribe(() => this.insignias = this.insignias.filter(res => res.id !== insignas.id)
+      );
     }
 
-    // Borramos la insignia de la lista de insingias agregadas
-    InsigniasEliminadas(insignas: Insignia) {
-      this.insigniasProfesor = this.insigniasProfesor.filter(res => res.id !== insignas.id);
-      return this.insigniasProfesor;
-    }
 
   ImagenDelaInsignia(insigna: Insignia) {
 

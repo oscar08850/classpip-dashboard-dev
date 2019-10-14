@@ -275,19 +275,19 @@ export class SesionService {
     return this.imagenLogoEquipo;
   }
 
-  public EnviarPuntoAlServicio(punto: any) {
+  public TomaTipoPunto(punto: any) {
     this.punto = punto;
   }
 
-  public RecibirPuntoDelServicio(): any {
+  public DameTipoPunto(): any {
     return this.punto;
   }
 
-  public EnviarInsigniaAlServicio(insignia: any) {
+  public TomaInsignia(insignia: any) {
     this.insignia = insignia;
   }
 
-  public RecibirInsigniaDelServicio(): any {
+  public DameInsignia(): any {
     return this.insignia;
   }
 }
