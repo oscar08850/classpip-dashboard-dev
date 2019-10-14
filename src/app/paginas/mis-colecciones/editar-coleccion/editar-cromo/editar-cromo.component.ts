@@ -152,30 +152,6 @@ export class EditarCromoComponent implements OnInit {
         };
   }
 
-/*
-  OpcionProbabilidadSeleccionada() {
-
-        // Opcion selecionada para probabilidad
-        if (this.opcionSeleccionadaProbabilidad === 'Muy Baja') {
-          this.probabilidadCromo = 'Muy Baja';
-        }
-        if (this.opcionSeleccionadaProbabilidad === 'Baja') {
-          this.probabilidadCromo = 'Baja';
-        }
-
-        if (this.opcionSeleccionadaProbabilidad === 'Media') {
-          this.probabilidadCromo = 'Media';
-        }
-
-        if (this.opcionSeleccionadaProbabilidad === 'Alta') {
-          this.probabilidadCromo = 'Alta';
-        }
-
-        if (this.opcionSeleccionadaProbabilidad === 'Muy Alta') {
-          this.probabilidadCromo = 'Muy Alta';
-        }
-  }
- */
   OpcionNivelSeleccionado() {
         console.log(this.opcionSeleccionadaNivel);
         // Opcion selecionada para nivel

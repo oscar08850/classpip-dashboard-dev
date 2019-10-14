@@ -7,6 +7,8 @@ import { Cromo, Coleccion } from '../../../clases/index';
 
 // Servicios
 import { ColeccionService } from '../../../servicios/index';
+import { PeticionesAPIService } from '../../../servicios/index';
+
 
 export interface OpcionSeleccionada {
   nombre: string;
@@ -48,7 +50,7 @@ export class AgregarCromoDialogComponent implements OnInit {
 
     ];
 
-    opcionSeleccionadaProbabilidad: string;
+   // opcionSeleccionadaProbabilidad: string;
 
       // Opciones para mostrar en la lista desplegable para seleccionar el tipo de juego que listar
     opcionesNivel: OpcionSeleccionada[] = [
@@ -68,6 +70,7 @@ export class AgregarCromoDialogComponent implements OnInit {
   constructor(  private coleccionService: ColeccionService,
                 private formBuilder: FormBuilder,
                 public dialogRef: MatDialogRef<AgregarCromoDialogComponent>,
+                private peticionesAPI: PeticionesAPIService,
                 @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
@@ -81,13 +84,13 @@ export class AgregarCromoDialogComponent implements OnInit {
     console.log('Entro a asignar el cromo ' + this.nombreCromo);
     console.log('Entro a asignar el cromo a la coleccionID' + this.coleccionId);
     console.log(this.nombreImagenCromo );
-
-    this.coleccionService.POST_CromoColeccion(
+    this.peticionesAPI.PonCromoColeccion(
       new Cromo(this.nombreCromo, this.nombreImagenCromo , this.probabilidadCromo, this.nivelCromo), this.coleccionId)
     .subscribe((res) => {
       if (res != null) {
         console.log('asignado correctamente');
-        this.CromosAgregados(res);
+        this.cromosAgregados.push(res);
+        this.cromosAgregados = this.cromosAgregados.filter(cromo => cromo.Nombre !== '');
 
          // Hago el POST de la imagen SOLO si hay algo cargado. Ese boolean se cambiará en la función ExaminarImagenCromo
         if (this.imagenCargadoCromo === true) {
@@ -95,7 +98,7 @@ export class AgregarCromoDialogComponent implements OnInit {
           // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagenCromo
           const formData: FormData = new FormData();
           formData.append(this.nombreImagenCromo, this.fileCromo);
-          this.coleccionService.POST_ImagenCromo(formData)
+          this.peticionesAPI.PonImagenCromo(formData)
           .subscribe(() => console.log('Imagen cargado'));
         }
         this.LimpiarCampos();
@@ -104,29 +107,19 @@ export class AgregarCromoDialogComponent implements OnInit {
       }
     });
   }
-  // Lista de los cromos añadidos a la coleccion
-  CromosAgregados(cromo: Cromo) {
-    this.cromosAgregados.push(cromo);
-    this.cromosAgregados = this.cromosAgregados.filter(res => res.Nombre !== '');
-    return this.cromosAgregados;
-  }
+
 
   // Utilizamos esta función para eliminar un cromo de la base de datos y de la lista de añadidos recientemente
   BorrarCromo(cromo: Cromo) {
     console.log('Id cromo ' + this.coleccionId);
-    this.coleccionService.DELETE_Cromo(cromo.id, this.coleccionId)
+    this.peticionesAPI.BorrarCromo(cromo.id, this.coleccionId)
     .subscribe(() => {
-      this.CromosEliminados(cromo);
+      this.cromosAgregados = this.cromosAgregados.filter(res => res.id !== cromo.id);
       console.log('Cromo borrado correctamente');
 
     });
   }
 
-  // Elimina el cromo de la lista de añadidos a la coleccion
-  CromosEliminados(cromo: Cromo) {
-    this.cromosAgregados = this.cromosAgregados.filter(res => res.id !== cromo.id);
-    return this.cromosAgregados;
-  }
 
    // Activa la función ExaminarImagenCromo
    ActivarInputCromo() {
@@ -151,28 +144,28 @@ export class AgregarCromoDialogComponent implements OnInit {
     };
   }
 
-  // Una vez seleccionada la probabilidad se asigna a la varible del cromo
-  OpcionProbabilidadSeleccionada() {
-    // Opcion selecionada para probabilidad
-    if (this.opcionSeleccionadaProbabilidad === 'Muy Baja') {
-      this.probabilidadCromo = 'Muy Baja';
-    }
-    if (this.opcionSeleccionadaProbabilidad === 'Baja') {
-      this.probabilidadCromo = 'Baja';
-    }
+  // // Una vez seleccionada la probabilidad se asigna a la varible del cromo
+  // OpcionProbabilidadSeleccionada() {
+  //   // Opcion selecionada para probabilidad
+  //   if (this.opcionSeleccionadaProbabilidad === 'Muy Baja') {
+  //     this.probabilidadCromo = 'Muy Baja';
+  //   }
+  //   if (this.opcionSeleccionadaProbabilidad === 'Baja') {
+  //     this.probabilidadCromo = 'Baja';
+  //   }
 
-    if (this.opcionSeleccionadaProbabilidad === 'Media') {
-      this.probabilidadCromo = 'Media';
-    }
+  //   if (this.opcionSeleccionadaProbabilidad === 'Media') {
+  //     this.probabilidadCromo = 'Media';
+  //   }
 
-    if (this.opcionSeleccionadaProbabilidad === 'Alta') {
-      this.probabilidadCromo = 'Alta';
-    }
+  //   if (this.opcionSeleccionadaProbabilidad === 'Alta') {
+  //     this.probabilidadCromo = 'Alta';
+  //   }
 
-    if (this.opcionSeleccionadaProbabilidad === 'Muy Alta') {
-      this.probabilidadCromo = 'Muy Alta';
-    }
-  }
+  //   if (this.opcionSeleccionadaProbabilidad === 'Muy Alta') {
+  //     this.probabilidadCromo = 'Muy Alta';
+  //   }
+  // }
 
   OpcionNivelSeleccionado() {
     console.log(this.opcionSeleccionadaNivel);
@@ -180,31 +173,31 @@ export class AgregarCromoDialogComponent implements OnInit {
     if (this.opcionSeleccionadaNivel === 'Diamante') {
       this.nivelCromo = 'Diamante';
       this.probabilidadCromo = 'Muy Baja';
-      this.opcionSeleccionadaProbabilidad = 'Muy Baja';
+     // this.opcionSeleccionadaProbabilidad = 'Muy Baja';
 
     }
     if (this.opcionSeleccionadaNivel === 'Platino') {
       this.nivelCromo = 'Platino';
       this.probabilidadCromo = 'Baja';
-      this.opcionSeleccionadaProbabilidad = 'Baja';
+      //this.opcionSeleccionadaProbabilidad = 'Baja';
     }
 
     if (this.opcionSeleccionadaNivel === 'Oro') {
       this.nivelCromo = 'Oro';
       this.probabilidadCromo = 'Media';
-      this.opcionSeleccionadaProbabilidad = 'Media';
+     // this.opcionSeleccionadaProbabilidad = 'Media';
     }
 
     if (this.opcionSeleccionadaNivel === 'Plata') {
       this.nivelCromo = 'Plata';
       this.probabilidadCromo = 'Alta';
-      this.opcionSeleccionadaProbabilidad = 'Alta';
+    //  this.opcionSeleccionadaProbabilidad = 'Alta';
     }
 
     if (this.opcionSeleccionadaNivel === 'Bronce') {
       this.nivelCromo = 'Bronce';
       this.probabilidadCromo = 'Muy Alta';
-      this.opcionSeleccionadaProbabilidad = 'Muy Alta';
+    //  this.opcionSeleccionadaProbabilidad = 'Muy Alta';
     }
   }
 
@@ -217,7 +210,7 @@ export class AgregarCromoDialogComponent implements OnInit {
       this.imagenCargadoCromo = false;
       this.imagenCromo = undefined;
       this.nombreImagenCromo = undefined;
-      this.opcionSeleccionadaProbabilidad = null;
+      //this.opcionSeleccionadaProbabilidad = null;
       this.opcionSeleccionadaNivel = null;
   }
 

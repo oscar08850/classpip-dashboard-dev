@@ -144,12 +144,7 @@ export class MisColeccionesComponent implements OnInit {
       console.log(this.coleccionesProfesor);
     });
   }
-/*
-  // Borramos la colección de la lista de colecciones del profesor
-  ColeccionesEliminadas(coleccion: Coleccion) {
-    this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
-    return this.coleccionesProfesor;
-  } */
+
 
 
   // Si queremos borrar un equipo, antes nos saldrá un aviso para confirmar la acción como medida de seguridad. Esto se
