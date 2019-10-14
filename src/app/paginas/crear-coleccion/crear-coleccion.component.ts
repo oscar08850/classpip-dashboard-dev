@@ -133,7 +133,7 @@ export class CrearColeccionComponent implements OnInit {
     console.log(this.nombreImagen);
 
     // Hace el POST del equipo
-    this.coleccionService.POST_Coleccion (new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
+    this.peticionesAPI.CreaColeccion (new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
     //this.peticionesAPI.CreaColeccion(new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
     .subscribe((res) => {
       if (res != null) {
@@ -220,12 +220,7 @@ export class CrearColeccionComponent implements OnInit {
       }
     });
   }
- /*  // Lista de los cromos añadidos a la coleccion
-  CromosAgregados(cromo: Cromo) {
-    this.cromosAgregados.push(cromo);
-    this.cromosAgregados = this.cromosAgregados.filter(res => res.Nombre !== '');
-    return this.cromosAgregados;
-  } */
+
 
   // Utilizamos esta función para eliminar un cromo de la base de datos y de la lista de añadidos recientemente
   BorrarCromo(cromo: Cromo) {
@@ -239,12 +234,7 @@ export class CrearColeccionComponent implements OnInit {
 
     });
   }
- /*  // Elimina el cromo de la lista de añadidos a la coleccion
-  CromosEliminados(cromo: Cromo) {
-    this.cromosAgregados = this.cromosAgregados.filter(res => res.id !== cromo.id);
-    return this.cromosAgregados;
-  }
- */
+
   // Activa la función ExaminarImagenColeccion
   ActivarInputColeccion() {
     console.log('Activar input');
@@ -290,7 +280,7 @@ export class CrearColeccionComponent implements OnInit {
       this.imagenCromo = reader.result.toString();
     };
   }
-/*
+
   // Una vez seleccionada la probabilidad se asigna a la varible del cromo
   OpcionProbabilidadSeleccionada() {
     // Opcion selecionada para probabilidad
@@ -313,7 +303,7 @@ export class CrearColeccionComponent implements OnInit {
       this.probabilidadCromo = 'Muy Alta';
     }
   }
- */
+
   OpcionNivelSeleccionado() {
     console.log(this.opcionSeleccionadaNivel);
     // Opcion selecionada para nivel

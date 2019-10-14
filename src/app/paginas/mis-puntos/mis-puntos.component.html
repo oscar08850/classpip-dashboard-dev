@@ -9,8 +9,8 @@
 
  <mat-tab index = "0" label="Mis tipos de Puntos">
     <form>
-        <mat-accordion *ngIf="puntosProfesor;else Aviso_no_puntos">
-          <mat-expansion-panel *ngFor="let punto of puntosProfesor">
+        <mat-accordion *ngIf="tiposPuntos;else Aviso_no_puntos">
+          <mat-expansion-panel *ngFor="let punto of tiposPuntos">
             <mat-expansion-panel-header>
 
               <mat-panel-title>
@@ -26,7 +26,7 @@
                   </div>
                   <div class="contenedor3" style="margin-right: 2% ">
                     <div class="elemento">
-                      <button type="button" class="btn Editar" routerLink= "editarPunto" (click) = "EnviarPuntoEditar(punto)">Editar Punto <i class="material-icons">
+                      <button type="button" class="btn Editar" routerLink= "editarPunto" (click) = "EnviarTipoPuntoEditar(punto)">Editar Punto <i class="material-icons">
                         edit </i>  </button>
                     </div>
                     <div class="elemento">
@@ -50,8 +50,8 @@
       <!-- ////////////////////////////////////////////// PARA INSIGNIAS //////////////////////////////////////////////// -->
   <mat-tab label="Mis Insignias">
       <form>
-          <mat-accordion *ngIf="insigniasProfesor;else Aviso_no_insignias">
-            <mat-expansion-panel *ngFor="let insignia of insigniasProfesor" (click) = "ImagenDelaInsignia(insignia)">
+          <mat-accordion *ngIf="insignias;else Aviso_no_insignias">
+            <mat-expansion-panel *ngFor="let insignia of insignias" (click) = "ImagenDelaInsignia(insignia)">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   {{insignia.Nombre}}

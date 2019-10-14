@@ -71,51 +71,33 @@ export class CrearPuntoComponent implements OnInit {
   // Función para crear punto
   CrearPunto() {
 
-    this.peticionesAPI.POST_Punto(new Punto(this.nombrePunto, this.descripcionPunto), this.profesorId)
+    this.peticionesAPI.CreaTipoDePunto(new Punto(this.nombrePunto, this.descripcionPunto), this.profesorId)
     .subscribe(res => {
       if (res !== undefined) {
 
         this.snackBar.open(this.nombrePunto + ' creado correctamente', 'Cerrar', {
           duration: 2000,
         });
-        this.PuntosAgregados(res);
-        this.LimpiarCampos();
+        // añadimos el punto a la lista que se muestra al usuario
+        this.puntosAgregados.push(res);
+        this.puntosAgregados = this.puntosAgregados.filter(punto => punto.Nombre !== '');
+        // limpiamos los campos del formulario
+        this.nombrePunto = undefined;
+        this.descripcionPunto = undefined;
+        this.isDisabledPuntos = true;
       } else {
         console.log('Fallo añadiendo');
       }
     });
   }
 
-  // Añade en la lista de puntos agregados el nuevo punto y actualiza la tabla
-  PuntosAgregados(punto: Punto) {
-    this.puntosAgregados.push(punto);
-    this.puntosAgregados = this.puntosAgregados.filter(res => res.Nombre !== '');
-    return this.puntosAgregados;
-  }
-
-
-  // Pone todos los campos como al principio
-  LimpiarCampos() {
-    this.nombrePunto = undefined;
-    this.descripcionPunto = undefined;
-    this.isDisabledPuntos = true;
-  }
-
 
   // Utilizamos esta función para eliminar un punto de la base de datos y de la lista de añadidos recientemente
   BorrarPunto(punto: Punto) {
-    this.peticionesAPI.DELETE_Punto(punto.id, punto.profesorId)
-    .subscribe(() => {
-      this.PuntosEliminados(punto);
-    });
+    this.peticionesAPI.BorraTipoDePunto(punto.id, punto.profesorId)
+    .subscribe(() => this.puntosAgregados = this.puntosAgregados.filter(res => res.id !== punto.id));
   }
 
-
-  // Borramos el punto de la lista de puntos agregados
-  PuntosEliminados(punto: Punto) {
-    this.puntosAgregados = this.puntosAgregados.filter(res => res.id !== punto.id);
-    return this.puntosAgregados;
-  }
 
 
   // Los campos de nombre y descripción son obligatorios. Si son undefined o '' no podremos clicar en crear
@@ -163,7 +145,7 @@ export class CrearPuntoComponent implements OnInit {
   // Una vez examinado el logo (o no), procedemos a hacer el POST de la nueva insignia
   CrearInsignia() {
 
-    this.peticionesAPI.POST_Insignia(new Insignia(this.nombreInsignia, this.descripcionInsignia, this.nombreLogo)
+    this.peticionesAPI.CreaInsignia(new Insignia(this.nombreInsignia, this.descripcionInsignia, this.nombreLogo)
     , this.profesorId).subscribe(insignia => {
       if (insignia !== undefined) {
 
@@ -177,24 +159,23 @@ export class CrearPuntoComponent implements OnInit {
           // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagen
           const formData: FormData = new FormData();
           formData.append(this.nombreLogo, this.file);
-          this.peticionesAPI.POST_ImagenInsignia(formData)
+          this.peticionesAPI.PonImagenInsignia(formData)
           .subscribe(() => console.log('Logo cargado'));
         }
-
-        this.InsigniasAgregadas(insignia); // Añadimos la insignia a la lista insignias agregadas
-        this.LimpiarCamposInsignia(); // Limpiamos todos los campos
+        // Ponemos la insignia en la lista que ve el usuario
+        this.insigniasAgregadas.push(insignia);
+        this.insigniasAgregadas = this.insigniasAgregadas.filter(res => res.Nombre !== '');
+        // Limpiamos los campos del formulario
+        this.nombreInsignia = undefined;
+        this.descripcionInsignia = undefined;
+        this.isDisabledInsignias = true;
+        this.logoCargado = false;
+        this.logo = undefined;
+        this.nombreLogo = undefined;
       } else {
         console.log('Fallo añadiendo');
       }
     });
-  }
-
-
-  // Añade la nueva insignia a la lista insignias agregadas
-  InsigniasAgregadas(insignia: Insignia) {
-    this.insigniasAgregadas.push(insignia);
-    this.insigniasAgregadas = this.insigniasAgregadas.filter(res => res.Nombre !== '');
-    return this.insigniasAgregadas;
   }
 
 
@@ -208,30 +189,11 @@ export class CrearPuntoComponent implements OnInit {
     }
   }
 
-  // Vuelve a poner todos los campos de la insignia como al principio
-  LimpiarCamposInsignia() {
-    this.nombreInsignia = undefined;
-    this.descripcionInsignia = undefined;
-    this.isDisabledInsignias = true;
-    this.logoCargado = false;
-    this.logo = undefined;
-    this.nombreLogo = undefined;
-  }
 
   // Borra la insignia que le pasamos de la API
   BorrarInsignia(insignia: Insignia) {
-    this.peticionesAPI.DELETE_Insignia(insignia.id, insignia.profesorId)
-    .subscribe(() => {
-      this.InsigniasEliminadas(insignia);
-      console.log('punto borrado correctamente');
-
-    });
-  }
-
-  // Eliminan las insignias de la lista de insigniasAgregadas
-  InsigniasEliminadas(insignia: Insignia) {
-    this.insigniasAgregadas = this.insigniasAgregadas.filter(res => res.id !== insignia.id);
-    return this.insigniasAgregadas;
+    this.peticionesAPI.BorraInsignia(insignia.id, insignia.profesorId)
+    .subscribe(() => this.insigniasAgregadas = this.insigniasAgregadas.filter(res => res.id !== insignia.id));
   }
 
 }

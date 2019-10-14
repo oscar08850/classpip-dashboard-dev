@@ -496,52 +496,52 @@ export class PeticionesAPIService {
   }
 
   // PARA CREAR UN PUNTO NUEVO DEL PROFESOR
-  public POST_Punto(punto: Punto, profesorId: number): Observable<Punto> {
+  public CreaTipoDePunto(punto: Punto, profesorId: number): Observable<Punto> {
     return this.http.post<Punto>(this.APIUrlProfesores + '/' + profesorId + '/puntos', punto);
   }
 
   // PARA EDITAR UN PUNTO DEL PROFESOR
-  public PUT_Punto(punto: Punto, profesorId: number, puntoId: number): Observable<Punto> {
+  public ModificaTipoDePunto(punto: Punto, profesorId: number, puntoId: number): Observable<Punto> {
     return this.http.put<Punto>(this.APIUrlProfesores + '/' + profesorId + '/puntos/' + puntoId, punto);
   }
 
   // PARA BORRAR UN PUNTO DEL PROFESOR
-  public DELETE_Punto(puntoId: number, profesorId: number): Observable<any> {
+  public BorraTipoDePunto(puntoId: number, profesorId: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlProfesores + '/' + profesorId + '/puntos/' + puntoId);
   }
 
   // PARA CREAR UNA INSIGNIA NUEVO DEL PROFESOR
-  public POST_Insignia(insignia: Insignia, profesorId: number): Observable<Insignia> {
+  public CreaInsignia(insignia: Insignia, profesorId: number): Observable<Insignia> {
     return this.http.post<Insignia>(this.APIUrlProfesores + '/' + profesorId + '/insignia', insignia);
   }
 
   // PARA EDITAR UNA INSIGNIA DEL PROFESOR
-  public PUT_Insignia(insignia: Insignia, profesorId: number, insigniaId: number): Observable<Insignia> {
+  public ModificaInsignia(insignia: Insignia, profesorId: number, insigniaId: number): Observable<Insignia> {
     return this.http.put<Insignia>(this.APIUrlProfesores + '/' + profesorId + '/insignia/' + insigniaId, insignia);
   }
 
   // PARA BORRAR UNA INSIGNIA DEL PROFESOR
-  public DELETE_Insignia(insigniaId: number, profesorId: number): Observable<any> {
+  public BorraInsignia(insigniaId: number, profesorId: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlProfesores + '/' + profesorId + '/insignia/' + insigniaId);
   }
 
   // PARA PONER UNA IMAGEN A UNA INSIGNIA
-  public POST_ImagenInsignia(formData: FormData): Observable<any> {
+  public PonImagenInsignia(formData: FormData): Observable<any> {
     return this.http.post<any>(this.APIURLImagenInsignia + '/upload', formData);
   }
 
-  // DEVUELVE LOS PUNTOS CREADOS POR EL PROFESOR
-  public GET_Puntos(profesorId: number): Observable<Punto[]> {
-    return this.http.get<Punto[]>(this.APIUrlProfesores + '/' + profesorId + '/puntos');
-  }
+  // // DEVUELVE LOS PUNTOS CREADOS POR EL PROFESOR
+  // public DameTiposDePuntos(profesorId: number): Observable<Punto[]> {
+  //   return this.http.get<Punto[]>(this.APIUrlProfesores + '/' + profesorId + '/puntos');
+  // }
 
   // DEVUELVE LAS INSIGNIAS CREADAS POR EL PROFESOR
-  public GET_Insignias(profesorId: number): Observable<Insignia[]> {
+  public DameInsignias(profesorId: number): Observable<Insignia[]> {
     return this.http.get<Insignia[]>(this.APIUrlProfesores + '/' + profesorId + '/insignia');
   }
 
   // DEVUELVE LA IMAGEN CORRESPONDIENTE A CADA INSIGNIA
-  public GET_ImagenInsignia(ImagenInsignia: string): Observable<any> {
+  public DameImagenInsignia(ImagenInsignia: string): Observable<any> {
     return this.http.get<any>(this.APIURLImagenInsignia + '/download/' + ImagenInsignia);
   }
 

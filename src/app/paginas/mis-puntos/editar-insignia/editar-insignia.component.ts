@@ -36,7 +36,7 @@ export class EditarInsigniaComponent implements OnInit {
                 private http: Http ) { }
 
   ngOnInit() {
-    this.insignia = this.sesion.RecibirInsigniaDelServicio();
+    this.insignia = this.sesion.DameInsignia();
     this.nombreInsignia = this.insignia.Nombre;
     this.descripcionInsignia = this.insignia.Descripcion;
     // Cargo el logo
@@ -45,9 +45,12 @@ export class EditarInsigniaComponent implements OnInit {
 
   EditarInsignia() {
     console.log('Entro a editar');
+    this.insignia.Nombre = this.nombreImagen;
+    this.insignia.Descripcion = this.descripcionInsignia;
+    this.insignia.Imagen = this.imagenInsignia;
 
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.PUT_Insignia(new Insignia(this.nombreInsignia, this.descripcionInsignia, this.nombreImagen), this.insignia.profesorId, this.insignia.id)
+    this.peticionesAPI.ModificaInsignia(new Insignia(this.nombreInsignia, this.descripcionInsignia, this.nombreImagen), this.insignia.profesorId, this.insignia.id)
     .subscribe((res) => {
       if (res != null) {
         console.log('Voy a editar la insignia con id ' + this.insignia.id);
@@ -57,7 +60,7 @@ export class EditarInsigniaComponent implements OnInit {
           // HACEMOS EL POST DE LA NUEVA IMAGEN EN LA BASE DE DATOS
           const formData: FormData = new FormData();
           formData.append(this.nombreImagen, this.file);
-          this.peticionesAPI.POST_ImagenInsignia(formData)
+          this.peticionesAPI.PonImagenInsignia(formData)
           .subscribe(() => console.log('Logo cargado'));
         }
 

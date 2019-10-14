@@ -76,7 +76,7 @@ export class EditarColeccionComponent implements OnInit {
           // HACEMOS EL POST DE LA NUEVA IMAGEN EN LA BASE DE DATOS
           const formData: FormData = new FormData();
           formData.append(this.nombreImagenColeccion, this.file);
-          this.coleccionService.POST_ImagenColeccion(formData)
+          this.peticionesAPI.PonImagenColeccion (formData)
           .subscribe(() => console.log('Imagen cargada'));
         }
 
@@ -86,30 +86,6 @@ export class EditarColeccionComponent implements OnInit {
     });
     this.goBack();
   }
-
-/*
-    // Busca la imagen que tiene el nombre del coleccion.ImagenColeccion y lo carga en imagenColeccion
-    GET_Imagen() {
-
-      if (this.coleccion.ImagenColeccion !== undefined ) {
-        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.http.get('http://localhost:3000/api/imagenes/ImagenColeccion/download/' + this.coleccion.ImagenColeccion,
-        { responseType: ResponseContentType.Blob })
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
-
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenColeccion = reader.result.toString();
-          }, false);
-
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-      });
-
-      }
-    } */
 
   // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
   TraeImagenesCromos() {
@@ -139,12 +115,7 @@ export class EditarColeccionComponent implements OnInit {
     }
   }
 
-  // Ordena los cromos por nombre. Asi si tengo algun cromo repetido, salen juntos
-  OrdenarCromos() {
-    this.cromosColeccion.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
-  }
-
-      // AL CLICAR EN AGREGAR LOGO NOS ACTIVARÁ LA FUNCIÓN MOSTRAR DE ABAJO
+  // AL CLICAR EN AGREGAR LOGO NOS ACTIVARÁ LA FUNCIÓN MOSTRAR DE ABAJO
   ActivarInput() {
     console.log('Activar input');
     document.getElementById('input').click();
@@ -239,13 +210,6 @@ export class EditarColeccionComponent implements OnInit {
     });
   }
 
-  // Borramos el punto de la lista de puntos agregados
-  // CromosEliminados(cromo: Cromo) {
-  //   this.cromosColeccion = this.cromosColeccion.filter(res => res.id !== cromo.id);
-  //   return this.cromosColeccion;
-
-
-  // }
 
   // Le pasamos la coleccion y buscamos la imagen que tiene y las imagenes de sus cromos
  TraeImagenesColeccion(coleccion: Coleccion) {
@@ -283,18 +247,7 @@ export class EditarColeccionComponent implements OnInit {
   // Ordena los cromos por nombre. Asi si tengo algun cromo repetido, salen juntos
   this.cromosColeccion.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
   this.TraeImagenesCromos();
-  // this.coleccionService.GET_CromosColeccion(coleccion.id)
-  // .subscribe(res => {
-  //   if (res[0] !== undefined) {
-  //     this.cromosColeccion = res;
-  //     this.OrdenarCromos();
 
-  //     console.log(res);
-  //   } else {
-  //     console.log('No hay cromos en esta coleccion');
-  //     this.cromosColeccion = undefined;
-  //   }
-  //});
 }
   goBack() {
     this.location.back();
