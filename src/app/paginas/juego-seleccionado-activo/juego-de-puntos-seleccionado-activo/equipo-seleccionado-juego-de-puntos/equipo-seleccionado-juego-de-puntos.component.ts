@@ -69,11 +69,14 @@ export class EquipoSeleccionadoJuegoDePuntosComponent implements OnInit {
     this.nivelesDelJuego = res.nivelesDelJuego;
     this.tiposPuntosDelJuego = res.tiposPuntosDelJuego;
     this.juegoSeleccionado = this.sesion.DameJuego();
+    if (this.nivelesDelJuego !== undefined) {
 
-    const niveles = this.calculos.DameNivelActualYSiguienteEquipo (this.nivelesDelJuego , this.equipoJuegoDePuntos);
-    this.nivel = niveles.n;
-    this.siguienteNivel = niveles.sn;
+      // Busco el nivel del alumno
+      this.nivel = this.nivelesDelJuego.filter (nivel => nivel.id === this.equipoJuegoDePuntos.nivelId)[0];
+      // Y el nivel siguiente
 
+      this.siguienteNivel = this.calculos.DameSiguienteNivel (this.nivelesDelJuego, this.nivel);
+    }
 
 
     this.GET_ImagenPerfil();
@@ -127,12 +130,12 @@ export class EquipoSeleccionadoJuegoDePuntosComponent implements OnInit {
     }
   }
 
-  porcentaje(): number {
-    return this.calculos.PorcentajeEquipo (this.nivel, this.equipoJuegoDePuntos, this.nivelesDelJuego, this.siguienteNivel);
-  }
+  // porcentaje(): number {
+  //  // return this.calculos.PorcentajeEquipo (this.nivel, this.equipoJuegoDePuntos, this.nivelesDelJuego, this.siguienteNivel);
+  //   return 0;
+  // }
 
   MostrarHistorialSeleccionado() {
-
 
     // traigo el historial
     this.calculos.PreparaHistorialEquipo (this.equipoJuegoDePuntos, this.tiposPuntosDelJuego).
@@ -150,22 +153,37 @@ export class EquipoSeleccionadoJuegoDePuntosComponent implements OnInit {
         );
 
   }
-
-
   BorrarPunto(punto: TablaHistorialPuntosEquipo) {
-    console.log(punto);
-    this.calculos.BorrarPuntoEquipo (
-              this.equipoJuegoDePuntos, punto, this.nivel,
-              this.siguienteNivel, this.juegoSeleccionado,
-              this.equipoSeleccionado, this.nivelesDelJuego).
-    subscribe ( res => {
-                          this.equipoJuegoDePuntos = res.equipo;
-                          this.nivel = res.n;
-                          this.siguienteNivel = res.sn;
-                          this.MostrarHistorialSeleccionado();
+    // tslint:disable-next-line:max-line-length
+    this.calculos.BorrarPuntoEquipo (punto, this.equipoJuegoDePuntos, this.nivelesDelJuego);
+    this.historial = this.historial.filter(historial => historial.historialId !== punto.historialId);
 
-    });
+    if (this.nivelesDelJuego !== undefined) {
+
+      // Busco el nivel del alumno
+      this.nivel = this.nivelesDelJuego.filter (nivel => nivel.id === this.equipoJuegoDePuntos.nivelId)[0];
+      // Y el nivel siguiente
+
+      this.siguienteNivel = this.calculos.DameSiguienteNivel (this.nivelesDelJuego, this.nivel);
+    }
+
   }
+
+
+  // BorrarPunto2(punto: TablaHistorialPuntosEquipo) {
+  //   console.log(punto);
+  //   this.calculos.BorrarPuntoEquipo (
+  //             this.equipoJuegoDePuntos, punto, this.nivel,
+  //             this.siguienteNivel, this.juegoSeleccionado,
+  //             this.equipoSeleccionado, this.nivelesDelJuego).
+  //   subscribe ( res => {
+  //                         this.equipoJuegoDePuntos = res.equipo;
+  //                         this.nivel = res.n;
+  //                         this.siguienteNivel = res.sn;
+  //                         this.MostrarHistorialSeleccionado();
+
+  //   });
+  // }
 
 
 

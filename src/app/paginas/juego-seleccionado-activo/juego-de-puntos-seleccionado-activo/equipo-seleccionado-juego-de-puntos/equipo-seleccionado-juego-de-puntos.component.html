@@ -22,29 +22,19 @@
         {{posicion}}º
       </p>
 
+      <div   *ngIf="nivelesDelJuego">
+
+        <div *ngIf="nivel"  style="font-size: 110%">
+          <span style="font-weight: bold; ">Nivel: </span> {{nivel.Nombre}}
+        </div>
+        <div *ngIf="siguienteNivel"  style="font-size: 110%">
+            <span style="font-weight: bold; ">Puntos que te faltan para el siguiente nivel: </span> {{siguienteNivel.PuntosAlcanzar - equipoJuegoDePuntos.PuntosTotalesEquipo}}
+        </div>
+        <div *ngIf="siguienteNivel === undefined"  style="font-size: 110%">
+            <span style="font-weight: bold; ">Estas en el máximo nivel</span>
+        </div>
+      </div>
   </div>
-  <div  class="contenedor2">
-
-      <div *ngIf="nivel"  style="font-size: 110%">
-          <span style="font-weight: bold; ">Nivel:</span> {{nivel.Nombre}}
-      </div>
-
-      <div class="progress" style="width: 100%">
-        <div *ngIf="siguienteNivel" class="progress-bar progress-easy" [style.width]="porcentaje()*100+'%'" role="progressbar" aria-valuenow = "equipoJuegoDePuntos.PuntosTotalesEquipo"
-        aria-valuemin="nivel.PuntosAlcanzar" aria-valuemax="siguienteNivel.PuntosAlcanzar">{{equipoJuegoDePuntos.PuntosTotalesEquipo}}</div>
-
-        <div *ngIf="siguienteNivel === undefined" class="progress-bar progress-easy" [style.width]="porcentaje()*100+'%'" role="progressbar" aria-valuenow = "equipoJuegoDePuntos.PuntosTotalesEquipo"
-        aria-valuemin="nivel.PuntosAlcanzar" aria-valuemax="nivel.PuntosAlcanzar">Nivel máximo alcanzado</div>
-
-      </div>
-
-      <div *ngIf="siguienteNivel" style="font-size: 110%">
-        ({{equipoJuegoDePuntos.PuntosTotalesEquipo}}/{{siguienteNivel.PuntosAlcanzar}}) PX
-      </div>
-      <div *ngIf="siguienteNivel === undefined"  style="font-size: 110%">
-        ({{nivel.PuntosAlcanzar}}/{{nivel.PuntosAlcanzar}}) PX
-      </div>
-    </div>
   </div>
 </div>
 

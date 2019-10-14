@@ -101,33 +101,39 @@ export class CrearNivelComponent implements OnInit {
   }
 
    CrearNivel() {
-    this.juegoDePuntosId = this.juego.id;
+    // if ((this.puntosAlcanzar === undefined) || (this.puntosAlcanzar === 0)) {
+    //   this.snackBar.open('El numero de puntos a alcanzar no puede ser 0', 'Cerrar', {
+    //     duration: 2000,
+    //   });
+    // } else {
+      this.juegoDePuntosId = this.juego.id;
 
-    this.peticionesAPI.CreaNivel(new Nivel (this.nombreNivel, this.puntosAlcanzar, this.privilegiosDelNivel,
-      this.nombreLogo), this.juegoDePuntosId).subscribe(nivel => {
-        if (nivel !== undefined) {
-          console.log('Nivel añadido correctamente');
-          console.log(nivel);
-          this.snackBar.open('Nivel ' + nivel.Nombre + ' creado correctamente', 'Cerrar', {
-            duration: 2000,
-          });
+      this.peticionesAPI.CreaNivel(new Nivel (this.nombreNivel, this.puntosAlcanzar, this.privilegiosDelNivel,
+        this.nombreLogo), this.juegoDePuntosId).subscribe(nivel => {
+          if (nivel !== undefined) {
+            console.log('Nivel añadido correctamente');
+            console.log(nivel);
+            this.snackBar.open('Nivel ' + nivel.Nombre + ' creado correctamente', 'Cerrar', {
+              duration: 2000,
+            });
 
-          // Hago el POST de la imagen SOLO si hay algo cargado. Ese boolean se cambiará en la función ExaminarImagen
-          if (this.logoCargado === true) {
+            // Hago el POST de la imagen SOLO si hay algo cargado. Ese boolean se cambiará en la función ExaminarImagen
+            if (this.logoCargado === true) {
 
-            // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagen
-            const formData: FormData = new FormData();
-            formData.append(this.nombreLogo, this.file);
-            this.peticionesAPI.PonImagenNivel(formData)
-            .subscribe(() => console.log('Logo cargado'));
+              // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagen
+              const formData: FormData = new FormData();
+              formData.append(this.nombreLogo, this.file);
+              this.peticionesAPI.PonImagenNivel(formData)
+              .subscribe(() => console.log('Logo cargado'));
+            }
+
+            this.LimpiarCampos(); // Limpiamos todos los campos
+          } else {
+              console.log('Fallo añadiendo');
           }
-
-          this.LimpiarCampos(); // Limpiamos todos los campos
-        } else {
-             console.log('Fallo añadiendo');
-        }
-      });
-    }
+        });
+    // }
+  }
 
 
 

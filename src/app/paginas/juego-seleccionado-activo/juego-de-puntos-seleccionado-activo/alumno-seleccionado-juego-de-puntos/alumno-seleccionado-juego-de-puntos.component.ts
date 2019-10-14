@@ -81,9 +81,14 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
     console.log('muestro la posicion ' + this.posicion);
     console.log(this.posicion);
 
-    const niveles = this.calculos.DameNivelActualYSiguiente (this.nivelesDelJuego , this.alumnoJuegoDePuntos);
-    this.nivel = niveles.n;
-    this.siguienteNivel = niveles.sn;
+    if (this.nivelesDelJuego !== undefined) {
+
+        // Busco el nivel del alumno
+        this.nivel = this.nivelesDelJuego.filter (nivel => nivel.id === this.alumnoJuegoDePuntos.nivelId)[0];
+        // Y el nivel siguiente
+
+        this.siguienteNivel = this.calculos.DameSiguienteNivel (this.nivelesDelJuego, this.nivel);
+      }
     // this.Nivel();
     this.GET_ImagenPerfil();
 
@@ -115,9 +120,10 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
 
   }
 
-  Porcentaje(): any {
-    return this.calculos.Porcentaje (this.nivel, this.siguienteNivel, this.alumnoJuegoDePuntos, this.nivelesDelJuego);
-  }
+  // Porcentaje(): any {
+  //   //return this.calculos.Porcentaje (this.nivel, this.siguienteNivel, this.alumnoJuegoDePuntos, this.nivelesDelJuego);
+  //   return 0;
+  // }
   MostrarHistorialSeleccionado() {
 
     // Si es indefinido muestro la tabla del total de puntos
@@ -173,17 +179,15 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
   }
   BorrarPunto(punto: TablaHistorialPuntosAlumno) {
     // tslint:disable-next-line:max-line-length
-    this.calculos.BorrarPunto (punto, this.alumnoJuegoDePuntos, this.nivel, this.siguienteNivel, this.nivelesDelJuego, this.alumnoSeleccionado, this.juegoSeleccionado)
-    .subscribe (res => {
-                            console.log ('regreso de borrar alumno' + this.alumnoJuegoDePuntos);
-                            this.alumnoJuegoDePuntos = res.alumno;
-                            console.log ('ALUMNO ' + this.alumnoJuegoDePuntos);
-                            this.nivel = res.n;
-                            console.log ('nivel ' + this.nivel);
-                            this.siguienteNivel = res.sn;
-                            this.MostrarHistorialSeleccionado();
+    this.calculos.BorrarPunto (punto, this.alumnoJuegoDePuntos, this.nivelesDelJuego);
+    this.historial = this.historial.filter(historial => historial.historialId !== punto.historialId);
+    if (this.nivelesDelJuego !== undefined) {
+        // Busco el nivel del alumno
+        this.nivel = this.nivelesDelJuego.filter (nivel => nivel.id === this.alumnoJuegoDePuntos.nivelId)[0];
+        // Y el nivel siguiente
+        this.siguienteNivel = this.calculos.DameSiguienteNivel (this.nivelesDelJuego, this.nivel);
+    }
 
-    });
   }
 
   AbrirDialogoConfirmacionBorrarPunto(punto: TablaHistorialPuntosAlumno): void {
