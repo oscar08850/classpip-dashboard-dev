@@ -79,7 +79,7 @@ export class EditarCromoComponent implements OnInit {
     this.probabilidadCromo = this.cromo.Probabilidad;
 
     this.opcionSeleccionadaNivel = this.cromo.Nivel;
-    this.opcionSeleccionadaProbabilidad = this.cromo.Probabilidad;
+    //this.opcionSeleccionadaProbabilidad = this.cromo.Probabilidad;
     console.log(this.cromo);
     // Cargo el imagen del cromo
     this.TraeImagenCromo();
@@ -158,31 +158,31 @@ export class EditarCromoComponent implements OnInit {
         if (this.opcionSeleccionadaNivel === 'Diamante') {
           this.nivelCromo = 'Diamante';
           this.probabilidadCromo = 'Muy Baja';
-          this.opcionSeleccionadaProbabilidad = 'Muy Baja';
+         // this.opcionSeleccionadaProbabilidad = 'Muy Baja';
 
         }
         if (this.opcionSeleccionadaNivel === 'Platino') {
           this.nivelCromo = 'Platino';
           this.probabilidadCromo = 'Baja';
-          this.opcionSeleccionadaProbabilidad = 'Baja';
+          //this.opcionSeleccionadaProbabilidad = 'Baja';
         }
 
         if (this.opcionSeleccionadaNivel === 'Oro') {
           this.nivelCromo = 'Oro';
           this.probabilidadCromo = 'Media';
-          this.opcionSeleccionadaProbabilidad = 'Media';
+          //this.opcionSeleccionadaProbabilidad = 'Media';
         }
 
         if (this.opcionSeleccionadaNivel === 'Plata') {
           this.nivelCromo = 'Plata';
           this.probabilidadCromo = 'Alta';
-          this.opcionSeleccionadaProbabilidad = 'Alta';
+          //this.opcionSeleccionadaProbabilidad = 'Alta';
         }
 
         if (this.opcionSeleccionadaNivel === 'Bronce') {
           this.nivelCromo = 'Bronce';
           this.probabilidadCromo = 'Muy Alta';
-          this.opcionSeleccionadaProbabilidad = 'Muy Alta';
+          //this.opcionSeleccionadaProbabilidad = 'Muy Alta';
         }
   }
 

@@ -19,9 +19,11 @@
         </div>
 
       <mat-form-field style="margin: 15px;">
-        <mat-label>Nivel </mat-label>
 
-          <select matNativeControl [(ngModel)]="probabilidadCromo" name="opcion">
+
+
+        <mat-label>Nivel </mat-label>
+          <select matNativeControl [(ngModel)]="opcionSeleccionadaNivel" name="opcion">
             <option  (keyup)="Disabled()" *ngFor="let opcion of opcionesNivel" [value]="opcion.id">
                 {{opcion.nombre}}
             </option>

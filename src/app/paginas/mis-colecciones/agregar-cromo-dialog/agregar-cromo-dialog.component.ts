@@ -83,9 +83,11 @@ export class AgregarCromoDialogComponent implements OnInit {
 
     console.log('Entro a asignar el cromo ' + this.nombreCromo);
     console.log('Entro a asignar el cromo a la coleccionID' + this.coleccionId);
-    console.log(this.nombreImagenCromo );
+    console.log('Probabilidad' + this.probabilidadCromo);
+    console.log('Nivel' + this.opcionSeleccionadaNivel);
+    console.log('Imagen' + this.nombreImagenCromo );
     this.peticionesAPI.PonCromoColeccion(
-      new Cromo(this.nombreCromo, this.nombreImagenCromo , this.probabilidadCromo, this.nivelCromo), this.coleccionId)
+      new Cromo(this.nombreCromo, this.nombreImagenCromo , this.probabilidadCromo, this.opcionSeleccionadaNivel), this.coleccionId)
     .subscribe((res) => {
       if (res != null) {
         console.log('asignado correctamente');
