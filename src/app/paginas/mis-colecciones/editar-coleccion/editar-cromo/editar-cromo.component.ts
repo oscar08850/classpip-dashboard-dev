@@ -85,6 +85,7 @@ export class EditarCromoComponent implements OnInit {
     this.TraeImagenCromo();
   }
 
+
   EditarCromo() {
         console.log('Entro a editar');
         console.log(this.probabilidadCromo);
@@ -152,8 +153,9 @@ export class EditarCromoComponent implements OnInit {
         };
   }
 
+
   OpcionNivelSeleccionado() {
-        console.log(this.opcionSeleccionadaNivel);
+        console.log('AAAA' + this.opcionSeleccionadaNivel);
         // Opcion selecionada para nivel
         if (this.opcionSeleccionadaNivel === 'Diamante') {
           this.nivelCromo = 'Diamante';
@@ -185,6 +187,17 @@ export class EditarCromoComponent implements OnInit {
           //this.opcionSeleccionadaProbabilidad = 'Muy Alta';
         }
   }
+  // Esta función se utiliza para controlar si el botón de siguiente del stepper esta desativado.
+  // Si en alguno de los inputs no hay nada, esta disabled. Sino, podremos clicar.
+  // Disabled() {
+
+  //   if (this.nombreCromo === undefined || this.probabilidadCromo === undefined || this.nivelCromo === undefined ||
+  //         this.nivelCromo === '' || this.probabilidadCromo === '' || this.nivelCromo === null) {
+  //         this.isDisabledCromo = true;
+  //   } else {
+  //         this.isDisabledCromo = false;
+  //     }
+  //   }
 
   goBack() {
     this.location.back();

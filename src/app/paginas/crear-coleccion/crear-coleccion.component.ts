@@ -305,7 +305,7 @@ export class CrearColeccionComponent implements OnInit {
   // }
 
   OpcionNivelSeleccionado() {
-    console.log(this.opcionSeleccionadaNivel);
+    console.log('AAAAA' + this.opcionSeleccionadaNivel);
     // Opcion selecionada para nivel
     if (this.opcionSeleccionadaNivel === 'Diamante') {
       this.nivelCromo = 'Diamante';

@@ -150,10 +150,13 @@ export class EditarColeccionComponent implements OnInit {
     });
 
      // RECUPERAREMOS LA NUEVA LISTA DE LOS CROMO Y VOLVEREMOS A BUSCAR LOS CROMOS QUE TIENE LA COLECCION
-    dialogRef.afterClosed().subscribe(cromo => {
-
-    this.cromosColeccion.push (cromo);
-    this.TraeImagenesColeccion(this.coleccion);
+    dialogRef.afterClosed().subscribe(cromosAgregados => {
+      console.log ('volvemos de agregar cromos ' + cromosAgregados.length);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0 ; i < cromosAgregados.length; i++) {
+        this.cromosColeccion.push (cromosAgregados[i]);
+      }
+      this.TraeImagenesColeccion(this.coleccion);
 
      });
   }

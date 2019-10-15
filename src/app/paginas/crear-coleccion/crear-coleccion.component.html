@@ -54,13 +54,13 @@ R
 
               <div class="form-group" style="margin: 15px;">
                   <label for="inputNombreCromo">Nombre</label>
-                  <input (keyup)="Disabled()" type="text" id="inputNombreNivel" class="form-control" requiered [(ngModel)]="nombreCromo" placeholder="Escribe el nombre del cromo">
+                  <input  type="text" id="inputNombreNivel" class="form-control" requiered [(ngModel)]="nombreCromo" placeholder="Escribe el nombre del cromo">
               </div>
 
               <mat-form-field style="margin: 15px;">
                 <mat-label style="color: white;">Nivel </mat-label>
                   <select matNativeControl [(ngModel)]="opcionSeleccionadaNivel" name="opcion" (change) = "OpcionNivelSeleccionado()">
-                    <option  (keyup)="Disabled()" *ngFor="let opcion of opcionesNivel" [value]="opcion.id">
+                    <option   *ngFor="let opcion of opcionesNivel" [value]="opcion.id">
                         {{opcion.nombre}}
                     </option>
                   </select>
@@ -69,7 +69,7 @@ R
               <mat-form-field style="margin: 15px; ">
                 <mat-label  style="color: white;">Probabilidad </mat-label>
                   <select matNativeControl [(ngModel)]="probabilidadCromo" name="opcion">
-                    <option  (keyup)="Disabled()" *ngFor="let opcion of opcionesProbabilidad" [value]="opcion.id">
+                    <option  *ngFor="let opcion of opcionesProbabilidad" [value]="opcion.id">
                         {{opcion.nombre}}
                     </option>
                   </select>
