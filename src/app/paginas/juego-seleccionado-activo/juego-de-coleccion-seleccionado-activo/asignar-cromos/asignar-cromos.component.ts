@@ -89,7 +89,7 @@ export class AsignarCromosComponent implements OnInit {
 
     this.coleccion = this.sesion.DameColeccion();
     this.juegoSeleccionado = this.sesion.DameJuego();
-    console.log ('Ya estamos');
+    console.log ('Ya estamos ' + this.coleccion);
 
     this.CromosColeccion();
     if (this.juegoSeleccionado.Modo === 'Individual') {

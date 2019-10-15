@@ -76,7 +76,7 @@ export class CrearColeccionComponent implements OnInit {
 
     ];
 
-    opcionSeleccionadaProbabilidad: string;
+    //opcionSeleccionadaProbabilidad: string;
 
       // Opciones para mostrar en la lista desplegable para seleccionar el tipo de nivel que listar
     opcionesNivel: OpcionSeleccionada[] = [
@@ -281,60 +281,60 @@ export class CrearColeccionComponent implements OnInit {
     };
   }
 
-  // Una vez seleccionada la probabilidad se asigna a la varible del cromo
-  OpcionProbabilidadSeleccionada() {
-    // Opcion selecionada para probabilidad
-    if (this.opcionSeleccionadaProbabilidad === 'Muy Baja') {
-      this.probabilidadCromo = 'Muy Baja';
-    }
-    if (this.opcionSeleccionadaProbabilidad === 'Baja') {
-      this.probabilidadCromo = 'Baja';
-    }
+  // // Una vez seleccionada la probabilidad se asigna a la varible del cromo
+  // OpcionProbabilidadSeleccionada() {
+  //   // Opcion selecionada para probabilidad
+  //   if (this.opcionSeleccionadaProbabilidad === 'Muy Baja') {
+  //     this.probabilidadCromo = 'Muy Baja';
+  //   }
+  //   if (this.opcionSeleccionadaProbabilidad === 'Baja') {
+  //     this.probabilidadCromo = 'Baja';
+  //   }
 
-    if (this.opcionSeleccionadaProbabilidad === 'Media') {
-      this.probabilidadCromo = 'Media';
-    }
+  //   if (this.opcionSeleccionadaProbabilidad === 'Media') {
+  //     this.probabilidadCromo = 'Media';
+  //   }
 
-    if (this.opcionSeleccionadaProbabilidad === 'Alta') {
-      this.probabilidadCromo = 'Alta';
-    }
+  //   if (this.opcionSeleccionadaProbabilidad === 'Alta') {
+  //     this.probabilidadCromo = 'Alta';
+  //   }
 
-    if (this.opcionSeleccionadaProbabilidad === 'Muy Alta') {
-      this.probabilidadCromo = 'Muy Alta';
-    }
-  }
+  //   if (this.opcionSeleccionadaProbabilidad === 'Muy Alta') {
+  //     this.probabilidadCromo = 'Muy Alta';
+  //   }
+  // }
 
   OpcionNivelSeleccionado() {
-    console.log(this.opcionSeleccionadaNivel);
+    console.log('AAAAA' + this.opcionSeleccionadaNivel);
     // Opcion selecionada para nivel
     if (this.opcionSeleccionadaNivel === 'Diamante') {
       this.nivelCromo = 'Diamante';
       this.probabilidadCromo = 'Muy Baja';
-      this.opcionSeleccionadaProbabilidad = 'Muy Baja';
+     // this.opcionSeleccionadaProbabilidad = 'Muy Baja';
 
     }
     if (this.opcionSeleccionadaNivel === 'Platino') {
       this.nivelCromo = 'Platino';
       this.probabilidadCromo = 'Baja';
-      this.opcionSeleccionadaProbabilidad = 'Baja';
+     // this.opcionSeleccionadaProbabilidad = 'Baja';
     }
 
     if (this.opcionSeleccionadaNivel === 'Oro') {
       this.nivelCromo = 'Oro';
       this.probabilidadCromo = 'Media';
-      this.opcionSeleccionadaProbabilidad = 'Media';
+     // this.opcionSeleccionadaProbabilidad = 'Media';
     }
 
     if (this.opcionSeleccionadaNivel === 'Plata') {
       this.nivelCromo = 'Plata';
       this.probabilidadCromo = 'Alta';
-      this.opcionSeleccionadaProbabilidad = 'Alta';
+      //this.opcionSeleccionadaProbabilidad = 'Alta';
     }
 
     if (this.opcionSeleccionadaNivel === 'Bronce') {
       this.nivelCromo = 'Bronce';
       this.probabilidadCromo = 'Muy Alta';
-      this.opcionSeleccionadaProbabilidad = 'Muy Alta';
+      //this.opcionSeleccionadaProbabilidad = 'Muy Alta';
     }
   }
 
@@ -347,7 +347,7 @@ export class CrearColeccionComponent implements OnInit {
       this.imagenCargadoCromo = false;
       this.imagenCromo = undefined;
       this.nombreImagenCromo = undefined;
-      this.opcionSeleccionadaProbabilidad = null;
+     // this.opcionSeleccionadaProbabilidad = null;
       this.opcionSeleccionadaNivel = null;
   }
 
