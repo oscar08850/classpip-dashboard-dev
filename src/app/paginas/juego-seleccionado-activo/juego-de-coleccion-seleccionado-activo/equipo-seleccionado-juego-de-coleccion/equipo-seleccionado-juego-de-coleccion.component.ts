@@ -5,7 +5,7 @@ import { Alumno, Equipo, Juego, EquipoJuegoDeColeccion, Cromo } from '../../../.
 
 
 // Services
-import { SesionService, PeticionesAPIService, JuegoDeColeccionService } from '../../../../servicios/index';
+import { SesionService, PeticionesAPIService, CalculosService } from '../../../../servicios/index';
 
 
 @Component({
@@ -28,13 +28,14 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   inscripcionEquipo: EquipoJuegoDeColeccion;
 
   listaCromos: Cromo[];
+  listaCromosSinRepetidos: any [];
   cromo: Cromo;
 
   imagenCromoArray: string[] = [];
 
   constructor( private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
-               private s: JuegoDeColeccionService,
+               private calculos: CalculosService,
                private http: Http,
                ) { }
 
@@ -72,6 +73,7 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
     this.peticionesAPI.DameCromosEquipo(this.inscripcionEquipo.id)
     .subscribe(cromos => {
       this.listaCromos = cromos;
+      this.listaCromosSinRepetidos = this.calculos.GeneraListaSinRepetidos(this.listaCromos);
       this.sesion.TomaCromos(this.listaCromos);
       this.listaCromos.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
       this.GET_ImagenesCromos();
@@ -84,9 +86,9 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   GET_ImagenesCromos() {
 
     // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.listaCromos.length; i++) {
+    for (let i = 0; i < this.listaCromosSinRepetidos.length; i++) {
 
-      this.cromo = this.listaCromos[i];
+      this.cromo = this.listaCromosSinRepetidos[i].cromo;
 
       if (this.cromo.Imagen !== undefined ) {
 

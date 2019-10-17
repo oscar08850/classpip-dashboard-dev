@@ -8,6 +8,7 @@ table {
   text-align: center;
 }
 
+
 .contenedor{
 
   width: 70%;
@@ -17,6 +18,12 @@ table {
   border: 10px solid transparent;
   background-color: transparent;
 
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: center;
+  align-items: center;
 }
 
 .contenedor2{

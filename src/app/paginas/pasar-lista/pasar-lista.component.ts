@@ -38,6 +38,7 @@ export class PasarListaComponent implements OnInit {
   constructor(
                public dialog: MatDialog,
                public snackBar: MatSnackBar,
+               public location: Location,
                private sesion: SesionService) { }
 
   ngOnInit() {
@@ -85,4 +86,8 @@ export class PasarListaComponent implements OnInit {
   ProcesarSeleccionados() {
     this.mensaje = 'Aun no hay nada que hacer con los seleccionados';
   }
+  goBack() {
+    this.location.back();
+  }
+
 }
