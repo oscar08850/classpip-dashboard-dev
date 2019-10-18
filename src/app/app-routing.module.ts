@@ -52,6 +52,7 @@ import { ConfiguracionProfesorComponent } from './paginas/COMPARTIDO/configuraci
 import { AppComponent } from './app.component';
 import { ElementosComponent } from './elementos/elementos.component';
 import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.component';
+import {EstilosComponent} from './estilos/estilos.component';
 
 const routes: Routes = [
 
@@ -71,6 +72,7 @@ const routes: Routes = [
   { path: 'inicio/:id', component: InicioComponent },
 
   { path: 'inicio/:id/desarrolladores', component: DesarrolladoresComponent },
+  { path: 'inicio/:id/estilos', component: EstilosComponent },
 
   // GRUPOS
   { path: 'inicio/:id/crearGrupo', component: CrearGrupoComponent },

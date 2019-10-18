@@ -3,7 +3,7 @@ import { SesionService, PeticionesAPIService} from './index';
 // tslint:disable-next-line:max-line-length
 import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, HistorialPuntosAlumno,
   HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo, AlumnoJuegoDeColeccion, Album,
-  EquipoJuegoDeColeccion, AlbumEquipo } from '../clases/index';
+  EquipoJuegoDeColeccion, AlbumEquipo, Cromo } from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -1273,6 +1273,21 @@ public PreparaHistorialEquipo(
       });
     }
 
+  }
+
+  // Esta función recibe una lista de cromos en la que puede haber repetidos
+  // y geneera otra en la que cada cromo aparece una sola vez y se le asocia el número
+  // de veces que aparece reperido en la lista de entrada
+  GeneraListaSinRepetidos(listaCromos: Cromo []): any [] {
+    const listaCromosSinRepetidos: any [] = [];
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < listaCromos.length; i++) {
+      const n = listaCromos.filter (cromo => cromo.Nombre === listaCromos[i].Nombre).length;
+      if (listaCromosSinRepetidos.filter (res => res.cromo.Nombre === listaCromos[i].Nombre).length === 0) {
+        listaCromosSinRepetidos.push ({rep: n, cromo: listaCromos[i]});
+      }
+    }
+    return listaCromosSinRepetidos;
   }
 
 }

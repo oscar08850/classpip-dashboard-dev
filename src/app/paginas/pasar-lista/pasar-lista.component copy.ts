@@ -115,4 +115,7 @@ export class PasarListaComponent implements OnInit {
       }
       console.log(this.seleccionados);
     }
+    goBack() {
+      this.location.back();
+    }
 }

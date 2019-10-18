@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ResponseContentType, Http, Response } from '@angular/http';
+import { Location } from '@angular/common';
 
 import { Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, EquipoJuegoDePuntos,
   TablaAlumnoJuegoDePuntos, HistorialPuntosAlumno } from '../../../../clases/index';
@@ -24,6 +25,7 @@ export class InformacionJuegoPuntosComponent implements OnInit {
 
   constructor(
                private sesion: SesionService,
+               public location: Location,
                private http: Http ) { }
 
   ngOnInit() {
@@ -63,5 +65,9 @@ export class InformacionJuegoPuntosComponent implements OnInit {
       this.imagenNivel = undefined;
     }
   }
+  goBack() {
+    this.location.back();
+  }
+
 
 }

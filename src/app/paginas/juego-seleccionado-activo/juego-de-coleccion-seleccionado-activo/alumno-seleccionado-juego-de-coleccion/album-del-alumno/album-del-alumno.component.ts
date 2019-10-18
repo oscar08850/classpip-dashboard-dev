@@ -4,6 +4,9 @@ import { ResponseContentType, Http, Response } from '@angular/http';
 // Clases
 import { Cromo, Coleccion, AlbumDelAlumno, Alumno } from '../../../../../clases/index';
 
+
+import { Location } from '@angular/common';
+
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../../../../servicios/index';
 
@@ -29,6 +32,7 @@ export class AlbumDelAlumnoComponent implements OnInit {
   constructor(
                 private sesion: SesionService,
                 private peticionesAPI: PeticionesAPIService,
+                private location: Location,
                 private http: Http) { }
 
   ngOnInit() {
@@ -110,4 +114,8 @@ export class AlbumDelAlumnoComponent implements OnInit {
       }
     }
   }
+  goBack() {
+    this.location.back();
+  }
+
 }

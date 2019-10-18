@@ -6,7 +6,7 @@ import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion,
   Album, AlbumEquipo, Coleccion, Cromo } from '../../../../clases/index';
 
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../../servicios/index';
-
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-alumno-seleccionado-juego-de-coleccion',
@@ -22,6 +22,7 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   juegoSeleccionado: Juego;
 
   listaCromos: Cromo[];
+  listaCromosSinRepetidos: any[];
   cromo: Cromo;
 
   imagenCromoArray: string[] = [];
@@ -32,6 +33,8 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   constructor(
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
+               private calculos: CalculosService,
+               private location: Location,
                private http: Http
   ) {}
 
@@ -74,6 +77,10 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
     this.peticionesAPI.DameCromosAlumno(this.inscripcionAlumno.id)
     .subscribe(cromos => {
       this.listaCromos = cromos;
+
+      // esta es la lista que se mostrará al usuario, sin cromos repetidos y con una
+      // indicación de cuantas veces se repite cada cromo
+      this.listaCromosSinRepetidos = this.calculos.GeneraListaSinRepetidos(this.listaCromos);
       this.sesion.TomaCromos(this.listaCromos);
       this.listaCromos.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
       this.GET_ImagenesCromos();
@@ -83,10 +90,11 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
 
   GET_ImagenesCromos() {
 
+    // Me traigo la lista de imagenes de los cromos sin repetición
     // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.listaCromos.length; i++) {
+    for (let i = 0; i < this.listaCromosSinRepetidos.length; i++) {
 
-      this.cromo = this.listaCromos[i];
+      this.cromo = this.listaCromosSinRepetidos[i].cromo;
 
       if (this.cromo.Imagen !== undefined ) {
 
@@ -109,4 +117,8 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
       }
     }
   }
+  goBack() {
+    this.location.back();
+  }
+
 }

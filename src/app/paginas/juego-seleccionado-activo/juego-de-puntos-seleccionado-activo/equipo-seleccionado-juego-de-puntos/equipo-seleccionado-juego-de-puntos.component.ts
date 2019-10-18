@@ -4,8 +4,8 @@ import { ResponseContentType, Http, Response } from '@angular/http';
 import { Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, EquipoJuegoDePuntos,
   TablaAlumnoJuegoDePuntos, HistorialPuntosAlumno, TablaHistorialPuntosEquipo } from '../../../../clases/index';
 
-// Services
 
+import { Location } from '@angular/common';
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService } from '../../../../servicios/index';
@@ -58,6 +58,7 @@ export class EquipoSeleccionadoJuegoDePuntosComponent implements OnInit {
                public calculos: CalculosService,
                public peticionesAPI: PeticionesAPIService,
                public snackBar: MatSnackBar,
+               public location: Location,
                private http: Http) { }
 
   ngOnInit() {
@@ -205,6 +206,9 @@ export class EquipoSeleccionadoJuegoDePuntosComponent implements OnInit {
         });
       }
     });
+  }
+  goBack() {
+    this.location.back();
   }
 
 }

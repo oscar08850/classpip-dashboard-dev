@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 // Clases
 import { Juego } from '../../clases/index';
+import { Location } from '@angular/common';
 
 // Services
 import { SesionService } from '../../servicios/index';
@@ -15,11 +16,15 @@ export class JuegoSeleccionadoInactivoComponent implements OnInit {
 
   juegoSeleccionado: Juego;
 
-  constructor( private sesion: SesionService ) { }
+  constructor(  private sesion: SesionService,
+                public location: Location ) { }
 
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
   }
 
+  goBack() {
+    this.location.back();
+  }
 }

@@ -32,6 +32,7 @@ export class NavbarComponent implements OnInit {
   URLCrearColeccion: string;
   URLConfiguracion: string;
   URLDesarrolladores: string;
+  URLEstilos: string;
 
   constructor( private sesion: SesionService,
                private router: Router) { }
@@ -47,6 +48,7 @@ export class NavbarComponent implements OnInit {
     this.URLMisColecciones = this.URLInicio + '/misColecciones';
     this.URLCrearColeccion = this.URLInicio + '/crearColeccion';
     this.URLDesarrolladores = this.URLInicio + '/desarrolladores';
+    this.URLEstilos = this.URLInicio + '/estilos';
     this.URLConfiguracion = this.URLInicio + '/configuracionProfesor';
 
 

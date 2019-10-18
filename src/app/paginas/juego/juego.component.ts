@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
+import { Location } from '@angular/common';
 
 // Clases
 import { Alumno, Equipo, Juego, Punto, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo} from '../../clases/index';
@@ -97,6 +98,7 @@ export class JuegoComponent implements OnInit {
                public snackBar: MatSnackBar,
                private calculos: CalculosService,
                private sesion: SesionService,
+               private location: Location,
                private peticionesAPI: PeticionesAPIService
                ) { }
 
@@ -293,6 +295,9 @@ export class JuegoComponent implements OnInit {
     console.log(this.juego);
   }
 
+  goBack() {
+    this.location.back();
+  }
 
 
 }

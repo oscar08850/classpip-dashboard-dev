@@ -26,21 +26,21 @@
 
 <mat-grid-list cols="3" rowHeight="100px" style="width: 70%; margin-left : 15%" >
   <mat-grid-tile
-      *ngFor="let cromo of listaCromos; let i = index"
+      *ngFor="let elem of listaCromosSinRepetidos; let i = index"
       [colspan]="1"
       [rowspan]="4"
       [style.background]="white">
       <mat-card class="cromo" [ngClass]="{
-        'Diamante' : cromo.Nivel === 'Diamante',
-        'Platino' : cromo.Nivel === 'Platino',
-        'Oro' : cromo.Nivel === 'Oro',
-        'Plata' : cromo.Nivel === 'Plata',
-        'Bronce' : cromo.Nivel === 'Bronce'}">
+        'Diamante' : elem.cromo.Nivel === 'Diamante',
+        'Platino' : elem.cromo.Nivel === 'Platino',
+        'Oro' : elem.cromo.Nivel === 'Oro',
+        'Plata' : elem.cromo.Nivel === 'Plata',
+        'Bronce' : elem.cromo.Nivel === 'Bronce'}">
         <mat-card-header>
           <div style="display: flex; justify-content:space-between; width: 250px ">
           <div  >
-          <mat-card-title>{{cromo.Nombre}}</mat-card-title>
-          <mat-card-subtitle><p style="margin-bottom: -2px;">Nivel: {{cromo.Nivel}} </p><p style="margin-bottom: -2px;">Probabilidad: {{cromo.Probabilidad}} </p></mat-card-subtitle>
+          <mat-card-title>{{elem.cromo.Nombre}}</mat-card-title>
+          <mat-card-subtitle><p style="margin-bottom: -2px;">Nivel: {{elem.cromo.Nivel}} </p><p style="margin-bottom: -2px;">Probabilidad: {{elem.cromo.Probabilidad}} </p><p style="margin-bottom: -2px;">Repeticiones: <strong style= "font-size: 1.5rem">{{elem.rep}} </strong> </p></mat-card-subtitle>
         </div>
           <div class="elementoCromo">
           </div>

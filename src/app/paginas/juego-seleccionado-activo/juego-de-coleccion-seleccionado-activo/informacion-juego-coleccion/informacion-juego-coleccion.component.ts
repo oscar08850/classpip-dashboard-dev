@@ -7,6 +7,7 @@ import { Cromo, Coleccion } from '../../../../clases/index';
 // Servicios
 import { ColeccionService } from '../../../../servicios/index';
 import { SesionService, PeticionesAPIService } from '../../../../servicios/index';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class InformacionJuegoColeccionComponent implements OnInit {
   constructor(  private coleccionService: ColeccionService,
                 private sesion: SesionService,
                 private peticionesAPI: PeticionesAPIService,
+                public location: Location,
                 private http: Http) { }
 
   ngOnInit() {
@@ -147,5 +149,9 @@ for (let i = 0; i < this.cromosColeccion.length; i++) {
   }
 }
 }
+goBack() {
+  this.location.back();
+}
+
 
 }

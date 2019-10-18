@@ -226,4 +226,9 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
       }
     });
   }
+  goBack() {
+    this.location.back();
+  }
+
+
 }
