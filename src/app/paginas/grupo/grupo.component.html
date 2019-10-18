@@ -1,103 +1,99 @@
-R
 <div class="titulo"><h2>Grupo Seleccionado</h2></div>
 <mat-divider class="lineaDivisoria"></mat-divider>
-
-<div class="contenedor contenedor3">
-  <div class="contenedor2">
-  <div class="texto" style=" text-align: left;">
-        <p>
-          <span style="font-weight: bold;">Nombre:</span>
-          {{grupo.Nombre}}
-        </p>
+<div class = "contenedor">
+  <div class="enColumna">
+    <div class = "enFila">
+          <div class="enColumna">
+            <div class="texto" style=" text-align: left;">
+                  <p>
+                    <span style="font-weight: bold;">Nombre:</span>
+                    {{grupo.Nombre}}
+                  </p>
+            </div>
+            <div class="texto" style=" text-align: left;">
+                  <p>
+                      <span style="font-weight: bold;">Descripción:</span>
+                      {{grupo.Descripcion}}
+                  </p>
+            </div>
+          </div>
+          <div class="enColumna">
+              <button type="button" class="btn Editar" routerLink= "editarGrupo"> Editar Grupo<i class="material-icons">
+                  edit </i>  </button>
+              <button type="button" class="btn Eliminar" (click)="AbrirDialogoConfirmacionBorrar()">Eliminar Grupo <i class="material-icons">
+                  delete
+                  </i></button>
+          </div>
     </div>
-    <div class="texto" style=" text-align: left;">
-        <p>
-            <span style="font-weight: bold;">Descripción:</span>
-            {{grupo.Descripcion}}
-        </p>
-    </div>
-  </div>
-  <div>
-    <div class="elemento"><button type="button" class="btn Editar" routerLink= "editarGrupo"> Editar Grupo<i class="material-icons">
-      edit </i>  </button></div>
 
-    <div class="elemento"> <button type="button" class="btn Eliminar" (click)="AbrirDialogoConfirmacionBorrar()">Eliminar Grupo <i class="material-icons">
-      delete
-      </i></button>
+    <div class="enFila" style= "width : 40%">
+        <button type="button" (click)= "GuardarGrupo();" class="btn PasarLista" routerLink= "pasarLista">Pasar Lista <i class="material-icons" >
+          list
+          </i></button>
+        <button type="button" class="btn Equipos" (click)= "GuardarGrupo();" routerLink= "equiposGrupo">Equipos <i class="material-icons">
+                group
+        </i></button>
 
+        <button type="button" class="btn Juegos" (click)= "GuardarGrupo();" routerLink = "juegos">Juegos <i class="material-icons">
+                videogame_asset
+                </i></button>
     </div>
+
+
+
+    <form style=" width: 100%;" *ngIf="alumnosGrupoSeleccionado;else Aviso_no_alumnos">
+
+
+        <mat-form-field style = "width: 60%; margin-left: 20%; ">
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
+            <i class="material-icons" matSuffix>search</i>
+          </mat-form-field>
+
+
+
+
+        <table align = "center" text mat-table [dataSource]="dataSource" class="example-container mat-elevation-z8">
+
+          <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+          <!-- Nombre Alumno Column -->
+          <ng-container matColumnDef="nombreAlumno">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+            <td mat-cell style= "text-align: left" *matCellDef="let alumno" > {{alumno.Nombre}} </td>
+          </ng-container>
+
+          <!-- Primer Apellido Column -->
+          <ng-container matColumnDef="primerApellido">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Primer Apellido </th>
+            <td mat-cell style= "text-align: left" *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+          </ng-container>
+
+          <!-- Segundo Apellido Column -->
+          <ng-container matColumnDef="segundoApellido">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Segundo Apellido </th>
+            <td mat-cell style= "text-align: left" *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+          </ng-container>
+
+          <!-- alumnoId Column -->
+          <ng-container matColumnDef="alumnoId">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Identificador Alumno </th>
+            <td mat-cell style= "text-align: left" *matCellDef="let alumno"> {{alumno.id}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></tr>
+          <tr mat-row style= "text-align: left" *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+        <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator> -->
+
+      </form>
+
+    <div class="contenedor">
+        <ng-template  #Aviso_no_alumnos><div class="texto">Todavía no hay alumnos en este grupo.  </div></ng-template>
+    </div>
+    <button type="button" (click) = "goBack()" class="btn Back botonCentrado">Volver <i class="material-icons">
+        navigate_before</i></button>
   </div>
 </div>
-
-<div class="contenedor">
-    <div class="elemento"><button type="button" (click)= "GuardarGrupo();" class="btn PasarLista" routerLink= "pasarLista">Pasar Lista <i class="material-icons" >
-      list
-      </i></button>
-
-    </div>
-
-    <div class="elemento"> <button type="button" class="btn Equipos" (click)= "GuardarGrupo();" routerLink= "equiposGrupo">Equipos <i class="material-icons">
-            group
-            </i></button>
-
-
-
-    </div>
-    <div class="elemento"> <button type="button" class="btn Juegos" (click)= "GuardarGrupo();" routerLink = "juegos">Juegos <i class="material-icons">
-            videogame_asset
-            </i></button>
-    </div>
-</div>
-
-<form *ngIf="alumnosGrupoSeleccionado;else Aviso_no_alumnos">
-
-    <div class = "filter">
-    <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
-        <i class="material-icons" matSuffix>search</i>
-      </mat-form-field>
-    </div>
-
-    <table align = "center" text mat-table [dataSource]="dataSource" class="example-container mat-elevation-z8">
-
-      <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
-
-      <!-- Nombre Alumno Column -->
-      <ng-container matColumnDef="nombreAlumno">
-        <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Nombre </th>
-        <td mat-cell *matCellDef="let alumno" > {{alumno.Nombre}} </td>
-      </ng-container>
-
-      <!-- Primer Apellido Column -->
-      <ng-container matColumnDef="primerApellido">
-        <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Primer Apellido </th>
-        <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
-      </ng-container>
-
-      <!-- Segundo Apellido Column -->
-      <ng-container matColumnDef="segundoApellido">
-        <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Segundo Apellido </th>
-        <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
-      </ng-container>
-
-      <!-- alumnoId Column -->
-      <ng-container matColumnDef="alumnoId">
-        <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Identificador Alumno </th>
-        <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    </table>
-
-    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator> -->
-
-  </form>
-
-  <div class="contenedor">
-      <ng-template  #Aviso_no_alumnos><div class="texto">Todavía no hay alumnos en este grupo.  </div></ng-template>
-  </div>
-  <div class="elemento"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
-  </div>

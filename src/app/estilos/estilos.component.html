@@ -1,0 +1,156 @@
+
+<div class="titulo">Estilos</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class="subtitulo"> Cada página empieza siempre con un titulo, una linea y
+  (si es necesario) un subtitulo. El resto del contenido de la página está dentro
+  de un contenedor.
+</div>
+<br>
+<div class="contenedor">
+
+
+    BOTONES
+    <br>
+    <button type="button" class="btn Editar">Editar <i class="material-icons">
+        edit </i></button>
+    <button type="button" class="btn PasarLista">Pasar Lista <i class="material-icons" >
+        list </i></button>
+    <button type="button" class="btn Equipos" >Equipos <i class="material-icons">
+        group</i></button>
+    <button type="button" class="btn Juegos" >Juegos <i class="material-icons">
+        videogame_asset
+    </i></button>
+
+    <button type="button" class="btn Eliminar" >Eliminar <i class="material-icons">
+      delete
+    </i></button>
+    <button type="button"  class="btn Aceptar">Aceptar <i class="material-icons">
+      check </i></button>
+
+    <button type="button" class="btn Agregar"> Agregar <i class="material-icons">
+      add</i></button>
+
+    <button type="button" class="btn Info">Información<i class="material-icons">
+      info</i></button>
+
+    <button type="button" class="btn Next">Next <i class="material-icons">
+      navigate_next</i></button>
+    <br>
+    <button type="button" class="btn Back"> Back <i class="material-icons">
+        navigate_before</i></button>
+      <br>
+    BOTON DE VOLVER A LA PAGINA ANTERIOR (SE PONE AL FINAL DE LA PÁGINA)
+    <br>
+    <button type="button" class="btn Back botonCentrado">Back <i class="material-icons">
+      navigate_before</i></button>
+
+    <br>
+
+    CONTENEDORES BASICOS
+    <br>
+    contenedor: Queda centrado en el bloque en el que se pone, con un margen del 15% a ambos lados
+    <br>
+    <div class="contenedor">
+        <button type="button" class="btn Editar">Boton 1 </button>
+        <button type="button" class="btn Editar">Boton 2 </button>
+        <button type="button" class="btn Editar">Boton 3 </button>
+        <button type="button" class="btn Editar">Boton 4 </button>
+        <button type="button" class="btn Editar">Boton 5 </button>
+        <button type="button" class="btn Editar">Boton 6 </button>
+        <button type="button" class="btn Editar">Boton 7 </button>
+
+    </div>
+    <br>
+    enFila
+    <br>
+    <div class="enFila">
+        <button type="button" class="btn Editar">Editar </button>
+        <button type="button" class="btn Editar">Editar </button>
+        <button type="button" class="btn Editar">Editar </button>
+        <button type="button" class="btn Editar">Editar </button>
+    </div>
+    <br>
+    enColumna
+    <br>
+    <div class="enColumna">
+        <button type="button" class="btn Eliminar">Eliminar </button>
+        <button type="button" class="btn Eliminar">Eliminar </button>
+        <button type="button" class="btn Eliminar">Eliminar </button>
+
+    </div>
+    <br>
+    CONTENEDORES ANIDADOS
+    <br>
+    caso 1: Columnas en fila
+    <br>
+    <div class="enFila">
+        <div class="enColumna">
+            <button type="button" class="btn Eliminar">Eliminar </button>
+            <button type="button" class="btn Eliminar">Eliminar </button>
+
+        </div>
+        <div class="enColumna">
+
+            <button type="button" class="btn Editar">Editar </button>
+            <button type="button" class="btn Editar">Editar </button>
+            <button type="button" class="btn Editar">Editar </button>
+        </div>
+        <div class="enColumna">
+
+
+            <button type="button" class="btn Info">Info </button>
+            <button type="button" class="btn Info">Info </button>
+            <button type="button" class="btn Info">Info </button>
+            <button type="button" class="btn Info">Info </button>
+
+        </div>
+    </div>
+
+    <br>
+    caso 2: Filas en columna
+    <br>
+    <div class="enColumna">
+        <div class="enFila">
+            <button type="button" class="btn Editar">Editar </button>
+            <button type="button" class="btn Editar">Editar </button>
+
+
+        </div>
+        <div class="enFila">
+
+            <button type="button" class="btn Eliminar">Eliminar </button>
+            <button type="button" class="btn Eliminar">Eliminar </button>
+            <button type="button" class="btn Eliminar">Eliminar </button>
+
+        </div>
+        <div class="enFila">
+
+            <button type="button" class="btn Info">Info </button>
+            <button type="button" class="btn Info">Info </button>
+            <button type="button" class="btn Info">Info </button>
+            <button type="button" class="btn Info">Info </button>
+
+        </div>
+    </div>
+    caso 3: Filas en contenedor
+    <br>
+    <div class="contenedor">
+        <div class="enFila">
+            <button type="button" class="btn Editar">Editar </button>
+            <button type="button" class="btn Editar">Editar </button>
+
+        </div>
+        <div class="enFila">
+
+            <button type="button" class="btn Eliminar">Eliminar </button>
+            <button type="button" class="btn Eliminar">Eliminar </button>
+            <button type="button" class="btn Eliminar">Eliminar </button>
+        </div>
+        <div class="enFila">
+            <button type="button" class="btn Info">Info </button>
+            <button type="button" class="btn Info">Info </button>
+            <button type="button" class="btn Info">Info </button>
+            <button type="button" class="btn Info">Info </button>
+        </div>
+    </div>
+</div>
