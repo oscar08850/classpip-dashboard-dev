@@ -1,6 +1,6 @@
 
 <div class="titulo">Plantillas</div>
-<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+<mat-divider class="lineaDivisoria"></mat-divider>
 <div class="subtitulo">Plantillas para los elementos más habituales usados en el diseño del Dash.</div>
 <br>
 <div class="contenedor">
@@ -13,13 +13,14 @@
         <br>
         <br>
         Selector
-        <mat-form-field>
+        <br>
+        <mat-form-field style = "width: 50%">
           <mat-label>Elemento</mat-label>
        <!--    El elemento seleccionado se guardara en la variable elementoSeleccionado
           En cuanto lo hayamos seleccionado se ejecutará la función AccionConSeleccionado
           en la que haremos lo que queramos hacer con el elemento seleccionado
           Los elementos entre los que seleccionar deben estar en la listaElementos -->
-          <select matNativeControl [(ngModel)]="elementoSeleccionado" (change) = "AccionConSeleccionado();">
+          <select  matNativeControl [(ngModel)]="elementoSeleccionado" (change) = "AccionConSeleccionado();">
             <option *ngFor="let elemento of listaElementos" >
               {{elemento}}
             </option>
@@ -48,7 +49,7 @@
       Tabla con filtro, checkbox, ordenación, boton para hacer cosas con seleccionados y paginación
  <!--    Este es el filtro que activa la función AplicarFiltro  -->
       <br>
-      <mat-form-field>
+      <mat-form-field  style= "width: 40%">
         <input matInput (keyup)="AplicarFiltro($event.target.value)" placeholder="Filtro">
       </mat-form-field>
 
@@ -149,18 +150,18 @@
       <form [formGroup]="firstFormGroup">
         <!-- El nombre introducido se guardará en la variable nombre del formulario -->
         <ng-template matStepLabel>Nombre</ng-template>
-        <mat-form-field>
+        <mat-form-field style= "width: 40%">
           <mat-label>Nombre</mat-label>
           <!-- En cuanto escriba algo llamo a la función Disabled para decidir si muestro
           ya el boton de siguiente (que solo se muestra si se ha escrito algo en los dos campos) -->
-          <input (keyup)="BotonPaso1()" matInput placeholder="Escribe tu nombre" formControlName="nombre" required>
+          <input  (keyup)="BotonPaso1()" matInput placeholder="Escribe tu nombre" formControlName="nombre" required>
         </mat-form-field>
         <!-- Pongo una DIV ahora para que la edad la ponga debajo del nombre, y no al lado -->
         <div>
         <ng-template matStepLabel>Edad</ng-template>
-        <mat-form-field>
+        <mat-form-field style= "width: 40%">
           <mat-label>Edad</mat-label>
-          <input (keyup)="BotonPaso1()" matInput placeholder="Escribe tu edad" formControlName="edad" required>
+          <input  (keyup)="BotonPaso1()" matInput placeholder="Escribe tu edad" formControlName="edad" required>
         </mat-form-field>
         </div>
         <!-- Este es el boton para pasar al paso siguiente. Estará activo segun el valor
@@ -183,13 +184,13 @@
     <mat-step [stepControl]="secondFormGroup">
       <form [formGroup]="secondFormGroup">
         <ng-template matStepLabel>Calle</ng-template>
-        <mat-form-field>
+        <mat-form-field style= "width: 40%">
           <mat-label>Calle</mat-label>
           <input (keyup)="BotonPaso2()"matInput placeholder="Escribe tu calle" formControlName="calle" required>
         </mat-form-field>
         <div>
         <ng-template matStepLabel>Ciudad</ng-template>
-        <mat-form-field>
+        <mat-form-field style= "width: 40%">
           <mat-label>Cudad</mat-label>
           <input (keyup)="BotonPaso2()"matInput placeholder="Escribe tu ciudad" formControlName="ciudad" required>
         </mat-form-field>
@@ -249,7 +250,7 @@ y con un dialogo -->
 
             </mat-expansion-panel-header>
               <div class="enColumna">
-                  <div style="margin-right: 20%">
+                  <div>
                   <span style="font-weight: bold; margin-left: 16px; font-size: 130%;">Datos del elemento</span>
                   <mat-list role="list">
                       <mat-list-item role="listitem"> Nombre: {{elemento.name}}</mat-list-item>

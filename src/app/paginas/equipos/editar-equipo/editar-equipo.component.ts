@@ -143,6 +143,7 @@ export class EditarEquipoComponent implements OnInit {
 
     const dialogRef = this.dialog.open(AgregarAlumnoEquipoComponent, {
       maxHeight: '95%',
+      maxWidth: '50%',
 
       // LE ENVIAMOS LOS ALUMNOS QUE TIENE ACTUALMENTE EL EQUIPO Y LOS QUE PODEMOS AÑADIR, ADEMÁS DEL EQUIPO QUE NOS SERÁ
       // ÚTIL PARA SABER SU ID Y EL ID DEL GRUPO AL QUE PERTENCE
@@ -235,6 +236,7 @@ export class EditarEquipoComponent implements OnInit {
 
     const dialogRef = this.dialog.open(MoverAlumnoComponent, {
       maxHeight: '95%',
+      maxWidth: '50vw',
 
       // LE ENVIAMOS LOS ALUMNOS QUE TIENE ACTUALMENTE EL EQUIPO Y LOS QUE PODEMOS AÑADIR, ADEMÁS DEL EQUIPO QUE NOS SERÁ
       // ÚTIL PARA SABER SU ID Y EL ID DEL GRUPO AL QUE PERTENCE

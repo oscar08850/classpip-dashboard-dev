@@ -1,6 +1,5 @@
-R
-<div class="titulo"><h2>Juegos</h2></div>
-<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+<div class="titulo">Juegos</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
 
 
 <div class="contenedor">
@@ -19,7 +18,7 @@ R
           <mat-list>
 
                 <!-- ///////////////////////// LISTA DE JUEGOS ACTIVOS /////////////////////////////////-->
-                <h3 class = "CabeceraActivos" mat-subheader>Juegos Activos</h3>
+                <h3 class = "CabeceraActivos" style= "color: white;font-style: bold;font-size: 2em;" mat-subheader>Juegos Activos</h3>
 
                 <form *ngIf="juegosActivos;else Aviso_no_juegos_activos">
                   <mat-list-item *ngFor="let juego of juegosActivos" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionadoActivo">
@@ -36,7 +35,7 @@ R
                   </ng-template>
 
             <!-- ///////////////////////// LISTA DE JUEGOS INACTIVOS /////////////////////////////////-->
-            <h3 class = "CabeceraInactivos" mat-subheader>Juegos Inactivos</h3>
+            <h3 class = "CabeceraInactivos" style= "color: white;font-style: bold;font-size: 2em;" mat-subheader>Juegos Inactivos</h3>
               <form *ngIf="juegosInactivos;else Aviso_no_juegos_inactivos">
                   <mat-list-item *ngFor="let juego of juegosInactivos" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionadoInactivo">
                     <mat-icon mat-list-icon><i class="material-icons red">history</i></mat-icon>
@@ -67,7 +66,7 @@ R
   <mat-tab label="Crear juego">
 
     <form>
-      <mat-card class="panel">
+      <mat-card class="panel" style="width: 90%">
 
         <mat-card-content>
           <mat-horizontal-stepper #stepper #linearHorizontalStepper="matHorizontalStepper" [linear]="true">
@@ -135,7 +134,7 @@ R
             <mat-step>
               <ng-template matStepLabel><div>Asignación De Puntos</div></ng-template>
 
-              <label class = "LabelStepper">Selecciona los tipos de puntos para el juego</label>
+              <label class = "LabelStepper">Selecciona los tipos de puntos</label>
               <!-- Saltamos al componente de asignación -->
               <app-asignacion-punto-juego></app-asignacion-punto-juego>
 
@@ -146,7 +145,7 @@ R
             <mat-step>
               <ng-template matStepLabel><div>Creación de Niveles</div></ng-template>
 
-                <label class = "LabelStepper">Añade todos los niveles que desee al juego</label>
+                <label class = "LabelStepper">Añade los niveles que desees</label>
                   <!-- Activamos el componente para crear nivel -->
                   <app-crear-nivel ></app-crear-nivel>
 
@@ -223,6 +222,6 @@ R
 </mat-tab-group>
 
 </div>
-<div class="elemento"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+<div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
 </div>
 

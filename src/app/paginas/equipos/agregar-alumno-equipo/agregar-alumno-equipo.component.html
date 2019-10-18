@@ -1,15 +1,15 @@
-R
-<h4>Seleccione el alumno al que desee añadir al equipo</h4>
+
+Seleccione el alumno al que desee añadir al equipo
 <mat-divider></mat-divider>
 
- <form>
+ <form style="width: 100%">
     <div>
         <p>
-            <span style="font-weight: bold;">Alumnos del equipo: {{equipo.Nombre}}</span>
+            <span style="font-weight: bold;text-align: center;">Alumnos del equipo: {{equipo.Nombre}}</span>
         </p>
     </div>
 
-    <table align="center" *ngIf="data.alumnosEquipo" mat-table [dataSource]="data.alumnosEquipo" class="example-container mat-elevation-z8">
+    <table style="width: 100%; table-layout:fixed;"  *ngIf="data.alumnosEquipo" mat-table [dataSource]="data.alumnosEquipo" class="example-container mat-elevation-z8">
 
       <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
@@ -59,11 +59,11 @@ R
     </div>
     <div>
       <p>
-          <span style="font-weight: bold;">Alumnos sin equipo</span>
+          <span style="font-weight: bold; align-content: center;">Alumnos sin equipo</span>
       </p>
     </div>
     <div>
-        <table align="center" *ngIf="alumnosSinEquipo" mat-table [dataSource]="alumnosSinEquipo" class="example-container mat-elevation-z8">            <!--- Note that these columns can be defined in any order.
+        <table style="width: 100%; table-layout:fixed;"  *ngIf="alumnosSinEquipo" mat-table [dataSource]="alumnosSinEquipo" class="example-container mat-elevation-z8">            <!--- Note that these columns can be defined in any order.
 
       The actual rendered columns are set as a property on the row definition" -->
 
@@ -109,7 +109,7 @@ R
           </table>
     </div>
 
-    <mat-dialog-actions align= "end">
+    <mat-dialog-actions align= "center">
 
       <button   type="button" class="btn Aceptar" [mat-dialog-close]="data.alumnosEquipo" cdkFocusInitial>Aceptar</button>
   </mat-dialog-actions>

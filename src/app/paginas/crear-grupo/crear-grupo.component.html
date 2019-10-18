@@ -1,8 +1,9 @@
-R
-<div class="titulo"><h2>Crear Grupo</h2></div>
-<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
 
-<form [formGroup]="myForm" class="contenedor">
+<div class="titulo">Crear Grupo</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class = "contenedor" >
+
+<form [formGroup]="myForm">
 
     <mat-card class="panel">
 
@@ -12,13 +13,13 @@ R
                 <!-- PRIMER PASO -->
                 <mat-step [stepControl]="myForm">
                   <ng-template matStepLabel>Descripción</ng-template>
-                  <mat-form-field>
+                  <mat-form-field style=  "width: 30%;">
                     <mat-label>Nombre</mat-label>
                     <input (keyup)="Disabled()" matInput formControlName="nombreGrupo" required>
                   </mat-form-field>
 
                   <div>
-                    <mat-form-field>
+                    <mat-form-field style=  "width: 30%;">
                       <mat-label>Descripción</mat-label>
                         <input (keyup)="Disabled()" matInput formControlName="descripcionGrupo" required>
                     </mat-form-field>
@@ -68,7 +69,17 @@ R
         </mat-card-content>
       </mat-card>
 
+      <br>
 
 </form>
+<div class = "enColumna">
+<button type="button" (click) = "goBack();" class="btn Back">Volver <i class="material-icons">
+    navigate_before</i></button>
+
+  <br>
+</div>
+</div>
+
+
 
 

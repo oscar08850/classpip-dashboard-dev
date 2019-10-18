@@ -47,7 +47,11 @@ export class EditarPuntoComponent implements OnInit {
     });
     this.goBack();
   }
+  LimpiarCampos() {
+    this.nombrePunto = '';
+    this.descripcionPunto = '';
 
+  }
   goBack() {
     this.location.back();
   }

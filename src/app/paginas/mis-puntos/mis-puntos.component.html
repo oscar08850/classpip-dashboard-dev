@@ -1,5 +1,5 @@
-<div class="titulo"><h2>Tipos de Puntos e Insignias</h2></div>
-<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+<div class="titulo">Tipos de Puntos e Insignias</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
 
 
 <div class="contenedor">
@@ -17,23 +17,24 @@
                 {{punto.Nombre}}
               </mat-panel-title>
             </mat-expansion-panel-header>
-              <div class="contenedor2">
+              <div class="enColumna">
                   <div style="margin-left: 1%">
-                  <span style="font-weight: bold; font-size: 110%;">Descripción del punto</span>
-                  <p>
+                  <span style="font-weight: bold;">Descripción del tipo de punto</span>
+                  <br>
+                  <br>
+                  <p style="font-size: 1.5em;">
                     {{punto.Descripcion}}
                   </p>
                   </div>
-                  <div class="contenedor3" style="margin-right: 2% ">
-                    <div class="elemento">
-                      <button type="button" class="btn Editar" routerLink= "editarPunto" (click) = "EnviarTipoPuntoEditar(punto)">Editar Punto <i class="material-icons">
+                  <div class="enColumna" style="margin-right: 2% ">
+
+                      <button type="button" class="btn Editar" routerLink= "editarPunto" (click) = "EnviarTipoPuntoEditar(punto)">Editar<i class="material-icons">
                         edit </i>  </button>
-                    </div>
-                    <div class="elemento">
-                      <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrarPunto(punto)">Eliminar Punto <i class="material-icons">
+
+                      <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrarPunto(punto)">Eliminar <i class="material-icons">
                         delete
                         </i></button>
-                    </div>
+
 
                   </div>
               </div>
@@ -57,17 +58,19 @@
                   {{insignia.Nombre}}
                 </mat-panel-title>
               </mat-expansion-panel-header>
-                <div class="contenedor2">
+                <div class="enColumna">
                     <div>
                         <img class ="logo" *ngIf="imagenInsignia" mat-card-image [src]="imagenInsignia" >
                     </div>
                     <div style="margin-right: 20%">
-                    <span style="font-weight: bold; font-size: 110%;">Descripción de la insignia</span>
-                    <p>
+                    <span style="font-weight: bold; ">Descripción de la insignia</span>
+                    <br>
+                    <br>
+                    <p style="font-size: 1.5em;">
                       {{insignia.Descripcion}}
                     </p>
                     </div>
-                    <div class="contenedor3" style="margin-right: 2% ">
+                    <div class="enColumna" style="margin-right: 2% ">
                       <div class="elemento">
                         <button type="button" class="btn Editar" routerLink= "editarInsignia" (click) = "EnviarInsigniaEditar(insignia)">Editar Insignia <i class="material-icons">
                           edit </i>  </button>

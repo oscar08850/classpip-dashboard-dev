@@ -1,36 +1,28 @@
-<div class="titulo"><h2>Editar Punto</h2></div>
-<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
-
-<div class="contenedor contenedor3">
+<div class="titulo"><h2>Editar tipo de punto</h2></div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class="contenedor">
     <mat-card class="panel">
-        <mat-card-content>
-          <div class="contenedor2" style=" text-align: left;">
-              <div class="texto" style=" text-align: left;">
-                  <p>
-                    <span style="font-weight: bold;">Nombre: </span>
-                    <mat-form-field style="width: 100%; border: none; ">
-                        <textarea matInput  requiered [(ngModel)]="nombrePunto">Escribe el nombre</textarea>
-                      </mat-form-field>
-                  </p>
-                </div>
-                <div class="texto" style=" text-align: left;">
-                  <p>
-                      <span  style="font-weight: bold;">Descripción: </span>
-                      <mat-form-field style="width: 100%; border: none; ">
-                        <textarea matInput  requiered [(ngModel)]="descripcionPunto">Escribe la descripción</textarea>
-                      </mat-form-field>
-                    </p>
-                </div>
+      <mat-card-header>
+          <mat-card-title>Información sobre el tipo de punto</mat-card-title>
+      </mat-card-header>
 
-            <div>
+      <mat-card-content>
+        <div class="form-group">
+            <label for="inputNombrePunto">Nombre</label>
+            <input type="text" id="inputNombrePunto" class="form-control" requiered [(ngModel)]="nombrePunto" placeholder="Escribe el nombre tipo de punto">
+        </div>
 
-                <div class="elemento">
-                    <button type="button" class="btn Aceptar" (click)= "EditarPunto()">Aceptar Cambios <i class="material-icons">
-                      check </i></button>
-              </div>
+        <div class="form-group">
+          <label for="textareaPrivilegio">Descripción</label>
+          <textarea  class="form-control" id="textareaPrivilegio" requiered [(ngModel)]="descripcionPunto" placeholder="Descripción" rows="4"></textarea>
+        </div>
+      </mat-card-content>
 
-            </div>
-          </div>
-  </mat-card-content>
-</mat-card>
+
+      <mat-card-actions align="center">
+        <button type="button" class="btn Aceptar" (click)= "EditarPunto()">Aceptar Cambios <i class="material-icons">
+            check </i></button>
+      </mat-card-actions>
+
+    </mat-card>
 </div>
