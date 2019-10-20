@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
 import { AgregarAlumnoDialogComponent } from './agregar-alumno-dialog/agregar-alumno-dialog.component';
-
+import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../servicios/index';
@@ -46,7 +46,9 @@ export class CrearGrupoComponent implements OnInit {
               public sesion: SesionService,
               public peticionesAPI: PeticionesAPIService,
               // tslint:disable-next-line:variable-name
-              private _formBuilder: FormBuilder) { }
+              private _formBuilder: FormBuilder,
+              public snackBar: MatSnackBar,
+              private location: Location ) { }
 
 
   ngOnInit() {
@@ -83,6 +85,9 @@ export class CrearGrupoComponent implements OnInit {
         this.grupo = res;
       } else {
         console.log('Fallo en la creación');
+        this.snackBar.open('Se ha producido un error creando el grupo', 'Cerrar', {
+          duration: 2000,
+        });
       }
     });
   }
@@ -125,6 +130,13 @@ export class CrearGrupoComponent implements OnInit {
   VueltaInicio() {
     this.router.navigate([this.URLVueltaInicio, this.profesorId]);
     console.log(this.URLVueltaInicio);
+  }
+
+  goBack() {
+    this.location.back();
+    this.snackBar.open('El grupo se ha creado correctamente', 'Cerrar', {
+      duration: 3000,
+    });
   }
 
   // MIRO SI HAY ALGO SIMULTÁNEAMENTE EN EL NOMBRE Y LA DESCRIPCIÓN
