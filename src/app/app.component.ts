@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Profesor } from './clases';
 import { SesionService} from './servicios/sesion.service';
 import { PeticionesAPIService} from './servicios/index';
+import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
+
 // USARE ESTO PARA NAVEGAR A LA PAGINA DE INICIO
 import { Router } from '@angular/router';
 
@@ -18,7 +20,8 @@ export class AppComponent  {
   constructor(
               private route: Router,
               private peticionesAPI: PeticionesAPIService,
-              private sesion: SesionService) { }
+              private sesion: SesionService,
+              public snackBar: MatSnackBar) { }
 
   Autentificar() {
     this.peticionesAPI.DameProfesor(this.nombre, this.apellido).subscribe(
@@ -37,6 +40,9 @@ export class AppComponent  {
         } else {
           // Aqui habría que mostrar alguna alerta al usuario
           console.log('profe no existe');
+          this.snackBar.open('Usuario y/o contraseña incorrectos', 'Cerrar', {
+            duration: 5000,
+          });
         }
       }
     );

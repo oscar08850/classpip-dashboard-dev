@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 // Servicios
 import {PeticionesAPIService} from '../../../servicios/index';
 
@@ -31,7 +32,8 @@ export class AgregarAlumnoDialogComponent implements OnInit {
               private formBuilder: FormBuilder,
               private peticionesAPI: PeticionesAPIService,
               public dialogRef: MatDialogRef<AgregarAlumnoDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) { }
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              public snackBar: MatSnackBar ) { }
 
   ngOnInit() {
 
@@ -139,10 +141,15 @@ export class AgregarAlumnoDialogComponent implements OnInit {
         if (res != null) {
           console.log('Voy a añadir a ' + res);
           this.MatricularAlumno(res);
+          this.snackBar.open('Este alumno no estaba en la base de datos, ha sido añadido', 'Cerrar', {
+            duration: 3000,
+          });
 
         } else {
-          // Aqui habria que mostrar algun mensaje al usuario
-
+          // Aqui habria que mostrar algun mensaje al usuario --> Hecho
+          this.snackBar.open('Se ha producido un error añadiendo al alumno en la base de datos', 'Cerrar', {
+            duration: 2000,
+          });
           console.log('fallo añadiendo');
         }
       });

@@ -12,8 +12,7 @@
   </form>
 
   <!-- LOGIN -->
-  <form *ngIf="profesor === undefined" (ngSubmit)="Autentificar();" style="display: flex;  justify-content: center">
-
+  <form *ngIf="profesor === undefined" style="display: flex;  justify-content: center">
   <mat-card class="cartaInicioSesion">
 
     <mat-card-content style="text-align: center; display: flex; align-items: center; flex-direction: column; ">
@@ -21,28 +20,28 @@
           Iniciar sesión en Classpip
         </h4>
 
-
           <div>
             <mat-form-field style="margin: 15px; width: 80%">
               <input matInput type="text" name="nombre" placeholder="Nombre" required [(ngModel)]="nombre">
             </mat-form-field>
-            <mat-form-field style="margin: 15px; width: 80%">
-                <input matInput type="password" name="apellido" placeholder="Contraseña" required [(ngModel)]="apellido">
+
+            <mat-form-field style="margin: 15px;">
+              <input matInput type="password" name="apellido" placeholder="Contraseña" required [(ngModel)]="apellido">
+
             </mat-form-field>
           </div>
-            <mat-card-actions>
-            <button class="btn IncioSesion">Entrar</button>
+
+          <mat-card-actions>
+            <button class="btn IncioSesion" (click)= Autentificar()>Entrar</button>
             <button class="btnContraseña" >¿Olvidaste tu contraseña?</button>
-
-            </mat-card-actions>
-
-
-  </mat-card-content>
+          </mat-card-actions>
+     </mat-card-content>
   </mat-card>
+
 </form>
 </div>
 
-<div >
+<div>
   <!-- SI EL PROFESOR ENTRA CORRECTAMENTE, PODRÁ VER EL NAVBAR -->
   <div>
     <form *ngIf="profesor !== undefined">
@@ -60,9 +59,10 @@
 
   <!-- FALTA EL FOOTER -->
 
-
-
 </div>
+
+
+
 <div>
     <app-footer></app-footer>
 </div>

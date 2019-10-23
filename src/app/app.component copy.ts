@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Profesor } from './clases';
 import { ProfesorService } from './servicios/profesor.service';
+import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
+
 // USARE ESTO PARA NAVEGAR A LA PAGINA DE INICIO
 import { Router } from '@angular/router';
 
@@ -15,7 +17,8 @@ export class AppComponent  {
   apellido: string;
 
   constructor(private profesorService: ProfesorService,
-              private route: Router) { }
+              private route: Router,
+              public snackBar: MatSnackBar ) { }
 
 
 
