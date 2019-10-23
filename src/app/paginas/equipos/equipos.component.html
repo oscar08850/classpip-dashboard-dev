@@ -1,6 +1,5 @@
-R
-<div class="titulo"><h2>Equipos</h2></div>
-<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+<div class="titulo">Equipos</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
 
 
 <div class="contenedor">
@@ -22,26 +21,28 @@ R
               Información sobre {{equipo.Nombre}}
             </mat-panel-description> -->
           </mat-expansion-panel-header>
-            <div class="contenedor2">
+            <div class="enFila">
                 <div>
                 <img class ="logo" *ngIf="imagenLogo" mat-card-image [src]="imagenLogo" >
                 </div>
-                <div style="margin-right: 20%">
-                <span style="font-weight: bold; margin-left: 16px; font-size: 130%;">Miembros del equipo</span>
-                <mat-list role="list" *ngFor="let alumno of alumnosEquipo">
-                  <mat-list-item role="listitem">{{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</mat-list-item>
+                <div style="margin-left: 10%; width: 40%">
+                <span style="font-weight: bold; font-size: 130%;">Miembros del equipo</span>
+                <mat-list *ngFor="let alumno of alumnosEquipo">
+                  <!-- <mat-list-item  role="listitem">{{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</mat-list-item> -->
+                  <mat-list-item >{{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</mat-list-item>
+
                 </mat-list>
                 </div>
-                <div class="contenedor3" style="margin-right: 2% ">
+                <div class="enColumna" style="margin-right: 2% ">
                   <div class="elemento">
                     <button type="button" class="btn Editar" routerLink= "editarEquipo" (click) = "EnviarEquipoEditar(equipo, alumnosEquipo)">Editar Equipo <i class="material-icons">
                       edit </i>  </button>
                   </div>
-                  <div class="elemento">
+                  <!-- <div class="elemento"> -->
                     <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrar(equipo)">Eliminar Equipo <i class="material-icons">
                       delete
                       </i></button>
-                  </div>
+                  <!-- </div> -->
 
                 </div>
             </div>
@@ -145,6 +146,6 @@ R
   </mat-tab>
 </mat-tab-group>
 </div>
-<div class="elemento"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+<div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
 </div>
 

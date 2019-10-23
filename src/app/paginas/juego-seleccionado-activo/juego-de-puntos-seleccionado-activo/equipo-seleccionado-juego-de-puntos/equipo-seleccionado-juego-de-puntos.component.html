@@ -3,7 +3,7 @@
 <mat-divider class="lineaDivisoria"></mat-divider>
 
 <div class="contenedor">
-<div class="contenedor3">
+<div class="enColumna">
   <div>
       <img *ngIf="imagenPerfil" class = "imagen" hight = "200" width = "200" mat-card-image [src]="imagenPerfil" >
   </div>
@@ -36,12 +36,17 @@
       </div>
   </div>
   </div>
-</div>
+
 
 <form style="margin: 15px">
-  <h4>Historial de puntos</h4>
+
+<br>
+<strong style= "font-size: 2em; text-align: center">Historial de puntos</strong>
+<br>
+<br>
+<br>
 <mat-form-field>
-  <mat-label>Punto</mat-label>
+  <mat-label>Tipo de punto</mat-label>
   <select matNativeControl [(ngModel)]="puntoSeleccionadoId" name="punto" (change) = "MostrarHistorialSeleccionado()">
     <option *ngFor="let punto of listaSeleccionable" [value]="punto.id">
       {{punto.Nombre}}
@@ -50,7 +55,7 @@
 </mat-form-field>
 </form>
 
-<form>
+<form style="width: 100%">
 
   <table align="center" *ngIf="historial[0];else No_Tiene_Puntos"  mat-table [dataSource]="historial" class="example-container mat-elevation-z8">
 
@@ -59,31 +64,31 @@
 
     <!-- Nombre Column -->
     <ng-container matColumnDef="nombre">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 25%"> Nombre </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 25%"> Nombre </th>
       <td mat-cell *matCellDef="let punto"> {{punto.nombre}} </td>
     </ng-container>
 
     <!-- Descripción Column -->
     <ng-container matColumnDef="descripcion">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Descripción </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Descripción </th>
       <td mat-cell *matCellDef="let punto"> {{punto.descripcion}} </td>
     </ng-container>
 
     <!-- Valor Punto Column -->
     <ng-container matColumnDef="valorPunto">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Valor Punto </th>
-      <td mat-cell *matCellDef="let punto"> {{punto.valorPunto}} </td>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Valor Punto </th>
+      <td mat-cell style= "text-align: center;" *matCellDef="let punto"> {{punto.valorPunto}} </td>
     </ng-container>
 
     <!-- Fecha Column -->
     <ng-container matColumnDef="fecha">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Fecha Asignación </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Fecha Asignación </th>
       <td mat-cell *matCellDef="let punto"> {{punto.fecha}} </td>
     </ng-container>
 
     <!-- More Column -->
     <ng-container matColumnDef=" ">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 10%"></th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 10%"></th>
       <td mat-cell *matCellDef="let punto">
           <button (click) = "AbrirDialogoConfirmacionBorrarPunto(punto)" mat-icon-button matTooltip="Eliminar punto al equipo">
             <i class="material-icons red md-36">delete</i>
@@ -99,6 +104,7 @@
   <ng-template #No_Tiene_Puntos> Todavía no tiene puntos</ng-template>
   </div>
 </form>
-
+<button type="button" class="btn Back" (click)="goBack()">Volver </button>
+  </div>
 
 </div>

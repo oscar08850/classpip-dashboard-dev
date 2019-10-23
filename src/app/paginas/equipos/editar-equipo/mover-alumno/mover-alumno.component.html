@@ -1,8 +1,8 @@
-R
-<h4>Seleccione el equipo al que desee mover los alumnos</h4>
-<mat-divider></mat-divider>
 
-<mat-form-field style="margin: 5px">
+Seleccione el equipo al que desee mover los alumnos
+<mat-divider></mat-divider>
+<br>
+<mat-form-field style="width: 50%; margin: 5px">
   <mat-label>Equipo</mat-label>
   <select matNativeControl [(ngModel)]="equipoSeleccionadoId" name="equipo">
     <option value="" selected></option>
@@ -17,7 +17,7 @@ R
 
 <div>
   <form>
-    <table align="center" *ngIf="alumnosEquipo;else Aviso_no_alumnos" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table style="width: 100%; table-layout:fixed;" align="center" *ngIf="alumnosEquipo;else Aviso_no_alumnos" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
       <!-- Checkbox Column -->
       <ng-container matColumnDef="select">
@@ -76,7 +76,7 @@ R
   </form>
 </div>
 
-<mat-dialog-actions align= "end">
+<mat-dialog-actions align= "center">
 
     <div>
         <button class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = "AbrirDialogoConfirmacionMoverAlumno()" >Mover Alumnos</button>

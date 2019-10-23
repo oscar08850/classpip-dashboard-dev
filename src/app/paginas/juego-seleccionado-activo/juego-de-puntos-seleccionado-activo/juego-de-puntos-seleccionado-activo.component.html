@@ -1,8 +1,9 @@
+<div class ="contenedor">
+<div class= "enColumna">
 
-<form>
-
-<h4>Clasificación por puntos:</h4>
-<mat-form-field>
+Clasificación por puntos:
+<br>
+<mat-form-field style=" width: 60%;">
   <mat-label>Puntos</mat-label>
   <select matNativeControl [(ngModel)]="puntoSeleccionadoId" name="punto" (change) = "MostrarRankingSeleccionado()">
     <option *ngFor="let punto of listaSeleccionable" [value]="punto.id">
@@ -10,75 +11,68 @@
     </option>
   </select>
 </mat-form-field>
-</form>
 
-<div class="contenedor">
-    <div class="elemento">
+<div class="enFila" style = "width: 80%">
       <button type="button" class="btn Info" (click) = Informacion(); routerLink = "informacionJuego">Información<i class="material-icons">info</i></button>
-    </div>
-    <div class="elemento">
       <button type="button" class="btn Agregar" (click) = AsignarPuntos(); routerLink = "asignarPuntos">Asignar Puntos<i class="material-icons">add</i></button>
-    </div>
-    <div class="elemento">
       <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionDesactivar()"> Desactivar<i class="material-icons">history</i></button>
-    </div>
-  </div>
+</div>
 
 
-<form *ngIf="juegoSeleccionado.Modo === 'Individual'">
+<form style="width: 100%"  *ngIf="juegoSeleccionado.Modo === 'Individual'">
 
-  <div class = "filter">
-    <mat-form-field style=" width: 95% !important;">
+
+    <mat-form-field style="width: 60%">
         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
         <i class="material-icons" matSuffix>search</i>
       </mat-form-field>
-  </div>
 
-  <table align="center" mat-table [dataSource]="datasourceAlumno" class="example-container mat-elevation-z8">
+
+  <table style="width: 100%" align="center" mat-table [dataSource]="datasourceAlumno" class="example-container mat-elevation-z8">
 
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
 
     <!-- Posición Column -->
     <ng-container matColumnDef="posicion">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera">  Posición Global </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">  Posición Global </th>
       <td mat-cell *matCellDef="let alumno"> {{alumno.posicion}} </td>
     </ng-container>
 
     <!-- Nombre Alumno Column -->
     <ng-container matColumnDef="nombreAlumno">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Nombre </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Nombre </th>
       <td mat-cell *matCellDef="let alumno"> {{alumno.nombre}} </td>
     </ng-container>
 
     <!-- Primer Apellido Column -->
     <ng-container matColumnDef="primerApellido">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Primer Apellido </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Primer Apellido </th>
       <td mat-cell *matCellDef="let alumno"> {{alumno.primerApellido}} </td>
     </ng-container>
 
     <!-- Segundo Apellido Column -->
     <ng-container matColumnDef="segundoApellido">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Segundo Apellido </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Segundo Apellido </th>
       <td mat-cell *matCellDef="let alumno"> {{alumno.segundoApellido}} </td>
     </ng-container>
 
     <!-- Puntos Column -->
     <ng-container matColumnDef="puntos">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Puntos </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Puntos </th>
       <td mat-cell *matCellDef="let alumno"> {{alumno.puntos}} </td>
     </ng-container>
 
 
     <!-- Nivel Column -->
     <ng-container matColumnDef="nivel">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 15%"> Nivel </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Nivel </th>
       <td mat-cell *matCellDef="let alumno"> {{alumno.nivel}} </td>
     </ng-container>
 
         <!-- More Column -->
     <ng-container matColumnDef=" ">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 10%"></th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 10%"></th>
       <td mat-cell *matCellDef="let alumno">
           <button (click) = "AccederAlumno(alumno)" routerLink = "informacionAlumnoJuego" mat-icon-button matTooltip="Ver progreso de {{alumno.nombre}} en el juego">
               <i class="material-icons">more_horiz</i>
@@ -94,36 +88,36 @@
 
 
  <!-- ////////////////////////////////////// CLASIFICACIÓN EQUIPOS ////////////////////////////////////////////////////-->
-<form *ngIf="juegoSeleccionado.Modo != 'Individual'">
+<form style=" width: 100%" *ngIf="juegoSeleccionado.Modo != 'Individual'">
 
-  <div class = "filter">
-    <mat-form-field  style=" width: 95% !important;">
+
+    <mat-form-field style="width: 60%">
         <input matInput (keyup)="applyFilterEquipo($event.target.value)" placeholder="Filtro para buscar equipo...">
         <i class="material-icons" matSuffix>search</i>
       </mat-form-field>
-  </div>
 
-  <table align="center" mat-table [dataSource]="datasourceEquipo" class="example-container mat-elevation-z8">
+
+  <table style="width: 100%" align="center" mat-table [dataSource]="datasourceEquipo" class="example-container mat-elevation-z8">
 
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
 
     <!-- Posición Column -->
     <ng-container matColumnDef="posicion">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 18%"> Posición Global </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 18%"> Posición Global </th>
       <td mat-cell *matCellDef="let equipo"> {{equipo.posicion}} </td>
     </ng-container>
 
     <!-- Nombre Alumno Column -->
     <ng-container matColumnDef="nombreEquipo">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 18%"> Nombre </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 18%"> Nombre </th>
       <td mat-cell *matCellDef="let equipo"> {{equipo.nombre}} </td>
     </ng-container>
 
 
     <!-- Miembros Column -->
     <ng-container matColumnDef="miembros">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 18%"> Miembros </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 18%"> Miembros </th>
       <td mat-cell *matCellDef="let equipo"><button mat-icon-button matTooltip="Ver miembros de {{equipo.nombre}}" color="primary"
         [mdePopoverTriggerFor]="appPopover" (click) = "AlumnosDelEquipo(equipo)"
         mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
@@ -148,20 +142,20 @@
 
     <!-- Puntos Column -->
     <ng-container matColumnDef="puntos">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 18%"> Puntos </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 18%"> Puntos </th>
       <td mat-cell *matCellDef="let equipo"> {{equipo.puntos}} </td>
     </ng-container>
 
 
     <!-- Nivel Column -->
     <ng-container matColumnDef="nivel">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 18%"> Nivel </th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 18%"> Nivel </th>
       <td mat-cell *matCellDef="let equipo"> {{equipo.nivel}} </td>
     </ng-container>
 
         <!-- More Column -->
     <ng-container matColumnDef=" ">
-      <th mat-header-cell *matHeaderCellDef class="letraCabecera"></th>
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
       <td mat-cell *matCellDef="let equipo">
           <button (click) = "AccederEquipo(equipo)" routerLink = "informacionEquipoJuego" mat-icon-button matTooltip="Ver progreso de {{equipo.nombre}} en el juego">
               <i class="material-icons">more_horiz</i>
@@ -174,8 +168,10 @@
 
   </table>
 </form>
+<br>
 
-<div class="contenedor"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+<button type="button" class="btn Back" (click)="goBack()">Volver </button>
+</div>
 </div>
 
 

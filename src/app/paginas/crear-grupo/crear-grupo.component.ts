@@ -10,6 +10,7 @@ import { SesionService, PeticionesAPIService } from '../../servicios/index';
 
 // Clases
 import { Grupo } from '../../clases/index';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -45,6 +46,7 @@ export class CrearGrupoComponent implements OnInit {
               public dialog: MatDialog,
               public sesion: SesionService,
               public peticionesAPI: PeticionesAPIService,
+              public location: Location,
               // tslint:disable-next-line:variable-name
               private _formBuilder: FormBuilder,
               public snackBar: MatSnackBar,
@@ -148,6 +150,9 @@ export class CrearGrupoComponent implements OnInit {
       // Si ambos son diferentes a nulo, estará activado.
       this.isDisabled = false;
     }
+  }
+  goBack() {
+    this.location.back();
   }
 
 }

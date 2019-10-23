@@ -82,6 +82,7 @@ export class PasarListaComponent implements OnInit {
     } else {
       this.botonTablaDesactivado = false;
     }
+    this.mensaje = '';
   }
   ProcesarSeleccionados() {
     this.mensaje = 'Aun no hay nada que hacer con los seleccionados';

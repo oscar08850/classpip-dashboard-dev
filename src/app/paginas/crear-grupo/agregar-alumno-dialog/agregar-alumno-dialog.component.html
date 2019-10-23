@@ -1,113 +1,108 @@
-R
-<h3>Agregar alumno </h3>
-<mat-divider></mat-divider>
 
+<div class="subtitulo" align="center">Agregar alumno</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<br>
 <mat-tab-group [color]="primary" [backgroundColor]="primary" #tabs>
 
  <!-- ////////////////////////////////////////////// PARA ÚNICO ALUMNO //////////////////////////////////////////////// -->
 
   <mat-tab index = "0" label="Individualmente">
-    <div class=" centrado">
-          <div class=" centrado centrado2">
+    <div class="enFila">
 
 
-        <form (ngSubmit)="AsignacionIndividual();" [formGroup]="myForm">
-          <p style="font-weight: bold;">Introduce todos los campos</p>
+          <form (ngSubmit)="AsignacionIndividual();" [formGroup]="myForm">
+            <div class="enColumna">
+            <p style="font-weight: bold;">Introduce todos los campos</p>
 
-            <div class="centrado2">
-            <mat-form-field>
-              <mat-label>Nombre</mat-label>
-                <input matInput placeholder="Nombre" formControlName="nombreAlumno" required>
-              <mat-error>Este campo es obligatorio</mat-error>
-            </mat-form-field>
-            </div>
 
-            <div class="centrado2">
-              <mat-form-field>
-                <mat-label>Primer Apellido</mat-label>
-                  <input matInput placeholder="Primer Apellido" formControlName="primerApellido" required>
+              <mat-form-field style="width: 60%">
+                <mat-label>Nombre</mat-label>
+                  <input matInput placeholder="Nombre" formControlName="nombreAlumno" required>
                 <mat-error>Este campo es obligatorio</mat-error>
               </mat-form-field>
+
+
+
+                <mat-form-field style="width: 60%">
+                  <mat-label>Primer Apellido</mat-label>
+                    <input matInput placeholder="Primer Apellido" formControlName="primerApellido" required>
+                  <mat-error>Este campo es obligatorio</mat-error>
+                </mat-form-field>
+
+
+
+                <mat-form-field style="width: 60%">
+                  <mat-label>Segundo Apellido</mat-label>
+                    <input matInput placeholder="Segundo Apellido" formControlName="segundoApellido" required>
+                  <mat-error>Este campo es obligatorio</mat-error>
+
+                </mat-form-field>
+
+
+                <button class="btn Agregar" >Añadir alumno <i class="material-icons">
+                    person_add </i></button>
             </div>
 
-            <div class="centrado2">
-              <mat-form-field>
-                <mat-label>Segundo Apellido</mat-label>
-                  <input matInput placeholder="Segundo Apellido" formControlName="segundoApellido" required>
-                <mat-error>Este campo es obligatorio</mat-error>
-
-              </mat-form-field>
-            </div>
+          </form>
 
 
-            <div class="centrado2">
-              <button class="btn Agregar" >Añadir alumno <i class="material-icons">
-                  person_add </i></button>
-            </div>
-        </form>
-      </div>
+      <form>
 
+        <table style="width: 100%" align = "center" *ngIf="alumnosAgregados[0]" mat-table [dataSource]="alumnosAgregados" class="example-container mat-elevation-z8">
 
+              <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
 
-    <div class=" centrado centrado2">
-    <form>
+              <!-- Nombre Alumno Column -->
+              <ng-container matColumnDef="nombreAlumno">
+                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Nombre </th>
+                <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+              </ng-container>
 
-      <table align = "center" *ngIf="alumnosAgregados[0]" mat-table [dataSource]="alumnosAgregados" class="example-container mat-elevation-z8">
+              <!-- Primer Apellido Column -->
+              <ng-container matColumnDef="primerApellido">
+                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Primer Apellido </th>
+                <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+              </ng-container>
 
-            <!--- Note that these columns can be defined in any order.
-                  The actual rendered columns are set as a property on the row definition" -->
+              <!-- Segundo Apellido Column -->
+              <ng-container matColumnDef="segundoApellido">
+                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Segundo Apellido </th>
+                <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+              </ng-container>
 
-            <!-- Nombre Alumno Column -->
-            <ng-container matColumnDef="nombreAlumno">
-              <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Nombre </th>
-              <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
-            </ng-container>
+              <!-- alumnoId Column -->
+              <ng-container matColumnDef="alumnoId">
+                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Identificador Alumno </th>
+                <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
+              </ng-container>
 
-            <!-- Primer Apellido Column -->
-            <ng-container matColumnDef="primerApellido">
-              <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Primer Apellido </th>
-              <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
-            </ng-container>
+              <!-- Delete Column -->
+              <ng-container matColumnDef=" ">
+                  <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" ></th>
+                  <td mat-cell *matCellDef="let alumno">
+                      <button (click) = "BorrarAlumno(alumno)" mat-icon-button matTooltip="Borrar a {{alumno.Nombre}} del grupo">
+                        <i class="material-icons red md-36">delete</i>
+                      </button>
+                  </td>
+              </ng-container>
 
-            <!-- Segundo Apellido Column -->
-            <ng-container matColumnDef="segundoApellido">
-              <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Segundo Apellido </th>
-              <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
-            </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-            <!-- alumnoId Column -->
-            <ng-container matColumnDef="alumnoId">
-              <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Identificador Alumno </th>
-              <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
-            </ng-container>
+            </table>
 
-            <!-- Delete Column -->
-            <ng-container matColumnDef=" ">
-                <th mat-header-cell *matHeaderCellDef class="letraCabecera" ></th>
-                <td mat-cell *matCellDef="let alumno">
-                    <button (click) = "BorrarAlumno(alumno)" mat-icon-button matTooltip="Borrar a {{alumno.Nombre}} del grupo">
-                      <i class="material-icons red md-36">delete</i>
-                    </button>
-                </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-          </table>
-
-    </form>
-    </div>
+      </form>
   </div>
   </mat-tab>
 
  <!-- ////////////////////////////////////////////// PARA AGRECACION MASIVA //////////////////////////////////////////////// -->
   <mat-tab label="Masivamente">
 
-      <div class=" centrado">
-      <div class=" centrado centrado2">
+      <div class="enFila">
 
         <form (ngSubmit)="AsignacionMasiva();" [formGroup]="myForm2">
+          <div class="enColumna">
             <div>
                 <p>
                   <span style="font-weight: bold;"> Introduce los datos de forma correcta</span>
@@ -116,49 +111,47 @@ R
                   </mat-form-field>
                 </p>
               </div>
-              <div class="centrado2">
-                  <button  class="btn Agregar">Añadir alumnos <i class="material-icons">
+
+                <button  class="btn Agregar">Añadir alumnos <i class="material-icons">
                       person_add </i></button>
-                </div>
-          </form>
-        </div>
-      </div>
 
-        <div class=" centrado centrado2">
-            <form>
+          </div>
+        </form>
 
-              <table align = "center" *ngIf="alumnosAgregados[0]" mat-table [dataSource]="alumnosAgregados" class="example-container mat-elevation-z8">
+        <form>
+
+              <table style="width: 100%" align = "center" *ngIf="alumnosAgregados[0]" mat-table [dataSource]="alumnosAgregados" class="example-container mat-elevation-z8">
 
                     <!--- Note that these columns can be defined in any order.
                           The actual rendered columns are set as a property on the row definition" -->
 
                     <!-- Nombre Alumno Column -->
                     <ng-container matColumnDef="nombreAlumno">
-                      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Nombre </th>
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Nombre </th>
                       <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
                     </ng-container>
 
                     <!-- Primer Apellido Column -->
                     <ng-container matColumnDef="primerApellido">
-                      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Primer Apellido </th>
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Primer Apellido </th>
                       <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
                     </ng-container>
 
                     <!-- Segundo Apellido Column -->
                     <ng-container matColumnDef="segundoApellido">
-                      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Segundo Apellido </th>
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Segundo Apellido </th>
                       <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
                     </ng-container>
 
                     <!-- alumnoId Column -->
                     <ng-container matColumnDef="alumnoId">
-                      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Identificador Alumno </th>
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Identificador Alumno </th>
                       <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
                     </ng-container>
 
                     <!-- Delete Column -->
                     <ng-container matColumnDef=" ">
-                        <th mat-header-cell *matHeaderCellDef class="letraCabecera" ></th>
+                        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" ></th>
                         <td mat-cell *matCellDef="let alumno">
                             <button (click) = "BorrarAlumno(alumno)" mat-icon-button matTooltip="Borrar a {{alumno.Nombre}} del grupo">
                               <i class="material-icons red md-36">delete</i>
@@ -171,8 +164,8 @@ R
 
                   </table>
 
-            </form>
-        </div>
+        </form>
+      </div>
   </mat-tab>
 
 

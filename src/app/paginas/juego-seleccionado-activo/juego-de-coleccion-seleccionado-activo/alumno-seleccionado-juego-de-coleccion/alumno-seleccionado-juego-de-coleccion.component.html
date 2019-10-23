@@ -1,28 +1,23 @@
-<div class="titulo"><h2>{{juegoSeleccionado.Tipo}}</h2></div>
-<div class="subtitulo"><h3>Información Del Jugador</h3></div>
+<div class="titulo">{{juegoSeleccionado.Tipo}}</div>
+<div class="subtitulo">Información Del Jugador</div>
 <mat-divider class="lineaDivisoria"></mat-divider>
 
 <div class="contenedor">
-  <div class="contenedor3">
-<div class="contenedor3">
-  <div>
-      <img class = "imagen" hight = "200" width = "200" mat-card-image [src]="imagenPerfil" >
-  </div>
-  <div>
-    <p style="font-size: 110%">
-      <span style="font-weight: bold;">Cromos de: </span>
-      {{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}
-    </p>
-  </div>
-</div>
+  <div class="enColumna">
+    <div class="enFila"  style="width: 70%">
+
+        <img class = "imagen" hight = "200" width = "200" mat-card-image [src]="imagenPerfil" >
 
 
-<div>
-  <button  type="button"  class="btn Info" routerLink = "Album">Álbum Alumno</button>
-</div>
+        <p style="font-size: 110%">
+          <span style="font-weight: bold;">Cromos de: </span>
+          {{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}
+        </p>
+        <button  type="button"  class="btn Info" routerLink = "Album">Álbum Alumno</button>
+    </div>
 
-</div>
-</div>
+
+
 
 <mat-grid-list cols="3" rowHeight="100px" style="width: 70%; margin-left : 15%" >
   <mat-grid-tile
@@ -57,6 +52,8 @@
       </mat-card>
   </mat-grid-tile>
 </mat-grid-list>
+<br>
 
-<div class="contenedor"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
-</div>
+ <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+ </div>
+ </div>

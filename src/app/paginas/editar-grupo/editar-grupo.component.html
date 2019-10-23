@@ -1,50 +1,50 @@
 R
-<div class="titulo"><h2>Editar Grupos</h2></div>
-<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
-
-<div class="contenedor contenedor3">
-  <div class="contenedor2">
-  <div class="texto" style=" text-align: left;">
-    <p>
-      <span style="font-weight: bold;">Nombre: </span>
-      <input style="background-color: transparent" type="text" name="nombre" requiered [(ngModel)]="nombreGrupo">
-    </p>
-  </div>
-  <div class="texto" style=" text-align: left;">
-    <p>
-        <span  style="font-weight: bold;">Descripción: </span>
-        <input style="background-color: transparent" type="text" name="descripcion"  requiered [(ngModel)]="descripcionGrupo">
-    </p>
-  </div>
-</div>
-<div>
-  <div class="elemento"><button type="button"  class="btn Aceptar" (click)= "ModificarGrupo()"> Aceptar Cambios <i class="material-icons">
-    check </i>  </button></div>
-
-</div>
-</div>
+<div class="titulo">Editar Grupos</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
 
 <div class="contenedor">
-  <div class="elemento"><button type="button" class="btn Agregar" (click) = "AbrirDialogoAgregarAlumnos()">  Añadir Alumno<i class="material-icons">
-    person_add </i></button></div>
+  <div class="enColumna">
 
-  <div class="elemento"> <button type="button"  [disabled]="botonTablaDesactivado" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrar()"> Eliminar Alumnos <i class="material-icons">
-    delete </i></button> </div>
-</div>
+    <div class="enColumna">
+      <div class="texto" style=" text-align: left;">
+        <p>
+          <span style="font-weight: bold;">Nombre: </span>
+          <input style="background-color: transparent" type="text" name="nombre" requiered [(ngModel)]="nombreGrupo">
+        </p>
+      </div>
+      <div class="texto" style=" text-align: left;">
+        <p>
+            <span  style="font-weight: bold;">Descripción: </span>
+            <input style="background-color: transparent" type="text" name="descripcion"  requiered [(ngModel)]="descripcionGrupo">
+        </p>
+      </div>
+      <button type="button"  class="btn Aceptar" (click)= "ModificarGrupo()"> Aceptar Cambios <i class="material-icons">
+          check </i>  </button>
+    </div>
 
-  <form *ngIf="alumnosGrupoSeleccionado;else Aviso_no_alumnos">
 
-    <div class = "filter">
-      <mat-form-field>
+
+    <div class="enFila" style="width: 30%">
+      <button type="button" class="btn Agregar" (click) = "AbrirDialogoAgregarAlumnos()">  Añadir Alumno<i class="material-icons">
+        person_add </i></button>
+
+       <button type="button"  [disabled]="botonTablaDesactivado" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrar()"> Eliminar Alumnos <i class="material-icons">
+        delete </i></button>
+    </div>
+
+  <form style="width: 70%" *ngIf="alumnosGrupoSeleccionado;else Aviso_no_alumnos">
+
+
+      <mat-form-field style="width: 60%" >
         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
         <i class="material-icons" matSuffix>search</i>
       </mat-form-field>
-    </div>
+
 
 
 <!--    Esta es la tabla. Se identifica dónde están los datos y se indica que habrá ordenación-->
 <!-- <table mat-table [dataSource]="dataSource" matSort  class="mat-elevation-z8"> -->
-    <table align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table style="width: 100%" align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <!--    La primera columna será un checkbox -->
             <ng-container matColumnDef="select">
@@ -69,25 +69,25 @@ R
 
       <!-- Nombre Alumno Column -->
         <ng-container matColumnDef="nombreAlumno">
-          <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Nombre </th>
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
           <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
         </ng-container>
 
         <!-- Primer Apellido Column -->
         <ng-container matColumnDef="primerApellido">
-          <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Primer Apellido </th>
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Primer Apellido </th>
           <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
         </ng-container>
 
         <!-- Segundo Apellido Column -->
         <ng-container matColumnDef="segundoApellido">
-          <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Segundo Apellido </th>
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Segundo Apellido </th>
           <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
         </ng-container>
 
         <!-- alumnoId Column -->
         <ng-container matColumnDef="alumnoId">
-          <th mat-header-cell *matHeaderCellDef class="letraCabecera"> Identificador Alumno </th>
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Identificador Alumno </th>
           <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
         </ng-container>
 
@@ -103,5 +103,7 @@ R
   <div class="contenedor">
       <ng-template  #Aviso_no_alumnos><div class="texto">Todavía no hay alumnos en este grupo.</div></ng-template>
   </div>
-
+  <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+  </div>
+</div>
 
