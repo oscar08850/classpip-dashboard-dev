@@ -7,6 +7,7 @@ import { Alumno, Equipo, Juego, EquipoJuegoDeColeccion, Cromo } from '../../../.
 // Services
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../../servicios/index';
 
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-equipo-seleccionado-juego-de-coleccion',
@@ -37,6 +38,7 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
                private peticionesAPI: PeticionesAPIService,
                private calculos: CalculosService,
                private http: Http,
+               public location: Location
                ) { }
 
   ngOnInit() {
@@ -111,4 +113,8 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
       }
     }
   }
+  goBack() {
+    this.location.back();
+  }
+
 }

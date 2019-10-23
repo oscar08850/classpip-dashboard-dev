@@ -15,6 +15,7 @@ import { JuegoService, EquipoService, ColeccionService, JuegoDeColeccionService 
 
 import {SesionService, PeticionesAPIService, CalculosService} from '../../../../servicios/index';
 
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-asignar-cromos',
@@ -83,6 +84,7 @@ export class AsignarCromosComponent implements OnInit {
                private juegoDeColeccionService: JuegoDeColeccionService,
                public dialog: MatDialog,
                private http: Http,
+               public location: Location,
                public snackBar: MatSnackBar) { }
 
   ngOnInit() {
@@ -139,11 +141,12 @@ export class AsignarCromosComponent implements OnInit {
 
 
   applyFilter(filterValue: string) {
-    this.datasourceAlumno.filter = filterValue.trim().toLowerCase();
+
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   applyFilterEquipo(filterValue: string) {
-    this.datasourceEquipo.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   CromosColeccion() {
@@ -402,4 +405,8 @@ export class AsignarCromosComponent implements OnInit {
       });
       }
   }
+  goBack() {
+    this.location.back();
+  }
+
 }

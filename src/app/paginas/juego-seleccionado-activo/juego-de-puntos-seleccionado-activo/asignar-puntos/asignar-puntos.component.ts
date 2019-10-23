@@ -8,6 +8,7 @@ import { Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, EquipoJuegoDe
 import { SesionService, CalculosService, PeticionesAPIService } from '../../../../servicios/index';
 import {MatTableDataSource} from '@angular/material/table';
 
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-asignar-puntos',
@@ -66,6 +67,7 @@ export class AsignarPuntosComponent implements OnInit {
   constructor(
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
+               public location: Location,
                private calculos: CalculosService ) { }
 
   ngOnInit() {
@@ -280,4 +282,9 @@ export class AsignarPuntosComponent implements OnInit {
       }
     }
   }
+
+  goBack() {
+    this.location.back();
+  }
+
 }

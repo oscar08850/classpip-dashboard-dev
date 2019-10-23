@@ -122,11 +122,11 @@ export class EquiposComponent implements OnInit {
 
   // Le pasamos el equipo y buscamos el logo que tiene y sus alumnos
   AlumnosYLogoDelEquipo(equipo: Equipo) {
-
+    console.log ('dentro');
 
     // Si el equipo tiene una foto (recordemos que la foto no es obligatoria)
     if (equipo.FotoEquipo !== undefined) {
-
+      console.log ('vamos a por logo');
       // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
      //Esto no consigo convertirlo en una funcion para los servicios
       // this.peticionesAPI.DameLogoEquipo (equipo.FotoEquipo)

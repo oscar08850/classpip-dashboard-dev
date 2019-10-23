@@ -1,6 +1,94 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+
+// Imagen del alumno
+.imagen {
+  max-width: 200px;
+  max-height: 200px;
+  margin: 10px;
+}
+// Estilos para la página del Login
+
+.btnContraseña:hover {
+  text-decoration:underline;
+  color: rgb(51, 122, 183) ;
+}
+.btnContraseña{
+  color: rgb(51, 122, 183);
+  width: auto;
+  background-color: transparent;
+  border: solid transparent;
+}
+
+.contenedorInicioSesion{
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border: 10px solid rgb(63, 81, 181);
+  background-color: rgb(63, 81, 181);
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+// Estilos del navbar
+.contenedorNavbar{
+  width: auto;
+  height: 50px;
+  padding: 10px;
+  border: 10px solid rgb(63, 81, 181);
+  background-color: rgb(63, 81, 181);
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+
+
+.class{
+  color:#000;
+  font-size:170%;
+  display: inline-block;
+}
+
+.pip{
+  color:white;
+  font-size:170%;
+  display: inline-block;
+}
+
+.btnNavbar{
+  color:white;
+  background-color: transparent;
+  border: 5px solid transparent;
+}
+.btnNavbarAmarillo{
+  color: rgb(225, 240, 14);
+  background-color: transparent;
+  font-weight: 900;
+  border: 5px solid transparent;
+}
+
+.btnNavbar:hover {
+  color: black !important;
+  background-color: transparent;
+}
+
+
+
+
+
 // para mostrar la imagen de los cromos
 .posicionImagen{
 
@@ -14,11 +102,19 @@
   border: solid transparent;
 }
 
-// Estilos para el panel de creacion de nivel
+// Estilos para los paneles
 .panel{
   background-color: rgb(97, 10, 203);
   width: 600px;
 }
+.logo {
+  margin-left: 25px;
+  width: 130px;
+  height: 130px;
+  max-width: 130px;
+  max-height: 130px;
+}
+
 
 .foto {
   max-width: 100px;
@@ -30,8 +126,8 @@ mat-card-title {
   color: white
 }
 
-mat-card-subtitle{
-  color: white;
+mat-card-subtitle {
+  color: white
 }
 
 label{
@@ -64,6 +160,10 @@ label{
   font-style: oblique;
 }
 
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
 
 .CabeceraActivos {
   background-color: rgb(92, 184, 92);
@@ -82,13 +182,18 @@ label{
 }
 
 
-
+// Iconos
+.material-icons{
+  width: 15px;
+  height: 15px;
+}
  .material-icons.red { color: rgb(228, 8, 8); }
 
  .material-icons.md-36 { font-size: 36px; }
 
 .material-icons.green { color: rgb(49, 151, 2); }
 .material-icons.margin { margin-top: 10 px; margin-left: 10 px;}
+
 
 input[type=text] {
   border: none;
@@ -132,7 +237,7 @@ input[type=text] {
 
 .logo {
   width: 130px;
-  height: 130px;
+  height: 100px;
   max-width: 130px;
   max-height: 130px;
 }
@@ -193,16 +298,23 @@ input[type=text] {
   align-items: center;
   }
 
-.material-icons{
-  width: 15px;
-  height: 15px;
-}
 
-.mat-form-field {
-  font-size: 14px;
-  width: 100%;
-}
-CONTENEDORES
+  .btn.Cerrar{
+    background-color: rgb(240, 173, 78);
+  }
+  .btn.IncioSesion{
+    background-color: rgb(51, 122, 183);
+  }
+
+  // Prueba cambiado colores
+
+  .btnCambiarStep{
+  display: flex;
+  justify-content: flex-end;
+  }
+
+
+//CONTENEDORES
 
 .filter {
   width: 60%;
@@ -211,9 +323,9 @@ CONTENEDORES
 }
 
 .contenedorFooter{
-  width: auto;
+  width: 70%;
   height: 50px;
-  padding: 10px;
+  margin-left: 15%;
   border: 10px solid rgb(63, 81, 181);
   background-color: rgb(63, 81, 181);
 
@@ -225,6 +337,8 @@ CONTENEDORES
   align-items: center;
 
 }
+
+
 
 .contenedor{
 
@@ -268,29 +382,6 @@ table {
 
 
 
-// Opciones gráficas título
-.titulo{
-  width: 70%;
-  margin-left: 15%;
-  height: 60px;
-  padding: 10px;
-  color: rgb(63, 81, 181);
-  // color: rgb(181, 87, 63);
-}
-
-
-.subtitulo{
-  width: 70%;
-  margin-left: 15%;
-  height: 45px;
-  padding: 10px;
-  color: rgb(63, 81, 181);
-  // color: rgb(181, 87, 63);
-}
-
-.h2, h2 {
-  font-size: 2.5rem !important;
-}
 .lineaDivisoria{
   width: 70%;
   margin-left : 15% !important;
@@ -307,93 +398,6 @@ table {
   background-color: rgb(204, 197, 197);
 }
 
-.letraCabecera{
-  color:white;
-  text-align: left !important;
-  font-weight: bold;
-  font-size: 90%;
-}
-
-// Opciones gráficas botones
-.btn{
-  margin: 5px;
-  align-items: center;
-  color: white;
-  width: 170px;
-  // border-top-left-radius: 15px !important;
-  // border-top-right-radius: 15px !important;
-  // border-bottom-left-radius: 15px !important;
-  // border-bottom-right-radius: 15px !important;
-}
-.btn:hover {
-  color: black !important;
-}
-
-    // Colores de los botones
-.btn.Agregar{
- background-color: rgb(65, 178, 212);
-}
-.btn.Info{
-  background-color: rgb(240, 173, 78);
-}
-.btn.Back{
-  background-color: rgb(240, 173, 78);
-}
-.btn.Aceptar{
-  background-color: rgb(92, 184, 92);
-}
-
-.btn.Eliminar{
-  background-color: rgb(212, 57, 52);
-}
-.btn.Editar{
-  background-color: rgb(65, 178, 212);
-}
-.btn.Next{
-  background-color: rgb(51, 122, 183);
-}
-.btn.PasarLista{
-  background-color: rgb(240, 173, 78);
-}
-.btn.Juegos{
-  background-color: rgb(51, 122, 183);
-}
-.btn.Equipos{
-  background-color: rgb(92, 184, 92);
-}
-
-// .btn.Eliminar{
-//   background-color: rgb(212, 169, 52);
-// }
-// .btn.Editar{
-//   background-color: rgb(212, 65, 200);
-// }
-// .btn.Next{
-//   background-color: rgb(51, 183, 51);
-// }
-// .btn.PasarLista{
-//   background-color: rgb(240, 78, 78);
-// }
-// .btn.Juegos{
-//   background-color: rgb(82, 183, 51);
-// }
-// .btn.Equipos{
-//   background-color: rgb(169, 92, 184);
-// }
-
-.btn.Cerrar{
-  background-color: rgb(240, 173, 78);
-}
-.btn.IncioSesion{
-  background-color: rgb(51, 122, 183);
-}
-
-// Prueba cambiado colores
-
-.btnCambiarStep{
-display: flex;
-justify-content: flex-end;
-}
 
 // Opciones gráficas cromos
 

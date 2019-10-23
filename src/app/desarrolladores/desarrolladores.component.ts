@@ -80,6 +80,14 @@ export class DesarrolladoresComponent implements OnInit {
   // Aquí se construirá la frase para mostrar los datos de la persona creada con el stepper
   resultadoStepper: string;
 
+
+  // Para el ejemplo de card
+
+  ciudad: string;
+  descripcionCiudad: string;
+  botonActivo = false;
+  fraseCard: string;
+
   constructor(
                 private formBuilder: FormBuilder,
                 public dialog: MatDialog,
@@ -233,4 +241,22 @@ export class DesarrolladoresComponent implements OnInit {
         });
       });
     }
+
+  Disabled() {
+
+    if (this.ciudad !== undefined && this.descripcionCiudad !== undefined) {
+      this.botonActivo = true;
+    }
+  }
+
+  LimpiarCampos() {
+    this.ciudad = undefined;
+    this.descripcionCiudad = undefined;
+    this.botonActivo = false;
+    this.fraseCard = undefined;
+  }
+
+  Registrar() {
+    this.fraseCard = 'Tu ciudad es ' + this.ciudad + 'y tu descripción es ' + this.descripcionCiudad;
+  }
 }

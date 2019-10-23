@@ -7,6 +7,8 @@ import { Cromo, Coleccion, AlbumDelAlumno } from '../../../../../clases/index';
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../../../../servicios/index';
 
+import { Location } from '@angular/common';
+
 @Component({
   selector: 'app-album-equipo',
   templateUrl: './album-equipo.component.html',
@@ -28,6 +30,7 @@ export class AlbumEquipoComponent implements OnInit {
 
   constructor(  private sesion: SesionService,
                 private peticionesAPI: PeticionesAPIService,
+                public location: Location,
                 private http: Http) { }
 
   ngOnInit() {
@@ -109,6 +112,10 @@ export class AlbumEquipoComponent implements OnInit {
       }
     }
   }
+  goBack() {
+    this.location.back();
+  }
+
 
 
 }

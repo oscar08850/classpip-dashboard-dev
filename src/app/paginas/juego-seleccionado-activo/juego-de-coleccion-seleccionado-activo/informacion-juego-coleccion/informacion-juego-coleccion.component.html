@@ -1,23 +1,15 @@
-<div class="titulo"><h2>Información Juego De Colección</h2></div>
+<div class="titulo">Información Juego De Colección</div>
 <mat-divider class="lineaDivisoria"></mat-divider>
 
-
-<div class="contenedor contenedor3">
-  <div class="contenedor3" style=" text-align: left;">
-      <div class="elemento">
+<div class="contenedor">
+  <div class="enColumna">
           <img class ="logo" style="margin-top: 5px" *ngIf="imagenColeccion" hight = "200" width = "200" mat-card-image [src]="imagenColeccion" >
-      </div>
-      <div style="margin-top: 20px">
           <p>
-              <span style="font-weight: bold;">Nombre:</span>
+          <span style="font-weight: bold;">Nombre:</span>
                     {{nombreColeccion}}
-                  </p>
-      </div>
+          </p>
 
 
-  </div>
-
-</div>
 
 
 <mat-grid-list cols="3" rowHeight="100px" style="width: 70%; margin-left : 15%" >
@@ -51,5 +43,6 @@
   </mat-grid-tile>
 </mat-grid-list>
 
-<div class="contenedor"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+<button type="button" class="btn Back" (click)="goBack()">Volver </button>
+  </div>
 </div>
