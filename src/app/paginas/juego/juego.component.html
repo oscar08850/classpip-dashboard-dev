@@ -20,7 +20,7 @@
                 <!-- ///////////////////////// LISTA DE JUEGOS ACTIVOS /////////////////////////////////-->
                 <h3 class = "CabeceraActivos" style= "color: white;font-style: bold;font-size: 2em;" mat-subheader>Juegos Activos</h3>
 
-                <form *ngIf="juegosActivos;else Aviso_no_juegos_activos">
+                <form *ngIf="juegosActivos ;else Aviso_no_juegos_activos">
                   <mat-list-item *ngFor="let juego of juegosActivos" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionadoActivo">
 
                     <mat-icon mat-list-icon><i class="material-icons green">check_circle_outline</i></mat-icon>
@@ -28,13 +28,17 @@
                     <p mat-line> {{juego.Modo}} </p>
                   </mat-list-item>
                 </form>
-
                 <ng-template #Aviso_no_juegos_activos>
-                    <label class = "AvisoNoJuegosActivo"><i class="material-icons green">error_outline</i>
+                  No hay juegos activos
+                </ng-template>
+                <!-- <ng-template #Aviso_no_juegos_activos>
+                    <label><i class="material-icons green">error_outline</i>
                       No hay juegos activos</label>
-                  </ng-template>
+                </ng-template> -->
 
             <!-- ///////////////////////// LISTA DE JUEGOS INACTIVOS /////////////////////////////////-->
+            <br>
+            <br>
             <h3 class = "CabeceraInactivos" style= "color: white;font-style: bold;font-size: 2em;" mat-subheader>Juegos Inactivos</h3>
               <form *ngIf="juegosInactivos;else Aviso_no_juegos_inactivos">
                   <mat-list-item *ngFor="let juego of juegosInactivos" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionadoInactivo">
@@ -46,8 +50,7 @@
 
               </form>
               <ng-template #Aviso_no_juegos_inactivos>
-                  <label class = "AvisoNoJuegosActivo"><i class="material-icons red">error_outline</i>
-                    No hay juegos inactivos</label>
+                  No hay juegos inactivos
               </ng-template>
 
           </mat-list>

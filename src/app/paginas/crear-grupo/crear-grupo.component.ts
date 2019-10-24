@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AgregarAlumnoDialogComponent } from './agregar-alumno-dialog/agregar-alumno-dialog.component';
@@ -46,7 +46,6 @@ export class CrearGrupoComponent implements OnInit {
               public dialog: MatDialog,
               public sesion: SesionService,
               public peticionesAPI: PeticionesAPIService,
-              public location: Location,
               // tslint:disable-next-line:variable-name
               private _formBuilder: FormBuilder,
               public snackBar: MatSnackBar,
@@ -135,10 +134,10 @@ export class CrearGrupoComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
     this.snackBar.open('El grupo se ha creado correctamente', 'Cerrar', {
       duration: 3000,
     });
+    this.location.back();
   }
 
   // MIRO SI HAY ALGO SIMULTÁNEAMENTE EN EL NOMBRE Y LA DESCRIPCIÓN
@@ -151,8 +150,6 @@ export class CrearGrupoComponent implements OnInit {
       this.isDisabled = false;
     }
   }
-  goBack() {
-    this.location.back();
-  }
+
 
 }

@@ -110,13 +110,14 @@ export class JuegoComponent implements OnInit {
     // ir a buscarla
     this.peticionesAPI.DameEquiposDelGrupo(this.grupo.id)
     .subscribe(equipos => {
-      if (equipos !== undefined) {
+      if (equipos[0] !== undefined) {
         console.log('Hay equipos');
         this.equiposGrupo = equipos;
         console.log(this.equiposGrupo);
       } else {
         // mensaje al usuario
         console.log('Este grupo aun no tiene equipos');
+        this.equiposGrupo = undefined;
       }
 
     });
@@ -125,15 +126,23 @@ export class JuegoComponent implements OnInit {
     // esta operacion es complicada. Por eso está en calculos
     this.calculos.DameListaJuegos(this.grupo.id)
     .subscribe ( listas => {
+            console.log ('He recibido los juegos');
             this.juegosActivos = listas.activos;
             // Si la lista aun esta vacia la dejo como indefinida para que me
             // salga el mensaje de que aun no hay juegos
-            if (this.juegosActivos.length === 0) {
+            if (listas.activos[0] === undefined) {
               this.juegosActivos = undefined;
+              console.log ('No hay inactivos');
+            } else {
+              this.juegosActivos = listas.activos;
+              console.log ('hay activos');
             }
-            this.juegosInactivos = listas.inactivos;
-            if (this.juegosInactivos.length === 0) {
+            if (listas.inactivos[0] === undefined) {
               this.juegosInactivos = undefined;
+              console.log ('No hay inactivos');
+            } else {
+              this.juegosInactivos = listas.inactivos;
+              console.log ('hay inactivos');
             }
 
     });
@@ -161,7 +170,7 @@ export class JuegoComponent implements OnInit {
   TraeEquiposDelGrupo() {
     this.peticionesAPI.DameEquiposDelGrupo(this.grupo.id)
     .subscribe(equipos => {
-      if (equipos !== undefined) {
+      if (equipos[0] !== undefined) {
         console.log('Hay equipos');
         this.equiposGrupo = equipos;
         console.log(this.equiposGrupo);
@@ -189,6 +198,9 @@ export class JuegoComponent implements OnInit {
     if (this.modoDeJuegoSeleccionado === 'Individual') {
       if (this.alumnosGrupo === undefined) {
         this.isDisabledModo = true;
+        this.snackBar.open('No hay alumnos en este grupo', 'Cerrar', {
+          duration: 5000,
+        });
         console.log('No Hay alumnos, no puedo crear el juego');
       } else {
         console.log('Hay alumnos, puedo crear');
@@ -198,6 +210,9 @@ export class JuegoComponent implements OnInit {
     } else {
       if (this.equiposGrupo === undefined) {
         this.isDisabledModo = true;
+        this.snackBar.open('No hay equipos en este grupo', 'Cerrar', {
+          duration: 5000,
+        });
         console.log('No se puede crear juego pq no hay equipos');
       } else {
         this.isDisabledModo = false;
