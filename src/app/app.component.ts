@@ -44,6 +44,12 @@ export class AppComponent  {
             duration: 5000,
           });
         }
+      },
+      (err) => {
+        console.log ('ERROR');
+        this.snackBar.open('Fallo en la conexión a la base de datos', 'Cerrar', {
+          duration: 5000,
+        });
       }
     );
   }
