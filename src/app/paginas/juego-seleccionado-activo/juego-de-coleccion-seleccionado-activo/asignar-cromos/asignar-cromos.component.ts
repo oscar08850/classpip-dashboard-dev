@@ -389,8 +389,7 @@ export class AsignarCromosComponent implements OnInit {
 
       if (this.cromoSeleccionado.Imagen !== undefined ) {
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.http.get('http://localhost:3000/api/imagenes/ImagenCromo/download/' + this.cromoSeleccionado.Imagen,
-        { responseType: ResponseContentType.Blob })
+        this.peticionesAPI.DameImagenCromo (this.cromoSeleccionado.Imagen)
         .subscribe(response => {
           const blob = new Blob([response.blob()], { type: 'image/jpg'});
 

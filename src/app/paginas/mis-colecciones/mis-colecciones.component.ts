@@ -87,9 +87,7 @@ export class MisColeccionesComponent implements OnInit {
   // Si la coleccion tiene una foto (recordemos que la foto no es obligatoria)
   if (coleccion.ImagenColeccion !== undefined) {
 
-    // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-    this.http.get('http://localhost:3000/api/imagenes/ImagenColeccion/download/' + coleccion.ImagenColeccion,
-    { responseType: ResponseContentType.Blob })
+    this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
     .subscribe(response => {
       const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
