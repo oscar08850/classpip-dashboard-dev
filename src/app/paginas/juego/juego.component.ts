@@ -269,12 +269,12 @@ export class JuegoComponent implements OnInit {
   }
 
   Numerojornadasunavueltaind(alumnosGrupo: Alumno[]) {
-    this.alumnosGrupo.length = alumnosGrupo.length;
+    this.alumnosGrupo.length = alumnosGrupo.length - 1;
     console.log('Miro cuantos alumnos hay en el grupo');
   }
 
   Numerojornadasunavueltaequ(equiposGrupo: Equipo[]) {
-    this.equiposGrupo.length = equiposGrupo.length;
+    this.equiposGrupo.length = equiposGrupo.length - 1;
     console.log('Miro cuantos equipos hay en el grupo');
   }
 
