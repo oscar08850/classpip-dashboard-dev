@@ -223,7 +223,7 @@ export class JuegoComponent implements OnInit {
   }
 
   // Función que usaremos para crear un juego de puntos.
-  //Hay que diferenciar entre los tres juegos porque la URL es diferente
+  // Hay que diferenciar entre los tres juegos porque la URL es diferente
   CrearJuegoDePuntos() {
     this.peticionesAPI.CreaJuegoDePuntos(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupo.id)
     .subscribe(juegoCreado => {
@@ -268,6 +268,15 @@ export class JuegoComponent implements OnInit {
     console.log('Voy a crear juego de competicón');
   }
 
+  Numerojornadasunavueltaind(alumnosGrupo: Alumno[]) {
+    this.alumnosGrupo.length = alumnosGrupo.length;
+    console.log('Miro cuantos alumnos hay en el grupo');
+  }
+
+  Numerojornadasunavueltaequ(equiposGrupo: Equipo[]) {
+    this.equiposGrupo.length = equiposGrupo.length;
+    console.log('Miro cuantos equipos hay en el grupo');
+  }
 
   Finalizar() {
     if (this.juego.Modo === 'Individual') {

@@ -177,6 +177,7 @@
 
               </mat-step>
             </div>
+
           </div>
 
 
@@ -184,7 +185,7 @@
 
           <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Competición'">
 
-            <!-- TERCER PASO: ASIGNACIÓN DE PUNTO AL JUEGO -->
+            <!-- TERCER PASO: SELECTION DE TIPO DE COMPETICION -->
 
             <mat-step>
                 <ng-template matStepLabel><div>Tipo De Competición</div></ng-template>
@@ -206,6 +207,52 @@
                   <button type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
+
+              <div *ngIf="TipoDeJuegoCompeticionSeleccionado === 'liga' && ModoDeJuegoSeleccionado === 'individual'"></div>
+               <!-- CUARTO PASO: NUMERO DE JORNADAS-->
+                <mat-step>
+                  <ng-template matStepLabel><div>Número de jornadas</div></ng-template>
+
+                    <label class="example-container"></label>
+                      <!-- casilla para introducir jornadas -->
+                      <mat-label>Introduzca el Número de jornadas, si desea realizar la liga de una vuelta escriba {{this.alumnosGrupo.length}}</mat-label>
+                      <div class="numerodejornadas">
+
+                        <mat-form-field>
+                          <input matInput placeholder="Introduzca el Número de jornadas" [formControl]="jornadas" required>
+
+                          <mat-error *ngIf="Por favor Introduzca un número de jornadas válido">{{getErrorMessage()}}</mat-error>>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="btnCambiarStep">
+                          <button type="button" class="btn Next"  matStepperNext>Siguiente</button>
+                      </div>
+
+                </mat-step>
+
+                <div *ngIf="TipoDeJuegoCompeticionSeleccionado === 'liga' && ModoDeJuegoSeleccionado === 'equipos'"></div>
+               <!-- CUARTO PASO: NUMERO DE JORNADAS-->
+                <mat-step>
+                  <ng-template matStepLabel><div>Número de jornadas</div></ng-template>
+
+                    <label class="example-container"></label>
+                      <!-- casilla para introducir jornadas -->
+                      <mat-label>Introduzca el Número de jornadas, si desea realizar la liga de una vuelta escriba {{this.equiposGrupo.length}}</mat-label>
+                      <div class="numerodejornadas">
+
+                        <mat-form-field>
+                          <input matInput placeholder="Introduzca el Número de jornadas" [formControl]="jornadas" required>
+
+                          <mat-error *ngIf="Por favor Introduzca un número de jornadas válido">{{getErrorMessage()}}</mat-error>>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="btnCambiarStep">
+                          <button type="button" class="btn Next"  matStepperNext>Siguiente</button>
+                      </div>
+
+                </mat-step>
           </div>
 
 
