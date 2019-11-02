@@ -244,6 +244,11 @@ export class PeticionesAPIService {
     return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeColeccions', juego);
   }
 
+  // CREAMOS UN NUEVO JUEGO DE COMPETICION EN EL GRUPO
+  public CreaJuegoDeCompeticion(juego: Juego, grupoId: number): Observable<Juego> {
+    return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeColeccions', juego);
+  }
+
   // DEVUELVE LOS TIPOS DE PUNTOS CREADOS POR EL PROFESOR
   public DameTiposDePuntos(profesorId: number): Observable<Punto[]> {
     return this.http.get<Punto[]>(this.APIUrlProfesores + '/' + profesorId + '/puntos');

@@ -246,6 +246,16 @@ export class JuegoComponent implements OnInit {
     });
   }
 
+  CrearJuegoDeCompeticion() {
+    this.peticionesAPI.CreaJuegoDeCompeticion(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupo.id)
+    .subscribe(juegoCreado => {
+      this.juego = juegoCreado;
+      console.log(juegoCreado);
+      console.log('Juego creado correctamente');
+      this.sesion.TomaJuego(this.juego);
+      this.juegoCreado = true;
+    });
+  }
   // Si decidimos crear un juego de puntos, lo crearemos ya en la base de datos y posteriormente le añadiremos puntos y niveles
   // Si decidimos crear un juego de colección no haremos el POST en este paso, sino en el siguente cuando indiquemos la colección
   // Si decidimos crear un juego de competición tampoco haremos el POST en este paso, sino cuando indiquemos el tipo de competición
@@ -257,6 +267,9 @@ export class JuegoComponent implements OnInit {
     } else if (this.tipoDeJuegoSeleccionado === 'Juego De Colección') {
       console.log('Voy a crear juego de colección');
       this.CrearJuegoDeColeccion();
+    } else if (this.tipoDeJuegoSeleccionado === 'Juego De Competición') {
+      console.log('Voy a crear juego de Competición');
+      this.CrearJuegoDeCompeticion();
     }
     this.snackBar.open(this.tipoDeJuegoSeleccionado + ' creado correctamente', 'Cerrar', {
       duration: 2000,
@@ -265,18 +278,18 @@ export class JuegoComponent implements OnInit {
 
   TipoDeJuegoCompeticionSeleccionado(tipoCompeticion: ChipColor) {
     this.tipoJuegoCompeticionSeleccionado = tipoCompeticion.nombre;
-    console.log('Voy a crear juego de competicón');
+    console.log('Voy a crear juego de competicón de clase:');
   }
 
-  Numerojornadasunavueltaind(alumnosGrupo: Alumno[]) {
-    this.alumnosGrupo.length = alumnosGrupo.length - 1;
-    console.log('Miro cuantos alumnos hay en el grupo');
-  }
+  // Numerojornadasunavueltaind(alumnosGrupo: Alumno[]) {
+  //   this.alumnosGrupo.length = alumnosGrupo.length - 1;
+  //   console.log('Miro cuantos alumnos hay en el grupo');
+  // }
 
-  Numerojornadasunavueltaequ(equiposGrupo: Equipo[]) {
-    this.equiposGrupo.length = equiposGrupo.length - 1;
-    console.log('Miro cuantos equipos hay en el grupo');
-  }
+  // Numerojornadasunavueltaequ(equiposGrupo: Equipo[]) {
+  //   this.equiposGrupo.length = equiposGrupo.length - 1;
+  //   console.log('Miro cuantos equipos hay en el grupo');
+  // }
 
   Finalizar() {
     if (this.juego.Modo === 'Individual') {
