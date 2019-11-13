@@ -76,7 +76,7 @@ export class CrearColeccionComponent implements OnInit {
 
     ];
 
-    //opcionSeleccionadaProbabilidad: string;
+    // opcionSeleccionadaProbabilidad: string;
 
       // Opciones para mostrar en la lista desplegable para seleccionar el tipo de nivel que listar
     opcionesNivel: OpcionSeleccionada[] = [
@@ -134,7 +134,7 @@ export class CrearColeccionComponent implements OnInit {
 
     // Hace el POST del equipo
     this.peticionesAPI.CreaColeccion (new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
-    //this.peticionesAPI.CreaColeccion(new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
+    // this.peticionesAPI.CreaColeccion(new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
     .subscribe((res) => {
       if (res != null) {
         console.log ('COLECCION CREADA: ' + res.id );
@@ -328,13 +328,13 @@ export class CrearColeccionComponent implements OnInit {
     if (this.opcionSeleccionadaNivel === 'Plata') {
       this.nivelCromo = 'Plata';
       this.probabilidadCromo = 'Alta';
-      //this.opcionSeleccionadaProbabilidad = 'Alta';
+      // this.opcionSeleccionadaProbabilidad = 'Alta';
     }
 
     if (this.opcionSeleccionadaNivel === 'Bronce') {
       this.nivelCromo = 'Bronce';
       this.probabilidadCromo = 'Muy Alta';
-      //this.opcionSeleccionadaProbabilidad = 'Muy Alta';
+      // this.opcionSeleccionadaProbabilidad = 'Muy Alta';
     }
   }
 
