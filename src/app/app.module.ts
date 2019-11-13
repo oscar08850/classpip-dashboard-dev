@@ -108,6 +108,7 @@ import { ElementosComponent } from './elementos/elementos.component';
 import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.component';
 import { DialogoComponent } from './desarrolladores/dialogo/dialogo.component';
 import { EstilosComponent } from './estilos/estilos.component';
+import { EditarCromoDialogComponent } from './paginas/mis-colecciones/editar-cromo-dialog/editar-cromo-dialog.component';
 
 
 @NgModule({
@@ -163,7 +164,8 @@ import { EstilosComponent } from './estilos/estilos.component';
     ElementosComponent,
     DesarrolladoresComponent,
     DialogoComponent,
-    EstilosComponent
+    EstilosComponent,
+    EditarCromoDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -202,7 +204,7 @@ import { EstilosComponent } from './estilos/estilos.component';
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
-    DialogoComponent ],
+    EditarCromoDialogComponent, DialogoComponent ],
   providers: [],
   bootstrap: [AppComponent]
 })

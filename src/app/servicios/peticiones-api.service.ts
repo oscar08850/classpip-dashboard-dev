@@ -312,13 +312,21 @@ export class PeticionesAPIService {
 
   // ELIMINAMOS LA COLECCIÓN CUYO IDENTIFICADOR PASAMOS COMO PARÁMETRO
   public BorraColeccion(coleccionId: number, profesorId: number): Observable<any> {
+    // console.log('JODER');
     return this.http.delete<any>(this.APIUrlProfesores + '/' + profesorId + '/coleccions/' + coleccionId);
   }
-
+  public BorrarImagenColeccion(ImagenColeccion: string): Observable<any> {
+    console.log('Voy a quitar la foto');
+    return this.http.delete<any>(this.APIUrlImagenColeccion + '/files/' + ImagenColeccion);
+  }
 
   // ELIMINAMOS UN CROMO DETERMINADO DE UNA COLECCIÓN CONCRETA
   public BorrarCromo(cromoId: number, coleccionId: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlColecciones + '/' + coleccionId + '/cromos/' + cromoId);
+  }
+
+  public BorrarImagenCromo(ImagenCromo: string): Observable<any> {
+    return this.http.delete<any>(this.APIUrlImagenCromo + '/files/' + ImagenCromo);
   }
 
    // SE USA PARA EDITAR LA COLECCIÓN DEL PROFESOR. AMBOS IDENTIFICADORES LOS PASAMOS COMO PARÁMETRO
