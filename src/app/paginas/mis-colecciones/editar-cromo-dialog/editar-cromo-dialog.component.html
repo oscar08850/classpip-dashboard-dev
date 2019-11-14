@@ -1,73 +1,58 @@
-<mat-dialog-content>
-  <p>
-    editar-cromo-dialog works!
-  </p>
-</mat-dialog-content>
-R
-<div class="titulo"><h2>Editar Cromo</h2></div>
 
-<div class="contenedor contenedor3">
-<mat-card class="panel">
+<div class="titulo">Editar cromo</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+  <div class= "enColumna">
+  <mat-card class="panel">
     <mat-card-content>
 
-        <div class="contenedor2" style=" text-align: left;">
-            <div class="contenedor3">
 
-          <div>
             <div class="texto" style=" text-align: left;">
                 <mat-form-field style="margin: 15px;">
-                    <input matInput type="text" placeholder="Nombre" required [(ngModel)]="nombreCromo">
-
-                  </mat-form-field>
-              </div>
-
-
-
-              <mat-form-field style="margin: 15px;">
-                  <mat-label style="color: white;">Nivel </mat-label>
-                    <select matNativeControl [(ngModel)]="opcionSeleccionadaNivel" name="opcion" (change) = "OpcionNivelSeleccionado()">
-                      <option   *ngFor="let opcion of opcionesNivel" [value]="opcion.id">
-                          {{opcion.nombre}}
-                      </option>
-                    </select>
+                    <mat-label style="color: white;">Nombre </mat-label>
+                    <input matInput type="text" style="color: yellow;" placeholder="Nombre" required [(ngModel)]="nombreCromo" (change) = "cambios=true">
                 </mat-form-field>
-
-
-                <mat-form-field style="margin: 15px; ">
-                  <mat-label  style="color: white;">Probabilidad </mat-label>
-                    <select matNativeControl [(ngModel)]="probabilidadCromo" name="opcion">
-                      <option *ngFor="let opcion of opcionesProbabilidad" [value]="opcion.id">
-                          {{opcion.nombre}}
-                      </option>
-                    </select>
-                </mat-form-field>
-
-
             </div>
-             <div class="agregarImagen" >
-                <div>
+            <mat-form-field style="margin: 15px;">
+                  <mat-label style="color: white;">Nivel </mat-label>
+                    <select matNativeControl style="color: yellow;" [(ngModel)]="opcionSeleccionadaNivel" name="opcion" (change) = "OpcionNivelSeleccionado()">
+                      <option  style="color: black" *ngFor="let opcion of opcionesNivel" [value]="opcion.id">
+                          {{opcion.nombre}}
+                      </option>
+                    </select>
+            </mat-form-field>
+            <mat-form-field style="margin: 15px; ">
+                  <mat-label  style="color: white;">Probabilidad </mat-label>
+                    <select matNativeControl style="color: yellow;" [(ngModel)]="probabilidadCromo" name="opcion" (change) = "cambios=true">
+                      <option style="color: black" *ngFor="let opcion of opcionesProbabilidad" [value]="opcion.id">
+                          {{opcion.nombre}}
+                      </option>
+                    </select>
+            </mat-form-field>
+
+            <div class="enFila" style="width: 70%">
+
                   <input #file id = "inputCromo" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromo($event)" style="display:none">
                   <img class="imagen" *ngIf="imagenCromo" hight = "150" width = "150" mat-card-image [src]="imagenCromo">
                   <button (click) = "ActivarInputCromo()" type="button" class="btn Agregar">
                    Agregar imagen <i class="material-icons">add_photo_alternate</i>
                   </button>
-                </div>
-             </div>
+
             </div>
-          <div>
-              <div class="elemento">
-                  <button type="button" class="btn Aceptar"  (click)= "EditarCromo()">Aceptar Cambios <i class="material-icons">
+
+            <button *ngIf="cambios" type="button" class="btn Aceptar"  (click)= "EditarCromo()">Aceptar Cambios <i class="material-icons">
                     check </i></button>
 
-            </div>
 
-          </div>
-        </div>
-</mat-card-content>
-</mat-card>
-</div>
-<mat-dialog-actions align= "end">
+
+    </mat-card-content>
+  </mat-card>
+
+  <mat-dialog-actions align= "end">
   <!-- <button mat-button [mat-dialog-close] class="btn Cerrar">Cerrar</button> -->
-  <button mat-button routerLink= "editarColeccion" (click)= "Cerrar();" class="btn Cerrar">Cerrar</button>
-</mat-dialog-actions>
+    <button mat-button routerLink= "editarColeccion" (click)= "Cerrar();" class="btn Cerrar">Cerrar</button>
+  </mat-dialog-actions>
+</div>
+</div>
 

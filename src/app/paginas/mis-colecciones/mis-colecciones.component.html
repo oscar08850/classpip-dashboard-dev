@@ -1,6 +1,5 @@
-R
-<div class="titulo"><h2>Mis Colecciones</h2></div>
-<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+<div class="titulo">Mis colecciones</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
 
 <div class="contenedor">
     <mat-card class="panel">
@@ -13,28 +12,18 @@ R
                   {{coleccion.Nombre}}
                 </mat-panel-title>
               </mat-expansion-panel-header>
-                <div class="contenedor2">
-                    <div>
-                        <img class ="logo" *ngIf="imagenColeccion" mat-card-image [src]="imagenColeccion" >
+                <div class="enFila" style = "width: 100%">
+                    <div class= "enColumna">
+                      <img class ="logo" *ngIf="imagenColeccion" mat-card-image [src]="imagenColeccion" >
+                      <span style="font-weight: bold; font-size: 130%;"> {{numeroDeCromos}} cromos</span>
                     </div>
-                    <div style="margin-right: 20%">
-                    <span style="font-weight: bold; margin-left: 16px; font-size: 130%;">Número de cromos</span>
-
-                    <div>
-                      <span style="margin-left: 12%; font-size: 110%;"> {{numeroDeCromos}} </span>
-                    </div>
-
-                    </div>
-                    <div class="contenedor3" style="margin-right: 2% ">
-                      <div class="elemento">
+                    <div class="enColumna">
                         <button type="button" class="btn Editar" style="width: 180px; "routerLink= "editarColeccion" (click) = "GuardarColeccion(coleccion)">Editar Colección <i class="material-icons">
                           edit </i>  </button>
-                      </div>
-                      <div class="elemento">
+
                         <button type="button" class="btn Eliminar" style="width: 180px; " (click) = "AbrirDialogoConfirmacionBorrarColeccion(coleccion)">Eliminar Colección <i class="material-icons">
                           delete
                           </i></button>
-                      </div>
 
                     </div>
                 </div>

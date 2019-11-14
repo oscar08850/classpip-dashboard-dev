@@ -385,8 +385,6 @@ export class AsignarCromosComponent implements OnInit {
     // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
     GET_ImagenCromo() {
 
-
-
       if (this.cromoSeleccionado.Imagen !== undefined ) {
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
         this.peticionesAPI.DameImagenCromo (this.cromoSeleccionado.Imagen)

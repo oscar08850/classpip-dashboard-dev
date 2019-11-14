@@ -130,35 +130,52 @@ export class MisColeccionesComponent implements OnInit {
   // Envialos la colecció y los cromos al servicio sesión porque los necesitaremos en los componentes
   // editar y agregar
   GuardarColeccion(coleccion: Coleccion) {
+    this.DameCromosEImagenDeLaColeccion(coleccion);
     this.sesion.TomaColeccion(coleccion);
     this.sesion.TomaCromos (this.cromosColeccion);
   }
 
-  // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
-  BorrarColeccion(coleccion: Coleccion) {
-    const formData: FormData = new FormData();
-    formData.append(coleccion.ImagenColeccion, this.file);
-    console.log(formData);
+  // // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
+  // BorrarColeccion(coleccion: Coleccion) {
+  //   const formData: FormData = new FormData();
+  //   formData.append(coleccion.ImagenColeccion, this.file);
+  //   console.log(formData);
+  //   this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
+  //   .subscribe(() => {
+  //     this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
+  //     // this.ColeccionesEliminadas(coleccion);
+  //     console.log('Coleccion borrada correctamente');
+  //     console.log(this.coleccionesProfesor);
+  //   });
+  //   console.log(coleccion.ImagenColeccion);
+  //   this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe(() => {
+  //     this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
+  //     console.log('he quitado la foto????');
+  //   });
+  //   this.peticionesAPI.DameCromosColeccion(coleccion.id).subscribe( listaCromos => {
+  //     for (let i = 0; i < (listaCromos.length); i++) {
+  //       this.peticionesAPI.BorrarImagenCromo(listaCromos[i].Imagen).subscribe(() => {
+  //         this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
+  //       });
+  //     }
+  //   });
+  // }
+
+
+   // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
+   BorrarColeccion(coleccion: Coleccion) {
+
+
     this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
-    .subscribe(() => {
-      this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
-      // this.ColeccionesEliminadas(coleccion);
-      console.log('Coleccion borrada correctamente');
-      console.log(this.coleccionesProfesor);
-    });
-    console.log(coleccion.ImagenColeccion);
-    this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe(() => {
-      this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
-      console.log('he quitado la foto????');
-    });
-    this.peticionesAPI.DameCromosColeccion(coleccion.id).subscribe( listaCromos => {
-      for (let i = 0; i < (listaCromos.length); i++) {
-        this.peticionesAPI.BorrarImagenCromo(listaCromos[i].Imagen).subscribe(() => {
-          this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
-        })
-      }
-    });
+    .subscribe();
+
+    this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe();
+    for (let i = 0; i < (this.cromosColeccion.length); i++) {
+        this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].Imagen).subscribe();
+    }
+    this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
   }
+
 
 
 

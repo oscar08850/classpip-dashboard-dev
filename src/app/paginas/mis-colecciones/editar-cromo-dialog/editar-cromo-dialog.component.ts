@@ -13,6 +13,8 @@ import { ColeccionService } from '../../../servicios/index';
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../../servicios/index';
 
+import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+
 export interface OpcionSeleccionada {
   nombre: string;
   id: string;
@@ -44,6 +46,9 @@ export class EditarCromoDialogComponent implements OnInit {
 
   // tslint:disable-next-line:ban-types
   imagenCargadoCromo: Boolean = false;
+
+  // tslint:disable-next-line:ban-types
+  cambios: Boolean = false;
 
     // Opciones para mostrar en la lista desplegable para seleccionar el tipo de juego que listar
     opcionesProbabilidad: OpcionSeleccionada[] = [
@@ -80,6 +85,7 @@ export class EditarCromoDialogComponent implements OnInit {
 
   ngOnInit() {
     this.cromo = this.data.cr;
+    console.log ('recibo cromo ' + this.cromo.Imagen);
     this.nombreCromo = this.cromo.Nombre;
     this.nivelCromo = this.cromo.Nivel;
     this.probabilidadCromo = this.cromo.Probabilidad;
@@ -101,35 +107,32 @@ export class EditarCromoDialogComponent implements OnInit {
     .subscribe((res) => {
       if (res != null) {
         this.cromo = res;
-        this.cromosEditados.push (res);
-        console.log('nombre del cromo + nivel' + this.cromosEditados[0].Nombre + this.cromosEditados[0].Nivel);
+        // this.cromosEditados.push (res);
+        // console.log('nombre del cromo + nivel' + this.cromosEditados[0].Nombre + this.cromosEditados[0].Nivel);
         if (this.imagenCargadoCromo === true) {
           // HACEMOS EL POST DE LA NUEVA IMAGEN EN LA BASE DE DATOS
+          console.log ('Nueva imagen');
           const formData: FormData = new FormData();
           formData.append(this.nombreImagenCromo, this.fileCromo);
           this.peticionesAPI.PonImagenCromo(formData)
           .subscribe(() => console.log('Imagen cargado'));
-        }
-        console.log(this.nombreImagenCromo);
-        console.log(ImagenAntigua);
-        if (this.nombreImagenCromo !== ImagenAntigua) {
-          this.peticionesAPI.BorrarImagenCromo(ImagenAntigua).subscribe(() => {
-
-          });
+          console.log(this.nombreImagenCromo);
+          console.log(ImagenAntigua);
+          this.peticionesAPI.BorrarImagenCromo(ImagenAntigua).subscribe();
         }
       } else {
         console.log('fallo editando');
       }
     });
     // this.dialogRef.close(this.cromosEditados);
+    this.cambios = false;
  }
 
   TraeImagenCromo() {
 
     if (this.cromo.Imagen !== undefined ) {
         // Busca en la base de datos la imágen con el nombre registrado en cromo.Imagen y la recupera
-        this.http.get('http://localhost:3000/api/imagenes/ImagenCromo/download/' + this.cromo.Imagen,
-        { responseType: ResponseContentType.Blob })
+        this.peticionesAPI.DameImagenCromo (this.cromo.Imagen)
         .subscribe(response => {
           const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
@@ -161,6 +164,7 @@ export class EditarCromoDialogComponent implements OnInit {
       console.log('ya Cromo');
       this.imagenCargadoCromo = true;
       this.imagenCromo = reader.result.toString();
+      this.cambios = true;
       };
   }
 
@@ -196,12 +200,26 @@ export class EditarCromoDialogComponent implements OnInit {
       this.probabilidadCromo = 'Muy Alta';
       // this.opcionSeleccionadaProbabilidad = 'Muy Alta';
     }
+    this.cambios = true;
   }
+  Cerrar(): void {
 
-   Cerrar() {
-     this.dialogRef.close(this.cromosEditados);
-   }
+    if (this.cambios) {
+      const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+        height: '150px',
+        data: {
+          mensaje: 'No quieres aceptar los cambios que has hecho'
+        }
+      });
 
-
+      dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.dialogRef.close(this.cromo);
+        }
+      });
+    } else {
+      this.dialogRef.close(this.cromo);
+    }
+  }
 
 }

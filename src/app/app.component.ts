@@ -4,6 +4,7 @@ import { SesionService} from './servicios/sesion.service';
 import { PeticionesAPIService} from './servicios/index';
 import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 
+
 // USARE ESTO PARA NAVEGAR A LA PAGINA DE INICIO
 import { Router } from '@angular/router';
 
@@ -24,6 +25,7 @@ export class AppComponent  {
               public snackBar: MatSnackBar) { }
 
   Autentificar() {
+
     this.peticionesAPI.DameProfesor(this.nombre, this.apellido).subscribe(
       (res) => {
         if (res[0] !== undefined) {
