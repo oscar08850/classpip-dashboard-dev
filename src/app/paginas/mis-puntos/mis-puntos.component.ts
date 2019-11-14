@@ -181,8 +181,7 @@ export class MisPuntosComponent implements OnInit {
     if (insigna.Imagen !== undefined) {
 
       // Busca en la base de datos la imágen con el nombre registrado en insingnia.Imagen y la recupera
-      this.http.get('http://localhost:3000/api/imagenes/ImagenInsignia/download/' + insigna.Imagen,
-      { responseType: ResponseContentType.Blob })
+      this.peticionesAPI.DameImagenInsignia (insigna.Imagen)
       .subscribe(response => {
         const blob = new Blob([response.blob()], { type: 'image/jpg'});
 

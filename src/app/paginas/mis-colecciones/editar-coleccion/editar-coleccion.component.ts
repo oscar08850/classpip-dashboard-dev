@@ -98,8 +98,7 @@ export class EditarColeccionComponent implements OnInit {
 
       if (this.cromo.Imagen !== undefined ) {
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.http.get('http://localhost:3000/api/imagenes/ImagenCromo/download/' + this.cromo.Imagen,
-        { responseType: ResponseContentType.Blob })
+        this.peticionesAPI.DameImagenCromo (this.cromo.Imagen)
         .subscribe(response => {
           const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
@@ -255,8 +254,7 @@ export class EditarColeccionComponent implements OnInit {
   if (coleccion.ImagenColeccion !== undefined) {
 
     // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-    this.http.get('http://localhost:3000/api/imagenes/ImagenColeccion/download/' + coleccion.ImagenColeccion,
-    { responseType: ResponseContentType.Blob })
+    this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
     .subscribe(response => {
       const blob = new Blob([response.blob()], { type: 'image/jpg'});
 

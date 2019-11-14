@@ -108,8 +108,7 @@ export class EquipoSeleccionadoJuegoDePuntosComponent implements OnInit {
   GET_ImagenPerfil() {
 
     if (this.equipoSeleccionado.FotoEquipo !== undefined ) {
-      this.http.get('http://localhost:3000/api/imagenes/LogosEquipos/download/' + this.equipoSeleccionado.FotoEquipo,
-      { responseType: ResponseContentType.Blob })
+      this.peticionesAPI.DameLogoEquipo (this.equipoSeleccionado.FotoEquipo)
       .subscribe(response => {
 
         const blob = new Blob([response.blob()], { type: 'image/jpg'});

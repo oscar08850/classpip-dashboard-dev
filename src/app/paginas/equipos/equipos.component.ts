@@ -130,8 +130,8 @@ export class EquiposComponent implements OnInit {
       // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
      //Esto no consigo convertirlo en una funcion para los servicios
       // this.peticionesAPI.DameLogoEquipo (equipo.FotoEquipo)
-      this.http.get('http://localhost:3000/api/imagenes/LogosEquipos/download/' + equipo.FotoEquipo,
-      { responseType: ResponseContentType.Blob })
+      this.peticionesAPI.DameLogoEquipo (equipo.FotoEquipo)
+
       .subscribe(response => {
         const blob = new Blob([response.blob()], { type: 'image/jpg'});
 

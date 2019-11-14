@@ -74,8 +74,7 @@ export class EditarEquipoComponent implements OnInit {
   GET_Logo() {
 
     if (this.equipo.FotoEquipo !== undefined ) {
-      this.http.get('http://localhost:3000/api/imagenes/LogosEquipos/download/' + this.equipo.FotoEquipo,
-      { responseType: ResponseContentType.Blob })
+      this.peticionesAPI.DameLogoEquipo (this.equipo.FotoEquipo)
       .subscribe(response => {
 
         const blob = new Blob([response.blob()], { type: 'image/jpg'});

@@ -102,8 +102,7 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
   GET_ImagenPerfil() {
 
     if (this.alumnoSeleccionado.ImagenPerfil !== undefined ) {
-      this.http.get('http://localhost:3000/api/imagenes/imagenAlumno/download/' + this.alumnoSeleccionado.ImagenPerfil,
-      { responseType: ResponseContentType.Blob })
+      this.peticionesAPI.DameImagenAlumno (this.alumnoSeleccionado.ImagenPerfil)
       .subscribe(response => {
 
         const blob = new Blob([response.blob()], { type: 'image/jpg'});
