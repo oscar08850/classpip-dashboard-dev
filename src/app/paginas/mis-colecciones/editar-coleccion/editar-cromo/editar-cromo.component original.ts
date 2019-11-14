@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material';
 import { ResponseContentType, Http, Response } from '@angular/http';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
 // Clases
 import { Cromo, Coleccion } from '../../../../clases/index';
@@ -70,8 +69,7 @@ export class EditarCromoComponent implements OnInit {
               private location: Location,
               private sesion: SesionService,
               private peticionesAPI: PeticionesAPIService,
-              private http: Http,
-              private formBuilder: FormBuilder,
+              private http: Http
   ) { }
 
   ngOnInit() {
@@ -81,12 +79,11 @@ export class EditarCromoComponent implements OnInit {
     this.probabilidadCromo = this.cromo.Probabilidad;
 
     this.opcionSeleccionadaNivel = this.cromo.Nivel;
-    // this.opcionSeleccionadaProbabilidad = this.cromo.Probabilidad;
+    this.opcionSeleccionadaProbabilidad = this.cromo.Probabilidad;
     console.log(this.cromo);
     // Cargo el imagen del cromo
     this.TraeImagenCromo();
   }
-
 
   EditarCromo() {
         console.log('Entro a editar');
@@ -116,7 +113,8 @@ export class EditarCromoComponent implements OnInit {
 
     if (this.cromo.Imagen !== undefined ) {
           // Busca en la base de datos la imágen con el nombre registrado en cromo.Imagen y la recupera
-          this.peticionesAPI.DameImagenCromo (this.cromo.Imagen)
+          this.http.get('http://localhost:3000/api/imagenes/ImagenCromo/download/' + this.cromo.Imagen,
+          { responseType: ResponseContentType.Blob })
           .subscribe(response => {
             const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
@@ -154,51 +152,63 @@ export class EditarCromoComponent implements OnInit {
         };
   }
 
+/*
+  OpcionProbabilidadSeleccionada() {
 
+        // Opcion selecionada para probabilidad
+        if (this.opcionSeleccionadaProbabilidad === 'Muy Baja') {
+          this.probabilidadCromo = 'Muy Baja';
+        }
+        if (this.opcionSeleccionadaProbabilidad === 'Baja') {
+          this.probabilidadCromo = 'Baja';
+        }
+
+        if (this.opcionSeleccionadaProbabilidad === 'Media') {
+          this.probabilidadCromo = 'Media';
+        }
+
+        if (this.opcionSeleccionadaProbabilidad === 'Alta') {
+          this.probabilidadCromo = 'Alta';
+        }
+
+        if (this.opcionSeleccionadaProbabilidad === 'Muy Alta') {
+          this.probabilidadCromo = 'Muy Alta';
+        }
+  }
+ */
   OpcionNivelSeleccionado() {
-        console.log('AAAA' + this.opcionSeleccionadaNivel);
+        console.log(this.opcionSeleccionadaNivel);
         // Opcion selecionada para nivel
         if (this.opcionSeleccionadaNivel === 'Diamante') {
           this.nivelCromo = 'Diamante';
           this.probabilidadCromo = 'Muy Baja';
-         // this.opcionSeleccionadaProbabilidad = 'Muy Baja';
+          this.opcionSeleccionadaProbabilidad = 'Muy Baja';
 
         }
         if (this.opcionSeleccionadaNivel === 'Platino') {
           this.nivelCromo = 'Platino';
           this.probabilidadCromo = 'Baja';
-          // this.opcionSeleccionadaProbabilidad = 'Baja';
+          this.opcionSeleccionadaProbabilidad = 'Baja';
         }
 
         if (this.opcionSeleccionadaNivel === 'Oro') {
           this.nivelCromo = 'Oro';
           this.probabilidadCromo = 'Media';
-          // this.opcionSeleccionadaProbabilidad = 'Media';
+          this.opcionSeleccionadaProbabilidad = 'Media';
         }
 
         if (this.opcionSeleccionadaNivel === 'Plata') {
           this.nivelCromo = 'Plata';
           this.probabilidadCromo = 'Alta';
-          // this.opcionSeleccionadaProbabilidad = 'Alta';
+          this.opcionSeleccionadaProbabilidad = 'Alta';
         }
 
         if (this.opcionSeleccionadaNivel === 'Bronce') {
           this.nivelCromo = 'Bronce';
           this.probabilidadCromo = 'Muy Alta';
-          // this.opcionSeleccionadaProbabilidad = 'Muy Alta';
+          this.opcionSeleccionadaProbabilidad = 'Muy Alta';
         }
   }
-  // Esta función se utiliza para controlar si el botón de siguiente del stepper esta desativado.
-  // Si en alguno de los inputs no hay nada, esta disabled. Sino, podremos clicar.
-  // Disabled() {
-
-  //   if (this.nombreCromo === undefined || this.probabilidadCromo === undefined || this.nivelCromo === undefined ||
-  //         this.nivelCromo === '' || this.probabilidadCromo === '' || this.nivelCromo === null) {
-  //         this.isDisabledCromo = true;
-  //   } else {
-  //         this.isDisabledCromo = false;
-  //     }
-  //   }
 
   goBack() {
     this.location.back();

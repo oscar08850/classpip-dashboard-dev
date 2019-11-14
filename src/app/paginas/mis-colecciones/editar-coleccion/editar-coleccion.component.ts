@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ResponseContentType, Http, Response } from '@angular/http';
 import { AgregarCromoDialogComponent } from '../agregar-cromo-dialog/agregar-cromo-dialog.component';
+import { EditarCromoDialogComponent } from '../editar-cromo-dialog/editar-cromo-dialog.component' ;
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
 // Clases
@@ -160,6 +161,33 @@ export class EditarColeccionComponent implements OnInit {
      });
   }
 
+  // TAMBIEN EDITAREMOS EL CROMO EN UN DIALOGO
+  AbrirDialogoEditarCromo(cromo: Cromo): void {
+
+    const dialogRef = this.dialog.open ( EditarCromoDialogComponent , {
+      width: '900px',
+      maxHeight: '600px',
+      data: {
+        cr : cromo,
+        coleccionId: this.coleccion.id,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe( cromosEditados => {
+      console.log ('volvemos de editar cromos ' + cromosEditados.length);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0 ; i < cromosEditados.length; i++) {
+        this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromosEditados[i].id);
+        this.cromosColeccion.push (cromosEditados[i]);
+       }
+      this.TraeImagenesCromos();
+      // this.cromosColeccion = this.sesion.DameCromos();
+      // this.coleccion = this.sesion.DameColeccion();
+      this.TraeImagenesColeccion(this.coleccion);
+
+    });
+  }
+
   // Guardo cromo en sesión, porque lo necesitará el componente de editar cromo
   GuardarCromo(cromo: Cromo) {
     console.log('voy a enviar');
@@ -210,6 +238,10 @@ export class EditarColeccionComponent implements OnInit {
       // Sin embargo, no funciona.
 
     });
+    this.peticionesAPI.BorrarImagenCromo(cromo.Imagen).subscribe(() => {
+      this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
+      this.TraeImagenesCromos();
+    })
   }
 
 
@@ -249,7 +281,7 @@ export class EditarColeccionComponent implements OnInit {
   this.cromosColeccion.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
   this.TraeImagenesCromos();
 
-}
+  }
   goBack() {
     this.location.back();
   }

@@ -10,7 +10,7 @@ R
               <input #file id = "input" type="file" accept= 'image/*' (change)="Mostrar($event)" style="display:none">
               <img class ="logo" *ngIf="imagenColeccion" hight = "200" width = "200" mat-card-image [src]="imagenColeccion" >
             </div>
-        <button (click) = "ActivarInput()" type="button"  class="btn Juego">
+        <button (click) = "ActivarInputCromo()" type="button"  class="btn Juego">
           Agregar Imagen<i class="material-icons">add_photo_alternate</i>
         </button>
       </div>
@@ -61,7 +61,7 @@ R
             </div>
             <div class="elementoCromo">
 
-              <button type="button" style="width: 50px !important;" class="btn Editar" routerLink= "editarCromo" (click) = "GuardarCromo(cromo)">
+              <button type="button" style="width: 50px !important;" class="btn Editar" (click) = "AbrirDialogoEditarCromo(cromo)">
                 <i style="margin-top: 3px; margin-right: 8px;" class="material-icons">edit </i>
               </button>
 

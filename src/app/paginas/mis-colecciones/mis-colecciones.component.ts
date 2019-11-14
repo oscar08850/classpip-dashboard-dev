@@ -33,6 +33,8 @@ export class MisColeccionesComponent implements OnInit {
 
   numeroDeCromos: number;
 
+  file: File;
+
   // PARA DIÁLOGO DE CONFIRMACIÓN
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
@@ -134,12 +136,27 @@ export class MisColeccionesComponent implements OnInit {
 
   // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
   BorrarColeccion(coleccion: Coleccion) {
+    const formData: FormData = new FormData();
+    formData.append(coleccion.ImagenColeccion, this.file);
+    console.log(formData);
     this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
     .subscribe(() => {
       this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
-      //this.ColeccionesEliminadas(coleccion);
+      // this.ColeccionesEliminadas(coleccion);
       console.log('Coleccion borrada correctamente');
       console.log(this.coleccionesProfesor);
+    });
+    console.log(coleccion.ImagenColeccion);
+    this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe(() => {
+      this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
+      console.log('he quitado la foto????');
+    });
+    this.peticionesAPI.DameCromosColeccion(coleccion.id).subscribe( listaCromos => {
+      for (let i = 0; i < (listaCromos.length); i++) {
+        this.peticionesAPI.BorrarImagenCromo(listaCromos[i].Imagen).subscribe(() => {
+          this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
+        })
+      }
     });
   }
 
