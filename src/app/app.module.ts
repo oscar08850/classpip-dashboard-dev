@@ -76,7 +76,6 @@ import { EditarPuntoComponent } from './paginas/mis-puntos/editar-punto/editar-p
 import { EditarInsigniaComponent } from './paginas/mis-puntos/editar-insignia/editar-insignia.component';
 import { EditarColeccionComponent } from './paginas/mis-colecciones/editar-coleccion/editar-coleccion.component';
 import { AgregarCromoDialogComponent } from './paginas/mis-colecciones/agregar-cromo-dialog/agregar-cromo-dialog.component';
-import { EditarCromoComponent } from './paginas/mis-colecciones/editar-coleccion/editar-cromo/editar-cromo.component';
 import { AsignacionColeccionJuegoComponent } from './paginas/juego/asignacion-coleccion-juego/asignacion-coleccion-juego.component';
 // tslint:disable-next-line:max-line-length
 import { DialogMostrarCromosComponent } from './paginas/juego/asignacion-coleccion-juego/dialog-mostrar-cromos/dialog-mostrar-cromos.component';
@@ -147,7 +146,6 @@ import { EditarCromoDialogComponent } from './paginas/mis-colecciones/editar-cro
     EditarInsigniaComponent,
     EditarColeccionComponent,
     AgregarCromoDialogComponent,
-    EditarCromoComponent,
     AsignacionColeccionJuegoComponent,
     DialogMostrarCromosComponent,
     JuegoDeColeccionSeleccionadoActivoComponent,

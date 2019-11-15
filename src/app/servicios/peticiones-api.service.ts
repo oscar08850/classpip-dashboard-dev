@@ -200,9 +200,7 @@ export class PeticionesAPIService {
     return this.httpImagenes.get(this.APIUrlImagenColeccion + '/download/' + imagen,
       { responseType: ResponseContentType.Blob });
   }
-  public ModificaColeccion(coleccion: Coleccion, profesorId: number, coleccionId: number): Observable<Coleccion> {
-    return this.http.put<Coleccion>(this.APIUrlProfesores + '/' + profesorId + '/coleccions/' + coleccionId, coleccion);
-  }
+
   public BorraColeccion(coleccionId: number, profesorId: number): Observable<any> {
     // console.log('JODER');
     return this.http.delete<any>(this.APIUrlProfesores + '/' + profesorId + '/coleccions/' + coleccionId);
@@ -225,6 +223,7 @@ export class PeticionesAPIService {
   }
   public DameCromosColeccion(coleccionId: number): Observable<Cromo[]> {
     return this.http.get<Cromo[]>(this.APIUrlColecciones + '/' + coleccionId + '/cromos');
+  }
   public BorrarImagenColeccion(ImagenColeccion: string): Observable<any> {
     console.log('Voy a quitar la foto');
     return this.http.delete<any>(this.APIUrlImagenColeccion + '/files/' + ImagenColeccion);
@@ -238,6 +237,7 @@ export class PeticionesAPIService {
    public ModificaColeccion(coleccion: Coleccion, profesorId: number, coleccionId: number): Observable<Coleccion> {
     return this.http.put<Coleccion>(this.APIUrlProfesores + '/' + profesorId + '/coleccions/' + coleccionId, coleccion);
   }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////

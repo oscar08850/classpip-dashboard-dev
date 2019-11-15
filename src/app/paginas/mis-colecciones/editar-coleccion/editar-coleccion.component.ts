@@ -42,6 +42,9 @@ export class EditarColeccionComponent implements OnInit {
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
 
+  // tslint:disable-next-line:ban-types
+  cambios: Boolean = false;
+
   constructor(
               private coleccionService: ColeccionService,
               public dialog: MatDialog,
@@ -57,7 +60,7 @@ export class EditarColeccionComponent implements OnInit {
     this.nombreColeccion = this.coleccion.Nombre;
     this.cromosColeccion = this.sesion.DameCromos();
     // Me traigo la imagen de la colección y las imagenes de cada cromo
-    this.TraeImagenesColeccion(this.coleccion);
+    this.TraeImagenColeccion(this.coleccion);
     // Cargo el imagen de la coleccion
     // this.GET_Imagen();
   }
@@ -65,7 +68,10 @@ export class EditarColeccionComponent implements OnInit {
   // Se hace un PUT de la coleccion seleccionada para editar
   EditarColeccion() {
     console.log('Entro a editar');
-
+    // Borramos la imagen anterior
+    if (this.coleccion.ImagenColeccion !== undefined) {
+      this.peticionesAPI.BorrarImagenColeccion (this.coleccion.ImagenColeccion).subscribe();
+    }
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.ModificaColeccion(new Coleccion(this.nombreColeccion, this.nombreImagenColeccion), this.coleccion.profesorId, this.coleccion.id)
     .subscribe((res) => {
@@ -85,7 +91,8 @@ export class EditarColeccionComponent implements OnInit {
         console.log('fallo editando');
       }
     });
-    this.goBack();
+    this.cambios = false;
+
   }
 
   // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
@@ -133,10 +140,15 @@ export class EditarColeccionComponent implements OnInit {
     reader.readAsDataURL(this.file);
     reader.onload = () => {
       console.log('ya');
+      this.cambios = true;
       this.imagenCambiada = true;
       this.imagenColeccion = reader.result.toString();
     };
   }
+
+
+
+
 
   // SI QUEREMOS AÑADIR CROMOS MANUALMENTE LO HAREMOS EN UN DIALOGO
   AbrirDialogoAgregarCromoColeccion(): void {
@@ -156,7 +168,8 @@ export class EditarColeccionComponent implements OnInit {
       for (let i = 0 ; i < cromosAgregados.length; i++) {
         this.cromosColeccion.push (cromosAgregados[i]);
       }
-      this.TraeImagenesColeccion(this.coleccion);
+      this.TraeImagenColeccion(this.coleccion);
+      this.TraeImagenesCromos();
 
      });
   }
@@ -164,6 +177,7 @@ export class EditarColeccionComponent implements OnInit {
   // TAMBIEN EDITAREMOS EL CROMO EN UN DIALOGO
   AbrirDialogoEditarCromo(cromo: Cromo): void {
 
+    console.log ('Vamos a editar cromo ' + cromo.Imagen);
     const dialogRef = this.dialog.open ( EditarCromoDialogComponent , {
       width: '900px',
       maxHeight: '600px',
@@ -173,17 +187,16 @@ export class EditarColeccionComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe( cromosEditados => {
-      console.log ('volvemos de editar cromos ' + cromosEditados.length);
+    // tslint:disable-next-line:no-shadowed-variable
+    dialogRef.afterClosed().subscribe( cromo => {
+      //console.log ('volvemos de editar cromos ' + cromosEditados.length);
       // tslint:disable-next-line:prefer-for-of
-      for (let i = 0 ; i < cromosEditados.length; i++) {
-        this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromosEditados[i].id);
-        this.cromosColeccion.push (cromosEditados[i]);
-       }
-      this.TraeImagenesCromos();
+      this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
+      this.cromosColeccion.push (cromo);
       // this.cromosColeccion = this.sesion.DameCromos();
       // this.coleccion = this.sesion.DameColeccion();
-      this.TraeImagenesColeccion(this.coleccion);
+      this.TraeImagenColeccion(this.coleccion);
+      this.TraeImagenesCromos();
 
     });
   }
@@ -241,12 +254,12 @@ export class EditarColeccionComponent implements OnInit {
     this.peticionesAPI.BorrarImagenCromo(cromo.Imagen).subscribe(() => {
       this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
       this.TraeImagenesCromos();
-    })
+    });
   }
 
 
   // Le pasamos la coleccion y buscamos la imagen que tiene y las imagenes de sus cromos
- TraeImagenesColeccion(coleccion: Coleccion) {
+ TraeImagenColeccion(coleccion: Coleccion) {
 
   console.log('entro a buscar cromos y foto');
   console.log(coleccion.ImagenColeccion);
@@ -283,7 +296,21 @@ export class EditarColeccionComponent implements OnInit {
 
   }
   goBack() {
-    this.location.back();
-  }
+    if (this.cambios) {
+      const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+        height: '150px',
+        data: {
+          mensaje: 'Dale a Aceptar si no quieres que se hagan los cambios en el nombre o en la imagen de la colección'
+        }
+      });
 
+      dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.location.back();
+        }
+      });
+    } else {
+      this.location.back();
+    }
+  }
 }

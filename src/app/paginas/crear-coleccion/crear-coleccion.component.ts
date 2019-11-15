@@ -14,6 +14,7 @@ import { SesionService, PeticionesAPIService } from '../../servicios/index';
 
 // Clases
 import { Coleccion, Cromo } from '../../clases/index';
+import { Location } from '@angular/common';
 
 export interface OpcionSeleccionada {
   nombre: string;
@@ -101,6 +102,7 @@ export class CrearColeccionComponent implements OnInit {
     public snackBar: MatSnackBar,
     public sesion: SesionService,
     public peticionesAPI: PeticionesAPIService,
+    public location: Location,
     private formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -233,6 +235,7 @@ export class CrearColeccionComponent implements OnInit {
       console.log('Cromo borrado correctamente');
 
     });
+    this.peticionesAPI.BorrarImagenCromo (cromo.Imagen).subscribe();
   }
 
   // Activa la función ExaminarImagenColeccion
@@ -377,6 +380,8 @@ export class CrearColeccionComponent implements OnInit {
       this.imagenCromo = undefined;
       this.coleccionCreada = undefined;
       this.cromosAgregados = [];
+      this.location.back();
+
 
   }
 }
