@@ -208,7 +208,7 @@ export class EditarCromoDialogComponent implements OnInit {
       const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
         height: '150px',
         data: {
-          mensaje: 'No quieres aceptar los cambios que has hecho'
+          mensaje: 'Dale a Aceptar si NO quieres que se hagan los cambios'
         }
       });
 

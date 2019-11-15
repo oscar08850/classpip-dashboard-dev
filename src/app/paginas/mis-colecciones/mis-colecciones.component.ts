@@ -130,7 +130,7 @@ export class MisColeccionesComponent implements OnInit {
   // Envialos la colecció y los cromos al servicio sesión porque los necesitaremos en los componentes
   // editar y agregar
   GuardarColeccion(coleccion: Coleccion) {
-    this.DameCromosEImagenDeLaColeccion(coleccion);
+  //  this.DameCromosEImagenDeLaColeccion(coleccion);
     this.sesion.TomaColeccion(coleccion);
     this.sesion.TomaCromos (this.cromosColeccion);
   }

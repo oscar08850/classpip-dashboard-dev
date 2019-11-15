@@ -68,7 +68,10 @@ export class EditarColeccionComponent implements OnInit {
   // Se hace un PUT de la coleccion seleccionada para editar
   EditarColeccion() {
     console.log('Entro a editar');
-
+    // Borramos la imagen anterior
+    if (this.coleccion.ImagenColeccion !== undefined) {
+      this.peticionesAPI.BorrarImagenColeccion (this.coleccion.ImagenColeccion).subscribe();
+    }
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.ModificaColeccion(new Coleccion(this.nombreColeccion, this.nombreImagenColeccion), this.coleccion.profesorId, this.coleccion.id)
     .subscribe((res) => {

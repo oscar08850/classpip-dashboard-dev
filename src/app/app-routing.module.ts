@@ -29,7 +29,6 @@ import { JuegoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado
 import { EditarPuntoComponent } from './paginas/mis-puntos/editar-punto/editar-punto.component';
 import { EditarInsigniaComponent } from './paginas/mis-puntos/editar-insignia/editar-insignia.component';
 import { EditarColeccionComponent } from './paginas/mis-colecciones/editar-coleccion/editar-coleccion.component';
-import { EditarCromoComponent } from './paginas/mis-colecciones/editar-coleccion/editar-cromo/editar-cromo.component';
 // tslint:disable-next-line:max-line-length
 import { AsignarCromosComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/asignar-cromos/asignar-cromos.component';
 // tslint:disable-next-line:max-line-length
@@ -138,7 +137,6 @@ const routes: Routes = [
 
   // COLECCIÓN
   { path: 'inicio/:id/misColecciones/editarColeccion', component: EditarColeccionComponent },
-  { path: 'inicio/:id/misColecciones/editarColeccion/editarCromo', component: EditarCromoComponent },
 
 
 
