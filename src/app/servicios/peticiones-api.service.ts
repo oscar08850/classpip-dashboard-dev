@@ -6,7 +6,7 @@ import { ResponseContentType } from '@angular/http';
 import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDePuntos,
         Equipo, AsignacionEquipo, AsignacionPuntosJuego, EquipoJuegoDePuntos, Coleccion,
         AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Cromo, HistorialPuntosAlumno, HistorialPuntosEquipo,
-        Album, AlbumEquipo, Insignia } from '../clases/index';
+        Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga } from '../clases/index';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +32,8 @@ export class PeticionesAPIService {
   private APIUrlAlumnoJuegoDeColeccion = 'http://localhost:3000/api/AlumnosJuegoDeColeccion';
   private APIUrlEquipoJuegoDeColeccion = 'http://localhost:3000/api/EquiposJuegoDeColeccion';
 
+  private APIUrlAlumnoJuegoDeCompeticionLiga = 'http://localhost:3000/api/AlumnosJuegoDeCompeticionLiga';
+  private APIUrlEquipoJuegoDeCompeticionLiga = 'http://localhost:3000/api/EquiposJuegoDeCompeticionLiga';
 
   private APIUrlColecciones = 'http://localhost:3000/api/Colecciones';
   private APIUrlImagenColeccion = 'http://localhost:3000/api/imagenes/ImagenColeccion';
@@ -245,8 +247,20 @@ export class PeticionesAPIService {
   }
 
   // CREAMOS UN NUEVO JUEGO DE COMPETICION EN EL GRUPO
-  public CreaJuegoDeCompeticion(juego: Juego, grupoId: number): Observable<Juego> {
-    return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeColeccions', juego);
+  public CreaJuegoDeCompeticionLiga(juego: Juego, grupoId: number): Observable<Juego> {
+    console.log('voy a crear el juevo de competicion liga');
+    console.log(juego);
+    return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga', juego);
+  }
+
+  // INSCRIBIMOS AL ALUMNO EN EL JUEGO DE COMPETICION
+  public InscribeAlumnoJuegoDeCompeticionLiga(alumnoJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga) {
+    return this.http.post<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionLiga, alumnoJuegoDeCompeticionLiga);
+  }
+
+    // INCRIBIMOS AL EQUIPO EN EL JUEGO DE COMPETICION
+  public InscribeEquipoJuegoDeCompeticionLiga(equipoJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga) {
+    return this.http.post<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionLiga, equipoJuegoDeCompeticionLiga);
   }
 
   // DEVUELVE LOS TIPOS DE PUNTOS CREADOS POR EL PROFESOR

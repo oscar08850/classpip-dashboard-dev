@@ -123,7 +123,14 @@
 
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
+                  <div *ngIf="(tipoDeJuegoSeleccionado !== 'Juego De Competición')">
+                    <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
+                  </div>
+
+                  <div *ngIf="(tipoDeJuegoSeleccionado === 'Juego De Competición')">
+                    <button type="button" class="btn Next"  matStepperNext>Siguiente</button>
+                  </div>
+
                 </div>
 
           </mat-step>
@@ -199,12 +206,15 @@
                           {{tipo.nombre}}
                       </mat-chip>
                     </mat-chip-list>
+                    <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{modoDeJuegoSeleccionado}} ... {{tipoJuegoCompeticionSeleccionado}} </span>
 
                 </div>
 
+
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
+
                 </div>
               </mat-step>
 
@@ -238,7 +248,6 @@
                       </div>
 
                 </mat-step>
-
 
           </div>
 

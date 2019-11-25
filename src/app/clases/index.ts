@@ -23,6 +23,8 @@ export * from './HistorialPuntosEquipo';
 export * from './clasesParaTablasJuegoDePuntos/TablaHistorialPuntosEquipo';
 export * from './AlumnoJuegoDeColeccion';
 export * from './EquipoJuegoDeColeccion';
+export * from './AlumnoJuegoDeCompeticionLiga';
+export * from './EquipoJuegoDeCompeticionLiga';
 export * from './Album';
 export * from './AlbumEquipo';
 export * from './clasesParaTablasJuegoColeccion/AlbumDelAlumno';
