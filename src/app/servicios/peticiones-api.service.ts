@@ -6,7 +6,8 @@ import { ResponseContentType } from '@angular/http';
 import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDePuntos,
         Equipo, AsignacionEquipo, AsignacionPuntosJuego, EquipoJuegoDePuntos, Coleccion,
         AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Cromo, HistorialPuntosAlumno, HistorialPuntosEquipo,
-        Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga } from '../clases/index';
+        Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
+        JuegoDeCompeticion } from '../clases/index';
 
 @Injectable({
   providedIn: 'root'
@@ -247,10 +248,10 @@ export class PeticionesAPIService {
   }
 
   // CREAMOS UN NUEVO JUEGO DE COMPETICION EN EL GRUPO
-  public CreaJuegoDeCompeticionLiga(juego: Juego, grupoId: number): Observable<Juego> {
+  public CreaJuegoDeCompeticionLiga(juego: JuegoDeCompeticion, grupoId: number): Observable<JuegoDeCompeticion> {
     console.log('voy a crear el juevo de competicion liga');
     console.log(juego);
-    return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga', juego);
+    return this.http.post<JuegoDeCompeticion>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga', juego);
   }
 
   // INSCRIBIMOS AL ALUMNO EN EL JUEGO DE COMPETICION
