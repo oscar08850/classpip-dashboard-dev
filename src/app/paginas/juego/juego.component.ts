@@ -251,7 +251,7 @@ export class JuegoComponent implements OnInit {
     // tslint:disable-next-line:max-line-length
     console.log ('&&&&&& ' + this.tipoJuegoCompeticionSeleccionado);
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CreaJuegoDeCompeticionLiga(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, 1, true, this.tipoJuegoCompeticionSeleccionado, 7), this.grupo.id)
+    this.peticionesAPI.CreaJuegoDeCompeticionLiga(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       console.log(juegoCreado);
