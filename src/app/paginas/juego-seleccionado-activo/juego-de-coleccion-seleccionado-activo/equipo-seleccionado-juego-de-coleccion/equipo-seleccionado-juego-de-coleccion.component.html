@@ -39,8 +39,12 @@
           <mat-card-title>{{elem.cromo.Nombre}}</mat-card-title>
           <mat-card-subtitle><p style="margin-bottom: -2px;">Nivel: {{elem.cromo.Nivel}} </p><p style="margin-bottom: -2px;">Probabilidad: {{elem.cromo.Probabilidad}} </p><p style="margin-bottom: -2px;">Repeticiones: <strong style= "font-size: 1.5rem">{{elem.rep}} </strong> </p></mat-card-subtitle>
         </div>
-          <div class="elementoCromo">
-          </div>
+        <div class="elementoCromo">
+
+            <button type="button" style="width: 50px !important;" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrarCromo(elem.cromo)">
+                <i style="margin-top: 3px; margin-right: 8px;" class="material-icons">delete </i>
+              </button>
+        </div>
         </div>
         </mat-card-header>
         <mat-card-content style="display: flex; align-items: center;justify-content: center;">

@@ -40,7 +40,7 @@ export class EditarColeccionComponent implements OnInit {
 
   // PARA DIÁLOGO DE CONFIRMACIÓN
   // tslint:disable-next-line:no-inferrable-types
-  mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
+  mensaje: string = 'Confirma que quieres eliminar el equipo llamado: ';
 
   // tslint:disable-next-line:ban-types
   cambios: Boolean = false;
