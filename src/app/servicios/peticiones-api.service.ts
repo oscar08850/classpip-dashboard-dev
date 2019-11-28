@@ -16,6 +16,7 @@ export class PeticionesAPIService {
 
 
   private APIUrlProfesores = 'http://localhost:3000/api/Profesores';
+  private APIUrlAlumnos = 'http://localhost:3000/api/Alumnos';
 
   private APIUrlGrupos = 'http://localhost:3000/api/Grupos';
 
@@ -58,11 +59,22 @@ export class PeticionesAPIService {
     console.log('Entro a mostrar a ' + nombre + ' ' + apellido);
     return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][Nombre]=' + nombre + '&filter[where][Apellido]=' + apellido);
   }
+  public DameTodosMisAlumnos(profesorId: number): Observable<Alumno[]> {
+    return this.http.get<Alumno[]>(this.APIUrlProfesores + '/' + profesorId + '/alumnos');
+  }
 
   public DameAlumnoConcreto(alumno: Alumno, ProfesorId: number): Observable<Alumno> {
     console.log('Entro a buscar a ' + alumno.Nombre + ' ' + alumno.PrimerApellido + ' ' + alumno.SegundoApellido );
     return this.http.get<Alumno>(this.APIUrlProfesores + '/' + ProfesorId + '/alumnos?filter[where][Nombre]=' + alumno.Nombre +
     '&filter[where][PrimerApellido]=' + alumno.PrimerApellido + '&filter[where][SegundoApellido]=' + alumno.SegundoApellido);
+  }
+
+  public CreaAlumno(alumno: Alumno): Observable<Alumno> {
+    return this.http.post<Alumno>(this.APIUrlAlumnos, alumno);
+  }
+
+  public BorraAlumno(alumnoId: number): Observable<any> {
+    return this.http.delete<any>(this.APIUrlAlumnos + '/' + alumnoId);
   }
   public DameImagenAlumno(imagen: string): Observable<any> {
     return this.httpImagenes.get(this.APIUrlImagenAlumno + '/download/' + imagen,

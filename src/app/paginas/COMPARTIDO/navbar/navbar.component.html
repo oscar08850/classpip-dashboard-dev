@@ -40,6 +40,12 @@
       <button mat-menu-item routerLink= "{{URLCrearPuntos}}"> Crear Puntos e Insignias </button>
     </mat-menu>
 
+    <button mat-button [matMenuTriggerFor]="Alumnos" class="btnNavbar"> Alumnos </button>
+    <mat-menu #Alumnos="matMenu">
+      <button mat-menu-item routerLink= "{{URLMisAlumnos}}"> Mis alumnos </button>
+      <button mat-menu-item routerLink= "{{URLIntroducirAlumnos}}"> Introducir nuevos alumnos </button>
+    </mat-menu>
+
     <button routerLink = {{URLDesarrolladores}} mat-button [matMenuTriggerFor]="Desarrollo" class="btnNavbarAmarillo"> Para desarrolladores </button>
     <mat-menu  #Desarrollo="matMenu">
     </mat-menu>

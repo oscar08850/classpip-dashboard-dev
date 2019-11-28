@@ -108,6 +108,8 @@ import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.comp
 import { DialogoComponent } from './desarrolladores/dialogo/dialogo.component';
 import { EstilosComponent } from './estilos/estilos.component';
 import { EditarCromoDialogComponent } from './paginas/mis-colecciones/editar-cromo-dialog/editar-cromo-dialog.component';
+import { MisAlumnosComponent } from './paginas/mis-alumnos/mis-alumnos.component';
+import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introducir-alumnos.component';
 
 
 @NgModule({
@@ -163,7 +165,9 @@ import { EditarCromoDialogComponent } from './paginas/mis-colecciones/editar-cro
     DesarrolladoresComponent,
     DialogoComponent,
     EstilosComponent,
-    EditarCromoDialogComponent
+    EditarCromoDialogComponent,
+    MisAlumnosComponent,
+    IntroducirAlumnosComponent
   ],
   imports: [
     BrowserModule,
