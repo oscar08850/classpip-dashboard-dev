@@ -108,6 +108,9 @@ export class PeticionesAPIService {
   public BorraMatricula(matriculaId: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlMatriculas + '/' + matriculaId);
   }
+  public BorraMatriculaAlumno(alumnoId: number, grupoId: number): Observable<Matricula> {
+    return this.http.delete<any>(this.APIUrlMatriculas + '?filter[where][grupoId]=' + grupoId + '&filter[where][alumnoId]=' + alumnoId);
+  }
   public MatriculaAlumnoEnGrupo(matricula: Matricula): Observable<Matricula> {
     return this.http.post<Matricula>(this.APIUrlMatriculas, matricula);
   }

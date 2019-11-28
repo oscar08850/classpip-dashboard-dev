@@ -1,177 +1,104 @@
 
-<div class="subtitulo" align="center">Agregar alumno</div>
+<div class="subtitulo" align="center">Agregar alumnos al grupo</div>
 <mat-divider class="lineaDivisoria"></mat-divider>
 <br>
-<mat-tab-group [color]="primary" [backgroundColor]="primary" #tabs>
-
- <!-- ////////////////////////////////////////////// PARA ÚNICO ALUMNO //////////////////////////////////////////////// -->
-
-  <mat-tab index = "0" label="Individualmente">
-    <div class="enFila">
 
 
-          <form (ngSubmit)="AsignacionIndividual();" [formGroup]="myForm">
-            <div class="enColumna">
-            <p style="font-weight: bold;">Introduce todos los campos</p>
+<div class="enColumna">
+ <form style="width: 70%">
+    <div>
+        <p>
+            <span style="font-weight: bold;text-align: center;">Alumnos que ya estan en el grupo </span>
+        </p>
+    </div>
+
+    <table style="width: 100%; table-layout:fixed;"  *ngIf="alumnosDelGrupo[0]" mat-table [dataSource]="dataSourceAlumnosDelGrupo" class="example-container mat-elevation-z8">
+
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Nombre Alumno Column -->
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Nombre </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+      </ng-container>
+
+      <!-- Primer Apellido Column -->
+      <ng-container matColumnDef="primerApellido">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Primer Apellido </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+      </ng-container>
+
+      <!-- Segundo Apellido Column -->
+      <ng-container matColumnDef="segundoApellido">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Segundo Apellido </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+      </ng-container>
 
 
-              <mat-form-field style="width: 60%">
-                <mat-label>Nombre</mat-label>
-                  <input matInput placeholder="Nombre" formControlName="nombreAlumno" required>
-                <mat-error>Este campo es obligatorio</mat-error>
-              </mat-form-field>
+      <!-- Delete Column -->
+      <ng-container matColumnDef=" ">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+        <td mat-cell *matCellDef="let alumno">
+            <button (click) = "AbrirDialogoConfirmacionBorrar (alumno)" mat-icon-button matTooltip="Borrar a {{alumno.Nombre}} del grupo">
+              <i class="material-icons red md-36">delete</i>
+            </button>
+        </td>
+      </ng-container>
 
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnosDelGrupo; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnosDelGrupo;"></tr>
 
+    </table>
+    <mat-divider class="lineaDivisoria"></mat-divider>
+    <br>
 
-                <mat-form-field style="width: 60%">
-                  <mat-label>Primer Apellido</mat-label>
-                    <input matInput placeholder="Primer Apellido" formControlName="primerApellido" required>
-                  <mat-error>Este campo es obligatorio</mat-error>
-                </mat-form-field>
+    <div>
+      <p>
+          <span style="font-weight: bold; align-content: center;">Mis alumnos</span>
+      </p>
+    </div>
 
+    <table style="width: 100%; table-layout:fixed;"  *ngIf="misAlumnos[0]" mat-table [dataSource]="dataSourceMisAlumnos" class="example-container mat-elevation-z8">
 
+      <!-- Nombre Alumno Column -->
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Nombre </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+      </ng-container>
 
-                <mat-form-field style="width: 60%">
-                  <mat-label>Segundo Apellido</mat-label>
-                    <input matInput placeholder="Segundo Apellido" formControlName="segundoApellido" required>
-                  <mat-error>Este campo es obligatorio</mat-error>
+      <!-- Primer Apellido Column -->
+      <ng-container matColumnDef="primerApellido">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Primer Apellido </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+      </ng-container>
 
-                </mat-form-field>
+      <!-- Segundo Apellido Column -->
+      <ng-container matColumnDef="segundoApellido">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Segundo Apellido </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+      </ng-container>
 
+      <!-- Add Column -->
+      <ng-container matColumnDef=" " stickyEnd>
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+          <td mat-cell *matCellDef="let alumno">
+              <button (click) = "AsignarAlumno(alumno)" mat-icon-button matTooltip = "Añadir a {{alumno.Nombre}} al grupo">
+                  <i class="material-icons green md-36">add_circle_outline</i>
+              </button>
+          </td>
+      </ng-container>
 
-                <button class="btn Agregar" >Añadir alumno <i class="material-icons">
-                    person_add </i></button>
-            </div>
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsMisAlumnos; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsMisAlumnos;"></tr>
 
-          </form>
+    </table>
+    <mat-divider class="lineaDivisoria"></mat-divider>
+    <br>
+    <mat-dialog-actions align= "center">
+      <button type="button" (click) = "goBack()" class="btn Back">Cerrar </button>
+    </mat-dialog-actions>
+</form>
+</div>
 
-
-      <form>
-
-        <table style="width: 100%" align = "center" *ngIf="alumnosAgregados[0]" mat-table [dataSource]="alumnosAgregados" class="example-container mat-elevation-z8">
-
-              <!--- Note that these columns can be defined in any order.
-                    The actual rendered columns are set as a property on the row definition" -->
-
-              <!-- Nombre Alumno Column -->
-              <ng-container matColumnDef="nombreAlumno">
-                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Nombre </th>
-                <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
-              </ng-container>
-
-              <!-- Primer Apellido Column -->
-              <ng-container matColumnDef="primerApellido">
-                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Primer Apellido </th>
-                <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
-              </ng-container>
-
-              <!-- Segundo Apellido Column -->
-              <ng-container matColumnDef="segundoApellido">
-                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Segundo Apellido </th>
-                <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
-              </ng-container>
-
-              <!-- alumnoId Column -->
-              <ng-container matColumnDef="alumnoId">
-                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Identificador Alumno </th>
-                <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
-              </ng-container>
-
-              <!-- Delete Column -->
-              <ng-container matColumnDef=" ">
-                  <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" ></th>
-                  <td mat-cell *matCellDef="let alumno">
-                      <button (click) = "BorrarAlumno(alumno)" mat-icon-button matTooltip="Borrar a {{alumno.Nombre}} del grupo">
-                        <i class="material-icons red md-36">delete</i>
-                      </button>
-                  </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-            </table>
-
-      </form>
-  </div>
-  </mat-tab>
-
- <!-- ////////////////////////////////////////////// PARA AGRECACION MASIVA //////////////////////////////////////////////// -->
-  <mat-tab label="Masivamente">
-
-      <div class="enFila">
-
-        <form (ngSubmit)="AsignacionMasiva();" [formGroup]="myForm2">
-          <div class="enColumna">
-            <div>
-                <p>
-                  <span style="font-weight: bold;"> Introduce los datos de forma correcta</span>
-                  <mat-form-field style="width: 100%; border: none; ">
-                    <textarea matInput placeholder="Ejemplo: Pedro García Aguado; Andrés Iniesta Luján" formControlName="textoAlumnos"></textarea>
-                  </mat-form-field>
-                </p>
-              </div>
-
-                <button  class="btn Agregar">Añadir alumnos <i class="material-icons">
-                      person_add </i></button>
-
-          </div>
-        </form>
-
-        <form>
-
-              <table style="width: 100%" align = "center" *ngIf="alumnosAgregados[0]" mat-table [dataSource]="alumnosAgregados" class="example-container mat-elevation-z8">
-
-                    <!--- Note that these columns can be defined in any order.
-                          The actual rendered columns are set as a property on the row definition" -->
-
-                    <!-- Nombre Alumno Column -->
-                    <ng-container matColumnDef="nombreAlumno">
-                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Nombre </th>
-                      <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
-                    </ng-container>
-
-                    <!-- Primer Apellido Column -->
-                    <ng-container matColumnDef="primerApellido">
-                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Primer Apellido </th>
-                      <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
-                    </ng-container>
-
-                    <!-- Segundo Apellido Column -->
-                    <ng-container matColumnDef="segundoApellido">
-                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Segundo Apellido </th>
-                      <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
-                    </ng-container>
-
-                    <!-- alumnoId Column -->
-                    <ng-container matColumnDef="alumnoId">
-                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Identificador Alumno </th>
-                      <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
-                    </ng-container>
-
-                    <!-- Delete Column -->
-                    <ng-container matColumnDef=" ">
-                        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" ></th>
-                        <td mat-cell *matCellDef="let alumno">
-                            <button (click) = "BorrarAlumno(alumno)" mat-icon-button matTooltip="Borrar a {{alumno.Nombre}} del grupo">
-                              <i class="material-icons red md-36">delete</i>
-                            </button>
-                        </td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-                  </table>
-
-        </form>
-      </div>
-  </mat-tab>
-
-
-<!-- </mat-dialog-content> -->
-</mat-tab-group>
- <mat-dialog-actions align= "end">
-  <button mat-button [mat-dialog-close] class="btn Cerrar">Cerrar</button>
- </mat-dialog-actions>
 

@@ -131,8 +131,11 @@ export class EditarGrupoComponent implements OnInit {
   // SI QUEREMOS AÑADIR ALUMNOS MANUALMENTE LO HAREMOS EN UN DIALOGO
   AbrirDialogoAgregarAlumnos(): void {
     const dialogRef = this.dialog.open(AgregarAlumnoDialogComponent, {
-      width: '900px',
-      maxHeight: '600px',
+      width: '50%',
+      height: '80%',
+      position: {
+        top: '0%'
+      },
       // Le pasamos solo los id del grupo y profesor ya que es lo único que hace falta para vincular los alumnos
       // En realidad el dialogo podría recuperar esta información de la sesión,
       // pero en el caso de los dialogos usamos el mecanismo de paso de parámetros porque es sencillo
