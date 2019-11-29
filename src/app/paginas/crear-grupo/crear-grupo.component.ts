@@ -137,6 +137,9 @@ export class CrearGrupoComponent implements OnInit {
   }
 
   goBack() {
+    this.location.back();
+  }
+  aceptarGoBack() {
     this.snackBar.open('El grupo se ha creado correctamente', 'Cerrar', {
       duration: 3000,
     });
