@@ -44,7 +44,8 @@ import { AlbumDelAlumnoComponent } from './paginas/juego-seleccionado-activo/jue
 // tslint:disable-next-line:max-line-length
 import { AlbumEquipoComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/equipo-seleccionado-juego-de-coleccion/album-equipo/album-equipo.component';
 import { ConfiguracionProfesorComponent } from './paginas/COMPARTIDO/configuracion-profesor/configuracion-profesor.component';
-
+import {MisAlumnosComponent} from './paginas/mis-alumnos/mis-alumnos.component';
+import {IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introducir-alumnos.component';
 
 
 
@@ -84,6 +85,10 @@ const routes: Routes = [
   // PUNTOS INSIGNIAS
   { path: 'inicio/:id/crearPuntos', component: CrearPuntoComponent },
   { path: 'inicio/:id/misPuntos', component: MisPuntosComponent },
+
+   // ALUMNNOS
+   { path: 'inicio/:id/misAlumnos', component: MisAlumnosComponent },
+   { path: 'inicio/:id/introducirAlumnos', component: IntroducirAlumnosComponent },
 
 
   //////////////////////////// RUTAS RELACIONADAS CON COMPONENTES PRINCIPALES /////////////////////////////////////////
@@ -143,6 +148,8 @@ const routes: Routes = [
   // PUNTOS E INSIGNIAS
   { path: 'inicio/:id/misPuntos/editarPunto', component: EditarPuntoComponent },
   { path: 'inicio/:id/misPuntos/editarInsignia', component: EditarInsigniaComponent },
+
+  // CONFIGURACION
   { path: 'inicio/:id/configuracionProfesor', component: ConfiguracionProfesorComponent }
 ];
 

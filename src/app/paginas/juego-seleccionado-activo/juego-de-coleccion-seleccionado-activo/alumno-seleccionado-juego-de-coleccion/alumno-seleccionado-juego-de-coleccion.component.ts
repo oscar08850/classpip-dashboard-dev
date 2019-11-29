@@ -7,6 +7,9 @@ import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion,
 
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../../servicios/index';
 import { Location } from '@angular/common';
+import { DialogoConfirmacionComponent } from '../../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import { MatDialog, MatSnackBar,  } from '@angular/material';
+
 
 @Component({
   selector: 'app-alumno-seleccionado-juego-de-coleccion',
@@ -29,13 +32,18 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
 
   // imagen
   imagenPerfil: string;
+  // tslint:disable-next-line:no-inferrable-types
+  mensaje: string = 'Confirma que quieres eliminar el cromo: ';
 
   constructor(
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
                private calculos: CalculosService,
                private location: Location,
-               private http: Http
+               private http: Http,
+               public snackBar: MatSnackBar,
+               public dialog: MatDialog
+
   ) {}
 
   ngOnInit() {
@@ -81,6 +89,7 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
       // esta es la lista que se mostrará al usuario, sin cromos repetidos y con una
       // indicación de cuantas veces se repite cada cromo
       this.listaCromosSinRepetidos = this.calculos.GeneraListaSinRepetidos(this.listaCromos);
+      this.listaCromosSinRepetidos.sort((a, b) => a.cromo.Nombre.localeCompare(b.cromo.Nombre));
       this.sesion.TomaCromos(this.listaCromos);
       this.listaCromos.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
       this.GET_ImagenesCromos();
@@ -117,6 +126,42 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
       }
     }
   }
+
+  AbrirDialogoConfirmacionBorrarCromo(cromo: Cromo): void {
+
+    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+      height: '150px',
+      data: {
+        mensaje: this.mensaje,
+        nombre: cromo.Nombre,
+      }
+    });
+
+    // Antes de cerrar recogeremos el resultado del diálogo: Borrar (true) o cancelar (false). Si confirmamos, borraremos
+    // el punto (función BorrarPunto) y mostraremos un snackBar con el mensaje de que se ha eliminado correctamente.
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.BorrarCromo(cromo);
+        this.snackBar.open(cromo.Nombre + ' eliminado correctamente', 'Cerrar', {
+          duration: 2000,
+        });
+
+      }
+    });
+  }
+
+   // Utilizamos esta función para eliminar un cromo de la base de datos y actualiza la lista de cromos
+   BorrarCromo(cromo: Cromo) {
+    // primero obtengo todas las asignaciones del cromo al alumno
+    this.peticionesAPI.DameAsignacionesCromosAlumno (this.inscripcionAlumno.id, cromo.id)
+    .subscribe((res) => {
+      // Y ahora elimino la primera de ellas (una cualquiera)
+      this.peticionesAPI.BorrarCromoAlumno (res[0].id)
+      .subscribe ( () => this.CromosDelAlumno());
+    });
+  }
+
+
   goBack() {
     this.location.back();
   }
