@@ -16,6 +16,7 @@ import { JuegoService, EquipoService, ColeccionService, JuegoDeColeccionService 
 import {SesionService, PeticionesAPIService, CalculosService} from '../../../../servicios/index';
 
 import { Location } from '@angular/common';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-asignar-cromos',
@@ -34,7 +35,9 @@ export class AsignarCromosComponent implements OnInit {
   dataSource;
 
   alumnosDelJuego: Alumno[];
+  alumnoElegido: Alumno;
   equiposDelJuego: Equipo[];
+  equipoElegido: Equipo;
 
   coleccion: Coleccion;
   cromosColeccion: Cromo[];
@@ -55,14 +58,19 @@ export class AsignarCromosComponent implements OnInit {
   alumnosEquipo: Alumno[];
 
   inscripcionesAlumnos: AlumnoJuegoDeColeccion[];
+
   inscripcionesEquipos: EquipoJuegoDeColeccion[];
 
 
-  // tslint:disable-next-line:no-inferrable-types
-  mensaje: string = 'Estás seguro/a de que quieres asignar este cromo';
 
   // tslint:disable-next-line:no-inferrable-types
-  mensajeAleatorio: string = 'Estás seguro/a de que quieres asignar este número de cromos aleatoriamente';
+  mensaje: string = 'Confirma que quieres asignar este cromo';
+
+  // tslint:disable-next-line:no-inferrable-types
+  mensajeAleatorio: string = 'Confirma que quieres asignar este sobre de cromos aleatorios';
+
+  // tslint:disable-next-line:no-inferrable-types
+  mensajeAsignacionAleatoria: string = 'Confirma que quieres asignar aleatoriamente este sobre de cromos aleatorios';
 
   // tslint:disable-next-line:ban-types
   isDisabled: Boolean = true;
@@ -302,6 +310,17 @@ export class AsignarCromosComponent implements OnInit {
     }
   }
 
+  AsignarAleatoriamenteCromosAleatorios() {
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      console.log('el juego es individual');
+      this.AsignarCromosAleatoriosAlumnoAleatorio();
+
+    } else {
+      console.log('El juego es en equipo');
+      this.AsignarCromosAleatoriosEquipoAleatorio();
+    }
+  }
+
 
   AsignarCromosAleatoriosAlumno() {
     this.dataSource.data.forEach
@@ -311,6 +330,26 @@ export class AsignarCromosComponent implements OnInit {
                   );
                 }
           });
+  }
+
+  AsignarCromosAleatoriosAlumnoAleatorio() {
+    const numeroAlumnos = this.alumnosDelJuego.length;
+    const elegido = Math.floor(Math.random() * numeroAlumnos);
+    this.alumnoElegido = this.alumnosDelJuego[elegido];
+    this.calculos.AsignarCromosAleatoriosAlumno (
+            this.alumnoElegido, this.inscripcionesAlumnos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
+    );
+    swal (this.alumnoElegido.Nombre + ' Enhorabuena', 'success');
+  }
+
+  AsignarCromosAleatoriosEquipoAleatorio() {
+    const numeroEquipos = this.equiposDelJuego.length;
+    const elegido = Math.floor(Math.random() * numeroEquipos);
+    this.equipoElegido = this.equiposDelJuego[elegido];
+    this.calculos.AsignarCromosAleatoriosEquipo (
+            this.equipoElegido, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
+    );
+    swal (this.equipoElegido.Nombre + ' Enhorabuena', 'success');
   }
 
   AsignarCromosAleatoriosEquipo() {
@@ -381,6 +420,27 @@ export class AsignarCromosComponent implements OnInit {
       }
     });
   }
+
+  AbrirDialogoConfirmacionAsignarCromosAlumnoAleatorio(): void {
+
+    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+      height: '150px',
+      data: {
+        mensaje: this.mensajeAsignacionAleatoria,
+        nombre: ''
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.AsignarAleatoriamenteCromosAleatorios();
+        this.snackBar.open('Cromos asignados correctamente', 'Cerrar', {
+          duration: 2000,
+        });
+      }
+    });
+  }
+
 
     // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
     GET_ImagenCromo() {

@@ -7,7 +7,7 @@
 
 
   <!-- ASIGNAR EL CROMO QUE EL PROFESOR ESCOJA-->
-  <mat-tab index = "0" label="Asignar Cromo Manualmente">
+  <mat-tab index = "0" label="Asignación manual">
 
       <br>
       <br>
@@ -59,18 +59,17 @@
 
 
   <!-- REPARTIR PAQUETES DE CROMOS ALEATORIOS -->
-  <mat-tab label="Asignar Cromo Aleatorio">
+  <mat-tab label="Asignación aleatoria">
 
     <div class="enColumna">
 
-    <div style="margin-top: 15px">
-      <span>Número de cromos a asignar: </span>
-      <input style="width:20%" type="number" name="numeroCromosRandom" placeholder="Escribe el número de cromos" requiered [(ngModel)]="numeroCromosRandom">
-    </div>
+      <div style="margin-top: 15px">
+        <span>Número de cromos a asignar: </span>
+        <input style="width:20%" type="number" name="numeroCromosRandom" placeholder="Escribe el número de cromos" requiered [(ngModel)]="numeroCromosRandom">
+      </div>
+      <button  style= "width:100%" type="button" class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = AbrirDialogoConfirmacionAsignarCromosAleatorios()>Asignar a los alumnos seleccionados</button>
+      <button style= "width:100%" type="button" class="btn Aceptar" (click) = AbrirDialogoConfirmacionAsignarCromosAlumnoAleatorio()>Asignar a un alumno elegido aleatoriamente</button>
 
-    <div style="margin-top: 10px">
-      <button type="button" class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = AbrirDialogoConfirmacionAsignarCromosAleatorios()>Asignar Cromo</button>
-    </div>
     </div>
 
   </mat-tab>
@@ -113,19 +112,56 @@
     <!-- Nombre Alumno Column -->
     <ng-container matColumnDef="nombreAlumno">
       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
-      <td mat-cell   *matCellDef="let alumno; "> {{alumno.Nombre}} </td>
+      <td mat-cell   *matCellDef="let alumno; ">
+            <div *ngIf = "alumnoElegido &&
+                          alumno.Nombre === alumnoElegido.Nombre &&
+                          alumno.PrimerApellido === alumnoElegido.PrimerApellido &&
+                          alumno.SegundoApellido === alumnoElegido.SegundoApellido"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{alumno.Nombre}} </div>
+            <div *ngIf = "alumnoElegido === undefined ||
+                          alumno.Nombre !== alumnoElegido.Nombre ||
+                          alumno.PrimerApellido !== alumnoElegido.PrimerApellido ||
+                          alumno.SegundoApellido !== alumnoElegido.SegundoApellido"
+                          style = "color:black">{{alumno.Nombre}} </div>
+      </td>
     </ng-container>
+
+
 
     <!-- Primer Apellido Column -->
     <ng-container matColumnDef="primerApellido">
       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Primer Apellido </th>
-      <td mat-cell   *matCellDef="let alumno;"> {{alumno.PrimerApellido}} </td>
+      <td mat-cell   *matCellDef="let alumno;">
+            <div *ngIf = "alumnoElegido &&
+                          alumno.Nombre === alumnoElegido.Nombre &&
+                          alumno.PrimerApellido === alumnoElegido.PrimerApellido &&
+                          alumno.SegundoApellido === alumnoElegido.SegundoApellido"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{alumno.PrimerApellido}} </div>
+            <div *ngIf = "alumnoElegido === undefined ||
+                          alumno.Nombre !== alumnoElegido.Nombre ||
+                          alumno.PrimerApellido !== alumnoElegido.PrimerApellido ||
+                          alumno.SegundoApellido !== alumnoElegido.SegundoApellido"
+                          style = "color:black">{{alumno.PrimerApellido}} </div>
+
+
+      </td>
     </ng-container>
 
     <!-- Segundo Apellido Column -->
     <ng-container matColumnDef="segundoApellido">
       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Segundo Apellido </th>
-      <td mat-cell   *matCellDef="let alumno; "> {{alumno.SegundoApellido}} </td>
+      <td mat-cell   *matCellDef="let alumno; ">
+            <div *ngIf = "alumnoElegido &&
+                          alumno.Nombre === alumnoElegido.Nombre &&
+                          alumno.PrimerApellido === alumnoElegido.PrimerApellido &&
+                          alumno.SegundoApellido === alumnoElegido.SegundoApellido"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{alumno.SegundoApellido}} </div>
+            <div *ngIf = "alumnoElegido === undefined ||
+                          alumno.Nombre !== alumnoElegido.Nombre ||
+                          alumno.PrimerApellido !== alumnoElegido.PrimerApellido ||
+                          alumno.SegundoApellido !== alumnoElegido.SegundoApellido"
+                          style = "color:black">{{alumno.SegundoApellido}} </div>
+      </td>
     </ng-container>
 
 
@@ -175,7 +211,16 @@
     <!-- Nombre Alumno Column -->
     <ng-container matColumnDef="nombreEquipo">
       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
-      <td mat-cell *matCellDef="let equipo"> {{equipo.Nombre}} </td>
+      <td mat-cell *matCellDef="let equipo">
+
+            <div *ngIf = "equipoElegido &&
+                          equipo.Nombre === equipoElegido.Nombre"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{equipo.Nombre}} </div>
+            <div *ngIf = "equipoElegido === undefined ||
+                          equipo.Nombre !== equipoElegido.Nombre"
+                          style = "color:black">{{equipo.Nombre}} </div>
+
+      </td>
     </ng-container>
 
 
