@@ -9,6 +9,8 @@ import { SesionService, CalculosService, PeticionesAPIService } from '../../../.
 import {MatTableDataSource} from '@angular/material/table';
 
 import { Location } from '@angular/common';
+import swal from 'sweetalert';
+
 
 @Component({
   selector: 'app-asignar-puntos',
@@ -22,6 +24,7 @@ export class AsignarPuntosComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
   // Muestra la posición del alumno, el nombre y los apellidos del alumno, los puntos y el nivel
   rankingJuegoDePuntos: TablaAlumnoJuegoDePuntos[] = [];
+  alumnoElegido: TablaAlumnoJuegoDePuntos;
 
   // tslint:disable-next-line:no-inferrable-types
   valorPunto: number = 1;
@@ -35,14 +38,12 @@ export class AsignarPuntosComponent implements OnInit {
   alumnosDelJuego: Alumno[];
   equiposDelJuego: Equipo[];
   nivelesDelJuego: Nivel[];
-  aaaa: AlumnoJuegoDePuntos[];
-
   // Recoge la inscripción de un alumno en el juego ordenada por puntos
   listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDePuntos[];
   listaEquiposOrdenadaPorPuntos: EquipoJuegoDePuntos[];
 
-
   rankingEquiposJuegoDePunto: TablaEquipoJuegoDePuntos[] = [];
+  equipoElegido: TablaEquipoJuegoDePuntos;
 
   displayedColumnsAlumno: string[] = ['select', 'posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos', 'nivel'];
   // selection = new SelectionModel<TablaAlumnoJuegoDePuntos>(true, []);
@@ -60,9 +61,15 @@ export class AsignarPuntosComponent implements OnInit {
 
   // tslint:disable-next-line:ban-types
   isDisabled: Boolean = true;
+  // tslint:disable-next-line:ban-types
+  isDisabledAleatorio: Boolean = true;
 
   dataSource: any;
-  botonTablaDesactivado = true;
+  botonAsignarDesactivado = true;
+  botonAsignarAleatorioDesactivado = true;
+
+
+  puntoAleatorioId: number;
 
   constructor(
                private sesion: SesionService,
@@ -73,7 +80,11 @@ export class AsignarPuntosComponent implements OnInit {
   ngOnInit() {
     const datos = this.sesion.DameDatosParaAsignarPuntos();
     console.log ('Datos ' + datos);
-    this.tiposPuntosDelJuego = datos.tiposPuntosDelJuego;
+    this.puntoAleatorioId = datos.tiposPuntosDelJuego.filter (p => p.Nombre === 'Aleatorio')[0].id;
+
+    // Elimino el tipo de punto aleatorio para que no salga entre los asignables
+    // porque ese tipo de punto se asigna al pulsar el boton de asignación aleatoria
+    this.tiposPuntosDelJuego = datos.tiposPuntosDelJuego.filter (p => p.Nombre !== 'Aleatorio');
     this.nivelesDelJuego = datos.nivelesDelJuego;
     this.alumnosDelJuego = datos.alumnosDelJuego;
     this.listaAlumnosOrdenadaPorPuntos = datos.listaAlumnosOrdenadaPorPuntos;
@@ -104,7 +115,9 @@ export class AsignarPuntosComponent implements OnInit {
       this.dataSource = new MatTableDataSource (this.rankingJuegoDePuntos);
     } else {
       this.dataSource = new MatTableDataSource (this.rankingEquiposJuegoDePunto);
+
     }
+
   }
   /* Para averiguar si todas las filas están seleccionadas */
   IsAllSelected() {
@@ -128,11 +141,11 @@ export class AsignarPuntosComponent implements OnInit {
   /* Esta función decide si el boton debe estar activo (si hay al menos
   una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
   /* En este caso para que esté activo también debe haber seleccionado el tipo de punto a asignar */
-  ActualizarBotonTabla() {
+  ActualizarBoton() {
     if ((this.selection.selected.length === 0) || (this.puntoSeleccionadoId === undefined)) {
-      this.botonTablaDesactivado = true;
+      this.botonAsignarDesactivado = true;
     } else {
-      this.botonTablaDesactivado = false;
+      this.botonAsignarDesactivado = false;
     }
   }
 
@@ -201,7 +214,7 @@ export class AsignarPuntosComponent implements OnInit {
     }
     this.dataSource = new MatTableDataSource (this.rankingJuegoDePuntos);
     this.selection.clear();
-    this.botonTablaDesactivado = true;
+    this.botonAsignarDesactivado = true;
   }
 
   AsignarPuntosEquipos() {
@@ -236,53 +249,71 @@ export class AsignarPuntosComponent implements OnInit {
     }
     this.dataSource = new MatTableDataSource (this.rankingEquiposJuegoDePunto);
     this.selection.clear();
-    this.botonTablaDesactivado = true;
+    this.botonAsignarDesactivado = true;
   }
 
-  BotonDesactivado() {
 
-    console.log('voy a ver si hay algo en los inputs');
-    if (this.puntoSeleccionadoId !== undefined && this.valorPunto !== undefined && this.valorPunto !== null) {
-      console.log('hay algo, disabled');
-      this.isDisabled = false;
-    } else {
-      console.log('no hay nada');
-      this.isDisabled = true;
-    }
-  }
-   /* Esta función decide si el boton debe estar activo (si hay al menos
-  una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
-  ActualizarBoton() {
-    if (this.selection.selected.length === 0) {
-      this.isDisabled = true;
-    } else {
-      this.isDisabled = false;
-    }
-  }
-
-  Disabled() {
+  AsignarAleatorio() {
     if (this.juegoSeleccionado.Modo === 'Individual') {
+      console.log ('Entramos');
+      const numeroAlumnos = this.alumnosDelJuego.length;
+      const elegido = Math.floor(Math.random() * numeroAlumnos);
+      this.alumnoElegido = this.rankingJuegoDePuntos[elegido];
 
-      if (this.seleccionados.filter(res => res === true)[0] !== undefined) {
-        console.log('Hay alguno seleccionado');
-        this.BotonDesactivado();
-      } else {
-        console.log('No hay alguno seleccionado');
-        this.isDisabled = true;
+      this.calculos.AsignarPuntosAlumno ( this.listaAlumnosOrdenadaPorPuntos[elegido],
+                                            this.nivelesDelJuego, this.valorPunto,
+                                            this.puntoAleatorioId);
+      this.rankingJuegoDePuntos[elegido].puntos = this.rankingJuegoDePuntos[elegido].puntos + this.valorPunto;
+      if (this.listaAlumnosOrdenadaPorPuntos[elegido].nivelId !== undefined) {
+          const nivel = this.nivelesDelJuego.filter (n => n.id === this.listaAlumnosOrdenadaPorPuntos[elegido].nivelId)[0];
+          this.rankingJuegoDePuntos[elegido].nivel = nivel.Nombre;
       }
 
+      // tslint:disable-next-line:only-arrow-functions
+      this.listaAlumnosOrdenadaPorPuntos = this.listaAlumnosOrdenadaPorPuntos.sort(function(obj1, obj2) {
+        return obj2.PuntosTotalesAlumno - obj1.PuntosTotalesAlumno;
+      });
+      // tslint:disable-next-line:only-arrow-functions
+      this.rankingJuegoDePuntos = this.rankingJuegoDePuntos.sort(function(obj1, obj2) {
+        return obj2.puntos - obj1.puntos;
+      });
+      for (let i = 0; i < this.rankingJuegoDePuntos.length; i++) {
+        this.rankingJuegoDePuntos[i].posicion = i + 1;
+      }
+      this.dataSource = new MatTableDataSource (this.rankingJuegoDePuntos);
+      this.selection.clear();
+      swal(this.alumnoElegido.nombre + ' ' + this.alumnoElegido.primerApellido, 'Enhorabuena', 'success');
     } else {
+      const numeroEquipos = this.equiposDelJuego.length;
+      const elegido = Math.floor(Math.random() * numeroEquipos);
+      this.equipoElegido = this.rankingEquiposJuegoDePunto[elegido];
 
-      if (this.seleccionadosEquipos.filter(res => res === true)[0] !== undefined) {
-        console.log('Hay alguno seleccionado');
-        this.BotonDesactivado();
-      } else {
-        console.log('No hay alguno seleccionado');
-        this.isDisabled = true;
+      this.calculos.AsignarPuntosEquipo ( this.listaEquiposOrdenadaPorPuntos[elegido],
+                                            this.nivelesDelJuego, this.valorPunto,
+                                            this.puntoAleatorioId);
+      this.rankingEquiposJuegoDePunto[elegido].puntos = this.rankingEquiposJuegoDePunto[elegido].puntos + this.valorPunto;
+      if (this.listaEquiposOrdenadaPorPuntos[elegido].nivelId !== undefined) {
+          const nivel = this.nivelesDelJuego.filter (n => n.id === this.listaEquiposOrdenadaPorPuntos[elegido].nivelId)[0];
+          this.rankingEquiposJuegoDePunto[elegido].nivel = nivel.Nombre;
       }
+
+      // tslint:disable-next-line:only-arrow-functions
+      this.listaEquiposOrdenadaPorPuntos = this.listaEquiposOrdenadaPorPuntos.sort(function(obj1, obj2) {
+        return obj2.PuntosTotalesEquipo - obj1.PuntosTotalesEquipo;
+      });
+      // tslint:disable-next-line:only-arrow-functions
+      this.rankingEquiposJuegoDePunto = this.rankingEquiposJuegoDePunto.sort(function(obj1, obj2) {
+        return obj2.puntos - obj1.puntos;
+      });
+      for (let i = 0; i < this.rankingEquiposJuegoDePunto.length; i++) {
+        this.rankingEquiposJuegoDePunto[i].posicion = i + 1;
+      }
+      this.dataSource = new MatTableDataSource (this.rankingEquiposJuegoDePunto);
+      this.selection.clear();
+      swal(this.equipoElegido.nombre + ' Enhorabuena', 'success');
+
     }
   }
-
   goBack() {
     this.location.back();
   }

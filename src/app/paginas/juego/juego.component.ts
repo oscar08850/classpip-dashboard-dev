@@ -284,7 +284,7 @@ export class JuegoComponent implements OnInit {
 
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.equiposGrupo.length; i++) {
-        console.log(this.equiposGrupo[i]);
+        console.log(this.equiposGrupo[i].Nombre);
         this.peticionesAPI.InscribeEquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
         .subscribe(equiposJuego => console.log(equiposJuego));
       }

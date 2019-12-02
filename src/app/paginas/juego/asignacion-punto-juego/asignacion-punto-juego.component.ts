@@ -36,6 +36,7 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
 
   puntosSeleccionados: Punto[] = [];
   botonTablaDesactivado = false;
+  puntoAleatorioId: number;
 
   constructor(
                public snackBar: MatSnackBar,
@@ -54,7 +55,15 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
     // traigo los tipos de puntos entre los que se puede seleccionar
     this.peticionesAPI.DameTiposDePuntos(this.profesorId)
     .subscribe(puntos => {
-      this.tiposPuntos = puntos;
+      this.puntoAleatorioId = puntos.filter (p => p.Nombre === 'Aleatorio')[0].id;
+
+      // Elimino el tipo de punto aleatorio para que no salga entre los asignables
+      // porque ese tipo de punto se asigna al juego de forma automática
+      this.tiposPuntos = puntos.filter (p => p.Nombre !== 'Aleatorio');
+      // asigno el tipo de punto aleatorio
+      this.peticionesAPI.AsignaPuntoJuego(new AsignacionPuntosJuego(this.puntoAleatorioId, this.juego.id))
+      .subscribe();
+
       this.seleccionados = Array(this.tiposPuntos.length).fill(false);
       console.log(this.seleccionados);
       this.dataSource = new MatTableDataSource (this.tiposPuntos);

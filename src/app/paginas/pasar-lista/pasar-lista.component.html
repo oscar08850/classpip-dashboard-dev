@@ -25,7 +25,11 @@
   <div class="enColumna">
       <button type="button" class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = ProcesarSeleccionados()>Procesar elegidos</button>
       {{mensaje}}
+      <br>
+      <button type="button" style = "width: 30%" class="btn Aceptar" (click)="ElegirAleatoriamente()">Elegir a un alumno aleatoriamente </button>
+
   </div>
+
 
 
   <table align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -92,6 +96,7 @@
 <div class="contenedor">
     <ng-template  #Aviso_no_alumnos><div class="texto">Todavía no hay alumnos en este grupo.</div></ng-template>
 </div>
+
 <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
 
 </div>
