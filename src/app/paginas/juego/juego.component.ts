@@ -6,7 +6,7 @@ import { Location } from '@angular/common';
 
 // Clases
 // tslint:disable-next-line:max-line-length
-import { Alumno, Equipo, Juego, Punto, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga} from '../../clases/index';
+import { Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga} from '../../clases/index';
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
@@ -43,6 +43,7 @@ export class JuegoComponent implements OnInit {
   juegoCreado: Boolean = false;
 
   juego: Juego;
+  juegoDeCompeticion: JuegoDeCompeticion;
 
 
   // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS E INACTIVOS DE LOS TRES TIPOS DE JUEGOS
@@ -250,10 +251,11 @@ export class JuegoComponent implements OnInit {
   CrearJuegoDeCompeticionLiga() {
     // tslint:disable-next-line:max-line-length
     console.log ('&&&&&& ' + this.tipoJuegoCompeticionSeleccionado);
-    // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CreaJuegoDeCompeticionLiga(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupo.id)
+    // tslint:disable-next-line:max-line-lengtholean)
+    this.peticionesAPI.CreaJuegoDeCompeticionLiga(new JuegoDeCompeticion (2, this.tipoDeJuegoSeleccionado,
+      this.modoDeJuegoSeleccionado), this.grupo.id)
     .subscribe(juegoCreado => {
-      this.juego = juegoCreado;
+      this.juegoDeCompeticion = juegoCreado;
       console.log(juegoCreado);
       console.log('Juego creado correctamente');
       this.sesion.TomaJuego(this.juego);
