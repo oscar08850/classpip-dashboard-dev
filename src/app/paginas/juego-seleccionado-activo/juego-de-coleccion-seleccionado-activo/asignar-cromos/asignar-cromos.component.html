@@ -3,7 +3,7 @@
 
 <div class="contenedor">
   <div class="enColumna">
-<mat-tab-group [color]="primary" [backgroundColor]="primary" #tabs style="margin-top: 10px">
+<mat-tab-group [color]="primary" [backgroundColor]="primary" #tabs style="margin-top: 10px" (selectedTabChange)="CambioTab($event)">
 
 
   <!-- ASIGNAR EL CROMO QUE EL PROFESOR ESCOJA-->
@@ -59,7 +59,7 @@
 
 
   <!-- REPARTIR PAQUETES DE CROMOS ALEATORIOS -->
-  <mat-tab label="Asignación aleatoria">
+  <mat-tab index = "1" label="Asignación aleatoria">
 
     <div class="enColumna">
 
@@ -73,11 +73,50 @@
     </div>
 
   </mat-tab>
+  <!-- REPARTIR PAQUETES DE CROMOS SEGUN PUNTOS -->
+  <mat-tab index = "2"  label="Asignación segun puntos">
+    <br>
+      <div class = "enFila" *ngIf = "juegosPuntos.length !== 0; else Aviso_no_habilitado">
+          <div style="width:90%">
+            <mat-form-field style="width:90%">
+              <mat-label>Selecciona el juego de puntos</mat-label>
+              <select matNativeControl [(ngModel)]="juegoPuntosSeleccionadoId" name="juego" (change) = "botonAsignacionDesactivado=false;">
+                <option *ngFor="let juego of juegosPuntos" [value]="juego.id">
+                  {{juego.Tipo}}
+                </option>
+              </select>
+            </mat-form-field>
+          </div>
+          <div class="enColumna">
+              <div>
+                  <input style="width:15%" type="number"   requiered [(ngModel)]="cromosParaPrimero">
+                  <span>cromos para el primero </span>
+                </div>
+              <div>
+                  <input style="width:15%" type="number"  requiered [(ngModel)]="cromosParaSegundo">
+                  <span>cromos para el segundo </span>
+                </div>
+              <div>
+                  <input style="width:15%" type="number"  requiered [(ngModel)]="cromosParaTercero">
+                  <span>cromos para el tercero </span>
+              </div>
+          </div>
+          <button  style= "width:50%" type="button" class="btn Aceptar" [disabled]="botonAsignacionDesactivado" (click) = AbrirDialogoConfirmacionAsignarCromosMejoresRanking()>Asignar cromos</button>
+
+      </div>
+      <ng-template #Aviso_no_habilitado>Esta opción no está habilitada porque no tienes juegos de puntos en este grupo</ng-template>
+
+
+
+
+  </mat-tab>
+
+
 </mat-tab-group>
 
 
 
-<form *ngIf="alumnosDelJuego" style="width: 100%">
+<form *ngIf="alumnosDelJuego && mostrarLista" style="width: 100%">
 
 
     <mat-form-field style = "width: 60%; margin-left: 20%; ">
@@ -86,7 +125,7 @@
       </mat-form-field>
 
 
-  <table align="center" *ngIf="alumnosDelJuego" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <table align="center" *ngIf="alumnosDelJuego && mostrarLista" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
@@ -163,6 +202,27 @@
                           style = "color:black">{{alumno.SegundoApellido}} </div>
       </td>
     </ng-container>
+
+     <ng-container matColumnDef=" ">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> </th>
+        <td mat-cell   *matCellDef="let alumno; ">
+              <div *ngIf = "primerAlumno && cromosParaPrimero > 0 &&
+                            alumno.Nombre === primerAlumno.Nombre &&
+                            alumno.PrimerApellido === primerAlumno.PrimerApellido &&
+                            alumno.SegundoApellido === primerAlumno.SegundoApellido"
+                            style = "color:green;font-weight: bold; font-size: 150%;">{{cromosParaPrimero}} cromos más </div>
+                            <div *ngIf = "segundoAlumno && cromosParaSegundo > 0 &&
+                            alumno.Nombre === segundoAlumno.Nombre &&
+                            alumno.PrimerApellido === segundoAlumno.PrimerApellido &&
+                            alumno.SegundoApellido === segundoAlumno.SegundoApellido"
+                            style = "color:green;font-weight: bold; font-size: 150%;">{{cromosParaSegundo}} cromos más </div>
+                            <div *ngIf = "tercerAlumno && cromosParaTercero > 0 &&
+                            alumno.Nombre === tercerAlumno.Nombre &&
+                            alumno.PrimerApellido === tercerAlumno.PrimerApellido &&
+                            alumno.SegundoApellido === tercerAlumno.SegundoApellido"
+                            style = "color:green;font-weight: bold; font-size: 150%;">{{cromosParaTercero}} cromos más </div>
+        </td>
+      </ng-container>
 
 
 
@@ -245,18 +305,33 @@
             </mat-card-content>
           </mat-card>
       </mde-popover>
+
     </td>
     </ng-container>
 
-
-        <!-- More Column -->
-    <ng-container matColumnDef=" ">
+    <ng-container matColumnDef="info">
       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"></th>
       <td mat-cell *matCellDef="let equipo">
           <button (click) = "AccederEquipo(equipo)" routerLink = "informacionEquipoJuegoColeccion" mat-icon-button matTooltip="Ver progreso de {{equipo.nombre}} en el juego">
               <i class="material-icons">more_horiz</i>
           </button>
       </td>
+    </ng-container>
+
+    <ng-container matColumnDef=" ">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> </th>
+        <td mat-cell   *matCellDef="let equipo; ">
+              <div *ngIf = "primerEquipo && cromosParaPrimero > 0 &&
+                            equipo.Nombre === primerEquipo.Nombre"
+                            style = "color:green;font-weight: bold; font-size: 150%;">{{cromosParaPrimero}} cromos más </div>
+              <div *ngIf = "segundoEquipo && cromosParaSegundo > 0 &&
+                            equipo.Nombre === segundoEquipo.Nombre"
+                            style = "color:green;font-weight: bold; font-size: 150%;">{{cromosParaSegundo}} cromos más </div>
+              <div *ngIf = "tercerEquipo && cromosParaTercero > 0 &&
+                            equipo.Nombre === tercerEquipo.Nombre"
+                            style = "color:green;font-weight: bold; font-size: 150%;">{{cromosParaTercero}} cromos más </div>
+
+        </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumnsEquipos; sticky: true"></tr>

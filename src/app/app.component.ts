@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Profesor } from './clases';
 import { SesionService} from './servicios/sesion.service';
-import { PeticionesAPIService} from './servicios/index';
+import { PeticionesAPIService, CalculosService} from './servicios/index';
 import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 
 
@@ -22,6 +22,7 @@ export class AppComponent  {
               private route: Router,
               private peticionesAPI: PeticionesAPIService,
               private sesion: SesionService,
+              private calculos: CalculosService,
               public snackBar: MatSnackBar) { }
 
   Autentificar() {

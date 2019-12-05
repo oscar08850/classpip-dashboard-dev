@@ -658,7 +658,7 @@ public AsignarPuntosAlumno(
 ) {
 
       alumno.PuntosTotalesAlumno = alumno.PuntosTotalesAlumno + puntosNuevos;
-      if (nivelesDelJuego !== undefined) {
+      if (nivelesDelJuego.length > 0 ) {
         const nivelId = this.DameNivelId (nivelesDelJuego, alumno.PuntosTotalesAlumno );
         alumno.nivelId = nivelId;
       }
@@ -682,7 +682,7 @@ public AsignarPuntosEquipo(
 ) {
 
       equipo.PuntosTotalesEquipo = equipo.PuntosTotalesEquipo + puntosNuevos;
-      if (nivelesDelJuego !== undefined) {
+      if (nivelesDelJuego.length > 0 ) {
         const nivelId = this.DameNivelId (nivelesDelJuego, equipo.PuntosTotalesEquipo );
         equipo.nivelId = nivelId;
       }
@@ -838,6 +838,29 @@ public PreparaHistorialEquipo(
       }
     }
     return listaCromosSinRepetidos;
+  }
+
+  FormarEquiposAleatorios(individuos: any[], tamEquipos: number): any[] {
+    const listaInicial = individuos;
+    const numeroGrupos = Math.ceil(listaInicial.length / tamEquipos);
+    console.log ('Tamaño ' + tamEquipos);
+
+    console.log ('Numero de grupos ' + numeroGrupos);
+    const equipos: any [] = [];
+    for (let i = 0; i < numeroGrupos - 1; i++) {
+      console.log ('grupo ' + i);
+      const equipo: any[] = [];
+      for (let j = 0; j < tamEquipos; j++) {
+        const n = Math.floor(Math.random() * listaInicial.length);
+        console.log (n + ' ' + listaInicial[n]);
+        equipo.push (listaInicial[n]);
+        listaInicial.splice (n , 1);
+      }
+      equipos.push (equipo);
+    }
+    equipos.push (listaInicial);
+    return equipos;
+
   }
 
 }

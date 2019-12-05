@@ -10,7 +10,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
-
 @Component({
   selector: 'app-mis-alumnos',
   templateUrl: './mis-alumnos.component.html',
@@ -28,16 +27,19 @@ export class MisAlumnosComponent implements OnInit {
   mensaje = 'Confirma que quieres eliminar a: ';
 
   constructor(
+
     private sesion: SesionService,
     private peticionesAPI: PeticionesAPIService,
     private calculos: CalculosService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
-    private location: Location) { }
+    private location: Location) {
+    }
 
   ngOnInit() {
     this.profesor = this.sesion.DameProfesor();
     this.DameTodosMisAlumnos();
+
   }
 
   DameTodosMisAlumnos() {

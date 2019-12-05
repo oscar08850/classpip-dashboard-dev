@@ -59,6 +59,14 @@
       </p>
     </div>
 
+    <div class = "filter">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilterMisAlumnos($event.target.value)" placeholder="Filtro para buscar alumno...">
+          <i class="material-icons" matSuffix>search</i>
+        </mat-form-field>
+      </div>
+
+
     <table style="width: 100%; table-layout:fixed;"  *ngIf="misAlumnos[0]" mat-table [dataSource]="dataSourceMisAlumnos" class="example-container mat-elevation-z8">
 
       <!-- Nombre Alumno Column -->

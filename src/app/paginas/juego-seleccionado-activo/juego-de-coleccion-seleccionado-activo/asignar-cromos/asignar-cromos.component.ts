@@ -4,11 +4,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ResponseContentType, Http, Response } from '@angular/http';
 
 // Imports para abrir diálogo y snackbar
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MatTabChangeEvent} from '@angular/material';
 import { DialogoConfirmacionComponent } from '../../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
 import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion,
- Album, AlbumEquipo, Coleccion, Cromo } from '../../../../clases/index';
+ Album, AlbumEquipo, Coleccion, Cromo, AlumnoJuegoDePuntos } from '../../../../clases/index';
 
 // Services
 import { JuegoService, EquipoService, ColeccionService, JuegoDeColeccionService } from '../../../../servicios/index';
@@ -42,10 +42,10 @@ export class AsignarCromosComponent implements OnInit {
   coleccion: Coleccion;
   cromosColeccion: Cromo[];
 
-  displayedColumnsAlumno: string[] = ['select', 'nombreAlumno', 'primerApellido', 'segundoApellido'];
+  displayedColumnsAlumno: string[] = ['select', 'nombreAlumno', 'primerApellido', 'segundoApellido', ' '];
   selection = new SelectionModel<Alumno>(true, []);
 
-  displayedColumnsEquipos: string[] = ['select', 'nombreEquipo', 'miembros'];
+  displayedColumnsEquipos: string[] = ['select', 'nombreEquipo', 'miembros', 'info', ' '];
   selectionEquipos = new SelectionModel<Equipo>(true, []);
 
   seleccionados: boolean[];
@@ -71,7 +71,8 @@ export class AsignarCromosComponent implements OnInit {
 
   // tslint:disable-next-line:no-inferrable-types
   mensajeAsignacionAleatoria: string = 'Confirma que quieres asignar aleatoriamente este sobre de cromos aleatorios';
-
+  // tslint:disable-next-line:no-inferrable-types
+  mensajeAsignacionMejoresRanking: string = 'Confirma que quieres asignar cromos a los tres mejores del ranking';
   // tslint:disable-next-line:ban-types
   isDisabled: Boolean = true;
 
@@ -82,6 +83,27 @@ export class AsignarCromosComponent implements OnInit {
   // tslint:disable-next-line:no-inferrable-types
   numeroCromosRandom: number = 1;
   botonTablaDesactivado = true;
+  juegosPuntos: Juego[] = [];
+  juegoPuntosSeleccionadoId: number;
+
+  // tslint:disable-next-line:no-inferrable-types
+  cromosParaPrimero: number = 3;
+  // tslint:disable-next-line:no-inferrable-types
+  cromosParaSegundo: number = 2;
+    // tslint:disable-next-line:no-inferrable-types
+  cromosParaTercero: number = 1;
+
+  // tslint:disable-next-line:no-inferrable-types
+  botonAsignacionDesactivado: boolean = true;
+
+  primerAlumno: Alumno;
+  segundoAlumno: Alumno;
+  tercerAlumno: Alumno;
+
+  primerEquipo: Equipo;
+  segundoEquipo: Equipo;
+  tercerEquipo: Equipo;
+  mostrarLista = true;
 
   constructor( private juegoService: JuegoService,
                private equipoService: EquipoService,
@@ -96,11 +118,9 @@ export class AsignarCromosComponent implements OnInit {
                public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-
     this.coleccion = this.sesion.DameColeccion();
     this.juegoSeleccionado = this.sesion.DameJuego();
     console.log ('Ya estamos ' + this.coleccion);
-
     this.CromosColeccion();
     if (this.juegoSeleccionado.Modo === 'Individual') {
       this.alumnosDelJuego = this.sesion.DameAlumnosDelJuego();
@@ -111,9 +131,38 @@ export class AsignarCromosComponent implements OnInit {
       this.RecuperarInscripcionesEquiposJuego();
       this.dataSource = new MatTableDataSource(this.equiposDelJuego);
     }
+    // Necesitaré los juegos de puntos de este grupo por si quiere
+    // asignar cromos segun los puntos
+    this.DameJuegosPuntos ();
   }
 
 
+  CambioTab(event: MatTabChangeEvent) {
+    // Se ejecuta cuando cambio de tab
+    console.log ('Cambio a tab ' + event.index);
+    this.mostrarLista = true;
+    this.primerAlumno = undefined;
+    this.segundoAlumno = undefined;
+    this.tercerAlumno = undefined;
+    this.primerEquipo = undefined;
+    this.segundoEquipo = undefined;
+    this.tercerEquipo = undefined;
+    this.alumnoElegido = undefined;
+    this.equipoElegido = undefined;
+    if (event.index === 2) {
+      console.log ('Entro');
+      console.log (this.juegosPuntos.length);
+      // En el caso de que no esté habilitada la opción de asignar cromos
+      // según ranking de puntos entonces no muestro la lista de jugadores
+      if (this.juegosPuntos.length === 0) {
+        this.mostrarLista = false;
+        console.log ('No mostrare la lista');
+      }
+
+    }
+
+
+  }
   /* Para averiguar si todas las filas están seleccionadas */
   IsAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -134,6 +183,17 @@ export class AsignarCromosComponent implements OnInit {
     }
   }
 
+  // Me traigo los juegos de puntos, pero seleccion solo los que tienen el mismo modo
+  // (individual o equipos)
+  DameJuegosPuntos() {
+    this.peticionesAPI.DameJuegoDePuntosGrupo (this.sesion.DameGrupo().id)
+    .subscribe ( juegos =>{
+
+      this.juegosPuntos = juegos.filter (j => j.Modo === this.juegoSeleccionado.Modo && j.JuegoActivo)
+      console.log ('HHHHH ' + this.juegosPuntos.length);
+    }
+    );
+  }
 
   /* Esta función decide si el boton debe estar activo (si hay al menos
   una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
@@ -144,7 +204,6 @@ export class AsignarCromosComponent implements OnInit {
       this.botonTablaDesactivado = false;
     }
   }
-
 
 
 
@@ -378,6 +437,60 @@ export class AsignarCromosComponent implements OnInit {
     });
   }
 
+  AsignarCromosMejoresRanking() {
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(this.juegoPuntosSeleccionadoId)
+      .subscribe(inscripciones => {
+        // tslint:disable-next-line:only-arrow-functions
+        const ranking = inscripciones.sort(function(obj1, obj2) {
+          return obj2.PuntosTotalesAlumno - obj1.PuntosTotalesAlumno;
+        });
+        // Obtengo los tres primeros alumnos del ranking (atención porque el ranking solo
+        // tiene los identificadores de los alumnos y a partir de ellos tengo que conseguir los alumnos)
+        this.primerAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[0].alumnoId)[0];
+        this.segundoAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[1].alumnoId)[0];
+        this.tercerAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[2].alumnoId)[0];
+
+        this.calculos.AsignarCromosAleatoriosAlumno (
+          this.primerAlumno, this.inscripcionesAlumnos, this.cromosParaPrimero, this.probabilidadCromos, this.cromosColeccion
+        );
+        this.calculos.AsignarCromosAleatoriosAlumno (
+          this.segundoAlumno, this.inscripcionesAlumnos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion
+        );
+        this.calculos.AsignarCromosAleatoriosAlumno (
+          this.tercerAlumno, this.inscripcionesAlumnos, this.cromosParaTercero, this.probabilidadCromos, this.cromosColeccion
+        );
+      });
+
+    } else {
+      this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(this.juegoPuntosSeleccionadoId)
+      .subscribe(inscripciones => {
+        // tslint:disable-next-line:only-arrow-functions
+        const ranking = inscripciones.sort(function(obj1, obj2) {
+          return obj2.PuntosTotalesEquipo - obj1.PuntosTotalesEquipo;
+        });
+        // Obtengo los tres primeros equipos del ranking (atención porque el ranking solo
+        // tiene los identificadores de los equipos y a partir de ellos tengo que conseguir los equipos)
+        this.primerEquipo = this.equiposDelJuego.filter (a => a.id === ranking[0].equipoId)[0];
+        this.segundoEquipo = this.equiposDelJuego.filter (a => a.id === ranking[1].equipoId)[0];
+        this.tercerEquipo = this.equiposDelJuego.filter (a => a.id === ranking[2].equipoId)[0];
+
+        this.calculos.AsignarCromosAleatoriosEquipo (
+          this.primerEquipo, this.inscripcionesEquipos, this.cromosParaPrimero, this.probabilidadCromos, this.cromosColeccion
+        );
+        this.calculos.AsignarCromosAleatoriosEquipo (
+          this.segundoEquipo, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion
+        );
+        this.calculos.AsignarCromosAleatoriosEquipo (
+          this.tercerEquipo, this.inscripcionesEquipos, this.cromosParaTercero, this.probabilidadCromos, this.cromosColeccion
+        );
+      });
+
+
+    }
+
+  }
+
   AbrirDialogoConfirmacionAsignarCromo(): void {
 
     let cromo: Cromo;
@@ -441,6 +554,25 @@ export class AsignarCromosComponent implements OnInit {
     });
   }
 
+  AbrirDialogoConfirmacionAsignarCromosMejoresRanking() {
+    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+      height: '150px',
+      data: {
+        mensaje: this.mensajeAsignacionMejoresRanking,
+        nombre: ''
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.AsignarCromosMejoresRanking();
+        this.snackBar.open('Cromos asignados correctamente', 'Cerrar', {
+          duration: 2000,
+        });
+      }
+    });
+
+  }
 
     // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
     GET_ImagenCromo() {

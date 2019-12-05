@@ -17,6 +17,7 @@ import { Equipo, Alumno, AsignacionEquipo } from '../../clases/index';
 // Servicios
 import { SesionService, PeticionesAPIService, CalculosService } from '../../servicios/index';
 
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-equipos',
@@ -70,6 +71,8 @@ export class EquiposComponent implements OnInit {
   nombreLogo: string;
   file: File;
   alumnosGrupo: Alumno[];
+  // tslint:disable-next-line:no-inferrable-types
+  tamEquipos: number = 3;
 
 
   // PARA DIÁLOGO DE CONFIRMACIÓN
@@ -212,7 +215,7 @@ export class EquiposComponent implements OnInit {
       // Actualizo la tabla de equipos
       this.listaEquipos = this.listaEquipos.filter (eq => eq.id !== equipo.id);
       if (this.listaEquipos.length === 0 ) {
-        this.listaEquipos = null;
+        this.listaEquipos = undefined;
       }
 
 
@@ -440,6 +443,26 @@ export class EquiposComponent implements OnInit {
       });
   }
 
+  CrearEquipos() {
+    const equipos = this.calculos.FormarEquiposAleatorios (this.alumnosGrupo, this.tamEquipos);
+    this.listaEquipos = [];
+    for (let i = 0 ; i < equipos.length; i++) {
+      this.peticionesAPI.CreaEquipo(new Equipo('Equipo_' + i, undefined), this.grupoId)
+      .subscribe((equipo) => {
+        if (equipo != null) {
+          this.listaEquipos.push (equipo);
+          const k = Number(equipo.Nombre.split('_')[1]);
+          // tslint:disable-next-line:prefer-for-of
+          for (let j = 0; j < equipos[k].length ; j++) {
+            this.peticionesAPI.PonAlumnoEquipo(new AsignacionEquipo(equipos[k][j].id, equipo.id), equipo.grupoId)
+            .subscribe();
+          }
+        }});
+    }
+    swal ('Equipos creados. Comprueba la lista de equipos' , 'success');
+
+
+  }
 
   ///////////// TERCER PASO STEPPER
 

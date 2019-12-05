@@ -189,6 +189,8 @@ export class AsignarPuntosComponent implements OnInit {
       // Buscamos los alumnos que hemos seleccionado
       if (this.selection.isSelected(this.dataSource.data[i]))  {
         console.log ('Voy a asignar ' + this.valorPunto + 'a ' + this.rankingJuegoDePuntos[i].nombre);
+        console.log ('Niveles ' + this.nivelesDelJuego);
+
         this.calculos.AsignarPuntosAlumno ( this.listaAlumnosOrdenadaPorPuntos[i],
                                             this.nivelesDelJuego, this.valorPunto,
                                             this.puntoSeleccionadoId);

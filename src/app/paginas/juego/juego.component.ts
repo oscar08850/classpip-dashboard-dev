@@ -93,6 +93,7 @@ export class JuegoComponent implements OnInit {
 
 
   tipoJuegoElegido: string;
+  nombreColeccionSeleccionada: string;
 
   constructor(
                public snackBar: MatSnackBar,
@@ -270,6 +271,7 @@ export class JuegoComponent implements OnInit {
 
 
   Finalizar() {
+
     if (this.juego.Modo === 'Individual') {
       console.log('Voy a inscribir a los alumnos del grupo');
 
@@ -308,6 +310,10 @@ export class JuegoComponent implements OnInit {
 
   prueba() {
     console.log(this.juego);
+  }
+  // Recibo el nombre de la colección elegida en el componente hijo
+  RecibeNombre($event) {
+    this.nombreColeccionSeleccionada = $event;
   }
 
   goBack() {
