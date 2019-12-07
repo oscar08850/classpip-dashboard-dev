@@ -262,7 +262,7 @@ export class JuegoComponent implements OnInit {
     console.log(new JuegoDeCompeticion (NumeroDeJornadas, this.tipoDeJuegoSeleccionado + ' Liga',
     this.modoDeJuegoSeleccionado), this.grupo.id);
     // tslint:disable-next-line:max-line-lengtholean)
-    this.peticionesAPI.CreaJuegoDeCompeticionLiga(new JuegoDeCompeticion (NumeroDeJornadas, this.tipoDeJuegoSeleccionado + 'Liga',
+    this.peticionesAPI.CreaJuegoDeCompeticionLiga(new JuegoDeCompeticion (NumeroDeJornadas, this.tipoDeJuegoSeleccionado + ' Liga',
       this.modoDeJuegoSeleccionado), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juegoDeCompeticion = juegoCreado;
