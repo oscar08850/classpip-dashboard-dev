@@ -113,7 +113,7 @@ export class CalculosService {
           }
           // Ahora vamos a por los juegos de competición
           console.log ('vamos a por los juegos de competicion: ' + grupoID);
-          this.peticionesAPI.DameJuegoDeCompeticionGrupo(grupoID)
+          this.peticionesAPI.DameJuegoDeCompeticionLigaGrupo(grupoID)
           .subscribe(juegosCompeticion => {
             console.log('He recibido los juegos de competición');
             // tslint:disable-next-line:prefer-for-of

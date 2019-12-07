@@ -433,8 +433,8 @@ export class PeticionesAPIService {
   }
 
   // Juego de competición
-  public DameJuegoDeCompeticionGrupo(grupoId: number): Observable<Juego[]> {
-    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeCompeticions');
+  public DameJuegoDeCompeticionLigaGrupo(grupoId: number): Observable<Juego[]> {
+    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga');
   }
 
 }
