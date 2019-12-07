@@ -3,13 +3,17 @@ import { ThemePalette } from '@angular/material/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 import { Location } from '@angular/common';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // Clases
 // tslint:disable-next-line:max-line-length
 import { Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga} from '../../clases/index';
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
+
 
 export interface OpcionSeleccionada {
   nombre: string;
@@ -28,6 +32,7 @@ export interface ChipColor {
   templateUrl: './juego.component.html',
   styleUrls: ['./juego.component.scss']
 })
+
 export class JuegoComponent implements OnInit {
 
 
@@ -44,12 +49,11 @@ export class JuegoComponent implements OnInit {
 
   juego: Juego;
   juegoDeCompeticion: JuegoDeCompeticion;
-
+  myForm: FormGroup;
 
   // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS E INACTIVOS DE LOS TRES TIPOS DE JUEGOS
   juegosActivos: Juego[];
   juegosInactivos: Juego[];
-
 
 
   // tslint:disable-next-line:no-inferrable-types
@@ -101,7 +105,9 @@ export class JuegoComponent implements OnInit {
                private calculos: CalculosService,
                private sesion: SesionService,
                private location: Location,
-               private peticionesAPI: PeticionesAPIService
+               private peticionesAPI: PeticionesAPIService,
+               // tslint:disable-next-line:variable-name
+               private _formBuilder: FormBuilder,
                ) { }
 
 
@@ -121,7 +127,6 @@ export class JuegoComponent implements OnInit {
         console.log('Este grupo aun no tiene equipos');
         this.equiposGrupo = undefined;
       }
-
     });
 
     // Ahora traemos la lista de juegos
@@ -150,6 +155,9 @@ export class JuegoComponent implements OnInit {
     });
     console.log ('Ya he traido los juegos');
 
+    this.myForm = this._formBuilder.group({
+      NumeroDeJornadas: ['', Validators.required],
+    });
   }
 
   //////////////////////////////////////// FUNCIONES PARA LISTAR JUEGOS ///////////////////////////////////////////////
@@ -249,10 +257,15 @@ export class JuegoComponent implements OnInit {
   }
 
   CrearJuegoDeCompeticionLiga() {
-    // tslint:disable-next-line:max-line-length
     console.log ('&&&&&& ' + this.tipoJuegoCompeticionSeleccionado);
+
+    let NumeroDeJornadas: number;
+    NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
+    console.log(NumeroDeJornadas);
+    console.log(new JuegoDeCompeticion (NumeroDeJornadas, this.tipoDeJuegoSeleccionado + 'Liga',
+    this.modoDeJuegoSeleccionado), this.grupo.id);
     // tslint:disable-next-line:max-line-lengtholean)
-    this.peticionesAPI.CreaJuegoDeCompeticionLiga(new JuegoDeCompeticion (2, this.tipoDeJuegoSeleccionado,
+    this.peticionesAPI.CreaJuegoDeCompeticionLiga(new JuegoDeCompeticion (NumeroDeJornadas, this.tipoDeJuegoSeleccionado + 'Liga',
       this.modoDeJuegoSeleccionado), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juegoDeCompeticion = juegoCreado;
@@ -287,11 +300,6 @@ export class JuegoComponent implements OnInit {
     console.log('Voy a crear juego de competicón de clase:');
     this.isDisabled = false;
   }
-
-  // Numerojornadasunavueltaind(alumnosGrupo: Alumno[]) {
-  //   this.alumnosGrupo.length = alumnosGrupo.length - 1;
-  //   console.log('Miro cuantos alumnos hay en el grupo');
-  // }
 
   Finalizar() {
     if (this.modoDeJuegoSeleccionado === 'Individual' && this.tipoJuegoCompeticionSeleccionado === 'Liga') {

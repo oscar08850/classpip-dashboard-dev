@@ -3,6 +3,8 @@ export class JuegoDeCompeticion {
   Tipo: string;
   Modo: string;
   JuegoActivo: boolean;
+  grupoId: number;
+  id: number;
 
   constructor(NumeroTotalJornas?: number, Tipo?: string, Modo?: string, JuegoActivo?: boolean) {
 

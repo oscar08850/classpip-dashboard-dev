@@ -229,7 +229,7 @@ export class CalculosService {
       let rankingJuegoDePuntos: any[] = [];
 
       console.log ('Dentro ranking2 ');
-      console.log ('Recorremos los ' + listaAlumnosOrdenadaPorPuntos.length)
+      console.log ('Recorremos los ' + listaAlumnosOrdenadaPorPuntos.length);
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i ++) {
         console.log ('alumno ' + i);
@@ -545,7 +545,7 @@ public BorrarPunto(   punto: TablaHistorialPuntosAlumno, alumnoJuegoDePuntos: an
   //  });
   //  return resultadoObservable;
 
-  //}
+  // }
 
 public BorrarPuntoEquipo( punto: TablaHistorialPuntosEquipo, equipoJuegoDePuntos: any,
                           nivelesDelJuego: Nivel[]) {
@@ -878,8 +878,10 @@ public AsignarPuntosAlumno(
 //             const fechaAsignacionPunto = new Date();
 //             const fechaString = fechaAsignacionPunto.toLocaleDateString() + '  ' + fechaAsignacionPunto.toLocaleTimeString();
 //         // tslint:disable-next-line:max-line-length
+// tslint:disable-next-line:max-line-length
 //       // this.POST_HistorialAlumno(this.valorPunto, this.puntoSeleccionadoId, this.listaAlumnosOrdenadaPorPuntos[i].id, this.fechaString);
 //         // tslint:disable-next-line:max-line-length
+// tslint:disable-next-line:max-line-length
 //             this.peticionesAPI.PonHistorialPuntosAlumno(new HistorialPuntosAlumno (valorPunto, puntoSeleccionadoId, listaAlumnosOrdenadaPorPuntos[i].id, fechaString))
 //         // tslint:disable-next-line:no-shadowed-variable
 //             .subscribe(res => console.log(res));
@@ -921,6 +923,7 @@ public AsignarPuntosAlumno(
 //         const fechaAsignacionPunto = new Date();
 //         const fechaString = fechaAsignacionPunto.toLocaleDateString() + '  ' + fechaAsignacionPunto.toLocaleTimeString();
 //         // tslint:disable-next-line:max-line-length
+// tslint:disable-next-line:max-line-length
 //         this.peticionesAPI.PonHistorialPuntosAlumno(new HistorialPuntosAlumno (valorPunto, puntoSeleccionadoId, listaAlumnosOrdenadaPorPuntos[i].id, fechaString))
 //         // tslint:disable-next-line:no-shadowed-variable
 //         .subscribe(res => console.log(res));
@@ -1090,6 +1093,7 @@ public AsignarPuntosEquipo(
 
 //           // tslint:disable-next-line:max-line-length
 //           // tslint:disable-next-line:max-line-length
+// tslint:disable-next-line:max-line-length
 //           this.peticionesAPI.PonHistorialPuntosEquipo(new HistorialPuntosEquipo (valorPunto, puntoSeleccionadoId, listaEquiposOrdenadaPorPuntos[i].id, fechaString))
 //           .subscribe(result => console.log(res));
 //           // tslint:disable-next-line:only-arrow-functions
@@ -1121,6 +1125,7 @@ public AsignarPuntosEquipo(
 //             const fechaString = fechaAsignacionPunto.toLocaleDateString() + '  ' + fechaAsignacionPunto.toLocaleTimeString();
 
 //             // tslint:disable-next-line:max-line-length
+// tslint:disable-next-line:max-line-length
 //             this.peticionesAPI.PonHistorialPuntosEquipo(new HistorialPuntosEquipo (valorPunto, puntoSeleccionadoId, listaEquiposOrdenadaPorPuntos[i].id, fechaString))
 //             .subscribe(result => console.log(res));
 //             // tslint:disable-next-line:max-line-length
@@ -1225,7 +1230,7 @@ public PreparaHistorialEquipo(
     console.log(alumnoJuegoDeColeccion);
 
     // tslint:disable-next-line:prefer-const
-    //let hits = this.probabilidadCromos.map(x => 0);
+    // let hits = this.probabilidadCromos.map(x => 0);
 
 
     for (let k = 0; k < numeroCromosRandom; k++) {
@@ -1233,7 +1238,7 @@ public PreparaHistorialEquipo(
       console.log('Voy a hacer el post del cromo ' + k);
 
       const indexCromo = this.randomIndex(probabilidadCromos);
-      //hits[this.indexCromo]++;
+      // hits[this.indexCromo]++;
 
 
       this.peticionesAPI.AsignarCromoAlumno(new Album (alumnoJuegoDeColeccion.id,

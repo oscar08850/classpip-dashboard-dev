@@ -68,7 +68,7 @@
 
   <mat-tab label="Crear juego">
 
-    <form>
+    <form [formGroup]="myForm">
       <mat-card class="panel" style="width: 90%">
 
         <mat-card-content>
@@ -212,28 +212,25 @@
 
 
                 <div class="btnCambiarStep">
-                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
-
+                    <button [disabled]="isDisabled" type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
 
 
                <!-- CUARTO PASO: NUMERO DE JORNADAS-->
-                <mat-step>
+                <mat-step [stepControl]="myForm">
                   <ng-template matStepLabel><div>Número de jornadas</div></ng-template>
 
-                    <label class="example-container"></label>
                       <!-- casilla para introducir jornadas -->
-                      <mat-label>Número de jornadas</mat-label>
-                      <div class="numerodejornadas">
 
-                        <mat-form-field>
-                          <input matInput placeholder="Introduzca el Número de jornadas" >
-                          <!-- <input (keyup)="Disabled()" matInput formControlName="numerodejornadas" required> -->
-                        </mat-form-field>
 
-                      </div>
+
+                          <mat-form-field>
+                            <mat-label>Número de jornadas</mat-label>
+                            <!--- <input matInput placeholder="Introduzca el Número de jornadas" > -->
+                            <input matInput formControlName="NumeroDeJornadas" required>
+                          </mat-form-field>
+
 
                       <div *ngIf="modoDeJuegoSeleccionado === 'Individual'">
                       <mat-label>Si desea realizar la liga de una vuelta escriba {{this.alumnosGrupo.length - 1}}</mat-label>
@@ -244,8 +241,10 @@
                       </div>
 
                       <div class="btnCambiarStep">
-                          <button type="button" class="btn Next"  matStepperNext>Siguiente</button>
-                      </div>
+                          <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                          <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
+
+                        </div>
 
                 </mat-step>
 

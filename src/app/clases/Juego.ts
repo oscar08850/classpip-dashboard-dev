@@ -5,9 +5,7 @@ export class Juego {
   grupoId: number;
   id: number;
   numerodejornadas: number;
-
   coleccionId: number;
-
   TipoDeCompeticion: string;
 
   constructor(Tipo?: string, Modo?: string, coleccionId?: number, JuegoActivo?: boolean,
