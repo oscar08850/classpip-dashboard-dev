@@ -166,23 +166,6 @@ export class PeticionesAPIService {
     return this.http.put<Punto>(this.APIUrlProfesores + '/' + profesorId + '/puntos/' + puntoId, punto);
   }
 
-  // CREAMOS UN NUEVO JUEGO DE COMPETICION EN EL GRUPO
-  public CreaJuegoDeCompeticionLiga(juego: JuegoDeCompeticion, grupoId: number): Observable<JuegoDeCompeticion> {
-    console.log('voy a crear el juevo de competicion liga');
-    console.log(juego);
-    return this.http.post<JuegoDeCompeticion>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga', juego);
-  }
-
-  // INSCRIBIMOS AL ALUMNO EN EL JUEGO DE COMPETICION
-  public InscribeAlumnoJuegoDeCompeticionLiga(alumnoJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga) {
-    return this.http.post<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionLiga, alumnoJuegoDeCompeticionLiga);
-  }
-
-    // INCRIBIMOS AL EQUIPO EN EL JUEGO DE COMPETICION
-  public InscribeEquipoJuegoDeCompeticionLiga(equipoJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga) {
-    return this.http.post<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionLiga, equipoJuegoDeCompeticionLiga);
-  }
-
   // DEVUELVE LOS TIPOS DE PUNTOS CREADOS POR EL PROFESOR
   public DameTiposDePuntos(profesorId: number): Observable<Punto[]> {
     return this.http.get<Punto[]>(this.APIUrlProfesores + '/' + profesorId + '/puntos');
@@ -432,9 +415,24 @@ export class PeticionesAPIService {
     return this.http.post<AlbumEquipo>(this.APIRUrlAlbumEquipo, album);
   }
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////
   // Juego de competición
+  // CREAMOS UN NUEVO JUEGO DE COMPETICION EN EL GRUPO
+  public CreaJuegoDeCompeticionLiga(juego: JuegoDeCompeticion, grupoId: number): Observable<JuegoDeCompeticion> {
+    console.log('voy a crear el juevo de competicion liga');
+    console.log(juego);
+    return this.http.post<JuegoDeCompeticion>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga', juego);
+  }
+
   public DameJuegoDeCompeticionLigaGrupo(grupoId: number): Observable<Juego[]> {
     return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga');
   }
 
+  public InscribeAlumnoJuegoDeCompeticionLiga(alumnoJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga) {
+    return this.http.post<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionLiga, alumnoJuegoDeCompeticionLiga);
+  }
+
+  public InscribeEquipoJuegoDeCompeticionLiga(equipoJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga) {
+    return this.http.post<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionLiga, equipoJuegoDeCompeticionLiga);
+  }
 }
