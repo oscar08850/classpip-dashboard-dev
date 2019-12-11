@@ -31,28 +31,32 @@ export class CalculosService {
   }
 
 
-  // ESTA FUNCIÓN BORRARÁ EL GRUPO DE ID QUE PASEMOS DEL PROFESOR CON ID QUE PASEMOS Y VOLVERÁ A LA PÁGINA DE LISTAR
-  // ACTUALIZANDO LA TABLA
-  public EliminarGrupo() {
+  // Elimina el grupo (tanto el id del profe como del grupo estan en sesión.
+  // Lo hago con un observable para que el componente que muestra la lista de grupos
+  // espere hasta que se haya acabado la operacion de borrar el grupo de la base de datos
+  public EliminarGrupo(): any {
+    const eliminaObservable = new Observable ( obs => {
 
-    this.peticionesAPI.BorraGrupo(
-              this.sesion.DameProfesor().id,
-              this.sesion.DameGrupo().id)
-    .subscribe(() => {
 
-      this.EliminarMatriculas();
+          this.peticionesAPI.BorraGrupo(
+                    this.sesion.DameProfesor().id,
+                    this.sesion.DameGrupo().id)
+          .subscribe(() => {
 
-      // Ahora elimino el grupo de la lista de grupos para que desaparezca de la pantalla al regresar
-      let lista = this.sesion.DameListaGrupos();
-      lista = lista.filter (g => g.id !== this.sesion.DameGrupo().id);
-      this.sesion.TomaListaGrupos (lista);
+            this.EliminarMatriculas();
+
+            // Ahora elimino el grupo de la lista de grupos para que desaparezca de la pantalla al regresar
+            let lista = this.sesion.DameListaGrupos();
+            lista = lista.filter (g => g.id !== this.sesion.DameGrupo().id);
+            obs.next ();
+          });
     });
+    return eliminaObservable;
   }
 
   // ESTA FUNCIÓN RECUPERA TODAS LAS MATRICULAS DEL GRUPO QUE VAMOS A BORRAR Y DESPUÉS LAS BORRA. ESTO LO HACEMOS PARA NO
   // DEJAR MATRICULAS QUE NO NOS SIRVEN EN LA BASE DE DATOS
   private EliminarMatriculas() {
-
     // Pido las matrículas correspondientes al grupo que voy a borrar
     this.peticionesAPI.DameMatriculasGrupo(this.sesion.DameGrupo().id)
     .subscribe( matriculas => {

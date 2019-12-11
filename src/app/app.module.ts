@@ -112,6 +112,7 @@ import { MisAlumnosComponent } from './paginas/mis-alumnos/mis-alumnos.component
 import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introducir-alumnos.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -207,7 +208,6 @@ import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introduc
   entryComponents: [AgregarAlumnoDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
     EditarCromoDialogComponent, DialogoComponent ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

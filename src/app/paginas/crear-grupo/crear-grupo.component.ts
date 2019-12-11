@@ -6,11 +6,20 @@ import { AgregarAlumnoDialogComponent } from './agregar-alumno-dialog/agregar-al
 import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 
 // Servicios
-import { SesionService, PeticionesAPIService } from '../../servicios/index';
+import { SesionService, PeticionesAPIService, CalculosService } from '../../servicios/index';
 
 // Clases
 import { Grupo } from '../../clases/index';
 import { Location } from '@angular/common';
+import { Observable} from 'rxjs';
+import { of } from 'rxjs';
+import 'rxjs';
+
+import swal from 'sweetalert';
+import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+
+
+
 
 
 @Component({
@@ -39,6 +48,8 @@ export class CrearGrupoComponent implements OnInit {
   // AL PRINCIPIO EL GRUPO NO ESTA CREADO
   // tslint:disable-next-line:ban-types
   grupoYaCreado: Boolean = false;
+  // tslint:disable-next-line:ban-types
+  finalizar: Boolean = false;
 
 
   constructor(private route: ActivatedRoute,
@@ -46,6 +57,7 @@ export class CrearGrupoComponent implements OnInit {
               public dialog: MatDialog,
               public sesion: SesionService,
               public peticionesAPI: PeticionesAPIService,
+              public calculos: CalculosService,
               // tslint:disable-next-line:variable-name
               private _formBuilder: FormBuilder,
               public snackBar: MatSnackBar,
@@ -65,6 +77,9 @@ export class CrearGrupoComponent implements OnInit {
       nombreGrupo: ['', Validators.required],
       descripcionGrupo: ['', Validators.required]
     });
+
+    this.peticionesAPI.DameGruposProfesor (this.profesorId)
+    .subscribe (lista => this.sesion.TomaListaGrupos(lista));
   }
 
   // CREAMOS UN GRUPO DÁNDOLE UN NOMBRE Y UNA DESCRIPCIÓN
@@ -143,6 +158,7 @@ export class CrearGrupoComponent implements OnInit {
     this.snackBar.open('El grupo se ha creado correctamente', 'Cerrar', {
       duration: 3000,
     });
+    this.finalizar = true;
     this.location.back();
   }
 
@@ -156,6 +172,34 @@ export class CrearGrupoComponent implements OnInit {
       this.isDisabled = false;
     }
   }
+  // Esta es la función a la que llama la guarda
+  // Pedimos al usuario confirmación de que quiere abandonar a medias
+  // la creación de grupo.
 
+  canExit(): Observable <boolean> {
+    if (!this.grupoYaCreado || this.finalizar) {
+      return of (true);
+    } else {
+      const confirmacionObservable = new Observable <boolean>( obs => {
+          const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+            height: '150px',
+            data: {
+              mensaje: 'Confirma que quieres abandonar el proceso de creación de grupo',
+            }
+          });
 
+          dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+            if (confirmed) {
+              // Si confirma que quiere salir entonces eliminamos el grupo que se ha creado
+              this.sesion.TomaGrupo (this.grupo);
+              this.calculos.EliminarGrupo().subscribe ( () => obs.next(confirmed));
+
+            } else {
+              obs.next (confirmed);
+            }
+          });
+      });
+      return confirmacionObservable;
+    }
+  }
 }
