@@ -124,6 +124,8 @@
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                   <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
+                  <!-- <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext>Siguiente</button> -->
+
                 </div>
 
           </mat-step>
@@ -132,6 +134,7 @@
           <!-- ////////////////////////////SI ESCOGEMOS EL JUEGO DE TIPO DE PUNTOS ////////////////////////////////-->
 
           <div *ngIf="(tipoDeJuegoSeleccionado === 'Juego De Puntos' && juegoCreado === true)">
+
 
             <!-- TERCER PASO: ASIGNACIÓN DE PUNTO AL JUEGO -->
             <mat-step>
@@ -173,7 +176,10 @@
 
                 <label class = "LabelStepper">Selecciona una colección para el juego</label>
                 <!-- Nos vamos al componente para asignar la colección -->
-                <app-asignacion-coleccion-juego></app-asignacion-coleccion-juego>
+                <app-asignacion-coleccion-juego
+                  (emisorNombreColeccion) = "RecibeNombre ($event)"
+                ></app-asignacion-coleccion-juego>
+                <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}: {{nombreColeccionSeleccionada}} ... {{modoDeJuegoSeleccionado}} </span>
 
               </mat-step>
             </div>
@@ -211,7 +217,10 @@
 
           <mat-step>
             <ng-template matStepLabel>Finalizar</ng-template>
-              Juego creado correctamente
+
+              <span *ngIf="tipoDeJuegoSeleccionado === 'Juego De Colección'" style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}}: {{nombreColeccionSeleccionada}} ... {{modoDeJuegoSeleccionado}} </span>
+              <span *ngIf="tipoDeJuegoSeleccionado === 'Juego De Puntos'" style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}} ... {{modoDeJuegoSeleccionado}} </span>
+
               <div class="btnCambiarStep">
                 <button type="button" class="btn Aceptar" (click) = "Finalizar();">Finalizar</button>
               </div>
@@ -225,6 +234,6 @@
 </mat-tab-group>
 
 </div>
-<div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
-</div>
+<!-- <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+</div> -->
 

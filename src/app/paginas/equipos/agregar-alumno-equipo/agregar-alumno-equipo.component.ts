@@ -41,6 +41,7 @@ export class AgregarAlumnoEquipoComponent implements OnInit {
     this.alumnosSinEquipo = this.data.alumnosSinEquipo;
   }
 
+
   // Meto al alumno con el id que paso como parámetro en el equipo
   AgregarAlumnosEquipo(alumnoId: number) {
 

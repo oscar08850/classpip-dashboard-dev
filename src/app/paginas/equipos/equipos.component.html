@@ -144,6 +144,21 @@
 
 
   </mat-tab>
+
+  <mat-tab label="Generar equipos aleatorios">
+    <div *ngIf="listaEquipos===undefined; else Aviso_no_habilitado" class = 'enColumna'>
+      <div class="enFila" style = 'width: 40%'>
+          <div style = 'margin-top: 5%'>
+              <span>Tamaño de los equipos </span>
+              <input style="width:15%" type="number"   requiered [(ngModel)]="tamEquipos">
+          </div>
+          <button type="button" class="btn Aceptar" (click)="CrearEquipos()">Crear equipos </button>
+      </div>
+    </div>
+    <ng-template #Aviso_no_habilitado>Esta opción no está habilitada porque ya tienes algunos equipos en este grupo</ng-template>
+
+  </mat-tab>
+
 </mat-tab-group>
 </div>
 <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>

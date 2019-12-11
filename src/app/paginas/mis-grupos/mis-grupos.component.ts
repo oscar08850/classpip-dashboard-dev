@@ -46,12 +46,10 @@ export class MisGruposComponent implements OnInit {
     this.profesor = this.sesion.DameProfesor();
     // CUANDO INICIEMOS EL COMPONENTE NOS LISTARÁ LOS GRUPOS DEL PROFESOR QUE RECUPERAMOS EL ID DE LA URL
     this.GruposDelProfesor();
-
-
-
   }
 
   GruposDelProfesor() {
+    console.log ('Busco grupos del profesor');
     this.peticionesAPI.DameGruposProfesor(this.profesor.id)
     .subscribe(res => {
       if (res[0] !== undefined) {

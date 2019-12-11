@@ -64,6 +64,15 @@ export class CrearPuntoComponent implements OnInit {
     // this.profesorId = this.profesorService.RecibirProfesorIdDelServicio();
     this.profesorId = Number (this.route.snapshot.paramMap.get('id'));
 
+
+    // Primero me aseguro de que el tipo de puntos aleatorio está creado. Si no es asi, lo creo
+    this.peticionesAPI.DameTiposDePuntos (this.profesorId)
+    .subscribe ( puntos => {
+      if (puntos.filter (p => p.Nombre === 'Aleatorio').length === 0) {
+        this.nombrePunto = 'Aleatorio';
+        this.descripcionPunto = 'Asignado de forma aleatoria (se crea automáticamente)';
+        this.CrearPunto();
+      }});
   }
 
   ///////////////////////////////////////////// CREAR PUNTO ///////////////////////////////////////////////////////

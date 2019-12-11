@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 // Imports para abrir diálogo mostrar cromos
@@ -18,7 +18,8 @@ import { SesionService, PeticionesAPIService, CalculosService } from '../../../s
   styleUrls: ['./asignacion-coleccion-juego.component.scss']
 })
 export class AsignacionColeccionJuegoComponent implements OnInit {
-
+  // Para comunicar el nombre de la colección seleccionada a componente padre
+  @Output() emisorNombreColeccion = new EventEmitter <string>();
   grupoId: number;
   profesorId: number;
 
@@ -33,13 +34,14 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
   isDisabled: Boolean = true;
 
   displayedColumns: string[] = ['nombreColeccion', ' '];
-  coleccionSeleccionada: Coleccion;
+
 
   juego: Juego;
 
   // Para que al hacer click se quede la fila marcada
   selectedRowIndex = -1;
 
+  coleccionSeleccionada: Coleccion;
 
   constructor(
                private sesion: SesionService,
@@ -95,7 +97,9 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
   }
 
   ColeccionSeleccionada(coleccion: Coleccion) {
+    // Comunico el nombre de la colección seleccionada al padre
     this.coleccionSeleccionada = coleccion;
+    this.emisorNombreColeccion.emit (coleccion.Nombre);
     this.isDisabled = false;
     console.log(this.coleccionSeleccionada);
   }

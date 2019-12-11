@@ -165,14 +165,17 @@ export class MisColeccionesComponent implements OnInit {
    // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
    BorrarColeccion(coleccion: Coleccion) {
 
-
+    console.log ('Vamos a eliminar la colección');
     this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
     .subscribe();
 
     this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe();
-    for (let i = 0; i < (this.cromosColeccion.length); i++) {
-        this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].Imagen).subscribe();
+    if (this.cromosColeccion !==  undefined) {
+      for (let i = 0; i < (this.cromosColeccion.length); i++) {
+          this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].Imagen).subscribe();
+      }
     }
+    console.log ('La saco de la lista');
     this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
   }
 
