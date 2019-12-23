@@ -4,18 +4,16 @@ export class Juego {
   JuegoActivo: boolean;
   grupoId: number;
   id: number;
-  numerodejornadas: number;
+  NumeroTotalJornadas: number;
   coleccionId: number;
-  TipoDeCompeticion: string;
 
   constructor(Tipo?: string, Modo?: string, coleccionId?: number, JuegoActivo?: boolean,
-              TipoDeCompeticion?: string, numerodejornadas?: number) {
+              NumeroTotalJornadas?: number) {
 
     this.Tipo = Tipo;
     this.Modo = Modo;
     this.JuegoActivo = JuegoActivo;
     this.coleccionId = coleccionId;
-    this.TipoDeCompeticion = TipoDeCompeticion;
-    this.numerodejornadas = numerodejornadas;
+    this.NumeroTotalJornadas = NumeroTotalJornadas;
   }
 }

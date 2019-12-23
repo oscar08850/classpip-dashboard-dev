@@ -418,11 +418,17 @@ export class PeticionesAPIService {
   /////////////////////////////////////////////////////////////////////////////////////////////////
   // Juego de competición
   // CREAMOS UN NUEVO JUEGO DE COMPETICION EN EL GRUPO
-  public CreaJuegoDeCompeticionLiga(juego: JuegoDeCompeticion, grupoId: number): Observable<JuegoDeCompeticion> {
-    console.log('voy a crear el juevo de competicion liga');
+  public CreaJuegoDeCompeticionLiga(juego: Juego, grupoId: number): Observable<Juego> {
+    console.log('voy a crear el juego de competicion liga');
     console.log(juego);
-    return this.http.post<JuegoDeCompeticion>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga', juego);
+    return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga', juego);
   }
+
+  // public CreaJuegoDeCompeticionLiga(juego: JuegoDeCompeticion, grupoId: number): Observable<JuegoDeCompeticion> {
+  //   console.log('voy a crear el juevo de competicion liga');
+  //   console.log(juego);
+  //   return this.http.post<JuegoDeCompeticion>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga', juego);
+  // }
 
   public DameJuegoDeCompeticionLigaGrupo(grupoId: number): Observable<Juego[]> {
     return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga');
