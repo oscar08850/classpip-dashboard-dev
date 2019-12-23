@@ -108,7 +108,8 @@ import { ElementosComponent } from './elementos/elementos.component';
 import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.component';
 import { DialogoComponent } from './desarrolladores/dialogo/dialogo.component';
 import { EstilosComponent } from './estilos/estilos.component';
-import { JuegoDeCompeticionSeleccionadoActivoComponent } from './juego-de-competicion-seleccionado-activo/juego-de-competicion-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeCompeticionSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/juego-de-competicion-seleccionado-activo.component';
 
 
 @NgModule({

@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
+// Clases
+import { Juego } from '../../../clases/index';
+
+// Servicio
+import {SesionService} from '../../../servicios/index';
+
 @Component({
   selector: 'app-juego-de-competicion-seleccionado-activo',
   templateUrl: './juego-de-competicion-seleccionado-activo.component.html',
@@ -7,9 +13,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
 
-  constructor() { }
+  juegoSeleccionado: Juego;
+
+  constructor(private sesion: SesionService) {}
 
   ngOnInit() {
+    this.juegoSeleccionado = this.sesion.DameJuego();
+    console.log(this.juegoSeleccionado);
   }
 
 }
