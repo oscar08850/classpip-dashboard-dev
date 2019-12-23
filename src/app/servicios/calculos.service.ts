@@ -83,7 +83,7 @@ export class CalculosService {
       const juegosActivos: Juego[] = [];
       const juegosInactivos: Juego[] = [];
 
-      console.log ('vamos a por los juegos de puntos: ' + grupoID);
+      console.log ('vamos a por los juegos de puntos del grupo: ' + grupoID);
       this.peticionesAPI.DameJuegoDePuntosGrupo(grupoID)
       .subscribe(juegosPuntos => {
         console.log('He recibido los juegos de puntos');
@@ -99,10 +99,11 @@ export class CalculosService {
           }
         }
         // Ahora vamos apor por los juegos de colección
+        console.log ('vamos a por los juegos de colección del grupo: ' + grupoID);
         this.peticionesAPI.DameJuegoDeColeccionGrupo(grupoID)
         .subscribe(juegosColeccion => {
           console.log('He recibido los juegos de coleccion');
-
+          console.log(juegosColeccion);
           // tslint:disable-next-line:prefer-for-of
           for (let i = 0; i < juegosColeccion.length; i++) {
             if (juegosColeccion[i].JuegoActivo === true) {
@@ -112,10 +113,11 @@ export class CalculosService {
             }
           }
           // Ahora vamos a por los juegos de competición
-          console.log ('vamos a por los juegos de competicion: ' + grupoID);
+          console.log ('vamos a por los juegos de competicion del grupo: ' + grupoID);
           this.peticionesAPI.DameJuegoDeCompeticionLigaGrupo(grupoID)
           .subscribe(juegosCompeticion => {
             console.log('He recibido los juegos de competición');
+            console.log(juegosCompeticion);
             // tslint:disable-next-line:prefer-for-of
             for (let i = 0; i < juegosCompeticion.length; i++) {
               if (juegosCompeticion[i].JuegoActivo === true) {

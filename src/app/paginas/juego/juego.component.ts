@@ -259,19 +259,39 @@ export class JuegoComponent implements OnInit {
     let NumeroDeJornadas: number;
     NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
     console.log(NumeroDeJornadas);
-    console.log(new JuegoDeCompeticion (NumeroDeJornadas, this.tipoDeJuegoSeleccionado + ' Liga',
-    this.modoDeJuegoSeleccionado), this.grupo.id);
+    console.log(new Juego (this.tipoDeJuegoSeleccionado + ' Liga', this.modoDeJuegoSeleccionado,
+                  undefined, true, NumeroDeJornadas), this.grupo.id);
     // tslint:disable-next-line:max-line-lengtholean)
-    this.peticionesAPI.CreaJuegoDeCompeticionLiga(new JuegoDeCompeticion (NumeroDeJornadas, this.tipoDeJuegoSeleccionado + ' Liga',
-      this.modoDeJuegoSeleccionado), this.grupo.id)
+    this.peticionesAPI.CreaJuegoDeCompeticionLiga(new Juego (this.tipoDeJuegoSeleccionado + ' Liga', this.modoDeJuegoSeleccionado,
+                                                    undefined, true, NumeroDeJornadas), this.grupo.id)
     .subscribe(juegoCreado => {
-      this.juegoDeCompeticion = juegoCreado;
+      this.juego = juegoCreado;
       console.log(juegoCreado);
       console.log('Juego creado correctamente');
       this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
     });
   }
+
+  // CrearJuegoDeCompeticionLiga() {
+  //   console.log ('&&&&&& ' + this.tipoJuegoCompeticionSeleccionado);
+
+  //   let NumeroDeJornadas: number;
+  //   NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
+  //   console.log(NumeroDeJornadas);
+  //   console.log(new JuegoDeCompeticion (NumeroDeJornadas, this.tipoDeJuegoSeleccionado + ' Liga',
+  //   this.modoDeJuegoSeleccionado), this.grupo.id);
+  //   // tslint:disable-next-line:max-line-lengtholean)
+  //   this.peticionesAPI.CreaJuegoDeCompeticionLiga(new JuegoDeCompeticion (NumeroDeJornadas, this.tipoDeJuegoSeleccionado + ' Liga',
+  //     this.modoDeJuegoSeleccionado), this.grupo.id)
+  //   .subscribe(juegoCreado => {
+  //     this.juegoDeCompeticion = juegoCreado;
+  //     console.log(juegoCreado);
+  //     console.log('Juego creado correctamente');
+  //     this.sesion.TomaJuego(this.juego);
+  //     this.juegoCreado = true;
+  //   });
+  // }
   // Si decidimos crear un juego de puntos, lo crearemos ya en la base de datos y posteriormente le añadiremos puntos y niveles
   // Si decidimos crear un juego de colección no haremos el POST en este paso, sino en el siguente cuando indiquemos la colección
   // Si decidimos crear un juego de competición tampoco haremos el POST en este paso, sino cuando indiquemos el tipo de competición
@@ -294,7 +314,7 @@ export class JuegoComponent implements OnInit {
 
   TipoDeJuegoCompeticionSeleccionado(tipoCompeticion: ChipColor) {
     this.tipoJuegoCompeticionSeleccionado = tipoCompeticion.nombre;
-    console.log('Voy a crear juego de competicón de clase:');
+    console.log('El juego de competición será tipo: ' + tipoCompeticion.nombre);
     this.isDisabled = false;
   }
 
@@ -305,9 +325,13 @@ export class JuegoComponent implements OnInit {
 
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.alumnosGrupo.length; i++) {
-          console.log(this.alumnosGrupo[i]);
+          console.log('alumno: ' + this.alumnosGrupo[i]);
+          console.log('id alumno: ' + this.alumnosGrupo[i].id);
+          console.log('juego: ' + this.juego);
+          console.log('id juego: ' + this.juego.id);
+          console.log(new AlumnoJuegoDeCompeticionLiga(this.alumnosGrupo[i].id, this.juego.id));
           // tslint:disable-next-line:max-line-length
-          this.peticionesAPI.InscribeAlumnoJuegoDeCompeticionLiga(new AlumnoJuegoDeCompeticionLiga(this.alumnosGrupo[i].id, this.juegoDeCompeticion.id))
+          this.peticionesAPI.InscribeAlumnoJuegoDeCompeticionLiga(new AlumnoJuegoDeCompeticionLiga(this.alumnosGrupo[i].id, this.juego.id))
           .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
         }
       } else {
@@ -317,7 +341,7 @@ export class JuegoComponent implements OnInit {
         for (let i = 0; i < this.equiposGrupo.length; i++) {
           console.log(this.equiposGrupo[i]);
           // tslint:disable-next-line:max-line-length
-          this.peticionesAPI.InscribeEquipoJuegoDeCompeticionLiga(new EquipoJuegoDeCompeticionLiga(this.equiposGrupo[i].id, this.juegoDeCompeticion.id))
+          this.peticionesAPI.InscribeEquipoJuegoDeCompeticionLiga(new EquipoJuegoDeCompeticionLiga(this.equiposGrupo[i].id, this.juego.id))
           .subscribe(equiposJuego => console.log(equiposJuego));
         }
       }
