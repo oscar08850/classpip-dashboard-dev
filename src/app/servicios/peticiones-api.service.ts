@@ -441,4 +441,10 @@ export class PeticionesAPIService {
   public InscribeEquipoJuegoDeCompeticionLiga(equipoJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga) {
     return this.http.post<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionLiga, equipoJuegoDeCompeticionLiga);
   }
+
+  // tslint:disable-next-line:max-line-length
+  public CambiaEstadoJuegoDeCompeticionLiga(JuegosDeCompeticionLiga: Juego, juegoDeCompeticionId: number, grupoId: number): Observable<Juego> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.put<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga/' + juegoDeCompeticionId, JuegosDeCompeticionLiga);
+  }
 }
