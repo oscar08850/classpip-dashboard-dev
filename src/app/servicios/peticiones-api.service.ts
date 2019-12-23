@@ -39,6 +39,7 @@ export class PeticionesAPIService {
   private APIRUrlAlbum = 'http://localhost:3000/api/Albumes';
   private APIRUrlAlbumEquipo = 'http://localhost:3000/api/albumsEquipo';
 
+  private APIUrlJuegoDeCompeticionLiga = 'http://localhost:3000/api/JuegosDeCompeticionLiga';
   private APIUrlAlumnoJuegoDeCompeticionLiga = 'http://localhost:3000/api/AlumnosJuegoDeCompeticionLiga';
   private APIUrlEquipoJuegoDeCompeticionLiga = 'http://localhost:3000/api/EquiposJuegoDeCompeticionLiga';
 
@@ -440,5 +441,17 @@ export class PeticionesAPIService {
 
   public InscribeEquipoJuegoDeCompeticionLiga(equipoJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga) {
     return this.http.post<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionLiga, equipoJuegoDeCompeticionLiga);
+  }
+  ///////////////////////////////////////////////////////////////////////////////////////////
+  // Gestion del juego de competiciones, individual
+  public DameAlumnosJuegoDeCompeticionLiga(juegoDeCompeticionLigaId: number): Observable<Alumno[]> {
+    console.log('Voy a por los alumnos');
+    return this.http.get<Alumno[]>(this.APIUrlJuegoDeCompeticionLiga + '/' + juegoDeCompeticionLigaId + '/alumnos');
+  }
+
+  public DameInscripcionesAlumnoJuegoDeCompeticionLiga(juegoDeCompeticionLigaId: number): Observable<AlumnoJuegoDeCompeticionLiga[]> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.get<AlumnoJuegoDeCompeticionLiga[]>(this.APIUrlAlumnoJuegoDeCompeticionLiga + '?filter[where][JuegoDeCompeticionLigaId]='
+    + juegoDeCompeticionLigaId);
   }
 }

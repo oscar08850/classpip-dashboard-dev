@@ -29,4 +29,5 @@ export * from './Album';
 export * from './AlbumEquipo';
 export * from './clasesParaTablasJuegoColeccion/AlbumDelAlumno';
 export * from './JuegoCompeticion';
+export * from './clasesParaTablasJuegoDeCompeticion/TablaAlumnoJuegoDeCompeticion';
 
