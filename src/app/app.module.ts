@@ -108,6 +108,7 @@ import { ElementosComponent } from './elementos/elementos.component';
 import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.component';
 import { DialogoComponent } from './desarrolladores/dialogo/dialogo.component';
 import { EstilosComponent } from './estilos/estilos.component';
+import { JuegoDeCompeticionSeleccionadoActivoComponent } from './juego-de-competicion-seleccionado-activo/juego-de-competicion-seleccionado-activo.component';
 
 
 @NgModule({
@@ -163,7 +164,8 @@ import { EstilosComponent } from './estilos/estilos.component';
     ElementosComponent,
     DesarrolladoresComponent,
     DialogoComponent,
-    EstilosComponent
+    EstilosComponent,
+    JuegoDeCompeticionSeleccionadoActivoComponent
   ],
   imports: [
     BrowserModule,
