@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Location } from '@angular/common';
 // Clases
-import { Alumno, Equipo, Juego, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga } from '../../../clases/index';
+// tslint:disable-next-line:max-line-length
+import { Alumno, Equipo, Juego, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga, TablaAlumnoJuegoDeCompeticion } from '../../../clases/index';
 
 // Servicio
 import { JuegoService, EquipoService, AlumnoService, ColeccionService, JuegoDeColeccionService } from '../../../servicios/index';
@@ -40,10 +41,17 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   datasourceAlumno;
   datasourceEquipo;
 
-  constructor(
-    private sesion: SesionService,
-    private peticionesAPI: PeticionesAPIService,
-    private calculos: CalculosService) {}
+  constructor(  private juegoService: JuegoService,
+                private alumnoService: AlumnoService,
+                private equipoService: EquipoService,
+                private coleccionService: ColeccionService,
+                private juegoDeColeccionService: JuegoDeColeccionService,
+                public dialog: MatDialog,
+                public snackBar: MatSnackBar,
+                public sesion: SesionService,
+                public peticionesAPI: PeticionesAPIService,
+                public calculos: CalculosService,
+                private location: Location) {}
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
