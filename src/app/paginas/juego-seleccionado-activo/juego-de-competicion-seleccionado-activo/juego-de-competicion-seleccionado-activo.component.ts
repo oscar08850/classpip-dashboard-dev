@@ -3,10 +3,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Location } from '@angular/common';
 // Clases
 // tslint:disable-next-line:max-line-length
-import { Alumno, Equipo, Juego, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga, TablaAlumnoJuegoDeCompeticion } from '../../../clases/index';
+import { Alumno, Juego, AlumnoJuegoDeCompeticionLiga, TablaAlumnoJuegoDeCompeticion } from '../../../clases/index';
 
 // Servicio
-import { JuegoService, EquipoService, AlumnoService, ColeccionService, JuegoDeColeccionService } from '../../../servicios/index';
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
 
 // Imports para abrir diálogo y snackbar
@@ -41,12 +40,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   datasourceAlumno;
   datasourceEquipo;
 
-  constructor(  private juegoService: JuegoService,
-                private alumnoService: AlumnoService,
-                private equipoService: EquipoService,
-                private coleccionService: ColeccionService,
-                private juegoDeColeccionService: JuegoDeColeccionService,
-                public dialog: MatDialog,
+  constructor(  public dialog: MatDialog,
                 public snackBar: MatSnackBar,
                 public sesion: SesionService,
                 public peticionesAPI: PeticionesAPIService,
@@ -155,7 +149,5 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
       }
     });
   }
-  goBack() {
-    this.location.back();
-  }
+
 }

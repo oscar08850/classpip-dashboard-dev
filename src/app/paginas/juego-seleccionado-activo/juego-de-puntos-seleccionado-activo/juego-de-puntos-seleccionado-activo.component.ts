@@ -337,9 +337,5 @@ export class JuegoDePuntosSeleccionadoActivoComponent implements OnInit {
       }
     });
   }
-  goBack() {
-    this.location.back();
-  }
-
 
 }
