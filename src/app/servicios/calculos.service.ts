@@ -3,7 +3,7 @@ import { SesionService, PeticionesAPIService} from './index';
 // tslint:disable-next-line:max-line-length
 import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, HistorialPuntosAlumno,
   HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo, AlumnoJuegoDeColeccion, Album,
-  EquipoJuegoDeColeccion, AlbumEquipo, Cromo } from '../clases/index';
+  EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaAlumnoJuegoDeCompeticion } from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -166,6 +166,23 @@ export class CalculosService {
 
       return (rankingJuegoDePuntos);
 
+  }
+
+  public PrepararTablaRankingIndividualCompeticion(listaAlumnosOrdenadaPorPuntos, alumnosDelJuego): TablaAlumnoJuegoDeCompeticion[] {
+    const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion [] = [];
+    console.log (' Vamos a preparar la tabla del ranking individual de Competición');
+    console.log ('la lista de alumnos ordenada es: ');
+    console.log (listaAlumnosOrdenadaPorPuntos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+      let alumno: Alumno;
+      const alumnoId = listaAlumnosOrdenadaPorPuntos[i].AlumnoId;
+      alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+      rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeCompeticion(i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+        listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno);
+    }
+    console.log ('El ranking es: ' + rankingJuegoDeCompeticion);
+    return rankingJuegoDeCompeticion;
   }
 
   public DameRankingPuntoSeleccionadoEquipos(

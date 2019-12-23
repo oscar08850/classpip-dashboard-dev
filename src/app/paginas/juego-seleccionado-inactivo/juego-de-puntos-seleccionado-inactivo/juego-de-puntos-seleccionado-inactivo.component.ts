@@ -77,7 +77,7 @@ export class JuegoDePuntosSeleccionadoInactivoComponent implements OnInit {
 
   ngOnInit() {
 
-    this.juegoSeleccionado = this.sesion.DameJuego()
+    this.juegoSeleccionado = this.sesion.DameJuego();
     this.listaSeleccionable[0] =  new Punto('Totales');
 
     this.TraeTiposPuntosDelJuego();
