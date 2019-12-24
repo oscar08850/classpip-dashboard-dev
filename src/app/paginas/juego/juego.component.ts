@@ -260,10 +260,11 @@ export class JuegoComponent implements OnInit {
     NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
     console.log(NumeroDeJornadas);
     console.log(new Juego (this.tipoDeJuegoSeleccionado + ' Liga', this.modoDeJuegoSeleccionado,
-                  undefined, true, NumeroDeJornadas), this.grupo.id);
+                  undefined, true, NumeroDeJornadas, this.tipoJuegoCompeticionSeleccionado), this.grupo.id);
     // tslint:disable-next-line:max-line-lengtholean)
-    this.peticionesAPI.CreaJuegoDeCompeticionLiga(new Juego (this.tipoDeJuegoSeleccionado + ' Liga', this.modoDeJuegoSeleccionado,
-                                                    undefined, true, NumeroDeJornadas), this.grupo.id)
+    this.peticionesAPI.CreaJuegoDeCompeticionLiga(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado,
+                                                    this.modoDeJuegoSeleccionado, undefined, true, NumeroDeJornadas,
+                                                    this.tipoJuegoCompeticionSeleccionado), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       console.log(juegoCreado);
