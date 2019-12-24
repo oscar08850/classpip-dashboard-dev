@@ -62,7 +62,7 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
-
+    console.log(this.juegoSeleccionado);
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
       this.AlumnosDelJuego();
