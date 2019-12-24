@@ -46,7 +46,9 @@ import { AlbumDelAlumnoComponent } from './paginas/juego-seleccionado-activo/jue
 import { AlbumEquipoComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/equipo-seleccionado-juego-de-coleccion/album-equipo/album-equipo.component';
 import { ConfiguracionProfesorComponent } from './paginas/COMPARTIDO/configuracion-profesor/configuracion-profesor.component';
 
-
+// JUEGO DE COMPETICIÓN
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/informacion-juego-de-competicion/informacion-juego-de-competicion.component';
 
 
 import { AppComponent } from './app.component';
@@ -135,6 +137,8 @@ const routes: Routes = [
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionEquipoJuegoColeccion/AlbumEquipo', component: AlbumEquipoComponent },
 
 
+  // GRUPOS --> JUEGOS --> JUEGO DE COMPETICIÓN
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoDeCompeticion', component: InformacionJuegoDeCompeticionComponent },
 
   // COLECCIÓN
   { path: 'inicio/:id/misColecciones/editarColeccion', component: EditarColeccionComponent },

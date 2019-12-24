@@ -150,4 +150,8 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     });
   }
 
+  Informacion(): void {
+    console.log ('Aqué estará la información del juego');
+  }
+
 }

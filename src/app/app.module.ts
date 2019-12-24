@@ -100,6 +100,13 @@ import { FooterComponent } from './paginas/COMPARTIDO/footer/footer.component';
 // tslint:disable-next-line:max-line-length
 import { JuegoDeColeccionSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-coleccion-seleccionado-inactivo/juego-de-coleccion-seleccionado-inactivo.component';
 
+// tslint:disable-next-line:max-line-length
+import { JuegoDeCompeticionSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/juego-de-competicion-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeCompeticionSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-seleccionado-inactivo/juego-de-competicion-seleccionado-inactivo.component';
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/informacion-juego-de-competicion/informacion-juego-de-competicion.component';
+
 
 // COMPONENTES EN COMPARTIDO
 import { DialogoConfirmacionComponent } from './paginas/COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
@@ -108,10 +115,6 @@ import { ElementosComponent } from './elementos/elementos.component';
 import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.component';
 import { DialogoComponent } from './desarrolladores/dialogo/dialogo.component';
 import { EstilosComponent } from './estilos/estilos.component';
-// tslint:disable-next-line:max-line-length
-import { JuegoDeCompeticionSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/juego-de-competicion-seleccionado-activo.component';
-// tslint:disable-next-line:max-line-length
-import { JuegoDeCompeticionSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-seleccionado-inactivo/juego-de-competicion-seleccionado-inactivo.component';
 
 
 
@@ -170,7 +173,8 @@ import { JuegoDeCompeticionSeleccionadoInactivoComponent } from './paginas/juego
     DialogoComponent,
     EstilosComponent,
     JuegoDeCompeticionSeleccionadoActivoComponent,
-    JuegoDeCompeticionSeleccionadoInactivoComponent
+    JuegoDeCompeticionSeleccionadoInactivoComponent,
+    InformacionJuegoDeCompeticionComponent
   ],
   imports: [
     BrowserModule,
