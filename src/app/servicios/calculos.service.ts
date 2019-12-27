@@ -3,7 +3,7 @@ import { SesionService, PeticionesAPIService} from './index';
 // tslint:disable-next-line:max-line-length
 import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, HistorialPuntosAlumno,
   HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo, AlumnoJuegoDeColeccion, Album,
-  EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaAlumnoJuegoDeCompeticion } from '../clases/index';
+  EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaAlumnoJuegoDeCompeticion, Jornada } from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';

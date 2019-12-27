@@ -183,6 +183,10 @@ export class SesionService {
     return datos;
   }
 
+//   public TomaInformacionJuegoDeCompeticion( nivelesDelJuego: any ) {
+//       this.nivelesDelJuego = nivelesDelJuego;
+// }
+
 
   public TomaDatosParaAsignarPuntos(
           tiposPuntosDelJuego: any,

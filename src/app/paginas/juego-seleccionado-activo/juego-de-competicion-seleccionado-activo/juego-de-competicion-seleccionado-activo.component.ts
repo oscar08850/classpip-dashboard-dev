@@ -54,6 +54,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     if (this.juegoSeleccionado.Modo === 'Individual') {
       this.AlumnosDelJuego();
     }
+    // Añadir opción equipo
   }
 
   applyFilter(filterValue: string) {
@@ -151,7 +152,8 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   }
 
   Informacion(): void {
-    console.log ('Aqué estará la información del juego');
+    console.log ('Aquí estará la información del juego');
+    this.sesion.TomaJuego (this.juegoSeleccionado);
   }
 
 }

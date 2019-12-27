@@ -1,3 +1,30 @@
-<div  class="titulo">Información Juego de Competición</div>
-<div class="subtitulo">{{juegoSeleccionado.Modo}}</div>
+<div  class="titulo">Información Juego de Competición {{juegoSeleccionado.TipoJuegoCompeticion}}</div>
+<!-- <div class="subtitulo">{{juegoSeleccionado.TipoJuegoCompeticion}}</div> -->
 <mat-divider class="lineaDivisoria"></mat-divider>
+
+<div  class="enColumna">
+  <div  class="contenedor"  style="align-items: center;">
+    <mat-tab-group  style="width: 75%;" [backgroundColor]="primary">
+
+      <!-- JORNADAS DEL JUEGO -->
+      <mat-tab  label="Jornadas del Juego">
+        <form>
+          <mat-accordion  *ngIf="numeroTotalJornadas!==undefined;else Aviso_no_jornadas">
+              <mat-expansion-panel *ngFor="let jornada of jornadasDelJuego" (click) = "ObtenerNivel(nivel)"></mat-expansion-panel>
+          </mat-accordion>
+
+          <ng-template #Aviso_no_jornadas>No se han creado jornadas en este juego</ng-template>
+        </form>
+        </mat-tab>
+
+      <!-- EQUIPOS DEL JUEGO -->
+      <mat-tab  *ngIf="juegoSeleccionado.Modo === 'Equipos'"  label="Equipos del Grupo"></mat-tab>
+
+      <!-- CRITERIOS ELEGIR GANADOR DEL JUEGO -->
+      <mat-tab  label="Criterios del Juego"></mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+
+</div>
