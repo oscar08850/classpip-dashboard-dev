@@ -1,13 +1,13 @@
 export class Jornada {
   Fecha: Date;
-  Criterio: string;
+  CriterioGanador: string;
   JuegoDeCompeticionLigaId: number;
   id: number;
 
-  constructor(Fecha?: Date, Criterio?: string, JuegoDeCompeticionLigaId?: number) {
+  constructor(Fecha?: Date, CriterioGanador?: string, JuegoDeCompeticionLigaId?: number) {
 
     this.Fecha = Fecha;
-    this.Criterio = Criterio;
+    this.CriterioGanador = CriterioGanador;
     this.JuegoDeCompeticionLigaId = JuegoDeCompeticionLigaId;
   }
 }
