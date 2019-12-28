@@ -271,6 +271,10 @@ export class JuegoComponent implements OnInit {
       console.log('Juego creado correctamente');
       this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
+      console.log('Voy a crear las jornadas');
+      this.calculos.CrearJornadasLiga(NumeroDeJornadas, this.juego.id);
+      console.log('Jornadas creadas correctamente');
+      // this.calculos.CrearenfrentamientosLiga();
     });
   }
 
