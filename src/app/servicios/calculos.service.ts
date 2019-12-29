@@ -1318,6 +1318,7 @@ public PreparaHistorialEquipo(
     for (let i = 1; i <= NumeroDeJornadas; i++) {
       // tslint:disable-next-line:max-line-length '2000-01-01T01:01:01.000Z'
       const jornada = new Jornada(undefined, 'Pendiente de determinar', juegoDeCompeticionID);
+      console.log(jornada);
       this.peticionesAPI.CrearJornadasLiga(jornada, juegoDeCompeticionID)
       .subscribe(jornadacreada => {
         console.log('jornada creada');

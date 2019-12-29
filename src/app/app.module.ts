@@ -106,7 +106,8 @@ import { JuegoDeCompeticionSeleccionadoActivoComponent } from './paginas/juego-s
 import { JuegoDeCompeticionSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-seleccionado-inactivo/juego-de-competicion-seleccionado-inactivo.component';
 // tslint:disable-next-line:max-line-length
 import { InformacionJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/informacion-juego-de-competicion/informacion-juego-de-competicion.component';
-
+// tslint:disable-next-line:max-line-length
+import { EditarJornadasJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/editar-jornadas-juego-de-competicion/editar-jornadas-juego-de-competicion.component';
 
 // COMPONENTES EN COMPARTIDO
 import { DialogoConfirmacionComponent } from './paginas/COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
@@ -174,7 +175,8 @@ import { EstilosComponent } from './estilos/estilos.component';
     EstilosComponent,
     JuegoDeCompeticionSeleccionadoActivoComponent,
     JuegoDeCompeticionSeleccionadoInactivoComponent,
-    InformacionJuegoDeCompeticionComponent
+    InformacionJuegoDeCompeticionComponent,
+    EditarJornadasJuegoDeCompeticionComponent
   ],
   imports: [
     BrowserModule,
