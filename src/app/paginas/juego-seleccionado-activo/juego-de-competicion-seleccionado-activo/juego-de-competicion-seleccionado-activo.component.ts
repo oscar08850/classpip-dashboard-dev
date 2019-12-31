@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Location } from '@angular/common';
 // Clases
 // tslint:disable-next-line:max-line-length
-import { Alumno, Juego, AlumnoJuegoDeCompeticionLiga, TablaAlumnoJuegoDeCompeticion } from '../../../clases/index';
+import { Alumno, Juego, TablaJornadas, AlumnoJuegoDeCompeticionLiga, TablaAlumnoJuegoDeCompeticion, Jornada } from '../../../clases/index';
 
 // Servicio
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
@@ -37,6 +37,8 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   // Columnas Tabla
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos', ' '];
 
+  jornadasEstablecidas: Jornada[];
+  JornadasCompeticion: TablaJornadas[] = [];
   datasourceAlumno;
   datasourceEquipo;
 
@@ -55,6 +57,15 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
       this.AlumnosDelJuego();
     }
     // Añadir opción equipo
+
+    this.peticionesAPI.DameJornadasDeCompeticionLiga(this.juegoSeleccionado.id)
+      .subscribe(inscripciones => {
+        this.jornadasEstablecidas = inscripciones;
+        console.log('Las jornadas son: ');
+        console.log(this.jornadasEstablecidas);
+      });
+
+
   }
 
   applyFilter(filterValue: string) {
@@ -63,6 +74,18 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
 
   applyFilterEquipo(filterValue: string) {
     this.datasourceEquipo.filter = filterValue.trim().toLowerCase();
+  }
+
+  editarjornadas() {
+
+    console.log('Tomo las jornadas' + this.jornadasEstablecidas);
+    console.log ('Aquí estará la información del juego');
+    this.sesion.TomaJuego (this.juegoSeleccionado);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasLiga( this.juegoSeleccionado, this.jornadasEstablecidas);
+    console.log('Juego activo' + this.JornadasCompeticion);
+    this.sesion.TomaDatosParaJornadas(
+      this.jornadasEstablecidas,
+      this.JornadasCompeticion);
   }
 
   AlumnosDelJuego() {

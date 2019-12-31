@@ -3,7 +3,7 @@ import { SesionService, PeticionesAPIService} from './index';
 // tslint:disable-next-line:max-line-length
 import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, HistorialPuntosAlumno,
   HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo, AlumnoJuegoDeColeccion, Album,
-  EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaAlumnoJuegoDeCompeticion, Jornada } from '../clases/index';
+  EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion, Jornada } from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -1326,4 +1326,28 @@ public PreparaHistorialEquipo(
       });
     }
   }
+
+  public DameTablaJornadasLiga( juegoSeleccionado, jornadas) {
+  const TablaJornada: TablaJornadas [] = [];
+
+  // tslint:disable-next-line:prefer-for-of
+  console.log('3 Vamos a llenar la tabla');
+  console.log(jornadas);
+  console.log(juegoSeleccionado);
+  for (let i = 0; i < juegoSeleccionado.NumeroTotalJornadas; i++) {
+  let jornada: Jornada;
+  const jornadaId = jornadas[i].id;
+  jornada = jornadas.filter(res => res.id === jornadaId)[0];
+
+  if (jornada.Fecha === undefined) {
+      TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador);
+      console.log(TablaJornada[i]);
+    } else {
+      TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador);
+      console.log(TablaJornada[i]);
+    }
+  }
+  return(TablaJornada);
+  }
+
 }

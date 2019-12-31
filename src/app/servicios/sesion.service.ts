@@ -40,6 +40,8 @@ export class SesionService {
   punto: Punto;
   insignia: Insignia;
 
+  jornadas: any;
+  JornadasCompeticion: any;
   // listaEquiposGrupo: any;
 
   constructor() { }
@@ -294,4 +296,26 @@ export class SesionService {
   public DameInsignia(): any {
     return this.insignia;
   }
+
+  public TomaDatosParaJornadas(
+    jornadas: any,
+    JornadasCompeticion: any
+  ) {
+  this.JornadasCompeticion = JornadasCompeticion;
+  this.jornadas = jornadas;
+  console.log ( this.JornadasCompeticion);
+  console.log ( this.jornadas);
+
+}
+
+public DameDatosParaJornadas(): any {
+const datos = {
+jornadas: this.jornadas,
+JornadasCompeticion: this.JornadasCompeticion
+};
+console.log ('Aqui estan las jornadas guardadas' + this.jornadas + this.JornadasCompeticion);
+
+return datos;
+}
+
 }

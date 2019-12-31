@@ -34,53 +34,16 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
   }
 
   jornadasDelJuego(): any {
-    this.jornadasEstablecidas = this.jornadasEstablecidasDelJuego();
-    console.log(this.jornadasEstablecidas);
-    console.log(this.jornadasEstablecidas);
-    console.log(this.jornadasEstablecidas);
-    console.log('Vamos a por las jornadas establecidas y no establecidas');
-    this.jornadas = this.DameListasJornadas (this.juegoSeleccionado, this.jornadasEstablecidas);
-    console.log('Las jornadas son: ' + this.jornadas);
-    return this.jornadas;
-  }
-
-  jornadasEstablecidasDelJuego(): Jornada[] {
-    console.log('Vamos a por las jornadas establecidas');
+    console.log('Vamos a por las jornadas');
     this.peticionesAPI.DameJornadasDeCompeticionLiga(this.juegoSeleccionado.id)
     .subscribe(inscripciones => {
       this.jornadasEstablecidas = inscripciones;
       console.log('Las jornadas establecidas son: ');
       console.log(this.jornadasEstablecidas);
     });
+    console.log('Las jornadas son: ' + this.jornadas);
     return this.jornadasEstablecidas;
   }
-
-  public DameListasJornadas(juegoDeCompeticion: Juego, listaJornadasDelJuegoEstablecidas: Jornada[]): any {
-    const listaJornadasDelJuego: any[] = listaJornadasDelJuegoEstablecidas;
-    // Lista que  que contiene el numero de la jornada que queda por establecer
-    const listaJornadasDelJuegoNoEstablecidas: number[] = [];
-    const numeroJornadasEstablecidas: number = listaJornadasDelJuegoEstablecidas.length;
-    let i = numeroJornadasEstablecidas;
-    console.log('Hay ' + numeroJornadasEstablecidas + ' jornadas establecidas');
-    while (i <= juegoDeCompeticion.NumeroTotalJornadas) {
-            listaJornadasDelJuegoNoEstablecidas.push(i + 1);
-            i ++;
-        }
-    console.log('Las Jornadas que quedan por establecer son: ');
-    console.log(listaJornadasDelJuegoNoEstablecidas);
-
-    listaJornadasDelJuego.push(listaJornadasDelJuegoNoEstablecidas);
-    console.log('La lista de Jornadas queda: ');
-    console.log(listaJornadasDelJuego);
-
-    const resultado = { establecidas: listaJornadasDelJuegoEstablecidas,
-                            noEstablecidas: listaJornadasDelJuegoNoEstablecidas,
-                            todas: listaJornadasDelJuego};
-    return listaJornadasDelJuego;
-  }
-
-
-
 
   goBack() {
     this.location.back();
