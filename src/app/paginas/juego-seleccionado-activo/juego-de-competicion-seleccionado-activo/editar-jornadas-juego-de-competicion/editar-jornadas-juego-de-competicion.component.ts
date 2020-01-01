@@ -35,6 +35,9 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
   seleccionados: boolean[];
   JornadasCompeticion: TablaJornadas[] = [];
 
+  displayedColumnsJornada: string[] = ['select', 'NumeroDeJornada', 'Fecha', 'CriterioGanador'];
+
+
   constructor(    public sesion: SesionService,
                   public location: Location,
                   public calculos: CalculosService,
@@ -46,16 +49,10 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
     this.JornadasCompeticion = datos.JornadasCompeticion;
     this.juegoSeleccionado = this.sesion.DameJuego();
     console.log ('juego seleccionado ' + this.juegoSeleccionado.Modo);
-    console.log ('1 Voy a por las jornadas');
+    console.log (this.jornadas);
     // this.JornadasCompeticion = this.TablaJornadas();
     console.log (this.JornadasCompeticion);
     this.dataSource = new MatTableDataSource (this.JornadasCompeticion);
-  }
-
-  TablaJornadas(): any {
-     console.log('4 Las jornadas son: ' + this.jornadas);
-     this.JornadasCompeticion = this.calculos.DameTablaJornadasLiga( this.juegoSeleccionado, this.jornadas);
-     console.log('4' + this.JornadasCompeticion);
   }
 
 
@@ -101,6 +98,9 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
 
       // Buscamos los alumnos que hemos seleccionado
       if (this.selection.isSelected(this.dataSource.data[i]))  {
+        console.log('Voy a asignar' + this.NuevaFecha + this.NuevoCriterio);
+        this.peticionesAPI.ModificarJornada (this.jornadas[i], this.NuevaFecha, this.Nuevocriterio)
+
 
       }
     }

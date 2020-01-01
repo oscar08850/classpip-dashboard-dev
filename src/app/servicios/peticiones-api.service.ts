@@ -472,4 +472,8 @@ export class PeticionesAPIService {
     // tslint:disable-next-line:max-line-length
     return this.http.post<Jornada>(this.APIUrlJuegoDeCompeticionLiga + '/' + juegoDeCompeticionID + '/JornadasDeCompeticionLiga', jornadasDeCompeticionLiga);
     }
+
+  public ModificarJornada(JornadaId: Jornada, Fecha: Date, Criterio: string ): Observable<Jornada> {
+
+  }
 }
