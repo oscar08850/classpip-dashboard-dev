@@ -31,7 +31,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MdePopoverModule } from '@material-extended/mde';
 import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
-
+import {MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 
 
 
@@ -209,6 +209,8 @@ import { EstilosComponent } from './estilos/estilos.component';
     MdePopoverModule,
     MatSortModule,
     MatPaginatorModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
 
     HttpClientModule
   ],

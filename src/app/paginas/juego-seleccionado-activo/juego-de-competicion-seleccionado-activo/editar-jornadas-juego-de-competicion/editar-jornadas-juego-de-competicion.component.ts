@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Location } from '@angular/common';
 import { SelectionModel } from '@angular/cdk/collections';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 // Clases
 // tslint:disable-next-line:max-line-length
 import { Alumno, Juego, Jornada, TablaJornadas, AlumnoJuegoDeCompeticionLiga, TablaAlumnoJuegoDeCompeticion } from '../../../../clases/index';
@@ -28,6 +30,9 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
   jornadasTabla: Jornada[];
   jornadas: Jornada[];
   dataSource: any;
+  myForm: FormGroup;
+  NuevaFechaFormGroup: FormGroup;
+  IDJornada: number;
   // tslint:disable-next-line:ban-types
   isDisabled: Boolean = true;
   botonTablaDesactivado = true;
@@ -38,10 +43,14 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
   displayedColumnsJornada: string[] = ['select', 'NumeroDeJornada', 'Fecha', 'CriterioGanador'];
 
 
+  startDate = new Date(2000, 0, 2);
+
   constructor(    public sesion: SesionService,
                   public location: Location,
                   public calculos: CalculosService,
-                  public peticionesAPI: PeticionesAPIService) {}
+                  public peticionesAPI: PeticionesAPIService,
+                  // tslint:disable-next-line:variable-name
+                  private _formBuilder: FormBuilder) {}
 
   ngOnInit() {
     const datos = this.sesion.DameDatosParaJornadas();
@@ -53,6 +62,12 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
     // this.JornadasCompeticion = this.TablaJornadas();
     console.log (this.JornadasCompeticion);
     this.dataSource = new MatTableDataSource (this.JornadasCompeticion);
+
+    this.myForm = this._formBuilder.group({
+      CriterioGanador: ['', Validators.required],
+      picker: ['', Validators.required],
+    });
+
   }
 
 
@@ -79,7 +94,11 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
   una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
   /* En este caso para que esté activo también debe haber seleccionado el tipo de punto a asignar */
   ActualizarBotonTabla() {
-    if ((this.selection.selected.length === 0) || (this.JornadaSeleccionadaId === undefined)) {
+    let NuevaFecha: Date;
+    NuevaFecha = this.myForm.value.picker;
+    let NuevoCriterio: string;
+    NuevoCriterio = this.myForm.value.CriterioGanador;
+    if ((this.selection.selected.length === 0) || ( NuevaFecha === undefined) || ( NuevoCriterio === undefined)) {
       this.botonTablaDesactivado = true;
     } else {
       this.botonTablaDesactivado = false;
@@ -92,14 +111,33 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
     // Tengo que hacer un recorrido diferente del dataSource porque necesito saber el
     // valor de i
 
+    let NuevaFecha: Date;
+    NuevaFecha = this.myForm.value.picker;
+    let NuevoCriterio: string;
+    NuevoCriterio = this.myForm.value.CriterioGanador;
+    console.log('Voy a asignar 1 ' + NuevaFecha + NuevoCriterio);
     for ( let i = 0; i < this.dataSource.data.length; i++) {
       console.log ('Vuelta ' + i);
 
 
       // Buscamos los alumnos que hemos seleccionado
       if (this.selection.isSelected(this.dataSource.data[i]))  {
-        console.log('Voy a asignar' + this.NuevaFecha + this.NuevoCriterio);
-        this.peticionesAPI.ModificarJornada (this.jornadas[i], this.NuevaFecha, this.Nuevocriterio)
+        console.log('Voy a asignar 2 ' + NuevaFecha + NuevoCriterio);
+        console.log(this.jornadas[i]);
+        console.log(NuevaFecha, NuevoCriterio, this.jornadas[i].id);
+        this.IDJornada = this.jornadas[i].id;
+        this.jornadas[i] = new Jornada (NuevaFecha, NuevoCriterio, this.jornadas[i].JuegoDeCompeticionLigaId);
+        console.log('Nueva Jornada ' + this.IDJornada);
+        console.log(this.jornadas[i]);
+        this.peticionesAPI.ModificarJornada (this.jornadas[i], this.IDJornada)
+        .subscribe(JornadaCreada => {
+          this.jornadas[i] = JornadaCreada;
+        });
+        console.log('Jornada Modificada');
+        this.JornadasCompeticion[i].CriterioGanador = this.jornadas[i].CriterioGanador;
+        this.JornadasCompeticion[i].Fecha = this.jornadas[i].Fecha;
+        this.JornadasCompeticion[i].NumeroDeJornada = i + 1;
+        console.log(this.JornadasCompeticion[i]);
 
 
       }
@@ -112,10 +150,13 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
 
 
   BotonDesactivado() {
+    let NuevaFecha: Date;
+    NuevaFecha = this.myForm.value.picker;
+    let NuevoCriterio: string;
+    NuevoCriterio = this.myForm.value.CriterioGanador;
 
     console.log('voy a ver si hay algo en los inputs');
-    if (this.JornadaSeleccionadaId !== undefined ) {
-      // && this.valorPunto !== undefined && this.valorPunto !== null) {
+    if (NuevaFecha !== undefined && NuevoCriterio !== undefined ) {
       console.log('hay algo, disabled');
       this.isDisabled = false;
     } else {

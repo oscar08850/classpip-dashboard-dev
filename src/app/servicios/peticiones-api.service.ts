@@ -473,7 +473,7 @@ export class PeticionesAPIService {
     return this.http.post<Jornada>(this.APIUrlJuegoDeCompeticionLiga + '/' + juegoDeCompeticionID + '/JornadasDeCompeticionLiga', jornadasDeCompeticionLiga);
     }
 
-  public ModificarJornada(JornadaId: Jornada, Fecha: Date, Criterio: string ): Observable<Jornada> {
-
+  public ModificarJornada(JornadaNueva: Jornada, JornadaId: number): Observable<Jornada> {
+    return this.http.put<Jornada>(this.APIUrlJornadasJuegoDeCompeticionLiga + '/' + JornadaId, JornadaNueva );
   }
 }
