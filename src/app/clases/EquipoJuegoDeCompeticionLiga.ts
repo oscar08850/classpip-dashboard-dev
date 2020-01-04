@@ -1,14 +1,14 @@
 export class EquipoJuegoDeCompeticionLiga {
 
   PuntosTotalesEquipo: number;
-  equipoId: number;
-  juegoDeCompeticionId: number;
+  EquipoId: number;
+  JuegoDeCompeticionId: number;
   id: number;
 
-  constructor(equipoId?: number, juegoDePuntosId?: number, PuntosTotalesEquipo?: number ) {
+  constructor(EquipoId?: number, JuegoDeCompeticionId?: number, PuntosTotalesEquipo?: number ) {
 
-    this.equipoId = equipoId;
-    this.juegoDeCompeticionId = juegoDePuntosId;
+    this.EquipoId = EquipoId;
+    this.JuegoDeCompeticionId = JuegoDeCompeticionId;
     this.PuntosTotalesEquipo = PuntosTotalesEquipo;
 
   }
