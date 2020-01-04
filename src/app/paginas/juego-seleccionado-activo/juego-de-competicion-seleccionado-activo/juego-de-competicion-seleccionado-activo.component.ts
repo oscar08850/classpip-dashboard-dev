@@ -175,8 +175,15 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   }
 
   Informacion(): void {
+
     console.log ('Aquí estará la información del juego');
+    console.log ('Voy a por la información del juego seleccionado');
     this.sesion.TomaJuego (this.juegoSeleccionado);
+    console.log('Tomo las jornadas' + this.jornadasEstablecidas);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasLiga( this.juegoSeleccionado, this.jornadasEstablecidas);
+    console.log ('Voy a por la información de las jornadas del juego');
+    this.sesion.TomaDatosParaJornadas(this.jornadasEstablecidas,
+                                      this.JornadasCompeticion);
   }
 
 }

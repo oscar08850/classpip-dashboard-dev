@@ -313,7 +313,7 @@ const datos = {
 jornadas: this.jornadas,
 JornadasCompeticion: this.JornadasCompeticion
 };
-console.log ('Aqui estan las jornadas guardadas' + this.jornadas + this.JornadasCompeticion);
+console.log ('Aqui estan las jornadas guardadas: ' + this.jornadas + this.JornadasCompeticion);
 
 return datos;
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
 // Clases
-import { Juego, Jornada } from '../../../../clases/index';
+import { Juego, Jornada, TablaJornadas } from '../../../../clases/index';
 
 // Servicio
 import { SesionService , CalculosService, PeticionesAPIService } from '../../../../servicios/index';
@@ -17,8 +17,8 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
   // Juego De CompeticionLiga seleccionado
   juegoSeleccionado: Juego;
   numeroTotalJornadas: number;
-  jornadasEstablecidas: Jornada[];
-  jornadas: any[];
+  jornadasDelJuego: Jornada[];
+  JornadasCompeticion: TablaJornadas[] = [];
 
   constructor( public sesion: SesionService,
                public location: Location,
@@ -28,21 +28,18 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
     this.numeroTotalJornadas = this.juegoSeleccionado.NumeroTotalJornadas;
+    console.log('Juego seleccionado: ');
     console.log(this.juegoSeleccionado);
+    console.log('Número total de jornadas: ');
     console.log(this.numeroTotalJornadas);
-    this.jornadas = this.jornadasDelJuego();
+    const datos = this.sesion.DameDatosParaJornadas();
+    this.JornadasCompeticion = datos.JornadasCompeticion;
+    console.log('Jornadas Competicion: ');
+    console.log(this.JornadasCompeticion);
   }
 
-  jornadasDelJuego(): any {
-    console.log('Vamos a por las jornadas');
-    this.peticionesAPI.DameJornadasDeCompeticionLiga(this.juegoSeleccionado.id)
-    .subscribe(inscripciones => {
-      this.jornadasEstablecidas = inscripciones;
-      console.log('Las jornadas establecidas son: ');
-      console.log(this.jornadasEstablecidas);
-    });
-    console.log('Las jornadas son: ' + this.jornadas);
-    return this.jornadasEstablecidas;
+  ObtenerEnfrentamientosDeCadaJornada() {
+    console.log('HTendré que pasr el id de la jornada para obtener los enfrentamientos y crear una tabla para cada uno');
   }
 
   goBack() {

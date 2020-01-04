@@ -58,8 +58,10 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
     this.JornadasCompeticion = datos.JornadasCompeticion;
     this.juegoSeleccionado = this.sesion.DameJuego();
     console.log ('juego seleccionado ' + this.juegoSeleccionado.Modo);
+    console.log('Jornadas: ');
     console.log (this.jornadas);
     // this.JornadasCompeticion = this.TablaJornadas();
+    console.log('Jornadas Competicion: ');
     console.log (this.JornadasCompeticion);
     this.dataSource = new MatTableDataSource (this.JornadasCompeticion);
 

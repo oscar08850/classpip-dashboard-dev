@@ -10,7 +10,13 @@
       <mat-tab  label="Jornadas del Juego">
         <form>
           <mat-accordion  *ngIf="numeroTotalJornadas!==undefined;else Aviso_no_jornadas">
-              <mat-expansion-panel *ngFor="let jornada of jornadasDelJuego" (click) = "ObtenerNivel(nivel)"></mat-expansion-panel>
+              <mat-expansion-panel *ngFor="let jornada of JornadasCompeticion" (click) = "ObtenerEnfrentamientosDeCadaJornada()">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                  Jornada {{jornada.NumeroDeJornada}}
+                </mat-panel-title>
+                </mat-expansion-panel-header>
+              </mat-expansion-panel>
           </mat-accordion>
 
           <ng-template #Aviso_no_jornadas>No se han creado jornadas en este juego</ng-template>
@@ -21,7 +27,32 @@
       <mat-tab  *ngIf="juegoSeleccionado.Modo === 'Equipos'"  label="Equipos del Grupo"></mat-tab>
 
       <!-- CRITERIOS ELEGIR GANADOR DEL JUEGO -->
-      <mat-tab  label="Criterios del Juego"></mat-tab>
+      <mat-tab  label="Criterios del Juego">
+          <form>
+              <mat-accordion>
+                  <mat-expansion-panel *ngFor="let jornada of JornadasCompeticion">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                      Jornada {{jornada.NumeroDeJornada}}
+                    </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="enFila">
+                        <div style="margin-right: 5%; border: 15px; width: 70%;">
+                            <!-- <span style="font-weight: bold; font-size: 130%;">Criterio</span>
+                            <p style="font-size: 200%; margin: 5px;">{{jornada.CriterioGanador}}</p> -->
+                            <!-- <br> -->
+                            <span style="font-weight: bold; font-size: 130%;">Criterio</span>
+                            <p style="font-size: 150%; margin: 5px;">{{jornada.CriterioGanador}}</p>
+                        </div>
+                        <!-- <div>
+                            <span style="font-weight: bold; font-size:150%;">PX</span>
+                            <p style="color: rgb(63, 81, 181); font-size:180%;">hola</p>
+                        </div> -->
+                    </div>
+                  </mat-expansion-panel>
+              </mat-accordion>
+            </form>
+      </mat-tab>
     </mat-tab-group>
   </div>
 

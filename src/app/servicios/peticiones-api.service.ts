@@ -426,12 +426,6 @@ export class PeticionesAPIService {
     return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga', juego);
   }
 
-  // public CreaJuegoDeCompeticionLiga(juego: JuegoDeCompeticion, grupoId: number): Observable<JuegoDeCompeticion> {
-  //   console.log('voy a crear el juevo de competicion liga');
-  //   console.log(juego);
-  //   return this.http.post<JuegoDeCompeticion>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga', juego);
-  // }
-
   public DameJuegoDeCompeticionLigaGrupo(grupoId: number): Observable<Juego[]> {
     return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga');
   }
@@ -447,6 +441,25 @@ export class PeticionesAPIService {
   public DameJornadasDeCompeticionLiga(juegoDeCompeticionLigaId: number): Observable<Jornada[]> {
     return this.http.get<Jornada[]>(this.APIUrlJornadasJuegoDeCompeticionLiga + '?filter[where][JuegoDeCompeticionLigaId]='
     + juegoDeCompeticionLigaId);
+
+    // return this.http.get<Jornada[]>(this.APIUrlJuegoDeCompeticionLiga + '/' + juegoDeCompeticionID + '/JornadasDeCompeticionLiga');
+  }
+
+  public CambiaEstadoJuegoDeCompeticionLiga(JuegosDeCompeticionLiga: Juego,
+                                            juegoDeCompeticionId: number,
+                                            grupoId: number): Observable<Juego> {
+    return this.http.put<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga/' + juegoDeCompeticionId,
+    JuegosDeCompeticionLiga);
+  }
+
+  public CrearJornadasLiga( jornadasDeCompeticionLiga: Jornada,
+                            juegoDeCompeticionID: number): Observable<Jornada> {
+    return this.http.post<Jornada>(this.APIUrlJuegoDeCompeticionLiga + '/' + juegoDeCompeticionID + '/JornadasDeCompeticionLiga',
+    jornadasDeCompeticionLiga);
+  }
+
+  public ModificarJornada(JornadaNueva: Jornada, JornadaId: number): Observable<Jornada> {
+    return this.http.put<Jornada>(this.APIUrlJornadasJuegoDeCompeticionLiga + '/' + JornadaId, JornadaNueva );
   }
   ///////////////////////////////////////////////////////////////////////////////////////////
   // Gestion del juego de competiciones, individual
@@ -461,19 +474,5 @@ export class PeticionesAPIService {
     + juegoDeCompeticionLigaId);
   }
 
-  // tslint:disable-next-line:max-line-length
-  public CambiaEstadoJuegoDeCompeticionLiga(JuegosDeCompeticionLiga: Juego, juegoDeCompeticionId: number, grupoId: number): Observable<Juego> {
-    // tslint:disable-next-line:max-line-length
-    return this.http.put<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga/' + juegoDeCompeticionId, JuegosDeCompeticionLiga);
-  }
 
-  // tslint:disable-next-line:max-line-length
-  public CrearJornadasLiga( jornadasDeCompeticionLiga: Jornada, juegoDeCompeticionID: number): Observable<Jornada> {
-    // tslint:disable-next-line:max-line-length
-    return this.http.post<Jornada>(this.APIUrlJuegoDeCompeticionLiga + '/' + juegoDeCompeticionID + '/JornadasDeCompeticionLiga', jornadasDeCompeticionLiga);
-    }
-
-  public ModificarJornada(JornadaNueva: Jornada, JornadaId: number): Observable<Jornada> {
-    return this.http.put<Jornada>(this.APIUrlJornadasJuegoDeCompeticionLiga + '/' + JornadaId, JornadaNueva );
-  }
 }
