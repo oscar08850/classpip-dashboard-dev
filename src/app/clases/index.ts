@@ -32,3 +32,4 @@ export * from './JuegoCompeticion';
 export * from './clasesParaTablasJuegoDeCompeticion/TablaAlumnoJuegoDeCompeticion';
 export * from './Jornada';
 export * from './clasesParaTablasJuegoDeCompeticion/TablaJornadas';
+export * from './clasesParaTablasJuegoDeCompeticion/TablaEquipoJuegoDeCompeticion';

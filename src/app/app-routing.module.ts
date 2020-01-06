@@ -51,6 +51,8 @@ import { ConfiguracionProfesorComponent } from './paginas/COMPARTIDO/configuraci
 import { InformacionJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/informacion-juego-de-competicion/informacion-juego-de-competicion.component';
 // tslint:disable-next-line:max-line-length
 import { EditarJornadasJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/editar-jornadas-juego-de-competicion/editar-jornadas-juego-de-competicion.component';
+// tslint:disable-next-line:max-line-length
+import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/alumnos-seleccionado-juego-de-competicion-liga/alumnos-seleccionado-juego-de-competicion-liga.component';
 
 import { AppComponent } from './app.component';
 import { ElementosComponent } from './elementos/elementos.component';
@@ -142,6 +144,10 @@ const routes: Routes = [
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoDeCompeticion', component: InformacionJuegoDeCompeticionComponent },
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/editarjornadasJuegoDeCompeticion', component: EditarJornadasJuegoDeCompeticionComponent },
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionAlumnoJuegoCompeticionLiga', component: AlumnosSeleccionadoJuegoDeCompeticionLigaComponent },
+
+
   // COLECCIÓN
   { path: 'inicio/:id/misColecciones/editarColeccion', component: EditarColeccionComponent },
   { path: 'inicio/:id/misColecciones/editarColeccion/editarCromo', component: EditarCromoComponent },

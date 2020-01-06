@@ -362,7 +362,7 @@ export class JuegoComponent implements OnInit {
           .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
         }
       } else {
-        console.log('Voy a inscribir los equipos al grupo');
+        console.log('Voy a inscribir los equipos del grupo');
 
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.equiposGrupo.length; i++) {

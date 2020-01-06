@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Location } from '@angular/common';
 // Clases
-// tslint:disable-next-line:max-line-length
-import { Alumno, Juego, TablaJornadas, AlumnoJuegoDeCompeticionLiga, TablaAlumnoJuegoDeCompeticion, Jornada } from '../../../clases/index';
+import { Alumno, Equipo, Juego, TablaJornadas, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
+         TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, Jornada } from '../../../clases/index';
 
 // Servicio
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
@@ -27,15 +27,20 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   mensaje: string = 'Estás seguro/a de que quieres desactivar el ';
   // Recupera la informacion del juego, los alumnos o los equipos del juego
   alumnosDelJuego: Alumno[];
+  equiposDelJuego: Equipo[];
+  alumnosDelEquipo: Alumno[];
 
   // Recoge la inscripción de un alumno en el juego ordenada por puntos
   listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionLiga[];
+  listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[];
 
   // Muestra la posición del alumno, el nombre y los apellidos del alumno y los puntos
-  rankingJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion[] = [];
+  rankingAlumnoJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion[] = [];
+  rankingEquiposJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion[] = [];
 
   // Columnas Tabla
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos', ' '];
+  displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'puntos', ' '];
 
   jornadasEstablecidas: Jornada[];
   JornadasCompeticion: TablaJornadas[] = [];
@@ -55,6 +60,8 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
       this.AlumnosDelJuego();
+    } else {
+      this.EquiposDelJuego();
     }
     // Añadir opción equipo
 
@@ -89,7 +96,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   }
 
   AlumnosDelJuego() {
-    console.log ('Vamos a pos los alumnos');
+    console.log ('Vamos a por los alumnos');
     console.log('Id juegoSeleccionado: ' + this.juegoSeleccionado.id);
     this.peticionesAPI.DameAlumnosJuegoDeCompeticionLiga(this.juegoSeleccionado.id)
     .subscribe(alumnosJuego => {
@@ -98,6 +105,51 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
       this.alumnosDelJuego = alumnosJuego;
       this.RecuperarInscripcionesAlumnoJuego();
     });
+  }
+
+  EquiposDelJuego() {
+    console.log ('Vamos a por los equipos');
+    console.log('Id juegoSeleccionado: ' + this.juegoSeleccionado.id);
+    this.peticionesAPI.DameEquiposJuegoDeCompeticionLiga(this.juegoSeleccionado.id)
+    .subscribe(equiposJuego => {
+      console.log ('ya tengo los equipos');
+      console.log (equiposJuego);
+      this.equiposDelJuego = equiposJuego;
+      this.RecuperarInscripcionesEquiposJuego();
+    });
+  }
+
+  AlumnosDelEquipo(equipo: Equipo) {
+    console.log(equipo);
+
+    this.peticionesAPI.DameAlumnosEquipo (equipo.id)
+    .subscribe(res => {
+      if (res[0] !== undefined) {
+        this.alumnosDelEquipo = res;
+        console.log('Los alumnos del equipo ' + equipo.id + ' son: ');
+        console.log(res);
+      } else {
+        console.log('No hay alumnos en este equipo');
+        // Informar al usuario
+        this.alumnosDelEquipo = undefined;
+      }
+    });
+  }
+
+  AccederAlumno(alumno: TablaAlumnoJuegoDeCompeticion) {
+
+    const alumnoSeleccionado = this.alumnosDelJuego.filter(res => res.Nombre === alumno.nombre &&
+      res.PrimerApellido === alumno.primerApellido && res.SegundoApellido === alumno.segundoApellido)[0];
+
+    const posicion = this.rankingAlumnoJuegoDeCompeticion.filter(res => res.nombre === alumno.nombre &&
+      res.primerApellido === alumno.primerApellido && res.segundoApellido === alumno.segundoApellido)[0].posicion;
+
+      // Informacion que se necesitara para ver la evolución del alumno
+    this.sesion.TomaDatosEvolucionAlumnoJuegoCompeticionLiga (
+      posicion,
+      alumnoSeleccionado,
+      this.listaAlumnosOrdenadaPorPuntos.filter(res => res.AlumnoId === alumnoSeleccionado.id)[0]
+    );
   }
 
   // Recupera los AlumnoJuegoDeCompeticionLiga del juegoSeleccionado.id ordenados por puntos de mayor a menor
@@ -118,26 +170,44 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     });
   }
 
+  // Recupera los EquipoJuegoDeCompeticionLiga del juegoSeleccionado.id ordenados por puntos de mayor a menor
+  RecuperarInscripcionesEquiposJuego() {
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionLiga(this.juegoSeleccionado.id)
+    .subscribe(inscripciones => {
+      this.listaEquiposOrdenadaPorPuntos = inscripciones;
+      console.log ('EquiposJuegoDeCompeticionLiga: ');
+      console.log (this.listaEquiposOrdenadaPorPuntos);
+      // ordena la lista por puntos
+      // tslint:disable-next-line:only-arrow-functions
+      this.listaEquiposOrdenadaPorPuntos = this.listaEquiposOrdenadaPorPuntos.sort(function(obj1, obj2) {
+        console.log (obj2.PuntosTotalesEquipo + ' ; ' + obj1.PuntosTotalesEquipo);
+        return obj2.PuntosTotalesEquipo - obj1.PuntosTotalesEquipo;
+      });
+      console.log(this.listaEquiposOrdenadaPorPuntos);
+      this.TablaClasificacionTotal();
+    });
+  }
+
   // En función del modo (Individual/Equipos), recorremos la lisa de Alumnos o de Equipos y vamos rellenando el rankingJuegoDePuntos
   // ESTO DEBERIA IR AL SERVICIO DE CALCULO, PERO DE MOMENTO NO LO HAGO PORQUE SE GENERAN DOS TABLAS
   // Y NO COMPRENDO BIEN LA NECESIDAD DE LAS DOS
   TablaClasificacionTotal() {
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
-      this.rankingJuegoDeCompeticion = this.calculos.PrepararTablaRankingIndividualCompeticion (
-        this.listaAlumnosOrdenadaPorPuntos,
-        this.alumnosDelJuego);
+      this.rankingAlumnoJuegoDeCompeticion = this.calculos.PrepararTablaRankingIndividualCompeticion (
+                                                                                                this.listaAlumnosOrdenadaPorPuntos,
+                                                                                                this.alumnosDelJuego);
       console.log ('Ya tengo la tabla');
-      console.log (this.rankingJuegoDeCompeticion);
-      this.datasourceAlumno = new MatTableDataSource(this.rankingJuegoDeCompeticion);
+      console.log (this.rankingAlumnoJuegoDeCompeticion);
+      this.datasourceAlumno = new MatTableDataSource(this.rankingAlumnoJuegoDeCompeticion);
 
-    } else {  // Añadir caso Equipo
-
-      // this.rankingEquiposJuegoDePuntos = this.calculos.PrepararTablaRankingEquipos (
-      //   this.listaEquiposOrdenadaPorPuntos, this.equiposDelJuego, this.nivelesDelJuego
-      // );
-      // console.log ('ranking ' + this.rankingEquiposJuegoDePuntos);
-      // this.datasourceEquipo = new MatTableDataSource(this.rankingEquiposJuegoDePuntos);
+    } else {
+      this.rankingEquiposJuegoDeCompeticion = this.calculos.PrepararTablaRankingEquipoCompeticion (
+                                                                                              this.listaEquiposOrdenadaPorPuntos,
+                                                                                              this.equiposDelJuego);
+      console.log ('Ya tengo la tabla');
+      console.log (this.rankingEquiposJuegoDeCompeticion);
+      this.datasourceEquipo = new MatTableDataSource(this.rankingEquiposJuegoDeCompeticion);
 
     }
   }

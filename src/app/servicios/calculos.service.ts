@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { SesionService, PeticionesAPIService} from './index';
-// tslint:disable-next-line:max-line-length
-import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, HistorialPuntosAlumno,
-  HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo, AlumnoJuegoDeColeccion, Album,
-  EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion, Jornada } from '../clases/index';
+import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos,
+         TablaEquipoJuegoDePuntos, HistorialPuntosAlumno, HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo,
+         AlumnoJuegoDeColeccion, Album, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
+         TablaEquipoJuegoDeCompeticion, Jornada } from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -182,6 +182,24 @@ export class CalculosService {
         listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno);
     }
     console.log ('El ranking es: ' + rankingJuegoDeCompeticion);
+    return rankingJuegoDeCompeticion;
+  }
+
+  public PrepararTablaRankingEquipoCompeticion(listaEquiposOrdenadaPorPuntos, equiposDelJuego) {
+    const rankingJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion [] = [];
+    console.log (' Vamos a preparar la tabla del ranking por equipos de Competición');
+    console.log ('la lista de equipos ordenada es: ');
+    console.log (listaEquiposOrdenadaPorPuntos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < listaEquiposOrdenadaPorPuntos.length; i++) {
+      let equipo: Equipo;
+      const EquipoId = listaEquiposOrdenadaPorPuntos[i].EquipoId;
+      equipo = equiposDelJuego.filter(res => res.id === EquipoId)[0];
+      rankingJuegoDeCompeticion[i] = new TablaEquipoJuegoDeCompeticion(i + 1, equipo.Nombre,
+                                        listaEquiposOrdenadaPorPuntos[i].PuntosTotalesEquipo, EquipoId);
+    }
+    console.log ('El ranking es: ' );
+    console.log (rankingJuegoDeCompeticion);
     return rankingJuegoDeCompeticion;
   }
 

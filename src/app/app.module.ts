@@ -116,6 +116,8 @@ import { ElementosComponent } from './elementos/elementos.component';
 import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.component';
 import { DialogoComponent } from './desarrolladores/dialogo/dialogo.component';
 import { EstilosComponent } from './estilos/estilos.component';
+// tslint:disable-next-line:max-line-length
+import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/alumnos-seleccionado-juego-de-competicion-liga/alumnos-seleccionado-juego-de-competicion-liga.component';
 
 
 
@@ -176,7 +178,8 @@ import { EstilosComponent } from './estilos/estilos.component';
     JuegoDeCompeticionSeleccionadoActivoComponent,
     JuegoDeCompeticionSeleccionadoInactivoComponent,
     InformacionJuegoDeCompeticionComponent,
-    EditarJornadasJuegoDeCompeticionComponent
+    EditarJornadasJuegoDeCompeticionComponent,
+    AlumnosSeleccionadoJuegoDeCompeticionLigaComponent
   ],
   imports: [
     BrowserModule,
