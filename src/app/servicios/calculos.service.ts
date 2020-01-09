@@ -1358,10 +1358,10 @@ public PreparaHistorialEquipo(
   jornada = jornadas.filter(res => res.id === jornadaId)[0];
 
   if (jornada.Fecha === undefined) {
-      TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador);
+      TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id);
       console.log(TablaJornada[i]);
     } else {
-      TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador);
+      TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
       console.log(TablaJornada[i]);
     }
   }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga } from '../clases';
+import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga,
+         TablaJornadas, Jornada} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 @Injectable({
@@ -305,23 +306,27 @@ export class SesionService {
     return this.insignia;
   }
 
-  public TomaDatosParaJornadas(
-    jornadas: any,
-    JornadasCompeticion: any
+  public TomaDatosJornadas(
+    jornadas: Jornada[],
+    JornadasCompeticion: TablaJornadas[]
   ) {
   this.JornadasCompeticion = JornadasCompeticion;
   this.jornadas = jornadas;
+  console.log ('jornadas:');
   console.log ( this.JornadasCompeticion);
+  console.log ('TablaJornadas:');
   console.log ( this.jornadas);
 
 }
 
-public DameDatosParaJornadas(): any {
+public DameDatosJornadas(): any {
 const datos = {
 jornadas: this.jornadas,
 JornadasCompeticion: this.JornadasCompeticion
 };
-console.log ('Aqui estan las jornadas guardadas: ' + this.jornadas + this.JornadasCompeticion);
+console.log ('Aqui estan las jornadas guardadas: ');
+console.log(this.jornadas);
+console.log(this.JornadasCompeticion);
 
 return datos;
 }

@@ -35,11 +35,13 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
     const datos = this.sesion.DameDatosParaJornadas();
     this.JornadasCompeticion = datos.JornadasCompeticion;
     console.log('Jornadas Competicion: ');
+    // Teniendo la tabla de Jornadas puedo sacar los enfrentamientos de cada jornada accediendo a la api
     console.log(this.JornadasCompeticion);
   }
 
   ObtenerEnfrentamientosDeCadaJornada() {
     console.log('HTendré que pasr el id de la jornada para obtener los enfrentamientos y crear una tabla para cada uno');
+    // this.peticionesAPI.DameEnfrentamientosDeJornadaLiga(jornadasDeCompeticionLigaId: number)
   }
 
   goBack() {
