@@ -53,7 +53,7 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
                   private _formBuilder: FormBuilder) {}
 
   ngOnInit() {
-    const datos = this.sesion.DameDatosParaJornadas();
+    const datos = this.sesion.DameDatosJornadas();
     this.jornadas = datos.jornadas;
     this.JornadasCompeticion = datos.JornadasCompeticion;
     this.juegoSeleccionado = this.sesion.DameJuego();

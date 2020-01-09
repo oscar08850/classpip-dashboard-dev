@@ -32,7 +32,7 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
     console.log(this.juegoSeleccionado);
     console.log('Número total de jornadas: ');
     console.log(this.numeroTotalJornadas);
-    const datos = this.sesion.DameDatosParaJornadas();
+    const datos = this.sesion.DameDatosJornadas();
     this.JornadasCompeticion = datos.JornadasCompeticion;
     console.log('Jornadas Competicion: ');
     // Teniendo la tabla de Jornadas puedo sacar los enfrentamientos de cada jornada accediendo a la api
