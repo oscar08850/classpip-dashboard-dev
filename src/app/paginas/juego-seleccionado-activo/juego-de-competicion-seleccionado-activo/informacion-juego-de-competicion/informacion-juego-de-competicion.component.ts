@@ -7,6 +7,7 @@ import { Juego, Jornada, TablaJornadas, EnfrentamientoLiga } from '../../../../c
 // Servicio
 import { SesionService , CalculosService, PeticionesAPIService } from '../../../../servicios/index';
 import { forEach } from '@angular/router/src/utils/collection';
+import { MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-informacion-juego-de-competicion',
@@ -20,7 +21,15 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
   numeroTotalJornadas: number;
   jornadasDelJuego: Jornada[];
   JornadasCompeticion: TablaJornadas[] = [];
+
+  // Información de la tabla: Muestra el JugadorUno, JugadorDos, Ganador, JornadaDeCompeticionLigaId y id
   EnfrentamientosJornadaSeleccionada: EnfrentamientoLiga[] = [];
+
+  // Columnas Tabla
+  displayedColumnsEnfrentamientos: string[] = ['JugadorUno', 'JugadorDos', 'Ganador'];
+
+  dataSourceEnfrentamientoIndividual;
+  dataSourceEnfrentamientoEquipo;
 
   constructor( public sesion: SesionService,
                public location: Location,
@@ -42,23 +51,31 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
   }
 
   ObtenerEnfrentamientosDeCadaJornada(jornadaSeleccionada: TablaJornadas) {
-    console.log('HTendré que pasr el id de la jornada para obtener los enfrentamientos y crear una tabla para cada uno');
     console.log('El id de la jornada seleccionada es: ' + jornadaSeleccionada.id);
-    // tslint:disable-next-line:prefer-for-of
     this.peticionesAPI.DameEnfrentamientosDeJornadaLiga(jornadaSeleccionada.id)
     .subscribe(enfrentamientos => {
       this.EnfrentamientosJornadaSeleccionada = enfrentamientos;
       console.log('Los enfrentamientos de esta jornada son: ');
       console.log(this.EnfrentamientosJornadaSeleccionada);
+      console.log('Ya tengo los enfrentamientos de la jornada, ahora tengo que mostrarlos en una tabla');
+      this.ConstruirTablaEnfrentamientos();
     });
-    // for (let i = 0; i < this.JornadasCompeticion.length; i ++) {
-    //   this.peticionesAPI.DameEnfrentamientosDeJornadaLiga(this.JornadasCompeticion[i].id)
-    //   .subscribe(enfrentamiento => {
-    //     this.EnfrentamientoJornada = enfrentamiento;
-    //     console.log('Las jornadas son: ');
-    //     console.log(this.EnfrentamientoJornada);
-    //   });
-    // }
+  }
+
+  ConstruirTablaEnfrentamientos() {
+    console.log ('Aquí tendré la tabla de enfrentamientos, los enfrentamientos sonc:');
+    console.log(this.EnfrentamientosJornadaSeleccionada);
+    console.log('Distinción entre Individual y equipos');
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      console.log(this.EnfrentamientosJornadaSeleccionada);
+      this.dataSourceEnfrentamientoIndividual = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
+
+    } else {
+      console.log('Estoy en ConstruirTablaEnfrentamientos() equipos');
+      console.log(this.EnfrentamientosJornadaSeleccionada);
+      this.dataSourceEnfrentamientoEquipo = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
+
+    }
   }
 
   goBack() {

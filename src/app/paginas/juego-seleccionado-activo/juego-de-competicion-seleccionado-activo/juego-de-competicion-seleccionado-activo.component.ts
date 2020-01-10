@@ -42,10 +42,11 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos', ' '];
   displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'puntos', ' '];
 
-  jornadasEstablecidas: Jornada[];
-  JornadasCompeticion: TablaJornadas[] = [];
   datasourceAlumno;
   datasourceEquipo;
+
+  jornadasEstablecidas: Jornada[];
+  JornadasCompeticion: TablaJornadas[] = [];
 
   constructor(  public dialog: MatDialog,
                 public snackBar: MatSnackBar,
@@ -144,7 +145,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     const posicion = this.rankingAlumnoJuegoDeCompeticion.filter(res => res.nombre === alumno.nombre &&
       res.primerApellido === alumno.primerApellido && res.segundoApellido === alumno.segundoApellido)[0].posicion;
 
-      // Informacion que se necesitara para ver la evolución del alumno
+      // Informacion que se necesitara para ver la evolución del alumno, faltará la función DameDatosEvolucionAlumno..
     this.sesion.TomaDatosEvolucionAlumnoJuegoCompeticionLiga (
       posicion,
       alumnoSeleccionado,
