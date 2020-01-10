@@ -10,7 +10,7 @@
       <mat-tab  label="Jornadas del Juego">
         <form>
           <mat-accordion  *ngIf="numeroTotalJornadas!==undefined;else Aviso_no_jornadas">
-              <mat-expansion-panel *ngFor="let jornada of JornadasCompeticion" (click) = "ObtenerEnfrentamientosDeCadaJornada()">
+              <mat-expansion-panel *ngFor="let jornada of JornadasCompeticion" (click) = "ObtenerEnfrentamientosDeCadaJornada(jornada)">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
                   Jornada {{jornada.NumeroDeJornada}}

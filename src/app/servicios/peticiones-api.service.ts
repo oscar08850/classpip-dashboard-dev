@@ -8,7 +8,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         Equipo, AsignacionEquipo, AsignacionPuntosJuego, EquipoJuegoDePuntos, Coleccion,
         AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Cromo, HistorialPuntosAlumno, HistorialPuntosEquipo,
         Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
-        Jornada } from '../clases/index';
+        Jornada, EnfrentamientoLiga } from '../clases/index';
 
 @Injectable({
   providedIn: 'root'
@@ -443,6 +443,11 @@ export class PeticionesAPIService {
     + juegoDeCompeticionLigaId);
 
     // return this.http.get<Jornada[]>(this.APIUrlJuegoDeCompeticionLiga + '/' + juegoDeCompeticionID + '/JornadasDeCompeticionLiga');
+  }
+
+  public DameEnfrentamientosDeJornadaLiga(jornadasDeCompeticionLigaId: number): Observable<EnfrentamientoLiga[]> {
+    return this.http.get<EnfrentamientoLiga[]>('http://localhost:3000/api/JornadasDeCompeticionLiga/' + jornadasDeCompeticionLigaId +
+    '/enfrentamientosLiga');
   }
 
   public CambiaEstadoJuegoDeCompeticionLiga(JuegosDeCompeticionLiga: Juego,

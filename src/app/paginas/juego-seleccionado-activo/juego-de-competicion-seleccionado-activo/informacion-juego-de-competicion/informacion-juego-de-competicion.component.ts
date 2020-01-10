@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
 // Clases
-import { Juego, Jornada, TablaJornadas } from '../../../../clases/index';
+import { Juego, Jornada, TablaJornadas, EnfrentamientoLiga } from '../../../../clases/index';
 
 // Servicio
 import { SesionService , CalculosService, PeticionesAPIService } from '../../../../servicios/index';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-informacion-juego-de-competicion',
@@ -19,6 +20,7 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
   numeroTotalJornadas: number;
   jornadasDelJuego: Jornada[];
   JornadasCompeticion: TablaJornadas[] = [];
+  EnfrentamientosJornadaSeleccionada: EnfrentamientoLiga[] = [];
 
   constructor( public sesion: SesionService,
                public location: Location,
@@ -39,9 +41,24 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
     console.log(this.JornadasCompeticion);
   }
 
-  ObtenerEnfrentamientosDeCadaJornada() {
+  ObtenerEnfrentamientosDeCadaJornada(jornadaSeleccionada: TablaJornadas) {
     console.log('HTendré que pasr el id de la jornada para obtener los enfrentamientos y crear una tabla para cada uno');
-    // this.peticionesAPI.DameEnfrentamientosDeJornadaLiga(jornadasDeCompeticionLigaId: number)
+    console.log('El id de la jornada seleccionada es: ' + jornadaSeleccionada.id);
+    // tslint:disable-next-line:prefer-for-of
+    this.peticionesAPI.DameEnfrentamientosDeJornadaLiga(jornadaSeleccionada.id)
+    .subscribe(enfrentamientos => {
+      this.EnfrentamientosJornadaSeleccionada = enfrentamientos;
+      console.log('Los enfrentamientos de esta jornada son: ');
+      console.log(this.EnfrentamientosJornadaSeleccionada);
+    });
+    // for (let i = 0; i < this.JornadasCompeticion.length; i ++) {
+    //   this.peticionesAPI.DameEnfrentamientosDeJornadaLiga(this.JornadasCompeticion[i].id)
+    //   .subscribe(enfrentamiento => {
+    //     this.EnfrentamientoJornada = enfrentamiento;
+    //     console.log('Las jornadas son: ');
+    //     console.log(this.EnfrentamientoJornada);
+    //   });
+    // }
   }
 
   goBack() {
