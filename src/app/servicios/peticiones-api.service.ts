@@ -460,7 +460,6 @@ export class PeticionesAPIService {
     return this.http.get<AlumnoJuegoDeCompeticionLiga[]>(this.APIUrlAlumnoJuegoDeCompeticionLiga + '?filter[where][JuegoDeCompeticionLigaId]='
     + juegoDeCompeticionLigaId);
   }
-
   // tslint:disable-next-line:max-line-length
   public CambiaEstadoJuegoDeCompeticionLiga(JuegosDeCompeticionLiga: Juego, juegoDeCompeticionId: number, grupoId: number): Observable<Juego> {
     // tslint:disable-next-line:max-line-length
@@ -475,5 +474,8 @@ export class PeticionesAPIService {
 
   public ModificarJornada(JornadaNueva: Jornada, JornadaId: number): Observable<Jornada> {
     return this.http.put<Jornada>(this.APIUrlJornadasJuegoDeCompeticionLiga + '/' + JornadaId, JornadaNueva );
+  }
+  public BorraJuegoDeCompeticionLiga(juegoDeCompeticionId: number, grupoId: number): Observable<Juego> {
+    return this.http.delete<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga/' + juegoDeCompeticionId);
   }
 }
