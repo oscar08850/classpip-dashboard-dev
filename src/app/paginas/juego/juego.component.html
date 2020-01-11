@@ -103,6 +103,7 @@
 
 
           <!-- //////////////////////// SEGUNDO PASO: SELECCIÓN DEL MODO DE JUEGO ///////////////////////// -->
+          <div *ngIf="(tipoDeJuegoSeleccionado !== 'Juego De Competición')">
           <mat-step>
             <ng-template matStepLabel><div>Modo De Juego</div></ng-template>
 
@@ -123,17 +124,11 @@
 
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <div *ngIf="(tipoDeJuegoSeleccionado !== 'Juego De Competición')">
-                    <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
-                  </div>
-
-                  <div *ngIf="(tipoDeJuegoSeleccionado === 'Juego De Competición')">
-                    <button type="button" class="btn Next"  matStepperNext>Siguiente</button>
-                  </div>
-
+                  <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
                 </div>
 
           </mat-step>
+        </div>
 
 
           <!-- ////////////////////////////SI ESCOGEMOS EL JUEGO DE TIPO DE PUNTOS ////////////////////////////////-->
@@ -192,7 +187,7 @@
 
           <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Competición'">
 
-            <!-- TERCER PASO: SELECTION DE TIPO DE COMPETICION -->
+            <!-- SEGUNDO PASO: SELECTION DE TIPO DE COMPETICION -->
 
             <mat-step>
                 <ng-template matStepLabel><div>Tipo De Competición</div></ng-template>
@@ -206,7 +201,7 @@
                           {{tipo.nombre}}
                       </mat-chip>
                     </mat-chip-list>
-                    <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{modoDeJuegoSeleccionado}} ... {{tipoJuegoCompeticionSeleccionado}} </span>
+                    <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoJuegoCompeticionSeleccionado}} </span>
 
                 </div>
 
@@ -216,6 +211,33 @@
                 </div>
               </mat-step>
 
+              <!-- TERCER PASO: SELECTION DE TIPO DE COMPETICION -->
+
+              <mat-step>
+                <ng-template matStepLabel><div>Modo De Juego</div></ng-template>
+
+                  <div class = "colorsChips">
+
+                    <label class = "LabelStepper">Selecciona un modo de juego:</label>
+                    <mat-chip-list class="mat-chip-list-stacked">
+                      <mat-chip *ngFor="let tipo of seleccionModoJuego; let i = index" selected [color]="tipo.color"  selected="{{seleccionModoJuego[i].selected}}"
+                         (click)="ModoDeJuegoSeleccionado(seleccionModoJuego[i])" [value]="tipo.nombre" [selectable]="true" >
+                          {{tipo.nombre}}
+                      </mat-chip>
+                    </mat-chip-list>
+                    <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}... {{tipoJuegoCompeticionSeleccionado}} ... {{modoDeJuegoSeleccionado}} </span>
+
+                  </div>
+
+
+
+                    <div class="btnCambiarStep">
+                      <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                      <button type="button" class="btn Next"  matStepperNext>Siguiente</button>
+
+                    </div>
+
+              </mat-step>
 
                <!-- CUARTO PASO: NUMERO DE JORNADAS-->
                 <mat-step [stepControl]="myForm">
@@ -255,6 +277,7 @@
             <ng-template matStepLabel>Finalizar</ng-template>
               Juego creado correctamente
               <div class="btnCambiarStep">
+                <button type="button" class="btn Aceptar" (click) = Finalizar();  routerLink = "juegoSeleccionadoActivo">Finalizar y Editar</button>
                 <button type="button" class="btn Aceptar" (click) = "Finalizar();">Finalizar</button>
               </div>
           </mat-step>
