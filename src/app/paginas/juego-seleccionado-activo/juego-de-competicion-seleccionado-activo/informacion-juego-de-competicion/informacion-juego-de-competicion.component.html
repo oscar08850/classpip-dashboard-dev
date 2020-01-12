@@ -1,24 +1,24 @@
 <div  class="titulo">Información Juego de Competición {{juegoSeleccionado.TipoJuegoCompeticion}}</div>
-<!-- <div class="subtitulo">{{juegoSeleccionado.TipoJuegoCompeticion}}</div> -->
+<div class="subtitulo">Jornadas del Juego</div>
 <mat-divider class="lineaDivisoria"></mat-divider>
 
 <div  class="enColumna">
   <div  class="contenedor"  style="align-items: center;">
-    <mat-tab-group  style="width: 75%;" [backgroundColor]="primary">
+    <!-- <mat-tab-group  style="width: 75%;" [backgroundColor]="primary"> -->
 
       <!-- JORNADAS DEL JUEGO -->
-      <mat-tab  label="Jornadas del Juego">
+      <!-- <mat-tab  label="Jornadas del Juego"> -->
         <form>
-          <mat-accordion  *ngIf="numeroTotalJornadas!==undefined;else Aviso_no_jornadas">
+          <mat-accordion  style="align-items: center;"  *ngIf="numeroTotalJornadas!==undefined;else Aviso_no_jornadas">
               <mat-expansion-panel *ngFor="let jornada of JornadasCompeticion" (click) = "ObtenerEnfrentamientosDeCadaJornada(jornada)">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                  Jornada {{jornada.NumeroDeJornada}}
+                  Jornada {{jornada.NumeroDeJornada}}:    {{jornada.Fecha}}
                 </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="enFila">
                   <div style="margin-right: 5%; border: 15px; width: 70%;">
-                      <span style="font-weight: bold; font-size: 130%;">Fecha: {{jornada.Fecha}}</span>
+                      <span style="font-weight: bold; font-size: 130%;">Criterio: {{jornada.CriterioGanador}}</span>
 
                       <!-- ///////////////////////////////////// TABLA ENFRENTAMIENTOS POR EQUIPOS ////////////////////////////////////// -->
                       <form style=" width: 100%" *ngIf="juegoSeleccionado.Modo != 'Individual'">
@@ -78,11 +78,6 @@
                         </table>
                       </form>
 
-
-
-                       <!-- Tabla para Individual -->
-
-
                   </div>
                   <!-- <div>
                       <span style="font-weight: bold; font-size:150%;">PX</span>
@@ -94,12 +89,12 @@
 
           <ng-template #Aviso_no_jornadas>No se han creado jornadas en este juego</ng-template>
         </form>
-        </mat-tab>
+        <!-- </mat-tab> -->
 
-      <!-- EQUIPOS DEL JUEGO -->
+      <!-- EQUIPOS DEL JUEGO
       <mat-tab  *ngIf="juegoSeleccionado.Modo === 'Equipos'"  label="Equipos del Grupo"></mat-tab>
 
-      <!-- CRITERIOS ELEGIR GANADOR DEL JUEGO -->
+      CRITERIOS ELEGIR GANADOR DEL JUEGO
       <mat-tab  label="Criterios del Juego">
           <form>
               <mat-accordion>
@@ -111,22 +106,15 @@
                     </mat-expansion-panel-header>
                     <div class="enFila">
                         <div style="margin-right: 5%; border: 15px; width: 70%;">
-                            <!-- <span style="font-weight: bold; font-size: 130%;">Criterio</span>
-                            <p style="font-size: 200%; margin: 5px;">{{jornada.CriterioGanador}}</p> -->
-                            <!-- <br> -->
                             <span style="font-weight: bold; font-size: 130%;">Criterio</span>
                             <p style="font-size: 150%; margin: 5px;">{{jornada.CriterioGanador}}</p>
                         </div>
-                        <!-- <div>
-                            <span style="font-weight: bold; font-size:150%;">PX</span>
-                            <p style="color: rgb(63, 81, 181); font-size:180%;">hola</p>
-                        </div> -->
                     </div>
                   </mat-expansion-panel>
               </mat-accordion>
             </form>
-      </mat-tab>
-    </mat-tab-group>
+      </mat-tab> -->
+    <!-- </mat-tab-group> -->
   </div>
 
   <button type="button" class="btn Back" (click)="goBack()">Volver </button>
