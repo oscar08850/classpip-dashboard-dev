@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { SesionService, PeticionesAPIService} from './index';
-// tslint:disable-next-line:max-line-length
-import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, HistorialPuntosAlumno,
-  HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo, AlumnoJuegoDeColeccion, Album,
-  EquipoJuegoDeColeccion, AlbumEquipo, Cromo } from '../clases/index';
+import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos,
+         TablaEquipoJuegoDePuntos, HistorialPuntosAlumno, HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo,
+         AlumnoJuegoDeColeccion, Album, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
+         TablaEquipoJuegoDeCompeticion, Jornada } from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -87,7 +87,7 @@ export class CalculosService {
       const juegosActivos: Juego[] = [];
       const juegosInactivos: Juego[] = [];
 
-      console.log ('vamos a por los juegos de puntos: ' + grupoID);
+      console.log ('vamos a por los juegos de puntos del grupo: ' + grupoID);
       this.peticionesAPI.DameJuegoDePuntosGrupo(grupoID)
       .subscribe(juegosPuntos => {
         console.log('He recibido los juegos de puntos');
@@ -103,10 +103,11 @@ export class CalculosService {
           }
         }
         // Ahora vamos apor por los juegos de colección
+        console.log ('vamos a por los juegos de colección del grupo: ' + grupoID);
         this.peticionesAPI.DameJuegoDeColeccionGrupo(grupoID)
         .subscribe(juegosColeccion => {
           console.log('He recibido los juegos de coleccion');
-
+          console.log(juegosColeccion);
           // tslint:disable-next-line:prefer-for-of
           for (let i = 0; i < juegosColeccion.length; i++) {
             if (juegosColeccion[i].JuegoActivo === true) {
@@ -116,10 +117,11 @@ export class CalculosService {
             }
           }
           // Ahora vamos a por los juegos de competición
-          console.log ('vamos a por los juegos de competicion: ' + grupoID);
-          this.peticionesAPI.DameJuegoDeCompeticionGrupo(grupoID)
+          console.log ('vamos a por los juegos de competicion del grupo: ' + grupoID);
+          this.peticionesAPI.DameJuegoDeCompeticionLigaGrupo(grupoID)
           .subscribe(juegosCompeticion => {
             console.log('He recibido los juegos de competición');
+            console.log(juegosCompeticion);
             // tslint:disable-next-line:prefer-for-of
             for (let i = 0; i < juegosCompeticion.length; i++) {
               if (juegosCompeticion[i].JuegoActivo === true) {
@@ -168,6 +170,41 @@ export class CalculosService {
 
       return (rankingJuegoDePuntos);
 
+  }
+
+  public PrepararTablaRankingIndividualCompeticion(listaAlumnosOrdenadaPorPuntos, alumnosDelJuego): TablaAlumnoJuegoDeCompeticion[] {
+    const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion [] = [];
+    console.log (' Vamos a preparar la tabla del ranking individual de Competición');
+    console.log ('la lista de alumnos ordenada es: ');
+    console.log (listaAlumnosOrdenadaPorPuntos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+      let alumno: Alumno;
+      const alumnoId = listaAlumnosOrdenadaPorPuntos[i].AlumnoId;
+      alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+      rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeCompeticion(i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+        listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno);
+    }
+    console.log ('El ranking es: ' + rankingJuegoDeCompeticion);
+    return rankingJuegoDeCompeticion;
+  }
+
+  public PrepararTablaRankingEquipoCompeticion(listaEquiposOrdenadaPorPuntos, equiposDelJuego) {
+    const rankingJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion [] = [];
+    console.log (' Vamos a preparar la tabla del ranking por equipos de Competición');
+    console.log ('la lista de equipos ordenada es: ');
+    console.log (listaEquiposOrdenadaPorPuntos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < listaEquiposOrdenadaPorPuntos.length; i++) {
+      let equipo: Equipo;
+      const EquipoId = listaEquiposOrdenadaPorPuntos[i].EquipoId;
+      equipo = equiposDelJuego.filter(res => res.id === EquipoId)[0];
+      rankingJuegoDeCompeticion[i] = new TablaEquipoJuegoDeCompeticion(i + 1, equipo.Nombre,
+                                        listaEquiposOrdenadaPorPuntos[i].PuntosTotalesEquipo, EquipoId);
+    }
+    console.log ('El ranking es: ' );
+    console.log (rankingJuegoDeCompeticion);
+    return rankingJuegoDeCompeticion;
   }
 
   public DameRankingPuntoSeleccionadoEquipos(
@@ -455,7 +492,7 @@ public BorrarPunto(   punto: TablaHistorialPuntosAlumno, alumnoJuegoDePuntos: an
   //  });
   //  return resultadoObservable;
 
-  //}
+  // }
 
 public BorrarPuntoEquipo( punto: TablaHistorialPuntosEquipo, equipoJuegoDePuntos: any,
                           nivelesDelJuego: Nivel[]) {
@@ -677,7 +714,6 @@ public AsignarPuntosAlumno(
 }
 
 
-
 public AsignarPuntosEquipo(
   equipo: EquipoJuegoDePuntos,
   nivelesDelJuego: Nivel[],
@@ -699,7 +735,6 @@ public AsignarPuntosEquipo(
           // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => console.log(res));
 }
-
 
 
 public PreparaHistorialEquipo(
@@ -779,7 +814,7 @@ public PreparaHistorialEquipo(
     console.log(alumnoJuegoDeColeccion);
 
     // tslint:disable-next-line:prefer-const
-    //let hits = this.probabilidadCromos.map(x => 0);
+    // let hits = this.probabilidadCromos.map(x => 0);
 
 
     for (let k = 0; k < numeroCromosRandom; k++) {
@@ -787,7 +822,7 @@ public PreparaHistorialEquipo(
       console.log('Voy a hacer el post del cromo ' + k);
 
       const indexCromo = this.randomIndex(probabilidadCromos);
-      //hits[this.indexCromo]++;
+      // hits[this.indexCromo]++;
 
 
       this.peticionesAPI.AsignarCromoAlumno(new Album (alumnoJuegoDeColeccion.id,
@@ -844,7 +879,43 @@ public PreparaHistorialEquipo(
     return listaCromosSinRepetidos;
   }
 
-  FormarEquiposAleatorios(individuos: any[], tamEquipos: number): any[] {
+  public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID) {
+    for (let i = 1; i <= NumeroDeJornadas; i++) {
+      // tslint:disable-next-line:max-line-length '2000-01-01T01:01:01.000Z'
+      const jornada = new Jornada(undefined, 'Pendiente de determinar', juegoDeCompeticionID);
+      console.log(jornada);
+      this.peticionesAPI.CrearJornadasLiga(jornada, juegoDeCompeticionID)
+      .subscribe(jornadacreada => {
+        console.log('jornada creada');
+        console.log(jornadacreada);
+      });
+    }
+  }
+
+  public DameTablaJornadasLiga( juegoSeleccionado, jornadas) {
+  const TablaJornada: TablaJornadas [] = [];
+
+  // tslint:disable-next-line:prefer-for-of
+  console.log('3 Vamos a llenar la tabla');
+  console.log(jornadas);
+  console.log(juegoSeleccionado);
+  for (let i = 0; i < juegoSeleccionado.NumeroTotalJornadas; i++) {
+  let jornada: Jornada;
+  const jornadaId = jornadas[i].id;
+  jornada = jornadas.filter(res => res.id === jornadaId)[0];
+
+  if (jornada.Fecha === undefined) {
+      TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id);
+      console.log(TablaJornada[i]);
+    } else {
+      TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
+      console.log(TablaJornada[i]);
+    }
+  }
+  return(TablaJornada);
+  }
+
+ public FormarEquiposAleatorios(individuos: any[], tamEquipos: number): any[] {
     const listaInicial = individuos;
     const numeroGrupos = Math.ceil(listaInicial.length / tamEquipos);
     console.log ('Tamaño ' + tamEquipos);
@@ -864,7 +935,6 @@ public PreparaHistorialEquipo(
     }
     equipos.push (listaInicial);
     return equipos;
-
   }
 
 }

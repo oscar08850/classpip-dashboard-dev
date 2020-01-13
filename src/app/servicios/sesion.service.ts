@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia } from '../clases';
+import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga,
+         TablaJornadas, Jornada} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 @Injectable({
@@ -40,6 +41,8 @@ export class SesionService {
   punto: Punto;
   insignia: Insignia;
 
+  jornadas: any;
+  JornadasCompeticion: any;
   // listaEquiposGrupo: any;
 
   constructor() { }
@@ -122,6 +125,14 @@ export class SesionService {
     return this.cromo;
   }
 
+  public TomaDatosEvolucionAlumnoJuegoCompeticionLiga( posicion: number,
+                                                       alumnoSeleccionado: Alumno,
+                                                       inscripcionAlumnoJuego: AlumnoJuegoDeCompeticionLiga ) {
+    this.posicion = posicion;
+    this.alumnoSeleccionado = alumnoSeleccionado;
+    this.inscripcionAlumnoJuego = inscripcionAlumnoJuego;
+  }
+
   public TomaDatosEvolucionAlumnoJuegoPuntos( posicion: any,
                                               tiposPuntosDelJuego: any,
                                               nivelesDelJuego: any,
@@ -182,6 +193,10 @@ export class SesionService {
     };
     return datos;
   }
+
+//   public TomaInformacionJuegoDeCompeticion( nivelesDelJuego: any ) {
+//       this.nivelesDelJuego = nivelesDelJuego;
+// }
 
 
   public TomaDatosParaAsignarPuntos(
@@ -290,4 +305,30 @@ export class SesionService {
   public DameInsignia(): any {
     return this.insignia;
   }
+
+  public TomaDatosJornadas(
+    jornadas: Jornada[],
+    JornadasCompeticion: TablaJornadas[]
+  ) {
+  this.JornadasCompeticion = JornadasCompeticion;
+  this.jornadas = jornadas;
+  console.log ('jornadas:');
+  console.log ( this.JornadasCompeticion);
+  console.log ('TablaJornadas:');
+  console.log ( this.jornadas);
+
+}
+
+public DameDatosJornadas(): any {
+const datos = {
+jornadas: this.jornadas,
+JornadasCompeticion: this.JornadasCompeticion
+};
+console.log ('Aqui estan las jornadas guardadas: ');
+console.log(this.jornadas);
+console.log(this.JornadasCompeticion);
+
+return datos;
+}
+
 }

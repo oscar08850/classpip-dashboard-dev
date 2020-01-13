@@ -10,3 +10,10 @@
 <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Colección'">
   <app-juego-de-coleccion-seleccionado-activo></app-juego-de-coleccion-seleccionado-activo>
 </div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Competición Liga'">
+  <app-juego-de-competicion-seleccionado-activo></app-juego-de-competicion-seleccionado-activo>
+</div>
+
+<div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver</button>
+</div>

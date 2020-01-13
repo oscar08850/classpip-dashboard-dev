@@ -23,7 +23,14 @@ export * from './HistorialPuntosEquipo';
 export * from './clasesParaTablasJuegoDePuntos/TablaHistorialPuntosEquipo';
 export * from './AlumnoJuegoDeColeccion';
 export * from './EquipoJuegoDeColeccion';
+export * from './AlumnoJuegoDeCompeticionLiga';
+export * from './EquipoJuegoDeCompeticionLiga';
 export * from './Album';
 export * from './AlbumEquipo';
 export * from './clasesParaTablasJuegoColeccion/AlbumDelAlumno';
-
+export * from './JuegoCompeticion';
+export * from './clasesParaTablasJuegoDeCompeticion/TablaAlumnoJuegoDeCompeticion';
+export * from './Jornada';
+export * from './clasesParaTablasJuegoDeCompeticion/TablaJornadas';
+export * from './clasesParaTablasJuegoDeCompeticion/TablaEquipoJuegoDeCompeticion';
+export * from './EnfrentamientoLiga';

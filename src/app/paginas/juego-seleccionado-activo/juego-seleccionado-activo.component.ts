@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 // Clases
 import { Juego } from '../../clases/index';
+import { Location } from '@angular/common';
 
 // Services
 import { SesionService } from '../../servicios/index';
@@ -15,7 +16,8 @@ export class JuegoSeleccionadoActivoComponent implements OnInit {
 
   juegoSeleccionado: Juego;
 
-  constructor( private sesion: SesionService ) { }
+  constructor( private sesion: SesionService,
+               private location: Location ) { }
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
@@ -23,5 +25,7 @@ export class JuegoSeleccionadoActivoComponent implements OnInit {
 
   }
 
-
+  goBack() {
+    this.location.back();
+  }
 }

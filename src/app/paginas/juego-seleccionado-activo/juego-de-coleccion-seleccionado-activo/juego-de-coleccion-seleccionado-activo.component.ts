@@ -107,7 +107,7 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
       this.RecuperarInscripcionesEquiposJuego();
       this.ColeccionDelJuego();
       this.sesion.TomaEquiposDelJuego (this.equiposDelJuego);
-      //this.juegoService.EnviarEquipoJuegoAlServicio(this.equiposDelJuego);
+      // this.juegoService.EnviarEquipoJuegoAlServicio(this.equiposDelJuego);
     });
   }
 
@@ -194,9 +194,5 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
       }
     });
   }
-  goBack() {
-    this.location.back();
-  }
-
 
 }
