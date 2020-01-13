@@ -340,43 +340,53 @@ export class JuegoComponent implements OnInit {
   }
 
   Finalizar() {
+    console.log ('Entro en finalizar');
+    console.log (this.tipoDeJuegoSeleccionado);
 
-    if (this.tipoJuegoCompeticionSeleccionado === 'Liga') {
-      if (this.modoDeJuegoSeleccionado === 'Individual') {
-        console.log('Voy a inscribir a los alumnos del grupo');
+    if (this.tipoDeJuegoSeleccionado === 'Juego De Competición') {
+      if (this.tipoJuegoCompeticionSeleccionado === 'Liga') {
+        if (this.modoDeJuegoSeleccionado === 'Individual') {
+          console.log('Voy a inscribir a los alumnos del grupo');
 
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < this.alumnosGrupo.length; i++) {
-          console.log('alumno: ' + this.alumnosGrupo[i]);
-          console.log('id alumno: ' + this.alumnosGrupo[i].id);
-          console.log('juego: ' + this.juego);
-          console.log('id juego: ' + this.juego.id);
-          console.log(new AlumnoJuegoDeCompeticionLiga(this.alumnosGrupo[i].id, this.juego.id));
-          // tslint:disable-next-line:max-line-length
-          this.peticionesAPI.InscribeAlumnoJuegoDeCompeticionLiga(new AlumnoJuegoDeCompeticionLiga(this.alumnosGrupo[i].id, this.juego.id))
-          .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
-        }
-      } else {
-        console.log('Voy a inscribir los equipos al grupo');
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.alumnosGrupo.length; i++) {
+            console.log('alumno: ' + this.alumnosGrupo[i]);
+            console.log('id alumno: ' + this.alumnosGrupo[i].id);
+            console.log('juego: ' + this.juego);
+            console.log('id juego: ' + this.juego.id);
+            console.log(new AlumnoJuegoDeCompeticionLiga(this.alumnosGrupo[i].id, this.juego.id));
+            // tslint:disable-next-line:max-line-length
+            this.peticionesAPI.InscribeAlumnoJuegoDeCompeticionLiga(new AlumnoJuegoDeCompeticionLiga(this.alumnosGrupo[i].id, this.juego.id))
+            .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
+          }
+        } else {
+          console.log('Voy a inscribir los equipos al grupo');
 
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < this.equiposGrupo.length; i++) {
-          console.log(this.equiposGrupo[i]);
-          // tslint:disable-next-line:max-line-length
-          this.peticionesAPI.InscribeEquipoJuegoDeCompeticionLiga(new EquipoJuegoDeCompeticionLiga(this.equiposGrupo[i].id, this.juego.id))
-          .subscribe(equiposJuego => console.log(equiposJuego));
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.equiposGrupo.length; i++) {
+            console.log(this.equiposGrupo[i]);
+            // tslint:disable-next-line:max-line-length
+            this.peticionesAPI.InscribeEquipoJuegoDeCompeticionLiga(new EquipoJuegoDeCompeticionLiga(this.equiposGrupo[i].id, this.juego.id))
+            .subscribe(equiposJuego => console.log(equiposJuego));
+          }
         }
       }
     }
-    if (this.tipoJuegoCompeticionSeleccionado !== 'Liga') {
+
+
+    console.log ('AAAA');
+
+    if (this.tipoDeJuegoSeleccionado === 'Juego De Puntos') {
+      console.log ('Es un juego de puntos');
+
       if (this.modoDeJuegoSeleccionado === 'Individual') {
-        console.log('Voy a inscribir a los alumnos del grupo');
+        console.log('Voy a inscribir a los alumnos del grupo 1');
 
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.alumnosGrupo.length; i++) {
           console.log(this.alumnosGrupo[i]);
           this.peticionesAPI.InscribeAlumnoJuegoDePuntos(new AlumnoJuegoDePuntos(this.alumnosGrupo[i].id, this.juego.id))
-          .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
+          .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente 1'));
         }
       } else {
         console.log('Voy a inscribir los equipos del grupo');
@@ -392,45 +402,46 @@ export class JuegoComponent implements OnInit {
 
 
 
-      if (this.juego.Modo === 'Individual') {
-          console.log('Voy a inscribir a los alumnos del grupo');
+      // if (this.juego.Modo === 'Individual') {
+      //     console.log('Voy a inscribir a los alumnos del grupo 2');
 
-          // tslint:disable-next-line:prefer-for-of
-          for (let i = 0; i < this.alumnosGrupo.length; i++) {
-            console.log(this.alumnosGrupo[i]);
-            this.peticionesAPI.InscribeAlumnoJuegoDePuntos(new AlumnoJuegoDePuntos(this.alumnosGrupo[i].id, this.juego.id))
-            .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
-          }
-        } else {
-          console.log('Voy a inscribir los equipos al grupo');
+      //     // tslint:disable-next-line:prefer-for-of
+      //     for (let i = 0; i < this.alumnosGrupo.length; i++) {
+      //       console.log(this.alumnosGrupo[i]);
+      //       this.peticionesAPI.InscribeAlumnoJuegoDePuntos(new AlumnoJuegoDePuntos(this.alumnosGrupo[i].id, this.juego.id))
+      //       .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente 2'));
+      //     }
+      //   } else {
+      //     console.log('Voy a inscribir los equipos al grupo');
 
-          // tslint:disable-next-line:prefer-for-of
-          for (let i = 0; i < this.equiposGrupo.length; i++) {
-            console.log(this.equiposGrupo[i].Nombre);
-            this.peticionesAPI.InscribeEquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
-            .subscribe(equiposJuego => console.log(equiposJuego));
+      //     // tslint:disable-next-line:prefer-for-of
+      //     for (let i = 0; i < this.equiposGrupo.length; i++) {
+      //       console.log(this.equiposGrupo[i].Nombre);
+      //       this.peticionesAPI.InscribeEquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
+      //       .subscribe(equiposJuego => console.log(equiposJuego));
 
-          }
-        }
+      //     }
+      // }
+    }
 
+    console.log ('BBBBBBB');
     // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
-      if (this.juegosActivos === undefined) {
+    if (this.juegosActivos === undefined) {
       // Si la lista aun no se ha creado no podre hacer el push
           this.juegosActivos = [];
-        }
-      this.juegosActivos.push (this.juego);
-
-
-      this.juegoCreado = false;
-
-    // Regresamos a la lista de equipos (mat-tab con índice 0)
-      this.tabGroup.selectedIndex = 0;
-
-    // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
-      this.stepper.reset();
-      this.finalizar = true;
-  }
     }
+    this.juegosActivos.push (this.juego);
+
+
+    this.juegoCreado = false;
+
+      // Regresamos a la lista de equipos (mat-tab con índice 0)
+    this.tabGroup.selectedIndex = 0;
+
+      // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
+    this.stepper.reset();
+    this.finalizar = true;
+  }
 
   // Recibo el nombre de la colección elegida en el componente hijo
    RecibeNombre($event) {
