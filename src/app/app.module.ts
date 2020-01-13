@@ -76,7 +76,6 @@ import { EditarPuntoComponent } from './paginas/mis-puntos/editar-punto/editar-p
 import { EditarInsigniaComponent } from './paginas/mis-puntos/editar-insignia/editar-insignia.component';
 import { EditarColeccionComponent } from './paginas/mis-colecciones/editar-coleccion/editar-coleccion.component';
 import { AgregarCromoDialogComponent } from './paginas/mis-colecciones/agregar-cromo-dialog/agregar-cromo-dialog.component';
-import { EditarCromoComponent } from './paginas/mis-colecciones/editar-coleccion/editar-cromo/editar-cromo.component';
 import { AsignacionColeccionJuegoComponent } from './paginas/juego/asignacion-coleccion-juego/asignacion-coleccion-juego.component';
 // tslint:disable-next-line:max-line-length
 import { DialogMostrarCromosComponent } from './paginas/juego/asignacion-coleccion-juego/dialog-mostrar-cromos/dialog-mostrar-cromos.component';
@@ -116,8 +115,14 @@ import { ElementosComponent } from './elementos/elementos.component';
 import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.component';
 import { DialogoComponent } from './desarrolladores/dialogo/dialogo.component';
 import { EstilosComponent } from './estilos/estilos.component';
+
 // tslint:disable-next-line:max-line-length
 import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/alumnos-seleccionado-juego-de-competicion-liga/alumnos-seleccionado-juego-de-competicion-liga.component';
+
+import { EditarCromoDialogComponent } from './paginas/mis-colecciones/editar-cromo-dialog/editar-cromo-dialog.component';
+import { MisAlumnosComponent } from './paginas/mis-alumnos/mis-alumnos.component';
+import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introducir-alumnos.component';
+
 
 
 
@@ -157,7 +162,6 @@ import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/ju
     EditarInsigniaComponent,
     EditarColeccionComponent,
     AgregarCromoDialogComponent,
-    EditarCromoComponent,
     AsignacionColeccionJuegoComponent,
     DialogMostrarCromosComponent,
     JuegoDeColeccionSeleccionadoActivoComponent,
@@ -175,11 +179,17 @@ import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/ju
     DesarrolladoresComponent,
     DialogoComponent,
     EstilosComponent,
+
     JuegoDeCompeticionSeleccionadoActivoComponent,
     JuegoDeCompeticionSeleccionadoInactivoComponent,
     InformacionJuegoDeCompeticionComponent,
     EditarJornadasJuegoDeCompeticionComponent,
     AlumnosSeleccionadoJuegoDeCompeticionLigaComponent
+
+    EditarCromoDialogComponent,
+    MisAlumnosComponent,
+    IntroducirAlumnosComponent
+
   ],
   imports: [
     BrowserModule,
@@ -220,8 +230,7 @@ import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/ju
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
-    DialogoComponent ],
-  providers: [],
+    EditarCromoDialogComponent, DialogoComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

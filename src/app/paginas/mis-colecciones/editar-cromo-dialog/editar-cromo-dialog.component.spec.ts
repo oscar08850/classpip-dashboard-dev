@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditarCromoComponent } from './editar-cromo.component';
+import { EditarCromoDialogComponent } from './editar-cromo-dialog.component';
 
-describe('EditarCromoComponent', () => {
-  let component: EditarCromoComponent;
-  let fixture: ComponentFixture<EditarCromoComponent>;
+describe('EditarCromoDialogComponent', () => {
+  let component: EditarCromoDialogComponent;
+  let fixture: ComponentFixture<EditarCromoDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditarCromoComponent ]
+      declarations: [ EditarCromoDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditarCromoComponent);
+    fixture = TestBed.createComponent(EditarCromoDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -76,8 +76,7 @@ export class EditarInsigniaComponent implements OnInit {
 
     if (this.insignia.Imagen !== undefined ) {
       // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-      this.http.get('http://localhost:3000/api/imagenes/ImagenInsignia/download/' + this.insignia.Imagen,
-      { responseType: ResponseContentType.Blob })
+      this.peticionesAPI.DameImagenInsignia (this.insignia.Imagen)
       .subscribe(response => {
         const blob = new Blob([response.blob()], { type: 'image/jpg'});
 

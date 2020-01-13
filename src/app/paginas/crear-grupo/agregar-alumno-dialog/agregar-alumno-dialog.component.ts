@@ -4,9 +4,13 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 // Servicios
 import {PeticionesAPIService} from '../../../servicios/index';
+import { Location } from '@angular/common';
 
 // Clases
 import { Grupo, Alumno, Matricula } from '../../../clases/index';
+import {MatTableDataSource} from '@angular/material/table';
+import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+
 
 @Component({
   selector: 'app-agregar-alumno-dialog',
@@ -16,20 +20,23 @@ import { Grupo, Alumno, Matricula } from '../../../clases/index';
 export class AgregarAlumnoDialogComponent implements OnInit {
 
   // PONEMOS LAS COLUMNAS DE LA TABLA Y LA LISTA QUE TENDRÁ LA INFORMACIÓN QUE QUEREMOS MOSTRAR (alumnosEquipo) y (alumnosAsignables)
-  displayedColumns: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'alumnoId', ' '];
+  displayedColumnsMisAlumnos: string[] = ['nombre', 'primerApellido', 'segundoApellido', ' '];
+  dataSourceMisAlumnos;
+  misAlumnos: Alumno[] = [];
+
+  displayedColumnsAlumnosDelGrupo: string[] = ['nombre', 'primerApellido', 'segundoApellido', ' '];
+  dataSourceAlumnosDelGrupo;
+  alumnosDelGrupo: Alumno[] = [];
 
   alumno: Alumno;
-  alumnosAgregados: Alumno[] = []; // Inicializamos vacio
+
   grupoId: number;
   profesorId: number;
-
-
-  // Declaramos el FormGroup que tendrá los tres controladores que recibirán los parámetros de entrada
-  myForm: FormGroup;
-  myForm2: FormGroup;
+  mensaje = 'Confirma que quieres quitar del grupo a ';
 
   constructor(
-              private formBuilder: FormBuilder,
+              public dialog: MatDialog,
+              public location: Location,
               private peticionesAPI: PeticionesAPIService,
               public dialogRef: MatDialogRef<AgregarAlumnoDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -43,143 +50,110 @@ export class AgregarAlumnoDialogComponent implements OnInit {
     this.grupoId = this.data.grupoId;
     this.profesorId = this.data.profesorId;
 
-    // Usaremos dos formularios, que tienen los campos que se indican
 
-    this.myForm = this.formBuilder.group({
-      nombreAlumno: ['', Validators.required],
-      primerApellido: ['', Validators.required],
-      segundoApellido: ['', Validators.required],
-      textoAlumnos: ['', Validators.required],
-    });
+    this.peticionesAPI.DameTodosMisAlumnos (this.profesorId )
+    .subscribe ( res => {
+                          this.misAlumnos = res;
+                          this.misAlumnos.sort((a, b) => a.PrimerApellido.localeCompare(b.PrimerApellido));
 
-    this.myForm2 = this.formBuilder.group({
-      textoAlumnos: ['', Validators.required],
-    });
+                          this.dataSourceMisAlumnos = new MatTableDataSource (this.misAlumnos);
+
+                        }
+    );
+
+    this.peticionesAPI.DameAlumnosGrupo (this.grupoId)
+    .subscribe ( res => {
+                          this.alumnosDelGrupo = res;
+                          this.alumnosDelGrupo.sort((a, b) => a.PrimerApellido.localeCompare(b.PrimerApellido));
+
+                          this.dataSourceAlumnosDelGrupo = new MatTableDataSource (this.alumnosDelGrupo);
+
+                        }
+    );
 
   }
 
-  // Esta función es la que se llama desde el formulario cuando ya hemos introducido
-  // los datos del alumno que vamos a asignar
-  // Simplemente preparamos el alumno y llamamos a la función de asignar alumno
-  AsignacionIndividual() {
-    console.log('voy a entrar a buscar alumno');
-
-    const nombreAlumno = this.myForm.value.nombreAlumno;
-    const primerApellido = this.myForm.value.primerApellido;
-    const segundoApellido = this.myForm.value.segundoApellido;
-    const alumno = new Alumno (nombreAlumno, primerApellido, segundoApellido);
-    this.AsignaAlumno (alumno);
+  applyFilterMisAlumnos(filterValue: string) {
+    this.dataSourceMisAlumnos.filter = filterValue.trim().toLowerCase();
   }
 
-  // Para asignar al alumno primero vemos si ya está en la base de datos
-  // en cuyo caso ya podemos matricularlo directamente en el grupo
-  // o si no está en la base de datos, en cuyo caso hay que ponerlo en la base
-  // de datos antes de matricularlo
-  AsignaAlumno(alumno: Alumno) {
+  applyFilterAlumnosDelGrupo(filterValue: string) {
+    this.dataSourceAlumnosDelGrupo.filter = filterValue.trim().toLowerCase();
+  }
 
-    this.peticionesAPI.DameAlumnoConcreto(alumno, this.profesorId)
-      .subscribe((respuesta) => {
-        if (respuesta[0] !== undefined) {
-          // el alumno ya está en la base de datos
-          console.log ('Ya esta en la base de datos');
-          this.MatricularAlumno(respuesta[0] );
-       } else {
-          // el alumno no está en la base de datos.
-          console.log ('NO esta en la base de datos');
-          this.AgregarAlumnoNuevoGrupo(alumno );
-        }
+
+
+  AsignarAlumno(alumno: Alumno) {
+    // tslint:disable-next-line:max-line-length
+    const found = this.alumnosDelGrupo.find (a => a.Nombre === alumno.Nombre &&  a.PrimerApellido === alumno.PrimerApellido && a.SegundoApellido === alumno.SegundoApellido);
+    if (found === undefined) {
+
+      this.peticionesAPI.MatriculaAlumnoEnGrupo(new Matricula (alumno.id, this.grupoId))
+      .subscribe();
+
+      // Añado los nuevos alumnos a la lista.
+      // AQUI ESTOY DANDO POR SENTADO QUE LA MATRICULACION SE PUEDE HACER
+      // ESTO HABRA QUE REVISARLO SI CONTROLAMOS QUE NO SE PUEDA ASIGNAR UN ALUMNO QUE YA ESTA
+      this.alumnosDelGrupo.push (alumno);
+      this.alumnosDelGrupo.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+      this.dataSourceAlumnosDelGrupo = new MatTableDataSource (this.alumnosDelGrupo);
+
+      // tslint:disable-next-line:max-line-length
+      this.misAlumnos = this.misAlumnos.filter (a => a.Nombre !== alumno.Nombre &&  a.PrimerApellido !== alumno.PrimerApellido && a.SegundoApellido !== alumno.SegundoApellido);
+      this.dataSourceMisAlumnos = new MatTableDataSource (this.misAlumnos);
+
+    } else {
+      this.snackBar.open('Este alumno ya está en el grupo', 'Cerrar', {
+        duration: 2000,
       });
-  }
 
-
-  // Esta función es la que se llama desde el formulario cuando están preparados los
-  // datos de los alumnos para asignación masiva
-  // Simplemente procesamos la linea de texto con los nombres de los alumnos para
-  // asignarlos uno a uno
-
-  AsignacionMasiva() {
-
-    let textoAlumnos: string;
-
-    textoAlumnos = this.myForm2.value.textoAlumnos;
-
-    for (let i = 0; i < textoAlumnos.split(';').length; i++) {
-      // Vamos a preparar el siguiente alumno
-        const nombreCompleto = textoAlumnos.split('; ')[0 + i];
-        const nombreAlumno = nombreCompleto.split(' ')[0];
-        const primerApellido = nombreCompleto.split(' ')[1];
-        const segundoApellido = nombreCompleto.split(' ')[2];
-        const alumno = new Alumno (nombreAlumno, primerApellido, segundoApellido);
-        console.log(nombreCompleto);
-        this.AsignaAlumno (alumno);
     }
+
   }
 
+  AbrirDialogoConfirmacionBorrar(alumno: Alumno): void {
 
-   // Para matricularlo enviamos la matricula a la base de datos y
-   // agregamos al alumno en la lista de alumnos inscritos que se muestra en pantalla
-   MatricularAlumno(alumno: Alumno) {
-    this.peticionesAPI.MatriculaAlumnoEnGrupo(new Matricula (alumno.id, this.grupoId))
-    .subscribe((resMatricula) => {
-      if (resMatricula != null) {
-        // Añadimos el alumno a la lista que hay que mostrar
-        this.alumnosAgregados.push(alumno);
-        this.alumnosAgregados = this.alumnosAgregados.filter(res => res.Nombre !== '');
-        this.myForm.reset();
-      } else {
-        // Aqui habria que mostrar algun mensaje al usuario
-        console.log('fallo en la matriculación');
+    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+      height: '150px',
+      data: {
+        mensaje: this.mensaje,
+        nombre: alumno.Nombre,
       }
     });
 
-  }
-  // Si el alumno no está en la base de datos lo enviamos a la base de datos (asignado al profesor)
-  // y lo matriculamos en el grupo
-  AgregarAlumnoNuevoGrupo(alumno: Alumno) {
-    this.peticionesAPI.AsignaAlumnoAlProfesor( alumno, this.profesorId)
-      .subscribe(res => {
-        if (res != null) {
-          console.log('Voy a añadir a ' + res);
-          this.MatricularAlumno(res);
-          this.snackBar.open('Este alumno no estaba en la base de datos, ha sido añadido', 'Cerrar', {
-            duration: 3000,
-          });
-
-        } else {
-          // Aqui habria que mostrar algun mensaje al usuario --> Hecho
-          this.snackBar.open('Se ha producido un error añadiendo al alumno en la base de datos', 'Cerrar', {
-            duration: 2000,
-          });
-          console.log('fallo añadiendo');
-        }
-      });
-  }
-
-
-
-  // Para borrar al alumno del grupo primero recuperamos la matricula del alumno en el grupo
-  // y luego eliminamos esa matricula
-  BorrarAlumno(alumno: Alumno) {
-    console.log('voy a borrar a ' + alumno.id);
-    console.log(alumno.Nombre + ' seleccionado');
-
-    // Recupero la matrícula del alumno en este grupo
-    this.peticionesAPI.DameMatriculaAlumno(alumno.id, this.grupoId)
-    .subscribe(matricula => {
-          console.log('Doy la matricula de ' + alumno.Nombre);
-          console.log(matricula[0]);
-
-          // Una vez recupero la matrícula, la borro
-          this.peticionesAPI.BorraMatricula(matricula[0].id)
-          .subscribe(res => {
-            console.log(alumno.Nombre + ' borrado correctamente');
-            // Ahora saco al alumno de la tabla que se muestra en pantalla
-            const id = alumno.id;
-            // tslint:disable-next-line:no-shadowed-variable
-            this.alumnosAgregados = this.alumnosAgregados.filter(alumno => alumno.id !== id);
-
-          });
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.EliminarDelGrupo(alumno);
+        this.snackBar.open('Alumnos eliminados correctamente', 'Cerrar', {
+          duration: 2000,
         });
+      }
+    });
+  }
+
+  EliminarDelGrupo(alumno: Alumno) {
+    // Deberia poder borrar la matricula directamente pero no he visto como
+    console.log ('Borrar ');
+    console.log ('alumnoID: ' + alumno.id);
+    console.log ('grupoID: ' + this.grupoId);
+    this.peticionesAPI.DameMatriculaAlumno (alumno.id, this.grupoId)
+    .subscribe( (matricula) => {
+        console.log ('voy a borrar: ' + matricula.id);
+        this.peticionesAPI.BorraMatricula (matricula[0].id).subscribe( () => {
+            console.log ('Borrada');
+            // tslint:disable-next-line:max-line-length
+            this.alumnosDelGrupo = this.alumnosDelGrupo.filter (a => a.Nombre !== alumno.Nombre &&  a.PrimerApellido !== alumno.PrimerApellido && a.SegundoApellido !== alumno.SegundoApellido);
+            this.dataSourceAlumnosDelGrupo = new MatTableDataSource (this.alumnosDelGrupo);
+            this.misAlumnos.push (alumno);
+            this.misAlumnos.sort((a, b) => a.PrimerApellido.localeCompare(b.PrimerApellido));
+            this.dataSourceMisAlumnos = new MatTableDataSource (this.misAlumnos);
+        }
+        );
+    });
+  }
+
+  goBack() {
+    this.dialogRef.close();
   }
 
 }

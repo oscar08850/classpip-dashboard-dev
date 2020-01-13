@@ -30,6 +30,8 @@ export class NavbarComponent implements OnInit {
   URLCrearPuntos: string;
   URLMisColecciones: string;
   URLCrearColeccion: string;
+  URLMisAlumnos: string;
+  URLIntroducirAlumnos: string;
   URLConfiguracion: string;
   URLDesarrolladores: string;
   URLEstilos: string;
@@ -48,6 +50,8 @@ export class NavbarComponent implements OnInit {
     this.URLMisColecciones = this.URLInicio + '/misColecciones';
     this.URLCrearColeccion = this.URLInicio + '/crearColeccion';
     this.URLDesarrolladores = this.URLInicio + '/desarrolladores';
+    this.URLMisAlumnos = this.URLInicio + '/misAlumnos';
+    this.URLIntroducirAlumnos = this.URLInicio + '/introducirAlumnos';
     this.URLEstilos = this.URLInicio + '/estilos';
     this.URLConfiguracion = this.URLInicio + '/configuracionProfesor';
 

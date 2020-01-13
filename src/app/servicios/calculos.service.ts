@@ -31,28 +31,32 @@ export class CalculosService {
   }
 
 
-  // ESTA FUNCIÓN BORRARÁ EL GRUPO DE ID QUE PASEMOS DEL PROFESOR CON ID QUE PASEMOS Y VOLVERÁ A LA PÁGINA DE LISTAR
-  // ACTUALIZANDO LA TABLA
-  public EliminarGrupo() {
+  // Elimina el grupo (tanto el id del profe como del grupo estan en sesión.
+  // Lo hago con un observable para que el componente que muestra la lista de grupos
+  // espere hasta que se haya acabado la operacion de borrar el grupo de la base de datos
+  public EliminarGrupo(): any {
+    const eliminaObservable = new Observable ( obs => {
 
-    this.peticionesAPI.BorraGrupo(
-              this.sesion.DameProfesor().id,
-              this.sesion.DameGrupo().id)
-    .subscribe(() => {
 
-      this.EliminarMatriculas();
+          this.peticionesAPI.BorraGrupo(
+                    this.sesion.DameProfesor().id,
+                    this.sesion.DameGrupo().id)
+          .subscribe(() => {
 
-      // Ahora elimino el grupo de la lista de grupos para que desaparezca de la pantalla al regresar
-      let lista = this.sesion.DameListaGrupos();
-      lista = lista.filter (g => g.id !== this.sesion.DameGrupo().id);
-      this.sesion.TomaListaGrupos (lista);
+            this.EliminarMatriculas();
+
+            // Ahora elimino el grupo de la lista de grupos para que desaparezca de la pantalla al regresar
+            let lista = this.sesion.DameListaGrupos();
+            lista = lista.filter (g => g.id !== this.sesion.DameGrupo().id);
+            obs.next ();
+          });
     });
+    return eliminaObservable;
   }
 
   // ESTA FUNCIÓN RECUPERA TODAS LAS MATRICULAS DEL GRUPO QUE VAMOS A BORRAR Y DESPUÉS LAS BORRA. ESTO LO HACEMOS PARA NO
   // DEJAR MATRICULAS QUE NO NOS SIRVEN EN LA BASE DE DATOS
   private EliminarMatriculas() {
-
     // Pido las matrículas correspondientes al grupo que voy a borrar
     this.peticionesAPI.DameMatriculasGrupo(this.sesion.DameGrupo().id)
     .subscribe( matriculas => {
@@ -372,100 +376,6 @@ export class CalculosService {
       return nivelesDelJuego[pos + 1];
     }
   }
-  // public DameNivelActualYSiguiente(nivelesDelJuego: any, alumnoJuegoDePuntos: any,  ): any {
-
-  //   let nivel;
-  //   let siguienteNivel;
-  //   // Primero ordenamos los niveles
-  //   // tslint:disable-next-line:only-arrow-functions
-  //   nivelesDelJuego = nivelesDelJuego.sort(function(obj1, obj2) {
-  //     return obj1.PuntosAlcanzar - obj2.PuntosAlcanzar;
-  //   });
-
-  //   nivel = nivelesDelJuego.filter(res => res.id === alumnoJuegoDePuntos.nivelId)[0];
-  //   // this.nivel = this.BuscarNivelActual(this.alumnoJuegoDePuntos.nivelId);
-  //   console.log(nivel);
-
-
-
-  //   // Si el alumno ya ha alcanzado algun nivel, buscamos cual es el siguiente nivel del que ya tiene. Sino el siguiente
-  //   // nivel será el primero
-  //   if (alumnoJuegoDePuntos.nivelId !== undefined) {
-
-  //     // Si no estoy en el último nivel, busco el siguiente nivel
-  //     if (alumnoJuegoDePuntos.nivelId !== nivelesDelJuego[nivelesDelJuego.length - 1].id) {
-  //       siguienteNivel = this.DameSiguienteNivel(nivelesDelJuego, alumnoJuegoDePuntos.nivelId);
-  //     } else {
-  //       siguienteNivel = undefined;
-  //     }
-
-  //   } else {
-  //     siguienteNivel = nivelesDelJuego[0];
-  //   }
-
-  //   const resultado = { n: nivel, sn: siguienteNivel};
-  //   return resultado;
-  // }
-
-
-  // public DameNivelActualYSiguienteEquipo(nivelesDelJuego: any, equipoJuegoDePuntos: any,  ): any {
-
-  //   let nivel;
-  //   let siguienteNivel;
-  //   // tslint:disable-next-line:only-arrow-functions
-  //   nivelesDelJuego = nivelesDelJuego.sort(function(obj1, obj2) {
-  //     return obj1.PuntosAlcanzar - obj2.PuntosAlcanzar;
-  //   });
-
-  //   nivel = nivelesDelJuego.filter(res => res.id === equipoJuegoDePuntos.nivelId)[0];
-
-  //   // Si el alumno ya ha alcanzado algun nivel, buscamos cual es el siguiente nivel del que ya tiene. Sino el siguiente
-  //   // nivel será el primero
-  //   if (equipoJuegoDePuntos.nivelId !== undefined) {
-  //     console.log('tiene un nivel');
-  //     // Si no estoy en el último nivel, busco el siguiente nivel
-  //     if (equipoJuegoDePuntos.nivelId !== nivelesDelJuego[nivelesDelJuego.length - 1].id) {
-  //       siguienteNivel = this.DameSiguienteNivel(nivelesDelJuego, equipoJuegoDePuntos.nivelId);
-  //     } else {
-  //       siguienteNivel = undefined;
-  //     }
-  //   } else {
-  //     console.log('no tiene un nivel');
-  //     siguienteNivel = nivelesDelJuego[0];
-  //   }
-  //   const resultado = { n: nivel, sn: siguienteNivel};
-  //   return resultado;
-  // }
-
-
-  // private DameSiguienteNivell(nivelesDelJuego: any, nivelId: number): Nivel {
-
-  //   console.log('Voy a buscar el siguiente nivel');
-  //   // tslint:disable-next-line:no-inferrable-types
-  //   let encontrado: boolean = false;
-  //   let i = 0;
-  //   while ((i < nivelesDelJuego.length) && (encontrado === false)) {
-
-  //     if (nivelesDelJuego[i].id === nivelId) {
-  //       encontrado = true;
-  //     }
-  //     i = i + 1;
-  //   }
-
-  //   return nivelesDelJuego[i];
-  // }
-/*
-  const gruposObservable = new Observable ( obs => {
-    this.peticionesAPI.DameGruposProfesor(profesorId)
-    .subscribe(res => {
-      if (res[0] !== undefined) {
-        obs.next (res.slice (0, 2));
-      } else {
-        obs.next (undefined);
-      }
-  });
-});
-return gruposObservable; */
 
 private DameNivelId( nivelesDelJuego: Nivel[], puntos: number): number {
   let i = 0;
@@ -789,7 +699,7 @@ public AsignarPuntosAlumno(
 ) {
 
       alumno.PuntosTotalesAlumno = alumno.PuntosTotalesAlumno + puntosNuevos;
-      if (nivelesDelJuego !== undefined) {
+      if (nivelesDelJuego.length > 0 ) {
         const nivelId = this.DameNivelId (nivelesDelJuego, alumno.PuntosTotalesAlumno );
         alumno.nivelId = nivelId;
       }
@@ -804,193 +714,6 @@ public AsignarPuntosAlumno(
 }
 
 
-// //TIENE QUE HABER UNA FORMA MAS FACIL DE HACER ESTO
-// public AsignarPuntosAlumno2(
-//   i: number,
-//   listaAlumnosOrdenadaPorPuntos: any,
-//   nivelesDelJuego: any,
-//   valorPunto: any,
-//   rankingJuegoDePuntos: any,
-//   puntoSeleccionadoId: any,
-
-
-
-// ): any {
-//   const listasObservables = new Observable ( obs => {
-
-//     console.log ('Lista ' + listaAlumnosOrdenadaPorPuntos);
-//     console.log ('niveles ' + nivelesDelJuego);
-//     let nivel: Nivel;
-//     let siguienteNivel: Nivel;
-//     // Buscar nivel actual
-//     nivel = nivelesDelJuego.filter(res => res.id === listaAlumnosOrdenadaPorPuntos[i].nivelId)[0];
-
-//     // Si el alumno ya ha alcanzado algun nivel, buscamos cual es el siguiente nivel del que ya tiene. Sino el siguiente
-//     // nivel será el primero
-//     if (listaAlumnosOrdenadaPorPuntos[i].nivelId !== undefined) {
-//       console.log('Si hay un nivel, buscamos el siguiente nivel');
-
-//       if (nivel.id !== nivelesDelJuego[nivelesDelJuego.length - 1].id) {
-
-//         // Buscar siguiente nivel
-
-//           // tslint:disable-next-line:no-inferrable-types
-//           let encontrado: boolean = false;
-//           let j = 0;
-//           while ((j < nivelesDelJuego.length) && (encontrado === false)) {
-//             if (nivelesDelJuego[j].id === listaAlumnosOrdenadaPorPuntos[j].nivelId) {
-//               encontrado = true;
-//             }
-//             j = j + 1;
-//           }
-//           siguienteNivel = nivelesDelJuego[j];
-
-//       } else {
-//         console.log('Ya hemos alcanzado el nivel maximo, no buscamos el siguiente nivel');
-//       }
-
-//     } else {
-//       console.log('El siguiente nivel es el primer nivel');
-//       siguienteNivel = nivelesDelJuego[0];
-//     }
-
-//     let nuevosPuntos: number;
-//     nuevosPuntos = listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno + valorPunto;
-
-//     // Comprobamos si subimos de nivel o no
-
-//     if (nivel !== undefined ) {
-//       if (nivel.id !== nivelesDelJuego[nivelesDelJuego.length - 1].id) {
-//         console.log('No estoy en el ultimo nivel, busco el siguiente nivel y miro si subo nivel o no');
-
-//         if (nuevosPuntos >= siguienteNivel.PuntosAlcanzar) {
-
-//           console.log('Voy a subir de nivel');
-//           nivel = siguienteNivel;
-//         } else {
-
-//           console.log('mantengo el nivel');
-//           if (listaAlumnosOrdenadaPorPuntos[i].nivelId !== undefined) {
-//             // Buscar nivel actual
-//             nivel = nivelesDelJuego.filter(res => res.id === listaAlumnosOrdenadaPorPuntos[i].nivelId)[0];
-
-//           }
-//         }
-//       } else {
-//         console.log('estoy maximo nivel, que es el siguiente');
-//         // Buscar nivel actual
-//         nivel = nivelesDelJuego.filter(res => res.id === listaAlumnosOrdenadaPorPuntos[i].nivelId)[0];
-
-//         console.log(nivel);
-//       }
-//     } else {
-
-//       if (nuevosPuntos >= siguienteNivel.PuntosAlcanzar) {
-
-//         console.log('Voy a subir de nivel');
-//         nivel = siguienteNivel;
-//       } else {
-
-//         console.log('mantengo el nivel');
-//         if (listaAlumnosOrdenadaPorPuntos[i].nivelId !== undefined) {
-//           // Buscar nivel actual
-//           nivel = nivelesDelJuego.filter(res => res.id === listaAlumnosOrdenadaPorPuntos[i].nivelId)[0];
-
-//         }
-//       }
-//     }
-
-//     // tslint:disable-next-line:curly
-
-//     if (nivel !== undefined) {
-//       this.peticionesAPI.PonPuntosJuegoDePuntos(new AlumnoJuegoDePuntos (listaAlumnosOrdenadaPorPuntos[i].alumnoId,
-//         listaAlumnosOrdenadaPorPuntos[i].juegoDePuntosId, nuevosPuntos, nivel.id),
-//         listaAlumnosOrdenadaPorPuntos[i].id).subscribe( res => {
-
-//             listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno = nuevosPuntos;
-//             listaAlumnosOrdenadaPorPuntos[i].nivelId = nivel.id;
-
-//             rankingJuegoDePuntos[i].puntos = nuevosPuntos;
-//             rankingJuegoDePuntos[i].nivel = nivel.Nombre;
-//             const fechaAsignacionPunto = new Date();
-//             const fechaString = fechaAsignacionPunto.toLocaleDateString() + '  ' + fechaAsignacionPunto.toLocaleTimeString();
-//         // tslint:disable-next-line:max-line-length
-// tslint:disable-next-line:max-line-length
-//       // this.POST_HistorialAlumno(this.valorPunto, this.puntoSeleccionadoId, this.listaAlumnosOrdenadaPorPuntos[i].id, this.fechaString);
-//         // tslint:disable-next-line:max-line-length
-// tslint:disable-next-line:max-line-length
-//             this.peticionesAPI.PonHistorialPuntosAlumno(new HistorialPuntosAlumno (valorPunto, puntoSeleccionadoId, listaAlumnosOrdenadaPorPuntos[i].id, fechaString))
-//         // tslint:disable-next-line:no-shadowed-variable
-//             .subscribe(res => console.log(res));
-//         // Ordenar lista por puntos
-//         // tslint:disable-next-line:only-arrow-functions
-//             listaAlumnosOrdenadaPorPuntos = listaAlumnosOrdenadaPorPuntos.sort(function(obj1, obj2) {
-//               return obj2.PuntosTotalesAlumno - obj1.PuntosTotalesAlumno;
-//             });
-//         //this.OrdenarListaPorPuntos();
-//         // Ordenar ranking por puntos
-//         // tslint:disable-next-line:only-arrow-functions
-//             rankingJuegoDePuntos = rankingJuegoDePuntos.sort(function(obj1, obj2) {
-//                 return obj2.puntos - obj1.puntos;
-//             });
-//             for (let j = 0; j < rankingJuegoDePuntos.length - 1; j ++) {
-//                 rankingJuegoDePuntos[j].posicion = j + 1;
-//             }
-//             rankingJuegoDePuntos = rankingJuegoDePuntos.filter(result => result.nombre !== '');
-//             if (i === 7) {
-//               console.log ('111111 ' + rankingJuegoDePuntos[i]);
-//             }
-
-//             const resultado = {
-//                                   lista: listaAlumnosOrdenadaPorPuntos,
-//                                   ranking: rankingJuegoDePuntos
-//             };
-//             obs.next (resultado);
-//         });
-//     } else {
-
-//       this.peticionesAPI.PonPuntosJuegoDePuntos(new AlumnoJuegoDePuntos (listaAlumnosOrdenadaPorPuntos[i].alumnoId,
-//         listaAlumnosOrdenadaPorPuntos[i].juegoDePuntosId, nuevosPuntos),
-//         listaAlumnosOrdenadaPorPuntos[i].id).subscribe( res => {
-//         console.log(res);
-//         listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno = nuevosPuntos;
-//         // this.listaAlumnosOrdenadaPorPuntos[i].nivelId = nivel.id;
-
-//         rankingJuegoDePuntos[i].puntos = nuevosPuntos;
-//         const fechaAsignacionPunto = new Date();
-//         const fechaString = fechaAsignacionPunto.toLocaleDateString() + '  ' + fechaAsignacionPunto.toLocaleTimeString();
-//         // tslint:disable-next-line:max-line-length
-// tslint:disable-next-line:max-line-length
-//         this.peticionesAPI.PonHistorialPuntosAlumno(new HistorialPuntosAlumno (valorPunto, puntoSeleccionadoId, listaAlumnosOrdenadaPorPuntos[i].id, fechaString))
-//         // tslint:disable-next-line:no-shadowed-variable
-//         .subscribe(res => console.log(res));
-//         // Ordenar lista por puntos
-//         // tslint:disable-next-line:only-arrow-functions
-//         listaAlumnosOrdenadaPorPuntos = listaAlumnosOrdenadaPorPuntos.sort(function(obj1, obj2) {
-//           return obj2.PuntosTotalesAlumno - obj1.PuntosTotalesAlumno;
-//         });
-//         //this.OrdenarListaPorPuntos();
-//         // Ordenar ranking por puntos
-//         // tslint:disable-next-line:only-arrow-functions
-//         rankingJuegoDePuntos = rankingJuegoDePuntos.sort(function(obj1, obj2) {
-//           return obj2.puntos - obj1.puntos;
-//         });
-//         for (let j = 0; j < rankingJuegoDePuntos.length - 1; j ++) {
-//           rankingJuegoDePuntos[j].posicion = j + 1;
-//         }
-//         rankingJuegoDePuntos = rankingJuegoDePuntos.filter(result => result.nombre !== '');
-//         const resultado = {
-//           lista: listaAlumnosOrdenadaPorPuntos,
-//           ranking: rankingJuegoDePuntos
-//         };
-//         obs.next (resultado);
-//       });
-//     }
-//   });
-//   return listasObservables;
-// }
-
-
 public AsignarPuntosEquipo(
   equipo: EquipoJuegoDePuntos,
   nivelesDelJuego: Nivel[],
@@ -999,7 +722,7 @@ public AsignarPuntosEquipo(
 ) {
 
       equipo.PuntosTotalesEquipo = equipo.PuntosTotalesEquipo + puntosNuevos;
-      if (nivelesDelJuego !== undefined) {
+      if (nivelesDelJuego.length > 0 ) {
         const nivelId = this.DameNivelId (nivelesDelJuego, equipo.PuntosTotalesEquipo );
         equipo.nivelId = nivelId;
       }
@@ -1012,182 +735,6 @@ public AsignarPuntosEquipo(
           // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => console.log(res));
 }
-
-
-
-// //TIENE QUE HABER UNA FORMA MAS FACIL DE HACER ESTO
-// public AsignarPuntosEquipo2(
-//   i: number,
-//   listaEquiposOrdenadaPorPuntos: any,
-//   nivelesDelJuego: any,
-//   valorPunto: any,
-//   rankingEquiposJuegoDePunto: any,
-//   puntoSeleccionadoId: any,
-
-
-
-// ): any {
-//   const listasObservables = new Observable ( obs => {
-
-
-
-//     let equipo: TablaEquipoJuegoDePuntos;
-//     equipo = rankingEquiposJuegoDePunto[i];
-//     console.log(equipo.nombre + ' seleccionado');
-
-//     let nivel: Nivel;
-//     let siguienteNivel: Nivel;
-//     nivel = nivelesDelJuego.filter(res => res.id === listaEquiposOrdenadaPorPuntos[i].nivelId)[0];
-
-
-//     // Si el alumno ya ha alcanzado algun nivel, buscamos cual es el siguiente nivel del que ya tiene. Sino el siguiente
-//     // nivel será el primero
-//     if (listaEquiposOrdenadaPorPuntos[i].nivelId !== undefined) {
-//       console.log('Si hay un nivel, buscamos el siguiente nivel');
-
-//       if (nivel.id !== nivelesDelJuego[nivelesDelJuego.length - 1].id) {
-
-//         //Buscamos el siguiente nivel
-//         let encontrado = false;
-//         let j = 0;
-//         while ((j < nivelesDelJuego.length) && (encontrado === false)) {
-//           if (nivelesDelJuego[j].id === listaEquiposOrdenadaPorPuntos[i].nivelId) {
-//             encontrado = true;
-//           }
-//           j = j + 1;
-//         }
-//         siguienteNivel = nivelesDelJuego[j];
-
-
-//       } else {
-//         console.log('Ya hemos alcanzado el nivel maximo, no buscamos el siguiente nivel');
-//       }
-
-//     } else {
-//       console.log('El siguiente nivel es el primer nivel');
-//       siguienteNivel = nivelesDelJuego[0];
-//     }
-
-//     let nuevosPuntos: number;
-//     nuevosPuntos = listaEquiposOrdenadaPorPuntos[i].PuntosTotalesEquipo + valorPunto;
-
-//     // Comprobamos si subimos de nivel o no
-
-//     if (nivel !== undefined) {
-//       if (nivel !== undefined) {
-//         if (nivel.id !== nivelesDelJuego[nivelesDelJuego.length - 1].id) {
-//           console.log('No estoy en el ultimo nivel, busco el siguiente nivel y miro si subo nivel o no');
-
-//           if (nuevosPuntos >= siguienteNivel.PuntosAlcanzar) {
-
-//             console.log('Voy a subir de nivel');
-//             nivel = siguienteNivel;
-//           } else {
-
-//             console.log('mantengo el nivel');
-//             if (listaEquiposOrdenadaPorPuntos[i].nivelId !== undefined) {
-//               nivel = nivelesDelJuego.filter(res => res.id === listaEquiposOrdenadaPorPuntos[i].nivelId)[0];
-
-//             }
-//           }
-//         } else {
-//           console.log('estoy maximo nivel, que es el siguiente');
-//           nivel = nivelesDelJuego.filter(res => res.id === listaEquiposOrdenadaPorPuntos[i].nivelId)[0];
-
-//           console.log(nivel);
-//         }
-//       }
-//     } else {
-//       if (nuevosPuntos >= siguienteNivel.PuntosAlcanzar) {
-
-//         console.log('Voy a subir de nivel');
-//         nivel = siguienteNivel;
-//       } else {
-
-//         console.log('mantengo el nivel');
-//         if (listaEquiposOrdenadaPorPuntos[i].nivelId !== undefined) {
-//           nivel = nivelesDelJuego.filter(res => res.id === listaEquiposOrdenadaPorPuntos[i].nivelId)[0];
-
-//         }
-//       }
-//     }
-
-//     // tslint:disable-next-line:curly
-
-//     if (nivel !== undefined) {
-//       this.peticionesAPI.PonPuntosEquiposJuegoDePuntos( new EquipoJuegoDePuntos(listaEquiposOrdenadaPorPuntos[i].equipoId,
-//         listaEquiposOrdenadaPorPuntos[i].juegoDePuntosId, nuevosPuntos, nivel.id), listaEquiposOrdenadaPorPuntos[i].id)
-//         .subscribe( res => {
-//           console.log(res);
-//           listaEquiposOrdenadaPorPuntos[i].PuntosTotalesEquipo = nuevosPuntos;
-//           listaEquiposOrdenadaPorPuntos[i].nivelId = nivel.id;
-
-//           rankingEquiposJuegoDePunto[i].puntos = nuevosPuntos;
-//           rankingEquiposJuegoDePunto[i].nivel = nivel.Nombre;
-
-//           const fechaAsignacionPunto = new Date();
-//           const fechaString = fechaAsignacionPunto.toLocaleDateString() + '  ' + fechaAsignacionPunto.toLocaleTimeString();
-
-//           // tslint:disable-next-line:max-line-length
-//           // tslint:disable-next-line:max-line-length
-// tslint:disable-next-line:max-line-length
-//           this.peticionesAPI.PonHistorialPuntosEquipo(new HistorialPuntosEquipo (valorPunto, puntoSeleccionadoId, listaEquiposOrdenadaPorPuntos[i].id, fechaString))
-//           .subscribe(result => console.log(res));
-//           // tslint:disable-next-line:only-arrow-functions
-//           rankingEquiposJuegoDePunto = rankingEquiposJuegoDePunto.sort(function(obj1, obj2) {
-//             return obj2.puntos - obj1.puntos;
-//           });
-//           for (let j = 0; j < rankingEquiposJuegoDePunto.length - 1; j ++) {
-//             rankingEquiposJuegoDePunto[j].posicion = j + 1;
-//           }
-//           rankingEquiposJuegoDePunto = rankingEquiposJuegoDePunto.filter(result => result.nombre !== '');
-//           const resultado = {
-//             lista: listaEquiposOrdenadaPorPuntos,
-//             ranking: rankingEquiposJuegoDePunto
-//           };
-//           obs.next (resultado);
-//         });
-//       } else {
-
-//         // tslint:disable-next-line:max-line-length
-//         this.peticionesAPI.PonPuntosEquiposJuegoDePuntos( new EquipoJuegoDePuntos(listaEquiposOrdenadaPorPuntos[i].equipoId,
-//           listaEquiposOrdenadaPorPuntos[i].juegoDePuntosId, nuevosPuntos), listaEquiposOrdenadaPorPuntos[i].id)
-//           .subscribe( res => {
-//             console.log(res);
-//             listaEquiposOrdenadaPorPuntos[i].PuntosTotalesEquipo = nuevosPuntos;
-
-//             rankingEquiposJuegoDePunto[i].puntos = nuevosPuntos;
-
-//             const fechaAsignacionPunto = new Date();
-//             const fechaString = fechaAsignacionPunto.toLocaleDateString() + '  ' + fechaAsignacionPunto.toLocaleTimeString();
-
-//             // tslint:disable-next-line:max-line-length
-// tslint:disable-next-line:max-line-length
-//             this.peticionesAPI.PonHistorialPuntosEquipo(new HistorialPuntosEquipo (valorPunto, puntoSeleccionadoId, listaEquiposOrdenadaPorPuntos[i].id, fechaString))
-//             .subscribe(result => console.log(res));
-//             // tslint:disable-next-line:max-line-length
-//             // tslint:disable-next-line:only-arrow-functions
-//             listaEquiposOrdenadaPorPuntos = listaEquiposOrdenadaPorPuntos.sort(function(obj1, obj2) {
-//               return obj2.PuntosTotalesEquipo - obj1.PuntosTotalesEquipo;
-//             });
-//             // tslint:disable-next-line:only-arrow-functions
-//             rankingEquiposJuegoDePunto = rankingEquiposJuegoDePunto.sort(function(obj1, obj2) {
-//               return obj2.puntos - obj1.puntos;
-//             });
-//             for (let j = 0; j < rankingEquiposJuegoDePunto.length - 1; j ++) {
-//               rankingEquiposJuegoDePunto[j].posicion = j + 1;
-//             }
-//             rankingEquiposJuegoDePunto = rankingEquiposJuegoDePunto.filter(result => result.nombre !== '');
-//             const resultado = {
-//               lista: listaEquiposOrdenadaPorPuntos,
-//               ranking: rankingEquiposJuegoDePunto
-//             };
-//             obs.next (resultado);
-//           });
-//       }
-//   });
-//   return listasObservables;
-// }
 
 
 public PreparaHistorialEquipo(
@@ -1366,6 +913,28 @@ public PreparaHistorialEquipo(
     }
   }
   return(TablaJornada);
+  }
+
+ public FormarEquiposAleatorios(individuos: any[], tamEquipos: number): any[] {
+    const listaInicial = individuos;
+    const numeroGrupos = Math.ceil(listaInicial.length / tamEquipos);
+    console.log ('Tamaño ' + tamEquipos);
+
+    console.log ('Numero de grupos ' + numeroGrupos);
+    const equipos: any [] = [];
+    for (let i = 0; i < numeroGrupos - 1; i++) {
+      console.log ('grupo ' + i);
+      const equipo: any[] = [];
+      for (let j = 0; j < tamEquipos; j++) {
+        const n = Math.floor(Math.random() * listaInicial.length);
+        console.log (n + ' ' + listaInicial[n]);
+        equipo.push (listaInicial[n]);
+        listaInicial.splice (n , 1);
+      }
+      equipos.push (equipo);
+    }
+    equipos.push (listaInicial);
+    return equipos;
   }
 
 }

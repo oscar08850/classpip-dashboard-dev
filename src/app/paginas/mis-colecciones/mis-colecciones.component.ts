@@ -33,6 +33,8 @@ export class MisColeccionesComponent implements OnInit {
 
   numeroDeCromos: number;
 
+  file: File;
+
   // PARA DIÁLOGO DE CONFIRMACIÓN
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
@@ -87,9 +89,7 @@ export class MisColeccionesComponent implements OnInit {
   // Si la coleccion tiene una foto (recordemos que la foto no es obligatoria)
   if (coleccion.ImagenColeccion !== undefined) {
 
-    // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-    this.http.get('http://localhost:3000/api/imagenes/ImagenColeccion/download/' + coleccion.ImagenColeccion,
-    { responseType: ResponseContentType.Blob })
+    this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
     .subscribe(response => {
       const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
@@ -130,20 +130,55 @@ export class MisColeccionesComponent implements OnInit {
   // Envialos la colecció y los cromos al servicio sesión porque los necesitaremos en los componentes
   // editar y agregar
   GuardarColeccion(coleccion: Coleccion) {
+  //  this.DameCromosEImagenDeLaColeccion(coleccion);
     this.sesion.TomaColeccion(coleccion);
     this.sesion.TomaCromos (this.cromosColeccion);
   }
 
-  // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
-  BorrarColeccion(coleccion: Coleccion) {
+  // // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
+  // BorrarColeccion(coleccion: Coleccion) {
+  //   const formData: FormData = new FormData();
+  //   formData.append(coleccion.ImagenColeccion, this.file);
+  //   console.log(formData);
+  //   this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
+  //   .subscribe(() => {
+  //     this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
+  //     // this.ColeccionesEliminadas(coleccion);
+  //     console.log('Coleccion borrada correctamente');
+  //     console.log(this.coleccionesProfesor);
+  //   });
+  //   console.log(coleccion.ImagenColeccion);
+  //   this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe(() => {
+  //     this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
+  //     console.log('he quitado la foto????');
+  //   });
+  //   this.peticionesAPI.DameCromosColeccion(coleccion.id).subscribe( listaCromos => {
+  //     for (let i = 0; i < (listaCromos.length); i++) {
+  //       this.peticionesAPI.BorrarImagenCromo(listaCromos[i].Imagen).subscribe(() => {
+  //         this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
+  //       });
+  //     }
+  //   });
+  // }
+
+
+   // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
+   BorrarColeccion(coleccion: Coleccion) {
+
+    console.log ('Vamos a eliminar la colección');
     this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
-    .subscribe(() => {
-      this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
-      //this.ColeccionesEliminadas(coleccion);
-      console.log('Coleccion borrada correctamente');
-      console.log(this.coleccionesProfesor);
-    });
+    .subscribe();
+
+    this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe();
+    if (this.cromosColeccion !==  undefined) {
+      for (let i = 0; i < (this.cromosColeccion.length); i++) {
+          this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].Imagen).subscribe();
+      }
+    }
+    console.log ('La saco de la lista');
+    this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
   }
+
 
 
 

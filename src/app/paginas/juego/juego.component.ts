@@ -12,6 +12,16 @@ import { Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, AlumnoJuegoDePuntos, 
 import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
 
 
+import { Observable} from 'rxjs';
+import { of } from 'rxjs';
+import 'rxjs';
+
+import swal from 'sweetalert';
+import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+
+
+
+
 export interface OpcionSeleccionada {
   nombre: string;
   id: string;
@@ -58,6 +68,7 @@ export class JuegoComponent implements OnInit {
 
 
 
+
   //////////////////////////////////// PARÁMETROS PARA PÁGINA DE CREAR JUEGO //////////////////////////////////////
 
   // En el primer paso mostraremos tres Chips con las diferentes opciones de tipo de juego que podemos crear y su color
@@ -96,9 +107,13 @@ export class JuegoComponent implements OnInit {
 
 
   tipoJuegoElegido: string;
+  nombreColeccionSeleccionada: string;
+  // tslint:disable-next-line:ban-types
+  finalizar: Boolean = false;
 
   constructor(
                public snackBar: MatSnackBar,
+               public dialog: MatDialog,
                private calculos: CalculosService,
                private sesion: SesionService,
                private location: Location,
@@ -312,6 +327,7 @@ export class JuegoComponent implements OnInit {
       console.log('Voy a crear juego de Competición Liga');
       this.CrearJuegoDeCompeticionLiga();
     }
+
     this.snackBar.open(this.tipoDeJuegoSeleccionado + ' creado correctamente', 'Cerrar', {
       duration: 2000,
     });
@@ -324,6 +340,7 @@ export class JuegoComponent implements OnInit {
   }
 
   Finalizar() {
+
     if (this.tipoJuegoCompeticionSeleccionado === 'Liga') {
       if (this.modoDeJuegoSeleccionado === 'Individual') {
         console.log('Voy a inscribir a los alumnos del grupo');
@@ -370,8 +387,29 @@ export class JuegoComponent implements OnInit {
           this.peticionesAPI.InscribeEquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
           .subscribe(equiposJuego => console.log(equiposJuego));
         }
+
+  /*  En teoría esto es lo que había antes de crear los juegos de competicion liga
+    if (this.juego.Modo === 'Individual') {
+      console.log('Voy a inscribir a los alumnos del grupo');
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.alumnosGrupo.length; i++) {
+        console.log(this.alumnosGrupo[i]);
+        this.peticionesAPI.InscribeAlumnoJuegoDePuntos(new AlumnoJuegoDePuntos(this.alumnosGrupo[i].id, this.juego.id))
+        .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
+      }
+    } else {
+      console.log('Voy a inscribir los equipos al grupo');
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.equiposGrupo.length; i++) {
+        console.log(this.equiposGrupo[i].Nombre);
+        this.peticionesAPI.InscribeEquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
+        .subscribe(equiposJuego => console.log(equiposJuego));
+
       }
     }
+    */
 
     // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
     if (this.juegosActivos === undefined) {
@@ -388,14 +426,51 @@ export class JuegoComponent implements OnInit {
 
     // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
     this.stepper.reset();
+    this.finalizar = true;
   }
 
   prueba() {
     console.log(this.juego);
   }
+  // Recibo el nombre de la colección elegida en el componente hijo
+  RecibeNombre($event) {
+    this.nombreColeccionSeleccionada = $event;
+  }
 
   goBack() {
     this.location.back();
+  }
+
+
+  canExit(): Observable <boolean> {
+    if (!this.juegoCreado || this.finalizar) {
+      return of (true);
+    } else {
+      const confirmacionObservable = new Observable <boolean>( obs => {
+          const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+            height: '150px',
+            data: {
+              mensaje: 'Confirma que quieres abandonar el proceso de creación del juego',
+            }
+          });
+
+          dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+            if (confirmed) {
+              // Si confirma que quiere salir entonces eliminamos el grupo que se ha creado
+              // this.sesion.TomaGrupo (this.grupo);
+              // this.calculos.EliminarGrupo();
+              //this.BorrarColeccion (this.coleccionCreada);
+              if (this.tipoDeJuegoSeleccionado === 'Juego De Puntos') {
+                this.peticionesAPI.BorraJuegoDePuntos(this.juego.id, this.juego.grupoId).subscribe();
+              } else if (this.tipoDeJuegoSeleccionado === 'Juego De Colección') {
+                this.peticionesAPI.BorraJuegoDeColeccion(this.juego.id, this.juego.grupoId).subscribe();
+              }
+            }
+            obs.next (confirmed);
+          });
+      });
+      return confirmacionObservable;
+    }
   }
 
 

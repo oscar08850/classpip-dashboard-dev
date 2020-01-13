@@ -29,7 +29,6 @@ import { JuegoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado
 import { EditarPuntoComponent } from './paginas/mis-puntos/editar-punto/editar-punto.component';
 import { EditarInsigniaComponent } from './paginas/mis-puntos/editar-insignia/editar-insignia.component';
 import { EditarColeccionComponent } from './paginas/mis-colecciones/editar-coleccion/editar-coleccion.component';
-import { EditarCromoComponent } from './paginas/mis-colecciones/editar-coleccion/editar-cromo/editar-cromo.component';
 // tslint:disable-next-line:max-line-length
 import { AsignarCromosComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/asignar-cromos/asignar-cromos.component';
 // tslint:disable-next-line:max-line-length
@@ -45,6 +44,9 @@ import { AlbumDelAlumnoComponent } from './paginas/juego-seleccionado-activo/jue
 // tslint:disable-next-line:max-line-length
 import { AlbumEquipoComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/equipo-seleccionado-juego-de-coleccion/album-equipo/album-equipo.component';
 import { ConfiguracionProfesorComponent } from './paginas/COMPARTIDO/configuracion-profesor/configuracion-profesor.component';
+import {MisAlumnosComponent} from './paginas/mis-alumnos/mis-alumnos.component';
+import {IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introducir-alumnos.component';
+
 
 // JUEGO DE COMPETICIÓN
 // tslint:disable-next-line:max-line-length
@@ -54,10 +56,14 @@ import { EditarJornadasJuegoDeCompeticionComponent } from './paginas/juego-selec
 // tslint:disable-next-line:max-line-length
 import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/alumnos-seleccionado-juego-de-competicion-liga/alumnos-seleccionado-juego-de-competicion-liga.component';
 
+
 import { AppComponent } from './app.component';
 import { ElementosComponent } from './elementos/elementos.component';
 import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.component';
 import {EstilosComponent} from './estilos/estilos.component';
+import { DeactivateGuardCrearGrupo } from './guardas/canExitCrearGrupo.guard';
+import { DeactivateGuardCrearColeccion } from './guardas/canExitCrearColeccion.guard';
+import { DeactivateGuardCrearJuego } from './guardas/canExitCrearJuego.guard';
 
 const routes: Routes = [
 
@@ -80,16 +86,28 @@ const routes: Routes = [
   { path: 'inicio/:id/estilos', component: EstilosComponent },
 
   // GRUPOS
-  { path: 'inicio/:id/crearGrupo', component: CrearGrupoComponent },
+  //  La página de crear grupos tiene una guarda para que no pueda abandonarse
+  // a menos que el usuario lo confirme
+  // Hay que evitar que se abandone a medias el proceso de creación de un grupo
+  { path: 'inicio/:id/crearGrupo', component: CrearGrupoComponent, canDeactivate: [DeactivateGuardCrearGrupo] },
+  //{ path: 'inicio/:id/crearGrupo', component: CrearGrupoComponent},
+
   { path: 'inicio/:id/misGrupos', component: MisGruposComponent },
 
+
+
+
   // COLECCIÓN
-  { path: 'inicio/:id/crearColeccion', component: CrearColeccionComponent },
+  { path: 'inicio/:id/crearColeccion', component: CrearColeccionComponent, canDeactivate: [DeactivateGuardCrearColeccion] },
   { path: 'inicio/:id/misColecciones', component: MisColeccionesComponent },
 
   // PUNTOS INSIGNIAS
   { path: 'inicio/:id/crearPuntos', component: CrearPuntoComponent },
   { path: 'inicio/:id/misPuntos', component: MisPuntosComponent },
+
+   // ALUMNNOS
+   { path: 'inicio/:id/misAlumnos', component: MisAlumnosComponent },
+   { path: 'inicio/:id/introducirAlumnos', component: IntroducirAlumnosComponent },
 
 
   //////////////////////////// RUTAS RELACIONADAS CON COMPONENTES PRINCIPALES /////////////////////////////////////////
@@ -109,7 +127,7 @@ const routes: Routes = [
 
 
   // GRUPOS --> JUEGOS
-  { path: 'grupo/:id/juegos', component: JuegoComponent },
+  { path: 'grupo/:id/juegos', component: JuegoComponent, canDeactivate: [DeactivateGuardCrearJuego] },
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo', component: JuegoSeleccionadoActivoComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo', component: JuegoSeleccionadoInactivoComponent },
 
@@ -150,18 +168,20 @@ const routes: Routes = [
 
   // COLECCIÓN
   { path: 'inicio/:id/misColecciones/editarColeccion', component: EditarColeccionComponent },
-  { path: 'inicio/:id/misColecciones/editarColeccion/editarCromo', component: EditarCromoComponent },
 
 
 
   // PUNTOS E INSIGNIAS
   { path: 'inicio/:id/misPuntos/editarPunto', component: EditarPuntoComponent },
   { path: 'inicio/:id/misPuntos/editarInsignia', component: EditarInsigniaComponent },
+
+  // CONFIGURACION
   { path: 'inicio/:id/configuracionProfesor', component: ConfiguracionProfesorComponent }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
+  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ResponseContentType, Http, Response } from '@angular/http';
 import { AgregarCromoDialogComponent } from '../agregar-cromo-dialog/agregar-cromo-dialog.component';
+import { EditarCromoDialogComponent } from '../editar-cromo-dialog/editar-cromo-dialog.component' ;
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
 // Clases
@@ -39,7 +40,10 @@ export class EditarColeccionComponent implements OnInit {
 
   // PARA DIÁLOGO DE CONFIRMACIÓN
   // tslint:disable-next-line:no-inferrable-types
-  mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
+  mensaje: string = 'Confirma que quieres eliminar el equipo llamado: ';
+
+  // tslint:disable-next-line:ban-types
+  cambios: Boolean = false;
 
   constructor(
               private coleccionService: ColeccionService,
@@ -56,7 +60,7 @@ export class EditarColeccionComponent implements OnInit {
     this.nombreColeccion = this.coleccion.Nombre;
     this.cromosColeccion = this.sesion.DameCromos();
     // Me traigo la imagen de la colección y las imagenes de cada cromo
-    this.TraeImagenesColeccion(this.coleccion);
+    this.TraeImagenColeccion(this.coleccion);
     // Cargo el imagen de la coleccion
     // this.GET_Imagen();
   }
@@ -64,7 +68,10 @@ export class EditarColeccionComponent implements OnInit {
   // Se hace un PUT de la coleccion seleccionada para editar
   EditarColeccion() {
     console.log('Entro a editar');
-
+    // Borramos la imagen anterior
+    if (this.coleccion.ImagenColeccion !== undefined) {
+      this.peticionesAPI.BorrarImagenColeccion (this.coleccion.ImagenColeccion).subscribe();
+    }
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.ModificaColeccion(new Coleccion(this.nombreColeccion, this.nombreImagenColeccion), this.coleccion.profesorId, this.coleccion.id)
     .subscribe((res) => {
@@ -84,7 +91,8 @@ export class EditarColeccionComponent implements OnInit {
         console.log('fallo editando');
       }
     });
-    this.goBack();
+    this.cambios = false;
+
   }
 
   // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
@@ -97,8 +105,7 @@ export class EditarColeccionComponent implements OnInit {
 
       if (this.cromo.Imagen !== undefined ) {
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.http.get('http://localhost:3000/api/imagenes/ImagenCromo/download/' + this.cromo.Imagen,
-        { responseType: ResponseContentType.Blob })
+        this.peticionesAPI.DameImagenCromo (this.cromo.Imagen)
         .subscribe(response => {
           const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
@@ -133,10 +140,15 @@ export class EditarColeccionComponent implements OnInit {
     reader.readAsDataURL(this.file);
     reader.onload = () => {
       console.log('ya');
+      this.cambios = true;
       this.imagenCambiada = true;
       this.imagenColeccion = reader.result.toString();
     };
   }
+
+
+
+
 
   // SI QUEREMOS AÑADIR CROMOS MANUALMENTE LO HAREMOS EN UN DIALOGO
   AbrirDialogoAgregarCromoColeccion(): void {
@@ -156,9 +168,37 @@ export class EditarColeccionComponent implements OnInit {
       for (let i = 0 ; i < cromosAgregados.length; i++) {
         this.cromosColeccion.push (cromosAgregados[i]);
       }
-      this.TraeImagenesColeccion(this.coleccion);
+      this.TraeImagenColeccion(this.coleccion);
+      this.TraeImagenesCromos();
 
      });
+  }
+
+  // TAMBIEN EDITAREMOS EL CROMO EN UN DIALOGO
+  AbrirDialogoEditarCromo(cromo: Cromo): void {
+
+    console.log ('Vamos a editar cromo ' + cromo.Imagen);
+    const dialogRef = this.dialog.open ( EditarCromoDialogComponent , {
+      width: '900px',
+      maxHeight: '600px',
+      data: {
+        cr : cromo,
+        coleccionId: this.coleccion.id,
+      }
+    });
+
+    // tslint:disable-next-line:no-shadowed-variable
+    dialogRef.afterClosed().subscribe( cromo => {
+      //console.log ('volvemos de editar cromos ' + cromosEditados.length);
+      // tslint:disable-next-line:prefer-for-of
+      this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
+      this.cromosColeccion.push (cromo);
+      // this.cromosColeccion = this.sesion.DameCromos();
+      // this.coleccion = this.sesion.DameColeccion();
+      this.TraeImagenColeccion(this.coleccion);
+      this.TraeImagenesCromos();
+
+    });
   }
 
   // Guardo cromo en sesión, porque lo necesitará el componente de editar cromo
@@ -211,11 +251,15 @@ export class EditarColeccionComponent implements OnInit {
       // Sin embargo, no funciona.
 
     });
+    this.peticionesAPI.BorrarImagenCromo(cromo.Imagen).subscribe(() => {
+      this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
+      this.TraeImagenesCromos();
+    });
   }
 
 
   // Le pasamos la coleccion y buscamos la imagen que tiene y las imagenes de sus cromos
- TraeImagenesColeccion(coleccion: Coleccion) {
+ TraeImagenColeccion(coleccion: Coleccion) {
 
   console.log('entro a buscar cromos y foto');
   console.log(coleccion.ImagenColeccion);
@@ -223,8 +267,7 @@ export class EditarColeccionComponent implements OnInit {
   if (coleccion.ImagenColeccion !== undefined) {
 
     // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-    this.http.get('http://localhost:3000/api/imagenes/ImagenColeccion/download/' + coleccion.ImagenColeccion,
-    { responseType: ResponseContentType.Blob })
+    this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
     .subscribe(response => {
       const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
@@ -251,9 +294,23 @@ export class EditarColeccionComponent implements OnInit {
   this.cromosColeccion.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
   this.TraeImagenesCromos();
 
-}
-  goBack() {
-    this.location.back();
   }
+  goBack() {
+    if (this.cambios) {
+      const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+        height: '150px',
+        data: {
+          mensaje: 'Dale a Aceptar si no quieres que se hagan los cambios en el nombre o en la imagen de la colección'
+        }
+      });
 
+      dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.location.back();
+        }
+      });
+    } else {
+      this.location.back();
+    }
+  }
 }

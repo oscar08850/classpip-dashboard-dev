@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { SelectionModel } from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
+import swal from 'sweetalert';
 
 // Clases
 import { Grupo, Alumno } from '../../clases/index';
@@ -26,6 +27,7 @@ export class PasarListaComponent implements OnInit {
   //
   alumnosSeleccionados: Alumno[];
 
+  alumnosElegido: Alumno;
 
   dataSource;
   mensaje: string = null;
@@ -87,8 +89,19 @@ export class PasarListaComponent implements OnInit {
   ProcesarSeleccionados() {
     this.mensaje = 'Aun no hay nada que hacer con los seleccionados';
   }
+
+  ElegirAleatoriamente() {
+    console.log ('Entramos');
+    const numeroAlumnos = this.alumnosGrupoSeleccionado.length;
+    const elegido = Math.floor(Math.random() * numeroAlumnos);
+    const alumnoElegido = this.alumnosGrupoSeleccionado[elegido];
+    console.log ('Hemos elegido a ' + elegido);
+    swal(alumnoElegido.Nombre + ' ' + alumnoElegido.PrimerApellido, 'Enhorabuena', 'success');
+  }
+
   goBack() {
     this.location.back();
   }
+
 
 }

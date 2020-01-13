@@ -8,7 +8,7 @@ import { Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, EquipoJuegoDe
 
 
 // Services
-import { SesionService } from '../../../../servicios/index';
+import { SesionService, PeticionesAPIService } from '../../../../servicios/index';
 
 @Component({
   selector: 'app-informacion-juego-puntos',
@@ -26,6 +26,7 @@ export class InformacionJuegoPuntosComponent implements OnInit {
   constructor(
                private sesion: SesionService,
                public location: Location,
+               public peticionesApi: PeticionesAPIService,
                private http: Http ) { }
 
   ngOnInit() {
@@ -45,8 +46,7 @@ export class InformacionJuegoPuntosComponent implements OnInit {
     if (nivel.Imagen !== undefined) {
 
       // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-      this.http.get('http://localhost:3000/api/imagenes/imagenNivel/download/' + nivel.Imagen,
-      { responseType: ResponseContentType.Blob })
+      this.peticionesApi.DameImagenNivel ( nivel.Imagen)
       .subscribe(response => {
         const blob = new Blob([response.blob()], { type: 'image/jpg'});
 

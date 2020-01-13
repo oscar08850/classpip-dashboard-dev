@@ -14,6 +14,14 @@ import { SesionService, PeticionesAPIService } from '../../servicios/index';
 
 // Clases
 import { Coleccion, Cromo } from '../../clases/index';
+import { Location } from '@angular/common';
+import { of } from 'rxjs';
+import 'rxjs';
+
+import swal from 'sweetalert';
+import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import { Observable} from 'rxjs';
+
 
 export interface OpcionSeleccionada {
   nombre: string;
@@ -64,7 +72,8 @@ export class CrearColeccionComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   imagenCargadoCromo: Boolean = false;
 
-
+  // tslint:disable-next-line:ban-types
+  finalizar: Boolean = false;
 
     // Opciones para mostrar en la lista desplegable para seleccionar el tipo de probabilidad que listar
     opcionesProbabilidad: OpcionSeleccionada[] = [
@@ -76,7 +85,7 @@ export class CrearColeccionComponent implements OnInit {
 
     ];
 
-    //opcionSeleccionadaProbabilidad: string;
+    // opcionSeleccionadaProbabilidad: string;
 
       // Opciones para mostrar en la lista desplegable para seleccionar el tipo de nivel que listar
     opcionesNivel: OpcionSeleccionada[] = [
@@ -101,6 +110,7 @@ export class CrearColeccionComponent implements OnInit {
     public snackBar: MatSnackBar,
     public sesion: SesionService,
     public peticionesAPI: PeticionesAPIService,
+    public location: Location,
     private formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -134,7 +144,7 @@ export class CrearColeccionComponent implements OnInit {
 
     // Hace el POST del equipo
     this.peticionesAPI.CreaColeccion (new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
-    //this.peticionesAPI.CreaColeccion(new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
+    // this.peticionesAPI.CreaColeccion(new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
     .subscribe((res) => {
       if (res != null) {
         console.log ('COLECCION CREADA: ' + res.id );
@@ -233,6 +243,7 @@ export class CrearColeccionComponent implements OnInit {
       console.log('Cromo borrado correctamente');
 
     });
+    this.peticionesAPI.BorrarImagenCromo (cromo.Imagen).subscribe();
   }
 
   // Activa la función ExaminarImagenColeccion
@@ -328,13 +339,13 @@ export class CrearColeccionComponent implements OnInit {
     if (this.opcionSeleccionadaNivel === 'Plata') {
       this.nivelCromo = 'Plata';
       this.probabilidadCromo = 'Alta';
-      //this.opcionSeleccionadaProbabilidad = 'Alta';
+      // this.opcionSeleccionadaProbabilidad = 'Alta';
     }
 
     if (this.opcionSeleccionadaNivel === 'Bronce') {
       this.nivelCromo = 'Bronce';
       this.probabilidadCromo = 'Muy Alta';
-      //this.opcionSeleccionadaProbabilidad = 'Muy Alta';
+      // this.opcionSeleccionadaProbabilidad = 'Muy Alta';
     }
   }
 
@@ -377,6 +388,56 @@ export class CrearColeccionComponent implements OnInit {
       this.imagenCromo = undefined;
       this.coleccionCreada = undefined;
       this.cromosAgregados = [];
+      this.location.back();
+      this.finalizar = true;
 
+
+  }
+
+  canExit(): Observable <boolean> {
+    if (!this.coleccionYaCreada || this.finalizar) {
+      return of (true);
+    } else {
+      const confirmacionObservable = new Observable <boolean>( obs => {
+          const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+            height: '150px',
+            data: {
+              mensaje: 'Confirma que quieres abandonar el proceso de creación de coleccion',
+            }
+          });
+
+          dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+            if (confirmed) {
+              // Si confirma que quiere salir entonces eliminamos el grupo que se ha creado
+              // this.sesion.TomaGrupo (this.grupo);
+              // this.calculos.EliminarGrupo();
+              this.BorrarColeccion (this.coleccionCreada).subscribe ( () => obs.next (confirmed));
+            } else {
+              obs.next (confirmed);
+            }
+          });
+      });
+      return confirmacionObservable;
+    }
+  }
+
+  // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
+  // Retornamos un observable para que el que la llame espere hasta que se haya completado la eliminación
+  // en la base de datos.
+  BorrarColeccion(coleccion: Coleccion): any {
+    const eliminaObservable = new Observable ( obs => {
+
+
+        this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
+        .subscribe( () => { console.log ('Ya he borrado la coleccion');
+                            this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe();
+                            for (let i = 0; i < (this.cromosAgregados.length); i++) {
+                                this.peticionesAPI.BorrarImagenCromo(this.cromosAgregados[i].Imagen).subscribe();
+                            }
+                            obs.next();
+        });
+    });
+        //this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
+    return eliminaObservable;
   }
 }
