@@ -78,11 +78,15 @@ export class EquipoSeleccionadoJuegoDePuntosComponent implements OnInit {
 
       this.siguienteNivel = this.calculos.DameSiguienteNivel (this.nivelesDelJuego, this.nivel);
     }
-
+    this.listaSeleccionable[0] =  new Punto('Totales');
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.tiposPuntosDelJuego.length; i ++) {
+          this.listaSeleccionable.push(this.tiposPuntosDelJuego[i]);
+    }
+    console.log ('lista seleccionable ' + this.listaSeleccionable.length);
 
     this.GET_ImagenPerfil();
 
-    this.listaSeleccionable[0] =  new Punto('Totales');
 
     this.AlumnosDelEquipo(this.equipoSeleccionado);
 
@@ -122,10 +126,6 @@ export class EquipoSeleccionadoJuegoDePuntosComponent implements OnInit {
           reader.readAsDataURL(blob);
         }
 
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < this.tiposPuntosDelJuego.length; i ++) {
-          this.listaSeleccionable.push(this.tiposPuntosDelJuego[i]);
-        }
       });
     }
   }

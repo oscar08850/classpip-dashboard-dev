@@ -65,6 +65,10 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
     const datos = this.sesion.DameDatosEvolucionAlumnoJuegoPuntos();
     this.posicion = datos.posicion;
     this.puntosDelJuego = datos.tiposPuntosDelJuego;
+    console.log ('tipos de puntos ' + this.puntosDelJuego.length);
+    console.log ('tipos de puntos ' + this.puntosDelJuego[0].Nombre);
+    console.log ('tipos de puntos ' + this.puntosDelJuego[1].Nombre);
+    console.log ('tipos de puntos ' + this.puntosDelJuego[2].Nombre);
     this.nivelesDelJuego = datos.nivelesDelJuego;
     this.alumnoSeleccionado = datos.alumnoSeleccionado;
     this.alumnoJuegoDePuntos = datos.inscripcionAlumnoJuego;
@@ -73,12 +77,13 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
     console.log ('Puntos totales juego' + this.alumnoJuegoDePuntos.PuntosTotalesAlumno);
 
     this.juegoSeleccionado = this.sesion.DameJuego();
-
+    this.listaSeleccionable[0] =  new Punto('Totales');
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.puntosDelJuego.length; i ++) {
       this.listaSeleccionable.push(this.puntosDelJuego[i]);
     }
 
+    console.log ('lista seleccionable ' + this.listaSeleccionable.length);
     console.log('muestro la posicion ' + this.posicion);
     console.log(this.posicion);
 
@@ -93,7 +98,7 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
     // this.Nivel();
     this.GET_ImagenPerfil();
 
-    this.listaSeleccionable[0] =  new Punto('Totales');
+
     this.MostrarHistorialSeleccionado();
 
   }

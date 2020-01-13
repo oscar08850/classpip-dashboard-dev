@@ -427,9 +427,9 @@ public BorrarPunto(   punto: TablaHistorialPuntosAlumno, alumnoJuegoDePuntos: an
                       nivelesDelJuego: Nivel[]) {
 
    alumnoJuegoDePuntos.PuntosTotalesAlumno = alumnoJuegoDePuntos.PuntosTotalesAlumno - punto.valorPunto;
-   if (nivelesDelJuego !== undefined) {
+   if ((nivelesDelJuego !== undefined) && (nivelesDelJuego.length !== 0)) {
      // calculamos el nuevo nivel
-     console.log ('calculo nuevo nivel ');
+     console.log ('calculo nuevo nivel ' + nivelesDelJuego.length);
      const nivelId = this.DameNivelId (nivelesDelJuego, alumnoJuegoDePuntos.PuntosTotalesAlumno );
      alumnoJuegoDePuntos.nivelId = nivelId;
    }

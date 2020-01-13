@@ -152,14 +152,14 @@ export class CrearGrupoComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    this.router.navigate(['/inicio/' + this.profesorId]);
   }
   aceptarGoBack() {
     this.snackBar.open('El grupo se ha creado correctamente', 'Cerrar', {
       duration: 3000,
     });
     this.finalizar = true;
-    this.location.back();
+    this.goBack();
   }
 
   // MIRO SI HAY ALGO SIMULTÁNEAMENTE EN EL NOMBRE Y LA DESCRIPCIÓN
