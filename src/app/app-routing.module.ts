@@ -90,7 +90,7 @@ const routes: Routes = [
   // a menos que el usuario lo confirme
   // Hay que evitar que se abandone a medias el proceso de creación de un grupo
   { path: 'inicio/:id/crearGrupo', component: CrearGrupoComponent, canDeactivate: [DeactivateGuardCrearGrupo] },
-  //{ path: 'inicio/:id/crearGrupo', component: CrearGrupoComponent},
+  // { path: 'inicio/:id/crearGrupo', component: CrearGrupoComponent},
 
   { path: 'inicio/:id/misGrupos', component: MisGruposComponent },
 
