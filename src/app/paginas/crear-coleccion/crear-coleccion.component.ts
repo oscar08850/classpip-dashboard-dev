@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // Imports para abrir diálogo confirmar eliminar equipo
@@ -105,7 +105,7 @@ export class CrearColeccionComponent implements OnInit {
 
   constructor(
     private coleccionService: ColeccionService,
-    private route: ActivatedRoute,
+    private router: Router,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public sesion: SesionService,
@@ -388,8 +388,8 @@ export class CrearColeccionComponent implements OnInit {
       this.imagenCromo = undefined;
       this.coleccionCreada = undefined;
       this.cromosAgregados = [];
-      this.location.back();
       this.finalizar = true;
+      this.router.navigate(['/inicio/' + this.profesorId]);
 
 
   }

@@ -115,6 +115,10 @@ export class JuegoDePuntosSeleccionadoActivoComponent implements OnInit {
     this.peticionesAPI.DamePuntosJuegoDePuntos(this.juegoSeleccionado.id)
     .subscribe(puntos => {
       this.tiposPuntosDelJuego = puntos;
+      console.log ('Traigo puntos ' + this.tiposPuntosDelJuego.length);
+      console.log ('Traigo puntos ' + this.tiposPuntosDelJuego[0].Nombre);
+      console.log ('Traigo puntos ' + this.tiposPuntosDelJuego[1].Nombre);
+      console.log ('Traigo puntos ' + this.tiposPuntosDelJuego[2].Nombre);
       this.listaSeleccionable = [];
       this.listaSeleccionable[0] =  new Punto('Totales');
       // tslint:disable-next-line:prefer-for-of
@@ -231,6 +235,7 @@ export class JuegoDePuntosSeleccionadoActivoComponent implements OnInit {
     const posicion = this.rankingJuegoDePuntos.filter(res => res.nombre === alumno.nombre &&
       res.primerApellido === alumno.primerApellido && res.segundoApellido === alumno.segundoApellido)[0].posicion;
 
+    console.log ('tipos de puntos antes ' + this.tiposPuntosDelJuego.length);
       // Informacion que se necesitara para ver la evolución del alumno
     this.sesion.TomaDatosEvolucionAlumnoJuegoPuntos (
       posicion,
