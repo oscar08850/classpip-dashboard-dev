@@ -387,53 +387,53 @@ export class JuegoComponent implements OnInit {
           this.peticionesAPI.InscribeEquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
           .subscribe(equiposJuego => console.log(equiposJuego));
         }
-
-  /*  En teoría esto es lo que había antes de crear los juegos de competicion liga
-    if (this.juego.Modo === 'Individual') {
-      console.log('Voy a inscribir a los alumnos del grupo');
-
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.alumnosGrupo.length; i++) {
-        console.log(this.alumnosGrupo[i]);
-        this.peticionesAPI.InscribeAlumnoJuegoDePuntos(new AlumnoJuegoDePuntos(this.alumnosGrupo[i].id, this.juego.id))
-        .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
       }
-    } else {
-      console.log('Voy a inscribir los equipos al grupo');
 
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.equiposGrupo.length; i++) {
-        console.log(this.equiposGrupo[i].Nombre);
-        this.peticionesAPI.InscribeEquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
-        .subscribe(equiposJuego => console.log(equiposJuego));
 
-      }
-    }
-    */
+
+
+      if (this.juego.Modo === 'Individual') {
+          console.log('Voy a inscribir a los alumnos del grupo');
+
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.alumnosGrupo.length; i++) {
+            console.log(this.alumnosGrupo[i]);
+            this.peticionesAPI.InscribeAlumnoJuegoDePuntos(new AlumnoJuegoDePuntos(this.alumnosGrupo[i].id, this.juego.id))
+            .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
+          }
+        } else {
+          console.log('Voy a inscribir los equipos al grupo');
+
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.equiposGrupo.length; i++) {
+            console.log(this.equiposGrupo[i].Nombre);
+            this.peticionesAPI.InscribeEquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
+            .subscribe(equiposJuego => console.log(equiposJuego));
+
+          }
+        }
 
     // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
-    if (this.juegosActivos === undefined) {
+      if (this.juegosActivos === undefined) {
       // Si la lista aun no se ha creado no podre hacer el push
-      this.juegosActivos = [];
-    }
-    this.juegosActivos.push (this.juego);
+          this.juegosActivos = [];
+        }
+      this.juegosActivos.push (this.juego);
 
 
-    this.juegoCreado = false;
+      this.juegoCreado = false;
 
     // Regresamos a la lista de equipos (mat-tab con índice 0)
-    this.tabGroup.selectedIndex = 0;
+      this.tabGroup.selectedIndex = 0;
 
     // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
-    this.stepper.reset();
-    this.finalizar = true;
+      this.stepper.reset();
+      this.finalizar = true;
   }
+    }
 
-  prueba() {
-    console.log(this.juego);
-  }
   // Recibo el nombre de la colección elegida en el componente hijo
-  RecibeNombre($event) {
+   RecibeNombre($event) {
     this.nombreColeccionSeleccionada = $event;
   }
 
@@ -459,7 +459,7 @@ export class JuegoComponent implements OnInit {
               // Si confirma que quiere salir entonces eliminamos el grupo que se ha creado
               // this.sesion.TomaGrupo (this.grupo);
               // this.calculos.EliminarGrupo();
-              //this.BorrarColeccion (this.coleccionCreada);
+              // this.BorrarColeccion (this.coleccionCreada);
               if (this.tipoDeJuegoSeleccionado === 'Juego De Puntos') {
                 this.peticionesAPI.BorraJuegoDePuntos(this.juego.id, this.juego.grupoId).subscribe();
               } else if (this.tipoDeJuegoSeleccionado === 'Juego De Colección') {

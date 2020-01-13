@@ -184,7 +184,7 @@ import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introduc
     JuegoDeCompeticionSeleccionadoInactivoComponent,
     InformacionJuegoDeCompeticionComponent,
     EditarJornadasJuegoDeCompeticionComponent,
-    AlumnosSeleccionadoJuegoDeCompeticionLigaComponent
+    AlumnosSeleccionadoJuegoDeCompeticionLigaComponent,
 
     EditarCromoDialogComponent,
     MisAlumnosComponent,
