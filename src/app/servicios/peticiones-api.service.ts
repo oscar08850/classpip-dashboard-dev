@@ -491,8 +491,8 @@ export class PeticionesAPIService {
     // return this.http.get<Jornada[]>(this.APIUrlJuegoDeCompeticionLiga + '/' + juegoDeCompeticionID + '/JornadasDeCompeticionLiga');
   }
 
-  public DameEnfrentamientosDeJornadaLiga(jornadasDeCompeticionLigaId: number): Observable<EnfrentamientoLiga[]> {
-    return this.http.get<EnfrentamientoLiga[]>('http://localhost:3000/api/JornadasDeCompeticionLiga/' + jornadasDeCompeticionLigaId +
+  public DameEnfrentamientosDeCadaJornadaLiga(jornadasDeCompeticionLigaId: number): Observable<Array<EnfrentamientoLiga>> {
+    return this.http.get<Array<EnfrentamientoLiga>>('http://localhost:3000/api/JornadasDeCompeticionLiga/' + jornadasDeCompeticionLigaId +
     '/enfrentamientosLiga');
   }
   ///////////////////////////////////////////////////////////////////////////////////////////

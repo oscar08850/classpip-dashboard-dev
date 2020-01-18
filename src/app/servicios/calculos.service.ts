@@ -189,7 +189,7 @@ export class CalculosService {
     return rankingJuegoDeCompeticion;
   }
 
-  public PrepararTablaRankingEquipoCompeticion(listaEquiposOrdenadaPorPuntos, equiposDelJuego) {
+  public PrepararTablaRankingEquipoCompeticion(listaEquiposOrdenadaPorPuntos, equiposDelJuego): TablaEquipoJuegoDeCompeticion[] {
     const rankingJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion [] = [];
     console.log (' Vamos a preparar la tabla del ranking por equipos de Competición');
     console.log ('la lista de equipos ordenada es: ');

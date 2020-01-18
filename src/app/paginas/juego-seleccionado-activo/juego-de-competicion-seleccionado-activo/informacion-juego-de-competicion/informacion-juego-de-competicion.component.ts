@@ -52,7 +52,7 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
 
   ObtenerEnfrentamientosDeCadaJornada(jornadaSeleccionada: TablaJornadas) {
     console.log('El id de la jornada seleccionada es: ' + jornadaSeleccionada.id);
-    this.peticionesAPI.DameEnfrentamientosDeJornadaLiga(jornadaSeleccionada.id)
+    this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga(jornadaSeleccionada.id)
     .subscribe(enfrentamientos => {
       this.EnfrentamientosJornadaSeleccionada = enfrentamientos;
       console.log('Los enfrentamientos de esta jornada son: ');
