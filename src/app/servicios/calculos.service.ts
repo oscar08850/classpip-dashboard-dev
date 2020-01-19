@@ -208,8 +208,23 @@ export class CalculosService {
                                         listaEquiposOrdenadaPorPuntos[i].PuntosTotalesEquipo, EquipoId);
     }
     const informacionPartidos = this.ObtenerInformaciónPartidos(listaEquiposOrdenadaPorPuntos, jornadasDelJuego, enfrentamientosDelJuego);
+    console.log('Vamos a rellenar la TablaEquipoJuegoDeCompeticion con la informacionPartidos');
+    const rankingJuegoDeCompeticionFinal = this.RellenarTablaEquipoJuegoDeCompeticion(rankingJuegoDeCompeticion, informacionPartidos);
     console.log ('El ranking es: ' );
-    console.log (rankingJuegoDeCompeticion);
+    console.log (rankingJuegoDeCompeticionFinal);
+    return rankingJuegoDeCompeticion;
+  }
+
+  public RellenarTablaEquipoJuegoDeCompeticion(rankingJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion[],
+                                               informacionPartidos: InformacionPartidosLiga[]): TablaEquipoJuegoDeCompeticion[] {
+    console.log();
+    for (let cont = 0; cont < rankingJuegoDeCompeticion.length; cont++) {
+      rankingJuegoDeCompeticion[cont].partidosTotales = informacionPartidos[cont].partidosTotales;
+      rankingJuegoDeCompeticion[cont].partidosJugados = informacionPartidos[cont].partidosJugados;
+      rankingJuegoDeCompeticion[cont].partidosGanador = informacionPartidos[cont].partidosGanados;
+      rankingJuegoDeCompeticion[cont].partidosEmpatados = informacionPartidos[cont].partidosEmpatados;
+      rankingJuegoDeCompeticion[cont].partidosPerdidos = informacionPartidos[cont].partidosPerdidos;
+    }
     return rankingJuegoDeCompeticion;
   }
 
@@ -235,7 +250,8 @@ export class CalculosService {
       informacionPartido.partidosPerdidos = this.CalcularPartidosPerdidos(listaEnfrentamientosDelJuego,
                                                             listaEquiposOrdenadaPorPuntos, equipo);
       listaInformacionPartidos.push(informacionPartido);
-      console.log('Partidos perdidos del equipo id ' + equipo + 'son: ' + informacionPartido.partidosPerdidos);
+      console.log('Partidos perdidos del equipo id ' + listaEquiposOrdenadaPorPuntos[equipo].EquipoId + 'son: '
+                   + informacionPartido.partidosPerdidos);
     }
     console.log('La listaInformacionPartidos es: ');
     console.log(listaInformacionPartidos);
