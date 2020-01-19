@@ -234,8 +234,9 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     if (this.juegoSeleccionado.Modo === 'Individual') {
       this.rankingAlumnoJuegoDeCompeticion = this.calculos.PrepararTablaRankingIndividualCompeticion (
                                                                                                 this.listaAlumnosOrdenadaPorPuntos,
-                                                                                                this.alumnosDelJuego);
-      console.log ('Ya tengo la tabla');
+                                                                                                this.alumnosDelJuego, this.jornadas,
+                                                                                                this.enfrentamientosDelJuego);
+      console.log ('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
       console.log (this.rankingAlumnoJuegoDeCompeticion);
       this.datasourceAlumno = new MatTableDataSource(this.rankingAlumnoJuegoDeCompeticion);
 
@@ -245,9 +246,9 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
                                                                                               this.equiposDelJuego, this.jornadas,
                                                                                               this.enfrentamientosDelJuego);
       this.datasourceEquipo = new MatTableDataSource(this.rankingEquiposJuegoDeCompeticion);
+      console.log('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
+      console.log (this.rankingEquiposJuegoDeCompeticion);
     }
-    console.log('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
-    console.log (this.rankingEquiposJuegoDeCompeticion);
   }
 
   applyFilter(filterValue: string) {

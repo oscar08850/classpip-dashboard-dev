@@ -4,7 +4,8 @@ import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHis
          TablaEquipoJuegoDePuntos, HistorialPuntosAlumno, HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo,
          AlumnoJuegoDeColeccion, Album, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
          TablaEquipoJuegoDeCompeticion, Jornada, EquipoJuegoDeCompeticionLiga, EnfrentamientoLiga,
-         InformacionPartidosLiga} from '../clases/index';
+         InformacionPartidosLiga,
+         AlumnoJuegoDeCompeticionLiga} from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -175,7 +176,9 @@ export class CalculosService {
 
   }
 
-  public PrepararTablaRankingIndividualCompeticion(listaAlumnosOrdenadaPorPuntos, alumnosDelJuego): TablaAlumnoJuegoDeCompeticion[] {
+  public PrepararTablaRankingIndividualCompeticion(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionLiga[],
+                                                   alumnosDelJuego: Alumno[], jornadasDelJuego: Jornada[],
+                                                   enfrentamientosDelJuego: EnfrentamientoLiga[][] ): TablaAlumnoJuegoDeCompeticion[] {
     const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion [] = [];
     console.log (' Vamos a preparar la tabla del ranking individual de Competición');
     console.log ('la lista de alumnos ordenada es: ');
@@ -186,9 +189,15 @@ export class CalculosService {
       const alumnoId = listaAlumnosOrdenadaPorPuntos[i].AlumnoId;
       alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
       rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeCompeticion(i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
-        listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno);
+                                                                       listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno, alumnoId);
     }
-    console.log ('El ranking es: ' + rankingJuegoDeCompeticion);
+    const individual = true;
+    const informacionPartidos = this.ObtenerInformaciónPartidos(listaAlumnosOrdenadaPorPuntos, jornadasDelJuego,
+                                                                individual, enfrentamientosDelJuego);
+    console.log('Vamos a rellenar la TablaEquipoJuegoDeCompeticion con la informacionPartidos');
+    const rankingJuegoDeCompeticionFinal = this.RellenarTablaAlumnoJuegoDeCompeticion(rankingJuegoDeCompeticion, informacionPartidos);
+    console.log ('El ranking es: ' );
+    console.log (rankingJuegoDeCompeticion);
     return rankingJuegoDeCompeticion;
   }
 
@@ -205,9 +214,11 @@ export class CalculosService {
       const EquipoId = listaEquiposOrdenadaPorPuntos[i].EquipoId;
       equipo = equiposDelJuego.filter(res => res.id === EquipoId)[0];
       rankingJuegoDeCompeticion[i] = new TablaEquipoJuegoDeCompeticion(i + 1, equipo.Nombre,
-                                        listaEquiposOrdenadaPorPuntos[i].PuntosTotalesEquipo, EquipoId);
+                                                                       listaEquiposOrdenadaPorPuntos[i].PuntosTotalesEquipo, EquipoId);
     }
-    const informacionPartidos = this.ObtenerInformaciónPartidos(listaEquiposOrdenadaPorPuntos, jornadasDelJuego, enfrentamientosDelJuego);
+    const individual = false;
+    const informacionPartidos = this.ObtenerInformaciónPartidos(listaEquiposOrdenadaPorPuntos, jornadasDelJuego,
+                                                                individual, enfrentamientosDelJuego);
     console.log('Vamos a rellenar la TablaEquipoJuegoDeCompeticion con la informacionPartidos');
     const rankingJuegoDeCompeticionFinal = this.RellenarTablaEquipoJuegoDeCompeticion(rankingJuegoDeCompeticion, informacionPartidos);
     console.log ('El ranking es: ' );
@@ -228,30 +239,64 @@ export class CalculosService {
     return rankingJuegoDeCompeticion;
   }
 
-  public ObtenerInformaciónPartidos(listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], jornadasDelJuego: Jornada[],
+  public RellenarTablaAlumnoJuegoDeCompeticion(rankingJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion[],
+                                               informacionPartidos: InformacionPartidosLiga[]): TablaAlumnoJuegoDeCompeticion[] {
+    console.log();
+    for (let cont = 0; cont < rankingJuegoDeCompeticion.length; cont++) {
+      rankingJuegoDeCompeticion[cont].partidosTotales = informacionPartidos[cont].partidosTotales;
+      rankingJuegoDeCompeticion[cont].partidosJugados = informacionPartidos[cont].partidosJugados;
+      rankingJuegoDeCompeticion[cont].partidosGanados = informacionPartidos[cont].partidosGanados;
+      rankingJuegoDeCompeticion[cont].partidosEmpatados = informacionPartidos[cont].partidosEmpatados;
+      rankingJuegoDeCompeticion[cont].partidosPerdidos = informacionPartidos[cont].partidosPerdidos;
+    }
+    return rankingJuegoDeCompeticion;
+  }
+
+  public ObtenerInformaciónPartidos(listaParticipantesOrdenadaPorPuntos, jornadasDelJuego: Jornada[], individual: boolean,
                                     enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>): InformacionPartidosLiga[] {
     this.informacionPartidos = [];
     console.log('Estoy en ObtenerInformacionPartidos()');
     const listaInformacionPartidos: InformacionPartidosLiga[] = [];
     const listaEnfrentamientosDelJuego: EnfrentamientoLiga[] = this.ObtenerListaEnfrentamientosDelJuego(jornadasDelJuego,
                                                                                                       enfrentamientosDelJuego);
-    // tslint:disable-next-line:prefer-for-of
-    for (let equipo = 0; equipo < listaEquiposOrdenadaPorPuntos.length; equipo++) {
-      const informacionPartido = new InformacionPartidosLiga(listaEquiposOrdenadaPorPuntos[equipo].EquipoId, 0, 0, 0, 0, 0);
-      console.log(informacionPartido);
-      informacionPartido.partidosTotales = this.CalcularPartidosTotales(listaEnfrentamientosDelJuego,
-                                                                        listaEquiposOrdenadaPorPuntos, equipo);
-      informacionPartido.partidosJugados = this.CalcularPartidosJugados(listaEnfrentamientosDelJuego,
-                                                                        listaEquiposOrdenadaPorPuntos, equipo);
-      informacionPartido.partidosGanados = this.CalcularPartidosGanados(listaEnfrentamientosDelJuego,
-                                                                        listaEquiposOrdenadaPorPuntos, equipo);
-      informacionPartido.partidosEmpatados = this.CalcularPartidosEmpatados(listaEnfrentamientosDelJuego,
-                                                                          listaEquiposOrdenadaPorPuntos, equipo);
-      informacionPartido.partidosPerdidos = this.CalcularPartidosPerdidos(listaEnfrentamientosDelJuego,
-                                                            listaEquiposOrdenadaPorPuntos, equipo);
-      listaInformacionPartidos.push(informacionPartido);
-      console.log('Partidos perdidos del equipo id ' + listaEquiposOrdenadaPorPuntos[equipo].EquipoId + 'son: '
-                   + informacionPartido.partidosPerdidos);
+    if (individual === false) {
+        // tslint:disable-next-line:prefer-for-of
+      for (let equipo = 0; equipo < listaParticipantesOrdenadaPorPuntos.length; equipo++) {
+        const informacionPartido = new InformacionPartidosLiga(listaParticipantesOrdenadaPorPuntos[equipo].EquipoId, 0, 0, 0, 0, 0);
+        console.log(informacionPartido);
+        informacionPartido.partidosTotales = this.CalcularPartidosTotales(listaEnfrentamientosDelJuego,
+                                                                          listaParticipantesOrdenadaPorPuntos, equipo, individual);
+        informacionPartido.partidosJugados = this.CalcularPartidosJugados(listaEnfrentamientosDelJuego,
+                                                                          listaParticipantesOrdenadaPorPuntos, equipo, individual);
+        informacionPartido.partidosGanados = this.CalcularPartidosGanados(listaEnfrentamientosDelJuego,
+                                                                          listaParticipantesOrdenadaPorPuntos, equipo, individual);
+        informacionPartido.partidosEmpatados = this.CalcularPartidosEmpatados(listaEnfrentamientosDelJuego,
+                                                                              listaParticipantesOrdenadaPorPuntos, equipo, individual);
+        informacionPartido.partidosPerdidos = this.CalcularPartidosPerdidos(listaEnfrentamientosDelJuego,
+                                                                            listaParticipantesOrdenadaPorPuntos, equipo, individual);
+        listaInformacionPartidos.push(informacionPartido);
+        console.log('Partidos perdidos del participante id ' + listaParticipantesOrdenadaPorPuntos[equipo].EquipoId + 'son: '
+                    + informacionPartido.partidosPerdidos);
+      }
+    } else if (individual === true) {
+        // tslint:disable-next-line:prefer-for-of
+      for (let alumno = 0; alumno < listaParticipantesOrdenadaPorPuntos.length; alumno++) {
+        const informacionPartido = new InformacionPartidosLiga(listaParticipantesOrdenadaPorPuntos[alumno].AlumnoId, 0, 0, 0, 0, 0);
+        console.log(informacionPartido);
+        informacionPartido.partidosTotales = this.CalcularPartidosTotales(listaEnfrentamientosDelJuego,
+                                                                          listaParticipantesOrdenadaPorPuntos, alumno, individual);
+        informacionPartido.partidosJugados = this.CalcularPartidosJugados(listaEnfrentamientosDelJuego,
+                                                                          listaParticipantesOrdenadaPorPuntos, alumno, individual);
+        informacionPartido.partidosGanados = this.CalcularPartidosGanados(listaEnfrentamientosDelJuego,
+                                                                          listaParticipantesOrdenadaPorPuntos, alumno, individual);
+        informacionPartido.partidosEmpatados = this.CalcularPartidosEmpatados(listaEnfrentamientosDelJuego,
+                                                                              listaParticipantesOrdenadaPorPuntos, alumno, individual);
+        informacionPartido.partidosPerdidos = this.CalcularPartidosPerdidos(listaEnfrentamientosDelJuego,
+                                                                            listaParticipantesOrdenadaPorPuntos, alumno, individual);
+        listaInformacionPartidos.push(informacionPartido);
+        console.log('Partidos perdidos del participante id ' + listaParticipantesOrdenadaPorPuntos[alumno].AlumnoId + 'son: '
+                    + informacionPartido.partidosPerdidos);
+      }
     }
     console.log('La listaInformacionPartidos es: ');
     console.log(listaInformacionPartidos);
@@ -273,60 +318,110 @@ export class CalculosService {
 
 
   public CalcularPartidosTotales(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
-                                 listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+                                 listaParticipantesOrdenadaPorPuntos, participante: number, individual): number {
     let partidosTotales = 0;
+    if (individual === false) {
       // tslint:disable-next-line:prefer-for-of
-    for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
-      if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
-          listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
-            partidosTotales++;
+      for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+        if (listaParticipantesOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+            listaParticipantesOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+              partidosTotales++;
+        }
+      }
+    } else if (individual === true) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+        if (listaParticipantesOrdenadaPorPuntos[participante].AlumnoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+            listaParticipantesOrdenadaPorPuntos[participante].AlumnoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+              partidosTotales++;
+        }
       }
     }
     return partidosTotales;
   }
 
   public CalcularPartidosJugados(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
-                                 listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+                                 listaParticipantesOrdenadaPorPuntos, participante: number, individual): number {
     let partidosJugados = 0;
+    if (individual === false) {
       // tslint:disable-next-line:prefer-for-of
-    for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
-      if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
-          listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+      for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+        if (listaParticipantesOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+            listaParticipantesOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
 
-          if (listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== undefined) {
-            partidosJugados++;
-          }
+            if (listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== undefined) {
+              partidosJugados++;
+            }
+        }
+      }
+    } else if (individual === true) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+        if (listaParticipantesOrdenadaPorPuntos[participante].AlumnoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+            listaParticipantesOrdenadaPorPuntos[participante].AlumnoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+
+            if (listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== undefined) {
+              partidosJugados++;
+            }
+        }
       }
     }
     return partidosJugados;
   }
 
   public CalcularPartidosGanados(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
-                                 listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+                                 listaEquiposOrdenadaPorPuntos, participante: number, individual): number {
     let partidosGanados = 0;
+    if (individual === false) {
       // tslint:disable-next-line:prefer-for-of
-    for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
-      if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
-          listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+      for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+        if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+            listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
 
-          if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador) {
-            partidosGanados++;
-          }
+            if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador) {
+              partidosGanados++;
+            }
+        }
+      }
+    } else if (individual === true) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+        if (listaEquiposOrdenadaPorPuntos[participante].AlumnoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+            listaEquiposOrdenadaPorPuntos[participante].AlumnoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+
+            if (listaEquiposOrdenadaPorPuntos[participante].AlumnoId === listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador) {
+              partidosGanados++;
+            }
+        }
       }
     }
     return partidosGanados;
   }
 
   public CalcularPartidosEmpatados(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
-                                   listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+                                   listaParticipantesOrdenadaPorPuntos,
+                                   participante: number, individual): number {
     let partidosEmpatados = 0;
-    // tslint:disable-next-line:prefer-for-of
-    for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
-      if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
-      listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+    if (individual === false) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+        if (listaParticipantesOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+        listaParticipantesOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
 
-        if (listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador === 0) {
-          partidosEmpatados++;
+          if (listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador === 0) {
+            partidosEmpatados++;
+          }
+        }
+      }
+    } else if (individual === true) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+        if (listaParticipantesOrdenadaPorPuntos[participante].AlumnoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+        listaParticipantesOrdenadaPorPuntos[participante].AlumnoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+
+          if (listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador === 0) {
+            partidosEmpatados++;
+          }
         }
       }
     }
@@ -334,17 +429,32 @@ export class CalculosService {
   }
 
   public CalcularPartidosPerdidos(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
-                                  listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], contEquipo: number): number {
+                                  listaParticipantesOrdenadaPorPuntos, contEquipo: number, individual): number {
     let partidosPerdidos = 0;
-    // tslint:disable-next-line:prefer-for-of
-    for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
-      if (listaEquiposOrdenadaPorPuntos[contEquipo].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
-      listaEquiposOrdenadaPorPuntos[contEquipo].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+    if (individual === false) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+        if (listaParticipantesOrdenadaPorPuntos[contEquipo].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+        listaParticipantesOrdenadaPorPuntos[contEquipo].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
 
-        if ((listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== 0 &&
-             listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== undefined) &&
-             listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== listaEquiposOrdenadaPorPuntos[contEquipo].EquipoId) {
-          partidosPerdidos++;
+          if ((listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== 0 &&
+              listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== undefined) &&
+              listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== listaParticipantesOrdenadaPorPuntos[contEquipo].EquipoId) {
+            partidosPerdidos++;
+          }
+        }
+      }
+    } else if (individual === true) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+        if (listaParticipantesOrdenadaPorPuntos[contEquipo].AlumnoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+        listaParticipantesOrdenadaPorPuntos[contEquipo].AlumnoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+
+          if ((listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== 0 &&
+              listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== undefined) &&
+              listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== listaParticipantesOrdenadaPorPuntos[contEquipo].AlumnoId) {
+            partidosPerdidos++;
+          }
         }
       }
     }
