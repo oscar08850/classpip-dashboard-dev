@@ -241,7 +241,8 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     } else {
       this.rankingEquiposJuegoDeCompeticion = this.calculos.PrepararTablaRankingEquipoCompeticion (
                                                                                               this.listaEquiposOrdenadaPorPuntos,
-                                                                                              this.equiposDelJuego);
+                                                                                              this.equiposDelJuego, this.jornadas,
+                                                                                              this.enfrentamientosDelJuego);
       this.datasourceEquipo = new MatTableDataSource(this.rankingEquiposJuegoDeCompeticion);
     }
     console.log('Faltan los cálculo de PartidosJugados, PartidosGanados, PartidoEmpatados, PartidosPerdidos');

@@ -3,7 +3,8 @@ import { SesionService, PeticionesAPIService} from './index';
 import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos,
          TablaEquipoJuegoDePuntos, HistorialPuntosAlumno, HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo,
          AlumnoJuegoDeColeccion, Album, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
-         TablaEquipoJuegoDeCompeticion, Jornada } from '../clases/index';
+         TablaEquipoJuegoDeCompeticion, Jornada, EquipoJuegoDeCompeticionLiga, EnfrentamientoLiga,
+         InformacionPartidosLiga} from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -23,6 +24,8 @@ export class CalculosService {
   todosLosJuegosInactivos: Juego[] = [];
   ListaJuegosSeleccionadoActivo: Juego[];
   ListaJuegosSeleccionadoInactivo: Juego[];
+
+  informacionPartidos: InformacionPartidosLiga[];
 
   constructor(
     private sesion: SesionService,
@@ -189,7 +192,9 @@ export class CalculosService {
     return rankingJuegoDeCompeticion;
   }
 
-  public PrepararTablaRankingEquipoCompeticion(listaEquiposOrdenadaPorPuntos, equiposDelJuego): TablaEquipoJuegoDeCompeticion[] {
+  public PrepararTablaRankingEquipoCompeticion( listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[],
+                                                equiposDelJuego: Equipo[], jornadasDelJuego: Jornada[],
+                                                enfrentamientosDelJuego: EnfrentamientoLiga[][] ): TablaEquipoJuegoDeCompeticion[] {
     const rankingJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion [] = [];
     console.log (' Vamos a preparar la tabla del ranking por equipos de Competición');
     console.log ('la lista de equipos ordenada es: ');
@@ -202,10 +207,183 @@ export class CalculosService {
       rankingJuegoDeCompeticion[i] = new TablaEquipoJuegoDeCompeticion(i + 1, equipo.Nombre,
                                         listaEquiposOrdenadaPorPuntos[i].PuntosTotalesEquipo, EquipoId);
     }
+    const informacionPartidos = this.ObtenerInformaciónPartidos(listaEquiposOrdenadaPorPuntos, jornadasDelJuego, enfrentamientosDelJuego);
     console.log ('El ranking es: ' );
     console.log (rankingJuegoDeCompeticion);
     return rankingJuegoDeCompeticion;
   }
+
+  public ObtenerInformaciónPartidos(listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], jornadasDelJuego: Jornada[],
+                                    enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>): InformacionPartidosLiga[] {
+    this.informacionPartidos = [];
+    console.log('Estoy en ObtenerInformacionPartidos()');
+    const listaInfromacionPartidos: InformacionPartidosLiga[] = [];
+    const listaEnfrentamientosDelJuego: EnfrentamientoLiga[] = this.ObtenerListaEnfrentamientosDelJuego(jornadasDelJuego,
+                                                                                                      enfrentamientosDelJuego);
+    // tslint:disable-next-line:prefer-for-of
+    for (let equipo = 0; equipo < listaEquiposOrdenadaPorPuntos.length; equipo++) {
+      const informacionPartido = new InformacionPartidosLiga(listaEquiposOrdenadaPorPuntos[equipo].EquipoId, 0, 0, 0, 0, 0);
+      console.log(informacionPartido);
+      informacionPartido.partidosTotales = this.CalcularPartidosTotales(listaEnfrentamientosDelJuego,
+                                                                        listaEquiposOrdenadaPorPuntos, equipo);
+      informacionPartido.partidosJugados = this.CalcularPartidosJugados(listaEnfrentamientosDelJuego,
+                                                                        listaEquiposOrdenadaPorPuntos, equipo);
+      informacionPartido.partidosGanados = this.CalcularPartidosGanados(listaEnfrentamientosDelJuego,
+                                                                        listaEquiposOrdenadaPorPuntos, equipo);
+      informacionPartido.partidosEmpatados = this.CalcularPartidosEmpatados(listaEnfrentamientosDelJuego,
+                                                                          listaEquiposOrdenadaPorPuntos, equipo);
+      // informacionPartido.partidosPerdidos = this.CalcularPartidosPerdidos(listaEnfrentamientosDelJuego, informacionPartido[equipo],
+                                                                          // listaEquiposOrdenadaPorPuntos, equipo);
+      listaInfromacionPartidos.push(informacionPartido);
+      console.log('Partidos perdidos del equipo id ' + equipo + 'son: ' + informacionPartido.partidosPerdidos);
+    }
+    console.log(listaInfromacionPartidos);
+    return;
+  }
+
+  ObtenerListaEnfrentamientosDelJuego(jornadasDelJuego: Jornada[], enfrentamientosDelJuego: EnfrentamientoLiga[][]) {
+    const listaEnfrentamientosDelJuego: EnfrentamientoLiga[] = [];
+    for (let jornada = 0; jornada < jornadasDelJuego.length; jornada++) {
+      // tslint:disable-next-line:prefer-for-of
+      for ( let enfrentamiento = 0; enfrentamiento < enfrentamientosDelJuego[jornada].length; enfrentamiento++) {
+        listaEnfrentamientosDelJuego.push(enfrentamientosDelJuego[jornada][enfrentamiento]);
+      }
+    }
+    console.log('La lista de enfrentamientos del juego es: ');
+    console.log(listaEnfrentamientosDelJuego);
+    return listaEnfrentamientosDelJuego;
+  }
+
+
+  CalcularPartidosTotales(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
+                          listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+    let partidosTotales = 0;
+      // tslint:disable-next-line:prefer-for-of
+    for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+      if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+          listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+            partidosTotales++;
+      }
+    }
+    return partidosTotales;
+  }
+
+  CalcularPartidosJugados(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
+                          listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+    let partidosJugados = 0;
+      // tslint:disable-next-line:prefer-for-of
+    for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+      if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+          listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+
+          if (listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== undefined) {
+            partidosJugados++;
+          }
+      }
+    }
+    return partidosJugados;
+  }
+
+  CalcularPartidosGanados(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
+                          listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+    let partidosGanados = 0;
+      // tslint:disable-next-line:prefer-for-of
+    for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+      if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+          listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+
+          if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador) {
+            partidosGanados++;
+          }
+      }
+    }
+    return partidosGanados;
+  }
+
+  CalcularPartidosEmpatados(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
+                            listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+    let partidosEmpatados = 0;
+    // tslint:disable-next-line:prefer-for-of
+    for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+      if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+      listaEquiposOrdenadaPorPuntos[participante].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
+
+        if (listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador === 0) {
+          partidosEmpatados++;
+        }
+      }
+    }
+    return partidosEmpatados;
+  }
+
+  CalcularPartidosPerdidos(listaEnfrentamientosDelJuego: EnfrentamientoLiga[], informacionPartido: InformacionPartidosLiga[],
+                           listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+    let partidosPerdidos = 0;
+    // tslint:disable-next-line:prefer-for-of
+    for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
+      if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === informacionPartido[participante].participanteId) {
+
+        partidosPerdidos = informacionPartido[participante].partidosJugados - informacionPartido[participante].partidosGanados -
+                           informacionPartido[participante].partidosEmpatados;
+      }
+    }
+    return partidosPerdidos;
+  }
+
+  // public ObtenerInformaciónPartidos(listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], jornadasDelJuego: Jornada[],
+  //                                   enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>): InformacionPartidosLiga[] {
+  //   console.log('Estoy en ObtenerInformacionPartidos()');
+  //   this.informacionPartidos = [];
+  //   // tslint:disable-next-line:prefer-for-of
+  //   for (let i = 0; i < listaEquiposOrdenadaPorPuntos.length; i++) {
+  //     const informacionPartido = new InformacionPartidosLiga(0, 0, 0, 0, 0);
+  //     const participantesInspeccionados: number[] = [];
+  //     for (let j = 0; j < jornadasDelJuego.length; j++) {
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let m = 0; m < enfrentamientosDelJuego[j].length; m++) {
+  //         const participanteInspeccionadoUno = participantesInspeccionados.indexOf(enfrentamientosDelJuego[j][m].JugadorUno);
+  //         const participanteInspeccionadoDos = participantesInspeccionados.indexOf(enfrentamientosDelJuego[j][m].JugadorDos);
+  //         if (listaEquiposOrdenadaPorPuntos[i].EquipoId === enfrentamientosDelJuego[j][m].JugadorUno &&
+  //             participanteInspeccionadoUno === -1) {
+  //           console.log('El participante del que vamos a calcular los partidos totales es: ' + enfrentamientosDelJuego[j][m].JugadorUno);
+  //           informacionPartido.partidosTotales = this.CalcularPartidosTotales(enfrentamientosDelJuego[j][m].JugadorUno,
+  //                                                                             jornadasDelJuego, enfrentamientosDelJuego);
+  //           console.log('Los partidosTotales de este son: ' + informacionPartido.partidosTotales);
+  //           this.informacionPartidos.push(informacionPartido);
+  //           participantesInspeccionados.push(enfrentamientosDelJuego[j][m].JugadorUno);
+  //           console.log(listaEquiposOrdenadaPorPuntos);
+  //           console.log(informacionPartido);
+  //         } else if (listaEquiposOrdenadaPorPuntos[i].EquipoId === enfrentamientosDelJuego[j][m].JugadorDos &&
+  //                    participanteInspeccionadoDos === -1) {
+  //           console.log('El participante del que vamos a calcular los partidos totales es: ' + enfrentamientosDelJuego[j][m].JugadorUno);
+  //           informacionPartido.partidosTotales = this.CalcularPartidosTotales(enfrentamientosDelJuego[j][m].JugadorDos,
+  //                                                                             jornadasDelJuego, enfrentamientosDelJuego);
+  //           participantesInspeccionados.push(enfrentamientosDelJuego[j][m].JugadorDos);
+  //           console.log(listaEquiposOrdenadaPorPuntos);
+  //           console.log(informacionPartido);
+  //         }
+  //       }
+  //     }
+  //   }
+  //   return this.informacionPartidos;
+  // }
+
+  // public CalcularPartidosTotales(participante: number, jornadasDelJuego: Jornada[],
+  //                                enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>): number {
+  //   console.log('Estamos en CalcularPartidosTotales() del participante: ' + participante);
+  //   let numPartidosTotales = 0;
+  //   for (let i = 0; i < jornadasDelJuego.length; i++) {
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for (let j = 0; j < enfrentamientosDelJuego[i].length; j++) {
+  //       if (participante === enfrentamientosDelJuego[i][j].JugadorUno ||
+  //           participante === enfrentamientosDelJuego[i][j].JugadorDos) {
+  //             numPartidosTotales ++;
+  //       }
+  //     }
+  //   }
+  //   console.log('Los partidosTotales son: ' + numPartidosTotales);
+  //   return numPartidosTotales;
+  // }
 
   public DameRankingPuntoSeleccionadoEquipos(
     listaEquiposOrdenadaPorPuntos: any,
