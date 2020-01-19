@@ -197,8 +197,8 @@ export class CalculosService {
     console.log('Vamos a rellenar la TablaEquipoJuegoDeCompeticion con la informacionPartidos');
     const rankingJuegoDeCompeticionFinal = this.RellenarTablaAlumnoJuegoDeCompeticion(rankingJuegoDeCompeticion, informacionPartidos);
     console.log ('El ranking es: ' );
-    console.log (rankingJuegoDeCompeticion);
-    return rankingJuegoDeCompeticion;
+    console.log (rankingJuegoDeCompeticionFinal);
+    return rankingJuegoDeCompeticionFinal;
   }
 
   public PrepararTablaRankingEquipoCompeticion( listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[],
