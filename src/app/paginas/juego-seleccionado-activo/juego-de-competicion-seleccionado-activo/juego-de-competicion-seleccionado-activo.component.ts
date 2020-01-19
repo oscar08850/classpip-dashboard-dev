@@ -40,7 +40,8 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
 
   // Columnas Tabla
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos', ' '];
-  displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'puntos', ' '];
+  displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'partidosTotales', 'partidosJugados',
+                                       'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos'];
 
   datasourceAlumno;
   datasourceEquipo;
@@ -245,7 +246,8 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
                                                                                               this.enfrentamientosDelJuego);
       this.datasourceEquipo = new MatTableDataSource(this.rankingEquiposJuegoDeCompeticion);
     }
-    console.log('Faltan los cálculo de PartidosJugados, PartidosGanados, PartidoEmpatados, PartidosPerdidos');
+    console.log('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
+    console.log (this.rankingEquiposJuegoDeCompeticion);
   }
 
   applyFilter(filterValue: string) {

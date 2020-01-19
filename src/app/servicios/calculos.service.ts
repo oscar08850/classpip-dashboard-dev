@@ -212,7 +212,7 @@ export class CalculosService {
     const rankingJuegoDeCompeticionFinal = this.RellenarTablaEquipoJuegoDeCompeticion(rankingJuegoDeCompeticion, informacionPartidos);
     console.log ('El ranking es: ' );
     console.log (rankingJuegoDeCompeticionFinal);
-    return rankingJuegoDeCompeticion;
+    return rankingJuegoDeCompeticionFinal;
   }
 
   public RellenarTablaEquipoJuegoDeCompeticion(rankingJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion[],
@@ -221,7 +221,7 @@ export class CalculosService {
     for (let cont = 0; cont < rankingJuegoDeCompeticion.length; cont++) {
       rankingJuegoDeCompeticion[cont].partidosTotales = informacionPartidos[cont].partidosTotales;
       rankingJuegoDeCompeticion[cont].partidosJugados = informacionPartidos[cont].partidosJugados;
-      rankingJuegoDeCompeticion[cont].partidosGanador = informacionPartidos[cont].partidosGanados;
+      rankingJuegoDeCompeticion[cont].partidosGanados = informacionPartidos[cont].partidosGanados;
       rankingJuegoDeCompeticion[cont].partidosEmpatados = informacionPartidos[cont].partidosEmpatados;
       rankingJuegoDeCompeticion[cont].partidosPerdidos = informacionPartidos[cont].partidosPerdidos;
     }
@@ -258,7 +258,7 @@ export class CalculosService {
     return listaInformacionPartidos;
   }
 
-  ObtenerListaEnfrentamientosDelJuego(jornadasDelJuego: Jornada[], enfrentamientosDelJuego: EnfrentamientoLiga[][]) {
+  public ObtenerListaEnfrentamientosDelJuego(jornadasDelJuego: Jornada[], enfrentamientosDelJuego: EnfrentamientoLiga[][]) {
     const listaEnfrentamientosDelJuego: EnfrentamientoLiga[] = [];
     for (let jornada = 0; jornada < jornadasDelJuego.length; jornada++) {
       // tslint:disable-next-line:prefer-for-of
@@ -272,8 +272,8 @@ export class CalculosService {
   }
 
 
-  CalcularPartidosTotales(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
-                          listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+  public CalcularPartidosTotales(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
+                                 listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
     let partidosTotales = 0;
       // tslint:disable-next-line:prefer-for-of
     for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
@@ -285,8 +285,8 @@ export class CalculosService {
     return partidosTotales;
   }
 
-  CalcularPartidosJugados(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
-                          listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+  public CalcularPartidosJugados(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
+                                 listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
     let partidosJugados = 0;
       // tslint:disable-next-line:prefer-for-of
     for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
@@ -301,8 +301,8 @@ export class CalculosService {
     return partidosJugados;
   }
 
-  CalcularPartidosGanados(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
-                          listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+  public CalcularPartidosGanados(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
+                                 listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
     let partidosGanados = 0;
       // tslint:disable-next-line:prefer-for-of
     for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
@@ -317,8 +317,8 @@ export class CalculosService {
     return partidosGanados;
   }
 
-  CalcularPartidosEmpatados(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
-                            listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+  public CalcularPartidosEmpatados(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
+                                   listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
     let partidosEmpatados = 0;
     // tslint:disable-next-line:prefer-for-of
     for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
@@ -333,8 +333,8 @@ export class CalculosService {
     return partidosEmpatados;
   }
 
-  CalcularPartidosPerdidos(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
-                           listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], contEquipo: number): number {
+  public CalcularPartidosPerdidos(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
+                                  listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], contEquipo: number): number {
     let partidosPerdidos = 0;
     // tslint:disable-next-line:prefer-for-of
     for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
