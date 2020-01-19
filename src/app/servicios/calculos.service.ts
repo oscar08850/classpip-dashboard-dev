@@ -217,7 +217,7 @@ export class CalculosService {
                                     enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>): InformacionPartidosLiga[] {
     this.informacionPartidos = [];
     console.log('Estoy en ObtenerInformacionPartidos()');
-    const listaInfromacionPartidos: InformacionPartidosLiga[] = [];
+    const listaInformacionPartidos: InformacionPartidosLiga[] = [];
     const listaEnfrentamientosDelJuego: EnfrentamientoLiga[] = this.ObtenerListaEnfrentamientosDelJuego(jornadasDelJuego,
                                                                                                       enfrentamientosDelJuego);
     // tslint:disable-next-line:prefer-for-of
@@ -232,13 +232,14 @@ export class CalculosService {
                                                                         listaEquiposOrdenadaPorPuntos, equipo);
       informacionPartido.partidosEmpatados = this.CalcularPartidosEmpatados(listaEnfrentamientosDelJuego,
                                                                           listaEquiposOrdenadaPorPuntos, equipo);
-      // informacionPartido.partidosPerdidos = this.CalcularPartidosPerdidos(listaEnfrentamientosDelJuego, informacionPartido[equipo],
-                                                                          // listaEquiposOrdenadaPorPuntos, equipo);
-      listaInfromacionPartidos.push(informacionPartido);
+      informacionPartido.partidosPerdidos = this.CalcularPartidosPerdidos(listaEnfrentamientosDelJuego,
+                                                            listaEquiposOrdenadaPorPuntos, equipo);
+      listaInformacionPartidos.push(informacionPartido);
       console.log('Partidos perdidos del equipo id ' + equipo + 'son: ' + informacionPartido.partidosPerdidos);
     }
-    console.log(listaInfromacionPartidos);
-    return;
+    console.log('La listaInformacionPartidos es: ');
+    console.log(listaInformacionPartidos);
+    return listaInformacionPartidos;
   }
 
   ObtenerListaEnfrentamientosDelJuego(jornadasDelJuego: Jornada[], enfrentamientosDelJuego: EnfrentamientoLiga[][]) {
@@ -316,15 +317,19 @@ export class CalculosService {
     return partidosEmpatados;
   }
 
-  CalcularPartidosPerdidos(listaEnfrentamientosDelJuego: EnfrentamientoLiga[], informacionPartido: InformacionPartidosLiga[],
-                           listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], participante: number): number {
+  CalcularPartidosPerdidos(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
+                           listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], contEquipo: number): number {
     let partidosPerdidos = 0;
     // tslint:disable-next-line:prefer-for-of
     for (let contEnfrentamiento = 0; contEnfrentamiento < listaEnfrentamientosDelJuego.length; contEnfrentamiento++) {
-      if (listaEquiposOrdenadaPorPuntos[participante].EquipoId === informacionPartido[participante].participanteId) {
+      if (listaEquiposOrdenadaPorPuntos[contEquipo].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorUno ||
+      listaEquiposOrdenadaPorPuntos[contEquipo].EquipoId === listaEnfrentamientosDelJuego[contEnfrentamiento].JugadorDos) {
 
-        partidosPerdidos = informacionPartido[participante].partidosJugados - informacionPartido[participante].partidosGanados -
-                           informacionPartido[participante].partidosEmpatados;
+        if ((listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== 0 &&
+             listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== undefined) &&
+             listaEnfrentamientosDelJuego[contEnfrentamiento].Ganador !== listaEquiposOrdenadaPorPuntos[contEquipo].EquipoId) {
+          partidosPerdidos++;
+        }
       }
     }
     return partidosPerdidos;
