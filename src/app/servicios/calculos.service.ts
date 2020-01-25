@@ -183,7 +183,7 @@ export class CalculosService {
     console.log (' Vamos a preparar la tabla del ranking individual de Competición');
     console.log ('la lista de alumnos ordenada es: ');
     console.log (listaAlumnosOrdenadaPorPuntos);
-    // tslint:disable-next-line:prefer-for-of
+    // tslint:disable-next-line:prefer-for-oF
     for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
       let alumno: Alumno;
       const alumnoId = listaAlumnosOrdenadaPorPuntos[i].AlumnoId;
