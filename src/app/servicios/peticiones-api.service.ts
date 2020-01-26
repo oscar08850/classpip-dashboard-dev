@@ -71,6 +71,12 @@ export class PeticionesAPIService {
     return this.http.get<Alumno[]>(this.APIUrlProfesores + '/' + profesorId + '/alumnos');
   }
 
+  public DameAlumno(alumnoId: number): Observable<Alumno> {
+    return this.http.get<Alumno>(this.APIUrlAlumnos + '/' + alumnoId);
+  }
+
+  // Falta hacer DameEquipo
+
   public DameAlumnoConcreto(alumno: Alumno, ProfesorId: number): Observable<Alumno> {
     console.log('Entro a buscar a ' + alumno.Nombre + ' ' + alumno.PrimerApellido + ' ' + alumno.SegundoApellido );
     return this.http.get<Alumno>(this.APIUrlProfesores + '/' + ProfesorId + '/alumnos?filter[where][Nombre]=' + alumno.Nombre +
@@ -495,6 +501,14 @@ export class PeticionesAPIService {
     return this.http.get<Array<EnfrentamientoLiga>>('http://localhost:3000/api/JornadasDeCompeticionLiga/' + jornadasDeCompeticionLigaId +
     '/enfrentamientosLiga');
   }
+
+  // public DameAlumnosEnfrentamiento(alumnoUnoId: number, alumnoDosId: number): Observable<Alumno[]> {
+  //   const AlumnosEnfrentamiento: Alumno[] = [];
+  //   AlumnosEnfrentamiento[0] = this.http.get<Alumno>(this.APIUrlAlumnos + '/' + alumnoUnoId);
+  //   AlumnosEnfrentamiento[1] = this.http.get<Alumno>(this.APIUrlAlumnos + '/' + alumnoDosId);
+  //   return AlumnosEnfrentamiento;
+  // } //No entiendo porque no funciona
+
   ///////////////////////////////////////////////////////////////////////////////////////////
   // Gestion del juego de competiciones, individual
   public DameAlumnosJuegoDeCompeticionLiga(juegoDeCompeticionLigaId: number): Observable<Alumno[]> {
