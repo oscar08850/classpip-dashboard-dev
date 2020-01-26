@@ -320,4 +320,8 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposJuegoDeCompeticion);
   }
 
+  seleccionarGanadorLiga(): void {
+    console.log('Aquí estará el proceso para elegir el ganador');
+  }
+
 }
