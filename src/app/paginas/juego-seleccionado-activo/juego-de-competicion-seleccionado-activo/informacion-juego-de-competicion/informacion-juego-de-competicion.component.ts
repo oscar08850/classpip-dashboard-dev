@@ -99,6 +99,8 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
                                                                                   this.listaAlumnosClasificacion[j].segundoApellido;
             } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
                 this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
             }
           } else if (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos === this.listaAlumnosClasificacion[j].id) {
               this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = this.listaAlumnosClasificacion[j].nombre + ' ' +
@@ -110,6 +112,8 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
                                                                                     this.listaAlumnosClasificacion[j].segundoApellido;
               } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
                   this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
               }
           }
         }
@@ -129,14 +133,18 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
               this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
             } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
                 this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-            }
+            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+          }
           } else if (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos === this.listaEquiposClasificacion[j].id) {
               this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = this.listaEquiposClasificacion[j].nombre;
               if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaEquiposClasificacion[j].id) {
                 this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
               } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
                 this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-              }
+              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+            }
           }
         }
       }

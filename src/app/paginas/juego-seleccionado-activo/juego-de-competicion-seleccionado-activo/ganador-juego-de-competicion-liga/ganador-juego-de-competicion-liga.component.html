@@ -1,3 +1,98 @@
-<p>
-  ganador-juego-de-competicion-liga works!
-</p>
+<div class="titulo">Pantalla para asignar el Ganador</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+  <div class="enColumna">
+    <div class = "enFila" style="width: 100%">
+      <div>
+        Seleccione
+        <br>
+        <mat-form-field >
+          <mat-label>Jornada</mat-label>
+          <select matNativeControl [(ngModel)]="jornadaId" (change) = "ActualizarBoton()">
+            <option *ngFor="let jornada of JornadasCompeticion" [value]="jornada.id"  (click) = "ObtenerEnfrentamientosDeCadaJornada(jornada)">
+              Jornada {{jornada.NumeroDeJornada}}
+            </option>
+          </select>
+        </mat-form-field>
+      </div>
+
+      <div style="margin-top: 10px; margin-left: 570px; margin-right: 10px;">
+        <button style= "width: 100%" type="button"class="btn Aceptar" [disabled]="botonAsignarDesactivado">Manualmente</button>
+        <!-- <button style= "width: 100%" type="button"class="btn Aceptar" [disabled]="botonAsignarDesactivado" (click) = AsignarPuntos()>Manualmente</button> -->
+      </div>
+      <div style="margin-top: 10px; margin-right: 10px;">
+        <button style= "width: 100%"  type="button"class="btn Aceptar"  [disabled]="botonAsignarDesactivado">Aleatoriamente</button>
+        <!-- <button style= "width: 100%"  type="button"class="btn Aceptar" (click) = AsignarAleatorio()>Aleatoriamente</button> -->
+      </div>
+    </div>
+
+    <form style="width: 100%">
+      <table style="width: 100%" align="center" *ngIf="juegoSeleccionado.Modo === 'Individual' && jornadaId != undefined" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="nombreJugadorUno">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Alumno 1
+            <!-- <td mat-cell *matCellDef="let enfrentamiento"> {{enfrentamiento.nombreJugadorUno}} </td> -->
+            <mat-checkbox
+                          (change)="$event ? MasterToggle() : null; ActualizarBoton ();"
+                          [checked]="selection.hasValue() && IsAllSelected()"
+                          [indeterminate]="selection.hasValue() && !IsAllSelected()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+                          (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null; ActualizarBoton ();"
+                          [checked]="selection.isSelected(row)">
+
+            </mat-checkbox>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nombreJugadorDos">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Alumno 2
+            <mat-checkbox
+                          (change)="$event ? MasterToggle() : null; ActualizarBoton ();"
+                          [checked]="selection.hasValue() && IsAllSelected()"
+                          [indeterminate]="selection.hasValue() && !IsAllSelected()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+                          (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null; ActualizarBoton ();"
+                          [checked]="selection.isSelected(row)">
+
+            </mat-checkbox>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Empate">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Empate
+            <mat-checkbox
+                          (change)="$event ? MasterToggle() : null; ActualizarBoton ();"
+                          [checked]="selection.hasValue() && IsAllSelected()"
+                          [indeterminate]="selection.hasValue() && !IsAllSelected()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+                          (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null; ActualizarBoton ();"
+                          [checked]="selection.isSelected(row)">
+
+            </mat-checkbox>
+
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumno"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumno;"></tr>
+
+      </table>
+    </form>
+    <br>
+    <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+  </div>
+</div>
