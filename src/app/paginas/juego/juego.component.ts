@@ -289,6 +289,16 @@ export class JuegoComponent implements OnInit {
       console.log('Voy a crear las ' + NumeroDeJornadas + ' jornadas');
       this.calculos.CrearJornadasLiga(NumeroDeJornadas, this.juego.id);
       console.log('Jornadas creadas correctamente');
+      if (this.modoDeJuegoSeleccionado === 'Individual') {
+        console.log('Voy a crear los enfrentamientos');
+        console.log(this.alumnosGrupo.length);
+        console.log(NumeroDeJornadas);
+        console.log(Math.abs(this.alumnosGrupo.length % 2));
+        this.calculos.calcularLiga(this.alumnosGrupo.length, NumeroDeJornadas );
+      } else {
+        console.log('Voy a crear los enfrentamientos');
+        this.calculos.calcularLiga(this.equiposGrupo.length, NumeroDeJornadas );
+      }
       // this.calculos.CrearenfrentamientosLiga();
     });
   }
@@ -346,6 +356,8 @@ export class JuegoComponent implements OnInit {
     if (this.tipoDeJuegoSeleccionado === 'Juego De Competición') {
       if (this.tipoJuegoCompeticionSeleccionado === 'Liga') {
         if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+
           console.log('Voy a inscribir a los alumnos del grupo');
 
           // tslint:disable-next-line:prefer-for-of

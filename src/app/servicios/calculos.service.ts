@@ -24,7 +24,7 @@ export class CalculosService {
   todosLosJuegosInactivos: Juego[] = [];
   ListaJuegosSeleccionadoActivo: Juego[];
   ListaJuegosSeleccionadoInactivo: Juego[];
-
+  rondas: Array<Array<EnfrentamientoLiga>>;
   informacionPartidos: InformacionPartidosLiga[];
 
   constructor(
@@ -1135,5 +1135,72 @@ public PreparaHistorialEquipo(
     equipos.push (listaInicial);
     return equipos;
   }
+
+
+
+  public calcularLigaNumEquipos(numEquipos: number, numRondas: number): any[] {
+        const numParticupantes = numEquipos - 1;
+        console.log('Vamos a crear los enfrentamientos');
+        const numPartidosPorRonda = numEquipos / 2;
+
+        this.rondas = [];
+
+        console.log(this.rondas);
+        for (let i = 0, k = 0; i < numRondas; i ++) {
+
+          this.rondas[i] = [];
+
+          for (let j = 0; j < numPartidosPorRonda; j ++) {
+
+                this.rondas[i][j] = new EnfrentamientoLiga();
+                this.rondas[i][j].JugadorUno = k;
+
+                k ++;
+
+                if (k === numParticupantes) {
+                    k = 0;
+                }
+            }
+        }
+
+        for (let i = 0; i < numRondas; i ++) {
+
+
+            if (i % 2 === 0) {
+                this.rondas[i][0].JugadorDos = numEquipos - 1;
+            } else {
+                this.rondas[i][0].JugadorDos = this.rondas[i][0].JugadorUno;
+                this.rondas[i][0].JugadorUno = numEquipos - 1;
+            }
+        }
+
+        const equipoMasAlto = numEquipos - 1;
+        const equipoImparMasAlto = equipoMasAlto - 1;
+
+        for (let i = 0, k = equipoImparMasAlto; i < numRondas; i ++) {
+
+
+            for (let j = 1; j < numPartidosPorRonda; j ++) {
+                this.rondas[i][j].JugadorDos = k;
+
+                k --;
+
+                if (k === -1) {
+                    k = equipoImparMasAlto;
+                }
+            }
+        }
+        return this.rondas;
+
+    }
+
+
+
+   public calcularLiga(numEquipos: number, NumeroDeJornadas: number) {
+            console.log('Voy a por los enrentamientos');
+            return this.calcularLigaNumEquipos(numEquipos, NumeroDeJornadas);
+    }
+
+
 
 }
