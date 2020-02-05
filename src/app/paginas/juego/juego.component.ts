@@ -6,7 +6,7 @@ import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // Clases
 // tslint:disable-next-line:max-line-length
-import { Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga} from '../../clases/index';
+import { Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga, Jornada} from '../../clases/index';
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
@@ -272,6 +272,7 @@ export class JuegoComponent implements OnInit {
     console.log ('&&&&&& ' + this.tipoJuegoCompeticionSeleccionado);
 
     let NumeroDeJornadas: number;
+    let Jornadas: Jornada[];
     NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
     console.log(NumeroDeJornadas);
     console.log(new Juego (this.tipoDeJuegoSeleccionado + ' Liga', this.modoDeJuegoSeleccionado,
@@ -287,18 +288,9 @@ export class JuegoComponent implements OnInit {
       this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
       console.log('Voy a crear las ' + NumeroDeJornadas + ' jornadas');
-      this.calculos.CrearJornadasLiga(NumeroDeJornadas, this.juego.id);
+      Jornadas = this.calculos.CrearJornadasLiga(NumeroDeJornadas, this.juego.id);
       console.log('Jornadas creadas correctamente');
-      if (this.modoDeJuegoSeleccionado === 'Individual') {
-        console.log('Voy a crear los enfrentamientos');
-        console.log(this.alumnosGrupo.length);
-        console.log(NumeroDeJornadas);
-        console.log(Math.abs(this.alumnosGrupo.length % 2));
-        this.calculos.calcularLiga(this.alumnosGrupo.length, NumeroDeJornadas );
-      } else {
-        console.log('Voy a crear los enfrentamientos');
-        this.calculos.calcularLiga(this.equiposGrupo.length, NumeroDeJornadas );
-      }
+      this.sesion.TomaDatosJornadasJuegoComponent(Jornadas);
       // this.calculos.CrearenfrentamientosLiga();
     });
   }
@@ -349,14 +341,24 @@ export class JuegoComponent implements OnInit {
     this.isDisabled = false;
   }
 
+
+
   Finalizar() {
     console.log ('Entro en finalizar');
     console.log (this.tipoDeJuegoSeleccionado);
+    const datos = this.sesion.DameDatosJornadasJuegoComponent();
+    let jornadas: Jornada[];
+    jornadas = datos.jornadas;
 
     if (this.tipoDeJuegoSeleccionado === 'Juego De Competición') {
       if (this.tipoJuegoCompeticionSeleccionado === 'Liga') {
         if (this.modoDeJuegoSeleccionado === 'Individual') {
 
+          console.log('Voy a crear los enfrentamientos');
+          console.log(this.alumnosGrupo.length);
+          console.log(jornadas.length);
+          console.log(Math.abs(this.alumnosGrupo.length % 2));
+          this.calculos.calcularLiga(this.alumnosGrupo.length, jornadas.length, this.alumnosGrupo, this.grupo.id, jornadas);
 
           console.log('Voy a inscribir a los alumnos del grupo');
 
@@ -372,6 +374,10 @@ export class JuegoComponent implements OnInit {
             .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
           }
         } else {
+
+          console.log('Voy a crear los enfrentamientos');
+          this.calculos.calcularLiga(this.equiposGrupo.length, jornadas.length, this.equiposGrupo, this.grupo.id, jornadas);
+
           console.log('Voy a inscribir los equipos al grupo');
 
           // tslint:disable-next-line:prefer-for-of

@@ -331,4 +331,22 @@ console.log(this.JornadasCompeticion);
 return datos;
 }
 
+public TomaDatosJornadasJuegoComponent(
+  jornadas: Jornada[],
+) {
+this.jornadas = jornadas;
+console.log ('jornadas:');
+console.log ( this.jornadas);
+
+}
+
+public DameDatosJornadasJuegoComponent(): any {
+const datos = {
+jornadas: this.jornadas,
+};
+console.log ('Aqui estan las jornadas guardadas: ');
+console.log(this.jornadas);
+
+return datos;
+}
 }

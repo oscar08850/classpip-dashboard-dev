@@ -26,7 +26,7 @@ export class CalculosService {
   ListaJuegosSeleccionadoInactivo: Juego[];
   rondas: Array<Array<EnfrentamientoLiga>>;
   informacionPartidos: InformacionPartidosLiga[];
-
+  jornadasnuevas: Jornada[];
   constructor(
     private sesion: SesionService,
     private peticionesAPI: PeticionesAPIService
@@ -1078,8 +1078,9 @@ public PreparaHistorialEquipo(
     return listaCromosSinRepetidos;
   }
 
-  public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID) {
-    for (let i = 1; i <= NumeroDeJornadas; i++) {
+  public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any [] {
+    this.jornadasnuevas = [];
+    for (let i = 0; i < NumeroDeJornadas; i++) {
       // tslint:disable-next-line:max-line-length '2000-01-01T01:01:01.000Z'
       const jornada = new Jornada(undefined, 'Pendiente de determinar', juegoDeCompeticionID);
       console.log(jornada);
@@ -1087,8 +1088,10 @@ public PreparaHistorialEquipo(
       .subscribe(jornadacreada => {
         console.log('jornada creada');
         console.log(jornadacreada);
-      });
+        this.jornadasnuevas[i] = jornadacreada;
+        });
     }
+    return this.jornadasnuevas;
   }
 
   public DameTablaJornadasLiga( juegoSeleccionado, jornadas) {
@@ -1196,11 +1199,64 @@ public PreparaHistorialEquipo(
 
 
 
-   public calcularLiga(numEquipos: number, NumeroDeJornadas: number) {
+   public calcularLiga(numEquipos: number, NumeroDeJornadas: number, participantes: any, ID: number, Jornadas: Jornada[]) {
             console.log('Voy a por los enrentamientos');
-            return this.calcularLigaNumEquipos(numEquipos, NumeroDeJornadas);
+            // let jornadas: Jornada[];
+            // this.peticionesAPI.DameJornadasDeCompeticionLiga(ID)
+            //   .subscribe(inscripciones => {
+            //     jornadas = inscripciones;
+            //     console.log('Las jornadas son: ');
+            //     console.log(jornadas);
+            //   });
+            this.rondas = this.calcularLigaNumEquipos(participantes.length, NumeroDeJornadas);
+            console.log('rondas');
+            console.log(this.rondas);
+            this.guardarenrentamientos(this.rondas, NumeroDeJornadas, participantes, Jornadas);
+            console.log('Enrentaminetos guardados');
     }
 
+    public guardarenrentamientos(rondas: Array<Array<EnfrentamientoLiga>>, NumeroDeJornadas: number,
+                                 participantes: any[], jornadas: Jornada[]) {
 
+      const numPartidosPorRonda = participantes.length / 2;
+      console.log(participantes.length);
+      console.log('Muestro las jornadas');
+      console.log(jornadas);
+      console.log(jornadas[0].id);
+      for (let i = 0; i < NumeroDeJornadas ; i ++) {
+
+
+        for (let j = 0; j < numPartidosPorRonda; j ++) {
+          // console.log('Participantes');
+          // console.log(participantes);
+          // // let jugador1: number;
+          // // let jugador2: number;
+          // console.log('jugador 1');
+          // console.log(rondas[i][j].JugadorUno);
+          // // jugador1 = participantes[rondas[i][j].JugadorUno];
+          // console.log('jugador 2');
+          // console.log(participantes[rondas[i][j].JugadorDos].id);
+          // // jugador2 = participantes[rondas[i][j].JugadorDos];
+
+          // console.log(jornadas[i].id);
+          // tslint:disable-next-line:prefer-const
+          let EnfrentamientoLigaa: EnfrentamientoLiga;
+          // EnfrentamientoLigaa.JornadaDeCompeticionLigaId = jornadas[i].id;
+          // EnfrentamientoLigaa.JugadorDos = participantes[rondas[i][j].JugadorDos];
+          // EnfrentamientoLigaa.JugadorUno = participantes[rondas[i][j].JugadorUno];
+          // EnfrentamientoLigaa.Ganador = undefined;
+          EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorUno].id,
+             participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id);
+          console.log('mostramos enrentamiento');
+          console.log(EnfrentamientoLigaa);
+          this.peticionesAPI.CrearEnrentamientoLiga(EnfrentamientoLigaa, jornadas[i].id)
+           .subscribe(enfrentamientocreado => {
+           console.log('enfrentamiento creado');
+           console.log(enfrentamientocreado);
+        });
+      }
+
+      }
+    }
 
 }

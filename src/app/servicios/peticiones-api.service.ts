@@ -495,6 +495,10 @@ export class PeticionesAPIService {
     return this.http.get<Array<EnfrentamientoLiga>>('http://localhost:3000/api/JornadasDeCompeticionLiga/' + jornadasDeCompeticionLigaId +
     '/enfrentamientosLiga');
   }
+  public CrearEnrentamientoLiga(Enfrentamiento: EnfrentamientoLiga, jornadasDeCompeticionLigaId: number): Observable<EnfrentamientoLiga> {
+    return this.http.post<EnfrentamientoLiga>('http://localhost:3000/api/JornadasDeCompeticionLiga/' + jornadasDeCompeticionLigaId +
+    '/enfrentamientosLiga', Enfrentamiento);
+  }
   ///////////////////////////////////////////////////////////////////////////////////////////
   // Gestion del juego de competiciones, individual
   public DameAlumnosJuegoDeCompeticionLiga(juegoDeCompeticionLigaId: number): Observable<Alumno[]> {
@@ -554,4 +558,5 @@ export class PeticionesAPIService {
   public DameJuegoDeCompeticionGrupo(grupoId: number): Observable<Juego[]> {
     return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeCompeticions');
   }
+
 }
