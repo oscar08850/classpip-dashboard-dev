@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatSnackBar } from '@angular/material';
 import {MatTableDataSource} from '@angular/material/table';
+import Swal from 'sweetalert2';
 
 
 // Clases
@@ -39,7 +39,6 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
   puntoAleatorioId: number;
 
   constructor(
-               public snackBar: MatSnackBar,
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService
   ){}
@@ -111,9 +110,7 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
 
     this.selection.clear();
 
-    this.snackBar.open('Puntos añadidos correctamente', 'Cerrar', {
-      duration: 2000,
-    });
+    Swal.fire('Puntos añadidos', 'Puntos añadidos correctamente', 'success');
 
   }
 

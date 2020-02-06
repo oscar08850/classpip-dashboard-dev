@@ -9,7 +9,7 @@ import { SesionService, CalculosService, PeticionesAPIService } from '../../../.
 import {MatTableDataSource} from '@angular/material/table';
 
 import { Location } from '@angular/common';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -284,7 +284,7 @@ export class AsignarPuntosComponent implements OnInit {
       }
       this.dataSource = new MatTableDataSource (this.rankingJuegoDePuntos);
       this.selection.clear();
-      swal(this.alumnoElegido.nombre + ' ' + this.alumnoElegido.primerApellido, 'Enhorabuena', 'success');
+      Swal.fire(this.alumnoElegido.nombre + ' ' + this.alumnoElegido.primerApellido, 'Enhorabuena', 'success');
     } else {
       const numeroEquipos = this.equiposDelJuego.length;
       const elegido = Math.floor(Math.random() * numeroEquipos);
@@ -312,7 +312,7 @@ export class AsignarPuntosComponent implements OnInit {
       }
       this.dataSource = new MatTableDataSource (this.rankingEquiposJuegoDePunto);
       this.selection.clear();
-      swal(this.equipoElegido.nombre + ' Enhorabuena', 'success');
+      Swal.fire(this.equipoElegido.nombre, ' Enhorabuena', 'success');
 
     }
   }

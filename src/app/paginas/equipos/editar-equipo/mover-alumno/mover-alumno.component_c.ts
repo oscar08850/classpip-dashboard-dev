@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar, MatDialog } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA,  MatDialog } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+import Swal from 'sweetalert2';
 
 import { DialogoConfirmacionComponent } from '../../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
@@ -36,8 +37,7 @@ export class MoverAlumnoComponent implements OnInit {
   constructor( public dialogRef: MatDialogRef<MoverAlumnoComponent>,
                @Inject(MAT_DIALOG_DATA) public data: any,
                private equipoService: EquipoService,
-               public dialog: MatDialog,
-               public snackBar: MatSnackBar) { }
+               public dialog: MatDialog) { }
 
   ngOnInit() {
     this.alumnosEquipo = this.data.alumnosEquipo;
@@ -109,13 +109,11 @@ export class MoverAlumnoComponent implements OnInit {
     });
 
     // Antes de cerrar recogeremos el resultado del diálogo: Borrar (true) o cancelar (false). Si confirmamos, borraremos
-    // el equipo (función EliminarEquipo) y mostraremos un snackBar con el mensaje de que se ha eliminado correctamente.
+    // el equipo (función EliminarEquipo) y mostraremos un swal con el mensaje de que se ha eliminado correctamente.
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.MoverAlumno();
-        this.snackBar.open('Alumnos movidos correctamente al equipo llamado: ' + this.equipoSeleccionadoNombre, 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Alumnos movidos', 'Alumnos movidos correctamente al equipo llamado: ' + this.equipoSeleccionadoNombre, 'success');
 
       }
     });

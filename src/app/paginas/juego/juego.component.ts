@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
+import { MatDialog, MatTabGroup } from '@angular/material';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // Clases
@@ -16,8 +16,8 @@ import { Observable} from 'rxjs';
 import { of } from 'rxjs';
 import 'rxjs';
 
-import swal from 'sweetalert';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import Swal from 'sweetalert2';
 
 
 
@@ -112,7 +112,6 @@ export class JuegoComponent implements OnInit {
   finalizar: Boolean = false;
 
   constructor(
-               public snackBar: MatSnackBar,
                public dialog: MatDialog,
                private calculos: CalculosService,
                private sesion: SesionService,
@@ -220,9 +219,7 @@ export class JuegoComponent implements OnInit {
     if (this.modoDeJuegoSeleccionado === 'Individual') {
       if (this.alumnosGrupo === undefined) {
         this.isDisabledModo = true;
-        this.snackBar.open('No hay alumnos en este grupo', 'Cerrar', {
-          duration: 5000,
-        });
+        Swal.fire('Alerta', 'No hay ningún alumno en este grupo', 'warning');
         console.log('No Hay alumnos, no puedo crear el juego');
       } else {
         console.log('Hay alumnos, puedo crear');
@@ -232,9 +229,7 @@ export class JuegoComponent implements OnInit {
     } else {
       if (this.equiposGrupo === undefined) {
         this.isDisabledModo = true;
-        this.snackBar.open('No hay equipos en este grupo', 'Cerrar', {
-          duration: 5000,
-        });
+        Swal.fire('Alerta', 'No hay ningún equipo en este grupo', 'warning');
         console.log('No se puede crear juego pq no hay equipos');
       } else {
         this.isDisabledModo = false;
@@ -328,9 +323,7 @@ export class JuegoComponent implements OnInit {
       this.CrearJuegoDeCompeticionLiga();
     }
 
-    this.snackBar.open(this.tipoDeJuegoSeleccionado + ' creado correctamente', 'Cerrar', {
-      duration: 2000,
-    });
+    Swal.fire('Creado', this.tipoDeJuegoSeleccionado + ' creado correctamente', 'success');
   }
 
   TipoDeJuegoCompeticionSeleccionado(tipoCompeticion: ChipColor) {

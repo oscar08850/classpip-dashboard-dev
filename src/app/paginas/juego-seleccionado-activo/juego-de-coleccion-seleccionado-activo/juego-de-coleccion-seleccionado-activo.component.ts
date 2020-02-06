@@ -9,8 +9,9 @@ import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion }
 import { JuegoService, EquipoService, AlumnoService, ColeccionService, JuegoDeColeccionService } from '../../../servicios/index';
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
 
-// Imports para abrir diálogo y snackbar
-import { MatDialog, MatSnackBar } from '@angular/material';
+// Imports para abrir diálogo y Swal
+import { MatDialog } from '@angular/material';
+import Swal from 'sweetalert2';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
 @Component({
@@ -48,7 +49,6 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
                private coleccionService: ColeccionService,
                private juegoDeColeccionService: JuegoDeColeccionService,
                public dialog: MatDialog,
-               public snackBar: MatSnackBar,
                public sesion: SesionService,
                public peticionesAPI: PeticionesAPIService,
                public calculos: CalculosService,
@@ -188,9 +188,7 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.DesactivarJuego();
-        this.snackBar.open(this.juegoSeleccionado.Tipo + ' desactivado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' desactivado correctamente', 'success');
       }
     });
   }

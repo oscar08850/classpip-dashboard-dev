@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AgregarAlumnoDialogComponent } from '../crear-grupo/agregar-alumno-dialog/agregar-alumno-dialog.component';
 import { MatTableDataSource } from '@angular/material/table';
+import Swal from 'sweetalert2';
 
 // Clases
 import { Grupo, Alumno } from '../../clases/index';
@@ -15,7 +16,7 @@ import { SesionService, PeticionesAPIService } from '../../servicios/index';
 
 
 // Imports para abrir diálogo agregar alumno/confirmar eliminar grupo
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
 
@@ -52,7 +53,6 @@ export class EditarGrupoComponent implements OnInit {
 
   constructor(
                public dialog: MatDialog,
-               public snackBar: MatSnackBar,
                public sesion: SesionService,
                public peticionesAPI: PeticionesAPIService,
                private location: Location) { }
@@ -107,9 +107,7 @@ export class EditarGrupoComponent implements OnInit {
 
         // Vuelvo a enviar el grupo a la sesion
         this.sesion.TomaGrupo(this.grupoSeleccionado);
-        this.snackBar.open('Grupo editado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Guardado', 'Grupo editado correctamente', 'success');
         this.goBack();
       } else {
         console.log('fallo editando');
@@ -174,9 +172,7 @@ export class EditarGrupoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.BorrarAlumnos();
-        this.snackBar.open('Alumnos eliminados correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Eliminados', 'Alumnos eliminados correctamente', 'success');
       }
     });
   }
