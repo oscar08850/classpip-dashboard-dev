@@ -8,7 +8,8 @@ import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion,
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../../servicios/index';
 import { Location } from '@angular/common';
 import { DialogoConfirmacionComponent } from '../../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
-import { MatDialog, MatSnackBar,  } from '@angular/material';
+import { MatDialog } from '@angular/material';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -41,7 +42,6 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
                private calculos: CalculosService,
                private location: Location,
                private http: Http,
-               public snackBar: MatSnackBar,
                public dialog: MatDialog
 
   ) {}
@@ -138,14 +138,11 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
     });
 
     // Antes de cerrar recogeremos el resultado del diálogo: Borrar (true) o cancelar (false). Si confirmamos, borraremos
-    // el punto (función BorrarPunto) y mostraremos un snackBar con el mensaje de que se ha eliminado correctamente.
+    // el punto (función BorrarPunto) y mostraremos un Swal con el mensaje de que se ha eliminado correctamente.
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.BorrarCromo(cromo);
-        this.snackBar.open(cromo.Nombre + ' eliminado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
-
+        Swal.fire('Eliminado', cromo.Nombre + ' eliminado correctamente', 'success');
       }
     });
   }

@@ -11,8 +11,8 @@ import { Alumno, Juego, Jornada, TablaJornadas, AlumnoJuegoDeCompeticionLiga, Ta
 // Servicio
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../../servicios/index';
 
-// Imports para abrir diálogo y snackbar
-import { MatDialog, MatSnackBar } from '@angular/material';
+// Imports para abrir diálogo
+import { MatDialog } from '@angular/material';
 
 
 @Component({

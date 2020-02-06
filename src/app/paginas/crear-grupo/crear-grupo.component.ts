@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AgregarAlumnoDialogComponent } from './agregar-alumno-dialog/agregar-alumno-dialog.component';
-import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
+import { MatDialog, MatTabGroup } from '@angular/material';
 
 // Servicios
 import { SesionService, PeticionesAPIService, CalculosService } from '../../servicios/index';
@@ -15,7 +15,7 @@ import { Observable} from 'rxjs';
 import { of } from 'rxjs';
 import 'rxjs';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
 
@@ -60,7 +60,6 @@ export class CrearGrupoComponent implements OnInit {
               public calculos: CalculosService,
               // tslint:disable-next-line:variable-name
               private _formBuilder: FormBuilder,
-              public snackBar: MatSnackBar,
               private location: Location ) { }
 
 
@@ -101,9 +100,7 @@ export class CrearGrupoComponent implements OnInit {
         this.grupo = res;
       } else {
         console.log('Fallo en la creación');
-        this.snackBar.open('Se ha producido un error creando el grupo', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Se ha producido un error creando el grupo', 'ERROR', 'error');
       }
     });
   }
@@ -155,9 +152,7 @@ export class CrearGrupoComponent implements OnInit {
     this.router.navigate(['/inicio/' + this.profesorId]);
   }
   aceptarGoBack() {
-    this.snackBar.open('El grupo se ha creado correctamente', 'Cerrar', {
-      duration: 3000,
-    });
+    Swal.fire('El grupo se ha creado correctamente', 'Enhorabuena', 'success');
     this.finalizar = true;
     this.goBack();
   }

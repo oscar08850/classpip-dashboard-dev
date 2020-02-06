@@ -3,12 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { SesionService, PeticionesAPIService, CalculosService  } from '../../servicios/index';
 
 import { Location } from '@angular/common';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 // Clases
 import { Alumno, Profesor } from '../../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-mis-alumnos',
@@ -32,7 +33,6 @@ export class MisAlumnosComponent implements OnInit {
     private peticionesAPI: PeticionesAPIService,
     private calculos: CalculosService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,
     private location: Location) {
     }
 
@@ -51,9 +51,7 @@ export class MisAlumnosComponent implements OnInit {
         this.misAlumnos = res;
         this.dataSource = new MatTableDataSource(this.misAlumnos);
       } else {
-        this.snackBar.open('Aun no tienes ningún alumno', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Alerta', 'Aun no tienes ningún alumno', 'warning');
       }
     });
   }
@@ -104,14 +102,11 @@ export class MisAlumnosComponent implements OnInit {
     });
 
     // Antes de cerrar recogeremos el resultado del diálogo: Borrar (true) o cancelar (false). Si confirmamos, borraremos
-    // el punto (función BorrarPunto) y mostraremos un snackBar con el mensaje de que se ha eliminado correctamente.
+    // el punto (función BorrarPunto) y mostraremos un swal con el mensaje de que se ha eliminado correctamente.
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.EliminarAlumno(alumno);
-        this.snackBar.open(alumno.Nombre + ' eliminado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
-
+        Swal.fire('Eliminado', alumno.Nombre + ' eliminado correctamente', 'success');
       }
     });
   }
@@ -127,9 +122,7 @@ export class MisAlumnosComponent implements OnInit {
   }
 
   ProcesarSeleccionados() {
-    this.snackBar.open('Enviaré un email a los seleccionados', 'Cerrar', {
-      duration: 2000,
-    });
+    Swal.fire('Información', 'Enviaré un email a los seleccionados', 'info');
   }
   goBack() {
     this.location.back();

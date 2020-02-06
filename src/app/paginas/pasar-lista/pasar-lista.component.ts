@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { SelectionModel } from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 // Clases
 import { Grupo, Alumno } from '../../clases/index';
@@ -11,7 +11,8 @@ import { Grupo, Alumno } from '../../clases/index';
 import { GrupoService, MatriculaService, AlumnoService } from '../../servicios/index';
 import { SesionService, PeticionesAPIService } from '../../servicios/index';
 // Imports para abrir diálogo agregar alumno/confirmar eliminar grupo
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
+import { SummaryResolver } from '@angular/compiler';
 
 @Component({
   selector: 'app-pasar-lista',
@@ -39,7 +40,6 @@ export class PasarListaComponent implements OnInit {
 
   constructor(
                public dialog: MatDialog,
-               public snackBar: MatSnackBar,
                public location: Location,
                private sesion: SesionService) { }
 
@@ -96,7 +96,7 @@ export class PasarListaComponent implements OnInit {
     const elegido = Math.floor(Math.random() * numeroAlumnos);
     const alumnoElegido = this.alumnosGrupoSeleccionado[elegido];
     console.log ('Hemos elegido a ' + elegido);
-    swal(alumnoElegido.Nombre + ' ' + alumnoElegido.PrimerApellido, 'Enhorabuena', 'success');
+    Swal.fire(alumnoElegido.Nombre + ' ' + alumnoElegido.PrimerApellido, 'Enhorabuena', 'success');
   }
 
   goBack() {

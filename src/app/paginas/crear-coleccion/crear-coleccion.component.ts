@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // Imports para abrir diálogo confirmar eliminar equipo
-import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
+import { MatDialog, MatTabGroup } from '@angular/material';
 
 // Servicios
 import { ColeccionService, ProfesorService } from '../../servicios/index';
@@ -18,7 +18,6 @@ import { Location } from '@angular/common';
 import { of } from 'rxjs';
 import 'rxjs';
 
-import swal from 'sweetalert';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import { Observable} from 'rxjs';
 
@@ -107,7 +106,6 @@ export class CrearColeccionComponent implements OnInit {
     private coleccionService: ColeccionService,
     private router: Router,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,
     public sesion: SesionService,
     public peticionesAPI: PeticionesAPIService,
     public location: Location,

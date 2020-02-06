@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 // Imports para abrir diálogo mostrar cromos
-import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
+import { MatDialog, MatTabGroup } from '@angular/material';
 import { DialogMostrarCromosComponent } from './dialog-mostrar-cromos/dialog-mostrar-cromos.component';
 
 import { Coleccion, Juego, Alumno, Equipo, AlumnoJuegoDeColeccion,

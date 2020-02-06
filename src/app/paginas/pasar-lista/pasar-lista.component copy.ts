@@ -9,7 +9,7 @@ import { Grupo, Alumno } from '../../clases/index';
 // Servicios
 import { GrupoService, MatriculaService, AlumnoService } from '../../servicios/index';
 // Imports para abrir diálogo agregar alumno/confirmar eliminar grupo
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-pasar-lista',
@@ -37,7 +37,6 @@ export class PasarListaComponent implements OnInit {
   constructor( private grupoService: GrupoService,
                private alumnoService: AlumnoService,
                public dialog: MatDialog,
-               public snackBar: MatSnackBar,
                private location: Location) { }
 
   ngOnInit() {

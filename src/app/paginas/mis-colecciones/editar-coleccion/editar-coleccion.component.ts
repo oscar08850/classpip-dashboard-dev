@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { ResponseContentType, Http, Response } from '@angular/http';
 import { AgregarCromoDialogComponent } from '../agregar-cromo-dialog/agregar-cromo-dialog.component';
 import { EditarCromoDialogComponent } from '../editar-cromo-dialog/editar-cromo-dialog.component' ;
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import Swal from 'sweetalert2';
 
 // Clases
 import { Cromo, Coleccion } from '../../../clases/index';
@@ -51,8 +52,7 @@ export class EditarColeccionComponent implements OnInit {
               private location: Location,
               private http: Http,
               private sesion: SesionService,
-              private peticionesAPI: PeticionesAPIService,
-              public snackBar: MatSnackBar
+              private peticionesAPI: PeticionesAPIService
   ) { }
 
   ngOnInit() {
@@ -222,13 +222,11 @@ export class EditarColeccionComponent implements OnInit {
     });
 
     // Antes de cerrar recogeremos el resultado del diálogo: Borrar (true) o cancelar (false). Si confirmamos, borraremos
-    // el punto (función BorrarPunto) y mostraremos un snackBar con el mensaje de que se ha eliminado correctamente.
+    // el punto (función BorrarPunto) y mostraremos un swal con el mensaje de que se ha eliminado correctamente.
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.BorrarCromo(cromo);
-        this.snackBar.open(cromo.Nombre + ' eliminado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Eliminado', cromo.Nombre + ' eliminado correctamente', 'success');
 
       }
     });

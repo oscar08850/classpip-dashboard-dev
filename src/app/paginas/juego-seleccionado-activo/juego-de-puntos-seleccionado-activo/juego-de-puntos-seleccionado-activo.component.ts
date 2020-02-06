@@ -6,10 +6,11 @@ import { Location } from '@angular/common';
 import { Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, EquipoJuegoDePuntos,
   TablaAlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos } from '../../../clases/index';
 
-// Imports para abrir diálogo y snackbar
-import { MatDialog, MatSnackBar } from '@angular/material';
+// Imports para abrir diálogo y swal
+import { MatDialog } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import {SesionService, PeticionesAPIService, CalculosService} from '../../../servicios/index';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -56,7 +57,6 @@ export class JuegoDePuntosSeleccionadoActivoComponent implements OnInit {
 
   constructor(
                public dialog: MatDialog,
-               public snackBar: MatSnackBar,
                private calculos: CalculosService,
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
@@ -333,9 +333,7 @@ export class JuegoDePuntosSeleccionadoActivoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.DesactivarJuego();
-        this.snackBar.open(this.juegoSeleccionado.Tipo + ' desactivado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' desactivado correctamente', 'success');
       }
     });
   }

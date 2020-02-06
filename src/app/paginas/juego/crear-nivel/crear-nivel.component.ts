@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
-import { MatSnackBar } from '@angular/material';
+import Swal from 'sweetalert2';
 
 
 // Servicios
@@ -45,8 +44,7 @@ export class CrearNivelComponent implements OnInit {
 
   constructor(
                private sesion: SesionService,
-               private peticionesAPI: PeticionesAPIService,
-               public snackBar: MatSnackBar ) { }
+               private peticionesAPI: PeticionesAPIService ) { }
 
   ngOnInit() {
 
@@ -113,9 +111,7 @@ export class CrearNivelComponent implements OnInit {
           if (nivel !== undefined) {
             console.log('Nivel añadido correctamente');
             console.log(nivel);
-            this.snackBar.open('Nivel ' + nivel.Nombre + ' creado correctamente', 'Cerrar', {
-              duration: 2000,
-            });
+            Swal.fire('Nivel creado', 'Nivel ' + nivel.Nombre + ' creado correctamente', 'success');
 
             // Hago el POST de la imagen SOLO si hay algo cargado. Ese boolean se cambiará en la función ExaminarImagen
             if (this.logoCargado === true) {

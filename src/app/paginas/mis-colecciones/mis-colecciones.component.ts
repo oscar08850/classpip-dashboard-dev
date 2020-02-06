@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ResponseContentType, Http, Response } from '@angular/http';
+import Swal from 'sweetalert2';
 
 
 // Imports para abrir diálogo confirmar eliminar equipo
-import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
+import { MatDialog, MatTabGroup } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
 // Servicios
@@ -44,7 +45,6 @@ export class MisColeccionesComponent implements OnInit {
     private profesorService: ProfesorService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,
     public sesion: SesionService,
     public peticionesAPI: PeticionesAPIService,
     private http: Http
@@ -195,14 +195,11 @@ export class MisColeccionesComponent implements OnInit {
     });
 
     // Antes de cerrar recogeremos el resultado del diálogo: Borrar (true) o cancelar (false). Si confirmamos, borraremos
-    // el punto (función BorrarPunto) y mostraremos un snackBar con el mensaje de que se ha eliminado correctamente.
+    // el punto (función BorrarPunto) y mostraremos un swal con el mensaje de que se ha eliminado correctamente.
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.BorrarColeccion(coleccion);
-        this.snackBar.open(coleccion.Nombre + ' eliminado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
-
+        Swal.fire('Eliminado', coleccion.Nombre + ' eliminado correctamente', 'success');
       }
     });
   }

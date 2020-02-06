@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
+import { MatDialog, MatTabGroup } from '@angular/material';
+import Swal from 'sweetalert2';
 // Servicios
 import {PeticionesAPIService} from '../../../servicios/index';
 import { Location } from '@angular/common';
@@ -39,8 +40,7 @@ export class AgregarAlumnoDialogComponent implements OnInit {
               public location: Location,
               private peticionesAPI: PeticionesAPIService,
               public dialogRef: MatDialogRef<AgregarAlumnoDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              public snackBar: MatSnackBar ) { }
+              @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
 
@@ -103,9 +103,7 @@ export class AgregarAlumnoDialogComponent implements OnInit {
       this.dataSourceMisAlumnos = new MatTableDataSource (this.misAlumnos);
 
     } else {
-      this.snackBar.open('Este alumno ya está en el grupo', 'Cerrar', {
-        duration: 2000,
-      });
+      Swal.fire('Cuidado', 'Este alumno ya está en el grupo', 'error');
 
     }
 
@@ -124,9 +122,7 @@ export class AgregarAlumnoDialogComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.EliminarDelGrupo(alumno);
-        this.snackBar.open('Alumnos eliminados correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Eliminado', 'Alumno eliminado correctamente', 'success');
       }
     });
   }

@@ -12,8 +12,9 @@ import { GrupoService, MatriculaService, AlumnoService } from '../../servicios/i
 
 
 // Imports para abrir diálogo agregar alumno/confirmar eliminar grupo
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import Swal from 'sweetalert2';
 
 
 
@@ -50,7 +51,6 @@ export class EditarGrupoComponent implements OnInit {
                private matriculaService: MatriculaService,
                private alumnoService: AlumnoService,
                public dialog: MatDialog,
-               public snackBar: MatSnackBar,
                private location: Location) { }
 
   ngOnInit() {
@@ -120,9 +120,7 @@ export class EditarGrupoComponent implements OnInit {
 
         // Vuelvo a enviar el grupo al componente grupo para tener la versión acutalizada y vuelvo hacia atrás
         this.grupoService.EnviarGrupoAlServicio(this.grupoSeleccionado);
-        this.snackBar.open('Grupo editado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Guardado', 'Grupo editado correctamente', 'success');
         this.goBack();
       } else {
         console.log('fallo editando');
@@ -211,9 +209,7 @@ export class EditarGrupoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.BorrarAlumnos();
-        this.snackBar.open('Alumnos eliminados correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Eliminado', 'Alumno eliminado correctamente', 'success');
       }
     });
   }

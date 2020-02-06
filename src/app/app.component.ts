@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { Profesor } from './clases';
 import { SesionService} from './servicios/sesion.service';
 import { PeticionesAPIService, CalculosService} from './servicios/index';
-import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
+import { MatDialog, MatTabGroup } from '@angular/material';
 
 
 // USARE ESTO PARA NAVEGAR A LA PAGINA DE INICIO
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-root',
@@ -22,8 +23,7 @@ export class AppComponent  {
               private route: Router,
               private peticionesAPI: PeticionesAPIService,
               private sesion: SesionService,
-              private calculos: CalculosService,
-              public snackBar: MatSnackBar) { }
+              private calculos: CalculosService) { }
 
   Autentificar() {
 
@@ -43,16 +43,12 @@ export class AppComponent  {
         } else {
           // Aqui habría que mostrar alguna alerta al usuario
           console.log('profe no existe');
-          this.snackBar.open('Usuario y/o contraseña incorrectos', 'Cerrar', {
-            duration: 5000,
-          });
+          Swal.fire('Cuidado', 'Usuario o contraseña incorrectos', 'warning');
         }
       },
       (err) => {
         console.log ('ERROR');
-        this.snackBar.open('Fallo en la conexión a la base de datos', 'Cerrar', {
-          duration: 5000,
-        });
+        Swal.fire('Error', 'Fallo en la conexion con la base de datos', 'error');
       }
     );
   }

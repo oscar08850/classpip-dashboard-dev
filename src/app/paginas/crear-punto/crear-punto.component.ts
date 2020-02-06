@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
+import Swal from 'sweetalert2';
 
 // Servicios
 import { ProfesorService, PeticionesAPIService } from '../../servicios/index';
@@ -55,8 +56,7 @@ export class CrearPuntoComponent implements OnInit {
   constructor( private peticionesAPI: PeticionesAPIService,
                private profesorService: ProfesorService,
                private route: ActivatedRoute,
-               public dialog: MatDialog,
-               public snackBar: MatSnackBar) { }
+               public dialog: MatDialog) { }
 
   ngOnInit() {
 
@@ -84,9 +84,7 @@ export class CrearPuntoComponent implements OnInit {
     .subscribe(res => {
       if (res !== undefined) {
 
-        this.snackBar.open(this.nombrePunto + ' creado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire(this.nombrePunto , 'Creado correctamente', 'success');
         // añadimos el punto a la lista que se muestra al usuario
         this.puntosAgregados.push(res);
         this.puntosAgregados = this.puntosAgregados.filter(punto => punto.Nombre !== '');
@@ -158,9 +156,7 @@ export class CrearPuntoComponent implements OnInit {
     , this.profesorId).subscribe(insignia => {
       if (insignia !== undefined) {
 
-        this.snackBar.open(this.nombreInsignia + ' creada correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire(this.nombreInsignia , 'Creada correctamente', 'success');
 
         // Hago el POST de la imagen SOLO si hay algo cargado. Ese boolean se cambiará en la función ExaminarImagen
         if (this.logoCargado === true) {

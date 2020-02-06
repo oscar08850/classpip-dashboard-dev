@@ -10,10 +10,11 @@ import { JuegoService, EquipoService, AlumnoService, JuegoDeColeccionService, Co
 
 import { SesionService, CalculosService, PeticionesAPIService } from '../../../servicios/index';
 
-// Imports para abrir diálogo y snackbar
-import { MatDialog, MatSnackBar } from '@angular/material';
+// Imports para abrir diálogo y swal
+import { MatDialog } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import { CompileShallowModuleMetadata } from '@angular/compiler';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-juego-de-coleccion-seleccionado-inactivo',
@@ -57,7 +58,6 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
               private coleccionService: ColeccionService,
               private juegoDeColeccionService: JuegoDeColeccionService,
               public dialog: MatDialog,
-              public snackBar: MatSnackBar,
               private location: Location) { }
 
   ngOnInit() {
@@ -192,9 +192,7 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.ReactivarJuego();
-        this.snackBar.open(this.juegoSeleccionado.Tipo + ' reactivado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Reactivado', this.juegoSeleccionado.Tipo + ' reactivado correctamente', 'success');
       }
     });
   }
@@ -220,9 +218,7 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.EliminarJuego();
-        this.snackBar.open(this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
       }
     });
   }

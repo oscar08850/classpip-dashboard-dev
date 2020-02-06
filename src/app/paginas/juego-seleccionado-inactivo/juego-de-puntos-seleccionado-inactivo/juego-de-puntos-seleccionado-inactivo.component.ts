@@ -13,8 +13,9 @@ import { SesionService, PeticionesAPIService, CalculosService } from '../../../s
 
 
 // Imports para abrir diálogo agregar alumno/confirmar eliminar grupo
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-juego-de-puntos-seleccionado-inactivo',
@@ -66,7 +67,6 @@ export class JuegoDePuntosSeleccionadoInactivoComponent implements OnInit {
 
   constructor( private juegoService: JuegoService,
                public dialog: MatDialog,
-               public snackBar: MatSnackBar,
                private alumnoService: AlumnoService,
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
@@ -341,9 +341,7 @@ export class JuegoDePuntosSeleccionadoInactivoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.ReactivarJuego();
-        this.snackBar.open(this.juegoSeleccionado.Tipo + ' reactivado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Reactivado', this.juegoSeleccionado.Tipo + ' reactivado correctamente', 'success');
       }
     });
   }
@@ -369,9 +367,7 @@ export class JuegoDePuntosSeleccionadoInactivoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.EliminarJuego();
-        this.snackBar.open(this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
       }
     });
   }

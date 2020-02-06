@@ -3,9 +3,10 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { ResponseContentType, Http, Response } from '@angular/http';
 
-// Imports para abrir diálogo y snackbar
-import { MatDialog, MatSnackBar, MatTabChangeEvent} from '@angular/material';
+// Imports para abrir diálogo y swal
+import { MatDialog, MatTabChangeEvent} from '@angular/material';
 import { DialogoConfirmacionComponent } from '../../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import Swal from 'sweetalert2';
 
 import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion,
  Album, AlbumEquipo, Coleccion, Cromo, AlumnoJuegoDePuntos } from '../../../../clases/index';
@@ -16,7 +17,6 @@ import { JuegoService, EquipoService, ColeccionService, JuegoDeColeccionService 
 import {SesionService, PeticionesAPIService, CalculosService} from '../../../../servicios/index';
 
 import { Location } from '@angular/common';
-import swal from 'sweetalert';
 
 @Component({
   selector: 'app-asignar-cromos',
@@ -114,8 +114,7 @@ export class AsignarCromosComponent implements OnInit {
                private juegoDeColeccionService: JuegoDeColeccionService,
                public dialog: MatDialog,
                private http: Http,
-               public location: Location,
-               public snackBar: MatSnackBar) { }
+               public location: Location) { }
 
   ngOnInit() {
     this.coleccion = this.sesion.DameColeccion();
@@ -398,7 +397,7 @@ export class AsignarCromosComponent implements OnInit {
     this.calculos.AsignarCromosAleatoriosAlumno (
             this.alumnoElegido, this.inscripcionesAlumnos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
     );
-    swal (this.alumnoElegido.Nombre + ' Enhorabuena', 'success');
+    Swal.fire(this.alumnoElegido.Nombre + ' Enhorabuena', 'Cromo asignado correctamente', 'success');
   }
 
   AsignarCromosAleatoriosEquipoAleatorio() {
@@ -408,7 +407,7 @@ export class AsignarCromosComponent implements OnInit {
     this.calculos.AsignarCromosAleatoriosEquipo (
             this.equipoElegido, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
     );
-    swal (this.equipoElegido.Nombre + ' Enhorabuena', 'success');
+    Swal.fire(this.equipoElegido.Nombre + ' Enhorabuena', 'Cromo asignado correctamente', 'success');
   }
 
   AsignarCromosAleatoriosEquipo() {
@@ -507,9 +506,7 @@ export class AsignarCromosComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.AsignarCromo();
-        this.snackBar.open('Cromo asignado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Asignado', 'Cromo asignado correctamente', 'success');
       }
     });
   }
@@ -527,9 +524,7 @@ export class AsignarCromosComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.AsignarCromosAleatorios();
-        this.snackBar.open('Cromos asignados correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Asignado', 'Cromo asignado correctamente', 'success');
       }
     });
   }
@@ -547,9 +542,6 @@ export class AsignarCromosComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.AsignarAleatoriamenteCromosAleatorios();
-        this.snackBar.open('Cromos asignados correctamente', 'Cerrar', {
-          duration: 2000,
-        });
       }
     });
   }
@@ -566,9 +558,7 @@ export class AsignarCromosComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.AsignarCromosMejoresRanking();
-        this.snackBar.open('Cromos asignados correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Asignado', 'Cromo asignado correctamente', 'success');
       }
     });
 
