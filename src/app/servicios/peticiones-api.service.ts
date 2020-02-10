@@ -502,6 +502,17 @@ export class PeticionesAPIService {
     '/enfrentamientosLiga');
   }
 
+  // NO ENTIENDO POR QUÉ NO FUNCIONA!!!!!!!!!!!!!!
+  // tslint:disable-next-line:max-line-length
+  public PonPuntosGanadorJuegoDeCompeticionLiga( ganadorJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga): Observable<AlumnoJuegoDeCompeticionLiga> {
+    return this.http.put<AlumnoJuegoDeCompeticionLiga>('http://localhost:3000/api/AlumnosJuegoDeCompeticionLiga/'
+                                                       + ganadorJuegoDeCompeticionLiga.id, ganadorJuegoDeCompeticionLiga);
+  }
+
+  public PonGanadorDelEnfrentamiento(enfrentamiento: EnfrentamientoLiga): Observable<EnfrentamientoLiga> {
+    return this.http.put<EnfrentamientoLiga>('http://localhost:3000/api/EnfrentamientosLiga/' + enfrentamiento.id, enfrentamiento);
+  }
+
   // public DameAlumnosEnfrentamiento(alumnoUnoId: number, alumnoDosId: number): Observable<Alumno[]> {
   //   const AlumnosEnfrentamiento: Alumno[] = [];
   //   AlumnosEnfrentamiento[0] = this.http.get<Alumno>(this.APIUrlAlumnos + '/' + alumnoUnoId);
@@ -520,6 +531,13 @@ export class PeticionesAPIService {
     return this.http.get<AlumnoJuegoDeCompeticionLiga[]>(this.APIUrlAlumnoJuegoDeCompeticionLiga
                                                           + '?filter[where][JuegoDeCompeticionLigaId]=' + juegoDeCompeticionLigaId);
   }
+
+  // tslint:disable-next-line:max-line-length
+  public PonPuntosAlumnoGanadorJuegoDeCompeticionLiga(alumnoGanadorJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga): Observable<AlumnoJuegoDeCompeticionLiga> {
+    return this.http.put<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionLiga + '/'
+                                                       + alumnoGanadorJuegoDeCompeticionLiga.id, alumnoGanadorJuegoDeCompeticionLiga);
+  }
+
   ///////////////////////////////////////////////////////////////////////////////////////////
   // Gestion del juego de competiciones, equipos
   public DameEquiposJuegoDeCompeticionLiga(juegoDeCompeticionLigaId: number): Observable<Equipo[]> {

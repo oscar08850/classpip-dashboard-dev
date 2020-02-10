@@ -3,7 +3,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 // Clases
 import { Juego, Jornada, TablaJornadas, EnfrentamientoLiga, TablaAlumnoJuegoDeCompeticion,
-  TablaEquipoJuegoDeCompeticion} from '../../../../clases/index';
+  TablaEquipoJuegoDeCompeticion,
+  AlumnoJuegoDeCompeticionLiga,
+  EquipoJuegoDeCompeticionLiga} from '../../../../clases/index';
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService } from '../../../../servicios/index';
@@ -21,8 +23,22 @@ import swal from 'sweetalert';
 export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
   /* Estructura necesaria para determinar que filas son las que se han seleccionado */
-  selection = new SelectionModel<any>(true, []);
-  botonAsignarDesactivado = true;
+  selectionUno = new SelectionModel<any>(true, []);
+  selectionDos = new SelectionModel<any>(true, []);
+  selectionTres = new SelectionModel<any>(true, []);
+  botonAsignarAleatorioDesactivado = true;
+  botonAsignarManualDesactivado = true;
+
+  alumnosSeleccionadosUno: EnfrentamientoLiga[] = [];
+  alumnosSeleccionadosDos: EnfrentamientoLiga[] = [];
+  alumnosSeleccionadosTres: EnfrentamientoLiga[] = [];
+  equiposSeleccionadosUno: any[] = [];
+  equiposSeleccionadosDos: any[] = [];
+  equiposSeleccionadosTres: any[] = [];
+
+  avisoMasDeUnGanadorMarcadoUnoDos = false;
+  avisoMasDeUnGanadorMarcadoUnoEmpate = false;
+  avisoMasDeUnGanadorMarcadoDosEmpate = false;
 
   // Juego De CompeticionLiga seleccionado
   juegoSeleccionado: Juego;
@@ -37,10 +53,15 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   // Alumnos y Equipos del Juego
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
   listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
+  alumnosJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga[] = [];
+  equiposJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga[] = [];
+
+  AlumnoJuegoDeCompeticionLigaId: number;
 
   dataSourceTablaGanadorIndividual;
   dataSourceTablaGanadorEquipo;
 
+  // displayedColumnsAlumno: string[] = ['select1', 'nombreJugadorUno', 'select2', 'nombreJugadorDos', 'select3', 'Empate'];
   displayedColumnsAlumno: string[] = ['select1', 'nombreJugadorUno', 'select2', 'nombreJugadorDos', 'select3', 'Empate'];
 
   constructor( public sesion: SesionService,
@@ -63,21 +84,45 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     this.listaAlumnosClasificacion = this.sesion.DameTablaAlumnoJuegoDeCompeticion();
     this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
     console.log(this.listaAlumnosClasificacion);
+    this.alumnosJuegoDeCompeticionLiga = this.sesion.DameInscripcionAlumno();
+    this.equiposJuegoDeCompeticionLiga = this.sesion.DameInscripcionEquipo();
   }
 
   /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
      o si debe estar desactivado (si no se ha seleccionado la jornada) */
-  ActualizarBoton() {
+  ActualizarBotonAleatorio() {
+    console.log('Estoy en actualizar botón');
+    // Lo primero borramos las listas de ganadores:
+    console.log('Voy a borrar las listas de ganadores');
+    this.alumnosSeleccionadosUno = [];
+    console.log(this.alumnosSeleccionadosUno);
+    this.alumnosSeleccionadosDos = [];
+    this.alumnosSeleccionadosTres = [];
+    this.equiposSeleccionadosUno = [];
+    this.equiposSeleccionadosDos = [];
+    this.equiposSeleccionadosTres = [];
+    console.log(this.jornadaId);
+    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
+    if (this.jornadaId === undefined) {
+      this.botonAsignarAleatorioDesactivado = true;
+    } else {
+      this.botonAsignarAleatorioDesactivado = false;
+      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+    }
+    console.log(this.botonAsignarAleatorioDesactivado);
+  }
+
+  ActualizarBotonManual() {
     console.log('Estoy en actualizar botón');
     console.log(this.jornadaId);
     // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
     if (this.jornadaId === undefined) {
-      this.botonAsignarDesactivado = true;
+      this.botonAsignarManualDesactivado = true;
     } else {
-      this.botonAsignarDesactivado = false;
+      this.botonAsignarManualDesactivado = false;
       this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
     }
-    console.log(this.botonAsignarDesactivado);
+    console.log(this.botonAsignarAleatorioDesactivado);
   }
 
 
@@ -136,7 +181,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       this.dataSourceTablaGanadorIndividual = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
       console.log('El dataSource es:');
       console.log(this.dataSourceTablaGanadorIndividual.data);
-      this.AsignarGanadorAlumnos();
 
     } else {
       console.log('Estoy en ConstruirTablaElegirGanador() equipos');
@@ -166,17 +210,213 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         }
       }
       this.dataSourceTablaGanadorEquipo = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
-      this.AsignarGanadorEquipos();
+    }
+  }
+
+  AsignarGanadorManualmente() {
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      console.log('La lista de alumnos ganadoresUno es:');
+      console.log(this.alumnosSeleccionadosUno);
+      console.log('La lista de alumnos ganadoresDos es:');
+      console.log(this.alumnosSeleccionadosDos);
+      console.log('La lista de alumnos ganadoresTres es:');
+      console.log(this.alumnosSeleccionadosTres);
+
+      // Segundo miramos si solo hay una selección por enfrentamiento
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.alumnosSeleccionadosUno.length; i++) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < this.alumnosSeleccionadosDos.length; j++) {
+          if (this.alumnosSeleccionadosUno[i].id === this.alumnosSeleccionadosDos[j].id) {
+            this.avisoMasDeUnGanadorMarcadoUnoDos = true;
+            console.log('Hay alguna selección con ganadorUno y ganadorDos, poner el sweatalert');
+            console.log(this.alumnosSeleccionadosDos[j]);
+            console.log(this.alumnosSeleccionadosUno[i].id);
+          }
+        }
+        // tslint:disable-next-line:prefer-for-of
+        for (let k = 0; k < this.alumnosSeleccionadosTres.length; k++) {
+          if (this.alumnosSeleccionadosUno[i].id === this.alumnosSeleccionadosTres[k].id) {
+            this.avisoMasDeUnGanadorMarcadoUnoEmpate = true;
+            console.log('Hay alguna selección con ganadorUno y Empate, poner el sweatalert');
+            console.log(this.alumnosSeleccionadosUno[i]);
+            console.log(this.alumnosSeleccionadosTres[k].id);
+          }
+        }
+      }
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.alumnosSeleccionadosDos.length; i++) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < this.alumnosSeleccionadosTres.length; j++) {
+          if (this.alumnosSeleccionadosDos[i].id === this.alumnosSeleccionadosTres[j].id) {
+            this.avisoMasDeUnGanadorMarcadoUnoEmpate = true;
+            console.log('Hay alguna selección con ganadorDos y Empate, poner sweatalert');
+            console.log(this.alumnosSeleccionadosDos[i]);
+            console.log(this.alumnosSeleccionadosTres[j].id);
+          }
+        }
+      }
+
+      // tslint:disable-next-line:max-line-length
+      console.log(this.avisoMasDeUnGanadorMarcadoUnoEmpate);
+      console.log(this.avisoMasDeUnGanadorMarcadoDosEmpate);
+      console.log(this.avisoMasDeUnGanadorMarcadoUnoDos);
+
+      if (this.avisoMasDeUnGanadorMarcadoDosEmpate === false && this.avisoMasDeUnGanadorMarcadoUnoDos === false
+          && this.avisoMasDeUnGanadorMarcadoUnoEmpate === false) {
+            console.log('Ahora tenemos que coger el alumno, sumar los puntos y asignar ganador');
+            // -------------------------------- GANADOR UNO ----------------------------------- //
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < this.alumnosSeleccionadosUno.length; i++) {
+              // tslint:disable-next-line:prefer-for-of
+              for (let j = 0; j < this.listaAlumnosClasificacion.length; j++) {
+                const nombreCompleto = this.listaAlumnosClasificacion[j].nombre + ' ' + this.listaAlumnosClasificacion[j].primerApellido
+                                     + ' ' + this.listaAlumnosClasificacion[j].segundoApellido;
+                if (nombreCompleto === this.alumnosSeleccionadosUno[i].nombreJugadorUno) {
+                  console.log('He encontrado el alumno: ' + this.alumnosSeleccionadosUno[i].nombreJugadorUno);
+                  console.log('Los puntos antes de registrar el partido ganado: ' + this.listaAlumnosClasificacion[j].puntos);
+
+                  // Miramos en la base de datos si para este enfrentamiento ya se había seleccionado un ganador.
+                  // Si ya estaba asignado que aparezca un mensaje avisando (Si da a aceptar se reasigna el ganador seleccionado, si da a
+                  // cancelar no se sobreescribe en la base de datos, se queda tal cual)
+                  // tslint:disable-next-line:prefer-for-of
+                  for (let k = 0; k < this.EnfrentamientosJornadaSeleccionada.length; k++) {
+                    if (this.EnfrentamientosJornadaSeleccionada[k].nombreJugadorUno === this.alumnosSeleccionadosUno[i].nombreJugadorUno) {
+                      console.log('Ya estoy en el el enfrentamiento que quiero');
+                      if (this.EnfrentamientosJornadaSeleccionada[k].Ganador === undefined) {
+                        // Después tengo que actualizar el ganador en EnfrentamientoLiga
+                        this.EnfrentamientosJornadaSeleccionada[k].Ganador = this.alumnosSeleccionadosUno[i].JugadorUno;
+                        console.log(this.EnfrentamientosJornadaSeleccionada[k]);
+                        const enfrentamiento = new EnfrentamientoLiga(this.EnfrentamientosJornadaSeleccionada[k].id,
+                                                                      this.EnfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                                      this.EnfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                                      this.EnfrentamientosJornadaSeleccionada[k].Ganador,
+                                                                      // tslint:disable-next-line:max-line-length
+                                                                      this.EnfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId);
+                        this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
+                        subscribe(res => console.log(res));
+
+                        // Ahora tengo que actualizar el AlumnoJuegoDeCompeticionLiga con los nuevos puntos
+                        this.listaAlumnosClasificacion[j].puntos = this.listaAlumnosClasificacion[j].puntos + 3;
+                        console.log('Los puntos actualizados después de registrar el partido ganado: '
+                                    + this.listaAlumnosClasificacion[j].puntos);
+                        console.log(this.listaAlumnosClasificacion[j]);
+                        // mirar porque listaAlumnosClasificados.id no lo coge ne alumnoGanador
+                        console.log('el id del alumno es: ' + this.listaAlumnosClasificacion[j].id);
+                        const AlumnoId = this.listaAlumnosClasificacion[j].id;
+                        // tslint:disable-next-line:prefer-for-of
+                        for (let m = 0; m < this.alumnosJuegoDeCompeticionLiga.length; m++) {
+                          if (this.alumnosJuegoDeCompeticionLiga[m].AlumnoId === AlumnoId) {
+                            this.AlumnoJuegoDeCompeticionLigaId = this.alumnosJuegoDeCompeticionLiga[m].id;
+                          }
+                        }
+                        const alumnoGanador = new AlumnoJuegoDeCompeticionLiga(AlumnoId,
+                                                                               this.juegoSeleccionado.id,
+                                                                               this.listaAlumnosClasificacion[j].puntos,
+                                                                               this.AlumnoJuegoDeCompeticionLigaId);
+                        console.log(alumnoGanador);
+                        console.log('El id del alumno es: ' + alumnoGanador.AlumnoId + ' y los puntos son: '
+                                    + alumnoGanador.PuntosTotalesAlumno);
+                        this.peticionesAPI.PonPuntosGanadorJuegoDeCompeticionLiga(alumnoGanador).
+                        subscribe(res => console.log(res));
+                      } else {
+                        console.log('Este enfrentamiento ya tiene asignado un ganador: ');
+                        console.log(this.EnfrentamientosJornadaSeleccionada[k]);
+                      }
+                    }
+                  }
+
+                }
+              }
+            }
+
+            // -------------------------------- GANADOR DOS ----------------------------------- //
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < this.alumnosSeleccionadosDos.length; i++) {
+              // tslint:disable-next-line:prefer-for-of
+              for (let j = 0; j < this.listaAlumnosClasificacion.length; j++) {
+                const nombreCompleto = this.listaAlumnosClasificacion[j].nombre + ' ' + this.listaAlumnosClasificacion[j].primerApellido
+                                     + ' ' + this.listaAlumnosClasificacion[j].segundoApellido;
+                if (nombreCompleto === this.alumnosSeleccionadosDos[i].nombreJugadorDos) {
+                  console.log('He encontrado el alumno: ' + this.alumnosSeleccionadosDos[i].nombreJugadorDos);
+                  console.log('Los puntos antes de registrar el partido ganado: ' + this.listaAlumnosClasificacion[j].puntos);
+
+                  // Miramos en la base de datos si para este enfrentamiento ya se había seleccionado un ganador.
+                  // Si ya estaba asignado que aparezca un mensaje avisando (Si da a aceptar se reasigna el ganador seleccionado, si da a
+                  // cancelar no se sobreescribe en la base de datos, se queda tal cual)
+                  // tslint:disable-next-line:prefer-for-of
+                  for (let k = 0; k < this.EnfrentamientosJornadaSeleccionada.length; k++) {
+                    if (this.EnfrentamientosJornadaSeleccionada[k].nombreJugadorDos === this.alumnosSeleccionadosDos[i].nombreJugadorDos) {
+                      console.log('Ya estoy en el el enfrentamiento que quiero');
+                      if (this.EnfrentamientosJornadaSeleccionada[k].Ganador === undefined) {
+                        // Después tengo que actualizar el ganador en EnfrentamientoLiga
+                        this.EnfrentamientosJornadaSeleccionada[k].Ganador = this.alumnosSeleccionadosDos[i].JugadorDos;
+                        console.log(this.EnfrentamientosJornadaSeleccionada[k]);
+                        const enfrentamiento = new EnfrentamientoLiga(this.EnfrentamientosJornadaSeleccionada[k].id,
+                                                                      this.EnfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                                      this.EnfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                                      this.EnfrentamientosJornadaSeleccionada[k].Ganador,
+                                                                      // tslint:disable-next-line:max-line-length
+                                                                      this.EnfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId);
+                        this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
+                        subscribe(res => console.log(res));
+
+                        // Ahora tengo que actualizar el AlumnoJuegoDeCompeticionLiga con los nuevos puntos
+                        this.listaAlumnosClasificacion[j].puntos = this.listaAlumnosClasificacion[j].puntos + 3;
+                        console.log('Los puntos actualizados después de registrar el partido ganado: '
+                                    + this.listaAlumnosClasificacion[j].puntos);
+                        console.log(this.listaAlumnosClasificacion[j]);
+                        // mirar porque listaAlumnosClasificados.id no lo coge ne alumnoGanador
+                        console.log('el id del alumno es: ' + this.listaAlumnosClasificacion[j].id);
+                        const AlumnoId = this.listaAlumnosClasificacion[j].id;
+                        // tslint:disable-next-line:prefer-for-of
+                        for (let m = 0; m < this.alumnosJuegoDeCompeticionLiga.length; m++) {
+                          if (this.alumnosJuegoDeCompeticionLiga[m].AlumnoId === AlumnoId) {
+                            this.AlumnoJuegoDeCompeticionLigaId = this.alumnosJuegoDeCompeticionLiga[m].id;
+                          }
+                        }
+                        const alumnoGanador = new AlumnoJuegoDeCompeticionLiga(AlumnoId,
+                                                                               this.juegoSeleccionado.id,
+                                                                               this.listaAlumnosClasificacion[j].puntos,
+                                                                               this.AlumnoJuegoDeCompeticionLigaId);
+                        console.log(alumnoGanador);
+                        console.log('El id del alumno es: ' + alumnoGanador.AlumnoId + ' y los puntos son: '
+                                    + alumnoGanador.PuntosTotalesAlumno);
+                        this.peticionesAPI.PonPuntosGanadorJuegoDeCompeticionLiga(alumnoGanador).
+                        subscribe(res => console.log(res));
+                      } else {
+                        console.log('Este enfrentamiento ya tiene asignado un ganador: ');
+                        console.log(this.EnfrentamientosJornadaSeleccionada[k]);
+                      }
+                    }
+                  }
+
+                }
+              }
+            }
+      }
+
+
+    } else {
+      console.log('La lista de equipos ganadoresUno es:');
+      console.log(this.equiposSeleccionadosUno);
+      console.log('La lista de equipos ganadoresDos es:');
+      console.log(this.equiposSeleccionadosDos);
+      console.log('La lista de equipos ganadoresTres es:');
+      console.log(this.equiposSeleccionadosTres);
     }
   }
 
   AsignarGanadorAlumnos() {
     console.log('Estoy en AsignarGanadorAlumnos()');
+    console.log(this.dataSourceTablaGanadorIndividual.data);
     // tslint:disable-next-line:prefer-for-of
     for ( let i = 0; i < this.dataSourceTablaGanadorIndividual.data.length; i++) {
       console.log('hola');
-      if (this.selection.isSelected(this.dataSourceTablaGanadorIndividual.data[i])) {
+      if (this.selectionUno.isSelected(this.dataSourceTablaGanadorIndividual.data[i])) {
         console.log(this.dataSourceTablaGanadorIndividual.data[i]);
+        console.log('Se ha seleccionado el jugadorUno como ganador');
       }
     }
   }
@@ -185,13 +425,59 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     console.log('Estoy en AsignarGanadorEquipos()');
   }
 
+  AddToListGanadorUno() {
+    // tslint:disable-next-line:prefer-for-of
+    for ( let i = 0; i < this.dataSourceTablaGanadorIndividual.data.length; i++) {
+      if (this.selectionUno.isSelected(this.dataSourceTablaGanadorIndividual.data[i]))  {
+        const indexOfUnselected = this.alumnosSeleccionadosUno.indexOf(this.dataSourceTablaGanadorIndividual.data[i]);
+        if (indexOfUnselected === -1) {
+          this.alumnosSeleccionadosUno.push(this.dataSourceTablaGanadorIndividual.data[i]);
+        } else {
+          this.alumnosSeleccionadosUno.splice(indexOfUnselected, 1);
+        }
+        this.selectionUno.deselect(this.dataSourceTablaGanadorIndividual.data[i]);
+      }
+    }
+  }
+
+  AddToListGanadorDos() {
+    // tslint:disable-next-line:prefer-for-of
+    for ( let i = 0; i < this.dataSourceTablaGanadorIndividual.data.length; i++) {
+      if (this.selectionDos.isSelected(this.dataSourceTablaGanadorIndividual.data[i]))  {
+        const indexOfUnselected = this.alumnosSeleccionadosDos.indexOf(this.dataSourceTablaGanadorIndividual.data[i]);
+        if (indexOfUnselected === -1) {
+          this.alumnosSeleccionadosDos.push(this.dataSourceTablaGanadorIndividual.data[i]);
+        } else {
+          this.alumnosSeleccionadosDos.splice(indexOfUnselected, 1);
+        }
+        this.selectionDos.deselect(this.dataSourceTablaGanadorIndividual.data[i]);
+      }
+    }
+  }
+
+  AddToListGanadorTres() {
+    // tslint:disable-next-line:prefer-for-of
+    for ( let i = 0; i < this.dataSourceTablaGanadorIndividual.data.length; i++) {
+      if (this.selectionTres.isSelected(this.dataSourceTablaGanadorIndividual.data[i]))  {
+        const indexOfUnselected = this.alumnosSeleccionadosTres.indexOf(this.dataSourceTablaGanadorIndividual.data[i]);
+        if (indexOfUnselected === -1) {
+          this.alumnosSeleccionadosTres.push(this.dataSourceTablaGanadorIndividual.data[i]);
+        } else {
+          this.alumnosSeleccionadosTres.splice(indexOfUnselected, 1);
+        }
+        this.selectionTres.deselect(this.dataSourceTablaGanadorIndividual.data[i]);
+      }
+    }
+  }
+
 
   /* Para averiguar si todas las filas están seleccionadas */
-  IsAllSelected() {
-    const numSelected = this.selection.selected.length;
-    console.log('numSelected = ' + numSelected);
+  IsAllSelectedUno() {
+    // console.log('Estoy en IsAllSelectedUno()');
+    const numSelected = this.selectionUno.selected.length;
     const numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    console.log('numRows=' + numRows);
+    // console.log('this.selectionUno es:');
+    // console.log(this.selectionUno);
     return numSelected === numRows;
   }
 
@@ -199,14 +485,60 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
     * desactivado, en cuyo caso se activan todos */
 
-  MasterToggle() {
-    if (this.IsAllSelected()) {
-      this.selection.clear(); // Desactivamos todos
+  MasterToggleUno() {
+    if (this.IsAllSelectedUno()) {
+      this.selectionUno.clear(); // Desactivamos todos
     } else {
       // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selection.select(row));
+      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionUno.select(row));
     }
   }
+
+  IsAllSelectedDos() {
+    // console.log('Estoy en IsAllSelectedDos()');
+    const numSelected = this.selectionDos.selected.length;
+    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    // console.log('this.selectionDos es:');
+    // console.log(this.selectionDos);
+    return numSelected === numRows;
+  }
+
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
+
+  MasterToggleDos() {
+    if (this.IsAllSelectedDos()) {
+      this.selectionDos.clear(); // Desactivamos todos
+    } else {
+      // activamos todos
+      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionDos.select(row));
+    }
+  }
+
+  /* Para averiguar si todas las filas están seleccionadas */
+  IsAllSelectedTres() {
+    // console.log('Estoy en IsAllSelectedTres()');
+    const numSelected = this.selectionTres.selected.length;
+    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    // console.log('this.selectionTres es:');
+    // console.log(this.selectionTres);
+    return numSelected === numRows;
+  }
+
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
+
+  MasterToggleTres() {
+    if (this.IsAllSelectedTres()) {
+      this.selectionTres.clear(); // Desactivamos todos
+    } else {
+      // activamos todos
+      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionTres.select(row));
+    }
+  }
+
 
   goBack() {
     this.location.back();

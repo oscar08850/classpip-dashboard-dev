@@ -331,5 +331,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
                                   this.JornadasCompeticion);
     this.sesion.TomaTablaAlumnoJuegoDeCompeticion(this.rankingAlumnoJuegoDeCompeticion);
     this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposJuegoDeCompeticion);
+    this.sesion.TomaInscripcionAlumno(this.listaAlumnosOrdenadaPorPuntos);
+    this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
   }
 }
