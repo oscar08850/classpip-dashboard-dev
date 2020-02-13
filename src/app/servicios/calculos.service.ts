@@ -5,7 +5,8 @@ import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHis
          AlumnoJuegoDeColeccion, Album, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
          TablaEquipoJuegoDeCompeticion, Jornada, EquipoJuegoDeCompeticionLiga, EnfrentamientoLiga,
          InformacionPartidosLiga,
-         AlumnoJuegoDeCompeticionLiga} from '../clases/index';
+         AlumnoJuegoDeCompeticionLiga,
+         JuegoDeCompeticion} from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -175,6 +176,8 @@ export class CalculosService {
       return (rankingJuegoDePuntos);
 
   }
+
+               //////////////////////////        JUEGO DE COMPETICIÓN      ////////////////////////
 
   public PrepararTablaRankingIndividualCompeticion(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionLiga[],
                                                    alumnosDelJuego: Alumno[], jornadasDelJuego: Jornada[],
@@ -462,60 +465,140 @@ export class CalculosService {
     return partidosPerdidos;
   }
 
-  // public ObtenerInformaciónPartidos(listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[], jornadasDelJuego: Jornada[],
-  //                                   enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>): InformacionPartidosLiga[] {
-  //   console.log('Estoy en ObtenerInformacionPartidos()');
-  //   this.informacionPartidos = [];
-  //   // tslint:disable-next-line:prefer-for-of
-  //   for (let i = 0; i < listaEquiposOrdenadaPorPuntos.length; i++) {
-  //     const informacionPartido = new InformacionPartidosLiga(0, 0, 0, 0, 0);
-  //     const participantesInspeccionados: number[] = [];
-  //     for (let j = 0; j < jornadasDelJuego.length; j++) {
-  //       // tslint:disable-next-line:prefer-for-of
-  //       for (let m = 0; m < enfrentamientosDelJuego[j].length; m++) {
-  //         const participanteInspeccionadoUno = participantesInspeccionados.indexOf(enfrentamientosDelJuego[j][m].JugadorUno);
-  //         const participanteInspeccionadoDos = participantesInspeccionados.indexOf(enfrentamientosDelJuego[j][m].JugadorDos);
-  //         if (listaEquiposOrdenadaPorPuntos[i].EquipoId === enfrentamientosDelJuego[j][m].JugadorUno &&
-  //             participanteInspeccionadoUno === -1) {
-  //           console.log('El participante del que vamos a calcular los partidos totales es: ' + enfrentamientosDelJuego[j][m].JugadorUno);
-  //           informacionPartido.partidosTotales = this.CalcularPartidosTotales(enfrentamientosDelJuego[j][m].JugadorUno,
-  //                                                                             jornadasDelJuego, enfrentamientosDelJuego);
-  //           console.log('Los partidosTotales de este son: ' + informacionPartido.partidosTotales);
-  //           this.informacionPartidos.push(informacionPartido);
-  //           participantesInspeccionados.push(enfrentamientosDelJuego[j][m].JugadorUno);
-  //           console.log(listaEquiposOrdenadaPorPuntos);
-  //           console.log(informacionPartido);
-  //         } else if (listaEquiposOrdenadaPorPuntos[i].EquipoId === enfrentamientosDelJuego[j][m].JugadorDos &&
-  //                    participanteInspeccionadoDos === -1) {
-  //           console.log('El participante del que vamos a calcular los partidos totales es: ' + enfrentamientosDelJuego[j][m].JugadorUno);
-  //           informacionPartido.partidosTotales = this.CalcularPartidosTotales(enfrentamientosDelJuego[j][m].JugadorDos,
-  //                                                                             jornadasDelJuego, enfrentamientosDelJuego);
-  //           participantesInspeccionados.push(enfrentamientosDelJuego[j][m].JugadorDos);
-  //           console.log(listaEquiposOrdenadaPorPuntos);
-  //           console.log(informacionPartido);
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return this.informacionPartidos;
-  // }
+  public AsignarPuntosGanadorEquipos(seleccionesColumna: EnfrentamientoLiga[], listaParticipantesJuego: TablaEquipoJuegoDeCompeticion[],
+                                     juegoSeleccionado: Juego, equiposJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga[],
+                                     ganador: number) {
+    let EquipoId: number;
+    let EquipoJuegoDeCompeticionLigaId: number;
+    const listaGanadores: EquipoJuegoDeCompeticionLiga[] = [];
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < seleccionesColumna.length; i++) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let j = 0; j < listaParticipantesJuego.length; j++) {
+        // Ganador en la primera columna
+        if (listaParticipantesJuego[j].nombre === seleccionesColumna[i].nombreJugadorUno && ganador === 1) {
+          console.log('He encontrado el equipo ganador: ' + seleccionesColumna[i].nombreJugadorUno);
+          console.log('Los puntos antes de registrar el partido ganado es: ' + listaParticipantesJuego[j].puntos);
+          EquipoId = seleccionesColumna[i].JugadorUno;
+          // tslint:disable-next-line:prefer-for-of
+          for (let k = 0; k < equiposJuegoDeCompeticionLiga.length; k++) {
+            if (listaParticipantesJuego[j].id === equiposJuegoDeCompeticionLiga[k].EquipoId) {
+              EquipoJuegoDeCompeticionLigaId = equiposJuegoDeCompeticionLiga[k].id;
+            }
+          }
+          listaParticipantesJuego[j]. puntos = listaParticipantesJuego[j]. puntos + 3;
+          console.log('Los puntos después de registrar el partido ganado es: ' + listaParticipantesJuego[j].puntos);
 
-  // public CalcularPartidosTotales(participante: number, jornadasDelJuego: Jornada[],
-  //                                enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>): number {
-  //   console.log('Estamos en CalcularPartidosTotales() del participante: ' + participante);
-  //   let numPartidosTotales = 0;
-  //   for (let i = 0; i < jornadasDelJuego.length; i++) {
-  //     // tslint:disable-next-line:prefer-for-of
-  //     for (let j = 0; j < enfrentamientosDelJuego[i].length; j++) {
-  //       if (participante === enfrentamientosDelJuego[i][j].JugadorUno ||
-  //           participante === enfrentamientosDelJuego[i][j].JugadorDos) {
-  //             numPartidosTotales ++;
-  //       }
-  //     }
-  //   }
-  //   console.log('Los partidosTotales son: ' + numPartidosTotales);
-  //   return numPartidosTotales;
-  // }
+          const equipoGanador = new EquipoJuegoDeCompeticionLiga(EquipoId,
+                                                               juegoSeleccionado.id,
+                                                               listaParticipantesJuego[j].puntos,
+                                                               EquipoJuegoDeCompeticionLigaId);
+          listaGanadores.push(equipoGanador);
+
+          // Ganador en la primera columna
+        } else if (listaParticipantesJuego[j].nombre === seleccionesColumna[i].nombreJugadorDos && ganador === 2) {
+          console.log ('He encontrado el equipo ganador: ' + seleccionesColumna[i].nombreJugadorDos);
+          console.log('Los puntos antes de registrar el partido ganado son: ' + listaParticipantesJuego[j].puntos);
+          EquipoId = seleccionesColumna[i].JugadorDos;
+          // tslint:disable-next-line:prefer-for-of
+          for (let k = 0; k < equiposJuegoDeCompeticionLiga.length; k++) {
+            if (listaParticipantesJuego[j].id === equiposJuegoDeCompeticionLiga[k].EquipoId) {
+              EquipoJuegoDeCompeticionLigaId = equiposJuegoDeCompeticionLiga[k].id;
+            }
+          }
+          listaParticipantesJuego[j]. puntos = listaParticipantesJuego[j]. puntos + 3;
+          console.log('Los puntos después de registrar el partido ganado es: ' + listaParticipantesJuego[j].puntos);
+
+          const equipoGanador = new EquipoJuegoDeCompeticionLiga(EquipoId,
+                                                                 juegoSeleccionado.id,
+                                                                 listaParticipantesJuego[j].puntos,
+                                                                 EquipoJuegoDeCompeticionLigaId);
+          listaGanadores.push(equipoGanador);
+        }
+      }
+    }
+  }
+
+  public AsignarGanadorYPuntos(seleccionesColumna: EnfrentamientoLiga[], listaParticipantesJuego: TablaAlumnoJuegoDeCompeticion[],
+                               enfrentamientosJornadaSeleccionada: EnfrentamientoLiga[], juegoSeleccionado: Juego,
+                               alumnosJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga[], ganador: number) {
+    let AlumnoJuegoDeCompeticionLigaId: number;
+    const listaGanadores: AlumnoJuegoDeCompeticionLiga[] = [];
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < seleccionesColumna.length; i++) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let j = 0; j < listaParticipantesJuego.length; j++) {
+        const nombreCompleto = listaParticipantesJuego[j].nombre + ' ' + listaParticipantesJuego[j].primerApellido
+                             + ' ' + listaParticipantesJuego[j].segundoApellido;
+        if (nombreCompleto === seleccionesColumna[i].nombreJugadorUno) {
+          console.log('He encontrado el alumno: ' + seleccionesColumna[i].nombreJugadorUno);
+          console.log('Los puntos antes de registrar el partido ganado: ' + listaParticipantesJuego[j].puntos);
+
+          // Miramos en la base de datos si para este enfrentamiento ya se había seleccionado un ganador.
+          // Si ya estaba asignado que aparezca un mensaje avisando (Si da a aceptar se reasigna el ganador seleccionado, si da a
+          // cancelar no se sobreescribe en la base de datos, se queda tal cual)
+          // tslint:disable-next-line:prefer-for-of
+          for (let k = 0; k < enfrentamientosJornadaSeleccionada.length; k++) {
+            if (enfrentamientosJornadaSeleccionada[k].nombreJugadorUno === seleccionesColumna[i].nombreJugadorUno &&
+                enfrentamientosJornadaSeleccionada[k].nombreJugadorDos === seleccionesColumna[i].nombreJugadorDos) {
+              console.log('Ya estoy en el el enfrentamiento que quiero');
+              if (enfrentamientosJornadaSeleccionada[k].Ganador === undefined) {
+                // Después tengo que actualizar el ganador en EnfrentamientoLiga
+                if (ganador === 1) {
+                  enfrentamientosJornadaSeleccionada[k].Ganador = seleccionesColumna[i].JugadorUno;
+                } else if (ganador === 2) {
+                  enfrentamientosJornadaSeleccionada[k].Ganador = seleccionesColumna[i].JugadorDos;
+                } else if (ganador === 0) {
+                  enfrentamientosJornadaSeleccionada[k].Ganador = 0;
+                }
+                console.log(enfrentamientosJornadaSeleccionada[k]);
+                const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                              enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                              enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                              // tslint:disable-next-line:max-line-length
+                                                              enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                              enfrentamientosJornadaSeleccionada[k].id);
+                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
+                subscribe(res => console.log(res));
+
+                // Ahora tengo que actualizar el AlumnoJuegoDeCompeticionLiga con los nuevos puntos
+                listaParticipantesJuego[j].puntos = listaParticipantesJuego[j].puntos + 3;
+                console.log('Los puntos actualizados después de registrar el partido ganado: '
+                            + listaParticipantesJuego[j].puntos);
+                console.log(listaParticipantesJuego[j]);
+                // mirar porque listaAlumnosClasificados.id no lo coge ne alumnoGanador
+                console.log('el id del alumno es: ' + listaParticipantesJuego[j].id);
+                const AlumnoId = listaParticipantesJuego[j].id;
+                // tslint:disable-next-line:prefer-for-of
+                for (let m = 0; m < alumnosJuegoDeCompeticionLiga.length; m++) {
+                  if (alumnosJuegoDeCompeticionLiga[m].AlumnoId === AlumnoId) {
+                    AlumnoJuegoDeCompeticionLigaId = alumnosJuegoDeCompeticionLiga[m].id;
+                  }
+                }
+                const alumnoGanador = new AlumnoJuegoDeCompeticionLiga(AlumnoId,
+                                                                       juegoSeleccionado.id,
+                                                                       listaParticipantesJuego[j].puntos,
+                                                                       AlumnoJuegoDeCompeticionLigaId);
+                console.log(alumnoGanador);
+                listaGanadores.push(alumnoGanador);
+                console.log('El id del alumno es: ' + alumnoGanador.AlumnoId + ' y los puntos son: '
+                            + alumnoGanador.PuntosTotalesAlumno);
+                this.peticionesAPI.PonPuntosGanadorJuegoDeCompeticionLiga(alumnoGanador).
+                subscribe(res => console.log(res));
+              } else {
+                console.log('Este enfrentamiento ya tiene asignado un ganador: ');
+                console.log(enfrentamientosJornadaSeleccionada[k]);
+              }
+            }
+          }
+
+        }
+      }
+    }
+    console.log('La lista de alumnos ganadores es: ');
+    console.log(listaGanadores);
+  }
+  ///////////////////////////////////////////////////////////////////////////////////
 
   public DameRankingPuntoSeleccionadoEquipos(
     listaEquiposOrdenadaPorPuntos: any,

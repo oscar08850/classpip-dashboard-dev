@@ -119,6 +119,93 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumno;"></tr>
 
       </table>
+
+      <table style="width: 80%" align="center" *ngIf="juegoSeleccionado.Modo != 'Individual' && jornadaId != undefined" mat-table [dataSource]="dataSourceTablaGanadorEquipo" class="mat-elevation-z8">
+
+        <!--    La primera columna será un checkbox -->
+        <ng-container matColumnDef="select1">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+        <!-- Si cambia el checkbox header (change) hay que actualizar los seleccionados y el
+              estado del botón
+              Sl estado del checkbox header será [checked] si todas las filas están
+              seleccionadas
+              y será [indeterminate] si hay alguna seleccionada pero no todas
+              La función selection.hasValue() esta predefinida.
+         -->
+            <mat-checkbox
+                    (change)="$event ? MasterToggleUno() : null;"
+                    [checked]="selectionUno.hasValue() && IsAllSelectedUno()"
+                    [indeterminate]="selectionUno.hasValue() && !IsAllSelectedUno()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+                  (click)="$event.stopPropagation()"
+                  (change)="$event ? selectionUno.toggle(row) : null; AddToListGanadorUno()"
+                  [checked]="selectionUno.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+
+        <!-- Nombre Jugador 1 Column -->
+        <ng-container matColumnDef="nombreJugadorUno">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Equipo 1 </th>
+          <td mat-cell *matCellDef="let enfrentamiento"> {{enfrentamiento.nombreJugadorUno}} </td>
+        </ng-container>
+
+        <!--    La primera columna será un checkbox   -->
+        <ng-container matColumnDef="select2">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+            <mat-checkbox
+                    (change)="$event ? MasterToggleDos() : null;"
+                    [checked]="selectionDos.hasValue() && IsAllSelectedDos()"
+                    [indeterminate]="selectionDos.hasValue() && !IsAllSelectedDos()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+                  (click)="$event.stopPropagation()"
+                  (change)="$event ? selectionDos.toggle(row) : null; AddToListGanadorDos()"
+                  [checked]="selectionDos.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Nombre Jugador 2 Column -->
+        <ng-container matColumnDef="nombreJugadorDos">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Equipo 2 </th>
+          <td mat-cell *matCellDef="let enfrentamiento"> {{enfrentamiento.nombreJugadorDos}} </td>
+        </ng-container>
+
+        <!--    La primera columna será un checkbox -->
+        <ng-container matColumnDef="select3">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+            <mat-checkbox
+                    (change)="$event ? MasterToggleTres() : null;"
+                    [checked]="selectionTres.hasValue() && IsAllSelectedTres()"
+                    [indeterminate]="selectionTres.hasValue() && !IsAllSelectedTres()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+                  (click)="$event.stopPropagation()"
+                  (change)="$event ? selectionTres.toggle(row) : null;  AddToListGanadorTres()"
+                  [checked]="selectionTres.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Nombre Empate Column -->
+        <ng-container matColumnDef="Empate">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Empate </th>
+          <td mat-cell *matCellDef="let enfrentamiento"> Empate </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumno"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumno;"></tr>
+
+      </table>
     </form>
     <br>
     <button type="button" class="btn Back" (click)="goBack()">Volver </button>

@@ -8,8 +8,8 @@ export class EnfrentamientoLiga {
   nombreGanador: string;
   id: number;
 
-  constructor(id?: number, JugadorUno?: number, JugadorDos?: number, Ganador?: number, JornadaDeCompeticionLigaId?: number,
-              nombreJugadorUno?: string, nombreJugadorDos?: string) {
+  constructor(JugadorUno?: number, JugadorDos?: number, Ganador?: number, JornadaDeCompeticionLigaId?: number,
+              id?: number, nombreJugadorUno?: string, nombreJugadorDos?: string) {
 
     this.JugadorUno = JugadorUno;
     this.JugadorDos = JugadorDos;

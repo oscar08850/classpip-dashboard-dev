@@ -134,22 +134,24 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
             } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
                 this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
             } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-          }
+                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+            }
           } else if (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos === this.listaEquiposClasificacion[j].id) {
               this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = this.listaEquiposClasificacion[j].nombre;
               if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaEquiposClasificacion[j].id) {
                 this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
               } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
               } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-            }
+                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+              }
           }
         }
       }
       console.log(this.EnfrentamientosJornadaSeleccionada);
       this.dataSourceEnfrentamientoEquipo = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
+      console.log('La tabla de enfrentamientos por equipos queda: ');
+      console.log(this.dataSourceEnfrentamientoEquipo.data);
 
     }
   }
