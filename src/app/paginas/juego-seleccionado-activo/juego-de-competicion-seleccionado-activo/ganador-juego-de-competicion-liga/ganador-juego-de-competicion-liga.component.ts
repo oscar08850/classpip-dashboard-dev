@@ -265,6 +265,9 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       if (this.avisoMasDeUnGanadorMarcadoDosEmpate === false && this.avisoMasDeUnGanadorMarcadoUnoDos === false
           && this.avisoMasDeUnGanadorMarcadoUnoEmpate === false) {
             console.log('Ahora tenemos que coger el alumno, sumar los puntos y asignar ganador');
+            console.log(this.enfrentamientosSeleccionadosColumnaUno);
+            console.log(this.enfrentamientosSeleccionadosColumnaDos);
+            console.log(this.enfrentamientosSeleccionadosColumnaTres);
             // -------------------------------- GANADOR UNO ----------------------------------- //
             // tslint:disable-next-line:prefer-for-of
             for (let i = 0; i < this.enfrentamientosSeleccionadosColumnaUno.length; i++) {
@@ -474,9 +477,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
               }
             }
       }
-
-
-    } else {
+    }  else {
       console.log('La lista de equipos ganadoresUno es:');
       console.log(this.enfrentamientosSeleccionadosColumnaUno);
       console.log('La lista de equipos ganadoresDos es:');
@@ -584,7 +585,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     if (this.juegoSeleccionado.Modo === 'Individual') {
       // tslint:disable-next-line:prefer-for-of
       for ( let i = 0; i < this.dataSourceTablaGanadorIndividual.data.length; i++) {
-        if (this.selectionDos.isSelected(this.dataSourceTablaGanadorIndividual.data[i]))  {
+        if (this.selectionUno.isSelected(this.dataSourceTablaGanadorIndividual.data[i]))  {
           const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaUno.indexOf(this.dataSourceTablaGanadorIndividual.data[i]);
           if (indexOfUnselected === -1) {
             this.enfrentamientosSeleccionadosColumnaUno.push(this.dataSourceTablaGanadorIndividual.data[i]);
