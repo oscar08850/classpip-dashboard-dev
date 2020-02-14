@@ -251,6 +251,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       this.AsignarPuntosAlumnosGanadorAleatoriamente(listaEnfrentamientosActualizados, this.alumnosJuegoDeCompeticionLiga);
     } else {
       console.log('Este Juego es por Equipos');
+      this.AsignarPuntosEquiposGanadorAleatoriamente(listaEnfrentamientosActualizados, this.equiposJuegoDeCompeticionLiga);
     }
   }
 
@@ -277,6 +278,34 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
           }
         }
         this.peticionesAPI.PonPuntosAlumnoGanadorJuegoDeCompeticionLiga(alumnosJuegoDeCompeticionLiga[j])
+        .subscribe();
+      }
+    }
+  }
+
+  AsignarPuntosEquiposGanadorAleatoriamente(listaEnfrentamientosActualizados: EnfrentamientoLiga[],
+                                            equiposJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga[]) {
+    console.log('Estoy en AsignarGanadorAlumnosAleatoriamente()');
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < listaEnfrentamientosActualizados.length; i++) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let j = 0; j < equiposJuegoDeCompeticionLiga.length; j++) {
+        if (listaEnfrentamientosActualizados[i].Ganador === equiposJuegoDeCompeticionLiga[j].EquipoId) {
+          equiposJuegoDeCompeticionLiga[j].PuntosTotalesEquipo = equiposJuegoDeCompeticionLiga[j].PuntosTotalesEquipo + 3;
+          console.log('El alumno ganador actualizado queda: ');
+          console.log(equiposJuegoDeCompeticionLiga[j]);
+        } else if (listaEnfrentamientosActualizados[i].Ganador === 0) {
+          if (listaEnfrentamientosActualizados[i].JugadorUno === equiposJuegoDeCompeticionLiga[j].EquipoId) {
+            console.log('Ya tengo el JugadorUno del enfrentamiento ' + listaEnfrentamientosActualizados[i].id
+                         + ', voy a sumarle un punto y actualizar la BD');
+            equiposJuegoDeCompeticionLiga[j].PuntosTotalesEquipo = equiposJuegoDeCompeticionLiga[j].PuntosTotalesEquipo + 1;
+          } else if (listaEnfrentamientosActualizados[i].JugadorDos === equiposJuegoDeCompeticionLiga[j].EquipoId) {
+            console.log('Ya tengo el JugadorDos del enfrentamiento ' + listaEnfrentamientosActualizados[i].id
+                          + ', voy a sumarle un punto y actualizar la BD');
+            equiposJuegoDeCompeticionLiga[j].PuntosTotalesEquipo = equiposJuegoDeCompeticionLiga[j].PuntosTotalesEquipo + 1;
+          }
+        }
+        this.peticionesAPI.PonPuntosEquipoGanadorJuegoDeCompeticionLiga(equiposJuegoDeCompeticionLiga[j])
         .subscribe();
       }
     }
