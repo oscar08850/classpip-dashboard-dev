@@ -482,6 +482,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
             }
       }
     }  else {
+      // -------- HACER UNA FUNCIÓN PARA REVISAR SI HAY MÁS DE UNA SELECCIÓN POR ENFRENTAMIETNO -------- //
       console.log('La lista de equipos ganadoresUno es:');
       console.log(this.enfrentamientosSeleccionadosColumnaUno);
       console.log('La lista de equipos ganadoresDos es:');
@@ -533,6 +534,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       console.log('avisoMasDeUnGanadorMarcadoUnoEmpate: ' + this.avisoMasDeUnGanadorMarcadoUnoEmpate);
       console.log('avisoMasDeUnGanadorMarcadoDosEmpate: ' + this.avisoMasDeUnGanadorMarcadoDosEmpate);
       console.log('avisoMasDeUnGanadorMarcadoUnoDos: ' + this.avisoMasDeUnGanadorMarcadoUnoDos);
+      // ----------------------------------------------------------------------------------------------------//
 
       if (this.avisoMasDeUnGanadorMarcadoDosEmpate === false && this.avisoMasDeUnGanadorMarcadoUnoDos === false
         && this.avisoMasDeUnGanadorMarcadoUnoEmpate === false) {

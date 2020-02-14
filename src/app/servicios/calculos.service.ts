@@ -476,54 +476,59 @@ export class CalculosService {
       // tslint:disable-next-line:prefer-for-of
       for (let j = 0; j < listaParticipantesJuego.length; j++) {
         // Ganador en la COLUMNA UNO
-        if (listaParticipantesJuego[j].nombre === seleccionesColumna[i].nombreJugadorUno && ganador === 1) {
-          console.log('He encontrado el equipo ganador: ' + seleccionesColumna[i].nombreJugadorUno);
-          console.log('Los puntos antes de registrar el partido ganado es: ' + listaParticipantesJuego[j].puntos);
-          EquipoId = seleccionesColumna[i].JugadorUno;
-          // tslint:disable-next-line:prefer-for-of
-          for (let k = 0; k < equiposJuegoDeCompeticionLiga.length; k++) {
-            if (listaParticipantesJuego[j].id === equiposJuegoDeCompeticionLiga[k].EquipoId) {
-              EquipoJuegoDeCompeticionLigaId = equiposJuegoDeCompeticionLiga[k].id;
+        if (seleccionesColumna[i].Ganador === undefined) {
+          if (listaParticipantesJuego[j].nombre === seleccionesColumna[i].nombreJugadorUno && ganador === 1) {
+            console.log('He encontrado el equipo ganador: ' + seleccionesColumna[i].nombreJugadorUno);
+            console.log('Los puntos antes de registrar el partido ganado es: ' + listaParticipantesJuego[j].puntos);
+            EquipoId = seleccionesColumna[i].JugadorUno;
+            // tslint:disable-next-line:prefer-for-of
+            for (let k = 0; k < equiposJuegoDeCompeticionLiga.length; k++) {
+              if (listaParticipantesJuego[j].id === equiposJuegoDeCompeticionLiga[k].EquipoId) {
+                EquipoJuegoDeCompeticionLigaId = equiposJuegoDeCompeticionLiga[k].id;
+              }
             }
-          }
-          listaParticipantesJuego[j]. puntos = listaParticipantesJuego[j]. puntos + 3;
-          console.log('Los puntos después de registrar el partido ganado es: ' + listaParticipantesJuego[j].puntos);
+            listaParticipantesJuego[j]. puntos = listaParticipantesJuego[j]. puntos + 3;
+            console.log('Los puntos después de registrar el partido ganado es: ' + listaParticipantesJuego[j].puntos);
 
-          const equipoGanador = new EquipoJuegoDeCompeticionLiga(EquipoId,
-                                                               juegoSeleccionado.id,
-                                                               listaParticipantesJuego[j].puntos,
-                                                               EquipoJuegoDeCompeticionLigaId);
-          listaGanadores.push(equipoGanador);
-          console.log('La lista de ganadores de la columna  uno es: ');
-          console.log(listaGanadores);
-          this.peticionesAPI.PonPuntosEquipoGanadorJuegoDeCompeticionLiga(equipoGanador).
-          subscribe(res => console.log(res));
-          this.AsignarGanadorEquipos(listaGanadores, seleccionesColumna);
-
-          // Ganador en la COLUMNA DOS
-        } else if (listaParticipantesJuego[j].nombre === seleccionesColumna[i].nombreJugadorDos && ganador === 2) {
-          console.log ('He encontrado el equipo ganador: ' + seleccionesColumna[i].nombreJugadorDos);
-          console.log('Los puntos antes de registrar el partido ganado son: ' + listaParticipantesJuego[j].puntos);
-          EquipoId = seleccionesColumna[i].JugadorDos;
-          // tslint:disable-next-line:prefer-for-of
-          for (let k = 0; k < equiposJuegoDeCompeticionLiga.length; k++) {
-            if (listaParticipantesJuego[j].id === equiposJuegoDeCompeticionLiga[k].EquipoId) {
-              EquipoJuegoDeCompeticionLigaId = equiposJuegoDeCompeticionLiga[k].id;
-            }
-          }
-          listaParticipantesJuego[j]. puntos = listaParticipantesJuego[j]. puntos + 3;
-          console.log('Los puntos después de registrar el partido ganado es: ' + listaParticipantesJuego[j].puntos);
-
-          const equipoGanador = new EquipoJuegoDeCompeticionLiga(EquipoId,
+            const equipoGanador = new EquipoJuegoDeCompeticionLiga(EquipoId,
                                                                  juegoSeleccionado.id,
                                                                  listaParticipantesJuego[j].puntos,
                                                                  EquipoJuegoDeCompeticionLigaId);
-          listaGanadores.push(equipoGanador);
-          console.log('La lista de ganadores de la columna dos es: ');
-          console.log(listaGanadores);
-          this.peticionesAPI.PonPuntosEquipoGanadorJuegoDeCompeticionLiga(equipoGanador).
-          subscribe(res => console.log(res));
-          this.AsignarGanadorEquipos(listaGanadores, seleccionesColumna);
+            listaGanadores.push(equipoGanador);
+            console.log('La lista de ganadores de la columna  uno es: ');
+            console.log(listaGanadores);
+            this.peticionesAPI.PonPuntosEquipoGanadorJuegoDeCompeticionLiga(equipoGanador).
+            subscribe(res => console.log(res));
+            this.AsignarGanadorEquipos(listaGanadores, seleccionesColumna);
+
+            // Ganador en la COLUMNA DOS
+          } else if (listaParticipantesJuego[j].nombre === seleccionesColumna[i].nombreJugadorDos && ganador === 2) {
+            console.log ('He encontrado el equipo ganador: ' + seleccionesColumna[i].nombreJugadorDos);
+            console.log('Los puntos antes de registrar el partido ganado son: ' + listaParticipantesJuego[j].puntos);
+            EquipoId = seleccionesColumna[i].JugadorDos;
+            // tslint:disable-next-line:prefer-for-of
+            for (let k = 0; k < equiposJuegoDeCompeticionLiga.length; k++) {
+              if (listaParticipantesJuego[j].id === equiposJuegoDeCompeticionLiga[k].EquipoId) {
+                EquipoJuegoDeCompeticionLigaId = equiposJuegoDeCompeticionLiga[k].id;
+              }
+            }
+            listaParticipantesJuego[j]. puntos = listaParticipantesJuego[j]. puntos + 3;
+            console.log('Los puntos después de registrar el partido ganado es: ' + listaParticipantesJuego[j].puntos);
+
+            const equipoGanador = new EquipoJuegoDeCompeticionLiga(EquipoId,
+                                                                   juegoSeleccionado.id,
+                                                                   listaParticipantesJuego[j].puntos,
+                                                                   EquipoJuegoDeCompeticionLigaId);
+            listaGanadores.push(equipoGanador);
+            console.log('La lista de ganadores de la columna dos es: ');
+            console.log(listaGanadores);
+            this.peticionesAPI.PonPuntosEquipoGanadorJuegoDeCompeticionLiga(equipoGanador).
+            subscribe(res => console.log(res));
+            this.AsignarGanadorEquipos(listaGanadores, seleccionesColumna);
+          }
+        } else {
+          console.log('Este enfrentamiento ya tiene asignado un ganador: ');
+          console.log(seleccionesColumna[i]);
         }
       }
     }
@@ -541,17 +546,22 @@ export class CalculosService {
       // tslint:disable-next-line:prefer-for-of
       for (let j = 0; j < seleccionesColumna.length; j++) {
         if (listaGanadores.length === seleccionesColumna.length) {
-          const enfrentamiento = new EnfrentamientoLiga(seleccionesColumna[j].id,
+          if (seleccionesColumna[j].Ganador === undefined) {
+            const enfrentamiento = new EnfrentamientoLiga(seleccionesColumna[j].id,
                                                         seleccionesColumna[j].JugadorUno,
                                                         seleccionesColumna[j].JugadorDos,
                                                         listaGanadores[i].EquipoId,
                                                         seleccionesColumna[j].JornadaDeCompeticionLigaId);
-          this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
-          subscribe(res => console.log(res));
-          console.log('El JudadorUnoId es: ');
-          console.log(seleccionesColumna[j].JugadorUno);
-          console.log('El JudadorDosId es: ');
-          console.log(seleccionesColumna[j].JugadorDos);
+            this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
+            subscribe(res => console.log(res));
+            console.log('El JudadorUnoId es: ');
+            console.log(seleccionesColumna[j].JugadorUno);
+            console.log('El JudadorDosId es: ');
+            console.log(seleccionesColumna[j].JugadorDos);
+          } else {
+            console.log('Este enfrentamiento ya tiene asignado un ganador: ');
+            console.log(seleccionesColumna[j]);
+          }
         } else {
             console.log('Algo no cuadra, no hay el mismo número de equipos ganadores de la ' +
                         'columna que enfrentamientos seleccionados de esa coliumna');
