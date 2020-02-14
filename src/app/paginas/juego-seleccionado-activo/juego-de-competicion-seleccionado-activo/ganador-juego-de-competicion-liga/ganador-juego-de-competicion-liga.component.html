@@ -23,11 +23,11 @@
 
 
       <div style="margin-top: 10px; margin-left: 570px; margin-right: 10px;">
-        <button style= "width: 100%" type="button"class="btn Aceptar" [disabled]="botonAsignarManualDesactivado">Manualmente</button>
+        <button style= "width: 100%" type="button"class="btn Aceptar" (click)= "AsignarGanadorManualmente()" [disabled]="botonAsignarAleatorioDesactivado">Manualmente</button>
         <!-- <button style= "width: 100%" type="button"class="btn Aceptar" [disabled]="botonAsignarDesactivado" (click) = AsignarPuntos()>Manualmente</button> -->
       </div>
       <div style="margin-top: 10px; margin-right: 10px;">
-        <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadorManualmente()"  [disabled]="botonAsignarAleatorioDesactivado">Aleatoriamente</button>
+        <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadorAleatoriamente()"  [disabled]="botonAsignarAleatorioDesactivado">Aleatoriamente</button>
         <!-- <button style= "width: 100%"  type="button"class="btn Aceptar" (click) = AsignarAleatorio()>Aleatoriamente</button> -->
       </div>
     </div>
