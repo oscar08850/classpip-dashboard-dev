@@ -475,7 +475,7 @@ export class CalculosService {
     for (let i = 0; i < seleccionesColumna.length; i++) {
       // tslint:disable-next-line:prefer-for-of
       for (let j = 0; j < listaParticipantesJuego.length; j++) {
-        // Ganador en la primera columna
+        // Ganador en la COLUMNA UNO
         if (listaParticipantesJuego[j].nombre === seleccionesColumna[i].nombreJugadorUno && ganador === 1) {
           console.log('He encontrado el equipo ganador: ' + seleccionesColumna[i].nombreJugadorUno);
           console.log('Los puntos antes de registrar el partido ganado es: ' + listaParticipantesJuego[j].puntos);
@@ -494,8 +494,13 @@ export class CalculosService {
                                                                listaParticipantesJuego[j].puntos,
                                                                EquipoJuegoDeCompeticionLigaId);
           listaGanadores.push(equipoGanador);
+          console.log('La lista de ganadores de la columna  uno es: ');
+          console.log(listaGanadores);
+          this.peticionesAPI.PonPuntosEquipoGanadorJuegoDeCompeticionLiga(equipoGanador).
+          subscribe(res => console.log(res));
+          this.AsignarGanadorEquipos(listaGanadores, seleccionesColumna);
 
-          // Ganador en la primera columna
+          // Ganador en la COLUMNA DOS
         } else if (listaParticipantesJuego[j].nombre === seleccionesColumna[i].nombreJugadorDos && ganador === 2) {
           console.log ('He encontrado el equipo ganador: ' + seleccionesColumna[i].nombreJugadorDos);
           console.log('Los puntos antes de registrar el partido ganado son: ' + listaParticipantesJuego[j].puntos);
@@ -514,6 +519,42 @@ export class CalculosService {
                                                                  listaParticipantesJuego[j].puntos,
                                                                  EquipoJuegoDeCompeticionLigaId);
           listaGanadores.push(equipoGanador);
+          console.log('La lista de ganadores de la columna dos es: ');
+          console.log(listaGanadores);
+          this.peticionesAPI.PonPuntosEquipoGanadorJuegoDeCompeticionLiga(equipoGanador).
+          subscribe(res => console.log(res));
+          this.AsignarGanadorEquipos(listaGanadores, seleccionesColumna);
+        }
+      }
+    }
+  }
+
+  public AsignarGanadorEquipos(listaGanadores: EquipoJuegoDeCompeticionLiga[], seleccionesColumna: EnfrentamientoLiga[]) {
+    console.log ('Estoy en AsignarGanadorEquipos()');
+    console.log('La lista de equipos ganadores es: ');
+    console.log(listaGanadores);
+    console.log('La lista de enfrentamientos seleccionados es: ');
+    console.log(seleccionesColumna);
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < listaGanadores.length; i++) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let j = 0; j < seleccionesColumna.length; j++) {
+        if (listaGanadores.length === seleccionesColumna.length) {
+          const enfrentamiento = new EnfrentamientoLiga(seleccionesColumna[j].id,
+                                                        seleccionesColumna[j].JugadorUno,
+                                                        seleccionesColumna[j].JugadorDos,
+                                                        listaGanadores[i].EquipoId,
+                                                        seleccionesColumna[j].JornadaDeCompeticionLigaId);
+          this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
+          subscribe(res => console.log(res));
+          console.log('El JudadorUnoId es: ');
+          console.log(seleccionesColumna[j].JugadorUno);
+          console.log('El JudadorDosId es: ');
+          console.log(seleccionesColumna[j].JugadorDos);
+        } else {
+            console.log('Algo no cuadra, no hay el mismo número de equipos ganadores de la ' +
+                        'columna que enfrentamientos seleccionados de esa coliumna');
         }
       }
     }
@@ -552,12 +593,12 @@ export class CalculosService {
                   enfrentamientosJornadaSeleccionada[k].Ganador = 0;
                 }
                 console.log(enfrentamientosJornadaSeleccionada[k]);
-                const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].id,
+                                                              enfrentamientosJornadaSeleccionada[k].JugadorUno,
                                                               enfrentamientosJornadaSeleccionada[k].JugadorDos,
                                                               enfrentamientosJornadaSeleccionada[k].Ganador,
                                                               // tslint:disable-next-line:max-line-length
-                                                              enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
-                                                              enfrentamientosJornadaSeleccionada[k].id);
+                                                              enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId);
                 this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                 subscribe(res => console.log(res));
 
@@ -583,7 +624,7 @@ export class CalculosService {
                 listaGanadores.push(alumnoGanador);
                 console.log('El id del alumno es: ' + alumnoGanador.AlumnoId + ' y los puntos son: '
                             + alumnoGanador.PuntosTotalesAlumno);
-                this.peticionesAPI.PonPuntosGanadorJuegoDeCompeticionLiga(alumnoGanador).
+                this.peticionesAPI.PonPuntosAlumnoGanadorJuegoDeCompeticionLiga(alumnoGanador).
                 subscribe(res => console.log(res));
               } else {
                 console.log('Este enfrentamiento ya tiene asignado un ganador: ');

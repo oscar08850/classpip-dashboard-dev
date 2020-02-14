@@ -221,6 +221,10 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       console.log('La lista de alumnos ganadoresTres es:');
       console.log(this.enfrentamientosSeleccionadosColumnaTres);
 
+      this.avisoMasDeUnGanadorMarcadoDosEmpate = false;
+      this.avisoMasDeUnGanadorMarcadoUnoDos = false;
+      this.avisoMasDeUnGanadorMarcadoUnoEmpate = false;
+
       // Segundo miramos si solo hay una selección por enfrentamiento
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.enfrentamientosSeleccionadosColumnaUno.length; i++) {
@@ -323,7 +327,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
                         console.log(alumnoGanador);
                         console.log('El id del alumno es: ' + alumnoGanador.AlumnoId + ' y los puntos son: '
                                     + alumnoGanador.PuntosTotalesAlumno);
-                        this.peticionesAPI.PonPuntosGanadorJuegoDeCompeticionLiga(alumnoGanador).
+                        this.peticionesAPI.PonPuntosAlumnoGanadorJuegoDeCompeticionLiga(alumnoGanador).
                         subscribe(res => console.log(res));
                       } else {
                         console.log('Este enfrentamiento ya tiene asignado un ganador: ');
@@ -391,7 +395,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
                         console.log(alumnoGanador);
                         console.log('El id del alumno es: ' + alumnoGanador.AlumnoId + ' y los puntos son: '
                                     + alumnoGanador.PuntosTotalesAlumno);
-                        this.peticionesAPI.PonPuntosGanadorJuegoDeCompeticionLiga(alumnoGanador).
+                        this.peticionesAPI.PonPuntosAlumnoGanadorJuegoDeCompeticionLiga(alumnoGanador).
                         subscribe(res => console.log(res));
                       } else {
                         console.log('Este enfrentamiento ya tiene asignado un ganador: ');
@@ -447,7 +451,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
                       console.log(alumnoGanador);
                       console.log('El id del alumno es: ' + alumnoGanador.AlumnoId + ' y los puntos son: '
                                   + alumnoGanador.PuntosTotalesAlumno);
-                      this.peticionesAPI.PonPuntosGanadorJuegoDeCompeticionLiga(alumnoGanador).
+                      this.peticionesAPI.PonPuntosAlumnoGanadorJuegoDeCompeticionLiga(alumnoGanador).
                       subscribe(res => console.log(res));
                       if (this.EnfrentamientosJornadaSeleccionada[k].Ganador === undefined) {
                         if (enfrentamientoEmpateRegistrado === false) {
@@ -549,12 +553,14 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
             console.log('Estoy en la condición de GANADOR UNO');
             this.calculos.AsignarPuntosGanadorEquipos(this.enfrentamientosSeleccionadosColumnaUno, this.listaEquiposClasificacion,
                                                       this.juegoSeleccionado, this.equiposJuegoDeCompeticionLiga, 1);
-          } else if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
+          }
+          if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
             // GANADOR DOS
             console.log('Estoy en la condición de GANADOR DOS');
             this.calculos.AsignarPuntosGanadorEquipos(this.enfrentamientosSeleccionadosColumnaDos, this.listaEquiposClasificacion,
                                                       this.juegoSeleccionado, this.equiposJuegoDeCompeticionLiga, 2);
-          } else if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
+          }
+          if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
             // EMPATE
             console.log('Estoy en la condición de EMPATE');
             this.calculos.AsignarPuntosGanadorEquipos(this.enfrentamientosSeleccionadosColumnaTres, this.listaEquiposClasificacion,

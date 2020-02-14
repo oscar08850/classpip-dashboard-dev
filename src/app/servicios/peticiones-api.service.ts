@@ -502,19 +502,6 @@ export class PeticionesAPIService {
     '/enfrentamientosLiga');
   }
 
-  // NO ENTIENDO POR QUÉ NO FUNCIONA!!!!!!!!!!!!!!
-  // tslint:disable-next-line:max-line-length
-  public PonPuntosGanadorJuegoDeCompeticionLiga( ganadorJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga): Observable<AlumnoJuegoDeCompeticionLiga> {
-    return this.http.put<AlumnoJuegoDeCompeticionLiga>('http://localhost:3000/api/AlumnosJuegoDeCompeticionLiga/'
-                                                       + ganadorJuegoDeCompeticionLiga.id, ganadorJuegoDeCompeticionLiga);
-  }
-
-  // tslint:disable-next-line:max-line-length
-  public PonPuntosEquipoGanadorJuegoDeCompeticionLiga(ganadorJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga): Observable<EquipoJuegoDeCompeticionLiga> {
-    return this.http.put<EquipoJuegoDeCompeticionLiga>('http://localhost:3000/api/EquiposJuegoDeCompeticionLiga/'
-                                                       + ganadorJuegoDeCompeticionLiga.id, ganadorJuegoDeCompeticionLiga);
-  }
-
   public PonGanadorDelEnfrentamiento(enfrentamiento: EnfrentamientoLiga): Observable<EnfrentamientoLiga> {
     return this.http.put<EnfrentamientoLiga>('http://localhost:3000/api/EnfrentamientosLiga/' + enfrentamiento.id, enfrentamiento);
   }
@@ -553,6 +540,12 @@ export class PeticionesAPIService {
   public DameInscripcionesEquipoJuegoDeCompeticionLiga(juegoDeCompeticionLigaId: number): Observable<EquipoJuegoDeCompeticionLiga[]> {
     return this.http.get<EquipoJuegoDeCompeticionLiga[]>(this.APIUrlEquipoJuegoDeCompeticionLiga
                                                           + '?filter[where][JuegoDeCompeticionLigaId]=' + juegoDeCompeticionLigaId);
+  }
+
+  // tslint:disable-next-line:max-line-length
+  public PonPuntosEquipoGanadorJuegoDeCompeticionLiga(ganadorJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga): Observable<EquipoJuegoDeCompeticionLiga> {
+    return this.http.put<EquipoJuegoDeCompeticionLiga>('http://localhost:3000/api/EquiposJuegoDeCompeticionLiga/'
+                                                       + ganadorJuegoDeCompeticionLiga.id, ganadorJuegoDeCompeticionLiga);
   }
 
 
