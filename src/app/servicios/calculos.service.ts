@@ -1142,6 +1142,9 @@ public PreparaHistorialEquipo(
 
 
   public calcularLigaNumEquipos(numEquipos: number, numRondas: number): any[] {
+        if (numEquipos % 2 !== 0) {
+           numEquipos = numEquipos + 1;
+         }
         const numParticupantes = numEquipos - 1;
         console.log('Vamos a crear los enfrentamientos');
         const numPartidosPorRonda = numEquipos / 2;
@@ -1193,6 +1196,7 @@ public PreparaHistorialEquipo(
                 }
             }
         }
+        console.log(this.rondas);
         return this.rondas;
 
     }
@@ -1245,14 +1249,28 @@ public PreparaHistorialEquipo(
           // EnfrentamientoLigaa.JugadorDos = participantes[rondas[i][j].JugadorDos];
           // EnfrentamientoLigaa.JugadorUno = participantes[rondas[i][j].JugadorUno];
           // EnfrentamientoLigaa.Ganador = undefined;
+          // console.log(rondas[i][j].JugadorUno);
+          // console.log(rondas[i][j].JugadorDos);
+          // console.log(participantes.length);
+
+          if (rondas[i][j].JugadorUno === participantes.length) {
+            EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorDos].id,
+              participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id);
+
+          } else if (rondas[i][j].JugadorDos === participantes.length) {
+            EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorUno].id,
+              participantes[rondas[i][j].JugadorUno].id, undefined, jornadas[i].id);
+
+          } else {
           EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorUno].id,
              participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id);
+          }
           console.log('mostramos enrentamiento');
-          console.log(EnfrentamientoLigaa);
+          // console.log(EnfrentamientoLigaa);
           this.peticionesAPI.CrearEnrentamientoLiga(EnfrentamientoLigaa, jornadas[i].id)
            .subscribe(enfrentamientocreado => {
            console.log('enfrentamiento creado');
-           console.log(enfrentamientocreado);
+           // console.log(enfrentamientocreado);
         });
       }
 
