@@ -1701,139 +1701,142 @@ public PreparaHistorialEquipo(
 
 
   public calcularLigaNumEquipos(numEquipos: number, numRondas: number): any[] {
-        if (numEquipos % 2 !== 0) {
-           numEquipos = numEquipos + 1;
-         }
-        const numParticupantes = numEquipos - 1;
-        console.log('Vamos a crear los enfrentamientos');
-        const numPartidosPorRonda = numEquipos / 2;
+    if (numEquipos % 2 !== 0) {
+       numEquipos = numEquipos + 1;
+     }
+    const numParticupantes = numEquipos - 1;
+    console.log('Vamos a crear los enfrentamientos');
+    const numPartidosPorRonda = numEquipos / 2;
 
-        this.rondas = [];
+    this.rondas = [];
 
+    console.log(this.rondas);
+    for (let i = 0, k = 0; i < numRondas; i ++) {
+
+      this.rondas[i] = [];
+
+      for (let j = 0; j < numPartidosPorRonda; j ++) {
+
+            this.rondas[i][j] = new EnfrentamientoLiga();
+            this.rondas[i][j].JugadorUno = k;
+
+            k ++;
+
+            if (k === numParticupantes) {
+                k = 0;
+            }
+        }
+    }
+
+    for (let i = 0; i < numRondas; i ++) {
+
+
+        if (i % 2 === 0) {
+            this.rondas[i][0].JugadorDos = numEquipos - 1;
+        } else {
+            this.rondas[i][0].JugadorDos = this.rondas[i][0].JugadorUno;
+            this.rondas[i][0].JugadorUno = numEquipos - 1;
+        }
+    }
+
+    const equipoMasAlto = numEquipos - 1;
+    const equipoImparMasAlto = equipoMasAlto - 1;
+
+    for (let i = 0, k = equipoImparMasAlto; i < numRondas; i ++) {
+
+
+        for (let j = 1; j < numPartidosPorRonda; j ++) {
+            this.rondas[i][j].JugadorDos = k;
+
+            k --;
+
+            if (k === -1) {
+                k = equipoImparMasAlto;
+            }
+        }
+    }
+    console.log(this.rondas);
+    return this.rondas;
+
+}
+
+
+
+public calcularLiga(numEquipos: number, NumeroDeJornadas: number, participantes: any, ID: number, Jornadas: Jornada[]) {
+        console.log('Voy a por los enrentamientos');
+        // let jornadas: Jornada[];
+        // this.peticionesAPI.DameJornadasDeCompeticionLiga(ID)
+        //   .subscribe(inscripciones => {
+        //     jornadas = inscripciones;
+        //     console.log('Las jornadas son: ');
+        //     console.log(jornadas);
+        //   });
+        this.rondas = this.calcularLigaNumEquipos(participantes.length, NumeroDeJornadas);
+        console.log('rondas');
         console.log(this.rondas);
-        for (let i = 0, k = 0; i < numRondas; i ++) {
+        this.guardarenrentamientos(this.rondas, NumeroDeJornadas, participantes, Jornadas);
+        console.log('Enrentaminetos guardados');
+}
 
-          this.rondas[i] = [];
+public guardarenrentamientos(rondas: Array<Array<EnfrentamientoLiga>>, NumeroDeJornadas: number,
+                             participantes: any[], jornadas: Jornada[]) {
 
-          for (let j = 0; j < numPartidosPorRonda; j ++) {
-
-                this.rondas[i][j] = new EnfrentamientoLiga();
-                this.rondas[i][j].JugadorUno = k;
-
-                k ++;
-
-                if (k === numParticupantes) {
-                    k = 0;
-                }
-            }
-        }
-
-        for (let i = 0; i < numRondas; i ++) {
+  const numPartidosPorRonda = participantes.length / 2;
+  console.log(participantes.length);
+  console.log('Muestro las jornadas');
+  console.log(jornadas);
+  console.log(jornadas[0].id);
+  for (let i = 0; i < NumeroDeJornadas ; i ++) {
 
 
-            if (i % 2 === 0) {
-                this.rondas[i][0].JugadorDos = numEquipos - 1;
-            } else {
-                this.rondas[i][0].JugadorDos = this.rondas[i][0].JugadorUno;
-                this.rondas[i][0].JugadorUno = numEquipos - 1;
-            }
-        }
+    for (let j = 0; j < numPartidosPorRonda; j ++) {
+      // console.log('Participantes');
+      // console.log(participantes);
+      // // let jugador1: number;
+      // // let jugador2: number;
+      // console.log('jugador 1');
+      // console.log(rondas[i][j].JugadorUno);
+      // // jugador1 = participantes[rondas[i][j].JugadorUno];
+      // console.log('jugador 2');
+      // console.log(participantes[rondas[i][j].JugadorDos].id);
+      // // jugador2 = participantes[rondas[i][j].JugadorDos];
 
-        const equipoMasAlto = numEquipos - 1;
-        const equipoImparMasAlto = equipoMasAlto - 1;
+      // console.log(jornadas[i].id);
+      // tslint:disable-next-line:prefer-const
+      let EnfrentamientoLigaa: EnfrentamientoLiga;
+      // EnfrentamientoLigaa.JornadaDeCompeticionLigaId = jornadas[i].id;
+      // EnfrentamientoLigaa.JugadorDos = participantes[rondas[i][j].JugadorDos];
+      // EnfrentamientoLigaa.JugadorUno = participantes[rondas[i][j].JugadorUno];
+      // EnfrentamientoLigaa.Ganador = undefined;
+      // console.log(rondas[i][j].JugadorUno);
+      // console.log(rondas[i][j].JugadorDos);
+      // console.log(participantes.length);
 
-        for (let i = 0, k = equipoImparMasAlto; i < numRondas; i ++) {
+      if (rondas[i][j].JugadorUno === participantes.length) {
+        EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorDos].id,
+          participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id, participantes[rondas[i][j].JugadorDos].Nombre,
+          participantes[rondas[i][j].JugadorDos].Nombre);
 
+      } else if (rondas[i][j].JugadorDos === participantes.length) {
+        EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorUno].id,
+          participantes[rondas[i][j].JugadorUno].id, undefined, jornadas[i].id, participantes[rondas[i][j].JugadorUno].Nombre,
+          participantes[rondas[i][j].JugadorUno].Nombre);
 
-            for (let j = 1; j < numPartidosPorRonda; j ++) {
-                this.rondas[i][j].JugadorDos = k;
-
-                k --;
-
-                if (k === -1) {
-                    k = equipoImparMasAlto;
-                }
-            }
-        }
-        console.log(this.rondas);
-        return this.rondas;
-
-    }
-
-
-
-   public calcularLiga(numEquipos: number, NumeroDeJornadas: number, participantes: any, ID: number, Jornadas: Jornada[]) {
-            console.log('Voy a por los enrentamientos');
-            // let jornadas: Jornada[];
-            // this.peticionesAPI.DameJornadasDeCompeticionLiga(ID)
-            //   .subscribe(inscripciones => {
-            //     jornadas = inscripciones;
-            //     console.log('Las jornadas son: ');
-            //     console.log(jornadas);
-            //   });
-            this.rondas = this.calcularLigaNumEquipos(participantes.length, NumeroDeJornadas);
-            console.log('rondas');
-            console.log(this.rondas);
-            this.guardarenrentamientos(this.rondas, NumeroDeJornadas, participantes, Jornadas);
-            console.log('Enrentaminetos guardados');
-    }
-
-    public guardarenrentamientos(rondas: Array<Array<EnfrentamientoLiga>>, NumeroDeJornadas: number,
-                                 participantes: any[], jornadas: Jornada[]) {
-
-      const numPartidosPorRonda = participantes.length / 2;
-      console.log(participantes);
-      console.log('Muestro las jornadas');
-      console.log(jornadas);
-      console.log(jornadas[0].id);
-      for (let i = 0; i < NumeroDeJornadas ; i ++) {
-
-
-        for (let j = 0; j < numPartidosPorRonda; j ++) {
-          // console.log('Participantes');
-          // console.log(participantes);
-          // // let jugador1: number;
-          // // let jugador2: number;
-          // console.log('jugador 1');
-          // console.log(rondas[i][j].JugadorUno);
-          // // jugador1 = participantes[rondas[i][j].JugadorUno];
-          // console.log('jugador 2');
-          // console.log(participantes[rondas[i][j].JugadorDos].id);
-          // // jugador2 = participantes[rondas[i][j].JugadorDos];
-
-          // console.log(jornadas[i].id);
-          // tslint:disable-next-line:prefer-const
-          let EnfrentamientoLigaa: EnfrentamientoLiga;
-          // EnfrentamientoLigaa.JornadaDeCompeticionLigaId = jornadas[i].id;
-          // EnfrentamientoLigaa.JugadorDos = participantes[rondas[i][j].JugadorDos];
-          // EnfrentamientoLigaa.JugadorUno = participantes[rondas[i][j].JugadorUno];
-          // EnfrentamientoLigaa.Ganador = undefined;
-          // console.log(rondas[i][j].JugadorUno);
-          // console.log(rondas[i][j].JugadorDos);
-          // console.log(participantes.length);
-
-          if (rondas[i][j].JugadorUno === participantes.length) {
-            EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorDos].id,
-              participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id);
-
-          } else if (rondas[i][j].JugadorDos === participantes.length) {
-            EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorUno].id,
-              participantes[rondas[i][j].JugadorUno].id, undefined, jornadas[i].id);
-
-          } else {
-          EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorUno].id,
-             participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id);
-          }
-          console.log('mostramos enrentamiento');
-          console.log(EnfrentamientoLigaa);
-          this.peticionesAPI.CrearEnrentamientoLiga(EnfrentamientoLigaa, jornadas[i].id)
-           .subscribe(enfrentamientocreado => {
-           console.log('enfrentamiento creado');
-           // console.log(enfrentamientocreado);
-        });
+      } else {
+        EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorUno].id,
+          participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id, participantes[rondas[i][j].JugadorUno].Nombre,
+          participantes[rondas[i][j].JugadorDos].Nombre);
       }
+      console.log('mostramos enrentamiento');
+      // console.log(EnfrentamientoLigaa);
+      this.peticionesAPI.CrearEnrentamientoLiga(EnfrentamientoLigaa, jornadas[i].id)
+       .subscribe(enfrentamientocreado => {
+       console.log('enfrentamiento creado');
+       // console.log(enfrentamientocreado);
+    });
+  }
 
-      }
-    }
+  }
+}
 
 }
