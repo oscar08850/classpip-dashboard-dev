@@ -39,7 +39,10 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   rankingEquiposJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion[] = [];
 
   // Columnas Tabla
-  displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos', ' '];
+  // displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'partidosTotales',
+  //                                      'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
+  displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'partidosTotales',
+                                       'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
   displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'partidosTotales', 'partidosJugados',
                                        'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos'];
 
@@ -234,8 +237,9 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     if (this.juegoSeleccionado.Modo === 'Individual') {
       this.rankingAlumnoJuegoDeCompeticion = this.calculos.PrepararTablaRankingIndividualCompeticion (
                                                                                                 this.listaAlumnosOrdenadaPorPuntos,
-                                                                                                this.alumnosDelJuego);
-      console.log ('Ya tengo la tabla');
+                                                                                                this.alumnosDelJuego, this.jornadas,
+                                                                                                this.enfrentamientosDelJuego);
+      console.log ('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
       console.log (this.rankingAlumnoJuegoDeCompeticion);
       this.datasourceAlumno = new MatTableDataSource(this.rankingAlumnoJuegoDeCompeticion);
 
@@ -245,9 +249,9 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
                                                                                               this.equiposDelJuego, this.jornadas,
                                                                                               this.enfrentamientosDelJuego);
       this.datasourceEquipo = new MatTableDataSource(this.rankingEquiposJuegoDeCompeticion);
+      console.log('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
+      console.log (this.rankingEquiposJuegoDeCompeticion);
     }
-    console.log('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
-    console.log (this.rankingEquiposJuegoDeCompeticion);
   }
 
   applyFilter(filterValue: string) {
@@ -312,6 +316,22 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     console.log ('Voy a por la información de las jornadas del juego');
     this.sesion.TomaDatosJornadas(this.jornadas,
                                       this.JornadasCompeticion);
+    this.sesion.TomaTablaAlumnoJuegoDeCompeticion(this.rankingAlumnoJuegoDeCompeticion);
+    this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposJuegoDeCompeticion);
   }
 
+  seleccionarGanadorLiga(): void {
+    console.log('Aquí estará el proceso para elegir el ganador');
+    console.log ('Voy a por la información del juego seleccionado');
+    this.sesion.TomaJuego (this.juegoSeleccionado);
+    console.log('Tomo las jornadas' + this.jornadas);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasLiga( this.juegoSeleccionado, this.jornadas);
+    console.log ('Voy a por la información de las jornadas del juego');
+    this.sesion.TomaDatosJornadas(this.jornadas,
+                                  this.JornadasCompeticion);
+    this.sesion.TomaTablaAlumnoJuegoDeCompeticion(this.rankingAlumnoJuegoDeCompeticion);
+    this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposJuegoDeCompeticion);
+    this.sesion.TomaInscripcionAlumno(this.listaAlumnosOrdenadaPorPuntos);
+    this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
+  }
 }
