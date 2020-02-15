@@ -444,19 +444,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
   }
 
-  AsignarGanadorAlumnos() {
-    console.log('Estoy en AsignarGanadorAlumnos()');
-    console.log(this.dataSourceTablaGanadorIndividual.data);
-    // tslint:disable-next-line:prefer-for-of
-    for ( let i = 0; i < this.dataSourceTablaGanadorIndividual.data.length; i++) {
-      console.log('hola');
-      if (this.selectionUno.isSelected(this.dataSourceTablaGanadorIndividual.data[i])) {
-        console.log(this.dataSourceTablaGanadorIndividual.data[i]);
-        console.log('Se ha seleccionado el jugadorUno como ganador');
-      }
-    }
-  }
-
   AddToListGanadorUno() {
     if (this.juegoSeleccionado.Modo === 'Individual') {
       // tslint:disable-next-line:prefer-for-of

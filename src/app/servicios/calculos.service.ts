@@ -567,13 +567,7 @@ export class CalculosService {
                   console.log(enfrentamientosJornadaSeleccionada[k]);
                   // Tengo que actualizar el ganador en EnfrentamientoLiga
                   enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
-                  const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].id,
-                                                                enfrentamientosJornadaSeleccionada[k].JugadorUno,
-                                                                enfrentamientosJornadaSeleccionada[k].JugadorDos,
-                                                                enfrentamientosJornadaSeleccionada[k].Ganador,
-                                                                // tslint:disable-next-line:max-line-length
-                                                                enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId);
-                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
+                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
                   subscribe(res => console.log(res));
                   console.log('El enfrentamiento con el ganador actualizado queda: ');
                   console.log(enfrentamientosJornadaSeleccionada[k]);
@@ -626,13 +620,7 @@ export class CalculosService {
                   console.log(enfrentamientosJornadaSeleccionada[k]);
                   // Tengo que actualizar el ganador en EnfrentamientoLiga
                   enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorUno;
-                  const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].id,
-                                                                enfrentamientosJornadaSeleccionada[k].JugadorUno,
-                                                                enfrentamientosJornadaSeleccionada[k].JugadorDos,
-                                                                enfrentamientosJornadaSeleccionada[k].Ganador,
-                                                                // tslint:disable-next-line:max-line-length
-                                                                enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId);
-                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
+                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
                   subscribe(res => console.log(res));
                   console.log('El enfrentamiento con el ganador actualizado queda: ');
                   console.log(enfrentamientosJornadaSeleccionada[k]);
@@ -702,13 +690,7 @@ export class CalculosService {
                 console.log(enfrentamientosJornadaSeleccionada[k]);
                 // Tengo que actualizar el ganador en EnfrentamientoLiga
                 enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
-                const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].id,
-                                                              enfrentamientosJornadaSeleccionada[k].JugadorUno,
-                                                              enfrentamientosJornadaSeleccionada[k].JugadorDos,
-                                                              enfrentamientosJornadaSeleccionada[k].Ganador,
-                                                              // tslint:disable-next-line:max-line-length
-                                                              enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId);
-                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
+                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
                 subscribe(res => console.log(res));
                 console.log('El enfrentamiento con el ganador actualizado queda: ');
                 console.log(enfrentamientosJornadaSeleccionada[k]);
@@ -762,13 +744,7 @@ export class CalculosService {
                 console.log(enfrentamientosJornadaSeleccionada[k]);
                 // Tengo que actualizar el ganador en EnfrentamientoLiga
                 enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorUno;
-                const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].id,
-                                                              enfrentamientosJornadaSeleccionada[k].JugadorUno,
-                                                              enfrentamientosJornadaSeleccionada[k].JugadorDos,
-                                                              enfrentamientosJornadaSeleccionada[k].Ganador,
-                                                              // tslint:disable-next-line:max-line-length
-                                                              enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId);
-                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
+                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
                 subscribe(res => console.log(res));
                 console.log('El enfrentamiento con el ganador actualizado queda: ');
                 console.log(enfrentamientosJornadaSeleccionada[k]);
@@ -866,13 +842,7 @@ export class CalculosService {
                   enfrentamientoEmpateRegistrado = true;
                   enfrentamientosJornadaSeleccionada[k].Ganador = 0;
                   console.log(enfrentamientosJornadaSeleccionada[k]);
-                  const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].id,
-                                                                enfrentamientosJornadaSeleccionada[k].JugadorUno,
-                                                                enfrentamientosJornadaSeleccionada[k].JugadorDos,
-                                                                enfrentamientosJornadaSeleccionada[k].Ganador,
-                                                                // tslint:disable-next-line:max-line-length
-                                                                enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId);
-                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
+                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
                   subscribe(res => console.log(res));
                 }
               } else {
@@ -943,13 +913,7 @@ export class CalculosService {
                   enfrentamientoEmpateRegistrado = true;
                   enfrentamientosJornadaSeleccionada[k].Ganador = 0;
                   console.log(enfrentamientosJornadaSeleccionada[k]);
-                  const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].id,
-                                                                enfrentamientosJornadaSeleccionada[k].JugadorUno,
-                                                                enfrentamientosJornadaSeleccionada[k].JugadorDos,
-                                                                enfrentamientosJornadaSeleccionada[k].Ganador,
-                                                                // tslint:disable-next-line:max-line-length
-                                                                enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId);
-                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
+                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
                   subscribe(res => console.log(res));
                 }
               } else {
