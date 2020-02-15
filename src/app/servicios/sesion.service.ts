@@ -339,6 +339,7 @@ public TomaDatosJornadasJuegoComponent(
 this.jornadas = jornadas;
 console.log ('jornadas:');
 console.log ( this.jornadas);
+}
 
 public TomaTablaAlumnoJuegoDeCompeticion(Tabla: TablaAlumnoJuegoDeCompeticion[]) {
   this.TablaAlumnoJuegoDeCompeticion = Tabla;
@@ -353,7 +354,7 @@ console.log(this.jornadas);
 
 return datos;
 }
-}
+
 
 public DameTablaAlumnoJuegoDeCompeticion(): TablaAlumnoJuegoDeCompeticion[] {
   const Tabla = this.TablaAlumnoJuegoDeCompeticion;

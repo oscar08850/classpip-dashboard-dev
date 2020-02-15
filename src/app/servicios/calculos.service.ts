@@ -1782,7 +1782,7 @@ public PreparaHistorialEquipo(
                                  participantes: any[], jornadas: Jornada[]) {
 
       const numPartidosPorRonda = participantes.length / 2;
-      console.log(participantes.length);
+      console.log(participantes);
       console.log('Muestro las jornadas');
       console.log(jornadas);
       console.log(jornadas[0].id);
@@ -1825,7 +1825,7 @@ public PreparaHistorialEquipo(
              participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id);
           }
           console.log('mostramos enrentamiento');
-          // console.log(EnfrentamientoLigaa);
+          console.log(EnfrentamientoLigaa);
           this.peticionesAPI.CrearEnrentamientoLiga(EnfrentamientoLigaa, jornadas[i].id)
            .subscribe(enfrentamientocreado => {
            console.log('enfrentamiento creado');
