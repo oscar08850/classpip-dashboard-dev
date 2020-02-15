@@ -813,6 +813,7 @@ export class CalculosService {
                                  listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[],
                                  alumnosJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga[],
                                  juegoSeleccionado: Juego, ganador: number) {
+    let alumnosConPuntosSumados = 0;
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < enfrentamientosSeleccionadosColumna.length; i++) {
       let enfrentamientoEmpateRegistrado = false;
@@ -835,31 +836,32 @@ export class CalculosService {
                 // tslint:disable-next-line:max-line-length
                 enfrentamientosJornadaSeleccionada[k].nombreJugadorDos === enfrentamientosSeleccionadosColumna[i].nombreJugadorDos) {
               console.log('Ya estoy en el el enfrentamiento que quiero');
-              // Ahora tengo que actualizar los dos AlumnoJuegoDeCompeticionLiga del enfrentamiento con los nuevos puntos
-              listaAlumnosClasificacion[j].puntos = listaAlumnosClasificacion[j].puntos + 1;
-              console.log('Los puntos actualizados después de registrar el partido ganado: '
-                          + listaAlumnosClasificacion[j].puntos);
-              console.log(listaAlumnosClasificacion[j]);
-              console.log('el id del alumno es: ' + listaAlumnosClasificacion[j].id);
-              const AlumnoId = listaAlumnosClasificacion[j].id;
-              // tslint:disable-next-line:prefer-for-of
-              for (let m = 0; m < alumnosJuegoDeCompeticionLiga.length; m++) {
-                if (alumnosJuegoDeCompeticionLiga[m].AlumnoId === AlumnoId) {
-                  this.AlumnoJuegoDeCompeticionLigaId = alumnosJuegoDeCompeticionLiga[m].id;
-                }
-              }
-              const alumnoGanador = new AlumnoJuegoDeCompeticionLiga(AlumnoId,
-                                                                     juegoSeleccionado.id,
-                                                                     listaAlumnosClasificacion[j].puntos,
-                                                                     this.AlumnoJuegoDeCompeticionLigaId);
-              console.log(alumnoGanador);
-              console.log('El id del alumno es: ' + alumnoGanador.AlumnoId + ' y los puntos son: '
-                          + alumnoGanador.PuntosTotalesAlumno);
-              this.peticionesAPI.PonPuntosAlumnoGanadorJuegoDeCompeticionLiga(alumnoGanador).
-              subscribe(res => console.log(res));
               if (enfrentamientosJornadaSeleccionada[k].Ganador === undefined) {
-                if (enfrentamientoEmpateRegistrado === false) {
-                  // Después tengo que actualizar el ganador en EnfrentamientoLiga
+                // Ahora tengo que actualizar los dos AlumnoJuegoDeCompeticionLiga del enfrentamiento con los nuevos puntos
+                listaAlumnosClasificacion[j].puntos = listaAlumnosClasificacion[j].puntos + 1;
+                console.log('Los puntos actualizados después de registrar el partido ganado: '
+                            + listaAlumnosClasificacion[j].puntos);
+                console.log(listaAlumnosClasificacion[j]);
+                console.log('el id del alumno es: ' + listaAlumnosClasificacion[j].id);
+                const AlumnoId = listaAlumnosClasificacion[j].id;
+                // tslint:disable-next-line:prefer-for-of
+                for (let m = 0; m < alumnosJuegoDeCompeticionLiga.length; m++) {
+                  if (alumnosJuegoDeCompeticionLiga[m].AlumnoId === AlumnoId) {
+                    this.AlumnoJuegoDeCompeticionLigaId = alumnosJuegoDeCompeticionLiga[m].id;
+                  }
+                }
+                const alumnoGanador = new AlumnoJuegoDeCompeticionLiga(AlumnoId,
+                                                                      juegoSeleccionado.id,
+                                                                      listaAlumnosClasificacion[j].puntos,
+                                                                      this.AlumnoJuegoDeCompeticionLigaId);
+                console.log(alumnoGanador);
+                console.log('El id del alumno es: ' + alumnoGanador.AlumnoId + ' y los puntos son: '
+                            + alumnoGanador.PuntosTotalesAlumno);
+                alumnosConPuntosSumados++;
+                this.peticionesAPI.PonPuntosAlumnoGanadorJuegoDeCompeticionLiga(alumnoGanador).
+                subscribe(res => console.log(res));
+
+                if (alumnosConPuntosSumados === 2 && enfrentamientoEmpateRegistrado === false) {
                   enfrentamientoEmpateRegistrado = true;
                   enfrentamientosJornadaSeleccionada[k].Ganador = 0;
                   console.log(enfrentamientosJornadaSeleccionada[k]);
@@ -872,11 +874,9 @@ export class CalculosService {
                   this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                   subscribe(res => console.log(res));
                 }
-              } else if (enfrentamientosJornadaSeleccionada[k].Ganador !== undefined) {
+              } else {
                 console.log('Este enfrentamiento ya tiene asignado un ganador: ');
                 console.log(enfrentamientosJornadaSeleccionada[k]);
-              } else if (enfrentamientoEmpateRegistrado === true) {
-                console.log('El enfrentamiento se ha registrado cuando hemos porcesado el otro alumno del enfrentamiento');
               }
             }
           }
