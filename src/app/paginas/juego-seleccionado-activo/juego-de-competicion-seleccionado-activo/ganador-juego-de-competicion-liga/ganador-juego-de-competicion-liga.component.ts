@@ -429,6 +429,15 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
                                                this.equiposJuegoDeCompeticionLiga,
                                                this.juegoSeleccionado, 2);
         }
+
+        // ----------------------------------- EMPATE ------------------------------------- //
+        if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
+          this.calculos.AsignarEmpateEquipos(this.enfrentamientosSeleccionadosColumnaTres,
+                                             this.EnfrentamientosJornadaSeleccionada,
+                                             this.listaEquiposClasificacion,
+                                             this.equiposJuegoDeCompeticionLiga,
+                                             this.juegoSeleccionado, 0) ;
+        }
       } else {
         console.log('Hay más de una selección en alguno de los enfrentamientos');
       }
