@@ -480,7 +480,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         // -------------------------------- GANADOR UNO ----------------------------------- //
         if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
           console.log('Estoy dentro de seleccionados columna uno');
-          this.calculos.AsignarGanadorEquipos2(this. enfrentamientosSeleccionadosColumnaUno, this.EnfrentamientosJornadaSeleccionada,
+          this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaUno, this.EnfrentamientosJornadaSeleccionada,
                                                this.listaEquiposClasificacion,
                                                this.equiposJuegoDeCompeticionLiga,
                                                this.juegoSeleccionado, 1);
@@ -488,7 +488,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
         // -------------------------------- GANADOR DOS ----------------------------------- //
         if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
-          this.calculos.AsignarGanadorEquipos2(this. enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
+          this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
                                                this.listaEquiposClasificacion,
                                                this.equiposJuegoDeCompeticionLiga,
                                                this.juegoSeleccionado, 2);
@@ -510,99 +510,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         console.log('Se ha seleccionado el jugadorUno como ganador');
       }
     }
-  }
-
-  AsignarGanadorEquipos() {
-      console.log('Estoy en AsignarGanadorEquipos()');
-
-      // -------- HACER UNA FUNCIÓN PARA REVISAR SI HAY MÁS DE UNA SELECCIÓN POR ENFRENTAMIETNO -------- //
-      console.log('La lista de equipos ganadoresUno es:');
-      console.log(this.enfrentamientosSeleccionadosColumnaUno);
-      console.log('La lista de equipos ganadoresDos es:');
-      console.log(this.enfrentamientosSeleccionadosColumnaDos);
-      console.log('La lista de equipos ganadoresTres es:');
-      console.log(this.enfrentamientosSeleccionadosColumnaTres);
-
-      this.avisoMasDeUnGanadorMarcadoDosEmpate = false;
-      this.avisoMasDeUnGanadorMarcadoUnoDos = false;
-      this.avisoMasDeUnGanadorMarcadoUnoEmpate = false;
-
-      // Segundo miramos si solo hay una selección por enfrentamiento
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.enfrentamientosSeleccionadosColumnaUno.length; i++) {
-        // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < this.enfrentamientosSeleccionadosColumnaDos.length; j++) {
-          if (this.enfrentamientosSeleccionadosColumnaUno[i].id === this.enfrentamientosSeleccionadosColumnaDos[j].id) {
-            this.avisoMasDeUnGanadorMarcadoUnoDos = true;
-            console.log('Hay alguna selección con ganadorUno y ganadorDos, poner el sweatalert');
-            console.log(this.enfrentamientosSeleccionadosColumnaDos[j]);
-            console.log(this.enfrentamientosSeleccionadosColumnaUno[i].id);
-          }
-        }
-        // tslint:disable-next-line:prefer-for-of
-        for (let k = 0; k < this.enfrentamientosSeleccionadosColumnaTres.length; k++) {
-          if (this.enfrentamientosSeleccionadosColumnaUno[i].id === this.enfrentamientosSeleccionadosColumnaTres[k].id) {
-            this.avisoMasDeUnGanadorMarcadoUnoEmpate = true;
-            console.log('Hay alguna selección con ganadorUno y Empate, poner el sweatalert');
-            console.log(this.enfrentamientosSeleccionadosColumnaUno[i]);
-            console.log(this.enfrentamientosSeleccionadosColumnaTres[k].id);
-          }
-        }
-      }
-
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.enfrentamientosSeleccionadosColumnaDos.length; i++) {
-        // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < this.enfrentamientosSeleccionadosColumnaTres.length; j++) {
-          if (this.enfrentamientosSeleccionadosColumnaDos[i].id === this.enfrentamientosSeleccionadosColumnaTres[j].id) {
-            this.avisoMasDeUnGanadorMarcadoDosEmpate = true;
-            console.log('Hay alguna selección con ganadorDos y Empate, poner sweatalert');
-            console.log(this.enfrentamientosSeleccionadosColumnaDos[i]);
-            console.log(this.enfrentamientosSeleccionadosColumnaTres[j].id);
-          }
-        }
-      }
-
-      // tslint:disable-next-line:max-line-length
-      console.log('avisoMasDeUnGanadorMarcadoUnoEmpate: ' + this.avisoMasDeUnGanadorMarcadoUnoEmpate);
-      console.log('avisoMasDeUnGanadorMarcadoDosEmpate: ' + this.avisoMasDeUnGanadorMarcadoDosEmpate);
-      console.log('avisoMasDeUnGanadorMarcadoUnoDos: ' + this.avisoMasDeUnGanadorMarcadoUnoDos);
-      // ----------------------------------------------------------------------------------------------------//
-
-      if (this.avisoMasDeUnGanadorMarcadoDosEmpate === false && this.avisoMasDeUnGanadorMarcadoUnoDos === false
-        && this.avisoMasDeUnGanadorMarcadoUnoEmpate === false) {
-
-          console.log('Los enfrentamientos con selección en la columna uno son: ');
-          console.log(this.enfrentamientosSeleccionadosColumnaUno);
-          console.log('Los enfrentamientos con selección en la columna dos son: ');
-          console.log(this.enfrentamientosSeleccionadosColumnaDos);
-          console.log('Los enfrentamientos con selección en la columna tres son: ');
-          console.log(this.enfrentamientosSeleccionadosColumnaTres);
-          console.log('Los equipos de este juego son: ');
-          console.log(this.equiposJuegoDeCompeticionLiga);
-          console.log('La lista de los equipos de este juego son: ');
-          console.log(this.listaEquiposClasificacion);
-
-          if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
-            // GANADOR UNO
-            console.log('Estoy en la condición de GANADOR UNO');
-            this.calculos.AsignarPuntosGanadorEquipos(this.enfrentamientosSeleccionadosColumnaUno, this.listaEquiposClasificacion,
-                                                      this.juegoSeleccionado, this.equiposJuegoDeCompeticionLiga, 1);
-          }
-          if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
-            // GANADOR DOS
-            console.log('Estoy en la condición de GANADOR DOS');
-            this.calculos.AsignarPuntosGanadorEquipos(this.enfrentamientosSeleccionadosColumnaDos, this.listaEquiposClasificacion,
-                                                      this.juegoSeleccionado, this.equiposJuegoDeCompeticionLiga, 2);
-          }
-          if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
-            // EMPATE
-            console.log('Estoy en la condición de EMPATE');
-            this.calculos.AsignarPuntosGanadorEquipos(this.enfrentamientosSeleccionadosColumnaTres, this.listaEquiposClasificacion,
-                                                      this.juegoSeleccionado, this.equiposJuegoDeCompeticionLiga, 3);
-          }
-        }
-
   }
 
   AddToListGanadorUno() {
