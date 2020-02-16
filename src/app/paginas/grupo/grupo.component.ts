@@ -9,8 +9,9 @@ import { Grupo, Alumno } from '../../clases/index';
 import { SesionService, PeticionesAPIService, CalculosService  } from '../../servicios/index';
 
 // Imports para abrir diálogo confirmar eliminar grupo
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -40,7 +41,6 @@ export class GrupoComponent implements OnInit {
               private peticionesAPI: PeticionesAPIService,
               private calculos: CalculosService,
               public dialog: MatDialog,
-              public snackBar: MatSnackBar,
               private location: Location) { }
 
   ngOnInit() {
@@ -93,9 +93,7 @@ export class GrupoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.EliminarGrupo();
-        this.snackBar.open(this.grupo.Nombre + ' eliminado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Eliminado', this.grupo.Nombre + ' eliminado correctamente', 'success');
       }
     });
   }

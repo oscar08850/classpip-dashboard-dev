@@ -9,8 +9,9 @@ import { Location } from '@angular/common';
 import { SesionService, CalculosService, PeticionesAPIService } from '../../../../servicios/index';
 
 // Imports para abrir diálogo
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-alumno-seleccionado-juego-de-puntos',
@@ -52,7 +53,6 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
 
   constructor(
                public dialog: MatDialog,
-               public snackBar: MatSnackBar,
                public sesion: SesionService,
                public calculos: CalculosService,
                public peticionesAPI: PeticionesAPIService,
@@ -209,9 +209,7 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.BorrarPunto(punto);
-        this.snackBar.open('Puntos eliminados correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Eliminados', 'Puntos eliminados correctamente', 'success');
       }
     });
   }

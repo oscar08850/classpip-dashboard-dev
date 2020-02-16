@@ -4,8 +4,9 @@ import { ResponseContentType, Http, Response } from '@angular/http';
 
 
 // Imports para abrir diálogo confirmar eliminar equipo
-import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
+import { MatDialog, MatTabGroup } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import Swal from 'sweetalert2';
 
 // Servicios
 import { ProfesorService, PeticionesAPIService, SesionService } from '../../servicios/index';
@@ -39,7 +40,6 @@ export class MisPuntosComponent implements OnInit {
     private sesion: SesionService,
     private peticionesAPI: PeticionesAPIService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,
     private http: Http) { }
 
   ngOnInit() {
@@ -96,13 +96,11 @@ export class MisPuntosComponent implements OnInit {
     });
 
     // Antes de cerrar recogeremos el resultado del diálogo: Borrar (true) o cancelar (false). Si confirmamos, borraremos
-    // el punto (función BorrarPunto) y mostraremos un snackBar con el mensaje de que se ha eliminado correctamente.
+    // el punto (función BorrarPunto) y mostraremos un swal con el mensaje de que se ha eliminado correctamente.
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.BorrarPunto(punto);
-        this.snackBar.open(punto.Nombre + ' eliminado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Eliminado', punto.Nombre + ' eliminado correctamente', 'success');
 
       }
     });
@@ -153,14 +151,11 @@ export class MisPuntosComponent implements OnInit {
     });
 
     // Antes de cerrar recogeremos el resultado del diálogo: Borrar (true) o cancelar (false). Si confirmamos, borraremos
-    // el punto (función BorrarPunto) y mostraremos un snackBar con el mensaje de que se ha eliminado correctamente.
+    // el punto (función BorrarPunto) y mostraremos un swal con el mensaje de que se ha eliminado correctamente.
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.BorrarInsignia(insigna);
-        this.snackBar.open(insigna.Nombre + ' eliminado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
-
+        Swal.fire('Eliminada', insigna.Nombre + ' eliminada correctamente', 'success');
       }
     });
   }

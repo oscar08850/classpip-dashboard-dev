@@ -13,8 +13,9 @@ import {MatSort} from '@angular/material/sort';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // Elementos necesarios para el diálogo
-import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
+import { MatDialog, MatTabGroup } from '@angular/material';
 import {DialogoComponent} from './dialogo/dialogo.component';
+import Swal from 'sweetalert2';
 
 
 
@@ -90,9 +91,7 @@ export class DesarrolladoresComponent implements OnInit {
 
   constructor(
                 private formBuilder: FormBuilder,
-                public dialog: MatDialog,
-                public snackBar: MatSnackBar
-
+                public dialog: MatDialog
    ) { }
 
   /* Anotaciones necesarias para la ordenación y la paginación */
@@ -236,9 +235,7 @@ export class DesarrolladoresComponent implements OnInit {
       dialogRef.afterClosed().subscribe((nuevaOpinion: string) => {
         console.log ('Nueva opinion: ' +  nuevaOpinion);
         this.listaElementosQuimicos[i].opinion = nuevaOpinion;
-        this.snackBar.open('Opinión modificada', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Opinion modificada', 'Nueva opinion modificada y guardada correctamente', 'success');
       });
     }
 

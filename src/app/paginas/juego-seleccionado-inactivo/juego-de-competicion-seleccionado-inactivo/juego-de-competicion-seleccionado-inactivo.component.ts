@@ -8,9 +8,10 @@ import { Alumno, Equipo, Juego, TablaJornadas, AlumnoJuegoDeCompeticionLiga, Equ
 // Servicio
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
 
-// Imports para abrir diálogo y snackbar
-import { MatDialog, MatSnackBar } from '@angular/material';
+// Imports para abrir diálogo y swal
+import { MatDialog } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -59,7 +60,6 @@ export class JuegoDeCompeticionSeleccionadoInactivoComponent implements OnInit {
   enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>;
 
   constructor(  public dialog: MatDialog,
-                public snackBar: MatSnackBar,
                 public sesion: SesionService,
                 public peticionesAPI: PeticionesAPIService,
                 public calculos: CalculosService,
@@ -275,9 +275,7 @@ export class JuegoDeCompeticionSeleccionadoInactivoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.ReactivarJuego();
-        this.snackBar.open(this.juegoSeleccionado.Tipo + ' reactivado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Reactivado', this.juegoSeleccionado.Tipo + ' reactivado correctamente', 'success');
       }
     });
   }
@@ -303,9 +301,8 @@ export class JuegoDeCompeticionSeleccionadoInactivoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.EliminarJuego();
-        this.snackBar.open(this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'Cerrar', {
-          duration: 2000,
-        });
+        Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
+
       }
     });
   }

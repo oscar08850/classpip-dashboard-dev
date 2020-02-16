@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, } from '@angular/material';
 import { Alumno, Profesor } from '../../clases/index';
 import {MatTableDataSource} from '@angular/material/table';
+import Swal from 'sweetalert2';
 
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../servicios/index';
@@ -27,8 +28,7 @@ export class IntroducirAlumnosComponent implements OnInit {
   constructor(
                 private peticionesAPI: PeticionesAPIService,
                 private sesion: SesionService,
-                public dialog: MatDialog,
-                public snackBar: MatSnackBar) { }
+                public dialog: MatDialog) { }
 
   ngOnInit() {
     this.profesor = this.sesion.DameProfesor();
@@ -76,9 +76,7 @@ export class IntroducirAlumnosComponent implements OnInit {
       alumno.ImagenPerfil = 'UsuarioAlumno.jpg';
       this.peticionesAPI.CreaAlumno (alumno).subscribe();
     }
-    this.snackBar.open(this.nuevosAlumnos.length + ' nuevos alumnos añadidos correctamente', 'Cerrar', {
-      duration: 2000,
-    });
+    Swal.fire('Añadidos', this.nuevosAlumnos.length + ' nuevos alumnos añadidos correctamente', 'success');
     this.nuevosAlumnos = [];
   }
 
