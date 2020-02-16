@@ -106,7 +106,11 @@ import { JuegoDeCompeticionSeleccionadoInactivoComponent } from './paginas/juego
 // tslint:disable-next-line:max-line-length
 import { InformacionJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/informacion-juego-de-competicion/informacion-juego-de-competicion.component';
 // tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-seleccionado-inactivo/informacion-juego-de-competicion-inactivo/informacion-juego-de-competicion-inactivo.component';
+// tslint:disable-next-line:max-line-length
 import { EditarJornadasJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/editar-jornadas-juego-de-competicion/editar-jornadas-juego-de-competicion.component';
+// tslint:disable-next-line:max-line-length
+import { GanadorJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/ganador-juego-de-competicion-liga/ganador-juego-de-competicion-liga.component';
 
 // COMPONENTES EN COMPARTIDO
 import { DialogoConfirmacionComponent } from './paginas/COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
@@ -185,10 +189,12 @@ import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introduc
     InformacionJuegoDeCompeticionComponent,
     EditarJornadasJuegoDeCompeticionComponent,
     AlumnosSeleccionadoJuegoDeCompeticionLigaComponent,
+    InformacionJuegoDeCompeticionInactivoComponent,
 
     EditarCromoDialogComponent,
     MisAlumnosComponent,
-    IntroducirAlumnosComponent
+    IntroducirAlumnosComponent,
+    GanadorJuegoDeCompeticionLigaComponent
 
   ],
   imports: [

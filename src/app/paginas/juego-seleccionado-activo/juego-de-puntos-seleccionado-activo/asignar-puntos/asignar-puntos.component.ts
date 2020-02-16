@@ -166,6 +166,7 @@ export class AsignarPuntosComponent implements OnInit {
   }
 
   AsignarPuntos() {
+    console.log('Estoy en AsignarPuntos');
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
       console.log('el juego es individual');

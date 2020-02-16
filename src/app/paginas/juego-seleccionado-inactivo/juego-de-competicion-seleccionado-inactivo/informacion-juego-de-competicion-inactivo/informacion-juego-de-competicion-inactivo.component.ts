@@ -12,11 +12,11 @@ import { MatTableDataSource } from '@angular/material';
 import { identifierModuleUrl } from '@angular/compiler';
 
 @Component({
-  selector: 'app-informacion-juego-de-competicion',
-  templateUrl: './informacion-juego-de-competicion.component.html',
-  styleUrls: ['./informacion-juego-de-competicion.component.scss']
+  selector: 'app-informacion-juego-de-competicion-inactivo',
+  templateUrl: './informacion-juego-de-competicion-inactivo.component.html',
+  styleUrls: ['./informacion-juego-de-competicion-inactivo.component.scss']
 })
-export class InformacionJuegoDeCompeticionComponent implements OnInit {
+export class InformacionJuegoDeCompeticionInactivoComponent implements OnInit {
 
   // Juego De CompeticionLiga seleccionado
   juegoSeleccionado: Juego;
@@ -69,16 +69,6 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
     });
   }
 
-  // RecuperarInscripcionesAlumnoJuego() {
-  //   this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionLiga(this.juegoSeleccionado.id)
-  //   .subscribe(inscripciones => {
-  //     this.listaAlumnosDelJuego = inscripciones;
-  //     console.log ('AlumnosJuegoDeCompeticionLiga: ');
-  //     console.log (this.listaAlumnosDelJuego);
-  //     console.log(this.listaAlumnosDelJuego);
-  //     this.ConstruirTablaEnfrentamientos();
-  //   });
-  // }
 
   ConstruirTablaEnfrentamientos() {
     console.log ('Aquí tendré la tabla de enfrentamientos, los enfrentamientos sonc:');

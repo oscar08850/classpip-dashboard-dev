@@ -20,8 +20,7 @@
                   <!-- <div style="margin-right: 15%; border: 15px; width: 60%;"> -->
                   <div style="margin-left: 20px; font-size: 130%; width: 40%;">
                       <span style="font-weight: bold; font-size: 80%;">Criterio: {{jornada.CriterioGanador}}</span>
-                      <!-- (click)="AñadirResultados()" -->
-                      <button type="button" class="btn Aceptar"  style="margin-left: 600px">Resultados<i class="material-icons">emoji_events</i></button>
+
                       <!-- ///////////////////////////////////// TABLA ENFRENTAMIENTOS POR EQUIPOS ////////////////////////////////////// -->
                       <form style=" width: 100%" *ngIf="juegoSeleccionado.Modo != 'Individual'">
                         <table style="margin-left: 65px;  width: 200%" align="center" mat-table [dataSource]="dataSourceEnfrentamientoEquipo" class="example-container mat-elevation-z8">
@@ -99,32 +98,7 @@
 
         <ng-template #Aviso_no_jornadas>No se han creado jornadas en este juego</ng-template>
         </form>
-        <!-- </mat-tab> -->
 
-      <!-- EQUIPOS DEL JUEGO
-      <mat-tab  *ngIf="juegoSeleccionado.Modo === 'Equipos'"  label="Equipos del Grupo"></mat-tab>
-
-      CRITERIOS ELEGIR GANADOR DEL JUEGO
-      <mat-tab  label="Criterios del Juego">
-          <form>
-              <mat-accordion>
-                  <mat-expansion-panel *ngFor="let jornada of JornadasCompeticion">
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                      Jornada {{jornada.NumeroDeJornada}}
-                    </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div class="enFila">
-                        <div style="margin-right: 5%; border: 15px; width: 70%;">
-                            <span style="font-weight: bold; font-size: 130%;">Criterio</span>
-                            <p style="font-size: 150%; margin: 5px;">{{jornada.CriterioGanador}}</p>
-                        </div>
-                    </div>
-                  </mat-expansion-panel>
-              </mat-accordion>
-            </form>
-      </mat-tab> -->
-    <!-- </mat-tab-group> -->
   </div>
 
   <button type="button" class="btn Back" (click)="goBack()">Volver </button>

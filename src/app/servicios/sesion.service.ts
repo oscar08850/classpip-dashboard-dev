@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga,
-         TablaJornadas, Jornada} from '../clases';
+         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 @Injectable({
@@ -43,6 +43,8 @@ export class SesionService {
 
   jornadas: any;
   JornadasCompeticion: any;
+  TablaAlumnoJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion[];
+  TablaEquipoJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion[];
   // listaEquiposGrupo: any;
 
   constructor() { }
@@ -324,11 +326,49 @@ const datos = {
 jornadas: this.jornadas,
 JornadasCompeticion: this.JornadasCompeticion
 };
-console.log ('Aqui estan las jornadas guardadas: ');
+console.log ('Aqui estan las jornadas guardadas y la tabla de jornadas: ');
 console.log(this.jornadas);
 console.log(this.JornadasCompeticion);
 
 return datos;
 }
+
+public TomaDatosJornadasJuegoComponent(
+  jornadas: Jornada[],
+) {
+this.jornadas = jornadas;
+console.log ('jornadas:');
+console.log ( this.jornadas);
+}
+
+public TomaTablaAlumnoJuegoDeCompeticion(Tabla: TablaAlumnoJuegoDeCompeticion[]) {
+  this.TablaAlumnoJuegoDeCompeticion = Tabla;
+}
+
+public DameDatosJornadasJuegoComponent(): any {
+const datos = {
+jornadas: this.jornadas,
+};
+console.log ('Aqui estan las jornadas guardadas: ');
+console.log(this.jornadas);
+
+return datos;
+}
+
+
+public DameTablaAlumnoJuegoDeCompeticion(): TablaAlumnoJuegoDeCompeticion[] {
+  const Tabla = this.TablaAlumnoJuegoDeCompeticion;
+  return Tabla;
+}
+
+public TomaTablaEquipoJuegoDeCompeticion(Tabla: TablaEquipoJuegoDeCompeticion[]) {
+  this.TablaEquipoJuegoDeCompeticion = Tabla;
+}
+
+public DameTablaEquipoJuegoDeCompeticion(): TablaEquipoJuegoDeCompeticion[] {
+  const Tabla = this.TablaEquipoJuegoDeCompeticion;
+  return Tabla;
+}
+
 
 }
