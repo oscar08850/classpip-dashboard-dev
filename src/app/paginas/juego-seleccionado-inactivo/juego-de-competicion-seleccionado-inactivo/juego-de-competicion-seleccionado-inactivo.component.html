@@ -1,7 +1,7 @@
 <div class="contenedor">
   <div class="enColumna">
     <div class="enFila" style="width:40%">
-      <button type="button" class="btn Info" (click) = Informacion(); routerLink = "informacionJuegoColeccion">Información<i class="material-icons">info</i></button>
+      <button type="button" class="btn Info"  (click) = Informacion();  routerLink = "informacionJuegoDeCompeticionInactivo">Información<i class="material-icons">info</i></button>
       <button type="button" class="btn Aceptar" (click) = "AbrirDialogoConfirmacionReactivar()">Reactivar<i class="material-icons">check_circle_outline</i></button>
       <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionEliminar()"> Eliminar<i class="material-icons">delete</i></button>
     </div>
@@ -11,62 +11,189 @@
 <form style="width: 100%"  *ngIf="juegoSeleccionado.Modo === 'Individual'">
   <div class="filter"  style="width: 60%">
     <mat-form-field style="width: 95% !Important;">
-     <input matInput (keyup)="applyFilter($event.target.value)"  placeholder="Filtro para buscar alumno...">
-     <i class="material-icons" matSuffix>search</i>
+      <input matInput (keyup)="applyFilter($event.target.value)"  placeholder="Filtro para buscar alumno...">
+      <i class="material-icons" matSuffix>search</i>
     </mat-form-field>
   </div>
 
-  <table style="width: 70%"  align="center"  mat-table [dataSource]="datasourceAlumno" class="example-container mat-elevation-z8">
-     <!--- Note that these columns can be defined in any order.
-             The actual rendered columns are set as a property on the row definition" -->
+  <table style="width: 80%"  align="center"  mat-table [dataSource]="datasourceAlumno" class="example-container mat-elevation-z8">
+      <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
 
-       <!-- Posición Column -->
-       <ng-container matColumnDef="posicion">
-         <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 15%">Posición Global</th>
-         <td mat-cell *matCellDef="let alumno"> {{alumno.posicion}} </td>
-       </ng-container>
+        <!-- Posición Column -->
+        <ng-container matColumnDef="posicion">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%">Posición Global</th>
+          <td mat-cell *matCellDef="let alumno"> {{alumno.posicion}} </td>
+        </ng-container>
 
-       <!-- Nombre Alumno Column -->
-       <ng-container matColumnDef="nombreAlumno">
-         <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%">Nombre</th>
-         <td mat-cell *matCellDef="let alumno"> {{alumno.nombre}} </td>
-       </ng-container>
+        <!-- Nombre Alumno Column -->
+        <ng-container matColumnDef="nombreAlumno">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Nombre</th>
+          <td mat-cell *matCellDef="let alumno"> {{alumno.nombre}} </td>
+        </ng-container>
 
-       <!-- Primer Apellido Column -->
-       <ng-container matColumnDef="primerApellido">
-           <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%">Primer Apellido</th>
-           <td mat-cell *matCellDef="let alumno"> {{alumno.primerApellido}} </td>
-       </ng-container>
+        <!-- Primer Apellido Column -->
+        <ng-container matColumnDef="primerApellido">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Primer Apellido</th>
+            <td mat-cell *matCellDef="let alumno"> {{alumno.primerApellido}} </td>
+        </ng-container>
 
-       <!-- Segundo Apellido Column -->
-       <ng-container matColumnDef="segundoApellido">
-           <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%">Segundo Apellido</th>
-           <td mat-cell *matCellDef="let alumno"> {{alumno.segundoApellido}} </td>
-       </ng-container>
+        <!-- Segundo Apellido Column
+        <ng-container matColumnDef="segundoApellido">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%">Segundo Apellido</th>
+            <td mat-cell *matCellDef="let alumno"> {{alumno.segundoApellido}} </td>
+        </ng-container> -->
 
-       <!-- Puntos Column -->
-       <ng-container matColumnDef="puntos">
-           <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 15%">Puntos</th>
-           <td mat-cell *matCellDef="let alumno"> {{alumno.puntos}} </td>
-       </ng-container>
+        <!-- Partidos Totales Column -->
+        <ng-container matColumnDef="partidosTotales">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Partidos Totales</th>
+          <td mat-cell *matCellDef="let alumno"  align="center"> {{alumno.partidosTotales}} </td>
+        </ng-container>
 
-       <!-- More Column -->
-       <ng-container matColumnDef=" ">
-           <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"> </th>
-           <td mat-cell *matCellDef="let alumno">
-               <button (click) = "AccederAlumno(alumno)" routerLink = "informacionAlumnoJuego" mat-icon-button matTooltip="Ver progreso de {{alumno.nombre}} en el juego">
-                   <i class="material-icons">more_horiz</i>
-               </button>
-           </td>
-       </ng-container>
+        <!-- Partidos Jugados Column -->
+        <ng-container matColumnDef="partidosJugados">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Jugados</th>
+          <td mat-cell *matCellDef="let alumno" align="center"> {{alumno.partidosJugados}} </td>
+        </ng-container>
 
-       <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnos; sticky: true"></tr>
-       <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnos;"></tr>
+        <!-- Partidos Ganados Column -->
+        <ng-container matColumnDef="partidosGanados">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Ganados</th>
+          <td mat-cell *matCellDef="let alumno" align="center"> {{alumno.partidosGanados}} </td>
+        </ng-container>
 
-   </table>
+        <!-- Partidos Empatados Column -->
+        <ng-container matColumnDef="partidosEmpatados">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Empatados</th>
+          <td mat-cell *matCellDef="let alumno" align="center"> {{alumno.partidosEmpatados}} </td>
+        </ng-container>
+
+        <!-- Partidos Perdidos Column -->
+        <ng-container matColumnDef="partidosPerdidos">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Perdidos</th>
+          <td mat-cell *matCellDef="let alumno" align="center"> {{alumno.partidosPerdidos}} </td>
+        </ng-container>
+
+        <!-- Puntos Column -->
+        <ng-container matColumnDef="puntos">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Puntos</th>
+            <td mat-cell *matCellDef="let alumno" align="center"> {{alumno.puntos}} </td>
+        </ng-container>
+
+        <!-- More Column -->
+        <ng-container matColumnDef=" ">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"> </th>
+            <td mat-cell *matCellDef="let alumno">
+                <button (click) = "AccederAlumno(alumno)" routerLink = "informacionAlumnoJuegoCompeticionLiga" mat-icon-button matTooltip="Ver progreso de {{alumno.nombre}} en el juego">
+                    <i class="material-icons">more_horiz</i>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnos; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnos;"></tr>
+
+  </table>
 </form>
-<br>
 
-<!-- <button type="button" class="btn Back" (click)="goBack()">Volver </button> -->
+<!-- ////////////////////////////////////// CLASIFICACIÓN EQUIPOS ////////////////////////////////////////////////////-->
+<form style=" width: 100%" *ngIf="juegoSeleccionado.Modo != 'Individual'">
+  <div class="filter"  style="width: 60%">
+    <mat-form-field style="width: 95% !Important;">
+      <input matInput (keyup)="applyFilterEquipo($event.target.value)" placeholder="Filtro para buscar equipo...">
+      <i class="material-icons" matSuffix>search</i>
+    </mat-form-field>
+  </div>
+
+  <table style="width: 80%" align="center" mat-table [dataSource]="datasourceEquipo" class="example-container mat-elevation-z8">
+    <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Posición Column -->
+          <ng-container matColumnDef="posicion">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%">Posición Global</th>
+            <td mat-cell *matCellDef="let equipo"> {{equipo.posicion}} </td>
+          </ng-container>
+
+          <!-- Nombre Equipo Column -->
+          <ng-container matColumnDef="nombreEquipo" align="center">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%" align="center">Nombre</th>
+            <td mat-cell *matCellDef="let equipo"> {{equipo.nombre}} </td>
+          </ng-container>
+
+          <!-- Miembros Column -->
+          <ng-container matColumnDef="miembros">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 10%">Miembros</th>
+            <td mat-cell *matCellDef="let equipo">
+              <button mat-icon-button matTooltip="Ver miembros de {{equipo.nombre}}" color="primary" [mdePopoverTriggerFor]="appPopover"
+              (click) = "AlumnosDelEquipo(equipo)" mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+                <i class="material-icons">group</i>
+              </button>
+
+              <mde-popover  #appPopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+                  <mat-card style="max-width: 300px">
+                      <mat-card-content>
+                          <mat-list>
+                              <mat-list-item *ngFor="let alumno of alumnosDelEquipo">
+                                  <p class="md-body-1" mat-line>{{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</p>
+                              </mat-list-item>
+                          </mat-list>
+                      </mat-card-content>
+                  </mat-card>
+              </mde-popover>
+            </td>
+          </ng-container>
+
+          <!-- Partidos Totales Column -->
+          <ng-container matColumnDef="partidosTotales">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Partidos Totales</th>
+            <td mat-cell *matCellDef="let equipo"  align="center"> {{equipo.partidosTotales}} </td>
+          </ng-container>
+
+          <!-- Partidos Jugados Column -->
+          <ng-container matColumnDef="partidosJugados">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Jugados</th>
+            <td mat-cell *matCellDef="let equipo" align="center"> {{equipo.partidosJugados}} </td>
+          </ng-container>
+
+          <!-- Partidos Ganados Column -->
+          <ng-container matColumnDef="partidosGanados">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Ganados</th>
+            <td mat-cell *matCellDef="let equipo" align="center"> {{equipo.partidosGanados}} </td>
+          </ng-container>
+
+          <!-- Partidos Empatados Column -->
+          <ng-container matColumnDef="partidosEmpatados">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Empatados</th>
+            <td mat-cell *matCellDef="let equipo" align="center"> {{equipo.partidosEmpatados}} </td>
+          </ng-container>
+
+          <!-- Partidos Perdidos Column -->
+          <ng-container matColumnDef="partidosPerdidos">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Perdidos</th>
+            <td mat-cell *matCellDef="let equipo" align="center"> {{equipo.partidosPerdidos}} </td>
+          </ng-container>
+
+          <!-- Puntos Column -->
+          <ng-container matColumnDef="puntos">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 10%" align="center"> Puntos </th>
+            <td mat-cell *matCellDef="let equipo" align="center"> {{equipo.puntos}} </td>
+          </ng-container>
+
+          <!-- More Column
+          <ng-container matColumnDef=" ">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+              <td mat-cell *matCellDef="let equipo">
+                  <button (click) = "AccederEquipo(equipo)" routerLink = "informacionEquipoJuego" mat-icon-button matTooltip="Ver progreso de {{equipo.nombre}} en el juego">
+                      <i class="material-icons">more_horiz</i>
+                  </button>
+              </td>
+          </ng-container> -->
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsEquipos; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsEquipos;"></tr>
+
+  </table>
+</form>
 
 </div>

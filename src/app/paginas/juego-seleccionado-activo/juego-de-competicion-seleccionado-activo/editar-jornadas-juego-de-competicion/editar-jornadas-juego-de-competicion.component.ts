@@ -56,10 +56,10 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
     const datos = this.sesion.DameDatosJornadas();
     this.jornadas = datos.jornadas;
     this.JornadasCompeticion = datos.JornadasCompeticion;
-    console.log ('this.JornadasCompeticion[1].Fecha');
-    console.log (this.JornadasCompeticion[0].Fecha);
-    console.log (this.JornadasCompeticion[1].Fecha);
-    console.log (this.JornadasCompeticion[2].Fecha);
+    // console.log ('this.JornadasCompeticion[1].Fecha');
+    // console.log (this.JornadasCompeticion[0].Fecha);
+    // console.log (this.JornadasCompeticion[1].Fecha);
+    // console.log (this.JornadasCompeticion[2].Fecha);
     this.juegoSeleccionado = this.sesion.DameJuego();
     console.log ('juego seleccionado ' + this.juegoSeleccionado.Modo);
     console.log('Jornadas: ');
