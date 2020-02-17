@@ -6,7 +6,7 @@ import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // Clases
 // tslint:disable-next-line:max-line-length
-import { Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga, Jornada} from '../../clases/index';
+import { Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno} from '../../clases/index';
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
@@ -87,6 +87,7 @@ export class JuegoComponent implements OnInit {
     // En el segundo paso mostraremos dos Chips con los dos modos de juego que podemos crear y su color
     seleccionTipoJuegoCompeticion: ChipColor[] = [
       {nombre: 'Liga', color: 'primary'},
+      {nombre: 'Formula 1', color: 'warn'},
       {nombre: 'Torneo', color: 'accent'}
     ];
 
@@ -184,7 +185,6 @@ export class JuegoComponent implements OnInit {
 
 
 
-
   ///////////////////////////////////////// FUNCIONES PARA CREAR JUEGO ///////////////////////////////////////////////
 
   // RECUPERA LOS EQUIPOS DEL GRUPO
@@ -264,7 +264,7 @@ export class JuegoComponent implements OnInit {
   }
 
   CrearJuegoDeCompeticionLiga() {
-    console.log ('&&&&&& ' + this.tipoJuegoCompeticionSeleccionado);
+    console.log (this.tipoJuegoCompeticionSeleccionado);
 
     let NumeroDeJornadas: number;
     let Jornadas: Jornada[];
@@ -286,29 +286,39 @@ export class JuegoComponent implements OnInit {
       Jornadas = this.calculos.CrearJornadasLiga(NumeroDeJornadas, this.juego.id);
       console.log('Jornadas creadas correctamente');
       this.sesion.TomaDatosJornadasJuegoComponent(Jornadas);
-      // this.calculos.CrearenfrentamientosLiga();
     });
   }
 
-  // CrearJuegoDeCompeticionLiga() {
-  //   console.log ('&&&&&& ' + this.tipoJuegoCompeticionSeleccionado);
+  //////////////////
+  //////////////////
 
-  //   let NumeroDeJornadas: number;
-  //   NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
-  //   console.log(NumeroDeJornadas);
-  //   console.log(new JuegoDeCompeticion (NumeroDeJornadas, this.tipoDeJuegoSeleccionado + ' Liga',
-  //   this.modoDeJuegoSeleccionado), this.grupo.id);
-  //   // tslint:disable-next-line:max-line-lengtholean)
-  //   this.peticionesAPI.CreaJuegoDeCompeticionLiga(new JuegoDeCompeticion (NumeroDeJornadas, this.tipoDeJuegoSeleccionado + ' Liga',
-  //     this.modoDeJuegoSeleccionado), this.grupo.id)
-  //   .subscribe(juegoCreado => {
-  //     this.juegoDeCompeticion = juegoCreado;
-  //     console.log(juegoCreado);
-  //     console.log('Juego creado correctamente');
-  //     this.sesion.TomaJuego(this.juego);
-  //     this.juegoCreado = true;
-  //   });
-  // }
+  CrearJuegoDeCompeticionFormulaUno() {
+    console.log ('&&&&&& ' + this.tipoJuegoCompeticionSeleccionado);
+
+    let NumeroDeJornadas: number;
+    let Jornadas: Jornada[];
+    NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
+    console.log(NumeroDeJornadas);
+    console.log(new Juego (this.tipoDeJuegoSeleccionado + ' Formula 1', this.modoDeJuegoSeleccionado,
+                  undefined, true, NumeroDeJornadas, this.tipoJuegoCompeticionSeleccionado), this.grupo.id);
+    // tslint:disable-next-line:max-line-length
+    this.peticionesAPI.CreaJuegoDeCompeticionFormulaUno(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado,
+                                                    this.modoDeJuegoSeleccionado, undefined, true, NumeroDeJornadas,
+                                                    this.tipoJuegoCompeticionSeleccionado), this.grupo.id)
+    .subscribe(juegoCreado => {
+      this.juego = juegoCreado;
+      console.log(juegoCreado);
+      console.log('Juego creado correctamente');
+      this.sesion.TomaJuego(this.juego);
+      this.juegoCreado = true;
+      console.log('Voy a crear las ' + NumeroDeJornadas + ' jornadas');
+      Jornadas = this.calculos.CrearJornadasFormulaUno(NumeroDeJornadas, this.juego.id);
+      console.log('Jornadas creadas correctamente');
+      this.sesion.TomaDatosJornadasJuegoComponent(Jornadas);
+    });
+  }
+
+
   // Si decidimos crear un juego de puntos, lo crearemos ya en la base de datos y posteriormente le añadiremos puntos y niveles
   // Si decidimos crear un juego de colección no haremos el POST en este paso, sino en el siguente cuando indiquemos la colección
   // Si decidimos crear un juego de competición tampoco haremos el POST en este paso, sino cuando indiquemos el tipo de competición
@@ -323,6 +333,9 @@ export class JuegoComponent implements OnInit {
     } else if (this.tipoDeJuegoSeleccionado === 'Juego De Competición' && this.tipoJuegoCompeticionSeleccionado === 'Liga') {
       console.log('Voy a crear juego de Competición Liga');
       this.CrearJuegoDeCompeticionLiga();
+    } else if (this.tipoDeJuegoSeleccionado === 'Juego De Competición' && this.tipoJuegoCompeticionSeleccionado === 'Formula 1') {
+      console.log('Voy a crear juego de Competición Formula 1');
+      this.CrearJuegoDeCompeticionFormulaUno();
     }
 
     Swal.fire('Creado', this.tipoDeJuegoSeleccionado + ' creado correctamente', 'success');
@@ -381,6 +394,32 @@ export class JuegoComponent implements OnInit {
             .subscribe(equiposJuego => console.log(equiposJuego));
           }
         }
+      } else if (this.tipoJuegoCompeticionSeleccionado === 'Formula 1') {
+        if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+          console.log('Voy a inscribir a los alumnos del grupo');
+
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.alumnosGrupo.length; i++) {
+            console.log('alumno: ' + this.alumnosGrupo[i]);
+            console.log('id alumno: ' + this.alumnosGrupo[i].id);
+            console.log('juego: ' + this.juego);
+            console.log('id juego: ' + this.juego.id);
+            console.log(new AlumnoJuegoDeCompeticionFormulaUno(this.alumnosGrupo[i].id, this.juego.id));
+            // tslint:disable-next-line:max-line-length
+            this.peticionesAPI.InscribeAlumnoJuegoDeCompeticionFormulaUno(new AlumnoJuegoDeCompeticionFormulaUno(this.alumnosGrupo[i].id, this.juego.id))
+            .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
+          }
+        } else {
+          console.log('Voy a inscribir los equipos al grupo');
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.equiposGrupo.length; i++) {
+            console.log(this.equiposGrupo[i]);
+            // tslint:disable-next-line:max-line-length
+            this.peticionesAPI.InscribeEquipoJuegoDeCompeticionFormulaUno(new EquipoJuegoDeCompeticionFormulaUno(this.equiposGrupo[i].id, this.juego.id))
+            .subscribe(equiposJuego => console.log(equiposJuego));
+          }
+        }
       }
     }
 
@@ -410,32 +449,8 @@ export class JuegoComponent implements OnInit {
         }
       }
 
-
-
-
-      // if (this.juego.Modo === 'Individual') {
-      //     console.log('Voy a inscribir a los alumnos del grupo 2');
-
-      //     // tslint:disable-next-line:prefer-for-of
-      //     for (let i = 0; i < this.alumnosGrupo.length; i++) {
-      //       console.log(this.alumnosGrupo[i]);
-      //       this.peticionesAPI.InscribeAlumnoJuegoDePuntos(new AlumnoJuegoDePuntos(this.alumnosGrupo[i].id, this.juego.id))
-      //       .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente 2'));
-      //     }
-      //   } else {
-      //     console.log('Voy a inscribir los equipos al grupo');
-
-      //     // tslint:disable-next-line:prefer-for-of
-      //     for (let i = 0; i < this.equiposGrupo.length; i++) {
-      //       console.log(this.equiposGrupo[i].Nombre);
-      //       this.peticionesAPI.InscribeEquipoJuegoDePuntos(new EquipoJuegoDePuntos(this.equiposGrupo[i].id, this.juego.id))
-      //       .subscribe(equiposJuego => console.log(equiposJuego));
-
-      //     }
-      // }
     }
 
-    console.log ('BBBBBBB');
     // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
     if (this.juegosActivos === undefined) {
       // Si la lista aun no se ha creado no podre hacer el push

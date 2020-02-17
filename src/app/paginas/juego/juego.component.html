@@ -246,35 +246,36 @@
               </mat-step>
 
                <!-- CUARTO PASO: NUMERO DE JORNADAS-->
-                <mat-step [stepControl]="myForm">
-                  <ng-template matStepLabel><div>Número de jornadas</div></ng-template>
 
-                      <!-- casilla para introducir jornadas -->
+                  <mat-step [stepControl]="myForm">
+                    <ng-template matStepLabel><div>Número de jornadas</div></ng-template>
 
+                        <!-- casilla para introducir jornadas -->
+                            <mat-form-field>
+                              <mat-label>Número de jornadas</mat-label>
+                              <!--- <input matInput placeholder="Introduzca el Número de jornadas" > -->
+                              <input matInput formControlName="NumeroDeJornadas" required>
+                            </mat-form-field>
 
+                        <div *ngIf="TipoDeJuegoCompeticionSeleccionado === 'Liga'">
+                          <div *ngIf="modoDeJuegoSeleccionado === 'Individual'">
+                          <mat-label>Si desea realizar la liga de una vuelta escriba {{this.alumnosGrupo.length - 1}}</mat-label>
+                          </div>
 
-                          <mat-form-field>
-                            <mat-label>Número de jornadas</mat-label>
-                            <!--- <input matInput placeholder="Introduzca el Número de jornadas" > -->
-                            <input matInput formControlName="NumeroDeJornadas" required>
-                          </mat-form-field>
-
-
-                      <div *ngIf="modoDeJuegoSeleccionado === 'Individual'">
-                      <mat-label>Si desea realizar la liga de una vuelta escriba {{this.alumnosGrupo.length - 1}}</mat-label>
-                      </div>
-
-                      <div *ngIf="modoDeJuegoSeleccionado === 'Equipos'">
-                      <mat-label>Si desea realizar la liga de una vuelta escriba {{this.equiposGrupo.length - 1}}</mat-label>
-                      </div>
-
-                      <div class="btnCambiarStep">
-                          <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                          <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
-
+                          <div *ngIf="modoDeJuegoSeleccionado === 'Equipos'">
+                          <mat-label>Si desea realizar la liga de una vuelta escriba {{this.equiposGrupo.length - 1}}</mat-label>
+                          </div>
                         </div>
 
-                </mat-step>
+                        <div class="btnCambiarStep">
+                            <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                            <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
+
+                          </div>
+
+                  </mat-step>
+
+
 
           </div>
 

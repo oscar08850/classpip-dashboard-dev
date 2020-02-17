@@ -8,7 +8,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         Equipo, AsignacionEquipo, AsignacionPuntosJuego, EquipoJuegoDePuntos, Coleccion,
         AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Cromo, HistorialPuntosAlumno, HistorialPuntosEquipo,
         Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
-        Jornada, EnfrentamientoLiga } from '../clases/index';
+        Jornada, EnfrentamientoLiga, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno } from '../clases/index';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +46,11 @@ export class PeticionesAPIService {
   private APIUrlAlumnoJuegoDeCompeticionLiga = 'http://localhost:3000/api/AlumnosJuegoDeCompeticionLiga';
   private APIUrlEquipoJuegoDeCompeticionLiga = 'http://localhost:3000/api/EquiposJuegoDeCompeticionLiga';
   private APIUrlJornadasJuegoDeCompeticionLiga = 'http://localhost:3000/api/JornadasDeCompeticionLiga';
+
+  private APIUrlJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/JuegosDeCompeticionFormulaUno';
+  private APIUrlAlumnoJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/AlumnosJuegoDeCompeticionFormulaUno';
+  private APIUrlEquipoJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/EquiposJuegoDeCompeticionFormulaUno';
+  private APIUrlJornadasJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/JornadasDeCompeticionFormulaUno';
 
   // Para cargar y descargar imagenes
   private APIUrlImagenAlumno = 'http://localhost:3000/api/imagenes/imagenAlumno';
@@ -551,6 +556,36 @@ export class PeticionesAPIService {
     return this.http.put<EquipoJuegoDeCompeticionLiga>('http://localhost:3000/api/EquiposJuegoDeCompeticionLiga/'
                                                        + ganadorJuegoDeCompeticionLiga.id, ganadorJuegoDeCompeticionLiga);
   }
+
+
+  public CreaJuegoDeCompeticionFormulaUno(juego: Juego, grupoId: number): Observable<Juego> {
+    console.log('voy a crear el juego de competicion FormulaUno');
+    console.log(juego);
+    return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionFormulaUno', juego);
+  }
+
+
+  // jornadas juego de competición liga
+  public CrearJornadasFormulaUno( JornadasDeCompeticionFormulaUno: Jornada, juegoDeCompeticionID: number): Observable<Jornada> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.post<Jornada>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionID + '/JornadasDeCompeticionFormulaUno',
+    JornadasDeCompeticionFormulaUno);
+  }
+
+  public InscribeAlumnoJuegoDeCompeticionFormulaUno(alumnoJuegoDeCompeticionFormulaUno: AlumnoJuegoDeCompeticionFormulaUno) {
+    return this.http.post<AlumnoJuegoDeCompeticionFormulaUno>(this.APIUrlAlumnoJuegoDeCompeticionFormulaUno,
+      alumnoJuegoDeCompeticionFormulaUno);
+  }
+
+  public InscribeEquipoJuegoDeCompeticionFormulaUno(equipoJuegoDeCompeticionFormulaUno: EquipoJuegoDeCompeticionFormulaUno) {
+    return this.http.post<EquipoJuegoDeCompeticionFormulaUno>(this.APIUrlEquipoJuegoDeCompeticionFormulaUno,
+      equipoJuegoDeCompeticionFormulaUno);
+  }
+
+  public DameJuegoDeCompeticionFormulaUnoGrupo(grupoId: number): Observable<Juego[]> {
+    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionFormulaUno');
+  }
+
 
 
   ///////////////////////////////////////////////////////////////////////////////////////////

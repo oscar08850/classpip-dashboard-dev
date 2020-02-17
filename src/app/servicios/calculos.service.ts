@@ -139,9 +139,22 @@ export class CalculosService {
                 juegosInactivos.push(juegosCompeticion[i]);
               }
             }
+            this.peticionesAPI.DameJuegoDeCompeticionFormulaUnoGrupo(grupoID)
+          .subscribe(juegosCompeticionFormulaUno => {
+            console.log('He recibido los juegos de competición');
+            console.log(juegosCompeticionFormulaUno);
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < juegosCompeticionFormulaUno.length; i++) {
+              if (juegosCompeticionFormulaUno[i].JuegoActivo === true) {
+                juegosActivos.push(juegosCompeticionFormulaUno[i]);
+              } else {
+                juegosInactivos.push(juegosCompeticionFormulaUno[i]);
+              }
+            }
             const resultado = { activos: juegosActivos, inactivos: juegosInactivos};
             obs.next (resultado);
             // this.PreparaListas ();
+            });
           });
         });
       });
@@ -1608,6 +1621,22 @@ public PreparaHistorialEquipo(
       const jornada = new Jornada(undefined, 'Pendiente de determinar', juegoDeCompeticionID);
       console.log(jornada);
       this.peticionesAPI.CrearJornadasLiga(jornada, juegoDeCompeticionID)
+      .subscribe(jornadacreada => {
+        console.log('jornada creada');
+        console.log(jornadacreada);
+        this.jornadasnuevas[i] = jornadacreada;
+        });
+    }
+    return this.jornadasnuevas;
+  }
+
+  public CrearJornadasFormulaUno(NumeroDeJornadas, juegoDeCompeticionID): any [] {
+    this.jornadasnuevas = [];
+    for (let i = 0; i < NumeroDeJornadas; i++) {
+      // tslint:disable-next-line:max-line-length '2000-01-01T01:01:01.000Z'
+      const jornada = new Jornada(undefined, 'Pendiente de determinar', juegoDeCompeticionID);
+      console.log(jornada);
+      this.peticionesAPI.CrearJornadasFormulaUno(jornada, juegoDeCompeticionID)
       .subscribe(jornadacreada => {
         console.log('jornada creada');
         console.log(jornadacreada);
