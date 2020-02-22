@@ -246,6 +246,79 @@ export class CalculosService {
     return rankingJuegoDeCompeticionFinal;
   }
 
+  public  ConstruirTablaEnfrentamientos(EnfrentamientosJornadaSeleccionada: EnfrentamientoLiga[],
+                                        listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[],
+                                        listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[],
+                                        juegoSeleccionado: Juego) {
+    console.log ('Aquí tendré la tabla de enfrentamientos, los enfrentamientos sonc:');
+    console.log(EnfrentamientosJornadaSeleccionada);
+    console.log('Distinción entre Individual y equipos');
+    if (juegoSeleccionado.Modo === 'Individual') {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < EnfrentamientosJornadaSeleccionada.length; i++) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < listaAlumnosClasificacion.length; j++) {
+          if (EnfrentamientosJornadaSeleccionada[i].JugadorUno === listaAlumnosClasificacion[j].id) {
+              EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = listaAlumnosClasificacion[j].nombre + ' ' +
+                                                                       listaAlumnosClasificacion[j].primerApellido + ' ' +
+                                                                       listaAlumnosClasificacion[j].segundoApellido;
+              if (EnfrentamientosJornadaSeleccionada[i].Ganador === listaAlumnosClasificacion[j].id) {
+                EnfrentamientosJornadaSeleccionada[i].nombreGanador = listaAlumnosClasificacion[j].nombre + ' ' +
+                                                                      listaAlumnosClasificacion[j].primerApellido + ' ' +
+                                                                      listaAlumnosClasificacion[j].segundoApellido;
+            } else if (EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
+               EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+            } else if (EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+               EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+            }
+          } else if (EnfrentamientosJornadaSeleccionada[i].JugadorDos === listaAlumnosClasificacion[j].id) {
+              EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = listaAlumnosClasificacion[j].nombre + ' ' +
+                                                                       listaAlumnosClasificacion[j].primerApellido + ' ' +
+                                                                       listaAlumnosClasificacion[j].segundoApellido;
+              if (EnfrentamientosJornadaSeleccionada[i].Ganador === listaAlumnosClasificacion[j].id) {
+                EnfrentamientosJornadaSeleccionada[i].nombreGanador = listaAlumnosClasificacion[j].nombre + ' ' +
+                                                                      listaAlumnosClasificacion[j].primerApellido + ' ' +
+                                                                      listaAlumnosClasificacion[j].segundoApellido;
+              } else if (EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
+                         EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+              } else if (EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+                  EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+              }
+          }
+        }
+      }
+
+    } else {
+      console.log('Estoy en ConstruirTablaEnfrentamientos() equipos');
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < EnfrentamientosJornadaSeleccionada.length; i++) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < listaEquiposClasificacion.length; j++) {
+          if (EnfrentamientosJornadaSeleccionada[i].JugadorUno === listaEquiposClasificacion[j].id) {
+            EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = listaEquiposClasificacion[j].nombre;
+            if (EnfrentamientosJornadaSeleccionada[i].Ganador === listaEquiposClasificacion[j].id) {
+              EnfrentamientosJornadaSeleccionada[i].nombreGanador = listaEquiposClasificacion[j].nombre;
+            } else if (EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
+                EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+            } else if (EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+                EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+            }
+          } else if (EnfrentamientosJornadaSeleccionada[i].JugadorDos === listaEquiposClasificacion[j].id) {
+              EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = listaEquiposClasificacion[j].nombre;
+              if (EnfrentamientosJornadaSeleccionada[i].Ganador === listaEquiposClasificacion[j].id) {
+                EnfrentamientosJornadaSeleccionada[i].nombreGanador = listaEquiposClasificacion[j].nombre;
+              } else if (EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
+                  EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+              } else if (EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+                  EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+              }
+          }
+        }
+      }
+    }
+    return EnfrentamientosJornadaSeleccionada;
+  }
+
   public RellenarTablaEquipoJuegoDeCompeticion(rankingJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion[],
                                                informacionPartidos: InformacionPartidosLiga[]): TablaEquipoJuegoDeCompeticion[] {
     console.log();
