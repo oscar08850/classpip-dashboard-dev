@@ -126,7 +126,7 @@ export class CalculosService {
             }
           }
           // Ahora vamos a por los juegos de competición
-          console.log ('vamos a por los juegos de competicion del grupo: ' + grupoID);
+          console.log ('vamos a por los juegos de competicion liga del grupo: ' + grupoID);
           this.peticionesAPI.DameJuegoDeCompeticionLigaGrupo(grupoID)
           .subscribe(juegosCompeticion => {
             console.log('He recibido los juegos de competición');
@@ -139,9 +139,10 @@ export class CalculosService {
                 juegosInactivos.push(juegosCompeticion[i]);
               }
             }
+            console.log ('vamos a por los juegos de competicion formula uno del grupo: ' + grupoID);
             this.peticionesAPI.DameJuegoDeCompeticionFormulaUnoGrupo(grupoID)
-          .subscribe(juegosCompeticionFormulaUno => {
-            console.log('He recibido los juegos de competición');
+            .subscribe(juegosCompeticionFormulaUno => {
+            console.log('He recibido los juegos de competición formula uno');
             console.log(juegosCompeticionFormulaUno);
             // tslint:disable-next-line:prefer-for-of
             for (let i = 0; i < juegosCompeticionFormulaUno.length; i++) {
