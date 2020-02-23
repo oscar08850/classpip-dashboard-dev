@@ -7,9 +7,11 @@ export class Juego {
   NumeroTotalJornadas: number;
   coleccionId: number;
   TipoJuegoCompeticion: string;
+  NumeroParticipantesPuntuan: number;
+  Puntos: number[];
 
   constructor(Tipo?: string, Modo?: string, coleccionId?: number, JuegoActivo?: boolean,
-              NumeroTotalJornadas?: number, TipoJuegoCompeticion?: string) {
+              NumeroTotalJornadas?: number, TipoJuegoCompeticion?: string, NumeroParticipantesPuntuan?: number, Puntos?: number[]) {
 
     this.Tipo = Tipo;
     this.Modo = Modo;
@@ -17,5 +19,7 @@ export class Juego {
     this.coleccionId = coleccionId;
     this.NumeroTotalJornadas = NumeroTotalJornadas;
     this.TipoJuegoCompeticion = TipoJuegoCompeticion;
+    this.NumeroParticipantesPuntuan = NumeroParticipantesPuntuan;
+    this.Puntos = Puntos;
   }
 }

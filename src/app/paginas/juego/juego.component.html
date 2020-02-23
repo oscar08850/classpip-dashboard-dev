@@ -207,13 +207,14 @@
                           {{tipo.nombre}}
                       </mat-chip>
                     </mat-chip-list>
-                    <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoJuegoCompeticionSeleccionado}} </span>
+                    <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoJuegoCompeticionSeleccionado}}</span>
 
                 </div>
 
 
                 <div class="btnCambiarStep">
-                    <button [disabled]="isDisabled" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="isDisabled" type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
 
@@ -253,43 +254,135 @@
                         <!-- casilla para introducir jornadas -->
                             <mat-form-field>
                               <mat-label>Número de jornadas</mat-label>
-                              <!--- <input matInput placeholder="Introduzca el Número de jornadas" > -->
                               <input matInput formControlName="NumeroDeJornadas" required>
                             </mat-form-field>
 
-                        <div *ngIf="TipoDeJuegoCompeticionSeleccionado === 'Liga'">
-                          <div *ngIf="modoDeJuegoSeleccionado === 'Individual'">
-                          <mat-label>Si desea realizar la liga de una vuelta escriba {{this.alumnosGrupo.length - 1}}</mat-label>
-                          </div>
+                        <div *ngIf="tipoJuegoCompeticionSeleccionado === 'Liga'">
+                            <div *ngIf="modoDeJuegoSeleccionado === 'Individual'">
+                            <mat-label>Si desea realizar la liga de una vuelta escriba {{this.alumnosGrupo.length - 1}}</mat-label>
+                            </div>
 
-                          <div *ngIf="modoDeJuegoSeleccionado === 'Equipos'">
-                          <mat-label>Si desea realizar la liga de una vuelta escriba {{this.equiposGrupo.length - 1}}</mat-label>
+                            <div *ngIf="modoDeJuegoSeleccionado === 'Equipos'">
+                            <mat-label>Si desea realizar la liga de una vuelta escriba {{this.equiposGrupo.length - 1}}</mat-label>
+                            </div>
+
+                          <div class="btnCambiarStep">
+                              <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                              <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
+
                           </div>
                         </div>
 
-                        <div class="btnCambiarStep">
+                        <div *ngIf="tipoJuegoCompeticionSeleccionado !== 'Liga'">
+                          <div class="btnCambiarStep">
                             <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                            <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
-
+                            <button type="button" class="btn Next" matStepperNext>Siguiente</button>
                           </div>
+                        </div>
 
                   </mat-step>
 
 
+                  <!-- QUINTO PASO: PUNTOS-->
+                  <div *ngIf="tipoJuegoCompeticionSeleccionado === 'Formula Uno'">
+
+                    <mat-step>
+                      <ng-template matStepLabel><div>Establecer Puntuación</div></ng-template>
+
+                      <div class="contenedor">
+                        <div class="enColumna">
+                          <div [formGroup]="myForm" class = "enFila" style="width: 80%">
+
+                            <div style="margin-top: 15px;">
+                              <span>Establecer Puntos: </span>
+                              <mat-form-field>
+                                <mat-label>Establecer Puntos:</mat-label>
+                                <input matInput formControlName="NuevaPuntuacion" placeholder="Escribe los Puntos" requiered [(ngModel)]="NuevaPuntuacion" (change) = "ActualizarBotonTabla()">
+                              </mat-form-field>
+                            </div>
+                            <div style="margin-top: 10px">
+                              <button type="button"class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = AnadirPuntos()>Añadir los Puntos</button>
+                            </div>
+                          </div>
+
+                          <form style="width: 100%">
+                            <table style="width: 100%" align="center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                              <ng-container matColumnDef="select">
+                                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+                                  <mat-checkbox
+                                                (change)="$event ? MasterToggle() : null; ActualizarBotonTabla ();"
+                                                [checked]="selection.hasValue() && IsAllSelected()"
+                                                [indeterminate]="selection.hasValue() && !IsAllSelected()">
+                                  </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                  <mat-checkbox
+                                                (click)="$event.stopPropagation()"
+                                                (change)="$event ? selection.toggle(row) : null; ActualizarBotonTabla ();"
+                                                [checked]="selection.isSelected(row)">
+
+                                  </mat-checkbox>
+
+                                </td>
+                              </ng-container>
+
+                              <!-- Posicion Column -->
+                              <ng-container matColumnDef="Posicion">
+                                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Posicion </th>
+                                <td mat-cell style= "text-align: center" *matCellDef="let tablaPuntuacion"> {{tablaPuntuacion.Posicion}} </td>
+                              </ng-container>
+
+                              <!-- Puntos Column -->
+                              <ng-container matColumnDef="Puntos">
+                                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Puntos </th>
+                                <td mat-cell *matCellDef="let tablaPuntuacion; "> {{tablaPuntuacion.Puntuacion}} </td>
+                              </ng-container>
+
+
+                              <tr mat-header-row *matHeaderRowDef="displayedColumnsTablaPuntuacion"></tr>
+                              <tr mat-row *matRowDef="let row; columns: displayedColumnsTablaPuntuacion;"></tr>
+
+                            </table>
+                          </form>
+                        </div>
+                      </div>
+
+                      <div class="btnCambiarStep">
+                        <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                        <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
+
+                      </div>
+                    </mat-step>
+                  </div>
+
+                  <mat-step>
+                    <ng-template matStepLabel>Finalizar</ng-template>
+
+                          <div class="btnCambiarStep">
+                            <div *ngIf="tipoJuegoCompeticionSeleccionado === 'Liga'">
+                              <button type="button" class="btn Aceptar" (click) = "Finalizar();">Finalizar</button>
+                              <button type="button" class="btn Aceptar" (click) = Finalizar();  routerLink = "juegoSeleccionadoActivo">Finalizar y Editar</button>
+                            </div>
+
+                            <div *ngIf="tipoJuegoCompeticionSeleccionado !== 'Liga'">
+                              <button type="button" class="btn Aceptar" (click) = "Finalizar();">Finalizar</button>
+                            </div>
+                          </div>
+                  </mat-step>
 
           </div>
 
+          <div *ngIf="tipoDeJuegoSeleccionado !== 'Juego De Competición'">
+            <mat-step>
+              <ng-template matStepLabel>Finalizar</ng-template>
 
-          <mat-step>
-            <ng-template matStepLabel>Finalizar</ng-template>
-
-              <span *ngIf="tipoDeJuegoSeleccionado === 'Juego De Colección'" style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}}: {{nombreColeccionSeleccionada}} ... {{modoDeJuegoSeleccionado}} </span>
-              <span *ngIf="tipoDeJuegoSeleccionado === 'Juego De Puntos'" style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}} ... {{modoDeJuegoSeleccionado}} </span>
-
-              <div class="btnCambiarStep">
-                <button type="button" class="btn Aceptar" (click) = "Finalizar();">Finalizar</button>
-              </div>
-          </mat-step>
+                <span *ngIf="tipoDeJuegoSeleccionado === 'Juego De Colección'" style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}}: {{nombreColeccionSeleccionada}} ... {{modoDeJuegoSeleccionado}} </span>
+                <span *ngIf="tipoDeJuegoSeleccionado === 'Juego De Puntos'" style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}} ... {{modoDeJuegoSeleccionado}} </span>
+                    <div class="btnCambiarStep">
+                      <button type="button" class="btn Aceptar" (click) = "Finalizar();">Finalizar</button>
+                    </div>
+            </mat-step>
+          </div>
 
           </mat-horizontal-stepper>
         </mat-card-content>

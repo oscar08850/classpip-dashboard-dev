@@ -1723,7 +1723,6 @@ public PreparaHistorialEquipo(
   const TablaJornada: TablaJornadas [] = [];
 
   // tslint:disable-next-line:prefer-for-of
-  console.log('3 Vamos a llenar la tabla');
   console.log(jornadas);
   console.log(juegoSeleccionado);
   for (let i = 0; i < juegoSeleccionado.NumeroTotalJornadas; i++) {
