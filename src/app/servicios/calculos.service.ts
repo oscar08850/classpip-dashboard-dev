@@ -3,10 +3,8 @@ import { SesionService, PeticionesAPIService} from './index';
 import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos,
          TablaEquipoJuegoDePuntos, HistorialPuntosAlumno, HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo,
          AlumnoJuegoDeColeccion, Album, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
-         TablaEquipoJuegoDeCompeticion, Jornada, EquipoJuegoDeCompeticionLiga, EnfrentamientoLiga,
-         InformacionPartidosLiga,
-         AlumnoJuegoDeCompeticionLiga,
-         JuegoDeCompeticion} from '../clases/index';
+         TablaEquipoJuegoDeCompeticion, Jornada, EquipoJuegoDeCompeticionLiga, EnfrentamientoLiga, InformacionPartidosLiga,
+         AlumnoJuegoDeCompeticionLiga, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno} from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -195,13 +193,12 @@ export class CalculosService {
 
   }
 
-               //////////////////////////        JUEGO DE COMPETICIÓN      ////////////////////////
-
-  public PrepararTablaRankingIndividualCompeticion(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionLiga[],
-                                                   alumnosDelJuego: Alumno[], jornadasDelJuego: Jornada[],
-                                                   enfrentamientosDelJuego: EnfrentamientoLiga[][] ): TablaAlumnoJuegoDeCompeticion[] {
+  //////////////////////////////////////////       JUEGO DE COMPETICIÓN  LIGA    ////////////////////////////////////////
+  public PrepararTablaRankingIndividualLiga(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionLiga[],
+                                            alumnosDelJuego: Alumno[], jornadasDelJuego: Jornada[],
+                                            enfrentamientosDelJuego: EnfrentamientoLiga[][] ): TablaAlumnoJuegoDeCompeticion[] {
     const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion [] = [];
-    console.log (' Vamos a preparar la tabla del ranking individual de Competición');
+    console.log (' Vamos a preparar la tabla del ranking individual de Competición Liga');
     console.log ('la lista de alumnos ordenada es: ');
     console.log (listaAlumnosOrdenadaPorPuntos);
     // tslint:disable-next-line:prefer-for-oF
@@ -222,11 +219,11 @@ export class CalculosService {
     return rankingJuegoDeCompeticionFinal;
   }
 
-  public PrepararTablaRankingEquipoCompeticion( listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[],
-                                                equiposDelJuego: Equipo[], jornadasDelJuego: Jornada[],
-                                                enfrentamientosDelJuego: EnfrentamientoLiga[][] ): TablaEquipoJuegoDeCompeticion[] {
+  public PrepararTablaRankingEquipoLiga( listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[],
+                                         equiposDelJuego: Equipo[], jornadasDelJuego: Jornada[],
+                                         enfrentamientosDelJuego: EnfrentamientoLiga[][] ): TablaEquipoJuegoDeCompeticion[] {
     const rankingJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion [] = [];
-    console.log (' Vamos a preparar la tabla del ranking por equipos de Competición');
+    console.log (' Vamos a preparar la tabla del ranking por equipos de Competición Liga');
     console.log ('la lista de equipos ordenada es: ');
     console.log (listaEquiposOrdenadaPorPuntos);
     // tslint:disable-next-line:prefer-for-of
@@ -555,8 +552,6 @@ export class CalculosService {
     }
     return partidosPerdidos;
   }
-
-
 
   public RevisarMultipleSeleccion(enfrentamientosSeleccionadosColumnaUno: EnfrentamientoLiga[],
                                   enfrentamientosSeleccionadosColumnaDos: EnfrentamientoLiga[],
@@ -1014,6 +1009,42 @@ export class CalculosService {
       }
     }
   }
+
+  //////////////////////////////////////// JUEGO DE COMPETICIÓN FÓRUMULA UNO ///////////////////////////////////
+
+  public PrepararTablaRankingIndividualFormulaUno(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionFormulaUno[],
+                                                  alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeCompeticion[] {
+    const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion [] = [];
+    console.log (' Vamos a preparar la tabla del ranking individual de Competición Fórmula Uno');
+    console.log ('la lista de alumnos ordenada es: ');
+    console.log (listaAlumnosOrdenadaPorPuntos);
+    // tslint:disable-next-line:prefer-for-oF
+    for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+    let alumno: Alumno;
+    const alumnoId = listaAlumnosOrdenadaPorPuntos[i].AlumnoId;
+    alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+    rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeCompeticion(i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+                            listaAlumnosOrdenadaPorPuntos[i].PuntosTotalesAlumno, alumnoId);
+    }
+    return rankingJuegoDeCompeticion;
+}
+
+public PrepararTablaRankingEquipoFormulaUno(listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionFormulaUno[],
+                                            equiposDelJuego: Equipo[]) {
+  const rankingJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion [] = [];
+  console.log (' Vamos a preparar la tabla del ranking por equipos de Competición Fórmula Uno');
+  console.log ('la lista de equipos ordenada es: ');
+  console.log (listaEquiposOrdenadaPorPuntos);
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < listaEquiposOrdenadaPorPuntos.length; i++) {
+  let equipo: Equipo;
+  const EquipoId = listaEquiposOrdenadaPorPuntos[i].EquipoId;
+  equipo = equiposDelJuego.filter(res => res.id === EquipoId)[0];
+  rankingJuegoDeCompeticion[i] = new TablaEquipoJuegoDeCompeticion(i + 1, equipo.Nombre,
+                          listaEquiposOrdenadaPorPuntos[i].PuntosTotalesEquipo, EquipoId);
+  }
+  return rankingJuegoDeCompeticion;
+}
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   public DameRankingPuntoSeleccionadoEquipos(

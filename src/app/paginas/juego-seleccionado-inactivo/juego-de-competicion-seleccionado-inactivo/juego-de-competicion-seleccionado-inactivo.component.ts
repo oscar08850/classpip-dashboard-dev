@@ -209,19 +209,17 @@ export class JuegoDeCompeticionSeleccionadoInactivoComponent implements OnInit {
   TablaClasificacionTotal() {
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
-      this.rankingAlumnoJuegoDeCompeticion = this.calculos.PrepararTablaRankingIndividualCompeticion (
-                                                                                                this.listaAlumnosOrdenadaPorPuntos,
-                                                                                                this.alumnosDelJuego, this.jornadas,
-                                                                                                this.enfrentamientosDelJuego);
+      this.rankingAlumnoJuegoDeCompeticion = this.calculos.PrepararTablaRankingIndividualLiga (this.listaAlumnosOrdenadaPorPuntos,
+                                                                                               this.alumnosDelJuego, this.jornadas,
+                                                                                               this.enfrentamientosDelJuego);
       console.log ('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
       console.log (this.rankingAlumnoJuegoDeCompeticion);
       this.datasourceAlumno = new MatTableDataSource(this.rankingAlumnoJuegoDeCompeticion);
 
     } else {
-      this.rankingEquiposJuegoDeCompeticion = this.calculos.PrepararTablaRankingEquipoCompeticion (
-                                                                                              this.listaEquiposOrdenadaPorPuntos,
-                                                                                              this.equiposDelJuego, this.jornadas,
-                                                                                              this.enfrentamientosDelJuego);
+      this.rankingEquiposJuegoDeCompeticion = this.calculos.PrepararTablaRankingEquipoLiga (this.listaEquiposOrdenadaPorPuntos,
+                                                                                            this.equiposDelJuego, this.jornadas,
+                                                                                            this.enfrentamientosDelJuego);
       this.datasourceEquipo = new MatTableDataSource(this.rankingEquiposJuegoDeCompeticion);
       console.log('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
       console.log (this.rankingEquiposJuegoDeCompeticion);
