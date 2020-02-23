@@ -408,7 +408,6 @@ export class CalculosService {
     return listaEnfrentamientosDelJuego;
   }
 
-
   public CalcularPartidosTotales(listaEnfrentamientosDelJuego: EnfrentamientoLiga[],
                                  listaParticipantesOrdenadaPorPuntos, participante: number, individual): number {
     let partidosTotales = 0;

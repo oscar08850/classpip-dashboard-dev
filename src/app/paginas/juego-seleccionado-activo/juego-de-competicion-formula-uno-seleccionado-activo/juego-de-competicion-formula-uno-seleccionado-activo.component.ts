@@ -27,6 +27,8 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   alumnosDelJuego: Alumno[];
   equiposDelJuego: Equipo[];
 
+  alumnosDelEquipo: Alumno[];
+
   listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionFormulaUno[];
   listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionFormulaUno[];
 
@@ -35,6 +37,10 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
 
   datasourceAlumno;
   datasourceEquipo;
+
+  displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos'];
+
+  displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'puntos'];
 
   constructor(public dialog: MatDialog,
               public sesion: SesionService,
@@ -125,6 +131,23 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
       console.log(this.datasourceEquipo);
 
     }
+  }
+
+  AlumnosDelEquipo(equipo: Equipo) {
+    console.log(equipo);
+
+    this.peticionesAPI.DameAlumnosEquipo (equipo.id)
+    .subscribe(res => {
+      if (res[0] !== undefined) {
+        this.alumnosDelEquipo = res;
+        console.log('Los alumnos del equipo ' + equipo.id + ' son: ');
+        console.log(res);
+      } else {
+        console.log('No hay alumnos en este equipo');
+        // Informar al usuario
+        this.alumnosDelEquipo = undefined;
+      }
+    });
   }
 
 }
