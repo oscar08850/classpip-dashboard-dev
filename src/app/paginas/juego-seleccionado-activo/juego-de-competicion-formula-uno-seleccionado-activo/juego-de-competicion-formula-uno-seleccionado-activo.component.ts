@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Location } from '@angular/common';
 
 // Clases
-import {Juego, Alumno, Equipo, AlumnoJuegoDeCompeticionFormulaUno,
+import {Juego, Alumno, Equipo, AlumnoJuegoDeCompeticionFormulaUno, Jornada, TablaJornadas,
         EquipoJuegoDeCompeticionFormulaUno, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion} from '../../../clases/index';
 
 // Servicio
@@ -35,6 +35,9 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   rankingIndividualFormulaUno: TablaAlumnoJuegoDeCompeticion[] = [];
   rankingEquiposFormulaUno: TablaEquipoJuegoDeCompeticion[] = [];
 
+  jornadas: Jornada[];
+  JornadasCompeticion: TablaJornadas[];
+
   datasourceAlumno;
   datasourceEquipo;
 
@@ -57,6 +60,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     } else {
       this.EquiposDelJuego();
     }
+    this.DameJornadasDelJuegoDeCompeticionSeleccionado();
   }
 
   // Recupera los alumnos que pertenecen al juego
@@ -71,6 +75,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     });
   }
 
+  // Recupera los equipos que pertenecen al juego
   EquiposDelJuego() {
     console.log ('Vamos a pos los equipos');
     this.peticionesAPI.DameEquiposJuegoDeCompeticionFormulaUno(this.juegoSeleccionado.id)
@@ -148,6 +153,42 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
         this.alumnosDelEquipo = undefined;
       }
     });
+  }
+
+  DameJornadasDelJuegoDeCompeticionSeleccionado() {
+    this.peticionesAPI.DameJornadasDeCompeticionFormulaUno(this.juegoSeleccionado.id)
+      .subscribe(inscripciones => {
+        this.jornadas = inscripciones;
+        console.log('Las jornadas son: ');
+        console.log(this.jornadas);
+      });
+  }
+
+  Informacion(): void {
+
+    console.log ('Aquí estará la información del juego');
+    console.log ('Voy a pasar la información del juego seleccionado');
+    this.sesion.TomaJuego (this.juegoSeleccionado);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion( this.juegoSeleccionado, this.jornadas);
+    console.log ('Voy a pasar la información de las jornadas del juego');
+    this.sesion.TomaDatosJornadas(this.jornadas,
+                                  this.JornadasCompeticion);
+    this.sesion.TomaTablaAlumnoJuegoDeCompeticion(this.rankingIndividualFormulaUno);
+    this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposFormulaUno);
+  }
+
+  seleccionarGanadorLiga(): void {
+    console.log('Aquí estará el proceso para elegir el ganador');
+    console.log ('Voy a por la información del juego seleccionado');
+    this.sesion.TomaJuego (this.juegoSeleccionado);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion( this.juegoSeleccionado, this.jornadas);
+    console.log ('Voy a por la información de las jornadas del juego');
+    this.sesion.TomaDatosJornadas(this.jornadas,
+                                  this.JornadasCompeticion);
+    this.sesion.TomaTablaAlumnoJuegoDeCompeticion(this.rankingIndividualFormulaUno);
+    this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposFormulaUno);
+    this.sesion.TomaInscripcionAlumno(this.listaAlumnosOrdenadaPorPuntos);
+    this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
   }
 
 }

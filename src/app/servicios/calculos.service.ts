@@ -1750,12 +1750,9 @@ public PreparaHistorialEquipo(
     return this.jornadasnuevas;
   }
 
-  public DameTablaJornadasLiga( juegoSeleccionado, jornadas) {
+  public DameTablaJornadasCompeticion( juegoSeleccionado, jornadas) {
   const TablaJornada: TablaJornadas [] = [];
-
-  // tslint:disable-next-line:prefer-for-of
-  console.log('3 Vamos a llenar la tabla');
-  console.log(jornadas);
+  console.log('juego seleccionado:');
   console.log(juegoSeleccionado);
   for (let i = 0; i < juegoSeleccionado.NumeroTotalJornadas; i++) {
   let jornada: Jornada;
@@ -1764,10 +1761,8 @@ public PreparaHistorialEquipo(
 
   if (jornada.Fecha === undefined) {
       TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id);
-      console.log(TablaJornada[i]);
     } else {
       TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
-      console.log(TablaJornada[i]);
     }
   }
   return(TablaJornada);

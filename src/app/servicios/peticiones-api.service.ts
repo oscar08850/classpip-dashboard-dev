@@ -626,6 +626,11 @@ export class PeticionesAPIService {
   ///////////////////////////////////////////////////////////////////////////////////////////
   // Juego de Competición Formula Uno
 
+  public DameJornadasDeCompeticionFormulaUno(juegoDeCompeticionFormulaUnoId: number): Observable<Jornada[]> {
+    return this.http.get<Jornada[]>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionFormulaUnoId
+                                     + '/jornadasDeCompeticionFormulaUno');
+  }
+
    ///////////////////////////////////////////////////////////////////////////////////////////
   // Gestion del juego de competicion formula uno, individual
   public DameAlumnosJuegoDeCompeticionFormulaUno(juegoDeCompeticionFormulaUnoId: number): Observable<Alumno[]> {
