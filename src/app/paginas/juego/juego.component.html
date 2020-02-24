@@ -291,7 +291,7 @@
 
                       <div class="contenedor">
                         <div class="enColumna">
-                          <div [formGroup]="myForm" class = "enFila" style="width: 80%">
+                          <div [formGroup]="myForm1" class = "enFila" style="width: 80%">
 
                             <div style="margin-top: 15px;">
                               <span>Establecer Puntos: </span>
@@ -302,6 +302,9 @@
                             </div>
                             <div style="margin-top: 10px">
                               <button type="button"class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = AnadirPuntos()>Añadir los Puntos</button>
+                            </div>
+                            <div style="margin-top: 10px">
+                              <button type="button"class="btn Aceptar" (click) = AnadirJugadorconPuntos()>Añadir Jugador</button>
                             </div>
                           </div>
 

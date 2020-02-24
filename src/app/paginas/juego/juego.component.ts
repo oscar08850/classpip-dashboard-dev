@@ -58,6 +58,7 @@ export class JuegoComponent implements OnInit {
   juego: Juego;
   juegoDeCompeticion: JuegoDeCompeticion;
   myForm: FormGroup;
+  myForm1: FormGroup;
 
   // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS E INACTIVOS DE LOS TRES TIPOS DE JUEGOS
   juegosActivos: Juego[];
@@ -106,6 +107,8 @@ export class JuegoComponent implements OnInit {
   // No nos permite avanzar en el segundo paso si no se ha seleccionado opción
   // tslint:disable-next-line:ban-types
   isDisabledModo: Boolean = true;
+  // tslint:disable-next-line:ban-types
+  isDisabledExtra: Boolean = true;
 
 
   tipoJuegoElegido: string;
@@ -118,6 +121,8 @@ export class JuegoComponent implements OnInit {
   Puntuacion: number[];
   dataSource: any;
   TablaPuntuacion: TablaPuntosFormulaUno[];
+  botonTablaDesactivadoJugadorExtra = true;
+  displayedColumnsTablaPuntuacion: string[] = ['select', 'Posicion', 'Puntos'];
 
 
   constructor(
@@ -177,11 +182,15 @@ export class JuegoComponent implements OnInit {
 
     this.myForm = this._formBuilder.group({
       NumeroDeJornadas: ['', Validators.required],
+    });
+
+    this.myForm1 = this._formBuilder.group({
       NuevaPuntuacion: ['', Validators.required],
     });
     this.TablaPuntuacion = [];
     this.TablaPuntuacion[0] = new TablaPuntosFormulaUno(1, 10);
     this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
+    this.Puntuacion = [10];
   }
 
   //////////////////////////////////////// FUNCIONES PARA LISTAR JUEGOS ///////////////////////////////////////////////
@@ -309,11 +318,13 @@ export class JuegoComponent implements OnInit {
     NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
     console.log(NumeroDeJornadas);
     console.log(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado, this.modoDeJuegoSeleccionado,
-                  undefined, true, NumeroDeJornadas, this.tipoJuegoCompeticionSeleccionado, 3, [10, 5, 2]), this.grupo.id);
+                  undefined, true, NumeroDeJornadas, this.tipoJuegoCompeticionSeleccionado, this.Puntuacion.length,
+                  this.Puntuacion), this.grupo.id);
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.CreaJuegoDeCompeticionFormulaUno(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado,
                                                     this.modoDeJuegoSeleccionado, undefined, true, NumeroDeJornadas,
-                                                    this.tipoJuegoCompeticionSeleccionado, 3, [10, 5, 2]), this.grupo.id)
+                                                    this.tipoJuegoCompeticionSeleccionado, this.Puntuacion.length,
+                                                    this.Puntuacion), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       console.log(juegoCreado);
@@ -543,7 +554,7 @@ export class JuegoComponent implements OnInit {
   /* En este caso para que esté activo también debe haber seleccionado el tipo de punto a asignar */
   ActualizarBotonTabla() {
     let NuevaPuntuacion: number;
-    NuevaPuntuacion = this.myForm.value.NuevaPuntuacion;
+    NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
     if ((this.selection.selected.length === 0) || ( NuevaPuntuacion === undefined)) {
       this.botonTablaDesactivado = true;
     } else {
@@ -553,7 +564,7 @@ export class JuegoComponent implements OnInit {
 
   BotonDesactivado() {
     let NuevaPuntuacion: number;
-    NuevaPuntuacion = this.myForm.value.NuevaPuntuacion;
+    NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
 
     console.log('voy a ver si hay algo en los inputs');
     if (NuevaPuntuacion !== undefined ) {
@@ -564,6 +575,7 @@ export class JuegoComponent implements OnInit {
       this.isDisabled = true;
     }
   }
+
    /* Esta función decide si el boton debe estar activo (si hay al menos
   una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
   ActualizarBoton() {
@@ -582,6 +594,7 @@ export class JuegoComponent implements OnInit {
       } else {
         console.log('No hay alguno seleccionado');
         this.isDisabled = true;
+
       }
 
     }
@@ -591,7 +604,7 @@ export class JuegoComponent implements OnInit {
     // valor de i
 
     let NuevaPuntuacion: number;
-    NuevaPuntuacion = this.myForm.value.NuevaPuntuacion;
+    NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
     console.log('Voy a asignar NuevaPuntuacion ' + NuevaPuntuacion);
     for ( let i = 0; i < this.dataSource.data.length; i++) {
 
@@ -601,6 +614,7 @@ export class JuegoComponent implements OnInit {
         console.log(this.Puntuacion[i]);
         console.log(NuevaPuntuacion);
         this.Puntuacion[i] = NuevaPuntuacion;
+        console.log(this.Puntuacion);
         this.TablaPuntuacion[i].Puntuacion = NuevaPuntuacion;
         console.log(this.TablaPuntuacion[i]);
       }
@@ -610,4 +624,25 @@ export class JuegoComponent implements OnInit {
     this.botonTablaDesactivado = true;
 
   }
+  AnadirJugadorconPuntos() {
+    // Tengo que hacer un recorrido diferente del dataSource porque necesito saber el
+       // valor de i
+
+       let NuevaPuntuacion: number;
+       NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
+       console.log(this.TablaPuntuacion);
+       console.log('Voy a asignar NuevaPuntuacion ' + NuevaPuntuacion);
+       let i: number;
+       i = this.Puntuacion.length;
+       console.log(i);
+       this.Puntuacion[i] = NuevaPuntuacion;
+       console.log(this.Puntuacion);
+       this.TablaPuntuacion[i] = new TablaPuntosFormulaUno(i + 1, NuevaPuntuacion);
+       console.log(this.TablaPuntuacion[i]);
+
+       this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
+       // this.selection.clear();
+       // this.botonTablaDesactivado = true;
+
+     }
 }
