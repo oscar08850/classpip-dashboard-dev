@@ -78,36 +78,6 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
       });
   }
 
-  // DameEnfrentamientosDelJuego() {
-  //   console.log('Estoy en DameEnfrentamientosDeLasJornadas()');
-  //   let jornadasCounter = 0;
-  //   let enfrentamientosCounter = 0;
-  //   this.enfrentamientosDelJuego = [];
-  //   // tslint:disable-next-line:prefer-for-of
-  //   for (let i = 0; i < this.jornadas.length; i++) {
-  //     this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga(this.jornadas[i].id)
-  //     .subscribe((enfrentamientosDeLaJornada: Array<EnfrentamientoLiga>) => {
-  //       jornadasCounter++;
-  //       console.log('Los enfrentamiendos de la jornadaId ' + this.jornadas[i].id + ' son: ');
-  //       console.log(enfrentamientosDeLaJornada);
-  //       // tslint:disable-next-line:prefer-for-of
-  //       for (let j = 0; j < enfrentamientosDeLaJornada.length; j++) {
-  //         this.enfrentamientosDelJuego.push(enfrentamientosDeLaJornada[j]);
-  //         enfrentamientosCounter++;
-  //       }
-  //       if (jornadasCounter === this.jornadas.length) {
-  //         console.log('La lista de enfrentamientos final del juego es: ');
-  //         console.log(this.enfrentamientosDelJuego);
-  //         if (this.juegoSeleccionado.Modo === 'Individual') {
-  //           this.AlumnosDelJuego();
-  //         } else {
-  //           this.EquiposDelJuego();
-  //         }
-  //       }
-  //     });
-  //   }
-  // }
-
   DameEnfrentamientosDelJuego() {
     console.log('Estoy en DameEnfrentamientosDeLasJornadas()');
     let jornadasCounter = 0;
@@ -235,19 +205,17 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   TablaClasificacionTotal() {
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
-      this.rankingAlumnoJuegoDeCompeticion = this.calculos.PrepararTablaRankingIndividualCompeticion (
-                                                                                                this.listaAlumnosOrdenadaPorPuntos,
-                                                                                                this.alumnosDelJuego, this.jornadas,
-                                                                                                this.enfrentamientosDelJuego);
+      this.rankingAlumnoJuegoDeCompeticion = this.calculos.PrepararTablaRankingIndividualLiga (this.listaAlumnosOrdenadaPorPuntos,
+                                                                                               this.alumnosDelJuego, this.jornadas,
+                                                                                               this.enfrentamientosDelJuego);
       console.log ('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
       console.log (this.rankingAlumnoJuegoDeCompeticion);
       this.datasourceAlumno = new MatTableDataSource(this.rankingAlumnoJuegoDeCompeticion);
 
     } else {
-      this.rankingEquiposJuegoDeCompeticion = this.calculos.PrepararTablaRankingEquipoCompeticion (
-                                                                                              this.listaEquiposOrdenadaPorPuntos,
-                                                                                              this.equiposDelJuego, this.jornadas,
-                                                                                              this.enfrentamientosDelJuego);
+      this.rankingEquiposJuegoDeCompeticion = this.calculos.PrepararTablaRankingEquipoLiga (this.listaEquiposOrdenadaPorPuntos,
+                                                                                            this.equiposDelJuego, this.jornadas,
+                                                                                            this.enfrentamientosDelJuego);
       this.datasourceEquipo = new MatTableDataSource(this.rankingEquiposJuegoDeCompeticion);
       console.log('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
       console.log (this.rankingEquiposJuegoDeCompeticion);
@@ -267,7 +235,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     console.log('Tomo las jornadas' + this.jornadas);
     console.log ('Aquí estará la información del juego');
     this.sesion.TomaJuego (this.juegoSeleccionado);
-    this.JornadasCompeticion = this.calculos.DameTablaJornadasLiga( this.juegoSeleccionado, this.jornadas);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion( this.juegoSeleccionado, this.jornadas, undefined, undefined);
     console.log('Juego activo' + this.JornadasCompeticion);
     this.sesion.TomaDatosJornadas(
       this.jornadas,
@@ -310,7 +278,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     console.log ('Voy a por la información del juego seleccionado');
     this.sesion.TomaJuego (this.juegoSeleccionado);
     console.log('Tomo las jornadas' + this.jornadas);
-    this.JornadasCompeticion = this.calculos.DameTablaJornadasLiga( this.juegoSeleccionado, this.jornadas);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion( this.juegoSeleccionado, this.jornadas, undefined, undefined);
     console.log ('Voy a por la información de las jornadas del juego');
     this.sesion.TomaDatosJornadas(this.jornadas,
                                       this.JornadasCompeticion);
@@ -323,7 +291,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     console.log ('Voy a por la información del juego seleccionado');
     this.sesion.TomaJuego (this.juegoSeleccionado);
     console.log('Tomo las jornadas' + this.jornadas);
-    this.JornadasCompeticion = this.calculos.DameTablaJornadasLiga( this.juegoSeleccionado, this.jornadas);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion( this.juegoSeleccionado, this.jornadas, undefined, undefined);
     console.log ('Voy a por la información de las jornadas del juego');
     this.sesion.TomaDatosJornadas(this.jornadas,
                                   this.JornadasCompeticion);
