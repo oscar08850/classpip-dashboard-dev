@@ -89,7 +89,7 @@ export class JuegoComponent implements OnInit {
     // En el segundo paso mostraremos dos Chips con los dos modos de juego que podemos crear y su color
     seleccionTipoJuegoCompeticion: ChipColor[] = [
       {nombre: 'Liga', color: 'primary'},
-      {nombre: 'Formula Uno', color: 'warn'},
+      {nombre: 'Fórmula Uno', color: 'warn'},
       {nombre: 'Torneo', color: 'accent'}
     ];
 
@@ -323,7 +323,7 @@ export class JuegoComponent implements OnInit {
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.CreaJuegoDeCompeticionFormulaUno(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado,
                                                     this.modoDeJuegoSeleccionado, undefined, true, NumeroDeJornadas,
-                                                    this.tipoJuegoCompeticionSeleccionado, this.Puntuacion.length,
+                                                    undefined, this.Puntuacion.length,
                                                     this.Puntuacion), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
@@ -353,7 +353,7 @@ export class JuegoComponent implements OnInit {
     } else if (this.tipoDeJuegoSeleccionado === 'Juego De Competición' && this.tipoJuegoCompeticionSeleccionado === 'Liga') {
       console.log('Voy a crear juego de Competición Liga');
       this.CrearJuegoDeCompeticionLiga();
-    } else if (this.tipoDeJuegoSeleccionado === 'Juego De Competición' && this.tipoJuegoCompeticionSeleccionado === 'Formula Uno') {
+    } else if (this.tipoDeJuegoSeleccionado === 'Juego De Competición' && this.tipoJuegoCompeticionSeleccionado === 'Fórmula Uno') {
       console.log('Voy a crear juego de Competición Formula Uno');
       this.CrearJuegoDeCompeticionFormulaUno();
     }
@@ -414,7 +414,7 @@ export class JuegoComponent implements OnInit {
             .subscribe(equiposJuego => console.log(equiposJuego));
           }
         }
-      } else if (this.tipoJuegoCompeticionSeleccionado === 'Formula 1') {
+      } else if (this.tipoJuegoCompeticionSeleccionado === 'Fórmula Uno') {
         if (this.modoDeJuegoSeleccionado === 'Individual') {
 
           console.log('Voy a inscribir a los alumnos del grupo');
