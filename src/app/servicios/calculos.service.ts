@@ -1770,11 +1770,12 @@ public PreparaHistorialEquipo(
       for (let j = 0; j < GanadoresFormulaUnoId.length; j++) {
         // tslint:disable-next-line:prefer-for-of
         for (let k = 0; k < equipoJuegoDeCompeticionFormulaUno.length; k++) {
-          if (GanadoresFormulaUno[j] === equipoJuegoDeCompeticionFormulaUno[k].id) {
+          if (GanadoresFormulaUnoId[j] === equipoJuegoDeCompeticionFormulaUno[k].id) {
             GanadoresFormulaUno[j] = equipoJuegoDeCompeticionFormulaUno[k].nombre;
           }
         }
       }
+      return GanadoresFormulaUno;
     }
   }
 
@@ -1813,13 +1814,29 @@ public PreparaHistorialEquipo(
     return datosClasificaciónJornada;
     } else {
       console.log('Esta jornada aún no tiene ganadores asignados');
+      const ParticipantesFormulaUno: string[] = [];
+      const PuntosFormulaUno: number[] = [];
+      if (juegoSeleccionado.Modo === 'Individual') {
+        for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
+          const ParticipanteFormulaUno = alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
+                                      + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
+                                      + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
+          ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+          PuntosFormulaUno.push(0);
+        }
+      } else {
+        for (let i = 0; i < equipoJuegoDeCompeticionFormulaUno.length; i++) {
+          const ParticipanteFormulaUno = equipoJuegoDeCompeticionFormulaUno[i].nombre;
+          ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+          PuntosFormulaUno.push(0);
+        }
+      }
       const datosClasificaciónJornada = {
-        participante: undefined,
-        puntos: undefined
+        participante: ParticipantesFormulaUno,
+        puntos: PuntosFormulaUno
       };
       return datosClasificaciónJornada;
     }
-
   }
 
   public DameTablaJornadasCompeticion(juegoSeleccionado, jornadas, alumnoJuegoDeCompeticionFormulaUno,
