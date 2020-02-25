@@ -1,3 +1,29 @@
-<p>
-  informacion-juego-de-competicion-formula-uno works!
-</p>
+<div  class="titulo">Información {{juegoSeleccionado.Tipo}}</div>
+<div class="subtitulo">Jornadas del Juego</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div  class="enColumna">
+  <div  class="contenedor"  style="margin-left: 5px; width: 60%">
+    <!-- JORNADAS DEL JUEGO -->
+      <!-- <mat-tab  label="Jornadas del Juego"> -->
+        <form>
+          <mat-accordion  style="align-items: center;  width: 30%;"  *ngIf="numeroTotalJornadas!==0;else Aviso_no_jornadas">
+              <mat-expansion-panel *ngFor="let jornada of JornadasCompeticion" (click) = "ObtenerEnfrentamientosDeCadaJornada(jornada)">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                  Jornada {{jornada.NumeroDeJornada}}:    {{jornada.Fecha}}
+                </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="enFila">
+                  <!-- <div style="margin-right: 15%; border: 15px; width: 60%;"> -->
+                  <div style="margin-left: 20px; font-size: 130%; width: 40%;">
+                      <span style="font-weight: bold; font-size: 80%;">Criterio: {{jornada.CriterioGanador}}</span>
+                      <!-- (click)="AñadirResultados()" -->
+                      <button type="button" class="btn Aceptar"  style="margin-left: 600px">Resultados<i class="material-icons">emoji_events</i></button>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+          </mat-accordion>
+        </form>
+  </div>
+</div>

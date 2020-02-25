@@ -1750,7 +1750,80 @@ public PreparaHistorialEquipo(
     return this.jornadasnuevas;
   }
 
-  public DameTablaJornadasCompeticion( juegoSeleccionado, jornadas) {
+  public ObtenerNombreGanadoresFormulaUno(juegoSeleccionado: Juego, jornada, alumnoJuegoDeCompeticionFormulaUno,
+                                          equipoJuegoDeCompeticionFormulaUno) {
+    const GanadoresFormulaUno: string[] = [];
+    const GanadoresFormulaUnoId = jornada.GanadoresFormulaUno;
+    if (juegoSeleccionado.Modo === 'Individual') {
+      for (let j = 0; j < GanadoresFormulaUnoId.length; j++) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let k = 0; k < alumnoJuegoDeCompeticionFormulaUno.length; k++) {
+          if (GanadoresFormulaUnoId[j] === alumnoJuegoDeCompeticionFormulaUno[k].id) {
+            GanadoresFormulaUno[j] = alumnoJuegoDeCompeticionFormulaUno[k].nombre + ' '
+                                     + alumnoJuegoDeCompeticionFormulaUno[k].primerApellido + ' '
+                                     + alumnoJuegoDeCompeticionFormulaUno[k].segundoApellido;
+          }
+        }
+      }
+      return GanadoresFormulaUno;
+    } else {
+      for (let j = 0; j < GanadoresFormulaUnoId.length; j++) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let k = 0; k < equipoJuegoDeCompeticionFormulaUno.length; k++) {
+          if (GanadoresFormulaUno[j] === equipoJuegoDeCompeticionFormulaUno[k].id) {
+            GanadoresFormulaUno[j] = equipoJuegoDeCompeticionFormulaUno[k].nombre;
+          }
+        }
+      }
+    }
+  }
+
+  public ClasificaciónJornada(juegoSeleccionado, alumnoJuegoDeCompeticionFormulaUno,
+                              equipoJuegoDeCompeticionFormulaUno, GanadoresFormulaUno: string[]) {
+    if (GanadoresFormulaUno !== undefined) {
+      const ParticipantesFormulaUno: string[] = GanadoresFormulaUno;
+      const PuntosFormulaUno: number[] = juegoSeleccionado.Puntos;
+      if (juegoSeleccionado.Modo === 'Individual') {
+        for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
+          const ParticipanteFormulaUno = alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
+                                      + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
+                                      + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
+          const indexNoGanador = GanadoresFormulaUno.indexOf(ParticipantesFormulaUno[i]);
+          if (indexNoGanador === -1) {
+            ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+            PuntosFormulaUno.push(0);
+
+          }
+        }
+      } else {
+        for (let i = 0; i < equipoJuegoDeCompeticionFormulaUno.length; i++) {
+          const ParticipanteFormulaUno = equipoJuegoDeCompeticionFormulaUno[i].nombre;
+          const indexNoGanador = GanadoresFormulaUno.indexOf(ParticipantesFormulaUno[i]);
+          if (indexNoGanador === -1) {
+            ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+            PuntosFormulaUno.push(0);
+
+          }
+        }
+      }
+    const datosClasificaciónJornada = {
+      participante: ParticipantesFormulaUno,
+      puntos: PuntosFormulaUno
+    };
+    return datosClasificaciónJornada;
+    } else {
+      console.log('Esta jornada aún no tiene ganadores asignados');
+      const datosClasificaciónJornada = {
+        participante: undefined,
+        puntos: undefined
+      };
+      return datosClasificaciónJornada;
+    }
+
+  }
+
+  public DameTablaJornadasCompeticion(juegoSeleccionado, jornadas, alumnoJuegoDeCompeticionFormulaUno,
+                                      equipoJuegoDeCompeticionFormulaUno) {
   const TablaJornada: TablaJornadas [] = [];
   console.log('juego seleccionado:');
   console.log(juegoSeleccionado);
@@ -1759,10 +1832,30 @@ public PreparaHistorialEquipo(
   const jornadaId = jornadas[i].id;
   jornada = jornadas.filter(res => res.id === jornadaId)[0];
 
-  if (jornada.Fecha === undefined) {
-      TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id);
+  console.log('Ganadores de la jornada:');
+  console.log(jornada.GanadoresFormulaUno);
+  console.log('Fecha de la jornada');
+  console.log(jornada.Fecha);
+  if (juegoSeleccionado.Tipo === 'Juego De Competición Fórmula Uno') {
+    if (jornada.Fecha === undefined && jornada.GanadoresFormulaUno === undefined) {
+      TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id, undefined);
+    } else if (jornada.Fecha === undefined && jornada.GanadoresFormulaUno !== undefined) {
+      const GanadoresFormulaUno = this.ObtenerNombreGanadoresFormulaUno(juegoSeleccionado, jornada, alumnoJuegoDeCompeticionFormulaUno,
+                                                                        equipoJuegoDeCompeticionFormulaUno);
+      TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id, GanadoresFormulaUno);
+    } else  if (jornada.Fecha !== undefined && jornada.GanadoresFormulaUno === undefined) {
+      TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, undefined);
     } else {
-      TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
+      const GanadoresFormulaUno = this.ObtenerNombreGanadoresFormulaUno(juegoSeleccionado, jornada, alumnoJuegoDeCompeticionFormulaUno,
+                                                                        equipoJuegoDeCompeticionFormulaUno);
+      TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, GanadoresFormulaUno);
+    }
+  } else {
+      if (jornada.Fecha === undefined) {
+        TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id);
+      } else {
+        TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
+      }
     }
   }
   return(TablaJornada);
