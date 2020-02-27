@@ -608,6 +608,8 @@ export class PeticionesAPIService {
     // tslint:disable-next-line:max-line-length
     return this.http.post<Jornada>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionID + '/JornadasDeCompeticionFormulaUno',
     JornadasDeCompeticionFormulaUno);
+
+    // return this.http.post<Jornada>('http://localhost:3000/api/JornadasDeCompeticionFormulaUno',
   }
 
   public InscribeAlumnoJuegoDeCompeticionFormulaUno(alumnoJuegoDeCompeticionFormulaUno: AlumnoJuegoDeCompeticionFormulaUno) {
@@ -626,8 +628,8 @@ export class PeticionesAPIService {
   ///////////////////////////////////////////////////////////////////////////////////////////
   // Juego de Competición Formula Uno
 
-  public DameJornadasDeCompeticionFormulaUno(juegoDeCompeticionFormulaUnoId: number): Observable<Jornada[]> {
-    return this.http.get<Jornada[]>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionFormulaUnoId
+  public DameJornadasDeCompeticionFormulaUno(juegoDeCompeticionId: number): Observable<Jornada[]> {
+    return this.http.get<Jornada[]>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionId
                                      + '/jornadasDeCompeticionFormulaUno');
   }
 
@@ -656,4 +658,20 @@ export class PeticionesAPIService {
     return this.http.get<EquipoJuegoDeCompeticionFormulaUno[]>(this.APIUrlEquipoJuegoDeCompeticionFormulaUno
                                                       + '?filter[where][JuegoDeCompeticionFormulaUnoId]=' + juegoDeCompeticionFormulaUnoId);
   }
+
+  public ModificarJornadaFormulaUno(JornadaNueva: Jornada, JornadaId: number): Observable<Jornada> {
+    return this.http.put<Jornada>(this.APIUrlJornadasJuegoDeCompeticionFormulaUno + '/' + JornadaId, JornadaNueva );
+  }
+
+  public CambiaEstadoJuegoDeCompeticionFormulaUno(JuegosDeCompeticionF1: Juego,
+                                                  juegoDeCompeticionId: number,
+                                                  grupoId: number): Observable<Juego> {
+    return this.http.put<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionFormulaUno/' + juegoDeCompeticionId,
+  JuegosDeCompeticionF1);
+}
+
+  public BorraJuegoDeCompeticionFormulaUno(juegoDeCompeticionId: number, grupoId: number): Observable<Juego> {
+    return this.http.delete<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionFormulaUno/' + juegoDeCompeticionId);
+  }
+
 }

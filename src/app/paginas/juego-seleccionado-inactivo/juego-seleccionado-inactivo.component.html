@@ -10,6 +10,10 @@
   <app-juego-de-coleccion-seleccionado-inactivo></app-juego-de-coleccion-seleccionado-inactivo>
 </div>
 
+<div  *ngIf= "juegoSeleccionado.Tipo === 'Juego De Competición Fórmula Uno'">
+  <app-juego-de-competicion-formula-uno-seleccionado-inactivo></app-juego-de-competicion-formula-uno-seleccionado-inactivo>
+</div>
+
 <div  *ngIf= "juegoSeleccionado.Tipo === 'Juego De Competición Liga'">
   <app-juego-de-competicion-seleccionado-inactivo></app-juego-de-competicion-seleccionado-inactivo>
 </div>

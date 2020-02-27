@@ -66,6 +66,10 @@ import { GanadorJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccio
 import { InformacionJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/informacion-juego-de-competicion-formula-uno/informacion-juego-de-competicion-formula-uno.component';
 // tslint:disable-next-line:max-line-length
 import { GanadoresJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/ganadores-juego-de-competicion-formula-uno/ganadores-juego-de-competicion-formula-uno.component';
+// tslint:disable-next-line:max-line-length
+import { EditarJornadasJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/editar-jornadas-juego-de-competicion-formula-uno/editar-jornadas-juego-de-competicion-formula-uno.component';
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionFormulaUnoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-formula-uno-seleccionado-inactivo/informacion-juego-de-competicion-formula-uno-inactivo/informacion-juego-de-competicion-formula-uno-inactivo.component';
 import { AppComponent } from './app.component';
 import { ElementosComponent } from './elementos/elementos.component';
 import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.component';
@@ -181,6 +185,13 @@ const routes: Routes = [
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoDeCompeticionFormulaUno', component: InformacionJuegoDeCompeticionFormulaUnoComponent },
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/ganadoresJuegoDeCompeticionFormulaUno', component: GanadoresJuegoDeCompeticionFormulaUnoComponent },
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/editarjornadasJuegoDeCompeticionFormulaUno', component: EditarJornadasJuegoDeCompeticionFormulaUnoComponent },
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionJuegoDeCompeticionFormulaUnoInactivo', component: InformacionJuegoDeCompeticionFormulaUnoInactivoComponent },
+
+
+
 
   // COLECCIÓN
   { path: 'inicio/:id/misColecciones/editarColeccion', component: EditarColeccionComponent },

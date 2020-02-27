@@ -368,7 +368,6 @@ export class JuegoComponent implements OnInit {
   }
 
 
-
   Finalizar() {
     console.log ('Entro en finalizar');
     console.log (this.tipoDeJuegoSeleccionado);

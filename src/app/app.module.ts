@@ -114,10 +114,15 @@ import { GanadorJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccio
 // tslint:disable-next-line:max-line-length
 import { JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo.component';
 // tslint:disable-next-line:max-line-length
+import { JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-formula-uno-seleccionado-inactivo/juego-de-competicion-formula-uno-seleccionado-inactivo.component';
+// tslint:disable-next-line:max-line-length
 import { InformacionJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/informacion-juego-de-competicion-formula-uno/informacion-juego-de-competicion-formula-uno.component';
 // tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionFormulaUnoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-formula-uno-seleccionado-inactivo/informacion-juego-de-competicion-formula-uno-inactivo/informacion-juego-de-competicion-formula-uno-inactivo.component';
+// tslint:disable-next-line:max-line-length
 import { GanadoresJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/ganadores-juego-de-competicion-formula-uno/ganadores-juego-de-competicion-formula-uno.component';
-
+// tslint:disable-next-line:max-line-length
+import { EditarJornadasJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/editar-jornadas-juego-de-competicion-formula-uno/editar-jornadas-juego-de-competicion-formula-uno.component';
 
 // COMPONENTES EN COMPARTIDO
 import { DialogoConfirmacionComponent } from './paginas/COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
@@ -204,7 +209,10 @@ import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introduc
     GanadorJuegoDeCompeticionLigaComponent,
     JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent,
     InformacionJuegoDeCompeticionFormulaUnoComponent,
-    GanadoresJuegoDeCompeticionFormulaUnoComponent
+    GanadoresJuegoDeCompeticionFormulaUnoComponent,
+    EditarJornadasJuegoDeCompeticionFormulaUnoComponent,
+    InformacionJuegoDeCompeticionFormulaUnoInactivoComponent,
+    JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent
 
   ],
   imports: [
