@@ -16,14 +16,43 @@
                 </mat-expansion-panel-header>
                 <div class="enFila">
                   <!-- <div style="margin-right: 15%; border: 15px; width: 60%;"> -->
-                  <div style="margin-left: 20px; font-size: 130%; width: 40%;">
+                  <div style="margin-left: 110px; font-size: 130%; width: 40%;">
                       <span style="font-weight: bold; font-size: 80%;">Criterio: {{jornada.CriterioGanador}}</span>
                       <!-- (click)="AñadirResultados()" -->
-                      <button type="button" class="btn Aceptar"  style="margin-left: 600px">Resultados<i class="material-icons">emoji_events</i></button>
+                      <button type="button" class="btn Aceptar"  style="margin-left: 550px">Resultados<i class="material-icons">emoji_events</i></button>
+                      <!-- ///////////////////////////////////// TABLA CLASIFICACIÓN JORNADA ////////////////////////////////////// -->
+                      <table style="width: 180%"  align="center"  mat-table [dataSource]="dataSourceClasificacionJornada" class="example-container mat-elevation-z8">
+                        <!--- Note that these columns can be defined in any order.
+                                The actual rendered columns are set as a property on the row definition" -->
+
+                          <!-- Posición Column -->
+                          <ng-container matColumnDef="posicion">
+                            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Posición Global</th>
+                            <td mat-cell *matCellDef="let participante"> {{participante.posicion}} </td>
+                          </ng-container>
+
+                          <!-- Nombre Alumno Column -->
+                          <ng-container matColumnDef="participante">
+                            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 600%"  align="center">Nombre</th>
+                            <td mat-cell *matCellDef="let participante"> {{participante.participante}} </td>
+                          </ng-container>
+
+                          <!-- Puntos Column -->
+                          <ng-container matColumnDef="puntos">
+                              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Puntos</th>
+                              <td mat-cell *matCellDef="let participante"> {{participante.puntos}} </td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                      </table>
+
                   </div>
                 </div>
               </mat-expansion-panel>
           </mat-accordion>
         </form>
   </div>
+  <button type="button" class="btn Back" (click)="goBack()">Volver </button>
 </div>

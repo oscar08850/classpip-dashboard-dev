@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 
 // Clases
 import { Juego, Jornada, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
-         TablaEquipoJuegoDeCompeticion} from '../../../../clases/index';
+         TablaEquipoJuegoDeCompeticion, TablaClasificacionJornada} from '../../../../clases/index';
 
 // Servicio
 import { SesionService , CalculosService, PeticionesAPIService } from '../../../../servicios/index';
@@ -26,6 +26,17 @@ export class InformacionJuegoDeCompeticionFormulaUnoComponent implements OnInit 
 
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
   listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
+  datosClasificaciónJornada: {participante: string[];
+                              puntos: number[];
+                              posicion: number[];
+                             };
+
+  TablaClasificacionJornadaSeleccionada: TablaClasificacionJornada[];
+
+  // Columnas Tabla
+  displayedColumns: string[] = ['posicion', 'participante', 'puntos'];
+
+  dataSourceClasificacionJornada;
 
 
   constructor(public sesion: SesionService,
@@ -53,11 +64,26 @@ export class InformacionJuegoDeCompeticionFormulaUnoComponent implements OnInit 
 
   ObtenerEnfrentamientosDeCadaJornada(jornadaSeleccionada: TablaJornadas) {
     console.log('El id de la jornada seleccionada es: ' + jornadaSeleccionada.id);
-    const datos = this.calculos.ClasificaciónJornada(this.juegoSeleccionado, this.listaAlumnosClasificacion,
+    this.datosClasificaciónJornada = this.calculos.ClasificacionJornada(this.juegoSeleccionado, this.listaAlumnosClasificacion,
                                                      this.listaEquiposClasificacion, jornadaSeleccionada.GanadoresFormulaUno);
-    console.log(datos.participante);
-    console.log(datos.puntos);
-      // this.ConstruirTablaEnfrentamientos();
+    // console.log(this.datosClasificaciónJornada.participante);
+    // console.log(this.datosClasificaciónJornada.puntos);
+    // console.log(this.datosClasificaciónJornada.posicion);
+    this.ConstruirTablaClasificaciónJornada();
+  }
+
+  ConstruirTablaClasificaciónJornada() {
+    console.log ('Aquí tendré la tabla de clasificación, los participantes ordenados son:');
+    console.log(this.datosClasificaciónJornada.participante);
+    console.log(this.datosClasificaciónJornada.puntos);
+    console.log(this.datosClasificaciónJornada.posicion);
+    this.TablaClasificacionJornadaSeleccionada = this.calculos.PrepararTablaRankingJornadaFormulaUno(this.datosClasificaciónJornada);
+    this.dataSourceClasificacionJornada = new MatTableDataSource(this.TablaClasificacionJornadaSeleccionada);
+    console.log(this.dataSourceClasificacionJornada.data);
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }
