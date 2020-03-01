@@ -530,7 +530,7 @@ export class PeticionesAPIService {
   }
 
   public ModificarJornada(JornadaNueva: Jornada, JornadaId: number): Observable<Jornada> {
-    return this.http.put<Jornada>(this.APIUrlJornadasJuegoDeCompeticionLiga + '/' + JornadaId, JornadaNueva );
+    return this.http.patch<Jornada>(this.APIUrlJornadasJuegoDeCompeticionLiga + '/' + JornadaId, JornadaNueva );
   }
 
   public DameJornadasDeCompeticionLiga(juegoDeCompeticionLigaId: number): Observable<Jornada[]> {
@@ -660,7 +660,7 @@ export class PeticionesAPIService {
   }
 
   public ModificarJornadaFormulaUno(JornadaNueva: Jornada, JornadaId: number): Observable<Jornada> {
-    return this.http.put<Jornada>(this.APIUrlJornadasJuegoDeCompeticionFormulaUno + '/' + JornadaId, JornadaNueva );
+    return this.http.patch<Jornada>(this.APIUrlJornadasJuegoDeCompeticionFormulaUno + '/' + JornadaId, JornadaNueva );
   }
 
   public CambiaEstadoJuegoDeCompeticionFormulaUno(JuegosDeCompeticionF1: Juego,

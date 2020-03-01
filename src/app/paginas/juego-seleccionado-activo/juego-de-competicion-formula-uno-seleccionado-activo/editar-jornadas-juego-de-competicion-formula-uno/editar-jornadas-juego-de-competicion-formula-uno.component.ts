@@ -139,7 +139,7 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
         console.log(this.jornadas[i]);
         console.log(this.NuevaFecha, NuevoCriterio, this.jornadas[i].id);
         this.IDJornada = this.jornadas[i].id;
-        this.jornadas[i] = new Jornada (this.NuevaFecha, NuevoCriterio, this.jornadas[i].JuegoDeCompeticionId);
+        this.jornadas[i] = new Jornada (this.NuevaFecha, NuevoCriterio);
         console.log('Nueva Jornada ' + this.IDJornada);
         console.log(this.jornadas[i]);
         this.peticionesAPI.ModificarJornadaFormulaUno (this.jornadas[i], this.IDJornada)
