@@ -188,7 +188,7 @@ export class AsignarCromosComponent implements OnInit {
     this.peticionesAPI.DameJuegoDePuntosGrupo (this.sesion.DameGrupo().id)
     .subscribe ( juegos => {
 
-      this.juegosPuntos = juegos.filter (j => j.Modo === this.juegoSeleccionado.Modo && j.JuegoActivo)
+      this.juegosPuntos = juegos.filter (j => j.Modo === this.juegoSeleccionado.Modo && j.JuegoActivo);
       console.log ('HHHHH ' + this.juegosPuntos.length);
     }
     );

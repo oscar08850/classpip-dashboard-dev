@@ -193,4 +193,12 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
   }
 
+  applyFilter(filterValue: string) {
+    this.datasourceAlumno.filter = filterValue.trim().toLowerCase();
+  }
+
+  applyFilterEquipo(filterValue: string) {
+    this.datasourceEquipo.filter = filterValue.trim().toLowerCase();
+  }
+
 }

@@ -4,15 +4,22 @@ export class TablaJornadas {
   Fecha: any;
   CriterioGanador: string;
   id: number;
-  GanadoresFormulaUno: string[];
+  GanadoresFormulaUno: {
+    nombre: string[];
+    id: number[]
+  };
 
-  constructor(NumeroDeJornada?: number, Fecha?: any, CriterioGanador?: string, id?: number, GanadoresFormulaUno?: string[]) {
+  constructor(NumeroDeJornada?: number, Fecha?: any, CriterioGanador?: string, id?: number, GanadoresFormulaUno?: string[],
+              GanadoresFormulaUnoId?: number[]) {
 
     this.NumeroDeJornada = NumeroDeJornada;
     this.Fecha = Fecha;
     this.CriterioGanador = CriterioGanador;
     this.id = id;
-    this.GanadoresFormulaUno = GanadoresFormulaUno;
+    if (GanadoresFormulaUno !== undefined && GanadoresFormulaUnoId !== undefined) {
+      this.GanadoresFormulaUno.nombre = GanadoresFormulaUno;
+      this.GanadoresFormulaUno.id = GanadoresFormulaUnoId;
+    }
 
   }
 }

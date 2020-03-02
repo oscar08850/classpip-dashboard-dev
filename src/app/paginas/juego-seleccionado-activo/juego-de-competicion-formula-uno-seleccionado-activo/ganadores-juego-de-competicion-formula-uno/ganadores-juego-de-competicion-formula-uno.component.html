@@ -1,3 +1,90 @@
-<p>
-  ganadores-juego-de-competicion-formula-uno works!
-</p>
+<div class="titulo">Seleccionar Participantes que puntúan</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class="contenedor">
+  <div class="enColumna">
+    <div class = "enFila" style="width: 100%">
+      <div>
+        Seleccione
+        <br>
+        <mat-form-field >
+          <mat-label>Jornada</mat-label>
+          <select matNativeControl [(ngModel)]="jornadaId"  (change) = "ActualizarBoton()">
+            <option *ngFor="let jornada of JornadasCompeticion" [value]="jornada.id">
+              Jornada {{jornada.NumeroDeJornada}}
+            </option>
+          </select>
+        </mat-form-field>
+      </div>
+      <div>
+        <br>
+        <mat-form-field >
+          <mat-label>Modo</mat-label>
+          <select matNativeControl [(ngModel)]="modoAsignacionId" (change) = "ActualizarBoton()">
+            <option *ngFor="let modo of modoAsignacion" [value]="modo.id">
+              {{modo.modo}}
+            </option>
+          </select>
+        </mat-form-field>
+      </div>
+
+      <!-- (click)= "AsignarGanadorManualmente()" -->
+
+      <div style="margin-top: 10px; margin-left: 400px; margin-right: 10px;">
+        <button style= "width: 100%" type="button"class="btn Aceptar" [disabled]="botonAsignarManualDesactivado">Manualmente</button>
+        <!-- <button style= "width: 100%" type="button"class="btn Aceptar" [disabled]="botonAsignarDesactivado" (click) = AsignarPuntos()>Manualmente</button> -->
+      </div>
+      <div style="margin-top: 10px; margin-right: 10px;">
+        <button style= "width: 100%"  type="button"class="btn Aceptar"  (click) = AsignarAleatoriamente()  [disabled]="botonAsignarAleatorioDesactivado">Aleatoriamente</button>
+        <!-- <button style= "width: 100%"  type="button"class="btn Aceptar" (click) = AsignarAleatorio()>Aleatoriamente</button> -->
+      </div>
+    </div>
+
+    <!-- ///////////////////////////////////// ALEATORIAMENTE ////////////////////////////////////// -->
+    <table style="width: 80%" align="center" *ngIf="modoAsignacionId == 2 && jornadaId != undefined" mat-table [dataSource]="dataSourceClasificacionJornada" class="mat-elevation-z8">
+      <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Posición Column -->
+        <ng-container matColumnDef="posicion">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Posición Global</th>
+          <td mat-cell *matCellDef="let participante"> {{participante.posicion}} </td>
+        </ng-container>
+
+        <!-- Nombre Alumno Column -->
+        <ng-container matColumnDef="participante">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 600%"  align="center">Nombre</th>
+          <td mat-cell *matCellDef="let participante"> {{participante.participante}} </td>
+        </ng-container>
+
+        <!-- Puntos Column -->
+        <ng-container matColumnDef="puntos">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Puntos</th>
+            <td mat-cell *matCellDef="let participante"> {{participante.puntos}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <!-- ///////////////////////////////////// MANUALMENTE ////////////////////////////////////// -->
+    <mat-tab-group  style="width: 80%" align="center"  *ngIf="modoAsignacionId == 1 && jornadaId != undefined">
+      <mat-tab label="Introducir ganadores uno a uno">
+        <div class = "enFila">
+          <div>
+            <mat-card style = 'width: 100%' class="panel">
+              <mat-card-header>
+                <mat-card-title>Nuevo Alumno</mat-card-title>
+                <mat-card-subtitle style = "color:white">Introduce los datos del nuevo alumno</mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+  </div>
+
+
+</div>
