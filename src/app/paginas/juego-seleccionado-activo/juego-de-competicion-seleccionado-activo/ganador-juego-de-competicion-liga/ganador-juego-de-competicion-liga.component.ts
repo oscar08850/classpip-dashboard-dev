@@ -534,6 +534,12 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
   }
 
+  AsignarGanadorJuegoPuntos() {
+
+
+
+  }
+
 
   /* Para averiguar si todas las filas están seleccionadas */
   IsAllSelectedUno() {

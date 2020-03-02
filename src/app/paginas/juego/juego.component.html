@@ -294,7 +294,7 @@
                           <div [formGroup]="myForm1" class = "enFila" style="width: 80%">
 
                             <div style="margin-top: 15px;">
-                              <span>Edita la Puntuación de los ganadores: </span>
+                              <span>Introduzca el Número de Puntos y Seleccione la Posición a la que desea asignarlos: </span>
                               <mat-form-field>
                                 <mat-label>Introduzca los Puntos deseados</mat-label>
                                 <input matInput formControlName="NuevaPuntuacion" placeholder="Escribe los Puntos" requiered [(ngModel)]="NuevaPuntuacion" (change) = "ActualizarBotonTabla()">
@@ -349,6 +349,8 @@
                           <div style="margin-top: 10px">
                             <button type="button"class="btn Agregar" (click) = AnadirJugadorconPuntos()>Añadir Fila<i class="material-icons">
                               add</i></button>
+                            <button type="button"class="btn Eliminar" (click) = EliminarJugadorconPuntos()>Eliminar Fila<i class="material-icons">
+                              delete</i></button>
                           </div>
 
                         </div>

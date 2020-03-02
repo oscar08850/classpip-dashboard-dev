@@ -649,4 +649,20 @@ export class JuegoComponent implements OnInit {
        // this.botonTablaDesactivado = true;
 
      }
+
+     EliminarJugadorconPuntos() {
+
+         let i: number;
+         i = this.Puntuacion.length;
+         console.log(i);
+         console.log(this.Puntuacion);
+         this.TablaPuntuacion = this.TablaPuntuacion.splice(0, i - 1);
+         this.Puntuacion = this.Puntuacion.slice(0, i - 1);
+         console.log(this.TablaPuntuacion);
+         console.log(this.Puntuacion);
+
+         this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
+
+
+       }
 }
