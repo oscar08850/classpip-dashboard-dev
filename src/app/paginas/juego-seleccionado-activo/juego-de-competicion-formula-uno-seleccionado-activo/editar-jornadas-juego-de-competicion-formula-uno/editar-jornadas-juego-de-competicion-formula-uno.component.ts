@@ -102,11 +102,12 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
   una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
   /* En este caso para que esté activo también debe haber seleccionado el tipo de punto a asignar */
   ActualizarBotonTabla() {
-    let NuevaFecha: Date;
-    NuevaFecha = this.myForm.value.picker;
     let NuevoCriterio: string;
     NuevoCriterio = this.myForm.value.CriterioGanador;
-    if ((this.selection.selected.length === 0) || ( NuevaFecha === undefined) || ( NuevoCriterio === undefined)) {
+    console.log(this.selection.selected.length);
+    console.log(this.NuevaFecha);
+    console.log(NuevoCriterio);
+    if ((this.selection.selected.length === 0) || ( this.NuevaFecha === undefined) || ( NuevoCriterio === undefined)) {
       this.botonTablaDesactivado = true;
     } else {
       this.botonTablaDesactivado = false;
@@ -163,13 +164,11 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
 
 
   BotonDesactivado() {
-    let NuevaFecha: Date;
-    NuevaFecha = this.myForm.value.picker;
     let NuevoCriterio: string;
     NuevoCriterio = this.myForm.value.CriterioGanador;
 
     console.log('voy a ver si hay algo en los inputs');
-    if (NuevaFecha !== undefined && NuevoCriterio !== undefined ) {
+    if (this.NuevaFecha !== undefined && NuevoCriterio !== undefined ) {
       console.log('hay algo, disabled');
       this.isDisabled = false;
     } else {

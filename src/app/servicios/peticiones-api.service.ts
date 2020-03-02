@@ -602,7 +602,6 @@ export class PeticionesAPIService {
     return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionFormulaUno', juego);
   }
 
-
   // jornadas juego de competición liga
   public CrearJornadasFormulaUno( JornadasDeCompeticionFormulaUno: Jornada, juegoDeCompeticionID: number): Observable<Jornada> {
     // tslint:disable-next-line:max-line-length

@@ -486,6 +486,10 @@ export class JuegoComponent implements OnInit {
       // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
     this.stepper.reset();
     this.finalizar = true;
+    this.TablaPuntuacion = [];
+    this.TablaPuntuacion[0] = new TablaPuntosFormulaUno(1, 10);
+    this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
+    this.Puntuacion = [10];
   }
 
   // Recibo el nombre de la colección elegida en el componente hijo
@@ -627,16 +631,17 @@ export class JuegoComponent implements OnInit {
     // Tengo que hacer un recorrido diferente del dataSource porque necesito saber el
        // valor de i
 
-       let NuevaPuntuacion: number;
-       NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
-       console.log(this.TablaPuntuacion);
-       console.log('Voy a asignar NuevaPuntuacion ' + NuevaPuntuacion);
+      //  let NuevaPuntuacion: number;
+      //  NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
+      //  console.log(this.TablaPuntuacion);
+      //  console.log('Voy a asignar NuevaPuntuacion ' + NuevaPuntuacion);
        let i: number;
        i = this.Puntuacion.length;
        console.log(i);
-       this.Puntuacion[i] = NuevaPuntuacion;
        console.log(this.Puntuacion);
-       this.TablaPuntuacion[i] = new TablaPuntosFormulaUno(i + 1, NuevaPuntuacion);
+       // this.Puntuacion[i] = NuevaPuntuacion;
+       this.TablaPuntuacion[i] = new TablaPuntosFormulaUno(i + 1, 1);
+       this.Puntuacion[i] = this.TablaPuntuacion[i].Puntuacion;
        console.log(this.TablaPuntuacion[i]);
 
        this.dataSource = new MatTableDataSource (this.TablaPuntuacion);

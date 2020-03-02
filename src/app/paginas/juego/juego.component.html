@@ -294,17 +294,14 @@
                           <div [formGroup]="myForm1" class = "enFila" style="width: 80%">
 
                             <div style="margin-top: 15px;">
-                              <span>Establecer Puntos: </span>
+                              <span>Edita la Puntuación de los ganadores: </span>
                               <mat-form-field>
-                                <mat-label>Establecer Puntos:</mat-label>
+                                <mat-label>Introduzca los Puntos deseados</mat-label>
                                 <input matInput formControlName="NuevaPuntuacion" placeholder="Escribe los Puntos" requiered [(ngModel)]="NuevaPuntuacion" (change) = "ActualizarBotonTabla()">
                               </mat-form-field>
                             </div>
                             <div style="margin-top: 10px">
-                              <button type="button"class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = AnadirPuntos()>Añadir los Puntos</button>
-                            </div>
-                            <div style="margin-top: 10px">
-                              <button type="button"class="btn Aceptar" (click) = AnadirJugadorconPuntos()>Añadir Jugador</button>
+                              <button type="button"class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = AnadirPuntos()>Establecer Puntuación</button>
                             </div>
                           </div>
 
@@ -342,11 +339,18 @@
                               </ng-container>
 
 
+
                               <tr mat-header-row *matHeaderRowDef="displayedColumnsTablaPuntuacion"></tr>
                               <tr mat-row *matRowDef="let row; columns: displayedColumnsTablaPuntuacion;"></tr>
 
                             </table>
                           </form>
+
+                          <div style="margin-top: 10px">
+                            <button type="button"class="btn Agregar" (click) = AnadirJugadorconPuntos()>Añadir Fila<i class="material-icons">
+                              add</i></button>
+                          </div>
+
                         </div>
                       </div>
 
