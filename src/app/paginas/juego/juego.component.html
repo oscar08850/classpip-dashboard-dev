@@ -75,6 +75,24 @@
           <mat-horizontal-stepper #stepper #linearHorizontalStepper="matHorizontalStepper" [linear]="true">
 
 
+          <!-- /////////////////////// PASO 0: INTROCUDIR NOMBRE ////////////////////////////////-->
+            <mat-step>
+
+              <div [formGroup]="myForm2">
+                <ng-template matStepLabel><div>Introduzca el nombre del juego</div></ng-template>
+
+                  <!-- casilla para introducir jornadas -->
+                      <mat-form-field>
+                        <mat-label>Nombre del juego</mat-label>
+                        <input matInput formControlName="NombredelJuego" required>
+                      </mat-form-field>
+
+                    <div class="btnCambiarStep">
+                      <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                    </div>
+              </div>
+            </mat-step>
+
         <!-- /////////////////////// PRIMER PASO: SELECCIÓN DEL TIPO DE JUEGO ////////////////////////////////-->
           <mat-step>
             <ng-template matStepLabel>Tipo De Juego</ng-template>
@@ -93,6 +111,7 @@
               </div>
 
               <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                   <button [disabled]="isDisabled" type="button" class="btn Next" matStepperNext>Siguiente</button>
               </div>
 

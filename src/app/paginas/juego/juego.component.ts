@@ -59,6 +59,7 @@ export class JuegoComponent implements OnInit {
   juegoDeCompeticion: JuegoDeCompeticion;
   myForm: FormGroup;
   myForm1: FormGroup;
+  myForm2: FormGroup;
 
   // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS E INACTIVOS DE LOS TRES TIPOS DE JUEGOS
   juegosActivos: Juego[];
@@ -187,6 +188,11 @@ export class JuegoComponent implements OnInit {
     this.myForm1 = this._formBuilder.group({
       NuevaPuntuacion: ['', Validators.required],
     });
+
+    this.myForm2 = this._formBuilder.group({
+      NombredelJuego: ['', Validators.required],
+    });
+
     this.TablaPuntuacion = [];
     this.TablaPuntuacion[0] = new TablaPuntosFormulaUno(1, 10);
     this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
@@ -262,6 +268,9 @@ export class JuegoComponent implements OnInit {
   // Función que usaremos para crear un juego de puntos.
   // Hay que diferenciar entre los tres juegos porque la URL es diferente
   CrearJuegoDePuntos() {
+    let NombredelJuego: string;
+    NombredelJuego = this.myForm2.value.NombredelJuego;
+    NombredelJuego = this.tipoDeJuegoSeleccionado + ': ' + NombredelJuego;
     this.peticionesAPI.CreaJuegoDePuntos(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
@@ -273,6 +282,9 @@ export class JuegoComponent implements OnInit {
   }
 
   CrearJuegoDeColeccion() {
+    let NombredelJuego: string;
+    NombredelJuego = this.myForm2.value.NombredelJuego;
+    NombredelJuego = this.tipoDeJuegoSeleccionado + ': ' + NombredelJuego;
     this.peticionesAPI.CreaJuegoDeColeccion(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
@@ -289,6 +301,9 @@ export class JuegoComponent implements OnInit {
     let NumeroDeJornadas: number;
     let Jornadas: Jornada[];
     NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
+    let NombredelJuego: string;
+    NombredelJuego = this.myForm2.value.NombredelJuego;
+    NombredelJuego = this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado + ': ' + NombredelJuego;
     console.log(NumeroDeJornadas);
     console.log(new Juego (this.tipoDeJuegoSeleccionado + ' Liga', this.modoDeJuegoSeleccionado,
                   undefined, true, NumeroDeJornadas, this.tipoJuegoCompeticionSeleccionado), this.grupo.id);
@@ -316,6 +331,10 @@ export class JuegoComponent implements OnInit {
     let NumeroDeJornadas: number;
     let Jornadas: Jornada[];
     NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
+    let NombredelJuego: string;
+    NombredelJuego = this.myForm2.value.NombredelJuego;
+    NombredelJuego = this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado + ': ' + NombredelJuego;
+    console.log(NombredelJuego);
     console.log(NumeroDeJornadas);
     console.log(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado, this.modoDeJuegoSeleccionado,
                   undefined, true, NumeroDeJornadas, this.tipoJuegoCompeticionSeleccionado, this.Puntuacion.length,
@@ -647,7 +666,6 @@ export class JuegoComponent implements OnInit {
        this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
        // this.selection.clear();
        // this.botonTablaDesactivado = true;
-
      }
 
      EliminarJugadorconPuntos() {
