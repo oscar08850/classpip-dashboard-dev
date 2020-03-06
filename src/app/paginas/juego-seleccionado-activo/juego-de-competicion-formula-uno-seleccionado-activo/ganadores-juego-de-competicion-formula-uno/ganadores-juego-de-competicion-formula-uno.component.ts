@@ -10,6 +10,9 @@ import { Juego, Jornada, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
 import { SesionService , CalculosService, PeticionesAPIService } from '../../../../servicios/index';
 import { forEach } from '@angular/router/src/utils/collection';
 import { MatTableDataSource } from '@angular/material';
+
+import Swal from 'sweetalert2';
+
 import { identifierModuleUrl } from '@angular/compiler';
 
 export interface Asignacion {
@@ -50,7 +53,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
   listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
-  datosClasificaciónJornada: {participante: string[];
+  datosClasificacionJornada: {participante: string[];
                               puntos: number[];
                               posicion: number[];
                               participanteId: number[];
@@ -120,22 +123,28 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     }
     console.log(this.tablaJornadaSelccionada);
     console.log('El id de la jornada seleccionada es: ' + this.tablaJornadaSelccionada.id);
-    this.datosClasificaciónJornada = this.calculos.ClasificacionJornada(this.juegoSeleccionado, this.listaAlumnosClasificacion,
-                                                     this.listaEquiposClasificacion,
-                                                     this.tablaJornadaSelccionada.GanadoresFormulaUno.nombre,
-                                                     this.tablaJornadaSelccionada.GanadoresFormulaUno.id);
-    // console.log(this.datosClasificaciónJornada.participante);
-    // console.log(this.datosClasificaciónJornada.puntos);
-    // console.log(this.datosClasificaciónJornada.posicion);
+    if (this.tablaJornadaSelccionada.GanadoresFormulaUno === undefined) {
+      this.datosClasificacionJornada = this.calculos.ClasificacionJornada(this.juegoSeleccionado, this.listaAlumnosClasificacion,
+                                                                          this.listaEquiposClasificacion,
+                                                                          undefined,
+                                                                          undefined);
+    } else {
+      this.datosClasificacionJornada = this.calculos.ClasificacionJornada(this.juegoSeleccionado, this.listaAlumnosClasificacion,
+                                                                          this.listaEquiposClasificacion,
+                                                                          this.tablaJornadaSelccionada.GanadoresFormulaUno.nombre,
+                                                                          this.tablaJornadaSelccionada.GanadoresFormulaUno.id);
+    }
     this.ConstruirTablaClasificaciónJornada();
   }
 
   ConstruirTablaClasificaciónJornada() {
     console.log ('Aquí tendré la tabla de clasificación, los participantes ordenados son:');
-    console.log(this.datosClasificaciónJornada.participante);
-    console.log(this.datosClasificaciónJornada.puntos);
-    console.log(this.datosClasificaciónJornada.posicion);
-    this.TablaClasificacionJornadaSeleccionada = this.calculos.PrepararTablaRankingJornadaFormulaUno(this.datosClasificaciónJornada);
+    console.log(this.datosClasificacionJornada.participante);
+    console.log(this.datosClasificacionJornada.puntos);
+    console.log(this.datosClasificacionJornada.posicion);
+    console.log('ParticipanteId:');
+    console.log(this.datosClasificacionJornada.participanteId);
+    this.TablaClasificacionJornadaSeleccionada = this.calculos.PrepararTablaRankingJornadaFormulaUno(this.datosClasificacionJornada);
     this.dataSourceClasificacionJornada = new MatTableDataSource(this.TablaClasificacionJornadaSeleccionada);
     console.log(this.dataSourceClasificacionJornada.data);
   }
@@ -155,7 +164,26 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     }
     console.log('Los participantes que puntúan son: ');
     console.log(participantesPuntuan);
-    // Swal.fire(this.alumnoElegido.Nombre + ' Enhorabuena', 'Cromo asignado correctamente', 'success');
+    // // tslint:disable-next-line:prefer-for-of
+    // for (let k = 0; k < participantesPuntuan.length; k++) {
+    //   // tslint:disable-next-line:prefer-for-of
+    //   for (let j = 0; j < this.datosClasificacionJornada.participanteId.length; j++) {
+    //     if (this.datosClasificacionJornada.participanteId[j] === participantesPuntuan[k].AlumnoId) {
+    //       Swal.fire(this.datosClasificacionJornada.participante[j] + ' Enhorabuena', 'success'); }
+    //     }
+    // }
+    let ganadores = '';
+    // tslint:disable-next-line:prefer-for-of
+    for (let k = 0; k < participantesPuntuan.length; k++) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let j = 0; j < this.datosClasificacionJornada.participanteId.length; j++) {
+        // tslint:disable-next-line:max-line-length
+        if (this.juegoSeleccionado.Modo === 'Individual' && this.datosClasificacionJornada.participanteId[j] === participantesPuntuan[k].AlumnoId) {
+          ganadores = ganadores + '\n' + this.datosClasificacionJornada.participante[j];
+        }
+      }
+    }
+    Swal.fire(ganadores, ' Enhorabuena', 'success');
   }
 
   goBack() {

@@ -1047,16 +1047,17 @@ export class CalculosService {
     return rankingJuegoDeCompeticion;
   }
 
-  public PrepararTablaRankingJornadaFormulaUno(datosClasificaciónJornadaSeleccionada: {participante: string[];
+  public PrepararTablaRankingJornadaFormulaUno(datosClasificacionJornadaSeleccionada: {participante: string[];
                                                                                        puntos: number[];
                                                                                        posicion: number[];
-                                                                                       }) {
+                                                                                       participanteId: number[]}) {
     console.log('Estoy en PrepararTablaRankingJornadaFormulaUno');
     const rankingJornadaFormulaUno: TablaClasificacionJornada [] = [];
-    for (let i = 0; i < datosClasificaciónJornadaSeleccionada.participante.length; i++) {
-      rankingJornadaFormulaUno[i] = new TablaClasificacionJornada(datosClasificaciónJornadaSeleccionada.participante[i],
-                                                                datosClasificaciónJornadaSeleccionada.puntos[i],
-                                                                datosClasificaciónJornadaSeleccionada.posicion[i]);
+    for (let i = 0; i < datosClasificacionJornadaSeleccionada.participante.length; i++) {
+      rankingJornadaFormulaUno[i] = new TablaClasificacionJornada(datosClasificacionJornadaSeleccionada.participante[i],
+                                                                datosClasificacionJornadaSeleccionada.puntos[i],
+                                                                datosClasificacionJornadaSeleccionada.posicion[i],
+                                                                datosClasificacionJornadaSeleccionada.participanteId[i]);
     }
     return rankingJornadaFormulaUno;
   }
@@ -1855,7 +1856,7 @@ export class CalculosService {
       const ParticipantesFormulaUno: string[] = [];
       const PuntosFormulaUno: number[] = [];
       const Posicion: number[] = [];
-      const ParticipantesId: number[] = GanadoresFormulaUnoId;
+      const ParticipantesId: number[] = [];
       if (juegoSeleccionado.Modo === 'Individual') {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
