@@ -80,7 +80,7 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
                                                                                             this.juegoSeleccionado);
       this.dataSourceEnfrentamientoIndividual = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
       console.log('La tabla de enfrentamientos individual queda: ');
-      console.log(this.dataSourceEnfrentamientoEquipo.data);
+      console.log(this.dataSourceEnfrentamientoIndividual.data);
 
     } else {
       this.EnfrentamientosJornadaSeleccionada = this.calculos.ConstruirTablaEnfrentamientos(this.EnfrentamientosJornadaSeleccionada,

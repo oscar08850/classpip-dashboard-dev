@@ -240,4 +240,12 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
       }
     });
   }
+  applyFilter(filterValue: string) {
+    this.datasourceAlumno.filter = filterValue.trim().toLowerCase();
+  }
+
+  applyFilterEquipo(filterValue: string) {
+    this.datasourceEquipo.filter = filterValue.trim().toLowerCase();
+  }
+
 }

@@ -1047,16 +1047,17 @@ export class CalculosService {
     return rankingJuegoDeCompeticion;
   }
 
-  public PrepararTablaRankingJornadaFormulaUno(datosClasificaciónJornadaSeleccionada: {participante: string[];
+  public PrepararTablaRankingJornadaFormulaUno(datosClasificacionJornadaSeleccionada: {participante: string[];
                                                                                        puntos: number[];
                                                                                        posicion: number[];
-                                                                                       }) {
+                                                                                       participanteId: number[]}) {
     console.log('Estoy en PrepararTablaRankingJornadaFormulaUno');
     const rankingJornadaFormulaUno: TablaClasificacionJornada [] = [];
-    for (let i = 0; i < datosClasificaciónJornadaSeleccionada.participante.length; i++) {
-      rankingJornadaFormulaUno[i] = new TablaClasificacionJornada(datosClasificaciónJornadaSeleccionada.participante[i],
-                                                                datosClasificaciónJornadaSeleccionada.puntos[i],
-                                                                datosClasificaciónJornadaSeleccionada.posicion[i]);
+    for (let i = 0; i < datosClasificacionJornadaSeleccionada.participante.length; i++) {
+      rankingJornadaFormulaUno[i] = new TablaClasificacionJornada(datosClasificacionJornadaSeleccionada.participante[i],
+                                                                datosClasificacionJornadaSeleccionada.puntos[i],
+                                                                datosClasificacionJornadaSeleccionada.posicion[i],
+                                                                datosClasificacionJornadaSeleccionada.participanteId[i]);
     }
     return rankingJornadaFormulaUno;
   }
@@ -1768,49 +1769,63 @@ export class CalculosService {
 
   public ObtenerNombreGanadoresFormulaUno(juegoSeleccionado: Juego, jornada, alumnoJuegoDeCompeticionFormulaUno,
                                           equipoJuegoDeCompeticionFormulaUno) {
-    const GanadoresFormulaUno: string[] = [];
-    const GanadoresFormulaUnoId = jornada.GanadoresFormulaUno;
+    console.log('Estoy en ObtenerNombreGanadoresFormulaUno()');
+    const GanadoresFormulaUno: {
+      nombre: string[]
+      id: number[]
+    } = {nombre: [], id: []};
+    GanadoresFormulaUno.nombre = [];
+    GanadoresFormulaUno.id = jornada.GanadoresFormulaUno;
     if (juegoSeleccionado.Modo === 'Individual') {
-      for (let j = 0; j < GanadoresFormulaUnoId.length; j++) {
+      for (let j = 0; j < GanadoresFormulaUno.id.length; j++) {
         // tslint:disable-next-line:prefer-for-of
         for (let k = 0; k < alumnoJuegoDeCompeticionFormulaUno.length; k++) {
-          if (GanadoresFormulaUnoId[j] === alumnoJuegoDeCompeticionFormulaUno[k].id) {
-            GanadoresFormulaUno[j] = alumnoJuegoDeCompeticionFormulaUno[k].nombre + ' '
-                                     + alumnoJuegoDeCompeticionFormulaUno[k].primerApellido + ' '
-                                     + alumnoJuegoDeCompeticionFormulaUno[k].segundoApellido;
+          if (GanadoresFormulaUno.id[j] === alumnoJuegoDeCompeticionFormulaUno[k].id) {
+              GanadoresFormulaUno.nombre[j] = alumnoJuegoDeCompeticionFormulaUno[k].nombre + ' '
+                                          + alumnoJuegoDeCompeticionFormulaUno[k].primerApellido + ' '
+                                          + alumnoJuegoDeCompeticionFormulaUno[k].segundoApellido;
           }
         }
       }
+      console.log(GanadoresFormulaUno);
       return GanadoresFormulaUno;
     } else {
-      for (let j = 0; j < GanadoresFormulaUnoId.length; j++) {
+      for (let j = 0; j < GanadoresFormulaUno.id.length; j++) {
         // tslint:disable-next-line:prefer-for-of
         for (let k = 0; k < equipoJuegoDeCompeticionFormulaUno.length; k++) {
-          if (GanadoresFormulaUnoId[j] === equipoJuegoDeCompeticionFormulaUno[k].id) {
-            GanadoresFormulaUno[j] = equipoJuegoDeCompeticionFormulaUno[k].nombre;
+          console.log('GanadoresFormulaUno[j].id === equipoJuegoDeCompeticionFormulaUno[k].id :');
+          console.log(GanadoresFormulaUno.id[j] + '===' + equipoJuegoDeCompeticionFormulaUno[k].id);
+          if (GanadoresFormulaUno.id[j] === equipoJuegoDeCompeticionFormulaUno[k].id) {
+              GanadoresFormulaUno.nombre[j] = equipoJuegoDeCompeticionFormulaUno[k].nombre;
           }
         }
       }
+      console.log('GanadoresFormulaUno:');
+      console.log(GanadoresFormulaUno);
       return GanadoresFormulaUno;
     }
   }
 
-  public ClasificacionJornada(juegoSeleccionado, alumnoJuegoDeCompeticionFormulaUno,
-                              equipoJuegoDeCompeticionFormulaUno, GanadoresFormulaUno: string[]) {
+  public ClasificacionJornada(juegoSeleccionado: Juego, alumnoJuegoDeCompeticionFormulaUno: TablaAlumnoJuegoDeCompeticion[],
+                              equipoJuegoDeCompeticionFormulaUno: TablaEquipoJuegoDeCompeticion[], GanadoresFormulaUno: string[],
+                              GanadoresFormulaUnoId: number[]) {
     if (GanadoresFormulaUno !== undefined) {
       const ParticipantesFormulaUno: string[] = GanadoresFormulaUno;
       const PuntosFormulaUno: number[] = juegoSeleccionado.Puntos;
       const Posicion: number[] = [];
+      const ParticipantesId: number[] = GanadoresFormulaUnoId;
       if (juegoSeleccionado.Modo === 'Individual') {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
           const ParticipanteFormulaUno = alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
                                       + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
                                       + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
+          const ParticipanteId = alumnoJuegoDeCompeticionFormulaUno[i].id;
           const indexNoGanador = GanadoresFormulaUno.indexOf(ParticipanteFormulaUno);
           if (indexNoGanador === -1) {
             ParticipantesFormulaUno.push(ParticipanteFormulaUno);
             PuntosFormulaUno.push(0);
+            ParticipantesId.push(ParticipanteId);
           }
         }
         for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
@@ -1820,10 +1835,12 @@ export class CalculosService {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < equipoJuegoDeCompeticionFormulaUno.length; i++) {
           const ParticipanteFormulaUno = equipoJuegoDeCompeticionFormulaUno[i].nombre;
+          const ParticipanteId = equipoJuegoDeCompeticionFormulaUno[i].id;
           const indexNoGanador = GanadoresFormulaUno.indexOf(ParticipanteFormulaUno);
           if (indexNoGanador === -1) {
             ParticipantesFormulaUno.push(ParticipanteFormulaUno);
             PuntosFormulaUno.push(0);
+            ParticipantesId.push(ParticipanteId);
           }
         }
         for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
@@ -1833,7 +1850,8 @@ export class CalculosService {
       const datosClasificaciónJornada = {
         participante: ParticipantesFormulaUno,
         puntos: PuntosFormulaUno,
-        posicion: Posicion
+        posicion: Posicion,
+        participanteId: ParticipantesId
       };
       return datosClasificaciónJornada;
     } else {
@@ -1841,6 +1859,7 @@ export class CalculosService {
       const ParticipantesFormulaUno: string[] = [];
       const PuntosFormulaUno: number[] = [];
       const Posicion: number[] = [];
+      const ParticipantesId: number[] = [];
       if (juegoSeleccionado.Modo === 'Individual') {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
@@ -1848,7 +1867,9 @@ export class CalculosService {
                                       + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
                                       + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
           ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+          const ParticipanteId = alumnoJuegoDeCompeticionFormulaUno[i].id;
           PuntosFormulaUno.push(0);
+          ParticipantesId.push(ParticipanteId);
         }
         for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
           Posicion[j] = j + 1;
@@ -1858,7 +1879,9 @@ export class CalculosService {
         for (let i = 0; i < equipoJuegoDeCompeticionFormulaUno.length; i++) {
           const ParticipanteFormulaUno = equipoJuegoDeCompeticionFormulaUno[i].nombre;
           ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+          const ParticipanteId = alumnoJuegoDeCompeticionFormulaUno[i].id;
           PuntosFormulaUno.push(0);
+          ParticipantesId.push(ParticipanteId);
         }
         for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
           Posicion[j] = j + 1;
@@ -1867,7 +1890,8 @@ export class CalculosService {
       const datosClasificaciónJornada = {
         participante: ParticipantesFormulaUno,
         puntos: PuntosFormulaUno,
-        posicion: Posicion
+        posicion: Posicion,
+        participanteId: ParticipantesId
       };
       return datosClasificaciónJornada;
     }
@@ -1875,45 +1899,43 @@ export class CalculosService {
 
   public DameTablaJornadasCompeticion(juegoSeleccionado, jornadas, alumnoJuegoDeCompeticionFormulaUno,
                                       equipoJuegoDeCompeticionFormulaUno) {
-  const TablaJornada: TablaJornadas [] = [];
-  console.log('juego seleccionado:');
-  console.log(juegoSeleccionado);
-  for (let i = 0; i < juegoSeleccionado.NumeroTotalJornadas; i++) {
-  let jornada: Jornada;
-  const jornadaId = jornadas[i].id;
-  console.log(juegoSeleccionado.NumeroTotalJornadas);
-  console.log(i);
-  console.log(jornadaId);
-  console.log(jornadas);
-  jornada = jornadas.filter(res => res.id === jornadaId)[0];
-  console.log(jornada);
-  console.log('Ganadores de la jornada:');
-  console.log(jornada.GanadoresFormulaUno);
-  console.log('Fecha de la jornada');
-  console.log(jornada.Fecha);
-  if (juegoSeleccionado.Tipo === 'Juego De Competición Fórmula Uno') {
-    if (jornada.Fecha === undefined && jornada.GanadoresFormulaUno === undefined) {
-      TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id, undefined);
-    } else if (jornada.Fecha === undefined && jornada.GanadoresFormulaUno !== undefined) {
-      const GanadoresFormulaUno = this.ObtenerNombreGanadoresFormulaUno(juegoSeleccionado, jornada, alumnoJuegoDeCompeticionFormulaUno,
-                                                                        equipoJuegoDeCompeticionFormulaUno);
-      TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id, GanadoresFormulaUno);
-    } else  if (jornada.Fecha !== undefined && jornada.GanadoresFormulaUno === undefined) {
-      TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, undefined);
-    } else {
-      const GanadoresFormulaUno = this.ObtenerNombreGanadoresFormulaUno(juegoSeleccionado, jornada, alumnoJuegoDeCompeticionFormulaUno,
-                                                                        equipoJuegoDeCompeticionFormulaUno);
-      TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, GanadoresFormulaUno);
-    }
-  } else {
-      if (jornada.Fecha === undefined) {
+    const TablaJornada: TablaJornadas [] = [];
+    console.log('juego seleccionado:');
+    console.log(juegoSeleccionado);
+    for (let i = 0; i < juegoSeleccionado.NumeroTotalJornadas; i++) {
+    let jornada: Jornada;
+    const jornadaId = jornadas[i].id;
+    jornada = jornadas.filter(res => res.id === jornadaId)[0];
+
+    console.log('Ganadores de la jornada:');
+    console.log(jornada.GanadoresFormulaUno);
+    console.log('Fecha de la jornada');
+    console.log(jornada.Fecha);
+    if (juegoSeleccionado.Tipo === 'Juego De Competición Fórmula Uno') {
+      if (jornada.Fecha === undefined && jornada.GanadoresFormulaUno === undefined) {
         TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id);
-      } else {
+      } else if (jornada.Fecha === undefined && jornada.GanadoresFormulaUno !== undefined) {
+        const GanadoresFormulaUno = this.ObtenerNombreGanadoresFormulaUno(juegoSeleccionado, jornada, alumnoJuegoDeCompeticionFormulaUno,
+                                                                          equipoJuegoDeCompeticionFormulaUno);
+        TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id, GanadoresFormulaUno.nombre,
+                                            GanadoresFormulaUno.id);
+      } else  if (jornada.Fecha !== undefined && jornada.GanadoresFormulaUno === undefined) {
         TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
+      } else {
+        const GanadoresFormulaUno = this.ObtenerNombreGanadoresFormulaUno(juegoSeleccionado, jornada, alumnoJuegoDeCompeticionFormulaUno,
+                                                                          equipoJuegoDeCompeticionFormulaUno);
+        TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, GanadoresFormulaUno.nombre,
+                                            GanadoresFormulaUno.id);
+      }
+    } else {
+        if (jornada.Fecha === undefined) {
+          TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id);
+        } else {
+          TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
+        }
       }
     }
-  }
-  return(TablaJornada);
+    return(TablaJornada);
   }
 
  public FormarEquiposAleatorios(individuos: any[], tamEquipos: number): any[] {

@@ -26,9 +26,10 @@ export class InformacionJuegoDeCompeticionFormulaUnoComponent implements OnInit 
 
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
   listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
-  datosClasificaciónJornada: {participante: string[];
+  datosClasificacionJornada: {participante: string[];
                               puntos: number[];
                               posicion: number[];
+                              participanteId: number[];
                              };
 
   TablaClasificacionJornadaSeleccionada: TablaClasificacionJornada[];
@@ -64,8 +65,14 @@ export class InformacionJuegoDeCompeticionFormulaUnoComponent implements OnInit 
 
   ObtenerEnfrentamientosDeCadaJornada(jornadaSeleccionada: TablaJornadas) {
     console.log('El id de la jornada seleccionada es: ' + jornadaSeleccionada.id);
-    this.datosClasificaciónJornada = this.calculos.ClasificacionJornada(this.juegoSeleccionado, this.listaAlumnosClasificacion,
-                                                     this.listaEquiposClasificacion, jornadaSeleccionada.GanadoresFormulaUno);
+    if (jornadaSeleccionada.GanadoresFormulaUno === undefined) {
+      this.datosClasificacionJornada = this.calculos.ClasificacionJornada(this.juegoSeleccionado, this.listaAlumnosClasificacion,
+                                                     this.listaEquiposClasificacion, undefined, undefined);
+    } else {
+      this.datosClasificacionJornada = this.calculos.ClasificacionJornada(this.juegoSeleccionado, this.listaAlumnosClasificacion,
+                                                     this.listaEquiposClasificacion, jornadaSeleccionada.GanadoresFormulaUno.nombre,
+                                                     jornadaSeleccionada.GanadoresFormulaUno.id);
+    }
     // console.log(this.datosClasificaciónJornada.participante);
     // console.log(this.datosClasificaciónJornada.puntos);
     // console.log(this.datosClasificaciónJornada.posicion);
@@ -74,10 +81,12 @@ export class InformacionJuegoDeCompeticionFormulaUnoComponent implements OnInit 
 
   ConstruirTablaClasificaciónJornada() {
     console.log ('Aquí tendré la tabla de clasificación, los participantes ordenados son:');
-    console.log(this.datosClasificaciónJornada.participante);
-    console.log(this.datosClasificaciónJornada.puntos);
-    console.log(this.datosClasificaciónJornada.posicion);
-    this.TablaClasificacionJornadaSeleccionada = this.calculos.PrepararTablaRankingJornadaFormulaUno(this.datosClasificaciónJornada);
+    console.log(this.datosClasificacionJornada.participante);
+    console.log(this.datosClasificacionJornada.puntos);
+    console.log(this.datosClasificacionJornada.posicion);
+    console.log('ParticipanteId:');
+    console.log(this.datosClasificacionJornada.participanteId);
+    this.TablaClasificacionJornadaSeleccionada = this.calculos.PrepararTablaRankingJornadaFormulaUno(this.datosClasificacionJornada);
     this.dataSourceClasificacionJornada = new MatTableDataSource(this.TablaClasificacionJornadaSeleccionada);
     console.log(this.dataSourceClasificacionJornada.data);
   }
