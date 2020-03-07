@@ -7,7 +7,7 @@ export class TablaJornadas {
   GanadoresFormulaUno: {
     nombre: string[];
     id: number[]
-  };
+  } = {nombre: undefined, id: undefined};
 
   constructor(NumeroDeJornada?: number, Fecha?: any, CriterioGanador?: string, id?: number, GanadoresFormulaUno?: string[],
               GanadoresFormulaUnoId?: number[]) {

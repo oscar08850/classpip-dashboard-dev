@@ -31,6 +31,7 @@ const ModoAsignacion: Asignacion[] = [
   styleUrls: ['./ganadores-juego-de-competicion-formula-uno.component.scss']
 })
 export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
+  [x: string]: any;
 
   // Juego De CompeticionLiga seleccionado
   juegoSeleccionado: Juego;
@@ -39,6 +40,8 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   JornadasCompeticion: TablaJornadas[] = [];
   tablaJornadaSelccionada: TablaJornadas;
   jornadaId: number;
+
+  jornadaTieneGanadores: boolean;
 
   modoAsignacion: Asignacion[] = ModoAsignacion;
   modoAsignacionId: number;
@@ -50,6 +53,8 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
   listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionFormulaUno[];
   listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionFormulaUno[];
+
+  participantesPuntuan: AlumnoJuegoDeCompeticionFormulaUno[] = [];
 
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
   listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
@@ -73,6 +78,8 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
 
   ngOnInit() {
+    console.log('participantesPuntuan');
+    console.log(this.participantesPuntuan);
     console.log('Estoy en ngOnInit de ganadores formula uno');
     this.juegoSeleccionado = this.sesion.DameJuego();
     this.numeroTotalJornadas = this.juegoSeleccionado.NumeroTotalJornadas;
@@ -91,6 +98,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     console.log(this.listaEquiposClasificacion);
     this.listaAlumnosOrdenadaPorPuntos = this.sesion.DameInscripcionAlumno();
     this.listaEquiposOrdenadaPorPuntos = this.sesion.DameInscripcionEquipo();
+    this.jornadaTieneGanadores = true;
   }
 
   ActualizarBoton() {
@@ -107,6 +115,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       console.log('Modo aleatorio');
       this.botonAsignarManualDesactivado = true;
       this.botonAsignarAleatorioDesactivado = false;
+      this.TieneGanadores(this.jornadaId);
       this.ObtenerClasificaciónDeCadaJornada();
     }
   }
@@ -151,39 +160,62 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
   AsignarAleatoriamente() {
     console.log('Falta hacer la función de aleatoriamente');
-    const numeroParticipantesPuntuan = this.juegoSeleccionado.NumeroParticipantesPuntuan;
-    const participantesPuntuan: AlumnoJuegoDeCompeticionFormulaUno[] = [];
-    const participantes: AlumnoJuegoDeCompeticionFormulaUno[] = this.listaAlumnosOrdenadaPorPuntos;
-    let i = 0;
-    while (i < numeroParticipantesPuntuan) {
-      const numeroParticipantes = participantes.length;
-      const elegido = Math.floor(Math.random() * numeroParticipantes);
-      participantesPuntuan.push(this.listaAlumnosOrdenadaPorPuntos[elegido]);
-      participantes.splice(elegido, 1);
-      i++;
-    }
-    console.log('Los participantes que puntúan son: ');
-    console.log(participantesPuntuan);
-    // // tslint:disable-next-line:prefer-for-of
-    // for (let k = 0; k < participantesPuntuan.length; k++) {
-    //   // tslint:disable-next-line:prefer-for-of
-    //   for (let j = 0; j < this.datosClasificacionJornada.participanteId.length; j++) {
-    //     if (this.datosClasificacionJornada.participanteId[j] === participantesPuntuan[k].AlumnoId) {
-    //       Swal.fire(this.datosClasificacionJornada.participante[j] + ' Enhorabuena', 'success'); }
-    //     }
-    // }
-    let ganadores = '';
-    // tslint:disable-next-line:prefer-for-of
-    for (let k = 0; k < participantesPuntuan.length; k++) {
+    const jornadaTieneGanadores = this.TieneGanadores(this.jornadaId);
+    if (jornadaTieneGanadores === false) {
+      const numeroParticipantesPuntuan = this.juegoSeleccionado.NumeroParticipantesPuntuan;
+      const participantes: AlumnoJuegoDeCompeticionFormulaUno[] = this.listaAlumnosOrdenadaPorPuntos;
+      let i = 0;
+
+      // Elegimos los ganadores aleatoriamente y los ponemos en una lista: participantesPuntuan
+      while (i < numeroParticipantesPuntuan) {
+        const numeroParticipantes = participantes.length;
+        const elegido = Math.floor(Math.random() * numeroParticipantes);
+        this.participantesPuntuan.push(this.listaAlumnosOrdenadaPorPuntos[elegido]);
+        participantes.splice(elegido, 1);
+        i++;
+      }
+      console.log('Los participantes que puntúan son: ');
+      console.log(this.participantesPuntuan);
+      let ganadores = '';
       // tslint:disable-next-line:prefer-for-of
-      for (let j = 0; j < this.datosClasificacionJornada.participanteId.length; j++) {
-        // tslint:disable-next-line:max-line-length
-        if (this.juegoSeleccionado.Modo === 'Individual' && this.datosClasificacionJornada.participanteId[j] === participantesPuntuan[k].AlumnoId) {
-          ganadores = ganadores + '\n' + this.datosClasificacionJornada.participante[j];
+      for (let k = 0; k < this.participantesPuntuan.length; k++) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < this.datosClasificacionJornada.participanteId.length; j++) {
+          // tslint:disable-next-line:max-line-length
+          if (this.juegoSeleccionado.Modo === 'Individual' && this.datosClasificacionJornada.participanteId[j] === this.participantesPuntuan[k].AlumnoId) {
+            ganadores = ganadores + '\n' + this.datosClasificacionJornada.participante[j];
+          }
+        }
+      }
+      Swal.fire(ganadores, ' Enhorabuena', 'success');
+    } else {
+      console.log('Esta jornada ya tiene ganadores asignados');
+    }
+  }
+
+  HaPuntuado(participante: AlumnoJuegoDeCompeticionFormulaUno) {
+    let haPuntuado: boolean;
+    haPuntuado = false;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.participantesPuntuan.length; i++) {
+      if (this.participantesPuntuan[i].AlumnoId === participante.AlumnoId) {
+        haPuntuado = true;
+      }
+    }
+    return haPuntuado;
+  }
+
+  TieneGanadores(jornadaId: number) {
+    this.jornadaTieneGanadores = false;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.jornadasDelJuego.length; i++) {
+      if (this.jornadasDelJuego[i].id === jornadaId) {
+        if (this.jornadasDelJuego[i].GanadoresFormulaUno !== undefined) {
+          this.jornadaTieneGanadores = true;
         }
       }
     }
-    Swal.fire(ganadores, ' Enhorabuena', 'success');
+    return this.jornadaTieneGanadores;
   }
 
   goBack() {
