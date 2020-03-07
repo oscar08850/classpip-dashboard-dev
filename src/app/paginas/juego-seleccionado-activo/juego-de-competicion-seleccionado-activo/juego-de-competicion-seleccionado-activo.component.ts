@@ -54,6 +54,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   JornadasCompeticion: TablaJornadas[] = [];
   // enfrentamientosDelJuego: EnfrentamientoLiga[] = [];
   enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>;
+  juegosActivosPuntos: Juego[] = [];
 
   constructor(  public dialog: MatDialog,
                 public sesion: SesionService,
@@ -65,7 +66,9 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     this.juegoSeleccionado = this.sesion.DameJuego();
     console.log(this.juegoSeleccionado);
     this.DameJornadasDelJuegoDeCompeticionSeleccionado();
+    this.DameJuegosdePuntosActivos();
   }
+
 
   DameJornadasDelJuegoDeCompeticionSeleccionado() {
     this.peticionesAPI.DameJornadasDeCompeticionLiga(this.juegoSeleccionado.id)
@@ -299,5 +302,22 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposJuegoDeCompeticion);
     this.sesion.TomaInscripcionAlumno(this.listaAlumnosOrdenadaPorPuntos);
     this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
+    this.sesion.TomaJuegosDePuntos(this.juegosActivosPuntos);
+  }
+
+  DameJuegosdePuntosActivos() {
+    this.peticionesAPI.DameJuegoDePuntosGrupo(this.juegoSeleccionado.grupoId)
+    .subscribe(juegosPuntos => {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegosPuntos.length; i++) {
+        if (juegosPuntos[i].JuegoActivo === true) {
+          this.juegosActivosPuntos.push(juegosPuntos[i]);
+        }
+      }
+    });
+    console.log('Juegos disponibles');
+    console.log(this.juegosActivosPuntos);
+    return this.juegosActivosPuntos;
+
   }
 }

@@ -24,7 +24,7 @@
                   <mat-list-item *ngFor="let juego of juegosActivos" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionadoActivo">
 
                     <mat-icon mat-list-icon><i class="material-icons green">check_circle_outline</i></mat-icon>
-                    <h4 mat-line>{{juego.Tipo}}</h4>
+                    <h4 mat-line>{{juego.Tipo}}: {{juego.Tipo}}</h4>
                     <p mat-line> {{juego.Modo}} </p>
                   </mat-list-item>
                 </form>

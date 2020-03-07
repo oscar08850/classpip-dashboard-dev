@@ -261,7 +261,6 @@ export class JuegoComponent implements OnInit {
         this.isDisabledModo = false;
         console.log('Hay equipos, puedo crear');
       }
-
     }
   }
 

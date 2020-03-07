@@ -45,6 +45,8 @@ export class SesionService {
   JornadasCompeticion: any;
   TablaAlumnoJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion[];
   TablaEquipoJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion[];
+
+  JuegosDePuntosActivos: Juego[];
   // listaEquiposGrupo: any;
 
   constructor() { }
@@ -370,5 +372,11 @@ public DameTablaEquipoJuegoDeCompeticion(): TablaEquipoJuegoDeCompeticion[] {
   return Tabla;
 }
 
-
+public TomaJuegosDePuntos(juegosActivos: Juego[]) {
+  this.JuegosDePuntosActivos = juegosActivos;
+}
+public DameJuegosDePuntosActivos(): Juego[] {
+  const juegosActivosPuntos = this.JuegosDePuntosActivos ;
+  return juegosActivosPuntos;
+}
 }
