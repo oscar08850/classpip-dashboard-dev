@@ -269,8 +269,8 @@ export class JuegoComponent implements OnInit {
   CrearJuegoDePuntos() {
     let NombredelJuego: string;
     NombredelJuego = this.myForm2.value.NombredelJuego;
-    NombredelJuego = this.tipoDeJuegoSeleccionado + ': ' + NombredelJuego;
-    this.peticionesAPI.CreaJuegoDePuntos(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupo.id)
+    this.peticionesAPI.CreaJuegoDePuntos(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado,
+      undefined, undefined, undefined, undefined, undefined, undefined, NombredelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       console.log(juegoCreado);
@@ -283,8 +283,8 @@ export class JuegoComponent implements OnInit {
   CrearJuegoDeColeccion() {
     let NombredelJuego: string;
     NombredelJuego = this.myForm2.value.NombredelJuego;
-    NombredelJuego = this.tipoDeJuegoSeleccionado + ': ' + NombredelJuego;
-    this.peticionesAPI.CreaJuegoDeColeccion(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado), this.grupo.id)
+    this.peticionesAPI.CreaJuegoDeColeccion(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado,
+      undefined, undefined, undefined, undefined, undefined, undefined, NombredelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       console.log(juegoCreado);
@@ -302,14 +302,15 @@ export class JuegoComponent implements OnInit {
     NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
     let NombredelJuego: string;
     NombredelJuego = this.myForm2.value.NombredelJuego;
-    NombredelJuego = this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado + ': ' + NombredelJuego;
     console.log(NumeroDeJornadas);
     console.log(new Juego (this.tipoDeJuegoSeleccionado + ' Liga', this.modoDeJuegoSeleccionado,
-                  undefined, true, NumeroDeJornadas, this.tipoJuegoCompeticionSeleccionado), this.grupo.id);
+                  undefined, true, NumeroDeJornadas, this.tipoJuegoCompeticionSeleccionado, undefined,
+                  undefined, NombredelJuego), this.grupo.id);
     // tslint:disable-next-line:max-line-lengtholean)
     this.peticionesAPI.CreaJuegoDeCompeticionLiga(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado,
                                                     this.modoDeJuegoSeleccionado, undefined, true, NumeroDeJornadas,
-                                                    this.tipoJuegoCompeticionSeleccionado), this.grupo.id)
+                                                    this.tipoJuegoCompeticionSeleccionado,
+                                                    undefined, undefined, NombredelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       console.log(juegoCreado);
@@ -332,7 +333,6 @@ export class JuegoComponent implements OnInit {
     NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
     let NombredelJuego: string;
     NombredelJuego = this.myForm2.value.NombredelJuego;
-    NombredelJuego = this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado + ': ' + NombredelJuego;
     console.log(NombredelJuego);
     console.log(NumeroDeJornadas);
     console.log(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado, this.modoDeJuegoSeleccionado,
@@ -342,7 +342,7 @@ export class JuegoComponent implements OnInit {
     this.peticionesAPI.CreaJuegoDeCompeticionFormulaUno(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoJuegoCompeticionSeleccionado,
                                                     this.modoDeJuegoSeleccionado, undefined, true, NumeroDeJornadas,
                                                     undefined, this.Puntuacion.length,
-                                                    this.Puntuacion), this.grupo.id)
+                                                    this.Puntuacion, NombredelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       console.log(juegoCreado);
