@@ -69,6 +69,8 @@ import { GanadoresJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-
 // tslint:disable-next-line:max-line-length
 import { EditarJornadasJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/editar-jornadas-juego-de-competicion-formula-uno/editar-jornadas-juego-de-competicion-formula-uno.component';
 // tslint:disable-next-line:max-line-length
+import { EditarPuntosJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/editar-puntos-juego-de-competicion-formula-uno/editar-puntos-juego-de-competicion-formula-uno.component';
+// tslint:disable-next-line:max-line-length
 import { InformacionJuegoDeCompeticionFormulaUnoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-formula-uno-seleccionado-inactivo/informacion-juego-de-competicion-formula-uno-inactivo/informacion-juego-de-competicion-formula-uno-inactivo.component';
 import { AppComponent } from './app.component';
 import { ElementosComponent } from './elementos/elementos.component';
@@ -187,6 +189,8 @@ const routes: Routes = [
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/ganadoresJuegoDeCompeticionFormulaUno', component: GanadoresJuegoDeCompeticionFormulaUnoComponent },
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/editarjornadasJuegoDeCompeticionFormulaUno', component: EditarJornadasJuegoDeCompeticionFormulaUnoComponent },
+   // tslint:disable-next-line:max-line-length
+   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/editarpuntosJuegoDeCompeticionFormulaUno', component: EditarPuntosJuegoDeCompeticionFormulaUnoComponent },
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionJuegoDeCompeticionFormulaUnoInactivo', component: InformacionJuegoDeCompeticionFormulaUnoInactivoComponent },
 

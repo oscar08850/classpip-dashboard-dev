@@ -5,7 +5,7 @@ import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHis
          AlumnoJuegoDeColeccion, Album, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
          TablaEquipoJuegoDeCompeticion, Jornada, EquipoJuegoDeCompeticionLiga, EnfrentamientoLiga, InformacionPartidosLiga,
          AlumnoJuegoDeCompeticionLiga, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno,
-         TablaClasificacionJornada} from '../clases/index';
+         TablaClasificacionJornada, TablaPuntosFormulaUno} from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -29,7 +29,7 @@ export class CalculosService {
   rondas: Array<Array<EnfrentamientoLiga>>;
   informacionPartidos: InformacionPartidosLiga[];
   jornadasnuevas: Jornada[];
-
+  TablaeditarPuntos: TablaPuntosFormulaUno[];
   AlumnoJuegoDeCompeticionLigaId: number;
   EquipoJuegoDeCompeticionLigaId: number;
 
@@ -2048,28 +2048,8 @@ export class CalculosService {
 
 
       for (let j = 0; j < numPartidosPorRonda; j ++) {
-        // console.log('Participantes');
-        // console.log(participantes);
-        // // let jugador1: number;
-        // // let jugador2: number;
-        // console.log('jugador 1');
-        // console.log(rondas[i][j].JugadorUno);
-        // // jugador1 = participantes[rondas[i][j].JugadorUno];
-        // console.log('jugador 2');
-        // console.log(participantes[rondas[i][j].JugadorDos].id);
-        // // jugador2 = participantes[rondas[i][j].JugadorDos];
-
-        // console.log(jornadas[i].id);
         // tslint:disable-next-line:prefer-const
         let EnfrentamientoLigaa: EnfrentamientoLiga;
-        // EnfrentamientoLigaa.JornadaDeCompeticionLigaId = jornadas[i].id;
-        // EnfrentamientoLigaa.JugadorDos = participantes[rondas[i][j].JugadorDos];
-        // EnfrentamientoLigaa.JugadorUno = participantes[rondas[i][j].JugadorUno];
-        // EnfrentamientoLigaa.Ganador = undefined;
-        // console.log(rondas[i][j].JugadorUno);
-        // console.log(rondas[i][j].JugadorDos);
-        // console.log(participantes.length);
-
         if (rondas[i][j].JugadorUno === participantes.length) {
           EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorDos].id,
             participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id, participantes[rondas[i][j].JugadorDos].Nombre,
@@ -2095,6 +2075,16 @@ export class CalculosService {
     }
 
     }
+  }
+
+  public DameTablaeditarPuntos(juegoSeleccionado: Juego) {
+    this.TablaeditarPuntos = [];
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegoSeleccionado.Puntos.length; i ++) {
+      this.TablaeditarPuntos[i] = new TablaPuntosFormulaUno(i + 1, juegoSeleccionado.Puntos[i]);
+    }
+    return this.TablaeditarPuntos;
   }
 
 }

@@ -4,7 +4,8 @@ import { Location } from '@angular/common';
 
 // Clases
 import {Juego, Alumno, Equipo, AlumnoJuegoDeCompeticionFormulaUno, Jornada, TablaJornadas,
-        EquipoJuegoDeCompeticionFormulaUno, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion} from '../../../clases/index';
+        EquipoJuegoDeCompeticionFormulaUno, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion,
+        TablaPuntosFormulaUno} from '../../../clases/index';
 
 // Servicio
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
@@ -37,6 +38,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
 
   jornadas: Jornada[];
   JornadasCompeticion: TablaJornadas[];
+  TablaeditarPuntos: TablaPuntosFormulaUno[];
 
   datasourceAlumno;
   datasourceEquipo;
@@ -208,6 +210,13 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     this.sesion.TomaDatosJornadas(
       this.jornadas,
       this.JornadasCompeticion);
+  }
+
+  editarpuntos() {
+    this.TablaeditarPuntos = this.calculos.DameTablaeditarPuntos(this.juegoSeleccionado);
+    console.log(this.TablaeditarPuntos);
+    this.sesion.TomaJuego (this.juegoSeleccionado);
+    this.sesion.TomaTablaeditarPuntos(this.TablaeditarPuntos);
   }
 
 

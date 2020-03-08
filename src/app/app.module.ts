@@ -123,6 +123,8 @@ import { InformacionJuegoDeCompeticionFormulaUnoInactivoComponent } from './pagi
 import { GanadoresJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/ganadores-juego-de-competicion-formula-uno/ganadores-juego-de-competicion-formula-uno.component';
 // tslint:disable-next-line:max-line-length
 import { EditarJornadasJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/editar-jornadas-juego-de-competicion-formula-uno/editar-jornadas-juego-de-competicion-formula-uno.component';
+// tslint:disable-next-line:max-line-length
+import { EditarPuntosJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/editar-puntos-juego-de-competicion-formula-uno/editar-puntos-juego-de-competicion-formula-uno.component';
 
 // COMPONENTES EN COMPARTIDO
 import { DialogoConfirmacionComponent } from './paginas/COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
@@ -211,6 +213,7 @@ import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introduc
     InformacionJuegoDeCompeticionFormulaUnoComponent,
     GanadoresJuegoDeCompeticionFormulaUnoComponent,
     EditarJornadasJuegoDeCompeticionFormulaUnoComponent,
+    EditarPuntosJuegoDeCompeticionFormulaUnoComponent,
     InformacionJuegoDeCompeticionFormulaUnoInactivoComponent,
     JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent
 
