@@ -39,6 +39,7 @@ export class EditarPuntosJuegoDeCompeticionFormulaUnoComponent implements OnInit
   dataSource: any;
   TablaPuntuacion: TablaPuntosFormulaUno[];
   displayedColumnsTablaPuntuacion: string[] = ['select', 'Posicion', 'Puntos'];
+  JuegoModificado: Juego;
 
 
   constructor(    public sesion: SesionService,
@@ -54,6 +55,7 @@ export class EditarPuntosJuegoDeCompeticionFormulaUnoComponent implements OnInit
     this.TablaPuntuacion = this.sesion.DameTablaeditarPuntos();
     this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
     this.Puntuacion = this.juegoSeleccionado.Puntos;
+    console.log(this.juegoSeleccionado);
     this.myForm1 = this._formBuilder.group({
       NuevaPuntuacion: ['', Validators.required],
     });
@@ -157,11 +159,6 @@ AnadirPuntos() {
 AnadirJugadorconPuntos() {
   // Tengo que hacer un recorrido diferente del dataSource porque necesito saber el
      // valor de i
-
-    //  let NuevaPuntuacion: number;
-    //  NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
-    //  console.log(this.TablaPuntuacion);
-    //  console.log('Voy a asignar NuevaPuntuacion ' + NuevaPuntuacion);
      let i: number;
      i = this.Puntuacion.length;
      console.log(i);
@@ -189,12 +186,26 @@ AnadirJugadorconPuntos() {
 
        this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
 
+    }
 
-     }
+    goBackandguardar() {
+      this.JuegoModificado = this.juegoSeleccionado;
+      console.log(this.JuegoModificado);
+      this.JuegoModificado.Puntos = this.Puntuacion;
+      console.log( this.JuegoModificado.Puntos);
+      this.JuegoModificado.NumeroParticipantesPuntuan = this.Puntuacion.length;
+      console.log(this.JuegoModificado);
+      this.peticionesAPI.ModificaJuegoDeCompeticionFormulaUno(this.JuegoModificado, this.JuegoModificado.id)
+      .subscribe(JuegoModificado => {
+        this.JuegoModificado = JuegoModificado;
+        console.log('El JuegoModificado es: ');
+        console.log(this.JuegoModificado);
+      });
+      this.location.back();
+    }
 
-
-  goBack() {
+   goBack() {
     this.location.back();
-  }
+    }
 
 }

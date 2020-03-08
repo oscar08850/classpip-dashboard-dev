@@ -47,7 +47,7 @@ export class PeticionesAPIService {
   private APIUrlEquipoJuegoDeCompeticionLiga = 'http://localhost:3000/api/EquiposJuegoDeCompeticionLiga';
   private APIUrlJornadasJuegoDeCompeticionLiga = 'http://localhost:3000/api/JornadasDeCompeticionLiga';
 
-  private APIUrlJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/JuegosDeCompeticionFormulaUno';
+  private APIUrlJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/JuegosDecompeticionFormulaUno';
   private APIUrlAlumnoJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/AlumnosJuegoDeCompeticionFormulaUno';
   private APIUrlEquipoJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/EquiposJuegoDeCompeticionFormulaUno';
   private APIUrlJornadasJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/JornadasDeCompeticionFormulaUno';
@@ -671,6 +671,14 @@ export class PeticionesAPIService {
 
   public BorraJuegoDeCompeticionFormulaUno(juegoDeCompeticionId: number, grupoId: number): Observable<Juego> {
     return this.http.delete<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionFormulaUno/' + juegoDeCompeticionId);
+  }
+
+  public ModificaJuegoDeCompeticionFormulaUno(juego: Juego, grupoId: number): Observable<Juego> {
+    console.log('voy a modificar el juego de competicion FormulaUno');
+    console.log(juego);
+    console.log(grupoId);
+    console.log(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + grupoId);
+    return this.http.patch<Juego>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + grupoId, juego);
   }
 
 }
