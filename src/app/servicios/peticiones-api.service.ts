@@ -631,6 +631,21 @@ export class PeticionesAPIService {
                                      + '/jornadasDeCompeticionFormulaUno');
   }
 
+  public ActualizaGanadoresJornadasDeCompeticionFormulaUno(juegoDeCompeticionFormulaUnoId: number): Observable<Jornada[]> {
+    return this.http.get<Jornada[]>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionFormulaUnoId
+                                     + '/jornadasDeCompeticionFormulaUno');
+  }
+
+  public PonGanadoresJornadasDeCompeticionFormulaUno(jornada: Jornada): Observable<Jornada> {
+    return this.http.put<Jornada>('hhttp://localhost:3000/api/JornadasDeCompeticionFormulaUno/' + jornada.id, jornada);
+  }
+
+  // tslint:disable-next-line:max-line-length
+  public PonPuntosAlumnosGanadoresJornadasDeCompeticionFormulaUno(alumno: AlumnoJuegoDeCompeticionFormulaUno): Observable<AlumnoJuegoDeCompeticionFormulaUno> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.put<AlumnoJuegoDeCompeticionFormulaUno>('http://localhost:3000/api/AlumnosJuegoDeCompeticionFormulaUno/' + alumno.id, alumno);
+  }
+
    ///////////////////////////////////////////////////////////////////////////////////////////
   // Gestion del juego de competicion formula uno, individual
   public DameAlumnosJuegoDeCompeticionFormulaUno(juegoDeCompeticionFormulaUnoId: number): Observable<Alumno[]> {
