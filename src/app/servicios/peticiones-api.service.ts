@@ -637,7 +637,7 @@ export class PeticionesAPIService {
   }
 
   public PonGanadoresJornadasDeCompeticionFormulaUno(jornada: Jornada): Observable<Jornada> {
-    return this.http.put<Jornada>('hhttp://localhost:3000/api/JornadasDeCompeticionFormulaUno/' + jornada.id, jornada);
+    return this.http.put<Jornada>('http://localhost:3000/api/JornadasDeCompeticionFormulaUno/' + jornada.id, jornada);
   }
 
   // tslint:disable-next-line:max-line-length

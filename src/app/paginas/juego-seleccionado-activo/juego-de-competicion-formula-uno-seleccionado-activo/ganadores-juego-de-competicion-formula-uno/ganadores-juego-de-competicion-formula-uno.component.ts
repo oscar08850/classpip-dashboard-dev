@@ -157,8 +157,119 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     console.log(this.dataSourceClasificacionJornada.data);
   }
 
+  // AsignarAleatoriamente() {
+  //   console.log('Estoy en AsignarAleatoriamente');
+  //   const jornadaTieneGanadores = this.TieneGanadores(Number(this.jornadaId));
+  //   console.log('Tiene Ganadores = ' + jornadaTieneGanadores);
+  //   console.log('Puntos del juego');
+  //   console.log(this.juegoSeleccionado.Puntos);
+  //   if (jornadaTieneGanadores === false && this.juegoSeleccionado.Modo === 'Individual') {
+  //     console.log('Estoy en asignar aleatoriamente individual');
+  //     const numeroParticipantesPuntuan = this.juegoSeleccionado.NumeroParticipantesPuntuan;
+  //     const participantes: AlumnoJuegoDeCompeticionFormulaUno[] = this.listaAlumnosOrdenadaPorPuntos;
+  //     let i = 0;
+  //     let posicion = 0;
+  //     // Elegimos los ganadores aleatoriamente y los ponemos en una lista: participantesPuntuan
+  //     while (i < numeroParticipantesPuntuan) {
+  //       const numeroParticipantes = participantes.length;
+  //       const elegido = Math.floor(Math.random() * numeroParticipantes);
+  //       const AlumnoId = participantes[elegido].AlumnoId;
+  //       this.ganadoresFormulaUnoId.push(AlumnoId);
+  //       console.log('ganadoresFormulaUno:');
+  //       console.log(this.ganadoresFormulaUnoId);
+  //       const puntosTotales = participantes[elegido].PuntosTotalesAlumno + this.juegoSeleccionado.Puntos[posicion];
+  //       posicion = posicion + 1;
+  //       const id = participantes[elegido].id;
+  //       const ganador = new AlumnoJuegoDeCompeticionFormulaUno(AlumnoId, this.juegoSeleccionado.id, puntosTotales, id);
+  //       // Hacemos el put de los ganadores para actualizar los puntos en la base de datos
+  //       this.peticionesAPI.PonPuntosAlumnosGanadoresJornadasDeCompeticionFormulaUno(ganador)
+  //       .subscribe(participante => {
+  //         console.log('Se ha actualizado en la base de datos el alumno: ');
+  //         console.log(participante);
+  //         if (i === numeroParticipantes - 1) {
+  //           this.ActualizarGanadoresJornada();
+  //         }
+  //       });
+  //       this.participantesIndividualPuntuan.push(ganador);
+  //       participantes.splice(elegido, 1);
+  //       i++;
+  //     }
+  //     console.log('Los participantes que puntúan son: ');
+  //     console.log(this.participantesIndividualPuntuan);
+
+  //     // Ponemos los id de los ganadores en la lista GanadoresFormulaUno para después guardarlo en la Jornada en la base de datos
+  //     let ganadores = '';
+  //     // let posicion = 0;
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for (let k = 0; k < this.participantesIndividualPuntuan.length; k++) {
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let j = 0; j < this.datosClasificacionJornada.participanteId.length; j++) {
+  //         // tslint:disable-next-line:max-line-length
+  //         if (this.datosClasificacionJornada.participanteId[j] === this.participantesIndividualPuntuan[k].AlumnoId) {
+  //           ganadores = ganadores + '\n' + this.datosClasificacionJornada.participante[j];
+  //           // this.ganadoresFormulaUnoId.push(this.datosClasificacionJornada.participanteId[j]);
+  //         }
+  //       }
+  //     }
+
+  //     // Actualizamos TablaClasificacionJornadaSeleccionada
+  //     console.log('Hay ' + this.TablaClasificacionJornadaSeleccionada.length +
+  //                 ' participantes en la TablaClasificacionJornadaSeleccionada');
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for (let x = 0; x < this.TablaClasificacionJornadaSeleccionada.length; x++) {
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let y = 0; y < this.participantesIndividualPuntuan.length; y++) {
+  //         if (this.TablaClasificacionJornadaSeleccionada[x].id === this.participantesIndividualPuntuan[y].id) {
+  //           this.TablaClasificacionJornadaSeleccionada[x].puntos = this.participantesIndividualPuntuan[y].PuntosTotalesAlumno;
+  //         }
+  //       }
+  //     }
+  //     // tslint:disable-next-line:only-arrow-functions
+  //     this.TablaClasificacionJornadaSeleccionada = this.TablaClasificacionJornadaSeleccionada.sort(function(obj1, obj2) {
+  //       return obj2.puntos - obj1.puntos;
+  //     });
+  //     this.dataSourceClasificacionJornada = new MatTableDataSource(this.TablaClasificacionJornadaSeleccionada);
+  //     console.log('La TablaClasificacionJornadaSeleccionada actualizada queda: ');
+  //     console.log(this.TablaClasificacionJornadaSeleccionada);
+  //     Swal.fire(ganadores, ' Enhorabuena', 'success');
+  //     console.log('Los ganadores de la jornada son:');
+  //     console.log(this.ganadoresFormulaUnoId);
+  //   } else if (jornadaTieneGanadores === false && this.juegoSeleccionado.Modo !== 'Individual') {
+  //     console.log('Estoy en asignar aleatorio equipo');
+  //     const numeroParticipantesPuntuan = this.juegoSeleccionado.NumeroParticipantesPuntuan;
+  //     const participantes: EquipoJuegoDeCompeticionFormulaUno[] = this.listaEquiposOrdenadaPorPuntos;
+  //     let i = 0;
+
+  //     // Elegimos los ganadores aleatoriamente y los ponemos en una lista: participantesPuntuan
+  //     while (i < numeroParticipantesPuntuan) {
+  //       const numeroParticipantes = participantes.length;
+  //       const elegido = Math.floor(Math.random() * numeroParticipantes);
+  //       this.participantesEquipoPuntuan.push(this.listaEquiposOrdenadaPorPuntos[elegido]);
+  //       participantes.splice(elegido, 1);
+  //       i++;
+  //     }
+  //     console.log('Los participantes que puntúan son: ');
+  //     console.log(this.participantesIndividualPuntuan);
+  //     let ganadores = '';
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for (let k = 0; k < this.participantesIndividualPuntuan.length; k++) {
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let j = 0; j < this.datosClasificacionJornada.participanteId.length; j++) {
+  //         // tslint:disable-next-line:max-line-length
+  //         if (this.juegoSeleccionado.Modo === 'Individual' && this.datosClasificacionJornada.participanteId[j] ===
+                                                              // this.participantesIndividualPuntuan[k].AlumnoId) {
+  //           ganadores = ganadores + '\n' + this.datosClasificacionJornada.participante[j];
+  //         }
+  //       }
+  //     }
+  //     Swal.fire(ganadores, ' Enhorabuena', 'success');
+  //   } else {
+  //     console.log('Esta jornada ya tiene ganadores asignados');
+  //   }
+  // }
+
   AsignarAleatoriamente() {
-    console.log('Falta hacer la función de aleatoriamente');
+    console.log('Estoy en AsignarAleatoriamente');
     const jornadaTieneGanadores = this.TieneGanadores(Number(this.jornadaId));
     console.log('Tiene Ganadores = ' + jornadaTieneGanadores);
     console.log('Puntos del juego');
@@ -169,45 +280,22 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       const participantes: AlumnoJuegoDeCompeticionFormulaUno[] = this.listaAlumnosOrdenadaPorPuntos;
       let i = 0;
       let posicion = 0;
-      // Elegimos los ganadores aleatoriamente y los ponemos en una lista: participantesPuntuan
+      // Elegimos los ganadores aleatoriamente y los ponemos en una lista: participantesPuntuan y los id en la lista ganadoresFormulaUnoId
       while (i < numeroParticipantesPuntuan) {
         const numeroParticipantes = participantes.length;
         const elegido = Math.floor(Math.random() * numeroParticipantes);
-        const AlumnoId = this.listaAlumnosOrdenadaPorPuntos[elegido].AlumnoId;
-        const puntosTotales = this.listaAlumnosOrdenadaPorPuntos[elegido].PuntosTotalesAlumno + this.juegoSeleccionado.Puntos[posicion];
+        const AlumnoId = participantes[elegido].AlumnoId;
+        const puntosTotales = participantes[elegido].PuntosTotalesAlumno + this.juegoSeleccionado.Puntos[posicion];
         posicion = posicion + 1;
-        const id = this.listaAlumnosOrdenadaPorPuntos[elegido].id;
+        const id = participantes[elegido].id;
         const ganador = new AlumnoJuegoDeCompeticionFormulaUno(AlumnoId, this.juegoSeleccionado.id, puntosTotales, id);
-        // Hacemos el put de los ganadores para actualizar los puntos en la base de datos
-        this.peticionesAPI.PonPuntosAlumnosGanadoresJornadasDeCompeticionFormulaUno(ganador)
-        .subscribe(participante => {
-          console.log('Se ha actualizado en la base de datos el alumno: ');
-          console.log(participante);
-          if (i === numeroParticipantes - 1) {
-            this.ActualizarGanadoresJornada();
-          }
-        });
         this.participantesIndividualPuntuan.push(ganador);
         participantes.splice(elegido, 1);
+        this.ganadoresFormulaUnoId.push(AlumnoId);
         i++;
       }
       console.log('Los participantes que puntúan son: ');
       console.log(this.participantesIndividualPuntuan);
-
-      // Ponemos los id de los ganadores en la lista GanadoresFormulaUno para después guardarlo en la Jornada en la base de datos
-      let ganadores = '';
-      // let posicion = 0;
-      // tslint:disable-next-line:prefer-for-of
-      for (let k = 0; k < this.participantesIndividualPuntuan.length; k++) {
-        // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < this.datosClasificacionJornada.participanteId.length; j++) {
-          // tslint:disable-next-line:max-line-length
-          if (this.datosClasificacionJornada.participanteId[j] === this.participantesIndividualPuntuan[k].AlumnoId) {
-            ganadores = ganadores + '\n' + this.datosClasificacionJornada.participante[j];
-            this.ganadoresFormulaUnoId.push(this.datosClasificacionJornada.participanteId[j]);
-          }
-        }
-      }
 
       // Actualizamos TablaClasificacionJornadaSeleccionada
       console.log('Hay ' + this.TablaClasificacionJornadaSeleccionada.length +
@@ -226,10 +314,24 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         return obj2.puntos - obj1.puntos;
       });
       this.dataSourceClasificacionJornada = new MatTableDataSource(this.TablaClasificacionJornadaSeleccionada);
+
+      let ganadores = '';
+      // let posicion = 0;
+      // tslint:disable-next-line:prefer-for-of
+      for (let k = 0; k < this.participantesIndividualPuntuan.length; k++) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < this.datosClasificacionJornada.participanteId.length; j++) {
+          // tslint:disable-next-line:max-line-length
+          if (this.datosClasificacionJornada.participanteId[j] === this.participantesIndividualPuntuan[k].AlumnoId) {
+            ganadores = ganadores + '\n' + this.datosClasificacionJornada.participante[j];
+          }
+        }
+      }
+      Swal.fire(ganadores, ' Enhorabuena', 'success');
+
       console.log('La TablaClasificacionJornadaSeleccionada actualizada queda: ');
       console.log(this.TablaClasificacionJornadaSeleccionada);
-      Swal.fire(ganadores, ' Enhorabuena', 'success');
-      console.log('Los ganadores de la jornada son:');
+      console.log('Los id de los ganadores de la jornada son:');
       console.log(this.ganadoresFormulaUnoId);
       this.ActualizarGanadoresJornada();
     } else if (jornadaTieneGanadores === false && this.juegoSeleccionado.Modo !== 'Individual') {
@@ -276,22 +378,23 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
           .subscribe(jornada => {
             console.log('La jornada actualizada queda: ');
             console.log(jornada);
+            this.ActualizarPuntosGanadoresJornada();
           });
         }
       }
   }
 
-  // ActualizarPuntosGanadoresJornada() {
-  //   // Hacemos el put de los ganadores para actualizar los puntos en la base de datos
-  //   // tslint:disable-next-line:prefer-for-of
-  //   for (let i = 0; i < this.participantesIndividualPuntuan.length; i++) {
-  //   this.peticionesAPI.PonPuntosAlumnosGanadoresJornadasDeCompeticionFormulaUno(this.participantesIndividualPuntuan[i])
-  //   .subscribe(participante => {
-  //     console.log('Se ha actualizado en la bas de datos el alumno: ');
-  //     console.log(participante);
-  //   });
-  //   }
-  // }
+  ActualizarPuntosGanadoresJornada() {
+    // Hacemos el put de los ganadores para actualizar los puntos en la base de datos
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.participantesIndividualPuntuan.length; i++) {
+    this.peticionesAPI.PonPuntosAlumnosGanadoresJornadasDeCompeticionFormulaUno(this.participantesIndividualPuntuan[i])
+    .subscribe(participante => {
+      console.log('Se ha actualizado en la bas de datos el alumno: ');
+      console.log(participante);
+    });
+    }
+  }
 
   HaPuntuado(participante: AlumnoJuegoDeCompeticionFormulaUno) {
     let haPuntuado: boolean;
