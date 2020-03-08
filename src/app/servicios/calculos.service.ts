@@ -1832,6 +1832,7 @@ export class CalculosService {
           Posicion[j] = j + 1;
         }
       } else {
+        console.log('Estamos en ClasificacionJornada() equipo');
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < equipoJuegoDeCompeticionFormulaUno.length; i++) {
           const ParticipanteFormulaUno = equipoJuegoDeCompeticionFormulaUno[i].nombre;
@@ -1879,7 +1880,7 @@ export class CalculosService {
         for (let i = 0; i < equipoJuegoDeCompeticionFormulaUno.length; i++) {
           const ParticipanteFormulaUno = equipoJuegoDeCompeticionFormulaUno[i].nombre;
           ParticipantesFormulaUno.push(ParticipanteFormulaUno);
-          const ParticipanteId = alumnoJuegoDeCompeticionFormulaUno[i].id;
+          const ParticipanteId = equipoJuegoDeCompeticionFormulaUno[i].id;
           PuntosFormulaUno.push(0);
           ParticipantesId.push(ParticipanteId);
         }
