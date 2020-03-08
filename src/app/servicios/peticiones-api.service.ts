@@ -646,6 +646,12 @@ export class PeticionesAPIService {
     return this.http.put<AlumnoJuegoDeCompeticionFormulaUno>('http://localhost:3000/api/AlumnosJuegoDeCompeticionFormulaUno/' + alumno.id, alumno);
   }
 
+   // tslint:disable-next-line:max-line-length
+   public PonPuntoEquiposGanadoresJornadasDeCompeticionFormulaUno(equipo: EquipoJuegoDeCompeticionFormulaUno): Observable<EquipoJuegoDeCompeticionFormulaUno> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.put<EquipoJuegoDeCompeticionFormulaUno>('http://localhost:3000/api/EquiposJuegoDeCompeticionFormulaUno/' + equipo.id, equipo);
+  }
+
    ///////////////////////////////////////////////////////////////////////////////////////////
   // Gestion del juego de competicion formula uno, individual
   public DameAlumnosJuegoDeCompeticionFormulaUno(juegoDeCompeticionFormulaUnoId: number): Observable<Alumno[]> {
