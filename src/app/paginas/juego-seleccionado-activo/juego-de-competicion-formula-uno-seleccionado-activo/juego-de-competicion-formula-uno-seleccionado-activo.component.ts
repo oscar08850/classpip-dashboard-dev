@@ -40,6 +40,8 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   JornadasCompeticion: TablaJornadas[];
   TablaeditarPuntos: TablaPuntosFormulaUno[];
 
+  juegosActivosPuntos: Juego[] = [];
+
   datasourceAlumno;
   datasourceEquipo;
 
@@ -66,6 +68,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
       this.EquiposDelJuego();
     }
     this.DameJornadasDelJuegoDeCompeticionSeleccionado();
+    this.DameJuegosdePuntosActivos();
   }
 
   // Recupera los alumnos que pertenecen al juego
@@ -196,6 +199,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposFormulaUno);
     this.sesion.TomaInscripcionAlumno(this.listaAlumnosOrdenadaPorPuntos);
     this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
+    this.sesion.TomaJuegosDePuntos(this.juegosActivosPuntos);
   }
 
   editarjornadas() {
@@ -257,4 +261,19 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     this.datasourceEquipo.filter = filterValue.trim().toLowerCase();
   }
 
+  DameJuegosdePuntosActivos() {
+    this.peticionesAPI.DameJuegoDePuntosGrupo(this.juegoSeleccionado.grupoId)
+    .subscribe(juegosPuntos => {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegosPuntos.length; i++) {
+        if (juegosPuntos[i].JuegoActivo === true) {
+          this.juegosActivosPuntos.push(juegosPuntos[i]);
+        }
+      }
+    });
+    console.log('Juegos disponibles');
+    console.log(this.juegosActivosPuntos);
+    return this.juegosActivosPuntos;
+
+  }
 }

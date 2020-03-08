@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 // Clases
 import { Juego, Jornada, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
          TablaEquipoJuegoDeCompeticion, TablaClasificacionJornada, AlumnoJuegoDeCompeticionFormulaUno,
-         EquipoJuegoDeCompeticionFormulaUno,
+         EquipoJuegoDeCompeticionFormulaUno, AlumnoJuegoDePuntos, EquipoJuegoDePuntos,
          Alumno} from '../../../../clases/index';
 
 // Servicio
@@ -24,6 +24,7 @@ export interface Asignacion {
 const ModoAsignacion: Asignacion[] = [
   {modo: 'Manualmente', id: 1},
   {modo: 'Aleatoriamente', id: 2},
+  {modo: 'Juego de Puntos', id: 3},
 ];
 
 @Component({
@@ -48,6 +49,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   modoAsignacionId: number;
   botonAsignarAleatorioDesactivado = true;
   botonAsignarManualDesactivado = true;
+  botonAsignarPuntosDesactivado = true;
 
   manualmente = false;
   aleatoriamente = true;
@@ -58,6 +60,13 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   participantesIndividualPuntuan: AlumnoJuegoDeCompeticionFormulaUno[] = [];
   participantesEquipoPuntuan: EquipoJuegoDeCompeticionFormulaUno[] = [];
   ganadoresFormulaUnoId: number[] = [];
+
+  juegosActivosPuntos: Juego[];
+  juegosActivosPuntosModo: Juego[];
+  NumeroDeJuegoDePuntos: number;
+  juegodePuntosSeleccionadoID: number;
+  listaAlumnosOrdenadaPorPuntosJuegoDePuntos: AlumnoJuegoDePuntos[];
+  listaEquiposOrdenadaPorPuntosJuegoDePuntos: EquipoJuegoDePuntos[];
 
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
   listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
@@ -100,6 +109,16 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     this.listaAlumnosOrdenadaPorPuntos = this.sesion.DameInscripcionAlumno();
     this.listaEquiposOrdenadaPorPuntos = this.sesion.DameInscripcionEquipo();
     this.jornadaTieneGanadores = true;
+    this.juegosActivosPuntos = this.sesion.DameJuegosDePuntosActivos();
+    let z = 0;
+    this.juegosActivosPuntosModo = [];
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.juegosActivosPuntos.length; i++) {
+        if (this.juegosActivosPuntos[i].Modo === this.juegoSeleccionado.Modo) {
+          this.juegosActivosPuntosModo[z] = this.juegosActivosPuntos[i];
+          z++;
+        }
+    }
   }
 
   ActualizarBoton() {
@@ -108,17 +127,63 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     if (this.modoAsignacionId === undefined || this.jornadaId === undefined) {
       this.botonAsignarAleatorioDesactivado = true;
       this.botonAsignarManualDesactivado = true;
+      this.botonAsignarPuntosDesactivado = true;
     } else if (Number(this.modoAsignacionId) === 1) { // Manual
       console.log('Modo manual');
       this.botonAsignarAleatorioDesactivado = true;
       this.botonAsignarManualDesactivado = false;
+      this.botonAsignarPuntosDesactivado = true;
     } else if (Number(this.modoAsignacionId) === 2) { // Aleatorio
       console.log('Modo aleatorio');
       this.botonAsignarManualDesactivado = true;
       this.botonAsignarAleatorioDesactivado = false;
+      this.botonAsignarPuntosDesactivado = true;
       this.TieneGanadores(this.jornadaId);
       this.ObtenerClasificaciónDeCadaJornada();
+    } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID !== undefined) { // JuegoPuntos
+      console.log('Modo aleatorio');
+      this.botonAsignarManualDesactivado = true;
+      this.botonAsignarAleatorioDesactivado = true;
+      this.botonAsignarPuntosDesactivado = false;
+      this.ActualizarBotonPuntos();
+      this.TieneGanadores(this.jornadaId);
+      this.ObtenerClasificaciónDeCadaJornada();
+    } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID !== undefined) { // JuegoPuntos
+      this.botonAsignarManualDesactivado = true;
+      this.botonAsignarAleatorioDesactivado = true;
+      this.botonAsignarPuntosDesactivado = true;
     }
+  }
+
+  ActualizarBotonPuntos() {
+    console.log(this.juegosActivosPuntosModo);
+    console.log(this.juegodePuntosSeleccionadoID);
+
+        // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.juegosActivosPuntosModo.length; i++) {
+          console.log('Entro en el for');
+          console.log(this.juegosActivosPuntosModo[i].id);
+          console.log(this.juegodePuntosSeleccionadoID);
+          console.log(this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID));
+          if (this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID)) {
+          console.log('Entro en el if');
+          console.log(this.juegosActivosPuntosModo[i].Modo);
+            // Vamos a buscar a los alumnos o equipos con sus repectivos puntos
+          if (this.juegosActivosPuntosModo[i].Modo === 'Individual') {
+              this.NumeroDeJuegoDePuntos = i;
+              this.RecuperarInscripcionesAlumnoJuego();
+              console.log(this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos);
+            } else {
+              this.NumeroDeJuegoDePuntos = i;
+              this.RecuperarInscripcionesEquiposJuego();
+              console.log(this.listaEquiposOrdenadaPorPuntosJuegoDePuntos);
+            }
+          console.log('Alumnos');
+          console.log(this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos);
+          console.log('Equipo');
+          console.log(this.listaEquiposOrdenadaPorPuntosJuegoDePuntos);
+          }
+        }
   }
 
   ObtenerClasificaciónDeCadaJornada() {
@@ -332,7 +397,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         // tslint:disable-next-line:prefer-for-of
         for (let y = 0; y < this.TablaClasificacionJornadaSeleccionada.length; y++) {
           if (this.TablaClasificacionJornadaSeleccionada[y].id === participantesIndividualPuntuan[x].AlumnoId) {
-            this.TablaClasificacionJornadaSeleccionada[y].puntos = participantesIndividualPuntuan[x].PuntosTotalesAlumno;
+            this.TablaClasificacionJornadaSeleccionada[y].puntos = this.juegoSeleccionado.Puntos[x];
           }
         }
       }
@@ -346,7 +411,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         // tslint:disable-next-line:prefer-for-of
         for (let y = 0; y < this.TablaClasificacionJornadaSeleccionada.length; y++) {
           if (this.TablaClasificacionJornadaSeleccionada[y].id === participantesEquipoPuntuan[x].EquipoId) {
-            this.TablaClasificacionJornadaSeleccionada[y].puntos = participantesEquipoPuntuan[x].PuntosTotalesEquipo;
+            this.TablaClasificacionJornadaSeleccionada[y].puntos = this.juegoSeleccionado.Puntos[x];
           }
         }
       }
@@ -354,6 +419,10 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       this.TablaClasificacionJornadaSeleccionada = this.TablaClasificacionJornadaSeleccionada.sort(function(obj1, obj2) {
         return obj2.puntos - obj1.puntos;
       });
+    }
+    // tslint:disable-next-line:prefer-for-of
+    for (let z = 0; z < this.TablaClasificacionJornadaSeleccionada.length; z++) {
+       this.TablaClasificacionJornadaSeleccionada[z].posicion = z + 1;
     }
     this.dataSourceClasificacionJornada = new MatTableDataSource(this.TablaClasificacionJornadaSeleccionada);
     console.log('La TablaClasificacionJornadaSeleccionada actualizada queda: ');
@@ -481,4 +550,126 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   goBack() {
     this.location.back();
   }
+
+  // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
+  RecuperarInscripcionesAlumnoJuego() {
+    console.log ('voy a por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(this.juegodePuntosSeleccionadoID)
+    .subscribe(inscripciones => {
+      this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos = inscripciones;
+      // ordena la lista por puntos
+      // tslint:disable-next-line:only-arrow-functions
+      this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos = this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos.sort(function(obj1, obj2) {
+        return obj2.PuntosTotalesAlumno - obj1.PuntosTotalesAlumno;
+      });
+      console.log ('ya tengo las inscripciones');
+      console.log (this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos);
+    });
+  }
+
+
+    // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
+  RecuperarInscripcionesEquiposJuego() {
+
+    console.log ('vamos por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(this.juegodePuntosSeleccionadoID)
+    .subscribe(inscripciones => {
+      this.listaEquiposOrdenadaPorPuntosJuegoDePuntos = inscripciones;
+      console.log(this.listaEquiposOrdenadaPorPuntosJuegoDePuntos);
+
+      // ordenamos por puntos
+      // tslint:disable-next-line:only-arrow-functions
+      this.listaEquiposOrdenadaPorPuntosJuegoDePuntos = this.listaEquiposOrdenadaPorPuntosJuegoDePuntos.sort(function(obj1, obj2) {
+        return obj2.PuntosTotalesEquipo - obj1.PuntosTotalesEquipo;
+      });
+      console.log ('ya tengo las inscripciones');
+      console.log (this.listaEquiposOrdenadaPorPuntosJuegoDePuntos);
+    });
+  }
+
+  AsignarGanadorJuegoPuntos() {
+    console.log('Estoy en AsignarJuegoPuntos');
+    const jornadaTieneGanadores = this.TieneGanadores(Number(this.jornadaId));
+    console.log('Tiene Ganadores = ' + jornadaTieneGanadores);
+    console.log('Puntos del juego');
+    console.log(this.juegoSeleccionado.Puntos);
+    if (jornadaTieneGanadores === false) {
+      // Elegimos los ganadores y los ponemos en una lista: participantesPuntuan y los id en la lista ganadoresFormulaUnoId
+      this.GanadoresJuegoDePuntos(this.juegoSeleccionado, this.listaAlumnosOrdenadaPorPuntos, this.listaEquiposOrdenadaPorPuntos);
+      // Actualizamos TablaClasificacionJornadaSeleccionada
+      this.ActualizarTablaClasificacion(this.juegoSeleccionado, this.participantesIndividualPuntuan, this.participantesEquipoPuntuan);
+      // Sweetalert con los ganadores
+      const ganadores = this.StringGanadores(this.juegoSeleccionado, this.participantesIndividualPuntuan, this.participantesEquipoPuntuan);
+      Swal.fire(ganadores, ' Enhorabuena', 'success');
+      this.ActualizarGanadoresJornada();
+    } else {
+      console.log('Este juego ya tiene ganadores asignados');
+    }
+  }
+
+  GanadoresJuegoDePuntos(juegoSeleccionado: Juego, listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionFormulaUno[],
+                         listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionFormulaUno[]) {
+    if (juegoSeleccionado.Modo === 'Individual') {
+    console.log('Estoy en asignar Puntos individual');
+    this.ganadoresFormulaUnoId = [];
+    const numeroParticipantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
+    const participantes: AlumnoJuegoDeCompeticionFormulaUno[] = listaAlumnosOrdenadaPorPuntos;
+    let i = 0;
+    let elegido = 0;
+    let posicion = 0;
+    // Elegimos los ganadores aleatoriamente y los ponemos en una lista: participantesPuntuan y los id en la lista ganadoresFormulaUnoId
+    while (i < numeroParticipantesPuntuan) {
+    // tslint:disable-next-line:prefer-for-of
+    for (let w = 0; w < participantes.length; w++) {
+      if (participantes[w].AlumnoId === this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos[i].alumnoId) {
+        elegido = w;
+      }
+    }
+
+    const AlumnoId = participantes[elegido].AlumnoId;
+    const puntosTotales = participantes[elegido].PuntosTotalesAlumno + juegoSeleccionado.Puntos[posicion];
+    posicion = posicion + 1;
+    const id = participantes[elegido].id;
+    const ganador = new AlumnoJuegoDeCompeticionFormulaUno(AlumnoId, juegoSeleccionado.id, puntosTotales, id);
+    this.participantesIndividualPuntuan.push(ganador);
+    participantes.splice(elegido, 1);
+    this.ganadoresFormulaUnoId.push(AlumnoId);
+    i++;
+    }
+    console.log('Los participantes que puntúan son: ');
+    console.log(this.participantesIndividualPuntuan);
+    } else {
+    console.log('Estoy en asignar aleatoriamente equipo');
+    this.ganadoresFormulaUnoId = [];
+    const numeroParticipantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
+    const participantes: EquipoJuegoDeCompeticionFormulaUno[] = listaEquiposOrdenadaPorPuntos;
+    let i = 0;
+    let posicion = 0;
+    let elegido = 0;
+    // Elegimos los ganadores aleatoriamente y los ponemos en una lista: participantesEquipoPuntuan y
+    // los id en la lista ganadoresFormulaUnoId
+    while (i < numeroParticipantesPuntuan) {
+    // tslint:disable-next-line:prefer-for-of
+    for (let w = 0; w < participantes.length; w++) {
+      if (participantes[w].EquipoId === this.listaEquiposOrdenadaPorPuntosJuegoDePuntos[i].equipoId) {
+        elegido = w;
+      }
+    }
+    const EquipoId = participantes[elegido].EquipoId;
+    const puntosTotales = participantes[elegido].PuntosTotalesEquipo + juegoSeleccionado.Puntos[posicion];
+    posicion = posicion + 1;
+    const id = participantes[elegido].id;
+    const ganador = new EquipoJuegoDeCompeticionFormulaUno(EquipoId, juegoSeleccionado.id, puntosTotales, id);
+    this.participantesEquipoPuntuan.push(ganador);
+    participantes.splice(elegido, 1);
+    this.ganadoresFormulaUnoId.push(EquipoId);
+    i++;
+    }
+    console.log('Los participantes que puntúan son: ');
+    console.log(this.participantesEquipoPuntuan);
+    }
+    console.log('Los id de los ganadores de la jornada son:');
+    console.log(this.ganadoresFormulaUnoId);
+    }
+
 }
