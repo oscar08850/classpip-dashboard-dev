@@ -456,7 +456,24 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       console.log(this.participantesIndividualPuntuan);
     } else {
       this.participantesEquipoPuntuan = [];
+      console.log('Estoy en ListaParticipantesPuntuanActualizados() Equipo');
+      console.log('ganadoresFormulaUnoId');
+      console.log(this.ganadoresFormulaUnoId);
+      this.participantesEquipoPuntuan = [];
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.ganadoresFormulaUnoId.length; i++) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < this.listaEquiposOrdenadaPorPuntos.length; j++) {
+          if (this.ganadoresFormulaUnoId[i] === this.listaEquiposOrdenadaPorPuntos[j].EquipoId) {
+            this.listaEquiposOrdenadaPorPuntos[j].PuntosTotalesEquipo = this.listaEquiposOrdenadaPorPuntos[j].PuntosTotalesEquipo
+                                                                        + this.juegoSeleccionado.Puntos[i];
+            this.participantesEquipoPuntuan.push(this.listaEquiposOrdenadaPorPuntos[j]);
+          }
+        }
+      }
     }
+    console.log('participantesEquipoPuntuan');
+    console.log(this.participantesEquipoPuntuan);
   }
 
   RegistroMasivoClasificacion() {
