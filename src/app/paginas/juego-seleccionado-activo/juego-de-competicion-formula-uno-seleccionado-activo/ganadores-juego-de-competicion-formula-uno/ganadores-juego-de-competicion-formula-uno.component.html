@@ -81,7 +81,7 @@
 
     <!-- ///////////////////////////////////// MANUALMENTE ////////////////////////////////////// -->
     <mat-tab-group  style="width: 80%" align="center"  *ngIf="modoAsignacionId == 1 && jornadaId != undefined">
-      <mat-tab label="Introducir ganadores uno a uno">
+      <mat-tab label="Introducir participantes que puntúan uno a uno">
         <div class = "enFila">
           <div>
             <mat-card style = 'width: 100%' class="panel">
@@ -89,6 +89,37 @@
                 <mat-card-title>Nuevo Alumno</mat-card-title>
                 <mat-card-subtitle style = "color:white">Introduce los datos del nuevo alumno</mat-card-subtitle>
               </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Introducir participantes que puntúan de forma masiva">
+        <div class = "enFila">
+          <div>
+            <mat-card style = 'width: 100%' class="panel">
+              <mat-card-header>
+                <mat-card-title>Clasificación de la Jornada</mat-card-title>
+              </mat-card-header>
+
+              <mat-card-content>
+                <div class="form-group">
+                  <label  *ngIf="juegoSeleccionado.Modo === 'Individual'" for="inputNombres">Pega/escribe aquí linea a linea nombre y apellidos separados por ; como mínimo de los participantes que puntúan (como en el ejemplo)</label>
+                  <label *ngIf="juegoSeleccionado.Modo !== 'Individual'" for="inputNombres">Pega/escribe aquí linea a linea el nombre de cada equipo, como mínimo de los equipos que puntúan (como en el ejemplo)</label>
+                  <textarea *ngIf="juegoSeleccionado.Modo === 'Individual'" rows="5" autofocus (keyup)="DisabledTexto()" matInput class="form-control" placeholder=
+                            "Àngels;Català;Sebastià
+Alejandro;Gimeno;Marés"
+                            requiered [(ngModel)]="textoParticipantesPuntuan"></textarea>
+                  <textarea *ngIf="juegoSeleccionado.Modo !== 'Individual'" rows="5" autofocus (keyup)="DisabledTexto()" matInput class="form-control" placeholder=
+                            "Los Leones
+Los Elefantes"
+                            requiered [(ngModel)]="textoParticipantesPuntuan"></textarea>
+                </div>
+              </mat-card-content>
+              <mat-card-actions  align="end">
+                <button style="margin: 5px" (click) = "LimpiarCamposTexto()"  [disabled]="isDisabledAnadirGanadores" type="button" class="btn Back" >Limpiar Campos<i class="material-icons">delete_sweep </i></button>
+                <button  style="margin: 5px" (click) = "RegistroMasivoClasificacion()" [disabled]="isDisabledAnadirGanadores"type="button" class="btn Agregar" >Añadir Ganadores<i class="material-icons">emoji_events </i></button>
+              </mat-card-actions>
             </mat-card>
           </div>
         </div>
