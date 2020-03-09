@@ -278,6 +278,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     if (juegoSeleccionado.Modo === 'Individual') {
       console.log('Estoy en asignar aleatoriamente individual');
       this.ganadoresFormulaUnoId = [];
+      this.participantesIndividualPuntuan = [];
       const numeroParticipantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
       const participantes: AlumnoJuegoDeCompeticionFormulaUno[] = listaAlumnosOrdenadaPorPuntos;
       let i = 0;
@@ -301,6 +302,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     } else {
       console.log('Estoy en asignar aleatoriamente equipo');
       this.ganadoresFormulaUnoId = [];
+      this.participantesEquipoPuntuan = [];
       const numeroParticipantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
       const participantes: EquipoJuegoDeCompeticionFormulaUno[] = listaEquiposOrdenadaPorPuntos;
       let i = 0;
@@ -696,6 +698,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     } else {
     console.log('Estoy en asignar aleatoriamente equipo');
     this.ganadoresFormulaUnoId = [];
+    this.participantesEquipoPuntuan = [];
     const numeroParticipantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
     const participantes: EquipoJuegoDeCompeticionFormulaUno[] = listaEquiposOrdenadaPorPuntos;
     let i = 0;
@@ -726,5 +729,19 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     console.log('Los id de los ganadores de la jornada son:');
     console.log(this.ganadoresFormulaUnoId);
     }
+
+    // LimpiarParametros() {
+    //   this.botonAsignarManualDesactivado = true;
+    //   this.botonAsignarAleatorioDesactivado = true;
+    //   this.botonAsignarPuntosDesactivado = true;
+    //   this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos = [];
+    //   this.listaEquiposOrdenadaPorPuntosJuegoDePuntos = [];
+    //   this.NumeroDeJuegoDePuntos = undefined;
+    //   this.datosClasificacionJornada = undefined;
+    //   this.participantesIndividualPuntuan = undefined;
+    //   this.participantesEquipoPuntuan = undefined;
+    //   console.log('Parametros Limpiados Correctamente');
+
+    // }
 
 }

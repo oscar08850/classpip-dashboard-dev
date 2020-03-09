@@ -15,7 +15,7 @@ import { SesionService, PeticionesAPIService, CalculosService } from '../../../.
 // Imports para abrir diálogo y snackbar
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { from } from 'rxjs';
-
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -179,12 +179,16 @@ AnadirJugadorconPuntos() {
        i = this.Puntuacion.length;
        console.log(i);
        console.log(this.Puntuacion);
-       this.TablaPuntuacion = this.TablaPuntuacion.splice(0, i - 1);
-       this.Puntuacion = this.Puntuacion.slice(0, i - 1);
-       console.log(this.TablaPuntuacion);
-       console.log(this.Puntuacion);
+       if (i > 1) {
+          this.TablaPuntuacion = this.TablaPuntuacion.splice(0, i - 1);
+          this.Puntuacion = this.Puntuacion.slice(0, i - 1);
+          console.log(this.TablaPuntuacion);
+          console.log(this.Puntuacion);
 
-       this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
+          this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
+       } else {
+        Swal.fire('No es posible eliminar otra fila', 'Lo sentimos', 'error');
+       }
 
     }
 

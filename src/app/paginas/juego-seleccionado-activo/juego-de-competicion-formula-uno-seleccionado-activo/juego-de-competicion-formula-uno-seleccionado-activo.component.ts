@@ -41,7 +41,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   TablaeditarPuntos: TablaPuntosFormulaUno[];
 
   juegosActivosPuntos: Juego[] = [];
-
+  botoneditarPuntosDesactivado = true;
   datasourceAlumno;
   datasourceEquipo;
 
@@ -143,6 +143,29 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
       console.log('Ya tengo la tabla');
       console.log(this.datasourceEquipo);
 
+    }
+    this.BotonEditarDesactivado();
+  }
+
+  BotonEditarDesactivado() {
+    console.log(this.rankingIndividualFormulaUno);
+    console.log(this.rankingEquiposFormulaUno);
+    let SumatorioPuntos: number;
+    SumatorioPuntos = 0;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.rankingIndividualFormulaUno.length; i++) {
+      SumatorioPuntos = SumatorioPuntos + this.rankingIndividualFormulaUno[i].puntos;
+    }
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.rankingEquiposFormulaUno.length; i++) {
+      SumatorioPuntos = SumatorioPuntos + this.rankingEquiposFormulaUno[i].puntos;
+    }
+    console.log('Sumatorio');
+    console.log(SumatorioPuntos);
+    if (SumatorioPuntos === 0) {
+      this.botoneditarPuntosDesactivado = false;
+    } else {
+      this.botoneditarPuntosDesactivado = true;
     }
   }
 
