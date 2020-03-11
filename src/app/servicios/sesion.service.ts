@@ -386,4 +386,5 @@ public DameTablaeditarPuntos(): TablaPuntosFormulaUno[] {
   const TablaeditarPuntos = this.TablaeditarPuntos ;
   return TablaeditarPuntos;
 }
+
 }

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Location } from '@angular/common';
+
 // Clases
-import { Alumno, Equipo, Juego, TablaJornadas, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno,
-         TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, Jornada, EnfrentamientoLiga } from '../../../clases/index';
+import {Juego, Alumno, Equipo, AlumnoJuegoDeCompeticionFormulaUno, Jornada, TablaJornadas,
+        EquipoJuegoDeCompeticionFormulaUno, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion,
+        TablaPuntosFormulaUno} from '../../../clases/index';
 
 // Servicio
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
@@ -13,64 +15,60 @@ import { MatDialog } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import Swal from 'sweetalert2';
 
-
 @Component({
-  selector: 'app-juego-de-competicion-formula-uno-seleccionado-inactivo',
-  templateUrl: './juego-de-competicion-formula-uno-seleccionado-inactivo.component.html',
-  styleUrls: ['./juego-de-competicion-formula-uno-seleccionado-inactivo.component.scss']
+  selector: 'app-juego-formula-uno-seleccionado-activo',
+  templateUrl: './juego-formula-uno-seleccionado-activo.component.html',
+  styleUrls: ['./juego-formula-uno-seleccionado-activo.component.scss']
 })
-export class JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent implements OnInit {
-
-  // Juego De CompeticionLiga seleccionado
+export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements OnInit {
+  // Juego De Competicion Formula Uno seleccionado
   juegoSeleccionado: Juego;
 
-
-  // Recupera la informacion del juego, los alumnos o los equipos del juego
+  // Recupera la informacion del juego, los alumnos o los equipos
   alumnosDelJuego: Alumno[];
   equiposDelJuego: Equipo[];
+
   alumnosDelEquipo: Alumno[];
 
-  // Recoge la inscripción de un alumno en el juego ordenada por puntos
   listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionFormulaUno[];
   listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionFormulaUno[];
 
-  // Muestra la posición del alumno, el nombre y los apellidos del alumno y los puntos
   rankingIndividualFormulaUno: TablaAlumnoJuegoDeCompeticion[] = [];
   rankingEquiposFormulaUno: TablaEquipoJuegoDeCompeticion[] = [];
 
-  // tslint:disable-next-line:no-inferrable-types
-  mensaje: string = 'Estás seguro/a de que quieres reactivar el ';
+  jornadas: Jornada[];
+  JornadasCompeticion: TablaJornadas[];
+  TablaeditarPuntos: TablaPuntosFormulaUno[];
+
+  juegosActivosPuntos: Juego[] = [];
+  botoneditarPuntosDesactivado = true;
+  datasourceAlumno;
+  datasourceEquipo;
 
   // tslint:disable-next-line:no-inferrable-types
-  mensajeBorrar: string = 'Estás seguro/a de que quieres borrar el ';
-  // Columnas Tabla
+  mensaje: string = 'Estás seguro/a de que quieres desactivar el ';
+
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos'];
 
   displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'puntos'];
 
-  datasourceAlumno;
-  datasourceEquipo;
-
-  jornadas: Jornada[];
-  JornadasCompeticion: TablaJornadas[] = [];
-  // enfrentamientosDelJuego: EnfrentamientoLiga[] = [];
-  enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>;
-
-  constructor(  public dialog: MatDialog,
-                public sesion: SesionService,
-                public peticionesAPI: PeticionesAPIService,
-                public calculos: CalculosService,
-                private location: Location) {}
+  constructor(public dialog: MatDialog,
+              public sesion: SesionService,
+              public peticionesAPI: PeticionesAPIService,
+              public calculos: CalculosService,
+              private location: Location) { }
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
     console.log(this.juegoSeleccionado);
+
     if (this.juegoSeleccionado.Modo === 'Individual') {
       this.AlumnosDelJuego();
     } else {
       this.EquiposDelJuego();
     }
     this.DameJornadasDelJuegoDeCompeticionSeleccionado();
+    this.DameJuegosdePuntosActivos();
   }
 
   // Recupera los alumnos que pertenecen al juego
@@ -146,6 +144,29 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent implement
       console.log(this.datasourceEquipo);
 
     }
+    this.BotonEditarDesactivado();
+  }
+
+  BotonEditarDesactivado() {
+    console.log(this.rankingIndividualFormulaUno);
+    console.log(this.rankingEquiposFormulaUno);
+    let SumatorioPuntos: number;
+    SumatorioPuntos = 0;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.rankingIndividualFormulaUno.length; i++) {
+      SumatorioPuntos = SumatorioPuntos + this.rankingIndividualFormulaUno[i].puntos;
+    }
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.rankingEquiposFormulaUno.length; i++) {
+      SumatorioPuntos = SumatorioPuntos + this.rankingEquiposFormulaUno[i].puntos;
+    }
+    console.log('Sumatorio');
+    console.log(SumatorioPuntos);
+    if (SumatorioPuntos === 0) {
+      this.botoneditarPuntosDesactivado = false;
+    } else {
+      this.botoneditarPuntosDesactivado = true;
+    }
   }
 
   AlumnosDelEquipo(equipo: Equipo) {
@@ -188,19 +209,57 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent implement
     this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposFormulaUno);
   }
 
-  ReactivarJuego() {
+  seleccionarGanadorLiga(): void {
+    console.log('Aquí estará el proceso para elegir el ganador');
+    console.log ('Voy a por la información del juego seleccionado');
+    this.sesion.TomaJuego (this.juegoSeleccionado);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion(this.juegoSeleccionado, this.jornadas,
+                                                                          this.rankingIndividualFormulaUno, this.rankingEquiposFormulaUno);
+    console.log ('Voy a por la información de las jornadas del juego');
+    this.sesion.TomaDatosJornadas(this.jornadas,
+                                  this.JornadasCompeticion);
+    this.sesion.TomaTablaAlumnoJuegoDeCompeticion(this.rankingIndividualFormulaUno);
+    this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposFormulaUno);
+    this.sesion.TomaInscripcionAlumno(this.listaAlumnosOrdenadaPorPuntos);
+    this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
+    this.sesion.TomaJuegosDePuntos(this.juegosActivosPuntos);
+  }
+
+  editarjornadas() {
+
+    console.log('Tomo las jornadas' + this.jornadas);
+    console.log(this.jornadas);
+    console.log ('Aquí estará la información del juego');
+    this.sesion.TomaJuego (this.juegoSeleccionado);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion(this.juegoSeleccionado, this.jornadas,
+                                this.rankingIndividualFormulaUno, this.rankingEquiposFormulaUno);
+    console.log('Juego activo' + this.JornadasCompeticion);
+    this.sesion.TomaDatosJornadas(
+      this.jornadas,
+      this.JornadasCompeticion);
+  }
+
+  editarpuntos() {
+    this.TablaeditarPuntos = this.calculos.DameTablaeditarPuntos(this.juegoSeleccionado);
+    console.log(this.TablaeditarPuntos);
+    this.sesion.TomaJuego (this.juegoSeleccionado);
+    this.sesion.TomaTablaeditarPuntos(this.TablaeditarPuntos);
+  }
+
+
+  DesactivarJuego() {
     console.log(this.juegoSeleccionado);
     this.peticionesAPI.CambiaEstadoJuegoDeCompeticionFormulaUno(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
-      undefined, true), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
+      undefined, false), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
         if (res !== undefined) {
           console.log(res);
-          console.log('juego reactivado');
+          console.log('juego desactivado');
           this.location.back();
         }
       });
   }
 
-  AbrirDialogoConfirmacionReactivar(): void {
+  AbrirDialogoConfirmacionDesactivar(): void {
 
     const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
       height: '150px',
@@ -212,42 +271,32 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent implement
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-        this.ReactivarJuego();
-        Swal.fire('Reactivado', this.juegoSeleccionado.Tipo + ' reactivado correctamente', 'success');
+        this.DesactivarJuego();
+        Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' desactivado correctamente', 'success');
       }
     });
   }
-
-  EliminarJuego() {
-    this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno(this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
-    .subscribe(res => {
-      console.log('Juego eliminado');
-      this.location.back();
-    });
+  applyFilter(filterValue: string) {
+    this.datasourceAlumno.filter = filterValue.trim().toLowerCase();
   }
 
-  AbrirDialogoConfirmacionEliminar(): void {
+  applyFilterEquipo(filterValue: string) {
+    this.datasourceEquipo.filter = filterValue.trim().toLowerCase();
+  }
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensajeBorrar,
-        nombre: this.juegoSeleccionado.Tipo,
+  DameJuegosdePuntosActivos() {
+    this.peticionesAPI.DameJuegoDePuntosGrupo(this.juegoSeleccionado.grupoId)
+    .subscribe(juegosPuntos => {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegosPuntos.length; i++) {
+        if (juegosPuntos[i].JuegoActivo === true) {
+          this.juegosActivosPuntos.push(juegosPuntos[i]);
+        }
       }
     });
+    console.log('Juegos disponibles');
+    console.log(this.juegosActivosPuntos);
+    return this.juegosActivosPuntos;
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.EliminarJuego();
-        Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
-
-      }
-    });
   }
-  goBack() {
-    this.location.back();
-  }
-
-
-
 }

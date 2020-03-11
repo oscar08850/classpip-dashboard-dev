@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InformacionJuegoDeCompeticionFormulaUnoComponent } from './informacion-juego-de-competicion-formula-uno.component';
+import { InformacionJuegoDeCompeticionFormulaUnoComponent } from './informacion-juego-formula-uno.component';
 
 describe('InformacionJuegoDeCompeticionFormulaUnoComponent', () => {
   let component: InformacionJuegoDeCompeticionFormulaUnoComponent;

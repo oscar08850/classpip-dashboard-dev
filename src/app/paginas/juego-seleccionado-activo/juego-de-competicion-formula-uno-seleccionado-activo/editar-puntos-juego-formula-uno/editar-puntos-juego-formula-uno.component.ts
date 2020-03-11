@@ -19,9 +19,9 @@ import Swal from 'sweetalert2';
 
 
 @Component({
-  selector: 'app-editar-puntos-juego-de-competicion-formula-uno',
-  templateUrl: './editar-puntos-juego-de-competicion-formula-uno.component.html',
-  styleUrls: ['./editar-puntos-juego-de-competicion-formula-uno.component.scss']
+  selector: 'app-editar-puntos-juego-formula-uno',
+  templateUrl: './editar-puntos-juego-formula-uno.component.html',
+  styleUrls: ['./editar-puntos-juego-formula-uno.component.scss']
 })
 export class EditarPuntosJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 

@@ -19,9 +19,9 @@ import { from } from 'rxjs';
 
 
 @Component({
-  selector: 'app-editar-jornadas-juego-de-competicion-formula-uno',
-  templateUrl: './editar-jornadas-juego-de-competicion-formula-uno.component.html',
-  styleUrls: ['./editar-jornadas-juego-de-competicion-formula-uno.component.scss']
+  selector: 'app-editar-jornadas-juego-formula-uno',
+  templateUrl: './editar-jornadas-juego-formula-uno.component.html',
+  styleUrls: ['./editar-jornadas-juego-formula-uno.component.scss']
 })
 export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 

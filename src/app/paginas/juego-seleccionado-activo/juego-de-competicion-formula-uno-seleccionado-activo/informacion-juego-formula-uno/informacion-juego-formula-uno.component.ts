@@ -12,9 +12,9 @@ import { MatTableDataSource } from '@angular/material';
 import { identifierModuleUrl } from '@angular/compiler';
 
 @Component({
-  selector: 'app-informacion-juego-de-competicion-formula-uno',
-  templateUrl: './informacion-juego-de-competicion-formula-uno.component.html',
-  styleUrls: ['./informacion-juego-de-competicion-formula-uno.component.scss']
+  selector: 'app-informacion-juego-formula-uno',
+  templateUrl: './informacion-juego-formula-uno.component.html',
+  styleUrls: ['./informacion-juego-formula-uno.component.scss']
 })
 export class InformacionJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 

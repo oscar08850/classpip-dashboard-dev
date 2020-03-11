@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditarJornadasJuegoDeCompeticionFormulaUnoComponent } from './editar-jornadas-juego-de-competicion-formula-uno.component';
+import { EditarJornadasJuegoDeCompeticionFormulaUnoComponent } from './editar-jornadas-juego-formula-uno.component';
 
 describe('JuegoDeCompeticionSeleccionadoActivoComponent', () => {
   let component: EditarJornadasJuegoDeCompeticionFormulaUnoComponent;

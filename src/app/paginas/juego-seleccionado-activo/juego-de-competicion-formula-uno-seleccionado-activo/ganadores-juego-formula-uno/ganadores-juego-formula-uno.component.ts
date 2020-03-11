@@ -28,9 +28,9 @@ const ModoAsignacion: Asignacion[] = [
 ];
 
 @Component({
-  selector: 'app-ganadores-juego-de-competicion-formula-uno',
-  templateUrl: './ganadores-juego-de-competicion-formula-uno.component.html',
-  styleUrls: ['./ganadores-juego-de-competicion-formula-uno.component.scss']
+  selector: 'app-ganadores-juego-formula-uno',
+  templateUrl: './ganadores-juego-formula-uno.component.html',
+  styleUrls: ['./ganadores-juego-formula-uno.component.scss']
 })
 export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   [x: string]: any;
