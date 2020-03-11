@@ -689,7 +689,6 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     const id = participantes[elegido].id;
     const ganador = new AlumnoJuegoDeCompeticionFormulaUno(AlumnoId, juegoSeleccionado.id, puntosTotales, id);
     this.participantesIndividualPuntuan.push(ganador);
-    participantes.splice(elegido, 1);
     this.ganadoresFormulaUnoId.push(AlumnoId);
     i++;
     }
@@ -719,7 +718,6 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     const id = participantes[elegido].id;
     const ganador = new EquipoJuegoDeCompeticionFormulaUno(EquipoId, juegoSeleccionado.id, puntosTotales, id);
     this.participantesEquipoPuntuan.push(ganador);
-    participantes.splice(elegido, 1);
     this.ganadoresFormulaUnoId.push(EquipoId);
     i++;
     }

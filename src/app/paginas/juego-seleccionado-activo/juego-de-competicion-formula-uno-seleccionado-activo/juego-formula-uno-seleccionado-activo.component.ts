@@ -244,6 +244,8 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     console.log(this.TablaeditarPuntos);
     this.sesion.TomaJuego (this.juegoSeleccionado);
     this.sesion.TomaTablaeditarPuntos(this.TablaeditarPuntos);
+    this.sesion.TomaTablaAlumnoJuegoDeCompeticion(this.rankingIndividualFormulaUno);
+    this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposFormulaUno);
   }
 
 

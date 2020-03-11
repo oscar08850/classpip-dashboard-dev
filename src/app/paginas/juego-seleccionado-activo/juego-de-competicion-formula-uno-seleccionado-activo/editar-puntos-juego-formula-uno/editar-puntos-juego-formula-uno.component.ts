@@ -6,17 +6,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 // Clases
 // tslint:disable-next-line:max-line-length
-import { TablaPuntosFormulaUno, Juego } from '../../../../clases/index';
-
+import { TablaPuntosFormulaUno, Juego, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion } from '../../../../clases/index';
 // Servicio
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../../servicios/index';
-
 
 // Imports para abrir diálogo y snackbar
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { from } from 'rxjs';
 import Swal from 'sweetalert2';
-
+// import { isNumber } from '@ng-bootstrap/ng-bootstrap/util/util.d';
+// import { isNumeric } from 'rxjs/util/isNumeric';
 
 @Component({
   selector: 'app-editar-puntos-juego-formula-uno',
@@ -40,6 +39,8 @@ export class EditarPuntosJuegoDeCompeticionFormulaUnoComponent implements OnInit
   TablaPuntuacion: TablaPuntosFormulaUno[];
   displayedColumnsTablaPuntuacion: string[] = ['select', 'Posicion', 'Puntos'];
   JuegoModificado: Juego;
+  listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
+  listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
 
 
   constructor(    public sesion: SesionService,
@@ -59,7 +60,12 @@ export class EditarPuntosJuegoDeCompeticionFormulaUnoComponent implements OnInit
     this.myForm1 = this._formBuilder.group({
       NuevaPuntuacion: ['', Validators.required],
     });
-
+    this.listaAlumnosClasificacion = this.sesion.DameTablaAlumnoJuegoDeCompeticion();
+    console.log('tabla alumnos clasificación:');
+    console.log(this.listaAlumnosClasificacion);
+    this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
+    console.log('tabla equipos clasificación:');
+    console.log(this.listaEquiposClasificacion);
   }
 
 // Para averiguar si todas las filas están seleccionadas */
@@ -138,19 +144,24 @@ AnadirPuntos() {
   let NuevaPuntuacion: number;
   NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
   console.log('Voy a asignar NuevaPuntuacion ' + NuevaPuntuacion);
-  for ( let i = 0; i < this.dataSource.data.length; i++) {
+  if (!isNaN(NuevaPuntuacion)) {
+    for ( let i = 0; i < this.dataSource.data.length; i++) {
 
-    // Buscamos los alumnos que hemos seleccionado
-    if (this.selection.isSelected(this.dataSource.data[i]))  {
-      console.log('Voy a asignar tantos puntos ' + NuevaPuntuacion);
-      console.log(this.Puntuacion[i]);
-      console.log(NuevaPuntuacion);
-      this.Puntuacion[i] = NuevaPuntuacion;
-      console.log(this.Puntuacion);
-      this.TablaPuntuacion[i].Puntuacion = NuevaPuntuacion;
-      console.log(this.TablaPuntuacion[i]);
-    }
+        // Buscamos los alumnos que hemos seleccionado
+        if (this.selection.isSelected(this.dataSource.data[i]))  {
+          console.log('Voy a asignar tantos puntos ' + NuevaPuntuacion);
+          console.log(this.Puntuacion[i]);
+          console.log(NuevaPuntuacion);
+          this.Puntuacion[i] = NuevaPuntuacion;
+          console.log(this.Puntuacion);
+          this.TablaPuntuacion[i].Puntuacion = NuevaPuntuacion;
+          console.log(this.TablaPuntuacion[i]);
+        }
+      }
+  } else {
+    Swal.fire('Introduzca una puntuación válida', 'Le recordamos que debe ser un Número', 'error');
   }
+
   this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
   this.selection.clear();
   this.botonTablaDesactivado = true;
@@ -160,18 +171,31 @@ AnadirJugadorconPuntos() {
   // Tengo que hacer un recorrido diferente del dataSource porque necesito saber el
      // valor de i
      let i: number;
+     let NumeroParticipantes: number;
      i = this.Puntuacion.length;
      console.log(i);
      console.log(this.Puntuacion);
-     // this.Puntuacion[i] = NuevaPuntuacion;
-     this.TablaPuntuacion[i] = new TablaPuntosFormulaUno(i + 1, 1);
-     this.Puntuacion[i] = this.TablaPuntuacion[i].Puntuacion;
-     console.log(this.TablaPuntuacion[i]);
+     if (this.juegoSeleccionado.Modo === 'Individual') {
+       NumeroParticipantes = this.listaAlumnosClasificacion.length;
+     } else {
+       NumeroParticipantes = this.listaEquiposClasificacion.length;
+     }
 
-     this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
-     // this.selection.clear();
-     // this.botonTablaDesactivado = true;
+     if (i < NumeroParticipantes) {
+      this.TablaPuntuacion[i] = new TablaPuntosFormulaUno(i + 1, 1);
+      this.Puntuacion[i] = this.TablaPuntuacion[i].Puntuacion;
+      console.log(this.TablaPuntuacion[i]);
+
+      this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
+    } else {
+      Swal.fire('No es posible añadir otra fila', 'Ya puntuan todos los participantes', 'error');
+     }
+
    }
+
+
+
+
 
    EliminarJugadorconPuntos() {
 
@@ -187,7 +211,7 @@ AnadirJugadorconPuntos() {
 
           this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
        } else {
-        Swal.fire('No es posible eliminar otra fila', 'Lo sentimos', 'error');
+        Swal.fire('No es posible eliminar otra fila', 'Como mínimo debe puntuar un participante', 'error');
        }
 
     }
