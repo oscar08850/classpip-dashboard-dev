@@ -627,45 +627,53 @@ export class JuegoComponent implements OnInit {
     let NuevaPuntuacion: number;
     NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
     console.log('Voy a asignar NuevaPuntuacion ' + NuevaPuntuacion);
-    for ( let i = 0; i < this.dataSource.data.length; i++) {
+    if (!isNaN(NuevaPuntuacion)) {
+      for ( let i = 0; i < this.dataSource.data.length; i++) {
 
-      // Buscamos los alumnos que hemos seleccionado
-      if (this.selection.isSelected(this.dataSource.data[i]))  {
-        console.log('Voy a asignar tantos puntos ' + NuevaPuntuacion);
-        console.log(this.Puntuacion[i]);
-        console.log(NuevaPuntuacion);
-        this.Puntuacion[i] = NuevaPuntuacion;
-        console.log(this.Puntuacion);
-        this.TablaPuntuacion[i].Puntuacion = NuevaPuntuacion;
-        console.log(this.TablaPuntuacion[i]);
-      }
+          // Buscamos los alumnos que hemos seleccionado
+          if (this.selection.isSelected(this.dataSource.data[i]))  {
+            console.log('Voy a asignar tantos puntos ' + NuevaPuntuacion);
+            console.log(this.Puntuacion[i]);
+            console.log(NuevaPuntuacion);
+            this.Puntuacion[i] = NuevaPuntuacion;
+            console.log(this.Puntuacion);
+            this.TablaPuntuacion[i].Puntuacion = NuevaPuntuacion;
+            console.log(this.TablaPuntuacion[i]);
+          }
+        }
+    } else {
+      Swal.fire('Introduzca una puntuación válida', 'Le recordamos que debe ser un Número', 'error');
     }
+
     this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
     this.selection.clear();
     this.botonTablaDesactivado = true;
 
   }
   AnadirJugadorconPuntos() {
-    // Tengo que hacer un recorrido diferente del dataSource porque necesito saber el
-       // valor de i
 
-      //  let NuevaPuntuacion: number;
-      //  NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
-      //  console.log(this.TablaPuntuacion);
-      //  console.log('Voy a asignar NuevaPuntuacion ' + NuevaPuntuacion);
-       let i: number;
-       i = this.Puntuacion.length;
-       console.log(i);
-       console.log(this.Puntuacion);
-       // this.Puntuacion[i] = NuevaPuntuacion;
+      let i: number;
+      let NumeroParticipantes: number;
+      i = this.Puntuacion.length;
+      console.log(i);
+      console.log(this.Puntuacion);
+      if (this.modoDeJuegoSeleccionado === 'Individual') {
+        NumeroParticipantes = this.alumnosGrupo.length;
+      } else {
+        NumeroParticipantes = this.equiposGrupo.length;
+      }
+
+      if (i < NumeroParticipantes) {
        this.TablaPuntuacion[i] = new TablaPuntosFormulaUno(i + 1, 1);
        this.Puntuacion[i] = this.TablaPuntuacion[i].Puntuacion;
        console.log(this.TablaPuntuacion[i]);
 
        this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
-       // this.selection.clear();
-       // this.botonTablaDesactivado = true;
-     }
+     } else {
+       Swal.fire('No es posible añadir otra fila', 'Ya puntuan todos los participantes', 'error');
+      }
+
+    }
 
      EliminarJugadorconPuntos() {
 
