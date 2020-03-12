@@ -104,13 +104,17 @@ export class JuegoComponent implements OnInit {
   // No nos permite avanzar en el primer paso si no se ha seleccionado una opción
   // tslint:disable-next-line:ban-types
   isDisabled: Boolean = true;
-
+  // tslint:disable-next-line:ban-types
+  isDisabledNombre: Boolean = true;
   // No nos permite avanzar en el segundo paso si no se ha seleccionado opción
   // tslint:disable-next-line:ban-types
   isDisabledModo: Boolean = true;
   // tslint:disable-next-line:ban-types
   isDisabledExtra: Boolean = true;
-
+  // tslint:disable-next-line:ban-types
+  isDisabledTipoCompeticion: Boolean = true;
+  // tslint:disable-next-line:ban-types
+  isDisabledJornadas: Boolean = true;
 
   tipoJuegoElegido: string;
   nombreColeccionSeleccionada: string;
@@ -382,7 +386,7 @@ export class JuegoComponent implements OnInit {
   TipoDeJuegoCompeticionSeleccionado(tipoCompeticion: ChipColor) {
     this.tipoJuegoCompeticionSeleccionado = tipoCompeticion.nombre;
     console.log('El juego de competición será tipo: ' + tipoCompeticion.nombre);
-    this.isDisabled = false;
+    this.isDisabledTipoCompeticion = false;
   }
 
 
@@ -673,24 +677,46 @@ export class JuegoComponent implements OnInit {
        Swal.fire('No es posible añadir otra fila', 'Ya puntuan todos los participantes', 'error');
       }
 
-    }
+  }
 
-     EliminarJugadorconPuntos() {
+  EliminarJugadorconPuntos() {
 
-         let i: number;
-         i = this.Puntuacion.length;
-         console.log(i);
-         console.log(this.Puntuacion);
-         if (i > 1) {
+      let i: number;
+      i = this.Puntuacion.length;
+      console.log(i);
+      console.log(this.Puntuacion);
+      if (i > 1) {
             this.TablaPuntuacion = this.TablaPuntuacion.splice(0, i - 1);
             this.Puntuacion = this.Puntuacion.slice(0, i - 1);
             console.log(this.TablaPuntuacion);
             console.log(this.Puntuacion);
 
             this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
-            } else {
+      } else {
           Swal.fire('No es posible eliminar otra fila', 'Lo sentimos', 'error');
-         }
+      }
 
-       }
+  }
+
+  ActualizarBotonPaso1() {
+    let NombredelJuego: string;
+    NombredelJuego = this.myForm2.value.NombredelJuego;
+    if ( NombredelJuego === undefined) {
+      this.isDisabledNombre = true;
+    } else {
+      this.isDisabledNombre = false;
+    }
+  }
+
+  ActualizarBotonPasoJornadas() {
+    let NumeroDeJornadas: number;
+    NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
+    console.log('Estoy en Actualizar boton');
+    if ( NumeroDeJornadas === undefined || isNaN(NumeroDeJornadas)) {
+      this.isDisabledJornadas = true;
+      Swal.fire('Introduzca un número de jornadas válido', 'Le recordamos que debe ser un Número', 'error');
+    } else {
+      this.isDisabledJornadas = false;
+    }
+  }
 }

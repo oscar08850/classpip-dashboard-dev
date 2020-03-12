@@ -83,12 +83,12 @@
 
                   <!-- casilla para introducir jornadas -->
                       <mat-form-field>
-                        <mat-label>Nombre del juego</mat-label>
-                        <input matInput formControlName="NombredelJuego" required>
+                        <mat-label>Introduzca el Nombre del juego</mat-label>
+                        <input matInput formControlName="NombredelJuego" placeholder="Escriba los Puntos" requiered [(ngModel)]="NombredelJuego" (change) = "ActualizarBotonPaso1()">
                       </mat-form-field>
 
                     <div class="btnCambiarStep">
-                      <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                      <button type="button" class="btn Next" [disabled]="isDisabledNombre" matStepperNext>Siguiente</button>
                     </div>
               </div>
             </mat-step>
@@ -212,7 +212,7 @@
 
           <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Competición'">
 
-            <!-- SEGUNDO PASO: SELECTION DE TIPO DE COMPETICION -->
+            <!-- TERCER PASO: SELECTION DE TIPO DE COMPETICION -->
 
             <mat-step>
                 <ng-template matStepLabel><div>Tipo De Competición</div></ng-template>
@@ -233,11 +233,11 @@
 
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button [disabled]="isDisabled" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  <button [disabled]="isDisabledTipoCompeticion" type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
 
-              <!-- TERCER PASO: SELECTION DE TIPO DE COMPETICION -->
+              <!-- QUARTO PASO: SELECTION DE MODO DE COMPETICION -->
 
               <mat-step>
                 <ng-template matStepLabel><div>Modo De Juego</div></ng-template>
@@ -259,21 +259,21 @@
 
                     <div class="btnCambiarStep">
                       <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                      <button type="button" class="btn Next"  matStepperNext>Siguiente</button>
+                      <button type="button" class="btn Next" [disabled]="isDisabledModo" matStepperNext>Siguiente</button>
 
                     </div>
 
               </mat-step>
 
-               <!-- CUARTO PASO: NUMERO DE JORNADAS-->
+               <!-- QUINTO PASO: NUMERO DE JORNADAS-->
 
                   <mat-step [stepControl]="myForm">
                     <ng-template matStepLabel><div>Número de jornadas</div></ng-template>
 
                         <!-- casilla para introducir jornadas -->
                             <mat-form-field>
-                              <mat-label>Número de jornadas</mat-label>
-                              <input matInput formControlName="NumeroDeJornadas" required>
+                              <mat-label>Introduzca el Número de jornadas</mat-label>
+                              <input matInput formControlName="NumeroDeJornadas" placeholder="Escriba las jornadas" requiered [(ngModel)]="NumeroDeJornadas" (change) = "ActualizarBotonPasoJornadas()">
                             </mat-form-field>
 
                         <div *ngIf="tipoJuegoCompeticionSeleccionado === 'Liga'">
@@ -287,7 +287,7 @@
 
                           <div class="btnCambiarStep">
                               <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                              <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
+                              <button type="button" class="btn Next" [disabled]="isDisabledJornadas" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
 
                           </div>
                         </div>
@@ -295,14 +295,14 @@
                         <div *ngIf="tipoJuegoCompeticionSeleccionado !== 'Liga'">
                           <div class="btnCambiarStep">
                             <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                            <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                            <button type="button" class="btn Next" [disabled]="isDisabledJornadas" matStepperNext>Siguiente</button>
                           </div>
                         </div>
 
                   </mat-step>
 
 
-                  <!-- QUINTO PASO: PUNTOS-->
+                  <!-- SEXTO PASO: PUNTOS-->
                   <div *ngIf="tipoJuegoCompeticionSeleccionado === 'Fórmula Uno'">
 
                     <mat-step>
@@ -377,7 +377,7 @@
 
                       <div class="btnCambiarStep">
                         <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                        <button type="button" class="btn Next"  [disabled]="isDisabledModo" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
+                        <button type="button" class="btn Next" matStepperNext (click) = "CrearJuegoCorrespondiente()">Siguiente</button>
 
                       </div>
                     </mat-step>
