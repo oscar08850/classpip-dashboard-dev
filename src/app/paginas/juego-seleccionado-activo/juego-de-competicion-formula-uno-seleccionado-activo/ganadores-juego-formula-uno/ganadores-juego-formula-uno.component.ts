@@ -143,14 +143,14 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       this.TieneGanadores(this.jornadaId);
       this.ObtenerClasificaciónDeCadaJornada();
     } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID !== undefined) { // JuegoPuntos
-      console.log('Modo aleatorio');
+      console.log('Modo puntos');
       this.botonAsignarManualDesactivado = true;
       this.botonAsignarAleatorioDesactivado = true;
       this.botonAsignarPuntosDesactivado = false;
       this.ActualizarBotonPuntos();
       this.TieneGanadores(this.jornadaId);
       this.ObtenerClasificaciónDeCadaJornada();
-    } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID !== undefined) { // JuegoPuntos
+    } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID === undefined) { // JuegoPuntos
       this.botonAsignarManualDesactivado = true;
       this.botonAsignarAleatorioDesactivado = true;
       this.botonAsignarPuntosDesactivado = true;
@@ -280,7 +280,11 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       this.ganadoresFormulaUnoId = [];
       this.participantesIndividualPuntuan = [];
       const numeroParticipantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
-      const participantes: AlumnoJuegoDeCompeticionFormulaUno[] = listaAlumnosOrdenadaPorPuntos;
+      const participantes: AlumnoJuegoDeCompeticionFormulaUno[] = [];
+      listaAlumnosOrdenadaPorPuntos.forEach(alumno => participantes.push(alumno));
+      console.log('participantes');
+      console.log(participantes);
+
       let i = 0;
       let posicion = 0;
       // Elegimos los ganadores aleatoriamente y los ponemos en una lista: participantesPuntuan y los id en la lista ganadoresFormulaUnoId
@@ -294,6 +298,10 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         const ganador = new AlumnoJuegoDeCompeticionFormulaUno(AlumnoId, juegoSeleccionado.id, puntosTotales, id);
         this.participantesIndividualPuntuan.push(ganador);
         participantes.splice(elegido, 1);
+        console.log('participantes');
+        console.log(participantes);
+        console.log('listaAlumnosOrdenadaPorPuntos');
+        console.log(listaAlumnosOrdenadaPorPuntos);
         this.ganadoresFormulaUnoId.push(AlumnoId);
         i++;
       }
