@@ -32,15 +32,15 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
   numeroTotalJornadas: number;
   jornadasTabla: Jornada[];
   jornadas: Jornada[];
-  dataSource: any;
+  dataSourceJornada: any;
   myForm: FormGroup;
   NuevaFechaFormGroup: FormGroup;
   IDJornada: number;
   // tslint:disable-next-line:ban-types
-  isDisabled: Boolean = true;
-  botonTablaDesactivado = true;
+  isDisabledJornada: Boolean = true;
+  botonTablaDesactivadoJornada = true;
   JornadaSeleccionadaId: number;
-  seleccionados: boolean[];
+  seleccionadosJornada: boolean[];
   JornadasCompeticion: TablaJornadas[] = [];
   NuevaFecha: Date;
 
@@ -69,7 +69,7 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
     // this.JornadasCompeticion = this.TablaJornadas();
     console.log('Jornadas Competicion: ');
     console.log (this.JornadasCompeticion);
-    this.dataSource = new MatTableDataSource (this.JornadasCompeticion);
+    this.dataSourceJornada = new MatTableDataSource (this.JornadasCompeticion);
 
     this.myForm = this._formBuilder.group({
       CriterioGanador: ['', Validators.required],
@@ -80,9 +80,9 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
 
 
   /* Para averiguar si todas las filas están seleccionadas */
-  IsAllSelected() {
+  IsAllSelectedJornada() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.dataSourceJornada.data.length;
     return numSelected === numRows;
   }
 
@@ -90,27 +90,28 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
     * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
     * desactivado, en cuyo caso se activan todos */
 
-  MasterToggle() {
-    if (this.IsAllSelected()) {
+  MasterToggleJornada() {
+    if (this.IsAllSelectedJornada()) {
       this.selection.clear(); // Desactivamos todos
     } else {
       // activamos todos
-      this.dataSource.data.forEach(row => this.selection.select(row));
+      this.dataSourceJornada.data.forEach(row => this.selection.select(row));
     }
   }
   /* Esta función decide si el boton debe estar activo (si hay al menos
   una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
   /* En este caso para que esté activo también debe haber seleccionado el tipo de punto a asignar */
-  ActualizarBotonTabla() {
+  ActualizarBotonTablaJornada() {
+    console.log('Estoy en ActualizarBotonTablaJornada()');
     let NuevoCriterio: string;
     NuevoCriterio = this.myForm.value.CriterioGanador;
     console.log(this.selection.selected.length);
     console.log(this.NuevaFecha);
     console.log(NuevoCriterio);
     if ((this.selection.selected.length === 0) || ( this.NuevaFecha === undefined) || ( NuevoCriterio === undefined)) {
-      this.botonTablaDesactivado = true;
+      this.botonTablaDesactivadoJornada = true;
     } else {
-      this.botonTablaDesactivado = false;
+      this.botonTablaDesactivadoJornada = false;
     }
   }
 
@@ -126,9 +127,9 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
     console.log(this.NuevaFecha);
     console.log(NuevoCriterio);
     if ((this.selection.selected.length === 0) || ( this.NuevaFecha === undefined) || ( NuevoCriterio === undefined)) {
-      this.botonTablaDesactivado = true;
+      this.botonTablaDesactivadoJornada = true;
     } else {
-      this.botonTablaDesactivado = false;
+      this.botonTablaDesactivadoJornada = false;
     }
   }
 
@@ -141,12 +142,12 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
     NuevoCriterio = this.myForm.value.CriterioGanador;
     console.log('Voy a asignar Fecha ' + this.NuevaFecha );
     console.log('Voy a asignar criterio ' + NuevoCriterio);
-    for ( let i = 0; i < this.dataSource.data.length; i++) {
+    for ( let i = 0; i < this.dataSourceJornada.data.length; i++) {
       console.log ('Vuelta para guardar, check jornada ' + i + 1);
 
 
       // Buscamos los alumnos que hemos seleccionado
-      if (this.selection.isSelected(this.dataSource.data[i]))  {
+      if (this.selection.isSelected(this.dataSourceJornada.data[i]))  {
         console.log('Voy a asignar 2 ' + this.NuevaFecha + NuevoCriterio);
         console.log(this.jornadas[i]);
         console.log(this.NuevaFecha, NuevoCriterio, this.jornadas[i].id);
@@ -167,47 +168,38 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
 
       }
     }
-    this.dataSource = new MatTableDataSource (this.JornadasCompeticion);
+    this.dataSourceJornada = new MatTableDataSource (this.JornadasCompeticion);
     this.selection.clear();
-    this.botonTablaDesactivado = true;
+    this.botonTablaDesactivadoJornada = true;
   }
 
 
 
-  BotonDesactivado() {
-    let NuevoCriterio: string;
-    NuevoCriterio = this.myForm.value.CriterioGanador;
+  // BotonDesactivadoJornada() {
+  //   let NuevoCriterio: string;
+  //   NuevoCriterio = this.myForm.value.CriterioGanador;
 
-    console.log('voy a ver si hay algo en los inputs');
-    if (this.NuevaFecha !== undefined && NuevoCriterio !== undefined ) {
-      console.log('hay algo, disabled');
-      this.isDisabled = false;
-    } else {
-      console.log('no hay nada');
-      this.isDisabled = true;
-    }
-  }
-   /* Esta función decide si el boton debe estar activo (si hay al menos
-  una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
-  ActualizarBoton() {
-    if (this.selection.selected.length === 0) {
-      this.isDisabled = true;
-    } else {
-      this.isDisabled = false;
-    }
-  }
+  //   console.log('voy a ver si hay algo en los inputs');
+  //   if (this.NuevaFecha !== undefined && NuevoCriterio !== undefined ) {
+  //     console.log('hay algo, disabled');
+  //     this.isDisabledJornada = false;
+  //   } else {
+  //     console.log('no hay nada');
+  //     this.isDisabledJornada = true;
+  //   }
+  // }
 
-  Disabled() {
+  // DisabledJornada() {
 
-      if (this.seleccionados.filter(res => res === true)[0] !== undefined) {
-        console.log('Hay alguno seleccionado');
-        this.BotonDesactivado();
-      } else {
-        console.log('No hay alguno seleccionado');
-        this.isDisabled = true;
-      }
+  //     if (this.seleccionadosJornada.filter(res => res === true)[0] !== undefined) {
+  //       console.log('Hay alguno seleccionado');
+  //       this.BotonDesactivadoJornada();
+  //     } else {
+  //       console.log('No hay alguno seleccionado');
+  //       this.isDisabledJornada = true;
+  //     }
 
-    }
+  //   }
 
   goBack() {
     this.location.back();
