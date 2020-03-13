@@ -13,7 +13,7 @@
               <mat-expansion-panel *ngFor="let jornada of JornadasCompeticion" (click) = "ObtenerEnfrentamientosDeCadaJornada(jornada)">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                  Jornada {{jornada.NumeroDeJornada}}:    {{jornada.Fecha}}
+                  Jornada {{jornada.NumeroDeJornada}}:    {{jornada.Fecha | date: 'shortDate'}}
                 </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="enFila">

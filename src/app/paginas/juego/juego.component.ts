@@ -97,6 +97,8 @@ export class JuegoComponent implements OnInit {
   // Recogemos la opción que seleccionemos en el primer (tipoDeJuegoSeleccionado) y en el segundo paso (modoDeJuegoSeleccionado)
   tipoDeJuegoSeleccionado: string;
   modoDeJuegoSeleccionado: string;
+  NumeroDeVueltasValueInd: number;
+  NumeroDeVueltasValueEqu: number;
 
   //
   tipoJuegoCompeticionSeleccionado: string;
@@ -239,6 +241,9 @@ export class JuegoComponent implements OnInit {
     this.tipoDeJuegoSeleccionado = tipo.nombre;
     console.log(this.tipoDeJuegoSeleccionado);
     this.isDisabled = false;
+    if (this.tipoDeJuegoSeleccionado === 'Juego De Competición') {
+        this.NumeroDeVueltas();
+    }
   }
 
 
@@ -693,7 +698,7 @@ export class JuegoComponent implements OnInit {
 
             this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
       } else {
-          Swal.fire('No es posible eliminar otra fila', 'Lo sentimos', 'error');
+        Swal.fire('No es posible eliminar otra fila', 'Como mínimo debe puntuar un participante', 'error');
       }
 
   }
@@ -718,5 +723,22 @@ export class JuegoComponent implements OnInit {
     } else {
       this.isDisabledJornadas = false;
     }
+  }
+
+  NumeroDeVueltas() {
+
+    if (this.alumnosGrupo.length % 2 === 0) {
+      this.NumeroDeVueltasValueInd = this.alumnosGrupo.length - 1;
+    } else {
+      this.NumeroDeVueltasValueInd = this.alumnosGrupo.length;
+    }
+    console.log(this.NumeroDeVueltasValueInd);
+
+    if (this.equiposGrupo.length % 2 === 0) {
+      this.NumeroDeVueltasValueEqu = this.equiposGrupo.length - 1;
+    } else {
+      this.NumeroDeVueltasValueEqu = this.equiposGrupo.length;
+    }
+    console.log(this.NumeroDeVueltasValueEqu);
   }
 }

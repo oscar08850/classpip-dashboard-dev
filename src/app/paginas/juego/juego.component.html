@@ -278,11 +278,11 @@
 
                         <div *ngIf="tipoJuegoCompeticionSeleccionado === 'Liga'">
                             <div *ngIf="modoDeJuegoSeleccionado === 'Individual'">
-                            <mat-label>Si desea realizar la liga de una vuelta escriba {{this.alumnosGrupo.length - 1}}</mat-label>
+                            <mat-label>Si desea realizar la liga de una vuelta escriba {{NumeroDeVueltasValueInd}}</mat-label>
                             </div>
 
                             <div *ngIf="modoDeJuegoSeleccionado === 'Equipos'">
-                            <mat-label>Si desea realizar la liga de una vuelta escriba {{this.equiposGrupo.length - 1}}</mat-label>
+                            <mat-label>Si desea realizar la liga de una vuelta escriba {{NumeroDeVueltasValueEqu}}</mat-label>
                             </div>
 
                           <div class="btnCambiarStep">
@@ -386,6 +386,7 @@
                   <mat-step>
                     <ng-template matStepLabel>Finalizar</ng-template>
 
+                    <span *ngIf="tipoDeJuegoSeleccionado === 'Juego De Competición'" style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}}... {{tipoJuegoCompeticionSeleccionado}} ... {{modoDeJuegoSeleccionado}} </span>
                           <div class="btnCambiarStep">
                             <div *ngIf="tipoJuegoCompeticionSeleccionado === 'Liga'">
                               <button type="button" class="btn Aceptar" (click) = "Finalizar();">Finalizar</button>

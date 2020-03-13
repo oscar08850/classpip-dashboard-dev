@@ -1914,11 +1914,11 @@ export class CalculosService {
     console.log(jornada.Fecha);
     if (juegoSeleccionado.Tipo === 'Juego De Competición Fórmula Uno') {
       if (jornada.Fecha === undefined && jornada.GanadoresFormulaUno === undefined) {
-        TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id);
+        TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
       } else if (jornada.Fecha === undefined && jornada.GanadoresFormulaUno !== undefined) {
         const GanadoresFormulaUno = this.ObtenerNombreGanadoresFormulaUno(juegoSeleccionado, jornada, alumnoJuegoDeCompeticionFormulaUno,
                                                                           equipoJuegoDeCompeticionFormulaUno);
-        TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id, GanadoresFormulaUno.nombre,
+        TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, GanadoresFormulaUno.nombre,
                                             GanadoresFormulaUno.id);
       } else  if (jornada.Fecha !== undefined && jornada.GanadoresFormulaUno === undefined) {
         TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
@@ -1929,11 +1929,11 @@ export class CalculosService {
                                             GanadoresFormulaUno.id);
       }
     } else {
-        if (jornada.Fecha === undefined) {
-          TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id);
-        } else {
+        // if (jornada.Fecha === undefined) {
+        //   TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id);
+        // } else {
           TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
-        }
+        // }
       }
     }
     return(TablaJornada);
