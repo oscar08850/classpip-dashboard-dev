@@ -425,6 +425,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       this.ActualizarGanadoresJornada();
     } else {
       console.log('Este juego ya tiene ganadores asignados');
+      Swal.fire('Este juego ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
     }
   }
 
@@ -493,6 +494,8 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         }
         if (encontrado === false) {
           console.log('Alguno de los nombres introducidos no se corresponde con ninguno de los alumnos del grupo');
+          // tslint:disable-next-line:max-line-length
+          Swal.fire('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo', ' No se ha podido realizar esta acción', 'error');
           this.ganadoresFormulaUnoId = [];
         }
       }
@@ -509,6 +512,8 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
           }
           if (encontrado === false) {
             console.log('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo');
+            // tslint:disable-next-line:max-line-length
+            Swal.fire('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo', ' No se ha podido realizar esta acción', 'error');
             this.ganadoresFormulaUnoId = [];
           }
         }
@@ -583,6 +588,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       }
     } else {
       console.log('Esta jornada ya tiene ganadores asignados');
+      Swal.fire('Este juego ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
     }
     // this.LimpiarCamposTexto();
   }
@@ -669,6 +675,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       this.ActualizarGanadoresJornada();
     } else {
       console.log('Este juego ya tiene ganadores asignados');
+      Swal.fire('Este juego ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
     }
   }
 
