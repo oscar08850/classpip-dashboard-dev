@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 
 // Clases
 import { Juego, Jornada, TablaJornadas, EnfrentamientoLiga, TablaAlumnoJuegoDeCompeticion,
-         TablaEquipoJuegoDeCompeticion} from '../../../../clases/index';
+         TablaEquipoJuegoDeCompeticion, TablaClasificacionJornada} from '../../../../clases/index';
 
 // Servicio
 import { SesionService , CalculosService, PeticionesAPIService } from '../../../../servicios/index';
@@ -29,12 +29,17 @@ export class InformacionJuegoDeCompeticionFormulaUnoInactivoComponent implements
 
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
   listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
+  datosClasificacionJornada: {participante: string[];
+    puntos: number[];
+    posicion: number[];
+    participanteId: number[];
+   };
 
+   TablaClasificacionJornadaSeleccionada: TablaClasificacionJornada[];
   // Columnas Tabla
-  displayedColumnsEnfrentamientos: string[] = ['nombreJugadorUno', 'nombreJugadorDos', 'nombreGanador'];
+  displayedColumns: string[] = ['posicion', 'participante', 'puntos'];
 
-  dataSourceEnfrentamientoIndividual;
-  dataSourceEnfrentamientoEquipo;
+  dataSourceClasificacionJornada;
 
   constructor( public sesion: SesionService,
                public location: Location,
@@ -42,6 +47,7 @@ export class InformacionJuegoDeCompeticionFormulaUnoInactivoComponent implements
                public peticionesAPI: PeticionesAPIService) { }
 
   ngOnInit() {
+    console.log('Estoy en ngOnInit de información formula uno');
     this.juegoSeleccionado = this.sesion.DameJuego();
     this.numeroTotalJornadas = this.juegoSeleccionado.NumeroTotalJornadas;
     console.log('Juego seleccionado: ');
@@ -50,100 +56,41 @@ export class InformacionJuegoDeCompeticionFormulaUnoInactivoComponent implements
     console.log(this.numeroTotalJornadas);
     const datos = this.sesion.DameDatosJornadas();
     this.JornadasCompeticion = datos.JornadasCompeticion;
-    console.log('Jornadas Competicion: ');
-    // Teniendo la tabla de Jornadas puedo sacar los enfrentamientos de cada jornada accediendo a la api
-    console.log(this.JornadasCompeticion);
     this.listaAlumnosClasificacion = this.sesion.DameTablaAlumnoJuegoDeCompeticion();
+    console.log('tabla alumnos clasificación:');
+    console.log(this.listaAlumnosClasificacion);
     this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
+    console.log('tabla equipos clasificación:');
+    console.log(this.listaEquiposClasificacion);
   }
 
   ObtenerEnfrentamientosDeCadaJornada(jornadaSeleccionada: TablaJornadas) {
     console.log('El id de la jornada seleccionada es: ' + jornadaSeleccionada.id);
-    this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga(jornadaSeleccionada.id)
-    .subscribe(enfrentamientos => {
-      this.EnfrentamientosJornadaSeleccionada = enfrentamientos;
-      console.log('Los enfrentamientos de esta jornada son: ');
-      console.log(this.EnfrentamientosJornadaSeleccionada);
-      console.log('Ya tengo los enfrentamientos de la jornada, ahora tengo que mostrarlos en una tabla');
-      this.ConstruirTablaEnfrentamientos();
-    });
+    if (jornadaSeleccionada.GanadoresFormulaUno === undefined) {
+      this.datosClasificacionJornada = this.calculos.ClasificacionJornada(this.juegoSeleccionado, this.listaAlumnosClasificacion,
+                                                     this.listaEquiposClasificacion, undefined, undefined);
+    } else {
+      this.datosClasificacionJornada = this.calculos.ClasificacionJornada(this.juegoSeleccionado, this.listaAlumnosClasificacion,
+                                                     this.listaEquiposClasificacion, jornadaSeleccionada.GanadoresFormulaUno.nombre,
+                                                     jornadaSeleccionada.GanadoresFormulaUno.id);
+    }
+    // console.log(this.datosClasificaciónJornada.participante);
+    // console.log(this.datosClasificaciónJornada.puntos);
+    // console.log(this.datosClasificaciónJornada.posicion);
+    this.ConstruirTablaClasificaciónJornada();
   }
 
 
-  ConstruirTablaEnfrentamientos() {
-    console.log ('Aquí tendré la tabla de enfrentamientos, los enfrentamientos sonc:');
-    console.log(this.EnfrentamientosJornadaSeleccionada);
-    console.log('Distinción entre Individual y equipos');
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
-        // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < this.listaAlumnosClasificacion.length; j++) {
-          if (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno === this.listaAlumnosClasificacion[j].id) {
-            this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = this.listaAlumnosClasificacion[j].nombre + ' ' +
-                                                                          this.listaAlumnosClasificacion[j].primerApellido + ' ' +
-                                                                          this.listaAlumnosClasificacion[j].segundoApellido;
-            if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaAlumnosClasificacion[j].id) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaAlumnosClasificacion[j].nombre + ' ' +
-                                                                                  this.listaAlumnosClasificacion[j].primerApellido + ' ' +
-                                                                                  this.listaAlumnosClasificacion[j].segundoApellido;
-            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-            }
-          } else if (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos === this.listaAlumnosClasificacion[j].id) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = this.listaAlumnosClasificacion[j].nombre + ' ' +
-                                                                            this.listaAlumnosClasificacion[j].primerApellido + ' ' +
-                                                                            this.listaAlumnosClasificacion[j].segundoApellido;
-              if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaAlumnosClasificacion[j].id) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaAlumnosClasificacion[j].nombre + ' ' +
-                                                                                    this.listaAlumnosClasificacion[j].primerApellido + ' ' +
-                                                                                    this.listaAlumnosClasificacion[j].segundoApellido;
-              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-              }
-          }
-        }
-      }
-      console.log(this.EnfrentamientosJornadaSeleccionada);
-      this.dataSourceEnfrentamientoIndividual = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
-
-    } else {
-      console.log('Estoy en ConstruirTablaEnfrentamientos() equipos');
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
-        // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < this.listaEquiposClasificacion.length; j++) {
-          if (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno === this.listaEquiposClasificacion[j].id) {
-            this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = this.listaEquiposClasificacion[j].nombre;
-            if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaEquiposClasificacion[j].id) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
-            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-            }
-          } else if (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos === this.listaEquiposClasificacion[j].id) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = this.listaEquiposClasificacion[j].nombre;
-              if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaEquiposClasificacion[j].id) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
-              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-              }
-          }
-        }
-      }
-      console.log(this.EnfrentamientosJornadaSeleccionada);
-      this.dataSourceEnfrentamientoEquipo = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
-      console.log('La tabla de enfrentamientos por equipos queda: ');
-      console.log(this.dataSourceEnfrentamientoEquipo.data);
-
-    }
+  ConstruirTablaClasificaciónJornada() {
+    console.log ('Aquí tendré la tabla de clasificación, los participantes ordenados son:');
+    console.log(this.datosClasificacionJornada.participante);
+    console.log(this.datosClasificacionJornada.puntos);
+    console.log(this.datosClasificacionJornada.posicion);
+    console.log('ParticipanteId:');
+    console.log(this.datosClasificacionJornada.participanteId);
+    this.TablaClasificacionJornadaSeleccionada = this.calculos.PrepararTablaRankingJornadaFormulaUno(this.datosClasificacionJornada);
+    this.dataSourceClasificacionJornada = new MatTableDataSource(this.TablaClasificacionJornadaSeleccionada);
+    console.log(this.dataSourceClasificacionJornada.data);
   }
 
   goBack() {

@@ -684,6 +684,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     if (juegoSeleccionado.Modo === 'Individual') {
     console.log('Estoy en asignar Puntos individual');
     this.ganadoresFormulaUnoId = [];
+    this.participantesIndividualPuntuan = [];
     const numeroParticipantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
     const participantes: AlumnoJuegoDeCompeticionFormulaUno[] = listaAlumnosOrdenadaPorPuntos;
     let i = 0;
