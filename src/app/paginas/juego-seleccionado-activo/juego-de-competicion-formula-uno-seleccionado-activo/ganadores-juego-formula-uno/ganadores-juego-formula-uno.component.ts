@@ -672,6 +672,9 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       // Sweetalert con los ganadores
       const ganadores = this.StringGanadores(this.juegoSeleccionado, this.participantesIndividualPuntuan, this.participantesEquipoPuntuan);
       Swal.fire(ganadores, ' Enhorabuena', 'success');
+      // Rellenamos lista participantesIndividualPuntuan/participantesEquipoPuntuan con los Alumno/Equipo actualizados
+      this.ListaParticipantesPuntuanActualizados();
+      // Actualizamos ganadores en la jornada
       this.ActualizarGanadoresJornada();
     } else {
       console.log('Este juego ya tiene ganadores asignados');
@@ -698,8 +701,12 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         elegido = w;
       }
     }
-
     const AlumnoId = participantes[elegido].AlumnoId;
+    console.log('A ver que pasa');
+    console.log(participantes[elegido]);
+    console.log(juegoSeleccionado.Puntos);
+    console.log(participantes[elegido].PuntosTotalesAlumno);
+    console.log(juegoSeleccionado.Puntos[posicion]);
     const puntosTotales = participantes[elegido].PuntosTotalesAlumno + juegoSeleccionado.Puntos[posicion];
     posicion = posicion + 1;
     const id = participantes[elegido].id;

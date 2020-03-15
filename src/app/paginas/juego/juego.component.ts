@@ -103,12 +103,11 @@ export class JuegoComponent implements OnInit {
   //
   tipoJuegoCompeticionSeleccionado: string;
 
-  // No nos permite avanzar en el primer paso si no se ha seleccionado una opción
+  // No nos permite avanzar si no se ha seleccionado una opción
   // tslint:disable-next-line:ban-types
   isDisabled: Boolean = true;
   // tslint:disable-next-line:ban-types
   isDisabledNombre: Boolean = true;
-  // No nos permite avanzar en el segundo paso si no se ha seleccionado opción
   // tslint:disable-next-line:ban-types
   isDisabledModo: Boolean = true;
   // tslint:disable-next-line:ban-types
@@ -517,6 +516,21 @@ export class JuegoComponent implements OnInit {
     this.TablaPuntuacion[0] = new TablaPuntosFormulaUno(1, 10);
     this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
     this.Puntuacion = [10];
+    // tslint:disable-next-line:ban-types
+    this.isDisabled = true;
+    // tslint:disable-next-line:ban-types
+    this.isDisabledNombre = true;
+    // tslint:disable-next-line:ban-types
+    this.isDisabledModo = true;
+    // tslint:disable-next-line:ban-types
+    this.isDisabledExtra = true;
+    // tslint:disable-next-line:ban-types
+    this.isDisabledTipoCompeticion = true;
+    // tslint:disable-next-line:ban-types
+    this.isDisabledJornadas = true;
+    this.tipoJuegoCompeticionSeleccionado = undefined;
+    this.tipoDeJuegoSeleccionado = undefined;
+    this.modoDeJuegoSeleccionado = undefined;
   }
 
   // Recibo el nombre de la colección elegida en el componente hijo
