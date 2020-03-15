@@ -237,6 +237,13 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     this.sesion.TomaDatosJornadas(
       this.jornadas,
       this.JornadasCompeticion);
+    // Necesario para Editar Puntos:
+    this.TablaeditarPuntos = this.calculos.DameTablaeditarPuntos(this.juegoSeleccionado);
+    console.log(this.TablaeditarPuntos);
+    this.sesion.TomaJuego (this.juegoSeleccionado);
+    this.sesion.TomaTablaeditarPuntos(this.TablaeditarPuntos);
+    this.sesion.TomaTablaAlumnoJuegoDeCompeticion(this.rankingIndividualFormulaUno);
+    this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposFormulaUno);
   }
 
   editarpuntos() {
@@ -252,9 +259,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   DesactivarJuego() {
     console.log(this.juegoSeleccionado);
     this.peticionesAPI.CambiaEstadoJuegoDeCompeticionFormulaUno(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
-      undefined, false, this.juegoSeleccionado.NumeroTotalJornadas, this.juegoSeleccionado.TipoJuegoCompeticion,
-      this.juegoSeleccionado.NumeroParticipantesPuntuan, this.juegoSeleccionado.Puntos, this.juegoSeleccionado.NombreJuego),
-      this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
+      undefined, false), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
         if (res !== undefined) {
           console.log(res);
           console.log('juego desactivado');

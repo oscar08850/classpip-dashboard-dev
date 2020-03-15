@@ -6,7 +6,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 // Clases
 // tslint:disable-next-line:max-line-length
-import { Alumno, Juego, Jornada, TablaJornadas, AlumnoJuegoDeCompeticionLiga, TablaAlumnoJuegoDeCompeticion } from '../../../../clases/index';
+import { Alumno, Juego, Jornada, TablaJornadas, AlumnoJuegoDeCompeticionLiga, TablaAlumnoJuegoDeCompeticion,
+         TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno } from '../../../../clases/index';
 
 // Servicio
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../../servicios/index';
@@ -15,7 +16,7 @@ import { SesionService, PeticionesAPIService, CalculosService } from '../../../.
 // Imports para abrir diálogo y snackbar
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { from } from 'rxjs';
-
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -46,6 +47,24 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
 
   displayedColumnsJornada: string[] = ['select', 'NumeroDeJornada', 'Fecha', 'CriterioGanador'];
 
+  // Editar Juego de Puntos
+  // No nos permite avanzar en el primer paso si no se ha seleccionado una opción
+  // tslint:disable-next-line:ban-types
+  isDisabled: Boolean = true;
+  myForm1: FormGroup;
+  selectionPuntos = new SelectionModel<any>(true, []);
+  botonTablaDesactivado = true;
+  seleccionados: boolean[];
+  Puntuacion: number[];
+  dataSource: any;
+  TablaPuntuacion: TablaPuntosFormulaUno[];
+  displayedColumnsTablaPuntuacion: string[] = ['select', 'Posicion', 'Puntos'];
+  JuegoModificado: Juego;
+  listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
+  listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
+
+  // rankingIndividualFormulaUno: TablaAlumnoJuegoDeCompeticion[] = [];
+  // rankingEquiposFormulaUno: TablaEquipoJuegoDeCompeticion[] = [];
 
   constructor(    public sesion: SesionService,
                   public location: Location,
@@ -76,8 +95,23 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
       picker: ['', Validators.required],
     });
 
-  }
+    // Editar Puntuación
+    console.log('Variables necesarias para editar puntuación');
+    this.TablaPuntuacion = this.sesion.DameTablaeditarPuntos();
+    this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
+    this.Puntuacion = this.juegoSeleccionado.Puntos;
+    console.log(this.juegoSeleccionado);
+    this.myForm1 = this._formBuilder.group({
+      NuevaPuntuacion: ['', Validators.required],
+    });
+    this.listaAlumnosClasificacion = this.sesion.DameTablaAlumnoJuegoDeCompeticion();
+    console.log('tabla alumnos clasificación:');
+    console.log(this.listaAlumnosClasificacion);
+    this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
+    console.log('tabla equipos clasificación:');
+    console.log(this.listaEquiposClasificacion);
 
+  }
 
   /* Para averiguar si todas las filas están seleccionadas */
   IsAllSelectedJornada() {
@@ -136,8 +170,6 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
   EditarJornada() {
     // Tengo que hacer un recorrido diferente del dataSource porque necesito saber el
     // valor de i
-
-
     let NuevoCriterio: string;
     NuevoCriterio = this.myForm.value.CriterioGanador;
     console.log('Voy a asignar Fecha ' + this.NuevaFecha );
@@ -175,31 +207,147 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
 
 
 
-  // BotonDesactivadoJornada() {
-  //   let NuevoCriterio: string;
-  //   NuevoCriterio = this.myForm.value.CriterioGanador;
 
-  //   console.log('voy a ver si hay algo en los inputs');
-  //   if (this.NuevaFecha !== undefined && NuevoCriterio !== undefined ) {
-  //     console.log('hay algo, disabled');
-  //     this.isDisabledJornada = false;
-  //   } else {
-  //     console.log('no hay nada');
-  //     this.isDisabledJornada = true;
-  //   }
-  // }
 
-  // DisabledJornada() {
+  // Editar Puntos
+  // Para averiguar si todas las filas están seleccionadas */
+  IsAllSelected() {
+    const numSelected = this.selectionPuntos.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
 
-  //     if (this.seleccionadosJornada.filter(res => res === true)[0] !== undefined) {
-  //       console.log('Hay alguno seleccionado');
-  //       this.BotonDesactivadoJornada();
-  //     } else {
-  //       console.log('No hay alguno seleccionado');
-  //       this.isDisabledJornada = true;
-  //     }
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
+  MasterToggle() {
+    if (this.IsAllSelected()) {
+      this.selectionPuntos.clear(); // Desactivamos todos
+    } else {
+      // activamos todos
+      this.dataSource.data.forEach(row => this.selectionPuntos.select(row));
+    }
+  }
 
-  //   }
+  /* Esta función decide si el boton debe estar activo (si hay al menos
+  una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
+  /* En este caso para que esté activo también debe haber seleccionado el tipo de punto a asignar */
+  ActualizarBotonTabla() {
+    let NuevaPuntuacion: number;
+    NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
+    if ((this.selectionPuntos.selected.length === 0) || ( NuevaPuntuacion === undefined)) {
+      this.botonTablaDesactivado = true;
+    } else {
+      this.botonTablaDesactivado = false;
+    }
+  }
+
+  AnadirPuntos() {
+    // Tengo que hacer un recorrido diferente del dataSource porque necesito saber el
+    // valor de i
+    let NuevaPuntuacion: number;
+    NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
+    console.log('Voy a asignar NuevaPuntuacion ' + NuevaPuntuacion);
+    if (!isNaN(NuevaPuntuacion)) {
+      for ( let i = 0; i < this.dataSource.data.length; i++) {
+        // Buscamos los alumnos que hemos seleccionado
+        if (this.selectionPuntos.isSelected(this.dataSource.data[i]))  {
+          console.log('Voy a asignar tantos puntos ' + NuevaPuntuacion);
+          console.log(this.Puntuacion[i]);
+          console.log(NuevaPuntuacion);
+          this.Puntuacion[i] = NuevaPuntuacion;
+          console.log(this.Puntuacion);
+          this.TablaPuntuacion[i].Puntuacion = NuevaPuntuacion;
+          console.log(this.TablaPuntuacion[i]);
+          }
+        }
+    } else {
+        Swal.fire('Introduzca una puntuación válida', 'Le recordamos que debe ser un Número', 'error');
+    }
+    this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
+    this.selectionPuntos.clear();
+    this.botonTablaDesactivado = true;
+  }
+
+  AnadirJugadorconPuntos() {
+    // Tengo que hacer un recorrido diferente del dataSource porque necesito saber el
+    // valor de i
+    let i: number;
+    let NumeroParticipantes: number;
+    i = this.Puntuacion.length;
+    console.log(i);
+    console.log(this.Puntuacion);
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      NumeroParticipantes = this.listaAlumnosClasificacion.length;
+    } else {
+      NumeroParticipantes = this.listaEquiposClasificacion.length;
+    }
+    if (i < NumeroParticipantes) {
+      this.TablaPuntuacion[i] = new TablaPuntosFormulaUno(i + 1, 1);
+      this.Puntuacion[i] = this.TablaPuntuacion[i].Puntuacion;
+      console.log(this.TablaPuntuacion[i]);
+      this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
+    } else {
+        Swal.fire('No es posible añadir otra fila', 'Ya puntuan todos los participantes', 'error');
+    }
+  }
+
+  EliminarJugadorconPuntos() {
+    let i: number;
+    i = this.Puntuacion.length;
+    console.log(i);
+    console.log(this.Puntuacion);
+    if (i > 1) {
+      this.TablaPuntuacion = this.TablaPuntuacion.splice(0, i - 1);
+      this.Puntuacion = this.Puntuacion.slice(0, i - 1);
+      console.log(this.TablaPuntuacion);
+      console.log(this.Puntuacion);
+      this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
+    } else {
+        Swal.fire('No es posible eliminar otra fila', 'Como mínimo debe puntuar un participante', 'error');
+    }
+  }
+
+  goBackandguardar() {
+    const JuegoEmpezado: boolean = this.JuegoEmpezado();
+    if (JuegoEmpezado === false) {
+      this.JuegoModificado = this.juegoSeleccionado;
+      console.log(this.JuegoModificado);
+      this.JuegoModificado.Puntos = this.Puntuacion;
+      console.log( this.JuegoModificado.Puntos);
+      this.JuegoModificado.NumeroParticipantesPuntuan = this.Puntuacion.length;
+      console.log(this.JuegoModificado);
+      this.peticionesAPI.ModificaJuegoDeCompeticionFormulaUno(this.JuegoModificado, this.JuegoModificado.id)
+      .subscribe(JuegoModificado => {
+        this.JuegoModificado = JuegoModificado;
+        console.log('El JuegoModificado es: ');
+        console.log(this.JuegoModificado);
+      });
+      Swal.fire('La nueva puntuación se ha guardado correctamente', '', 'success');
+    } else {
+      Swal.fire('Esta competición ya ha empezado', 'No es posible modificar las puntuaciones', 'error');
+    }
+  }
+
+  JuegoEmpezado() {
+    let SumatorioPuntos: number;
+    SumatorioPuntos = 0;
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      console.log(this.listaAlumnosClasificacion);
+      this.listaAlumnosClasificacion.forEach(alumno => {SumatorioPuntos = SumatorioPuntos + alumno.puntos;
+      });
+    } else {
+      console.log(this.listaEquiposClasificacion);
+      this.listaEquiposClasificacion.forEach(equipo => {SumatorioPuntos = SumatorioPuntos + equipo.puntos;
+      });
+    }
+    console.log('SumatorioPuntos = ' + SumatorioPuntos);
+    if (SumatorioPuntos === 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   goBack() {
     this.location.back();
