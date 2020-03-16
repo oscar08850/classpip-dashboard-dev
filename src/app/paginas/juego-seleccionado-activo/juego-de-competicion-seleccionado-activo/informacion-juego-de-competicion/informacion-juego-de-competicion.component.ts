@@ -36,6 +36,8 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
   dataSourceEnfrentamientoIndividual;
   dataSourceEnfrentamientoEquipo;
 
+  participanteDescansa;
+
   constructor( public sesion: SesionService,
                public location: Location,
                public calculos: CalculosService,
@@ -91,6 +93,49 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
       console.log('La tabla de enfrentamientos por equipos queda: ');
       console.log(this.dataSourceEnfrentamientoEquipo.data);
 
+    }
+  }
+
+  ParticipanteDescansa(jornadaSeleccionada: TablaJornadas) {
+    this.participanteDescansa = null;
+    console.log('Enfrentamientos de la jornada seleccionada:');
+    console.log(this.EnfrentamientosJornadaSeleccionada);
+    if (this.juegoSeleccionado.Modo === 'Individual' && this.listaAlumnosClasificacion.length % 2 !== 0) {
+      // Comparar lista alumnos del juego con los alumnos de los enfrentamientos, si alguno de los alumnos
+      // no está en ningún enfrentamiento es por que este descansa
+      // --> Mostrar mensaje: X descansa en esta jornada debajo de la tabla de enfrentamientos
+      console.log('Individual');
+      this.ComprobarQuienDescansa(this.listaAlumnosClasificacion, this.EnfrentamientosJornadaSeleccionada);
+      return true;
+    } else if (this.juegoSeleccionado.Modo === 'Equipos' && this.listaEquiposClasificacion.length % 2 !== 0) {
+      console.log('Equipo');
+      this.ComprobarQuienDescansa(this.listaEquiposClasificacion, this.EnfrentamientosJornadaSeleccionada);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  ComprobarQuienDescansa(participantes: any[], enfrentamientosJornadaSeleccionada: EnfrentamientoLiga[]) {
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < participantes.length; i++) {
+      let encontrado = false;
+      // tslint:disable-next-line:prefer-for-of
+      for (let k = 0; k < enfrentamientosJornadaSeleccionada.length; k++) {
+        if (enfrentamientosJornadaSeleccionada[k].JugadorUno === participantes[i].id ||
+            enfrentamientosJornadaSeleccionada[k].JugadorDos === participantes[i].id) {
+              encontrado = true;
+        }
+      }
+      if (encontrado === false) {
+        console.log('El participante que descansa es: ' + participantes[i].nombre);
+        if (this.juegoSeleccionado.Modo === 'Individual') {
+          this.participanteDescansa = ' descansa ' + participantes[i].nombre + ' ' + participantes[i].primerApellido
+                                      + ' ' + participantes[i].segundoApellido;
+        } else {
+          this.participanteDescansa = ' descansan ' + participantes[i].nombre;
+        }
+      }
     }
   }
 

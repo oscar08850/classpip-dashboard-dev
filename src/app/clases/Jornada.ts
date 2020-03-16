@@ -1,7 +1,7 @@
 export class Jornada {
   Fecha: Date;
   CriterioGanador: string;
-  JuegoDeCompeticionId: number;
+  JuegoDeCompeticionLigaId: number;
   GanadoresFormulaUno: number[];
   id: number;
 
@@ -9,7 +9,7 @@ export class Jornada {
 
     this.Fecha = Fecha;
     this.CriterioGanador = CriterioGanador;
-    this.JuegoDeCompeticionId = JuegoDeCompeticionId;
+    this.JuegoDeCompeticionLigaId = JuegoDeCompeticionId;
     this.GanadoresFormulaUno = GanadoresFormulaUno;
   }
 }
