@@ -41,7 +41,7 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
   constructor(
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService
-  ){}
+  ) {}
 
   ngOnInit() {
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga,
-         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion} from '../clases';
+         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 @Injectable({
@@ -45,6 +45,8 @@ export class SesionService {
   JornadasCompeticion: any;
   TablaAlumnoJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion[];
   TablaEquipoJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion[];
+  TablaeditarPuntos: TablaPuntosFormulaUno[];
+  JuegosDePuntosActivos: Juego[];
   // listaEquiposGrupo: any;
 
   constructor() { }
@@ -370,5 +372,19 @@ public DameTablaEquipoJuegoDeCompeticion(): TablaEquipoJuegoDeCompeticion[] {
   return Tabla;
 }
 
+public TomaJuegosDePuntos(juegosActivos: Juego[]) {
+  this.JuegosDePuntosActivos = juegosActivos;
+}
+public DameJuegosDePuntosActivos(): Juego[] {
+  const juegosActivosPuntos = this.JuegosDePuntosActivos ;
+  return juegosActivosPuntos;
+}
+public TomaTablaeditarPuntos( TablaeditarPuntos: TablaPuntosFormulaUno[]) {
+  this.TablaeditarPuntos = TablaeditarPuntos;
+}
+public DameTablaeditarPuntos(): TablaPuntosFormulaUno[] {
+  const TablaeditarPuntos = this.TablaeditarPuntos ;
+  return TablaeditarPuntos;
+}
 
 }

@@ -13,8 +13,8 @@
               <mat-expansion-panel *ngFor="let jornada of JornadasCompeticion" (click) = "ObtenerEnfrentamientosDeCadaJornada(jornada)">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                  Jornada {{jornada.NumeroDeJornada}}:    {{jornada.Fecha}}
-                </mat-panel-title>
+                    Jornada {{jornada.NumeroDeJornada}}:    {{jornada.Fecha | date: 'shortDate'}}
+                  </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="enFila">
                   <!-- <div style="margin-right: 15%; border: 15px; width: 60%;"> -->
@@ -57,6 +57,9 @@
                           <tr mat-header-row *matHeaderRowDef="displayedColumnsEnfrentamientos; sticky: true"></tr>
                           <tr mat-row *matRowDef="let row; columns: displayedColumnsEnfrentamientos;"></tr>
                         </table>
+                        <br>
+                        <div  *ngIf="ParticipanteDescansa(jornada) !== true && participanteDescansa === null; else Aviso_participante_descansa"></div>
+                        <ng-template #Aviso_participante_descansa>En este enfrentamiento {{participanteDescansa}}</ng-template>
                       </form>
 
                       <!-- ///////////////////////////////////// TABLA ENFRENTAMIENTOS INDIVIDUAL ////////////////////////////////////// -->
@@ -86,6 +89,9 @@
                           <tr mat-header-row *matHeaderRowDef="displayedColumnsEnfrentamientos; sticky: true"></tr>
                           <tr mat-row *matRowDef="let row; columns: displayedColumnsEnfrentamientos;"></tr>
                         </table>
+                        <br>
+                        <div  *ngIf="ParticipanteDescansa(jornada) !== true && participanteDescansa === null; else Aviso_participante_descansa"></div>
+                        <ng-template #Aviso_participante_descansa>En este enfrentamiento {{participanteDescansa}}</ng-template>
                       </form>
 
                   </div>

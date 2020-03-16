@@ -118,6 +118,17 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
     console.log('Nueva fecha seleccionada :' + e.target.value);
 
     this.NuevaFecha = e.target.value;
+
+    let NuevoCriterio: string;
+    NuevoCriterio = this.myForm.value.CriterioGanador;
+    console.log(this.selection.selected.length);
+    console.log(this.NuevaFecha);
+    console.log(NuevoCriterio);
+    if ((this.selection.selected.length === 0) || ( this.NuevaFecha === undefined) || ( NuevoCriterio === undefined)) {
+      this.botonTablaDesactivado = true;
+    } else {
+      this.botonTablaDesactivado = false;
+    }
   }
 
   EditarJornada() {

@@ -209,19 +209,17 @@ export class JuegoDeCompeticionSeleccionadoInactivoComponent implements OnInit {
   TablaClasificacionTotal() {
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
-      this.rankingAlumnoJuegoDeCompeticion = this.calculos.PrepararTablaRankingIndividualCompeticion (
-                                                                                                this.listaAlumnosOrdenadaPorPuntos,
-                                                                                                this.alumnosDelJuego, this.jornadas,
-                                                                                                this.enfrentamientosDelJuego);
+      this.rankingAlumnoJuegoDeCompeticion = this.calculos.PrepararTablaRankingIndividualLiga (this.listaAlumnosOrdenadaPorPuntos,
+                                                                                               this.alumnosDelJuego, this.jornadas,
+                                                                                               this.enfrentamientosDelJuego);
       console.log ('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
       console.log (this.rankingAlumnoJuegoDeCompeticion);
       this.datasourceAlumno = new MatTableDataSource(this.rankingAlumnoJuegoDeCompeticion);
 
     } else {
-      this.rankingEquiposJuegoDeCompeticion = this.calculos.PrepararTablaRankingEquipoCompeticion (
-                                                                                              this.listaEquiposOrdenadaPorPuntos,
-                                                                                              this.equiposDelJuego, this.jornadas,
-                                                                                              this.enfrentamientosDelJuego);
+      this.rankingEquiposJuegoDeCompeticion = this.calculos.PrepararTablaRankingEquipoLiga (this.listaEquiposOrdenadaPorPuntos,
+                                                                                            this.equiposDelJuego, this.jornadas,
+                                                                                            this.enfrentamientosDelJuego);
       this.datasourceEquipo = new MatTableDataSource(this.rankingEquiposJuegoDeCompeticion);
       console.log('Estoy en TablaClasificacionTotal(), la tabla que recibo desde calculos es:');
       console.log (this.rankingEquiposJuegoDeCompeticion);
@@ -242,7 +240,7 @@ export class JuegoDeCompeticionSeleccionadoInactivoComponent implements OnInit {
     console.log ('Voy a por la información del juego seleccionado');
     this.sesion.TomaJuego (this.juegoSeleccionado);
     console.log('Tomo las jornadas' + this.jornadas);
-    this.JornadasCompeticion = this.calculos.DameTablaJornadasLiga( this.juegoSeleccionado, this.jornadas);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion( this.juegoSeleccionado, this.jornadas, undefined, undefined);
     console.log ('Voy a por la información de las jornadas del juego');
     this.sesion.TomaDatosJornadas(this.jornadas,
                                       this.JornadasCompeticion);
@@ -253,7 +251,9 @@ export class JuegoDeCompeticionSeleccionadoInactivoComponent implements OnInit {
   ReactivarJuego() {
     console.log(this.juegoSeleccionado);
     this.peticionesAPI.CambiaEstadoJuegoDeCompeticionLiga(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
-      undefined, true), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
+      undefined, true, this.juegoSeleccionado.NumeroTotalJornadas, this.juegoSeleccionado.TipoJuegoCompeticion,
+      this.juegoSeleccionado.NumeroParticipantesPuntuan, this.juegoSeleccionado.Puntos, this.juegoSeleccionado.NombreJuego),
+      this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
         if (res !== undefined) {
           console.log(res);
           console.log('juego reactivado');

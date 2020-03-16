@@ -106,7 +106,9 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
 
   AsignarColeccionJuego() {
     // Añadimos la colección elegida al juego de colección (que ya se había creado)
-    this.peticionesAPI.CompletaJuegoDeColeccion(new Juego (this.juego.Tipo, this.juego.Modo, this.coleccionSeleccionada.id),
+    this.peticionesAPI.CompletaJuegoDeColeccion(new Juego (this.juego.Tipo, this.juego.Modo, this.coleccionSeleccionada.id,
+      this.juego.JuegoActivo, this.juego.NumeroTotalJornadas, this.juego.TipoJuegoCompeticion,
+      this.juego.NumeroParticipantesPuntuan, this.juego.Puntos, this.juego.NombreJuego),
      this.grupoId, this.juego.id).subscribe(res => {
       this.InscribirParticipantesJuego();
       console.log(res);

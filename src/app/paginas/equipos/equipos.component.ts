@@ -129,7 +129,7 @@ export class EquiposComponent implements OnInit {
     if (equipo.FotoEquipo !== undefined) {
       console.log ('vamos a por logo');
       // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-     //Esto no consigo convertirlo en una funcion para los servicios
+     // Esto no consigo convertirlo en una funcion para los servicios
       // this.peticionesAPI.DameLogoEquipo (equipo.FotoEquipo)
       this.peticionesAPI.DameLogoEquipo (equipo.FotoEquipo)
 
@@ -280,7 +280,7 @@ export class EquiposComponent implements OnInit {
           // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarLogo
           const formData: FormData = new FormData();
           formData.append(this.nombreLogo, this.file);
-          this.peticionesAPI.PonLogoEquipo(formData).subscribe (); //ATENCION: Si no se hace el subscribe no se hace la operacion
+          this.peticionesAPI.PonLogoEquipo(formData).subscribe (); // ATENCION: Si no se hace el subscribe no se hace la operacion
         }
 
       } else {
