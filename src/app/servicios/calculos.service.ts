@@ -2053,27 +2053,26 @@ export class CalculosService {
         let EnfrentamientoLigaa: EnfrentamientoLiga;
         if (rondas[i][j].JugadorUno === participantes.length) {
           EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorDos].id,
-            participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id, participantes[rondas[i][j].JugadorDos].Nombre,
-            participantes[rondas[i][j].JugadorDos].Nombre);
+            participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id);
 
         } else if (rondas[i][j].JugadorDos === participantes.length) {
           EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorUno].id,
-            participantes[rondas[i][j].JugadorUno].id, undefined, jornadas[i].id, participantes[rondas[i][j].JugadorUno].Nombre,
-            participantes[rondas[i][j].JugadorUno].Nombre);
+            participantes[rondas[i][j].JugadorUno].id, undefined, jornadas[i].id);
 
         } else {
           EnfrentamientoLigaa = new EnfrentamientoLiga(participantes[rondas[i][j].JugadorUno].id,
-            participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id, participantes[rondas[i][j].JugadorUno].Nombre,
-            participantes[rondas[i][j].JugadorDos].Nombre);
+            participantes[rondas[i][j].JugadorDos].id, undefined, jornadas[i].id);
         }
         console.log('mostramos enrentamiento');
         // console.log(EnfrentamientoLigaa);
-        this.peticionesAPI.CrearEnrentamientoLiga(EnfrentamientoLigaa, jornadas[i].id)
-        .subscribe(enfrentamientocreado => {
-        console.log('enfrentamiento creado');
-        // console.log(enfrentamientocreado);
-      });
-    }
+        if (EnfrentamientoLigaa.JugadorUno !== EnfrentamientoLigaa.JugadorDos) {
+          this.peticionesAPI.CrearEnrentamientoLiga(EnfrentamientoLigaa, jornadas[i].id)
+          .subscribe(enfrentamientocreado => {
+          console.log('enfrentamiento creado');
+          console.log(enfrentamientocreado);
+          });
+        }
+      }
 
     }
   }
