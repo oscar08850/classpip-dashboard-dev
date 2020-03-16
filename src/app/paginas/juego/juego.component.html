@@ -24,8 +24,8 @@
                   <mat-list-item *ngFor="let juego of juegosActivos" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionadoActivo">
 
                     <mat-icon mat-list-icon><i class="material-icons green">check_circle_outline</i></mat-icon>
-                    <h4 mat-line>{{juego.Tipo}}: {{juego.NombreJuego}}</h4>
-                    <p mat-line> {{juego.Modo}} </p>
+                    <h4 mat-line>{{juego.NombreJuego}}</h4>
+                    <p mat-line> {{juego.Tipo}}: {{juego.Modo}} </p>
                   </mat-list-item>
                 </form>
                 <ng-template #Aviso_no_juegos_activos>
@@ -43,8 +43,8 @@
               <form *ngIf="juegosInactivos;else Aviso_no_juegos_inactivos">
                   <mat-list-item *ngFor="let juego of juegosInactivos" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionadoInactivo">
                     <mat-icon mat-list-icon><i class="material-icons red">history</i></mat-icon>
-                    <h4 class= "ItemsInactivos" mat-line>{{juego.Tipo}}: {{juego.NombreJuego}}</h4>
-                    <p class= "ItemsInactivos" mat-line> {{juego.Modo}} </p>
+                    <h4 class= "ItemsInactivos" mat-line>{{juego.NombreJuego}}</h4>
+                    <p class= "ItemsInactivos" mat-line> {{juego.Tipo}}: {{juego.Modo}} </p>
                   </mat-list-item>
 
 
