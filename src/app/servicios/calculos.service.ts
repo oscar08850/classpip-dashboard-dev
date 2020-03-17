@@ -2087,4 +2087,15 @@ export class CalculosService {
     return this.TablaeditarPuntos;
   }
 
+  public JornadaFinalizada(jornadaSeleccionada: TablaJornadas) {
+    let jornadaFinalizada = false;
+    if (jornadaSeleccionada.GanadoresFormulaUno.id === undefined &&
+        jornadaSeleccionada.GanadoresFormulaUno.nombre === undefined) {
+          jornadaFinalizada = false;
+    } else {
+      jornadaFinalizada = true;
+    }
+    return jornadaFinalizada;
+  }
+
 }

@@ -38,6 +38,7 @@ export class InformacionJuegoDeCompeticionFormulaUnoComponent implements OnInit 
   displayedColumns: string[] = ['posicion', 'participante', 'puntos'];
 
   dataSourceClasificacionJornada;
+  botonResultadosDesactivado: boolean;
 
 
   constructor(public sesion: SesionService,
@@ -89,6 +90,16 @@ export class InformacionJuegoDeCompeticionFormulaUnoComponent implements OnInit 
     this.TablaClasificacionJornadaSeleccionada = this.calculos.PrepararTablaRankingJornadaFormulaUno(this.datosClasificacionJornada);
     this.dataSourceClasificacionJornada = new MatTableDataSource(this.TablaClasificacionJornadaSeleccionada);
     console.log(this.dataSourceClasificacionJornada.data);
+  }
+
+  JornadaFinalizada(jornadaSeleccionada: TablaJornadas) {
+    const jornadaFinalizada = this.calculos.JornadaFinalizada(jornadaSeleccionada);
+    if (jornadaFinalizada === true) {
+      this.botonResultadosDesactivado = true;
+    } else {
+      this.botonResultadosDesactivado = false;
+    }
+    return jornadaFinalizada;
   }
 
   goBack() {
