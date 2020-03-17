@@ -11,6 +11,9 @@ import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { calcPossibleSecurityContexts } from '@angular/compiler/src/template_parser/binding_parser';
 
+import Swal from 'sweetalert2';
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -622,7 +625,7 @@ export class CalculosService {
                                listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[],
                                equiposJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga[],
                                juegoSeleccionado: Juego, ganador: number) {
-    console.log('Estoy en AsignarGanadorEquipos2()');
+    console.log('Estoy en AsignarGanadorEquipos()');
     console.log(enfrentamientosSeleccionadosColumna);
     console.log(enfrentamientosJornadaSeleccionada);
     console.log(listaEquiposClasificacion);
@@ -2127,7 +2130,6 @@ export class CalculosService {
   public JornadaFinalizada(juegoSeleccionado: Juego, jornadaSeleccionada: TablaJornadas) {
     let jornadaFinalizada = false;
     if (juegoSeleccionado.Tipo === 'Juego De Competición Liga') {
-      console.log('jornadaSeleccionada.Disputada === ' + jornadaSeleccionada.Disputada);
       if (jornadaSeleccionada.Disputada === true) {
         jornadaFinalizada = true;
       } else {

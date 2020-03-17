@@ -12,7 +12,7 @@ import { SesionService, CalculosService, PeticionesAPIService } from '../../../.
 import {MatTableDataSource} from '@angular/material/table';
 
 import { Location } from '@angular/common';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -235,36 +235,58 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     console.log('Estoy en AsignarGanadorAleatoriamente()');
     console.log('La lista de enfrentamientos de esta Jornada es: ');
     console.log(this.EnfrentamientosJornadaSeleccionada);
+    let Resultados = '';
+    let Asignados = 'os enfrentamientos: ';
     const listaEnfrentamientosActualizados: EnfrentamientoLiga[] = [];
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
-      const Random = Math.random();
-      console.log('Random ' + i + ' = ' + Random);
-      if (Random < 0.33) {
-        this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorUno;
-        this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno;
-        console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
-                    + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno);
-        console.log(this.EnfrentamientosJornadaSeleccionada[i]);
-        listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
-      } else if (Random > 0.33 && Random < 0.66) {
-        this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorDos;
-        this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos;
-        console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
-                    + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos);
-        console.log(this.EnfrentamientosJornadaSeleccionada[i]);
-        listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
-      } else if (Random > 0.66) {
-        this.EnfrentamientosJornadaSeleccionada[i].Ganador = 0;
-        this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-        console.log('El enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' ha quedado en empate: ');
-        console.log(this.EnfrentamientosJornadaSeleccionada[i]);
-        listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+      if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+        const Random = Math.random();
+        console.log('Random ' + i + ' = ' + Random);
+        if (Random < 0.33) {
+          this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorUno;
+          this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno;
+          console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
+                      + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno);
+          console.log(this.EnfrentamientosJornadaSeleccionada[i]);
+          Resultados = Resultados + '\n' + 'Ganador: ' + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno;
+          listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+        } else if (Random > 0.33 && Random < 0.66) {
+          this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorDos;
+          this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos;
+          console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
+                      + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos);
+          console.log(this.EnfrentamientosJornadaSeleccionada[i]);
+          Resultados = Resultados + '\n' + 'Ganador: ' + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos;
+          listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+        } else if (Random > 0.66) {
+          this.EnfrentamientosJornadaSeleccionada[i].Ganador = 0;
+          this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+          console.log('El enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' ha quedado en empate: ');
+          console.log(this.EnfrentamientosJornadaSeleccionada[i]);
+          Resultados = Resultados + '\n' + 'Empate';
+          listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+        }
+        this.peticionesAPI.PonGanadorDelEnfrentamiento(this.EnfrentamientosJornadaSeleccionada[i]).subscribe();
+      } else {
+        console.log('Este enfrentamiento ya tiene asignado un ganador: ');
+        console.log(this.EnfrentamientosJornadaSeleccionada[i].nombreGanador);
+        Asignados = Asignados + (i + 1) + 'º ' ;
       }
-      this.peticionesAPI.PonGanadorDelEnfrentamiento(this.EnfrentamientosJornadaSeleccionada[i]).subscribe();
+
     }
-    console.log('La lista de enfrentamientos actualizados queda: ');
-    console.log(listaEnfrentamientosActualizados);
+    if (Resultados !== '' && Asignados === 'os enfrentamientos: ') {
+      console.log('La lista de enfrentamientos actualizados queda: ');
+      console.log(listaEnfrentamientosActualizados);
+      console.log('Los Resultados son: ' + Resultados);
+      Swal.fire(Resultados, 'Estos son los resultados', 'success');
+    } else if (Resultados === '' && Asignados !== '') {
+      Swal.fire('L' + Asignados + ' ya tienen asignado un gandaor',
+      'No se ha podido asignar ganador a estos enfrentamientos', 'error');
+    } else if (Resultados !== '' && Asignados !== '') {
+      Swal.fire(Resultados, 'No se ha podido asignar ganador a l' + Asignados + 'porque ya tienen asignado un gandaor. ',
+                'success');
+    }
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
       console.log('Este Juego es Individual');
@@ -425,6 +447,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
                                                     this.juegoSeleccionado, 0);
             }
       } else {
+          Swal.fire('Hay más de una selección en alguno de los enfrentamientos', ' No se ha podido realizar esta acción', 'error');
           console.log('Hay más de una selección en alguno de los enfrentamientos');
       }///////////////////////////////////////////////////////   EQUIPOS   ////////////////////////////////////////////////////
     } else {
@@ -459,6 +482,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
                                              this.juegoSeleccionado, 0) ;
         }
       } else {
+        Swal.fire('Hay más de una selección en alguno de los enfrentamientos', ' No se ha podido realizar esta acción', 'error');
         console.log('Hay más de una selección en alguno de los enfrentamientos');
       }
     }

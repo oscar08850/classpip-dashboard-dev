@@ -102,12 +102,9 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
     if (this.juegoSeleccionado.Modo === 'Individual' && this.listaAlumnosClasificacion.length % 2 !== 0) {
       // Comparar lista alumnos del juego con los alumnos de los enfrentamientos, si alguno de los alumnos
       // no está en ningún enfrentamiento es por que este descansa
-      // --> Mostrar mensaje: X descansa en esta jornada debajo de la tabla de enfrentamientos
-      console.log('Individual');
       this.ComprobarQuienDescansa(this.listaAlumnosClasificacion, this.EnfrentamientosJornadaSeleccionada);
       return true;
     } else if (this.juegoSeleccionado.Modo === 'Equipos' && this.listaEquiposClasificacion.length % 2 !== 0) {
-      console.log('Equipo');
       this.ComprobarQuienDescansa(this.listaEquiposClasificacion, this.EnfrentamientosJornadaSeleccionada);
       return true;
     } else {
