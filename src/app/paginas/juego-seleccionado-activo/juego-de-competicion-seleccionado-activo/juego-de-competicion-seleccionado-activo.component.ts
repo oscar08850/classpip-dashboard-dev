@@ -205,6 +205,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   // En función del modo (Individual/Equipos), recorremos la lisa de Alumnos o de Equipos y vamos rellenando el rankingJuegoDePuntos
   // ESTO DEBERIA IR AL SERVICIO DE CALCULO, PERO DE MOMENTO NO LO HAGO PORQUE SE GENERAN DOS TABLAS
   // Y NO COMPRENDO BIEN LA NECESIDAD DE LAS DOS
+
   TablaClasificacionTotal() {
 
     if (this.juegoSeleccionado.Modo === 'Individual') {

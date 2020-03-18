@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 
 // Clases
 import { Juego, Jornada, TablaJornadas, EnfrentamientoLiga, TablaAlumnoJuegoDeCompeticion,
-         TablaEquipoJuegoDeCompeticion} from '../../../../clases/index';
+         TablaEquipoJuegoDeCompeticion, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga} from '../../../../clases/index';
 
 // Servicio
 import { SesionService , CalculosService, PeticionesAPIService } from '../../../../servicios/index';
@@ -23,12 +23,18 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
   numeroTotalJornadas: number;
   jornadasDelJuego: Jornada[];
   JornadasCompeticion: TablaJornadas[] = [];
-
+  jornadas: Jornada[];
   // Información de la tabla: Muestra el JugadorUno, JugadorDos, Ganador, JornadaDeCompeticionLigaId y id
   EnfrentamientosJornadaSeleccionada: EnfrentamientoLiga[] = [];
 
+  // Recoge la inscripción de un alumno en el juego ordenada por puntos
+  listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionLiga[];
+  listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCompeticionLiga[];
+
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
   listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
+
+  juegosActivosPuntos: Juego[] = [];
 
   // Columnas Tabla
   displayedColumnsEnfrentamientos: string[] = ['nombreJugadorUno', 'nombreJugadorDos', 'nombreGanador'];
@@ -52,11 +58,15 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
     console.log(this.numeroTotalJornadas);
     const datos = this.sesion.DameDatosJornadas();
     this.JornadasCompeticion = datos.JornadasCompeticion;
+    this.jornadas = datos.Jornadas;
     console.log('Jornadas Competicion: ');
     // Teniendo la tabla de Jornadas puedo sacar los enfrentamientos de cada jornada accediendo a la api
     console.log(this.JornadasCompeticion);
     this.listaAlumnosClasificacion = this.sesion.DameTablaAlumnoJuegoDeCompeticion();
     this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
+    this.listaAlumnosOrdenadaPorPuntos = this.sesion.DameInscripcionAlumno();
+    this.listaEquiposOrdenadaPorPuntos = this.sesion.DameInscripcionEquipo();
+    this.juegosActivosPuntos = this.sesion.DameJuegosDePuntosActivos();
   }
 
   ObtenerEnfrentamientosDeCadaJornada(jornadaSeleccionada: TablaJornadas) {
@@ -137,6 +147,22 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
         }
       }
     }
+  }
+
+  seleccionarGanadorLiga(): void {
+    console.log('Aquí estará el proceso para elegir el ganador');
+    console.log ('Voy a por la información del juego seleccionado');
+    this.sesion.TomaJuego (this.juegoSeleccionado);
+    console.log('Tomo las jornadas' + this.jornadas);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion( this.juegoSeleccionado, this.jornadas, undefined, undefined);
+    console.log ('Voy a por la información de las jornadas del juego');
+    this.sesion.TomaDatosJornadas(this.jornadas,
+                                  this.JornadasCompeticion);
+    this.sesion.TomaTablaAlumnoJuegoDeCompeticion(this.listaAlumnosClasificacion);
+    this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.listaEquiposClasificacion);
+    this.sesion.TomaInscripcionAlumno(this.listaAlumnosOrdenadaPorPuntos);
+    this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
+    this.sesion.TomaJuegosDePuntos(this.juegosActivosPuntos);
   }
 
   goBack() {
