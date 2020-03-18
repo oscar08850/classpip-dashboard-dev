@@ -1033,7 +1033,6 @@ export class CalculosService {
                   enfrentamientoEmpateRegistrado = true;
                   enfrentamientosJornadaSeleccionada[k].Ganador = 0;
                   console.log(enfrentamientosJornadaSeleccionada[k]);
-                  enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
                   const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
                                                                 enfrentamientosJornadaSeleccionada[k].JugadorDos,
                                                                 enfrentamientosJornadaSeleccionada[k].Ganador,
