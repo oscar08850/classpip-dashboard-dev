@@ -712,7 +712,6 @@ export class CalculosService {
                   console.log(enfrentamientosJornadaSeleccionada[k]);
                   // Tengo que actualizar el ganador en EnfrentamientoLiga
                   enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorUno;
-                  enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
                   const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
                                                                 enfrentamientosJornadaSeleccionada[k].JugadorDos,
                                                                 enfrentamientosJornadaSeleccionada[k].Ganador,
@@ -789,7 +788,6 @@ export class CalculosService {
                 console.log(enfrentamientosJornadaSeleccionada[k]);
                 // Tengo que actualizar el ganador en EnfrentamientoLiga
                 enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
-                enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
                 const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
                                                               enfrentamientosJornadaSeleccionada[k].JugadorDos,
                                                               enfrentamientosJornadaSeleccionada[k].Ganador,
@@ -850,7 +848,6 @@ export class CalculosService {
                 console.log(enfrentamientosJornadaSeleccionada[k]);
                 // Tengo que actualizar el ganador en EnfrentamientoLiga
                 enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorUno;
-                enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
                 const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
                                                               enfrentamientosJornadaSeleccionada[k].JugadorDos,
                                                               enfrentamientosJornadaSeleccionada[k].Ganador,
@@ -913,7 +910,7 @@ export class CalculosService {
                              + ' ' + listaAlumnosClasificacion[j].segundoApellido;
         if (nombreCompleto === enfrentamientosSeleccionadosColumna[i].nombreJugadorDos ||
             nombreCompleto === enfrentamientosSeleccionadosColumna[i].nombreJugadorUno) {
-          console.log('He encontrado el alumno: ' + enfrentamientosSeleccionadosColumna[i].nombreJugadorDos);
+          console.log('He encontrado el alumno: ' + nombreCompleto);
           console.log('Los puntos antes de registrar el partido ganado: ' + listaAlumnosClasificacion[j].puntos);
 
           // Miramos en la base de datos si para este enfrentamiento ya se había seleccionado un ganador.
@@ -927,6 +924,7 @@ export class CalculosService {
                 enfrentamientosJornadaSeleccionada[k].nombreJugadorDos === enfrentamientosSeleccionadosColumna[i].nombreJugadorDos) {
               console.log('Ya estoy en el el enfrentamiento que quiero');
               if (enfrentamientosJornadaSeleccionada[k].Ganador === undefined) {
+                console.log('Este enfrentamiento no tiene ganador asignado:');
                 // Ahora tengo que actualizar los dos AlumnoJuegoDeCompeticionLiga del enfrentamiento con los nuevos puntos
                 listaAlumnosClasificacion[j].puntos = listaAlumnosClasificacion[j].puntos + 1;
                 console.log('Los puntos actualizados después de registrar el partido ganado: '
@@ -952,10 +950,10 @@ export class CalculosService {
                 subscribe(res => console.log(res));
 
                 if (alumnosConPuntosSumados === 2 && enfrentamientoEmpateRegistrado === false) {
+                  alumnosConPuntosSumados = 0;
                   enfrentamientoEmpateRegistrado = true;
                   enfrentamientosJornadaSeleccionada[k].Ganador = 0;
                   console.log(enfrentamientosJornadaSeleccionada[k]);
-                  enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
                   const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
                                                                 enfrentamientosJornadaSeleccionada[k].JugadorDos,
                                                                 enfrentamientosJornadaSeleccionada[k].Ganador,
@@ -1005,6 +1003,7 @@ export class CalculosService {
                 enfrentamientosJornadaSeleccionada[k].nombreJugadorDos === enfrentamientosSeleccionadosColumna[i].nombreJugadorDos) {
               console.log('Ya estoy en el el enfrentamiento que quiero');
               if (enfrentamientosJornadaSeleccionada[k].Ganador === undefined) {
+                console.log('Este enfrentamiento no tiene ganador asignado:');
                 // Ahora tengo que actualizar los dos AlumnoJuegoDeCompeticionLiga del enfrentamiento con los nuevos puntos
                 listaEquiposClasificacion[j].puntos = listaEquiposClasificacion[j].puntos + 1;
                 console.log('Los puntos actualizados después de registrar el partido ganado: '
