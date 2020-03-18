@@ -267,7 +267,13 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
           Resultados = Resultados + '\n' + 'Empate';
           listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
         }
-        this.peticionesAPI.PonGanadorDelEnfrentamiento(this.EnfrentamientosJornadaSeleccionada[i]).subscribe();
+        const enfrentamiento = new EnfrentamientoLiga(this.EnfrentamientosJornadaSeleccionada[i].JugadorUno,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].JugadorDos,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].Ganador,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].JornadaDeCompeticionLigaId,
+                                                      undefined, undefined,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].id);
+        this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).subscribe();
       } else {
         console.log('Este enfrentamiento ya tiene asignado un ganador: ');
         console.log(this.EnfrentamientosJornadaSeleccionada[i].nombreGanador);
@@ -643,7 +649,13 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
             console.log(this.EnfrentamientosJornadaSeleccionada[i]);
             listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
         }
-        this.peticionesAPI.PonGanadorDelEnfrentamiento(this.EnfrentamientosJornadaSeleccionada[i]).subscribe();
+        const enfrentamiento = new EnfrentamientoLiga(this.EnfrentamientosJornadaSeleccionada[i].JugadorUno,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].JugadorDos,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].Ganador,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].JornadaDeCompeticionLigaId,
+                                                      undefined, undefined,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].id);
+        this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).subscribe();
       }
       console.log('La lista de enfrentamientos actualizados queda: ');
       console.log(listaEnfrentamientosActualizados);
@@ -700,7 +712,13 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
             console.log(this.EnfrentamientosJornadaSeleccionada[i]);
             listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
         }
-        this.peticionesAPI.PonGanadorDelEnfrentamiento(this.EnfrentamientosJornadaSeleccionada[i]).subscribe();
+        const enfrentamiento = new EnfrentamientoLiga(this.EnfrentamientosJornadaSeleccionada[i].JugadorUno,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].JugadorDos,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].Ganador,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].JornadaDeCompeticionLigaId,
+                                                      undefined, undefined,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].id);
+        this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).subscribe();
 
       }
       console.log('La lista de enfrentamientos actualizados queda: ');

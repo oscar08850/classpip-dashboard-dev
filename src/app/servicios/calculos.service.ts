@@ -653,7 +653,13 @@ export class CalculosService {
                   console.log(enfrentamientosJornadaSeleccionada[k]);
                   // Tengo que actualizar el ganador en EnfrentamientoLiga
                   enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
-                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
+                  const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                                enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                                enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                                enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                                undefined, undefined,
+                                                                enfrentamientosJornadaSeleccionada[k].id);
+                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                   subscribe(res => console.log(res));
                   console.log('El enfrentamiento con el ganador actualizado queda: ');
                   console.log(enfrentamientosJornadaSeleccionada[k]);
@@ -706,7 +712,14 @@ export class CalculosService {
                   console.log(enfrentamientosJornadaSeleccionada[k]);
                   // Tengo que actualizar el ganador en EnfrentamientoLiga
                   enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorUno;
-                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
+                  enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
+                  const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                                enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                                enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                                enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                                undefined, undefined,
+                                                                enfrentamientosJornadaSeleccionada[k].id);
+                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                   subscribe(res => console.log(res));
                   console.log('El enfrentamiento con el ganador actualizado queda: ');
                   console.log(enfrentamientosJornadaSeleccionada[k]);
@@ -776,7 +789,14 @@ export class CalculosService {
                 console.log(enfrentamientosJornadaSeleccionada[k]);
                 // Tengo que actualizar el ganador en EnfrentamientoLiga
                 enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
-                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
+                enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
+                const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                              enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                              enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                              enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                              undefined, undefined,
+                                                              enfrentamientosJornadaSeleccionada[k].id);
+                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                 subscribe(res => console.log(res));
                 console.log('El enfrentamiento con el ganador actualizado queda: ');
                 console.log(enfrentamientosJornadaSeleccionada[k]);
@@ -830,7 +850,14 @@ export class CalculosService {
                 console.log(enfrentamientosJornadaSeleccionada[k]);
                 // Tengo que actualizar el ganador en EnfrentamientoLiga
                 enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorUno;
-                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
+                enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
+                const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                              enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                              enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                              enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                              undefined, undefined,
+                                                              enfrentamientosJornadaSeleccionada[k].id);
+                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                 subscribe(res => console.log(res));
                 console.log('El enfrentamiento con el ganador actualizado queda: ');
                 console.log(enfrentamientosJornadaSeleccionada[k]);
@@ -928,7 +955,14 @@ export class CalculosService {
                   enfrentamientoEmpateRegistrado = true;
                   enfrentamientosJornadaSeleccionada[k].Ganador = 0;
                   console.log(enfrentamientosJornadaSeleccionada[k]);
-                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
+                  enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
+                  const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                                enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                                enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                                enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                                undefined, undefined,
+                                                                enfrentamientosJornadaSeleccionada[k].id);
+                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                   subscribe(res => console.log(res));
                 }
               } else {
@@ -999,7 +1033,14 @@ export class CalculosService {
                   enfrentamientoEmpateRegistrado = true;
                   enfrentamientosJornadaSeleccionada[k].Ganador = 0;
                   console.log(enfrentamientosJornadaSeleccionada[k]);
-                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
+                  enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
+                  const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                                enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                                enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                                enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                                undefined, undefined,
+                                                                enfrentamientosJornadaSeleccionada[k].id);
+                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                   subscribe(res => console.log(res));
                 }
               } else {
