@@ -93,7 +93,7 @@ export class InformacionJuegoDeCompeticionFormulaUnoComponent implements OnInit 
   }
 
   JornadaFinalizada(jornadaSeleccionada: TablaJornadas) {
-    const jornadaFinalizada = this.calculos.JornadaFinalizada(jornadaSeleccionada);
+    const jornadaFinalizada = this.calculos.JornadaFinalizada(this.juegoSeleccionado, jornadaSeleccionada);
     if (jornadaFinalizada === true) {
       this.botonResultadosDesactivado = true;
     } else {

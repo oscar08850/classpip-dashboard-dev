@@ -43,6 +43,7 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
   dataSourceEnfrentamientoEquipo;
 
   participanteDescansa;
+  botonResultadosDesactivado: boolean;
 
   constructor( public sesion: SesionService,
                public location: Location,
@@ -108,17 +109,12 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
 
   ParticipanteDescansa(jornadaSeleccionada: TablaJornadas) {
     this.participanteDescansa = null;
-    console.log('Enfrentamientos de la jornada seleccionada:');
-    console.log(this.EnfrentamientosJornadaSeleccionada);
     if (this.juegoSeleccionado.Modo === 'Individual' && this.listaAlumnosClasificacion.length % 2 !== 0) {
       // Comparar lista alumnos del juego con los alumnos de los enfrentamientos, si alguno de los alumnos
       // no está en ningún enfrentamiento es por que este descansa
-      // --> Mostrar mensaje: X descansa en esta jornada debajo de la tabla de enfrentamientos
-      console.log('Individual');
       this.ComprobarQuienDescansa(this.listaAlumnosClasificacion, this.EnfrentamientosJornadaSeleccionada);
       return true;
     } else if (this.juegoSeleccionado.Modo === 'Equipos' && this.listaEquiposClasificacion.length % 2 !== 0) {
-      console.log('Equipo');
       this.ComprobarQuienDescansa(this.listaEquiposClasificacion, this.EnfrentamientosJornadaSeleccionada);
       return true;
     } else {
@@ -138,7 +134,6 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
         }
       }
       if (encontrado === false) {
-        console.log('El participante que descansa es: ' + participantes[i].nombre);
         if (this.juegoSeleccionado.Modo === 'Individual') {
           this.participanteDescansa = ' descansa ' + participantes[i].nombre + ' ' + participantes[i].primerApellido
                                       + ' ' + participantes[i].segundoApellido;
@@ -163,6 +158,16 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
     this.sesion.TomaInscripcionAlumno(this.listaAlumnosOrdenadaPorPuntos);
     this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
     this.sesion.TomaJuegosDePuntos(this.juegosActivosPuntos);
+  }
+
+  JornadaFinalizada(jornadaSeleccionada: TablaJornadas) {
+    const jornadaFinalizada = this.calculos.JornadaFinalizada(this.juegoSeleccionado, jornadaSeleccionada);
+    if (jornadaFinalizada === true) {
+      this.botonResultadosDesactivado = true;
+    } else {
+      this.botonResultadosDesactivado = false;
+    }
+    return jornadaFinalizada;
   }
 
   goBack() {

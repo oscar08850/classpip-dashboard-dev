@@ -22,7 +22,7 @@
         <br>
         <mat-form-field >
           <mat-label>Juegos</mat-label>
-          <select matNativeControl [(ngModel)]="juegodePuntosSeleccionadoID" (change) = "ActualizarBoton()">
+          <select matNativeControl [(ngModel)]="juegodePuntosSeleccionadoID" (change) = "ActualizarBotonJuego()">
             <option *ngFor="let juego of juegosActivosPuntosModo" [value]="juego.id">
               {{juego.NombreJuego}}
             </option>
