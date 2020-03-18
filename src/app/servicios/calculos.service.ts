@@ -1029,6 +1029,7 @@ export class CalculosService {
                 subscribe(res => console.log(res));
 
                 if (equiposConPuntosSumados === 2 && enfrentamientoEmpateRegistrado === false) {
+                  equiposConPuntosSumados = 0;
                   enfrentamientoEmpateRegistrado = true;
                   enfrentamientosJornadaSeleccionada[k].Ganador = 0;
                   console.log(enfrentamientosJornadaSeleccionada[k]);
