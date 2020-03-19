@@ -446,26 +446,39 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
   // Funciones para AsignarManualmenteMasivo --> ResgistroMasivoClasificacion()
   GanadoresMasivamenteNombre(lineas: string[]) {
-    const nombresClasificacion: string[] = [];
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      console.log('GanadoresMasivamente() Individual');
-      console.log('TablaClasificacionJornadaSeleccionada: ');
-      console.log(this.listaAlumnosClasificacion);
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < lineas.length; i++) {
-          const linea: string = lineas[i];
-          const nombreClasificacion = linea;
-          nombresClasificacion.push(nombreClasificacion);
-      }
-    } else {
-      console.log('GanadoresMasivamente() Equipo');
-      console.log('TablaClasificacionJornadaSeleccionada: ');
-      console.log(this.listaEquiposClasificacion);
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < lineas.length; i++) {
-        console.log('Bien introducido');
-        const nombreClasificacion = lineas[i];
+    let nombresClasificacion: string[] = [];
+    let encontrado = false;
+    let nombreBlanco = false;
+    let i = 0;
+    while (i < lineas.length && encontrado === false) {
+      const nombreClasificacion = lineas[i];
+      const indexOfUnselected = nombresClasificacion.indexOf(nombreClasificacion);
+      if (indexOfUnselected === -1 && nombreClasificacion !== '') {
         nombresClasificacion.push(nombreClasificacion);
+      } else if (nombreClasificacion === '' && lineas.length === this.juegoSeleccionado.NumeroParticipantesPuntuan ||
+                 nombreClasificacion === '' && i < this.juegoSeleccionado.NumeroParticipantesPuntuan ) {
+        nombreBlanco = true;
+        nombresClasificacion = [];
+        Swal.fire('Alguna de las líneas introducidas está en blanco', ' No se ha podido realizar esta acción', 'error');
+      } else if (nombreClasificacion === '' && (i + 1) > this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+        console.log('linea: ' + (i + 1));
+        // Si el espacio en blanco no está en una posición que puntúa no me importa porque antes de salir de la función irá fuera
+        console.log('Este caso no me afecta');
+      } else {
+        console.log(i);
+        console.log('Alguno de los participantes introducidos está repetido');
+        nombresClasificacion = [];
+        encontrado = true;
+        Swal.fire('Alguno de los participantes introducidos está repetido', ' No se ha podido realizar esta acción', 'error');
+      }
+      i++;
+    }
+    const participantesPuntuan = this.juegoSeleccionado.NumeroParticipantesPuntuan;
+    if (nombresClasificacion.length > participantesPuntuan) {
+      let k = nombresClasificacion.length;
+      while (k > participantesPuntuan) {
+        nombresClasificacion.pop();
+        k = k - 1;
       }
     }
     console.log('nombresClasificacion:');
@@ -537,11 +550,6 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     }
     console.log(this.ganadoresFormulaUnoId);
     console.log(this.participantesEquipoPuntuan);
-    // Sweetalert con los ganadores
-    console.log('Voy a hacer el Sweetalert');
-    const ganadores = this.stringGanadoresManualmente(ganadoresNombre);
-    console.log('ganadores: ' + ganadores);
-    Swal.fire(ganadores, ' Enhorabuena', 'success');
     return this.ganadoresFormulaUnoId;
   }
 
@@ -611,11 +619,17 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
           lineas.length > this.juegoSeleccionado.NumeroParticipantesPuntuan) {
             // Crear una listas de strings que debe contener nombre apellido1 apellido2 (Individual) o nombre (Equipo)
             const ganadoresNombre: string[] = this.GanadoresMasivamenteNombre(lineas);
-            // Comparar los nombres con los nombres de la TablaClasificacion --> guardar los id en ganadoresFormulaUnoId
-            this.ganadoresFormulaUnoId = this.GanadoresMasivamenteId(ganadoresNombre);
-            if (this.ganadoresFormulaUnoId.length === this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+            console.log('ganadoresNombre.length = ' + ganadoresNombre.length);
+            if (ganadoresNombre.length === this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+              console.log('this.ganadoresNombre.length === this.juegoSeleccionado.NumeroParticipantesPuntuan');
+              // Comparar los nombres con los nombres de la TablaClasificacion --> guardar los id en ganadoresFormulaUnoId
+              this.ganadoresFormulaUnoId = this.GanadoresMasivamenteId(ganadoresNombre);
               // Rellenamos lista participantesIndividualPuntuan/participantesEquipoPuntuan con los Alumno/Equipo actualizados
               this.ListaParticipantesPuntuanActualizados();
+              // Sweetalert con los ganadores
+              console.log('Voy a hacer el Sweetalert');
+              const ganadores = this.stringGanadoresManualmente(ganadoresNombre);
+              Swal.fire(ganadores, ' Enhorabuena', 'success');
               // Actualizamos ganadores en la jornada
               this.ActualizarGanadoresJornada();
             }
