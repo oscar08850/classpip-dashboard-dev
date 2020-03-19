@@ -81,6 +81,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   dataSourceTablaGanadorIndividual;
   dataSourceTablaGanadorEquipo;
 
+
   // displayedColumnsAlumno: string[] = ['select1', 'nombreJugadorUno', 'select2', 'nombreJugadorDos', 'select3', 'Empate'];
   displayedColumnsAlumno: string[] = ['select1', 'nombreJugadorUno', 'select2', 'nombreJugadorDos', 'select3', 'Empate'];
 
@@ -116,40 +117,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
           z++;
         }
     }
-  }
-
-
-  /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
-     o si debe estar desactivado (si no se ha seleccionado la jornada) */
-  ActualizarBotonAleatorio() {
-    console.log('Estoy en actualizar botón');
-    // Lo primero borramos las listas de ganadores:
-    console.log('Voy a borrar las listas de ganadores');
-    this.enfrentamientosSeleccionadosColumnaUno = [];
-    this.enfrentamientosSeleccionadosColumnaDos = [];
-    this.enfrentamientosSeleccionadosColumnaTres = [];
-    console.log(this.jornadaId);
-    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
-    if (this.jornadaId === undefined) {
-      this.botonAsignarAleatorioDesactivado = true;
-    } else {
-      this.botonAsignarAleatorioDesactivado = false;
-      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-    }
-    console.log('botonAsignarAleatorioDesactivado = ' + this.botonAsignarAleatorioDesactivado);
-  }
-
-  ActualizarBotonManual() {
-    console.log('Estoy en actualizar botón');
-    console.log(this.jornadaId);
-    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
-    if (this.jornadaId === undefined) {
-      this.botonAsignarManualDesactivado = true;
-    } else {
-      this.botonAsignarManualDesactivado = false;
-      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-    }
-    console.log(this.botonAsignarAleatorioDesactivado);
   }
 
   ObtenerEnfrentamientosDeCadaJornada(jornadaId: number) {
@@ -240,6 +207,27 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       console.log('El dataSource es:');
       console.log(this.dataSourceTablaGanadorEquipo.data);
     }
+  }
+
+  ///////////////////////////////////////////////////  ALEATORIAMENTE  /////////////////////////////////////////////////////////
+  /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
+     o si debe estar desactivado (si no se ha seleccionado la jornada) */
+  ActualizarBotonAleatorio() {
+    console.log('Estoy en actualizar botón');
+    // Lo primero borramos las listas de ganadores:
+    console.log('Voy a borrar las listas de ganadores');
+    this.enfrentamientosSeleccionadosColumnaUno = [];
+    this.enfrentamientosSeleccionadosColumnaDos = [];
+    this.enfrentamientosSeleccionadosColumnaTres = [];
+    console.log(this.jornadaId);
+    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
+    if (this.jornadaId === undefined) {
+      this.botonAsignarAleatorioDesactivado = true;
+    } else {
+      this.botonAsignarAleatorioDesactivado = false;
+      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+    }
+    console.log('botonAsignarAleatorioDesactivado = ' + this.botonAsignarAleatorioDesactivado);
   }
 
   AsignarGanadorAleatoriamente() {
@@ -370,6 +358,23 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
   }
 
+  ///////////////////////////////////////////////////  MANUALMENTE  /////////////////////////////////////////////////////////
+
+  /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
+     o si debe estar desactivado (si no se ha seleccionado la jornada) */
+  ActualizarBotonManual() {
+    console.log('Estoy en actualizar botón');
+    console.log(this.jornadaId);
+    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
+    if (this.jornadaId === undefined) {
+      this.botonAsignarManualDesactivado = true;
+    } else {
+      this.botonAsignarManualDesactivado = false;
+      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+    }
+    console.log(this.botonAsignarAleatorioDesactivado);
+  }
+
   RevisarMultipleSeleccion() {
     console.log('Selección en ColumnaUno');
     console.log(this.enfrentamientosSeleccionadosColumnaUno);
@@ -432,6 +437,10 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   }
 
   AsignarGanadorManualmente() {
+    let Resultados: {
+      buenos: string
+      malos: string
+    } = {buenos: '', malos: 'os enfrentamientos: '};
     /////////////////////////////////////////////////////   INDIVIDUAL   //////////////////////////////////////////////////
     if (this.juegoSeleccionado.Modo === 'Individual') {
       const seleccionMultiple = this.calculos.RevisarMultipleSeleccion(this.enfrentamientosSeleccionadosColumnaUno,
@@ -441,27 +450,46 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       if (seleccionMultiple === false) {
             // -------------------------------- GANADOR UNO ----------------------------------- //
             if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
-              this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaUno, this.EnfrentamientosJornadaSeleccionada,
-                                                     this.listaAlumnosClasificacion, this.alumnosJuegoDeCompeticionLiga,
-                                                     this.juegoSeleccionado, 1);
+              Resultados = this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaUno,
+                                                                               this.EnfrentamientosJornadaSeleccionada,
+                                                                               this.listaAlumnosClasificacion,
+                                                                               this.alumnosJuegoDeCompeticionLiga,
+                                                                               this.juegoSeleccionado, 1, Resultados);
             }
 
 
             // -------------------------------- GANADOR DOS ----------------------------------- //
             if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
-              this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
-                                                     this.listaAlumnosClasificacion, this.alumnosJuegoDeCompeticionLiga,
-                                                     this.juegoSeleccionado, 2);
+              Resultados = this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaDos,
+                                                                  this.EnfrentamientosJornadaSeleccionada,
+                                                                  this.listaAlumnosClasificacion,
+                                                                  this.alumnosJuegoDeCompeticionLiga,
+                                                                  this.juegoSeleccionado, 2, Resultados);
             }
 
 
             // ----------------------------------- EMPATE ------------------------------------- //
             if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
-              this.calculos.AsignarEmpateIndividual(this.enfrentamientosSeleccionadosColumnaTres,
+              Resultados = this.calculos.AsignarEmpateIndividual(this.enfrentamientosSeleccionadosColumnaTres,
                                                     this.EnfrentamientosJornadaSeleccionada,
                                                     this.listaAlumnosClasificacion,
                                                     this.alumnosJuegoDeCompeticionLiga,
-                                                    this.juegoSeleccionado, 0);
+                                                    this.juegoSeleccionado, Resultados);
+            }
+            console.log('Resultados buenos: ' + Resultados.buenos);
+            console.log('Resultados malos: ' + Resultados.malos);
+
+            if (Resultados.buenos !== '' && Resultados.malos === 'os enfrentamientos: ') {
+              console.log('Los Resultados son: ' + Resultados.buenos);
+              Swal.fire(Resultados.buenos, 'Estos son los resultados', 'success');
+            } else if (Resultados.buenos === '' && Resultados.malos !== 'os enfrentamientos: ') {
+              Swal.fire('L' + Resultados.malos + ' ya tienen asignado un gandaor',
+              'No se ha podido asignar ganador a estos enfrentamientos', 'error');
+            } else if (Resultados.buenos !== '' && Resultados.malos !== 'os enfrentamientos: ') {
+              Swal.fire(Resultados.buenos, 'No se ha podido asignar ganador a l' + Resultados.malos +
+                        ' porque ya tienen asignado un gandaor. ', 'success');
+            } else if (Resultados.buenos === '' && Resultados.malos === 'os enfrentamientos: ') {
+              Swal.fire('No se ha seleccionado ningún ganador', '', 'error');
             }
       } else {
           Swal.fire('Hay más de una selección en alguno de los enfrentamientos', ' No se ha podido realizar esta acción', 'error');
@@ -473,31 +501,47 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
                                                                        this.enfrentamientosSeleccionadosColumnaTres);
       console.log(seleccionMultiple);
       if (seleccionMultiple === false) {
-        // -------------------------------- GANADOR UNO ----------------------------------- //
-        if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
-          console.log('Estoy dentro de seleccionados columna uno');
-          this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaUno, this.EnfrentamientosJornadaSeleccionada,
-                                               this.listaEquiposClasificacion,
-                                               this.equiposJuegoDeCompeticionLiga,
-                                               this.juegoSeleccionado, 1);
-        }
+            // -------------------------------- GANADOR UNO ----------------------------------- //
+            if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
+              console.log('Estoy dentro de seleccionados columna uno');
+              Resultados = this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaUno,
+                                                               this.EnfrentamientosJornadaSeleccionada,
+                                                               this.listaEquiposClasificacion,
+                                                               this.equiposJuegoDeCompeticionLiga,
+                                                               this.juegoSeleccionado, 1, Resultados);
+            }
 
-        // -------------------------------- GANADOR DOS ----------------------------------- //
-        if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
-          this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
-                                               this.listaEquiposClasificacion,
-                                               this.equiposJuegoDeCompeticionLiga,
-                                               this.juegoSeleccionado, 2);
-        }
+            // -------------------------------- GANADOR DOS ----------------------------------- //
+            if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
+              this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
+                                                  this.listaEquiposClasificacion,
+                                                  this.equiposJuegoDeCompeticionLiga,
+                                                  this.juegoSeleccionado, 2, Resultados);
+            }
 
-        // ----------------------------------- EMPATE ------------------------------------- //
-        if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
-          this.calculos.AsignarEmpateEquipos(this.enfrentamientosSeleccionadosColumnaTres,
-                                             this.EnfrentamientosJornadaSeleccionada,
-                                             this.listaEquiposClasificacion,
-                                             this.equiposJuegoDeCompeticionLiga,
-                                             this.juegoSeleccionado, 0) ;
-        }
+            // ----------------------------------- EMPATE ------------------------------------- //
+            if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
+              this.calculos.AsignarEmpateEquipos(this.enfrentamientosSeleccionadosColumnaTres,
+                                                this.EnfrentamientosJornadaSeleccionada,
+                                                this.listaEquiposClasificacion,
+                                                this.equiposJuegoDeCompeticionLiga,
+                                                this.juegoSeleccionado, Resultados) ;
+            }
+            console.log('Resultados buenos: ' + Resultados.buenos);
+            console.log('Resultados malos: ' + Resultados.malos);
+
+            if (Resultados.buenos !== '' && Resultados.malos === 'os enfrentamientos: ') {
+              console.log('Los Resultados son: ' + Resultados.buenos);
+              Swal.fire(Resultados.buenos, 'Estos son los resultados', 'success');
+            } else if (Resultados.buenos === '' && Resultados.malos !== 'os enfrentamientos: ') {
+              Swal.fire('L' + Resultados.malos + ' ya tienen asignado un gandaor',
+              'No se ha podido asignar ganador a estos enfrentamientos', 'error');
+            } else if (Resultados.buenos !== '' && Resultados.malos !== 'os enfrentamientos: ') {
+              Swal.fire(Resultados.buenos, 'No se ha podido asignar ganador a l' + Resultados.malos +
+                        ' porque ya tienen asignado un gandaor. ', 'success');
+            } else if (Resultados.buenos === '' && Resultados.malos === 'os enfrentamientos: ') {
+              Swal.fire('No se ha seleccionado ningún ganador', '', 'error');
+            }
       } else {
         Swal.fire('Hay más de una selección en alguno de los enfrentamientos', ' No se ha podido realizar esta acción', 'error');
         console.log('Hay más de una selección en alguno de los enfrentamientos');
@@ -593,6 +637,183 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         }
       }
     }
+  }
+
+  /* Para averiguar si todas las filas están seleccionadas */
+  IsAllSelectedUno() {
+    let numSelected = 0;
+    let numRows = 0;
+    // console.log('Estoy en IsAllSelectedUno()');
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      numSelected = this.selectionUno.selected.length;
+      numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    } else {
+      numSelected = this.selectionUno.selected.length;
+      numRows = this.dataSourceTablaGanadorEquipo.data.length;
+    }
+    // console.log('this.selectionUno es:');
+    // console.log(this.selectionUno);
+    return numSelected === numRows;
+  }
+
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
+  MasterToggleUno() {
+    if (this.IsAllSelectedUno()) {
+      this.selectionUno.clear(); // Desactivamos todos
+      this.enfrentamientosSeleccionadosColumnaUno = [];
+      console.log('Los enfrentamientos con ganadorDos son (individual): ');
+      console.log(this.enfrentamientosSeleccionadosColumnaUno);
+    } else {
+      // activamos todos
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+          this.selectionUno.select(row);
+          this.enfrentamientosSeleccionadosColumnaUno.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorDos son (individual): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaUno);
+      } else {
+        this.dataSourceTablaGanadorEquipo.data.forEach(row => {
+          this.selectionUno.select(row);
+          this.enfrentamientosSeleccionadosColumnaUno.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorDos son (equipo): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaUno);
+      }
+    }
+  }
+
+  /* Para averiguar si todas las filas están seleccionadas */
+  IsAllSelectedDos() {
+    let numSelected = 0;
+    let numRows = 0;
+    // console.log('Estoy en IsAllSelectedUno()');
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      numSelected = this.selectionDos.selected.length;
+      numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    } else {
+      numSelected = this.selectionDos.selected.length;
+      numRows = this.dataSourceTablaGanadorEquipo.data.length;
+    }
+    // console.log('this.selectionUno es:');
+    // console.log(this.selectionUno);
+    return numSelected === numRows;
+  }
+
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
+  MasterToggleDos() {
+    if (this.IsAllSelectedDos()) {
+      this.selectionDos.clear(); // Desactivamos todos
+      this.enfrentamientosSeleccionadosColumnaDos = [];
+      console.log('Los enfrentamientos con ganadorDos son (individual): ');
+      console.log(this.enfrentamientosSeleccionadosColumnaDos);
+    } else {
+      // activamos todos
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+          this.selectionDos.select(row);
+          this.enfrentamientosSeleccionadosColumnaDos.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorDos son (individual): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaDos);
+      } else {
+        this.dataSourceTablaGanadorEquipo.data.forEach(row => {
+          this.selectionDos.select(row);
+          this.enfrentamientosSeleccionadosColumnaDos.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorDos son (equipo): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaDos);
+      }
+    }
+  }
+
+  /* Para averiguar si todas las filas están seleccionadas */
+  IsAllSelectedTres() {
+    let numSelected = 0;
+    let numRows = 0;
+    // console.log('Estoy en IsAllSelectedUno()');
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      numSelected = this.selectionTres.selected.length;
+      numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    } else {
+      numSelected = this.selectionTres.selected.length;
+      numRows = this.dataSourceTablaGanadorEquipo.data.length;
+    }
+    // console.log('this.selectionUno es:');
+    // console.log(this.selectionUno);
+    return numSelected === numRows;
+  }
+
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
+  MasterToggleTres() {
+    if (this.IsAllSelectedTres()) {
+      this.selectionTres.clear(); // Desactivamos todos
+      this.enfrentamientosSeleccionadosColumnaTres = [];
+      console.log('Los enfrentamientos con ganadorTres son (individual): ');
+      console.log(this.enfrentamientosSeleccionadosColumnaTres);
+    } else {
+      // activamos todos
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+          this.selectionTres.select(row);
+          this.enfrentamientosSeleccionadosColumnaTres.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorTres son (individual): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaTres);
+      } else {
+        this.dataSourceTablaGanadorEquipo.data.forEach(row => {
+          this.selectionTres.select(row);
+          this.enfrentamientosSeleccionadosColumnaTres.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorTres son (equipo): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaTres);
+      }
+    }
+  }
+
+  ///////////////////////////////////////////////////  MEDIANTE JUEGO DE PUNTOS  /////////////////////////////////////////////////////////
+  ActualizarBotonJuego() {
+    console.log('Estoy en actualizar botón');
+    if (this.jornadaId === undefined || this.juegodePuntosSeleccionadoID === undefined) {
+      this.botonAsignarJuegoDesactivado = true;
+    } else {
+      this.botonAsignarJuegoDesactivado = false;
+    }
+    console.log('botonAsignarJuegoDesactivado = ' + this.botonAsignarJuegoDesactivado);
+    console.log(this.juegosActivosPuntosModo);
+    console.log(this.juegodePuntosSeleccionadoID);
+
+        // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.juegosActivosPuntosModo.length; i++) {
+          console.log('Entro en el for');
+          console.log(this.juegosActivosPuntosModo[i].id);
+          console.log(this.juegodePuntosSeleccionadoID);
+          console.log(this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID));
+          if (this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID)) {
+          console.log('Entro en el if');
+          console.log(this.juegosActivosPuntosModo[i].Modo);
+            // Vamos a buscar a los alumnos o equipos con sus repectivos puntos
+          if (this.juegosActivosPuntosModo[i].Modo === 'Individual') {
+              this.NumeroDeJuegoDePuntos = i;
+              this.RecuperarInscripcionesAlumnoJuego();
+              console.log(this.listaAlumnosOrdenadaPorPuntos);
+            } else {
+              this.NumeroDeJuegoDePuntos = i;
+              this.RecuperarInscripcionesEquiposJuego();
+              console.log(this.listaEquiposOrdenadaPorPuntos);
+            }
+          console.log('Alumnos');
+          console.log(this.listaAlumnosOrdenadaPorPuntos);
+          console.log('Equipo');
+          console.log(this.listaEquiposOrdenadaPorPuntos);
+          }
+        }
   }
 
   AsignarGanadorJuegoPuntos() {
@@ -787,7 +1008,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
   }
 
-
   // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
   RecuperarInscripcionesAlumnoJuego() {
     console.log ('voy a por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
@@ -798,7 +1018,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     });
   }
 
-    // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
+  // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
   RecuperarInscripcionesEquiposJuego() {
 
     console.log ('vamos por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
@@ -811,110 +1031,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     });
   }
 
-  ActualizarBotonJuego() {
-    console.log('Estoy en actualizar botón');
-    if (this.jornadaId === undefined || this.juegodePuntosSeleccionadoID === undefined) {
-      this.botonAsignarJuegoDesactivado = true;
-    } else {
-      this.botonAsignarJuegoDesactivado = false;
-    }
-    console.log('botonAsignarJuegoDesactivado = ' + this.botonAsignarJuegoDesactivado);
-    console.log(this.juegosActivosPuntosModo);
-    console.log(this.juegodePuntosSeleccionadoID);
-
-        // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.juegosActivosPuntosModo.length; i++) {
-          console.log('Entro en el for');
-          console.log(this.juegosActivosPuntosModo[i].id);
-          console.log(this.juegodePuntosSeleccionadoID);
-          console.log(this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID));
-          if (this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID)) {
-          console.log('Entro en el if');
-          console.log(this.juegosActivosPuntosModo[i].Modo);
-            // Vamos a buscar a los alumnos o equipos con sus repectivos puntos
-          if (this.juegosActivosPuntosModo[i].Modo === 'Individual') {
-              this.NumeroDeJuegoDePuntos = i;
-              this.RecuperarInscripcionesAlumnoJuego();
-              console.log(this.listaAlumnosOrdenadaPorPuntos);
-            } else {
-              this.NumeroDeJuegoDePuntos = i;
-              this.RecuperarInscripcionesEquiposJuego();
-              console.log(this.listaEquiposOrdenadaPorPuntos);
-            }
-          console.log('Alumnos');
-          console.log(this.listaAlumnosOrdenadaPorPuntos);
-          console.log('Equipo');
-          console.log(this.listaEquiposOrdenadaPorPuntos);
-          }
-        }
-  }
-  /* Para averiguar si todas las filas están seleccionadas */
-  IsAllSelectedUno() {
-    // console.log('Estoy en IsAllSelectedUno()');
-    const numSelected = this.selectionUno.selected.length;
-    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    // console.log('this.selectionUno es:');
-    // console.log(this.selectionUno);
-    return numSelected === numRows;
-  }
-
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
-
-  MasterToggleUno() {
-    if (this.IsAllSelectedUno()) {
-      this.selectionUno.clear(); // Desactivamos todos
-    } else {
-      // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionUno.select(row));
-    }
-  }
-
-  IsAllSelectedDos() {
-    // console.log('Estoy en IsAllSelectedDos()');
-    const numSelected = this.selectionDos.selected.length;
-    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    // console.log('this.selectionDos es:');
-    // console.log(this.selectionDos);
-    return numSelected === numRows;
-  }
-
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
-
-  MasterToggleDos() {
-    if (this.IsAllSelectedDos()) {
-      this.selectionDos.clear(); // Desactivamos todos
-    } else {
-      // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionDos.select(row));
-    }
-  }
-
-  /* Para averiguar si todas las filas están seleccionadas */
-  IsAllSelectedTres() {
-    // console.log('Estoy en IsAllSelectedTres()');
-    const numSelected = this.selectionTres.selected.length;
-    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    // console.log('this.selectionTres es:');
-    // console.log(this.selectionTres);
-    return numSelected === numRows;
-  }
-
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
-
-  MasterToggleTres() {
-    if (this.IsAllSelectedTres()) {
-      this.selectionTres.clear(); // Desactivamos todos
-    } else {
-      // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionTres.select(row));
-    }
-  }
 
 
   goBack() {
