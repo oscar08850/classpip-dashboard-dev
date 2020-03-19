@@ -10,7 +10,7 @@
         <br>
         <mat-form-field >
           <mat-label>Jornada</mat-label>
-          <select matNativeControl [(ngModel)]="jornadaId" (change) = "ActualizarBotonAleatorio() && ActualizarBotonJuego()">
+          <select matNativeControl [(ngModel)]="jornadaId" (change) = "ActualizarBoton()">
             <option *ngFor="let jornada of JornadasCompeticion" [value]="jornada.id">
               Jornada {{jornada.NumeroDeJornada}}
             </option>
@@ -22,7 +22,7 @@
         <br>
         <mat-form-field >
           <mat-label>Modo</mat-label>
-          <select matNativeControl [(ngModel)]="modoAsignacionId" (change) = "ActualizarBotonJuego()">
+          <select matNativeControl [(ngModel)]="modoAsignacionId" (change) = "ActualizarBoton()">
             <option *ngFor="let modo of modoAsignacion" [value]="modo.id">
               {{modo.modo}}
             </option>
@@ -35,7 +35,7 @@
         <br>
         <mat-form-field >
           <mat-label>Juegos</mat-label>
-          <select matNativeControl [(ngModel)]="juegodePuntosSeleccionadoID" (change) = "ActualizarBotonJuego()">
+          <select matNativeControl [(ngModel)]="juegodePuntosSeleccionadoID" (change) = "ActualizarBoton()">
             <option *ngFor="let juego of juegosActivosPuntosModo" [value]="juego.id">
               {{juego.NombreJuego}}
             </option>
@@ -75,7 +75,7 @@
       </div>
 
       <div style="margin-top: 10px; margin-right: 10px;">
-        <button style= "width: 100%" type="button"class="btn Aceptar" (click)= "AsignarGanadorManualmente()" [disabled]="botonAsignarAleatorioDesactivado">Manualmente</button>
+        <button style= "width: 100%" type="button"class="btn Aceptar" (click)= "AsignarGanadorManualmente()" [disabled]="botonAsignarManualDesactivado">Manualmente</button>
         <!-- <button style= "width: 100%" type="button"class="btn Aceptar" [disabled]="botonAsignarDesactivado" (click) = AsignarPuntos()>Manualmente</button> -->
       </div>
       <div style="margin-top: 10px; margin-right: 10px;">

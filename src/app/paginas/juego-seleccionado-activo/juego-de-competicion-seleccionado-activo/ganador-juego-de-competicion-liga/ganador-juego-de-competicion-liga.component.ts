@@ -59,6 +59,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   JornadasCompeticion: TablaJornadas[] = [];
   jornadaId: number;
   juegodePuntosSeleccionadoID: number;
+  modoAsignacionId: number;
 
   // Información de la tabla: Muestra el JugadorUno, JugadorDos, Ganador, JornadaDeCompeticionLigaId y id
   EnfrentamientosJornadaSeleccionada: EnfrentamientoLiga[] = [];
@@ -212,7 +213,44 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   ///////////////////////////////////////////////////  ALEATORIAMENTE  /////////////////////////////////////////////////////////
   /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
      o si debe estar desactivado (si no se ha seleccionado la jornada) */
-  ActualizarBotonAleatorio() {
+     ActualizarBoton() {
+      console.log('Estoy en actualizar botón');
+      console.log(this.modoAsignacionId);
+      if (this.modoAsignacionId === undefined || this.jornadaId === undefined) {
+        this.botonAsignarAleatorioDesactivado = true;
+        this.botonAsignarManualDesactivado = true;
+        this.botonAsignarJuegoDesactivado = true;
+      } else if (Number(this.modoAsignacionId) === 1) { // Manual
+        console.log('Modo manual');
+        this.botonAsignarAleatorioDesactivado = true;
+        this.botonAsignarManualDesactivado = false;
+        this.botonAsignarJuegoDesactivado = true;
+        this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+      } else if (Number(this.modoAsignacionId) === 2) { // Aleatorio
+        console.log('Modo aleatorio');
+        this.botonAsignarManualDesactivado = true;
+        this.botonAsignarAleatorioDesactivado = false;
+        this.botonAsignarJuegoDesactivado = true;
+        console.log('Voy a borrar las listas de ganadores');
+        this.enfrentamientosSeleccionadosColumnaUno = [];
+        this.enfrentamientosSeleccionadosColumnaDos = [];
+        this.enfrentamientosSeleccionadosColumnaTres = [];
+        this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+      } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID !== undefined) { // JuegoPuntos
+        console.log('Modo puntos');
+        this.botonAsignarManualDesactivado = true;
+        this.botonAsignarAleatorioDesactivado = true;
+        this.botonAsignarJuegoDesactivado = false;
+        this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+        this.ActualizarBotonJuego();
+      } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID === undefined) { // JuegoPuntos
+        this.botonAsignarManualDesactivado = true;
+        this.botonAsignarAleatorioDesactivado = true;
+        this.botonAsignarJuegoDesactivado = true;
+      }
+    }
+
+     ActualizarBotonAleatorio() {
     console.log('Estoy en actualizar botón');
     // Lo primero borramos las listas de ganadores:
     console.log('Voy a borrar las listas de ganadores');
@@ -779,15 +817,15 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
   ///////////////////////////////////////////////////  MEDIANTE JUEGO DE PUNTOS  /////////////////////////////////////////////////////////
   ActualizarBotonJuego() {
-    console.log('Estoy en actualizar botón');
-    if (this.jornadaId === undefined || this.juegodePuntosSeleccionadoID === undefined) {
-      this.botonAsignarJuegoDesactivado = true;
-    } else {
-      this.botonAsignarJuegoDesactivado = false;
-    }
-    console.log('botonAsignarJuegoDesactivado = ' + this.botonAsignarJuegoDesactivado);
-    console.log(this.juegosActivosPuntosModo);
-    console.log(this.juegodePuntosSeleccionadoID);
+    // console.log('Estoy en actualizar botón');
+    // if (this.jornadaId === undefined || this.juegodePuntosSeleccionadoID === undefined) {
+    //   this.botonAsignarJuegoDesactivado = true;
+    // } else {
+    //   this.botonAsignarJuegoDesactivado = false;
+    // }
+    // console.log('botonAsignarJuegoDesactivado = ' + this.botonAsignarJuegoDesactivado);
+    // console.log(this.juegosActivosPuntosModo);
+    // console.log(this.juegodePuntosSeleccionadoID);
 
         // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.juegosActivosPuntosModo.length; i++) {
