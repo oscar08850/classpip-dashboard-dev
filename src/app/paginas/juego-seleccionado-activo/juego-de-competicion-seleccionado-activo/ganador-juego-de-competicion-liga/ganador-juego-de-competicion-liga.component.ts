@@ -70,6 +70,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   dataSourceTablaGanadorIndividual;
   dataSourceTablaGanadorEquipo;
 
+
   // displayedColumnsAlumno: string[] = ['select1', 'nombreJugadorUno', 'select2', 'nombreJugadorDos', 'select3', 'Empate'];
   displayedColumnsAlumno: string[] = ['select1', 'nombreJugadorUno', 'select2', 'nombreJugadorDos', 'select3', 'Empate'];
 
@@ -425,6 +426,10 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   }
 
   AsignarGanadorManualmente() {
+    let Resultados: {
+      buenos: string
+      malos: string
+    } = {buenos: '', malos: 'os enfrentamientos: '};
     /////////////////////////////////////////////////////   INDIVIDUAL   //////////////////////////////////////////////////
     if (this.juegoSeleccionado.Modo === 'Individual') {
       const seleccionMultiple = this.calculos.RevisarMultipleSeleccion(this.enfrentamientosSeleccionadosColumnaUno,
@@ -434,27 +439,46 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       if (seleccionMultiple === false) {
             // -------------------------------- GANADOR UNO ----------------------------------- //
             if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
-              this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaUno, this.EnfrentamientosJornadaSeleccionada,
-                                                     this.listaAlumnosClasificacion, this.alumnosJuegoDeCompeticionLiga,
-                                                     this.juegoSeleccionado, 1);
+              Resultados = this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaUno,
+                                                                               this.EnfrentamientosJornadaSeleccionada,
+                                                                               this.listaAlumnosClasificacion,
+                                                                               this.alumnosJuegoDeCompeticionLiga,
+                                                                               this.juegoSeleccionado, 1, Resultados);
             }
 
 
             // -------------------------------- GANADOR DOS ----------------------------------- //
             if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
-              this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
-                                                     this.listaAlumnosClasificacion, this.alumnosJuegoDeCompeticionLiga,
-                                                     this.juegoSeleccionado, 2);
+              Resultados = this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaDos,
+                                                                  this.EnfrentamientosJornadaSeleccionada,
+                                                                  this.listaAlumnosClasificacion,
+                                                                  this.alumnosJuegoDeCompeticionLiga,
+                                                                  this.juegoSeleccionado, 2, Resultados);
             }
 
 
             // ----------------------------------- EMPATE ------------------------------------- //
             if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
-              this.calculos.AsignarEmpateIndividual(this.enfrentamientosSeleccionadosColumnaTres,
+              Resultados = this.calculos.AsignarEmpateIndividual(this.enfrentamientosSeleccionadosColumnaTres,
                                                     this.EnfrentamientosJornadaSeleccionada,
                                                     this.listaAlumnosClasificacion,
                                                     this.alumnosJuegoDeCompeticionLiga,
-                                                    this.juegoSeleccionado, 0);
+                                                    this.juegoSeleccionado, Resultados);
+            }
+            console.log('Resultados buenos: ' + Resultados.buenos);
+            console.log('Resultados malos: ' + Resultados.malos);
+
+            if (Resultados.buenos !== '' && Resultados.malos === 'os enfrentamientos: ') {
+              console.log('Los Resultados son: ' + Resultados.buenos);
+              Swal.fire(Resultados.buenos, 'Estos son los resultados', 'success');
+            } else if (Resultados.buenos === '' && Resultados.malos !== 'os enfrentamientos: ') {
+              Swal.fire('L' + Resultados.malos + ' ya tienen asignado un gandaor',
+              'No se ha podido asignar ganador a estos enfrentamientos', 'error');
+            } else if (Resultados.buenos !== '' && Resultados.malos !== 'os enfrentamientos: ') {
+              Swal.fire(Resultados.buenos, 'No se ha podido asignar ganador a l' + Resultados.malos +
+                        ' porque ya tienen asignado un gandaor. ', 'success');
+            } else if (Resultados.buenos === '' && Resultados.malos === 'os enfrentamientos: ') {
+              Swal.fire('No se ha seleccionado ningún ganador', '', 'error');
             }
       } else {
           Swal.fire('Hay más de una selección en alguno de los enfrentamientos', ' No se ha podido realizar esta acción', 'error');
@@ -466,31 +490,47 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
                                                                        this.enfrentamientosSeleccionadosColumnaTres);
       console.log(seleccionMultiple);
       if (seleccionMultiple === false) {
-        // -------------------------------- GANADOR UNO ----------------------------------- //
-        if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
-          console.log('Estoy dentro de seleccionados columna uno');
-          this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaUno, this.EnfrentamientosJornadaSeleccionada,
-                                               this.listaEquiposClasificacion,
-                                               this.equiposJuegoDeCompeticionLiga,
-                                               this.juegoSeleccionado, 1);
-        }
+            // -------------------------------- GANADOR UNO ----------------------------------- //
+            if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
+              console.log('Estoy dentro de seleccionados columna uno');
+              Resultados = this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaUno,
+                                                               this.EnfrentamientosJornadaSeleccionada,
+                                                               this.listaEquiposClasificacion,
+                                                               this.equiposJuegoDeCompeticionLiga,
+                                                               this.juegoSeleccionado, 1, Resultados);
+            }
 
-        // -------------------------------- GANADOR DOS ----------------------------------- //
-        if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
-          this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
-                                               this.listaEquiposClasificacion,
-                                               this.equiposJuegoDeCompeticionLiga,
-                                               this.juegoSeleccionado, 2);
-        }
+            // -------------------------------- GANADOR DOS ----------------------------------- //
+            if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
+              this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
+                                                  this.listaEquiposClasificacion,
+                                                  this.equiposJuegoDeCompeticionLiga,
+                                                  this.juegoSeleccionado, 2, Resultados);
+            }
 
-        // ----------------------------------- EMPATE ------------------------------------- //
-        if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
-          this.calculos.AsignarEmpateEquipos(this.enfrentamientosSeleccionadosColumnaTres,
-                                             this.EnfrentamientosJornadaSeleccionada,
-                                             this.listaEquiposClasificacion,
-                                             this.equiposJuegoDeCompeticionLiga,
-                                             this.juegoSeleccionado, 0) ;
-        }
+            // ----------------------------------- EMPATE ------------------------------------- //
+            if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
+              this.calculos.AsignarEmpateEquipos(this.enfrentamientosSeleccionadosColumnaTres,
+                                                this.EnfrentamientosJornadaSeleccionada,
+                                                this.listaEquiposClasificacion,
+                                                this.equiposJuegoDeCompeticionLiga,
+                                                this.juegoSeleccionado, Resultados) ;
+            }
+            console.log('Resultados buenos: ' + Resultados.buenos);
+            console.log('Resultados malos: ' + Resultados.malos);
+
+            if (Resultados.buenos !== '' && Resultados.malos === 'os enfrentamientos: ') {
+              console.log('Los Resultados son: ' + Resultados.buenos);
+              Swal.fire(Resultados.buenos, 'Estos son los resultados', 'success');
+            } else if (Resultados.buenos === '' && Resultados.malos !== 'os enfrentamientos: ') {
+              Swal.fire('L' + Resultados.malos + ' ya tienen asignado un gandaor',
+              'No se ha podido asignar ganador a estos enfrentamientos', 'error');
+            } else if (Resultados.buenos !== '' && Resultados.malos !== 'os enfrentamientos: ') {
+              Swal.fire(Resultados.buenos, 'No se ha podido asignar ganador a l' + Resultados.malos +
+                        ' porque ya tienen asignado un gandaor. ', 'success');
+            } else if (Resultados.buenos === '' && Resultados.malos === 'os enfrentamientos: ') {
+              Swal.fire('No se ha seleccionado ningún ganador', '', 'error');
+            }
       } else {
         Swal.fire('Hay más de una selección en alguno de los enfrentamientos', ' No se ha podido realizar esta acción', 'error');
         console.log('Hay más de una selección en alguno de los enfrentamientos');
