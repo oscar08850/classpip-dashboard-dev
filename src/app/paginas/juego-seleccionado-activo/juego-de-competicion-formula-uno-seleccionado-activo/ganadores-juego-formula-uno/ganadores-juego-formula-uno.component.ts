@@ -453,12 +453,9 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       console.log(this.listaAlumnosClasificacion);
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < lineas.length; i++) {
-          const trozos: string[] = lineas[i].split(';');
-          if (trozos.length === 3) {
-            console.log('Bien introducido');
-            const nombreClasificacion = trozos[0] + ' ' + trozos[1] + ' ' + trozos[2];
-            nombresClasificacion.push(nombreClasificacion);
-          }
+          const linea: string = lineas[i];
+          const nombreClasificacion = linea;
+          nombresClasificacion.push(nombreClasificacion);
       }
     } else {
       console.log('GanadoresMasivamente() Equipo');
@@ -477,6 +474,12 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   }
 
   GanadoresMasivamenteId(ganadoresNombre: string[]) {
+    this.participantesEquipoPuntuan = [];
+    this.participantesIndividualPuntuan = [];
+    console.log('listaEquiposOrdenadaPorPuntos');
+    console.log(this.listaEquiposOrdenadaPorPuntos);
+    console.log('listaEquiposClasificacion');
+    console.log(this.listaEquiposClasificacion);
     const numeroParticipantesPuntuan = this.juegoSeleccionado.NumeroParticipantesPuntuan;
     this.ganadoresFormulaUnoId = [];
     if (this.juegoSeleccionado.Modo === 'Individual') {
@@ -489,16 +492,26 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
                                      + this.listaAlumnosClasificacion[j].primerApellido + ' '
                                      + this.listaAlumnosClasificacion[j].segundoApellido) {
             encontrado = true;
-            this.ganadoresFormulaUnoId.push(this.listaAlumnosClasificacion[j].id);
+            console.log(ganadoresNombre[i] + '===' + this.listaAlumnosClasificacion[j].nombre + ' '
+                                                   + this.listaAlumnosClasificacion[j].primerApellido + ' '
+                                                   + this.listaAlumnosClasificacion[j].segundoApellido);
+            if (this.ganadoresFormulaUnoId.length < numeroParticipantesPuntuan) {
+              this.ganadoresFormulaUnoId.push(this.listaAlumnosClasificacion[j].id);
+              this.participantesIndividualPuntuan.push(this.listaAlumnosOrdenadaPorPuntos[j]);
+            }
           }
         }
         if (encontrado === false) {
+          console.log('this.ganadoresFormulaUnoId.length' + this.ganadoresFormulaUnoId.length);
           console.log('Alguno de los nombres introducidos no se corresponde con ninguno de los alumnos del grupo');
+          console.log(this.ganadoresFormulaUnoId);
           // tslint:disable-next-line:max-line-length
           Swal.fire('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo', ' No se ha podido realizar esta acción', 'error');
           this.ganadoresFormulaUnoId = [];
         }
       }
+      console.log(this.ganadoresFormulaUnoId);
+      console.log(this.participantesIndividualPuntuan);
     } else {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < ganadoresNombre.length; i++) {
@@ -507,10 +520,14 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
           for (let j = 0; j < this.listaEquiposClasificacion.length; j++) {
             if (ganadoresNombre[i] === this.listaEquiposClasificacion[j].nombre) {
               encontrado = true;
-              this.ganadoresFormulaUnoId.push(this.listaEquiposClasificacion[j].id);
+              if (this.ganadoresFormulaUnoId.length < numeroParticipantesPuntuan) {
+                this.ganadoresFormulaUnoId.push(this.listaEquiposClasificacion[j].id);
+                this.participantesEquipoPuntuan.push(this.listaEquiposOrdenadaPorPuntos[j]);
+              }
             }
           }
           if (encontrado === false) {
+            console.log('this.ganadoresFormulaUnoId.length = ' + this.ganadoresFormulaUnoId.length);
             console.log('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo');
             // tslint:disable-next-line:max-line-length
             Swal.fire('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo', ' No se ha podido realizar esta acción', 'error');
@@ -518,7 +535,27 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
           }
         }
     }
+    console.log(this.ganadoresFormulaUnoId);
+    console.log(this.participantesEquipoPuntuan);
+    // Sweetalert con los ganadores
+    console.log('Voy a hacer el Sweetalert');
+    const ganadores = this.stringGanadoresManualmente(ganadoresNombre);
+    console.log('ganadores: ' + ganadores);
+    Swal.fire(ganadores, ' Enhorabuena', 'success');
     return this.ganadoresFormulaUnoId;
+  }
+
+  public stringGanadoresManualmente(ganadoresNombre: string[]) {
+    let sweetalert = '';
+    const numeroParticipantesPuntuan = this.juegoSeleccionado.NumeroParticipantesPuntuan;
+    let contador = 0;
+    ganadoresNombre.forEach(ganador => {
+      if (contador < numeroParticipantesPuntuan) {
+        sweetalert = sweetalert + '\n' + ganador;
+        contador++;
+      }
+    });
+    return sweetalert;
   }
 
   ListaParticipantesPuntuanActualizados() {
@@ -585,6 +622,9 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       } else {
         console.log('Esta jornada tiene ' + this.juegoSeleccionado.NumeroParticipantesPuntuan +
                     ' participantes que puntúan, pero solo se han introducido ' + lineas.length);
+        Swal.fire('Esta jornada tiene ' + this.juegoSeleccionado.NumeroParticipantesPuntuan +
+                  ' participantes que puntúan, pero solo se han introducido ' + lineas.length,
+                  ' No se ha podido realizar esta acción', 'error');
       }
     } else {
       console.log('Esta jornada ya tiene ganadores asignados');
