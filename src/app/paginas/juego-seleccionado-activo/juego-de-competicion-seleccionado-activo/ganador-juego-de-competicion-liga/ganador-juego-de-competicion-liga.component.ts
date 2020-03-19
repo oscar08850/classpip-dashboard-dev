@@ -14,6 +14,16 @@ import {MatTableDataSource} from '@angular/material/table';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 
+export interface Asignacion {
+  modo: string;
+  id: number;
+}
+
+const ModoAsignacion: Asignacion[] = [
+  {modo: 'Manualmente', id: 1},
+  {modo: 'Aleatoriamente', id: 2},
+  {modo: 'Juego de Puntos', id: 3},
+];
 
 @Component({
   selector: 'app-ganador-juego-de-competicion-liga',
@@ -36,6 +46,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   equiposSeleccionadosUno: any[] = [];
   equiposSeleccionadosDos: any[] = [];
   equiposSeleccionadosTres: any[] = [];
+  modoAsignacion: Asignacion[] = ModoAsignacion;
 
   avisoMasDeUnGanadorMarcadoUnoDos = false;
   avisoMasDeUnGanadorMarcadoUnoEmpate = false;

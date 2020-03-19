@@ -18,6 +18,18 @@
       </div>
 
       <div>
+        <br>
+        <mat-form-field >
+          <mat-label>Modo</mat-label>
+          <select matNativeControl [(ngModel)]="modoAsignacionId" (change) = "ActualizarBotonJuego()">
+            <option *ngFor="let modo of modoAsignacion" [value]="modo.id">
+              {{modo.modo}}
+            </option>
+          </select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="modoAsignacionId == 3">
         Seleccione un Juego
         <br>
         <mat-form-field >
@@ -29,6 +41,19 @@
           </select>
         </mat-form-field>
       </div>
+
+      <!-- <div>
+        Seleccione un Juego
+        <br>
+        <mat-form-field >
+          <mat-label>Juegos</mat-label>
+          <select matNativeControl [(ngModel)]="juegodePuntosSeleccionadoID" (change) = "ActualizarBotonJuego()">
+            <option *ngFor="let juego of juegosActivosPuntosModo" [value]="juego.id">
+              {{juego.NombreJuego}}
+            </option>
+          </select>
+        </mat-form-field>
+      </div> -->
 
       <!-- <div style="margin-top: 10px; margin-left: 450px; margin-right: 10px;">
         Seleccione un Juego
