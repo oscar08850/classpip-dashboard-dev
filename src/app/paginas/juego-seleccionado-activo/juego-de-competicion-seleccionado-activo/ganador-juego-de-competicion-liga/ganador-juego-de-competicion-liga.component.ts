@@ -107,40 +107,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
   }
 
-
-  /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
-     o si debe estar desactivado (si no se ha seleccionado la jornada) */
-  ActualizarBotonAleatorio() {
-    console.log('Estoy en actualizar botón');
-    // Lo primero borramos las listas de ganadores:
-    console.log('Voy a borrar las listas de ganadores');
-    this.enfrentamientosSeleccionadosColumnaUno = [];
-    this.enfrentamientosSeleccionadosColumnaDos = [];
-    this.enfrentamientosSeleccionadosColumnaTres = [];
-    console.log(this.jornadaId);
-    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
-    if (this.jornadaId === undefined) {
-      this.botonAsignarAleatorioDesactivado = true;
-    } else {
-      this.botonAsignarAleatorioDesactivado = false;
-      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-    }
-    console.log('botonAsignarAleatorioDesactivado = ' + this.botonAsignarAleatorioDesactivado);
-  }
-
-  ActualizarBotonManual() {
-    console.log('Estoy en actualizar botón');
-    console.log(this.jornadaId);
-    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
-    if (this.jornadaId === undefined) {
-      this.botonAsignarManualDesactivado = true;
-    } else {
-      this.botonAsignarManualDesactivado = false;
-      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-    }
-    console.log(this.botonAsignarAleatorioDesactivado);
-  }
-
   ObtenerEnfrentamientosDeCadaJornada(jornadaId: number) {
     console.log('Estoy en ObtenerEnfrentamientosDeCadaJornada()');
     console.log('El id de la jornada seleccionada es: ' + jornadaId);
@@ -229,6 +195,27 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       console.log('El dataSource es:');
       console.log(this.dataSourceTablaGanadorEquipo.data);
     }
+  }
+
+  ///////////////////////////////////////////////////  ALEATORIAMENTE  /////////////////////////////////////////////////////////
+  /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
+     o si debe estar desactivado (si no se ha seleccionado la jornada) */
+  ActualizarBotonAleatorio() {
+    console.log('Estoy en actualizar botón');
+    // Lo primero borramos las listas de ganadores:
+    console.log('Voy a borrar las listas de ganadores');
+    this.enfrentamientosSeleccionadosColumnaUno = [];
+    this.enfrentamientosSeleccionadosColumnaDos = [];
+    this.enfrentamientosSeleccionadosColumnaTres = [];
+    console.log(this.jornadaId);
+    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
+    if (this.jornadaId === undefined) {
+      this.botonAsignarAleatorioDesactivado = true;
+    } else {
+      this.botonAsignarAleatorioDesactivado = false;
+      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+    }
+    console.log('botonAsignarAleatorioDesactivado = ' + this.botonAsignarAleatorioDesactivado);
   }
 
   AsignarGanadorAleatoriamente() {
@@ -357,6 +344,23 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         .subscribe();
       }
     }
+  }
+
+  ///////////////////////////////////////////////////  MANUALMENTE  /////////////////////////////////////////////////////////
+
+  /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
+     o si debe estar desactivado (si no se ha seleccionado la jornada) */
+  ActualizarBotonManual() {
+    console.log('Estoy en actualizar botón');
+    console.log(this.jornadaId);
+    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
+    if (this.jornadaId === undefined) {
+      this.botonAsignarManualDesactivado = true;
+    } else {
+      this.botonAsignarManualDesactivado = false;
+      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+    }
+    console.log(this.botonAsignarAleatorioDesactivado);
   }
 
   RevisarMultipleSeleccion() {
@@ -584,6 +588,111 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
   }
 
+  /* Para averiguar si todas las filas están seleccionadas */
+  IsAllSelectedUno() {
+    // console.log('Estoy en IsAllSelectedUno()');
+    const numSelected = this.selectionUno.selected.length;
+    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    // console.log('this.selectionUno es:');
+    // console.log(this.selectionUno);
+    return numSelected === numRows;
+  }
+
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
+  MasterToggleUno() {
+    if (this.IsAllSelectedUno()) {
+      this.selectionUno.clear(); // Desactivamos todos
+    } else {
+      // activamos todos
+      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionUno.select(row));
+    }
+  }
+
+  /* Para averiguar si todas las filas están seleccionadas */
+  IsAllSelectedDos() {
+    // console.log('Estoy en IsAllSelectedDos()');
+    const numSelected = this.selectionDos.selected.length;
+    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    // console.log('this.selectionDos es:');
+    // console.log(this.selectionDos);
+    return numSelected === numRows;
+  }
+
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
+  MasterToggleDos() {
+    if (this.IsAllSelectedDos()) {
+      this.selectionDos.clear(); // Desactivamos todos
+    } else {
+      // activamos todos
+      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionDos.select(row));
+    }
+  }
+
+  /* Para averiguar si todas las filas están seleccionadas */
+  IsAllSelectedTres() {
+    // console.log('Estoy en IsAllSelectedTres()');
+    const numSelected = this.selectionTres.selected.length;
+    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    // console.log('this.selectionTres es:');
+    // console.log(this.selectionTres);
+    return numSelected === numRows;
+  }
+
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
+  MasterToggleTres() {
+    if (this.IsAllSelectedTres()) {
+      this.selectionTres.clear(); // Desactivamos todos
+    } else {
+      // activamos todos
+      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionTres.select(row));
+    }
+  }
+
+  ///////////////////////////////////////////////////  MEDIANTE JUEGO DE PUNTOS  /////////////////////////////////////////////////////////
+  ActualizarBotonJuego() {
+    console.log('Estoy en actualizar botón');
+    if (this.jornadaId === undefined || this.juegodePuntosSeleccionadoID === undefined) {
+      this.botonAsignarJuegoDesactivado = true;
+    } else {
+      this.botonAsignarJuegoDesactivado = false;
+    }
+    console.log('botonAsignarJuegoDesactivado = ' + this.botonAsignarJuegoDesactivado);
+    console.log(this.juegosActivosPuntosModo);
+    console.log(this.juegodePuntosSeleccionadoID);
+
+        // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.juegosActivosPuntosModo.length; i++) {
+          console.log('Entro en el for');
+          console.log(this.juegosActivosPuntosModo[i].id);
+          console.log(this.juegodePuntosSeleccionadoID);
+          console.log(this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID));
+          if (this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID)) {
+          console.log('Entro en el if');
+          console.log(this.juegosActivosPuntosModo[i].Modo);
+            // Vamos a buscar a los alumnos o equipos con sus repectivos puntos
+          if (this.juegosActivosPuntosModo[i].Modo === 'Individual') {
+              this.NumeroDeJuegoDePuntos = i;
+              this.RecuperarInscripcionesAlumnoJuego();
+              console.log(this.listaAlumnosOrdenadaPorPuntos);
+            } else {
+              this.NumeroDeJuegoDePuntos = i;
+              this.RecuperarInscripcionesEquiposJuego();
+              console.log(this.listaEquiposOrdenadaPorPuntos);
+            }
+          console.log('Alumnos');
+          console.log(this.listaAlumnosOrdenadaPorPuntos);
+          console.log('Equipo');
+          console.log(this.listaEquiposOrdenadaPorPuntos);
+          }
+        }
+  }
+
   AsignarGanadorJuegoPuntos() {
     console.log('Entramos en Asignar ganador puntos');
     console.log(this.juegosActivosPuntosModo);
@@ -776,7 +885,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
   }
 
-
   // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
   RecuperarInscripcionesAlumnoJuego() {
     console.log ('voy a por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
@@ -787,7 +895,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     });
   }
 
-    // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
+  // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
   RecuperarInscripcionesEquiposJuego() {
 
     console.log ('vamos por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
@@ -800,110 +908,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     });
   }
 
-  ActualizarBotonJuego() {
-    console.log('Estoy en actualizar botón');
-    if (this.jornadaId === undefined || this.juegodePuntosSeleccionadoID === undefined) {
-      this.botonAsignarJuegoDesactivado = true;
-    } else {
-      this.botonAsignarJuegoDesactivado = false;
-    }
-    console.log('botonAsignarJuegoDesactivado = ' + this.botonAsignarJuegoDesactivado);
-    console.log(this.juegosActivosPuntosModo);
-    console.log(this.juegodePuntosSeleccionadoID);
-
-        // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.juegosActivosPuntosModo.length; i++) {
-          console.log('Entro en el for');
-          console.log(this.juegosActivosPuntosModo[i].id);
-          console.log(this.juegodePuntosSeleccionadoID);
-          console.log(this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID));
-          if (this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID)) {
-          console.log('Entro en el if');
-          console.log(this.juegosActivosPuntosModo[i].Modo);
-            // Vamos a buscar a los alumnos o equipos con sus repectivos puntos
-          if (this.juegosActivosPuntosModo[i].Modo === 'Individual') {
-              this.NumeroDeJuegoDePuntos = i;
-              this.RecuperarInscripcionesAlumnoJuego();
-              console.log(this.listaAlumnosOrdenadaPorPuntos);
-            } else {
-              this.NumeroDeJuegoDePuntos = i;
-              this.RecuperarInscripcionesEquiposJuego();
-              console.log(this.listaEquiposOrdenadaPorPuntos);
-            }
-          console.log('Alumnos');
-          console.log(this.listaAlumnosOrdenadaPorPuntos);
-          console.log('Equipo');
-          console.log(this.listaEquiposOrdenadaPorPuntos);
-          }
-        }
-  }
-  /* Para averiguar si todas las filas están seleccionadas */
-  IsAllSelectedUno() {
-    // console.log('Estoy en IsAllSelectedUno()');
-    const numSelected = this.selectionUno.selected.length;
-    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    // console.log('this.selectionUno es:');
-    // console.log(this.selectionUno);
-    return numSelected === numRows;
-  }
-
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
-
-  MasterToggleUno() {
-    if (this.IsAllSelectedUno()) {
-      this.selectionUno.clear(); // Desactivamos todos
-    } else {
-      // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionUno.select(row));
-    }
-  }
-
-  IsAllSelectedDos() {
-    // console.log('Estoy en IsAllSelectedDos()');
-    const numSelected = this.selectionDos.selected.length;
-    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    // console.log('this.selectionDos es:');
-    // console.log(this.selectionDos);
-    return numSelected === numRows;
-  }
-
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
-
-  MasterToggleDos() {
-    if (this.IsAllSelectedDos()) {
-      this.selectionDos.clear(); // Desactivamos todos
-    } else {
-      // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionDos.select(row));
-    }
-  }
-
-  /* Para averiguar si todas las filas están seleccionadas */
-  IsAllSelectedTres() {
-    // console.log('Estoy en IsAllSelectedTres()');
-    const numSelected = this.selectionTres.selected.length;
-    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    // console.log('this.selectionTres es:');
-    // console.log(this.selectionTres);
-    return numSelected === numRows;
-  }
-
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
-
-  MasterToggleTres() {
-    if (this.IsAllSelectedTres()) {
-      this.selectionTres.clear(); // Desactivamos todos
-    } else {
-      // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionTres.select(row));
-    }
-  }
 
 
   goBack() {
