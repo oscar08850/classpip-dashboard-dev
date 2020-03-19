@@ -590,9 +590,16 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
   /* Para averiguar si todas las filas están seleccionadas */
   IsAllSelectedUno() {
+    let numSelected = 0;
+    let numRows = 0;
     // console.log('Estoy en IsAllSelectedUno()');
-    const numSelected = this.selectionUno.selected.length;
-    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      numSelected = this.selectionUno.selected.length;
+      numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    } else {
+      numSelected = this.selectionUno.selected.length;
+      numRows = this.dataSourceTablaGanadorEquipo.data.length;
+    }
     // console.log('this.selectionUno es:');
     // console.log(this.selectionUno);
     return numSelected === numRows;
@@ -604,19 +611,43 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   MasterToggleUno() {
     if (this.IsAllSelectedUno()) {
       this.selectionUno.clear(); // Desactivamos todos
+      this.enfrentamientosSeleccionadosColumnaUno = [];
+      console.log('Los enfrentamientos con ganadorDos son (individual): ');
+      console.log(this.enfrentamientosSeleccionadosColumnaUno);
     } else {
       // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionUno.select(row));
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+          this.selectionUno.select(row);
+          this.enfrentamientosSeleccionadosColumnaUno.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorDos son (individual): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaUno);
+      } else {
+        this.dataSourceTablaGanadorEquipo.data.forEach(row => {
+          this.selectionUno.select(row);
+          this.enfrentamientosSeleccionadosColumnaUno.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorDos son (equipo): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaUno);
+      }
     }
   }
 
   /* Para averiguar si todas las filas están seleccionadas */
   IsAllSelectedDos() {
-    // console.log('Estoy en IsAllSelectedDos()');
-    const numSelected = this.selectionDos.selected.length;
-    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    // console.log('this.selectionDos es:');
-    // console.log(this.selectionDos);
+    let numSelected = 0;
+    let numRows = 0;
+    // console.log('Estoy en IsAllSelectedUno()');
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      numSelected = this.selectionDos.selected.length;
+      numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    } else {
+      numSelected = this.selectionDos.selected.length;
+      numRows = this.dataSourceTablaGanadorEquipo.data.length;
+    }
+    // console.log('this.selectionUno es:');
+    // console.log(this.selectionUno);
     return numSelected === numRows;
   }
 
@@ -626,19 +657,43 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   MasterToggleDos() {
     if (this.IsAllSelectedDos()) {
       this.selectionDos.clear(); // Desactivamos todos
+      this.enfrentamientosSeleccionadosColumnaDos = [];
+      console.log('Los enfrentamientos con ganadorDos son (individual): ');
+      console.log(this.enfrentamientosSeleccionadosColumnaDos);
     } else {
       // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionDos.select(row));
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+          this.selectionDos.select(row);
+          this.enfrentamientosSeleccionadosColumnaDos.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorDos son (individual): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaDos);
+      } else {
+        this.dataSourceTablaGanadorEquipo.data.forEach(row => {
+          this.selectionDos.select(row);
+          this.enfrentamientosSeleccionadosColumnaDos.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorDos son (equipo): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaDos);
+      }
     }
   }
 
   /* Para averiguar si todas las filas están seleccionadas */
   IsAllSelectedTres() {
-    // console.log('Estoy en IsAllSelectedTres()');
-    const numSelected = this.selectionTres.selected.length;
-    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    // console.log('this.selectionTres es:');
-    // console.log(this.selectionTres);
+    let numSelected = 0;
+    let numRows = 0;
+    // console.log('Estoy en IsAllSelectedUno()');
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      numSelected = this.selectionTres.selected.length;
+      numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    } else {
+      numSelected = this.selectionTres.selected.length;
+      numRows = this.dataSourceTablaGanadorEquipo.data.length;
+    }
+    // console.log('this.selectionUno es:');
+    // console.log(this.selectionUno);
     return numSelected === numRows;
   }
 
@@ -648,9 +703,26 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   MasterToggleTres() {
     if (this.IsAllSelectedTres()) {
       this.selectionTres.clear(); // Desactivamos todos
+      this.enfrentamientosSeleccionadosColumnaTres = [];
+      console.log('Los enfrentamientos con ganadorTres son (individual): ');
+      console.log(this.enfrentamientosSeleccionadosColumnaTres);
     } else {
       // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionTres.select(row));
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+          this.selectionTres.select(row);
+          this.enfrentamientosSeleccionadosColumnaTres.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorTres son (individual): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaTres);
+      } else {
+        this.dataSourceTablaGanadorEquipo.data.forEach(row => {
+          this.selectionTres.select(row);
+          this.enfrentamientosSeleccionadosColumnaTres.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorTres son (equipo): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaTres);
+      }
     }
   }
 
