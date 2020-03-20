@@ -12,8 +12,18 @@ import { SesionService, CalculosService, PeticionesAPIService } from '../../../.
 import {MatTableDataSource} from '@angular/material/table';
 
 import { Location } from '@angular/common';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
+export interface Asignacion {
+  modo: string;
+  id: number;
+}
+
+const ModoAsignacion: Asignacion[] = [
+  {modo: 'Manualmente', id: 1},
+  {modo: 'Aleatoriamente', id: 2},
+  {modo: 'Juego de Puntos', id: 3},
+];
 
 @Component({
   selector: 'app-ganador-juego-de-competicion-liga',
@@ -36,6 +46,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   equiposSeleccionadosUno: any[] = [];
   equiposSeleccionadosDos: any[] = [];
   equiposSeleccionadosTres: any[] = [];
+  modoAsignacion: Asignacion[] = ModoAsignacion;
 
   avisoMasDeUnGanadorMarcadoUnoDos = false;
   avisoMasDeUnGanadorMarcadoUnoEmpate = false;
@@ -48,6 +59,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   JornadasCompeticion: TablaJornadas[] = [];
   jornadaId: number;
   juegodePuntosSeleccionadoID: number;
+  modoAsignacionId: number;
 
   // Información de la tabla: Muestra el JugadorUno, JugadorDos, Ganador, JornadaDeCompeticionLigaId y id
   EnfrentamientosJornadaSeleccionada: EnfrentamientoLiga[] = [];
@@ -69,6 +81,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
   dataSourceTablaGanadorIndividual;
   dataSourceTablaGanadorEquipo;
+
 
   // displayedColumnsAlumno: string[] = ['select1', 'nombreJugadorUno', 'select2', 'nombreJugadorDos', 'select3', 'Empate'];
   displayedColumnsAlumno: string[] = ['select1', 'nombreJugadorUno', 'select2', 'nombreJugadorDos', 'select3', 'Empate'];
@@ -105,40 +118,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
           z++;
         }
     }
-  }
-
-
-  /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
-     o si debe estar desactivado (si no se ha seleccionado la jornada) */
-  ActualizarBotonAleatorio() {
-    console.log('Estoy en actualizar botón');
-    // Lo primero borramos las listas de ganadores:
-    console.log('Voy a borrar las listas de ganadores');
-    this.enfrentamientosSeleccionadosColumnaUno = [];
-    this.enfrentamientosSeleccionadosColumnaDos = [];
-    this.enfrentamientosSeleccionadosColumnaTres = [];
-    console.log(this.jornadaId);
-    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
-    if (this.jornadaId === undefined) {
-      this.botonAsignarAleatorioDesactivado = true;
-    } else {
-      this.botonAsignarAleatorioDesactivado = false;
-      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-    }
-    console.log('botonAsignarAleatorioDesactivado = ' + this.botonAsignarAleatorioDesactivado);
-  }
-
-  ActualizarBotonManual() {
-    console.log('Estoy en actualizar botón');
-    console.log(this.jornadaId);
-    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
-    if (this.jornadaId === undefined) {
-      this.botonAsignarManualDesactivado = true;
-    } else {
-      this.botonAsignarManualDesactivado = false;
-      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-    }
-    console.log(this.botonAsignarAleatorioDesactivado);
   }
 
   ObtenerEnfrentamientosDeCadaJornada(jornadaId: number) {
@@ -231,40 +210,126 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
   }
 
+  ///////////////////////////////////////////////////  ALEATORIAMENTE  /////////////////////////////////////////////////////////
+  /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
+     o si debe estar desactivado (si no se ha seleccionado la jornada) */
+     ActualizarBoton() {
+      console.log('Estoy en actualizar botón');
+      console.log(this.modoAsignacionId);
+      if (this.modoAsignacionId === undefined || this.jornadaId === undefined) {
+        this.botonAsignarAleatorioDesactivado = true;
+        this.botonAsignarManualDesactivado = true;
+        this.botonAsignarJuegoDesactivado = true;
+      } else if (Number(this.modoAsignacionId) === 1) { // Manual
+        console.log('Modo manual');
+        this.botonAsignarAleatorioDesactivado = true;
+        this.botonAsignarManualDesactivado = false;
+        this.botonAsignarJuegoDesactivado = true;
+        this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+      } else if (Number(this.modoAsignacionId) === 2) { // Aleatorio
+        console.log('Modo aleatorio');
+        this.botonAsignarManualDesactivado = true;
+        this.botonAsignarAleatorioDesactivado = false;
+        this.botonAsignarJuegoDesactivado = true;
+        console.log('Voy a borrar las listas de ganadores');
+        this.enfrentamientosSeleccionadosColumnaUno = [];
+        this.enfrentamientosSeleccionadosColumnaDos = [];
+        this.enfrentamientosSeleccionadosColumnaTres = [];
+        this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+      } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID !== undefined) { // JuegoPuntos
+        console.log('Modo puntos');
+        this.botonAsignarManualDesactivado = true;
+        this.botonAsignarAleatorioDesactivado = true;
+        this.botonAsignarJuegoDesactivado = false;
+        this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+        this.ActualizarBotonJuego();
+      } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID === undefined) { // JuegoPuntos
+        this.botonAsignarManualDesactivado = true;
+        this.botonAsignarAleatorioDesactivado = true;
+        this.botonAsignarJuegoDesactivado = true;
+      }
+    }
+
+     ActualizarBotonAleatorio() {
+    console.log('Estoy en actualizar botón');
+    // Lo primero borramos las listas de ganadores:
+    console.log('Voy a borrar las listas de ganadores');
+    this.enfrentamientosSeleccionadosColumnaUno = [];
+    this.enfrentamientosSeleccionadosColumnaDos = [];
+    this.enfrentamientosSeleccionadosColumnaTres = [];
+    console.log(this.jornadaId);
+    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
+    if (this.jornadaId === undefined) {
+      this.botonAsignarAleatorioDesactivado = true;
+    } else {
+      this.botonAsignarAleatorioDesactivado = false;
+      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+    }
+    console.log('botonAsignarAleatorioDesactivado = ' + this.botonAsignarAleatorioDesactivado);
+  }
+
   AsignarGanadorAleatoriamente() {
     console.log('Estoy en AsignarGanadorAleatoriamente()');
     console.log('La lista de enfrentamientos de esta Jornada es: ');
     console.log(this.EnfrentamientosJornadaSeleccionada);
+    let Resultados = '';
+    let Asignados = 'os enfrentamientos: ';
     const listaEnfrentamientosActualizados: EnfrentamientoLiga[] = [];
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
-      const Random = Math.random();
-      console.log('Random ' + i + ' = ' + Random);
-      if (Random < 0.33) {
-        this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorUno;
-        this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno;
-        console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
-                    + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno);
-        console.log(this.EnfrentamientosJornadaSeleccionada[i]);
-        listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
-      } else if (Random > 0.33 && Random < 0.66) {
-        this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorDos;
-        this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos;
-        console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
-                    + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos);
-        console.log(this.EnfrentamientosJornadaSeleccionada[i]);
-        listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
-      } else if (Random > 0.66) {
-        this.EnfrentamientosJornadaSeleccionada[i].Ganador = 0;
-        this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-        console.log('El enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' ha quedado en empate: ');
-        console.log(this.EnfrentamientosJornadaSeleccionada[i]);
-        listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+      if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+        const Random = Math.random();
+        console.log('Random ' + i + ' = ' + Random);
+        if (Random < 0.33) {
+          this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorUno;
+          this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno;
+          console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
+                      + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno);
+          console.log(this.EnfrentamientosJornadaSeleccionada[i]);
+          Resultados = Resultados + '\n' + 'Ganador: ' + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno;
+          listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+        } else if (Random > 0.33 && Random < 0.66) {
+          this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorDos;
+          this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos;
+          console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
+                      + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos);
+          console.log(this.EnfrentamientosJornadaSeleccionada[i]);
+          Resultados = Resultados + '\n' + 'Ganador: ' + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos;
+          listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+        } else if (Random > 0.66) {
+          this.EnfrentamientosJornadaSeleccionada[i].Ganador = 0;
+          this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+          console.log('El enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' ha quedado en empate: ');
+          console.log(this.EnfrentamientosJornadaSeleccionada[i]);
+          Resultados = Resultados + '\n' + 'Empate';
+          listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+        }
+        const enfrentamiento = new EnfrentamientoLiga(this.EnfrentamientosJornadaSeleccionada[i].JugadorUno,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].JugadorDos,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].Ganador,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].JornadaDeCompeticionLigaId,
+                                                      undefined, undefined,
+                                                      this.EnfrentamientosJornadaSeleccionada[i].id);
+        this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).subscribe();
+      } else {
+        console.log('Este enfrentamiento ya tiene asignado un ganador: ');
+        console.log(this.EnfrentamientosJornadaSeleccionada[i].nombreGanador);
+        Asignados = Asignados + (i + 1) + 'º ' ;
       }
-      this.peticionesAPI.PonGanadorDelEnfrentamiento(this.EnfrentamientosJornadaSeleccionada[i]).subscribe();
+
     }
-    console.log('La lista de enfrentamientos actualizados queda: ');
-    console.log(listaEnfrentamientosActualizados);
+    if (Resultados !== '' && Asignados === 'os enfrentamientos: ') {
+      console.log('La lista de enfrentamientos actualizados queda: ');
+      console.log(listaEnfrentamientosActualizados);
+      console.log('Los Resultados son: ' + Resultados);
+      Swal.fire(Resultados, 'Estos son los resultados', 'success');
+    } else if (Resultados === '' && Asignados !== '') {
+      Swal.fire('L' + Asignados + ' ya tienen asignado un gandaor',
+      'No se ha podido asignar ganador a estos enfrentamientos', 'error');
+    } else if (Resultados !== '' && Asignados !== '') {
+      Swal.fire(Resultados, 'No se ha podido asignar ganador a l' + Asignados + 'porque ya tienen asignado un gandaor. ',
+                'success');
+    }
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
       console.log('Este Juego es Individual');
@@ -331,6 +396,23 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
   }
 
+  ///////////////////////////////////////////////////  MANUALMENTE  /////////////////////////////////////////////////////////
+
+  /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
+     o si debe estar desactivado (si no se ha seleccionado la jornada) */
+  ActualizarBotonManual() {
+    console.log('Estoy en actualizar botón');
+    console.log(this.jornadaId);
+    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
+    if (this.jornadaId === undefined) {
+      this.botonAsignarManualDesactivado = true;
+    } else {
+      this.botonAsignarManualDesactivado = false;
+      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+    }
+    console.log(this.botonAsignarAleatorioDesactivado);
+  }
+
   RevisarMultipleSeleccion() {
     console.log('Selección en ColumnaUno');
     console.log(this.enfrentamientosSeleccionadosColumnaUno);
@@ -393,6 +475,10 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   }
 
   AsignarGanadorManualmente() {
+    let Resultados: {
+      buenos: string
+      malos: string
+    } = {buenos: '', malos: 'os enfrentamientos: '};
     /////////////////////////////////////////////////////   INDIVIDUAL   //////////////////////////////////////////////////
     if (this.juegoSeleccionado.Modo === 'Individual') {
       const seleccionMultiple = this.calculos.RevisarMultipleSeleccion(this.enfrentamientosSeleccionadosColumnaUno,
@@ -402,29 +488,49 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       if (seleccionMultiple === false) {
             // -------------------------------- GANADOR UNO ----------------------------------- //
             if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
-              this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaUno, this.EnfrentamientosJornadaSeleccionada,
-                                                     this.listaAlumnosClasificacion, this.alumnosJuegoDeCompeticionLiga,
-                                                     this.juegoSeleccionado, 1);
+              Resultados = this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaUno,
+                                                                               this.EnfrentamientosJornadaSeleccionada,
+                                                                               this.listaAlumnosClasificacion,
+                                                                               this.alumnosJuegoDeCompeticionLiga,
+                                                                               this.juegoSeleccionado, 1, Resultados);
             }
 
 
             // -------------------------------- GANADOR DOS ----------------------------------- //
             if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
-              this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
-                                                     this.listaAlumnosClasificacion, this.alumnosJuegoDeCompeticionLiga,
-                                                     this.juegoSeleccionado, 2);
+              Resultados = this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaDos,
+                                                                  this.EnfrentamientosJornadaSeleccionada,
+                                                                  this.listaAlumnosClasificacion,
+                                                                  this.alumnosJuegoDeCompeticionLiga,
+                                                                  this.juegoSeleccionado, 2, Resultados);
             }
 
 
             // ----------------------------------- EMPATE ------------------------------------- //
             if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
-              this.calculos.AsignarEmpateIndividual(this.enfrentamientosSeleccionadosColumnaTres,
+              Resultados = this.calculos.AsignarEmpateIndividual(this.enfrentamientosSeleccionadosColumnaTres,
                                                     this.EnfrentamientosJornadaSeleccionada,
                                                     this.listaAlumnosClasificacion,
                                                     this.alumnosJuegoDeCompeticionLiga,
-                                                    this.juegoSeleccionado, 0);
+                                                    this.juegoSeleccionado, Resultados);
+            }
+            console.log('Resultados buenos: ' + Resultados.buenos);
+            console.log('Resultados malos: ' + Resultados.malos);
+
+            if (Resultados.buenos !== '' && Resultados.malos === 'os enfrentamientos: ') {
+              console.log('Los Resultados son: ' + Resultados.buenos);
+              Swal.fire(Resultados.buenos, 'Estos son los resultados', 'success');
+            } else if (Resultados.buenos === '' && Resultados.malos !== 'os enfrentamientos: ') {
+              Swal.fire('L' + Resultados.malos + ' ya tienen asignado un gandaor',
+              'No se ha podido asignar ganador a estos enfrentamientos', 'error');
+            } else if (Resultados.buenos !== '' && Resultados.malos !== 'os enfrentamientos: ') {
+              Swal.fire(Resultados.buenos, 'No se ha podido asignar ganador a l' + Resultados.malos +
+                        ' porque ya tienen asignado un gandaor. ', 'success');
+            } else if (Resultados.buenos === '' && Resultados.malos === 'os enfrentamientos: ') {
+              Swal.fire('No se ha seleccionado ningún ganador', '', 'error');
             }
       } else {
+          Swal.fire('Hay más de una selección en alguno de los enfrentamientos', ' No se ha podido realizar esta acción', 'error');
           console.log('Hay más de una selección en alguno de los enfrentamientos');
       }///////////////////////////////////////////////////////   EQUIPOS   ////////////////////////////////////////////////////
     } else {
@@ -433,32 +539,49 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
                                                                        this.enfrentamientosSeleccionadosColumnaTres);
       console.log(seleccionMultiple);
       if (seleccionMultiple === false) {
-        // -------------------------------- GANADOR UNO ----------------------------------- //
-        if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
-          console.log('Estoy dentro de seleccionados columna uno');
-          this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaUno, this.EnfrentamientosJornadaSeleccionada,
-                                               this.listaEquiposClasificacion,
-                                               this.equiposJuegoDeCompeticionLiga,
-                                               this.juegoSeleccionado, 1);
-        }
+            // -------------------------------- GANADOR UNO ----------------------------------- //
+            if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
+              console.log('Estoy dentro de seleccionados columna uno');
+              Resultados = this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaUno,
+                                                               this.EnfrentamientosJornadaSeleccionada,
+                                                               this.listaEquiposClasificacion,
+                                                               this.equiposJuegoDeCompeticionLiga,
+                                                               this.juegoSeleccionado, 1, Resultados);
+            }
 
-        // -------------------------------- GANADOR DOS ----------------------------------- //
-        if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
-          this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
-                                               this.listaEquiposClasificacion,
-                                               this.equiposJuegoDeCompeticionLiga,
-                                               this.juegoSeleccionado, 2);
-        }
+            // -------------------------------- GANADOR DOS ----------------------------------- //
+            if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
+              this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
+                                                  this.listaEquiposClasificacion,
+                                                  this.equiposJuegoDeCompeticionLiga,
+                                                  this.juegoSeleccionado, 2, Resultados);
+            }
 
-        // ----------------------------------- EMPATE ------------------------------------- //
-        if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
-          this.calculos.AsignarEmpateEquipos(this.enfrentamientosSeleccionadosColumnaTres,
-                                             this.EnfrentamientosJornadaSeleccionada,
-                                             this.listaEquiposClasificacion,
-                                             this.equiposJuegoDeCompeticionLiga,
-                                             this.juegoSeleccionado, 0) ;
-        }
+            // ----------------------------------- EMPATE ------------------------------------- //
+            if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
+              this.calculos.AsignarEmpateEquipos(this.enfrentamientosSeleccionadosColumnaTres,
+                                                this.EnfrentamientosJornadaSeleccionada,
+                                                this.listaEquiposClasificacion,
+                                                this.equiposJuegoDeCompeticionLiga,
+                                                this.juegoSeleccionado, Resultados) ;
+            }
+            console.log('Resultados buenos: ' + Resultados.buenos);
+            console.log('Resultados malos: ' + Resultados.malos);
+
+            if (Resultados.buenos !== '' && Resultados.malos === 'os enfrentamientos: ') {
+              console.log('Los Resultados son: ' + Resultados.buenos);
+              Swal.fire(Resultados.buenos, 'Estos son los resultados', 'success');
+            } else if (Resultados.buenos === '' && Resultados.malos !== 'os enfrentamientos: ') {
+              Swal.fire('L' + Resultados.malos + ' ya tienen asignado un gandaor',
+              'No se ha podido asignar ganador a estos enfrentamientos', 'error');
+            } else if (Resultados.buenos !== '' && Resultados.malos !== 'os enfrentamientos: ') {
+              Swal.fire(Resultados.buenos, 'No se ha podido asignar ganador a l' + Resultados.malos +
+                        ' porque ya tienen asignado un gandaor. ', 'success');
+            } else if (Resultados.buenos === '' && Resultados.malos === 'os enfrentamientos: ') {
+              Swal.fire('No se ha seleccionado ningún ganador', '', 'error');
+            }
       } else {
+        Swal.fire('Hay más de una selección en alguno de los enfrentamientos', ' No se ha podido realizar esta acción', 'error');
         console.log('Hay más de una selección en alguno de los enfrentamientos');
       }
     }
@@ -554,173 +677,155 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
   }
 
-  AsignarGanadorJuegoPuntos() {
-    console.log('Entramos en Asignar ganador puntos');
-    console.log(this.juegosActivosPuntosModo);
-    console.log(this.juegodePuntosSeleccionadoID);
-    const listaEnfrentamientosActualizados: EnfrentamientoLiga[] = [];
-    let JugadorUno: AlumnoJuegoDePuntos;
-    let JugadorDos: AlumnoJuegoDePuntos;
-    let JugadorUnoEq: EquipoJuegoDePuntos;
-    let JugadorDosEq: EquipoJuegoDePuntos;
-
-    console.log('Ya he salido del primer if y del primer FOR');
-    console.log(this.NumeroDeJuegoDePuntos);
-    console.log(this.juegosActivosPuntosModo[this.NumeroDeJuegoDePuntos].Modo);
-    if (this.juegosActivosPuntosModo[this.NumeroDeJuegoDePuntos].Modo === 'Individual') {
-      console.log('Estoy en AsignarGanadorJuegoPuntos()');
-      console.log('La lista de enfrentamientos de esta Jornada es: ');
-      console.log(this.EnfrentamientosJornadaSeleccionada);
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
-        // Para cada enfrentamiento
-        // tslint:disable-next-line:prefer-for-of
-        for (let y = 0; y < this.listaAlumnosOrdenadaPorPuntos.length; y++) {
-          // Busco a los jugadores del enfrentamiento en la lista de participantes del juego de puntos
-          if (this.listaAlumnosOrdenadaPorPuntos[y].alumnoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno) {
-            // Saco al jugador uno de la lista de participantes del juego de puntos
-            JugadorUno = this.listaAlumnosOrdenadaPorPuntos[y];
-            console.log('Jugador uno ' + JugadorUno);
-
-            // ELIMINAR /////////////////////////////////////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            if (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos) {
-              JugadorDos = this.listaAlumnosOrdenadaPorPuntos[y];
-              console.log('Jugador dos IFF ' + JugadorDos);
-            }
-          } else if (this.listaAlumnosOrdenadaPorPuntos[y].alumnoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos) {
-            // Saco al jugador dos de la lista de participantes del juego de puntos
-            JugadorDos = this.listaAlumnosOrdenadaPorPuntos[y];
-            console.log('Jugador dos ' + JugadorDos);
-          }
-        }
-        if (JugadorUno.PuntosTotalesAlumno > JugadorDos.PuntosTotalesAlumno) {
-            console.log('Ha ganado el Jugador uno');
-
-            this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorUno;
-            this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno;
-            console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
-            + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno);
-            console.log(this.EnfrentamientosJornadaSeleccionada[i]);
-            listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
-        } else if (JugadorUno.PuntosTotalesAlumno < JugadorDos.PuntosTotalesAlumno) {
-            console.log('Ha ganado el Jugador dos');
-            this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorDos;
-            this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos;
-            console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
-            + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos);
-            console.log(this.EnfrentamientosJornadaSeleccionada[i]);
-            listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
-        } else {
-            console.log('Empate');
-            this.EnfrentamientosJornadaSeleccionada[i].Ganador = 0;
-            this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-            console.log('El enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' ha quedado en empate: ');
-            console.log(this.EnfrentamientosJornadaSeleccionada[i]);
-            listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
-        }
-        this.peticionesAPI.PonGanadorDelEnfrentamiento(this.EnfrentamientosJornadaSeleccionada[i]).subscribe();
-      }
-      console.log('La lista de enfrentamientos actualizados queda: ');
-      console.log(listaEnfrentamientosActualizados);
-      console.log('Este Juego es Individual');
-      this.AsignarPuntosAlumnosGanadorAleatoriamente(listaEnfrentamientosActualizados, this.alumnosJuegoDeCompeticionLiga);
-
+  /* Para averiguar si todas las filas están seleccionadas */
+  IsAllSelectedUno() {
+    let numSelected = 0;
+    let numRows = 0;
+    // console.log('Estoy en IsAllSelectedUno()');
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      numSelected = this.selectionUno.selected.length;
+      numRows = this.dataSourceTablaGanadorIndividual.data.length;
     } else {
-      console.log('Estoy en AsignarGanadorJuegoPuntos() por equipos');
-      console.log('La lista de enfrentamientos de esta Jornada es: ');
-      console.log(this.EnfrentamientosJornadaSeleccionada);
-
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
-        // Para cada enfrentamiento
-        // tslint:disable-next-line:prefer-for-of
-        for (let y = 0; y < this.listaEquiposOrdenadaPorPuntos.length; y++) {
-          // Busco a los jugadores del enfrentamiento en la lista de participantes del juego de puntos
-          if (this.listaEquiposOrdenadaPorPuntos[y].equipoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno) {
-            // Saco al jugador uno de la lista de participantes del juego de puntos
-            JugadorUnoEq = this.listaEquiposOrdenadaPorPuntos[y];
-            console.log('Jugador uno ' + JugadorUnoEq);
-            if (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos) {
-              JugadorDosEq = this.listaEquiposOrdenadaPorPuntos[y];
-              console.log('Jugador dos IFF ' + JugadorDosEq);
-            }
-          } else if (this.listaEquiposOrdenadaPorPuntos[y].equipoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos) {
-            // Saco al jugador dos de la lista de participantes del juego de puntos
-            JugadorDosEq = this.listaEquiposOrdenadaPorPuntos[y];
-            console.log('Jugador dos ' + JugadorDosEq);
-          }
-        }
-        if (JugadorUnoEq.PuntosTotalesEquipo > JugadorDosEq.PuntosTotalesEquipo) {
-            console.log('Ha ganado el Jugador uno');
-
-            this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorUno;
-            this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno;
-            console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
-            + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno);
-            console.log(this.EnfrentamientosJornadaSeleccionada[i]);
-            listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
-        } else if (JugadorUnoEq.PuntosTotalesEquipo < JugadorDosEq.PuntosTotalesEquipo) {
-            console.log('Ha ganado el Jugador dos');
-            this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorDos;
-            this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos;
-            console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
-            + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos);
-            console.log(this.EnfrentamientosJornadaSeleccionada[i]);
-            listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
-        } else {
-            console.log('Empate');
-            this.EnfrentamientosJornadaSeleccionada[i].Ganador = 0;
-            this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-            console.log('El enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' ha quedado en empate: ');
-            console.log(this.EnfrentamientosJornadaSeleccionada[i]);
-            listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
-        }
-        this.peticionesAPI.PonGanadorDelEnfrentamiento(this.EnfrentamientosJornadaSeleccionada[i]).subscribe();
-
-      }
-      console.log('La lista de enfrentamientos actualizados queda: ');
-      console.log(listaEnfrentamientosActualizados);
-      console.log('Este Juego es por Equipos');
-      this.AsignarPuntosEquiposGanadorAleatoriamente(listaEnfrentamientosActualizados, this.equiposJuegoDeCompeticionLiga);
+      numSelected = this.selectionUno.selected.length;
+      numRows = this.dataSourceTablaGanadorEquipo.data.length;
     }
-
+    // console.log('this.selectionUno es:');
+    // console.log(this.selectionUno);
+    return numSelected === numRows;
   }
 
-
-  // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
-  RecuperarInscripcionesAlumnoJuego() {
-    console.log ('voy a por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
-    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(Number(this.juegodePuntosSeleccionadoID))
-    .subscribe(inscripciones => {
-      this.listaAlumnosOrdenadaPorPuntos = inscripciones;
-      console.log (this.listaAlumnosOrdenadaPorPuntos);
-    });
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
+  MasterToggleUno() {
+    if (this.IsAllSelectedUno()) {
+      this.selectionUno.clear(); // Desactivamos todos
+      this.enfrentamientosSeleccionadosColumnaUno = [];
+      console.log('Los enfrentamientos con ganadorDos son (individual): ');
+      console.log(this.enfrentamientosSeleccionadosColumnaUno);
+    } else {
+      // activamos todos
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+          this.selectionUno.select(row);
+          this.enfrentamientosSeleccionadosColumnaUno.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorDos son (individual): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaUno);
+      } else {
+        this.dataSourceTablaGanadorEquipo.data.forEach(row => {
+          this.selectionUno.select(row);
+          this.enfrentamientosSeleccionadosColumnaUno.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorDos son (equipo): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaUno);
+      }
+    }
   }
 
-    // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
-  RecuperarInscripcionesEquiposJuego() {
-
-    console.log ('vamos por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
-    this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(Number(this.juegodePuntosSeleccionadoID))
-    .subscribe(inscripciones => {
-      this.listaEquiposOrdenadaPorPuntos = inscripciones;
-      console.log(this.listaEquiposOrdenadaPorPuntos);
-      console.log ('ya tengo las inscripciones');
-
-    });
+  /* Para averiguar si todas las filas están seleccionadas */
+  IsAllSelectedDos() {
+    let numSelected = 0;
+    let numRows = 0;
+    // console.log('Estoy en IsAllSelectedUno()');
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      numSelected = this.selectionDos.selected.length;
+      numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    } else {
+      numSelected = this.selectionDos.selected.length;
+      numRows = this.dataSourceTablaGanadorEquipo.data.length;
+    }
+    // console.log('this.selectionUno es:');
+    // console.log(this.selectionUno);
+    return numSelected === numRows;
   }
 
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
+  MasterToggleDos() {
+    if (this.IsAllSelectedDos()) {
+      this.selectionDos.clear(); // Desactivamos todos
+      this.enfrentamientosSeleccionadosColumnaDos = [];
+      console.log('Los enfrentamientos con ganadorDos son (individual): ');
+      console.log(this.enfrentamientosSeleccionadosColumnaDos);
+    } else {
+      // activamos todos
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+          this.selectionDos.select(row);
+          this.enfrentamientosSeleccionadosColumnaDos.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorDos son (individual): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaDos);
+      } else {
+        this.dataSourceTablaGanadorEquipo.data.forEach(row => {
+          this.selectionDos.select(row);
+          this.enfrentamientosSeleccionadosColumnaDos.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorDos son (equipo): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaDos);
+      }
+    }
+  }
+
+  /* Para averiguar si todas las filas están seleccionadas */
+  IsAllSelectedTres() {
+    let numSelected = 0;
+    let numRows = 0;
+    // console.log('Estoy en IsAllSelectedUno()');
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      numSelected = this.selectionTres.selected.length;
+      numRows = this.dataSourceTablaGanadorIndividual.data.length;
+    } else {
+      numSelected = this.selectionTres.selected.length;
+      numRows = this.dataSourceTablaGanadorEquipo.data.length;
+    }
+    // console.log('this.selectionUno es:');
+    // console.log(this.selectionUno);
+    return numSelected === numRows;
+  }
+
+  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+    * desactivado, en cuyo caso se activan todos */
+  MasterToggleTres() {
+    if (this.IsAllSelectedTres()) {
+      this.selectionTres.clear(); // Desactivamos todos
+      this.enfrentamientosSeleccionadosColumnaTres = [];
+      console.log('Los enfrentamientos con ganadorTres son (individual): ');
+      console.log(this.enfrentamientosSeleccionadosColumnaTres);
+    } else {
+      // activamos todos
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+          this.selectionTres.select(row);
+          this.enfrentamientosSeleccionadosColumnaTres.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorTres son (individual): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaTres);
+      } else {
+        this.dataSourceTablaGanadorEquipo.data.forEach(row => {
+          this.selectionTres.select(row);
+          this.enfrentamientosSeleccionadosColumnaTres.push(row);
+        });
+        console.log('Los enfrentamientos con ganadorTres son (equipo): ');
+        console.log(this.enfrentamientosSeleccionadosColumnaTres);
+      }
+    }
+  }
+
+  ///////////////////////////////////////////////////  MEDIANTE JUEGO DE PUNTOS  /////////////////////////////////////////////////////////
   ActualizarBotonJuego() {
-    console.log('Estoy en actualizar botón');
-    if (this.jornadaId === undefined || this.juegodePuntosSeleccionadoID === undefined) {
-      this.botonAsignarJuegoDesactivado = true;
-    } else {
-      this.botonAsignarJuegoDesactivado = false;
-    }
-    console.log('botonAsignarJuegoDesactivado = ' + this.botonAsignarJuegoDesactivado);
-    console.log(this.juegosActivosPuntosModo);
-    console.log(this.juegodePuntosSeleccionadoID);
+    // console.log('Estoy en actualizar botón');
+    // if (this.jornadaId === undefined || this.juegodePuntosSeleccionadoID === undefined) {
+    //   this.botonAsignarJuegoDesactivado = true;
+    // } else {
+    //   this.botonAsignarJuegoDesactivado = false;
+    // }
+    // console.log('botonAsignarJuegoDesactivado = ' + this.botonAsignarJuegoDesactivado);
+    // console.log(this.juegosActivosPuntosModo);
+    // console.log(this.juegodePuntosSeleccionadoID);
 
         // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.juegosActivosPuntosModo.length; i++) {
@@ -748,73 +853,222 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
           }
         }
   }
-  /* Para averiguar si todas las filas están seleccionadas */
-  IsAllSelectedUno() {
-    // console.log('Estoy en IsAllSelectedUno()');
-    const numSelected = this.selectionUno.selected.length;
-    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    // console.log('this.selectionUno es:');
-    // console.log(this.selectionUno);
-    return numSelected === numRows;
-  }
 
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
+  AsignarGanadorJuegoPuntos() {
+    console.log('Entramos en Asignar ganador puntos');
+    console.log(this.juegosActivosPuntosModo);
+    console.log(this.juegodePuntosSeleccionadoID);
+    const listaEnfrentamientosActualizados: EnfrentamientoLiga[] = [];
+    let JugadorUno: AlumnoJuegoDePuntos;
+    let JugadorDos: AlumnoJuegoDePuntos;
+    let JugadorUnoEq: EquipoJuegoDePuntos;
+    let JugadorDosEq: EquipoJuegoDePuntos;
+    let Resultados = '';
+    let Asignados = 'os enfrentamientos: ';
+    console.log('Ya he salido del primer if y del primer FOR');
+    console.log(this.NumeroDeJuegoDePuntos);
+    console.log(this.juegosActivosPuntosModo[this.NumeroDeJuegoDePuntos].Modo);
+    if (this.juegosActivosPuntosModo[this.NumeroDeJuegoDePuntos].Modo === 'Individual') {
+      console.log('Estoy en AsignarGanadorJuegoPuntos()');
+      console.log('La lista de enfrentamientos de esta Jornada es: ');
+      console.log(this.EnfrentamientosJornadaSeleccionada);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
+        if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+          // Para cada enfrentamiento
+          // tslint:disable-next-line:prefer-for-of
+          for (let y = 0; y < this.listaAlumnosOrdenadaPorPuntos.length; y++) {
+            // Busco a los jugadores del enfrentamiento en la lista de participantes del juego de puntos
+            if (this.listaAlumnosOrdenadaPorPuntos[y].alumnoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno) {
+              // Saco al jugador uno de la lista de participantes del juego de puntos
+              JugadorUno = this.listaAlumnosOrdenadaPorPuntos[y];
+              console.log('Jugador uno ' + JugadorUno);
 
-  MasterToggleUno() {
-    if (this.IsAllSelectedUno()) {
-      this.selectionUno.clear(); // Desactivamos todos
+              if (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos) {
+                JugadorDos = this.listaAlumnosOrdenadaPorPuntos[y];
+                console.log('Jugador dos ' + JugadorDos);
+              }
+            } else if (this.listaAlumnosOrdenadaPorPuntos[y].alumnoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos) {
+              // Saco al jugador dos de la lista de participantes del juego de puntos
+              JugadorDos = this.listaAlumnosOrdenadaPorPuntos[y];
+              console.log('Jugador dos ' + JugadorDos);
+            }
+          }
+          console.log(JugadorUno);
+          console.log(JugadorDos);
+          if (JugadorUno.PuntosTotalesAlumno > JugadorDos.PuntosTotalesAlumno) {
+              console.log('Ha ganado el Jugador uno');
+
+              this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorUno;
+              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno;
+              Resultados = Resultados + '\n' + 'Ganador: ' + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno;
+              console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
+              + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno);
+              console.log(this.EnfrentamientosJornadaSeleccionada[i]);
+              listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+          } else if (JugadorUno.PuntosTotalesAlumno < JugadorDos.PuntosTotalesAlumno) {
+              console.log('Ha ganado el Jugador dos');
+              this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorDos;
+              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos;
+              Resultados = Resultados + '\n' + 'Ganador: ' + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos;
+              console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
+              + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos);
+              console.log(this.EnfrentamientosJornadaSeleccionada[i]);
+              listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+          } else {
+              console.log('Empate');
+              this.EnfrentamientosJornadaSeleccionada[i].Ganador = 0;
+              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+              console.log('El enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' ha quedado en empate: ');
+              Resultados = Resultados + '\n' + 'Empate';
+              console.log(this.EnfrentamientosJornadaSeleccionada[i]);
+              listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+          }
+          const enfrentamiento = new EnfrentamientoLiga(this.EnfrentamientosJornadaSeleccionada[i].JugadorUno,
+                                                        this.EnfrentamientosJornadaSeleccionada[i].JugadorDos,
+                                                        this.EnfrentamientosJornadaSeleccionada[i].Ganador,
+                                                        this.EnfrentamientosJornadaSeleccionada[i].JornadaDeCompeticionLigaId,
+                                                        undefined, undefined,
+                                                        this.EnfrentamientosJornadaSeleccionada[i].id);
+          this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).subscribe();
+        } else {
+          console.log('Este enfrentamiento ya tiene asignado un ganador: ');
+          console.log(this.EnfrentamientosJornadaSeleccionada[i].nombreGanador);
+          Asignados = Asignados + (i + 1) + 'º ' ;
+        }
+      }
+
+      if (Resultados !== '' && Asignados === 'os enfrentamientos: ') {
+        console.log('La lista de enfrentamientos actualizados queda: ');
+        console.log(listaEnfrentamientosActualizados);
+        console.log('Los Resultados son: ' + Resultados);
+        Swal.fire(Resultados, 'Estos son los resultados', 'success');
+      } else if (Resultados === '' && Asignados !== '') {
+        Swal.fire('L' + Asignados + ' ya tienen asignado un gandaor',
+        'No se ha podido asignar ganador a estos enfrentamientos', 'error');
+      } else if (Resultados !== '' && Asignados !== '') {
+        Swal.fire(Resultados, 'No se ha podido asignar ganador a l' + Asignados + 'porque ya tienen asignado un gandaor. ',
+                  'success');
+      }
+
+      console.log('La lista de enfrentamientos actualizados queda: ');
+      console.log(listaEnfrentamientosActualizados);
+      console.log('Este Juego es Individual');
+      this.AsignarPuntosAlumnosGanadorAleatoriamente(listaEnfrentamientosActualizados, this.alumnosJuegoDeCompeticionLiga);
+
     } else {
-      // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionUno.select(row));
+      console.log('Estoy en AsignarGanadorJuegoPuntos() por equipos');
+      console.log('La lista de enfrentamientos de esta Jornada es: ');
+      console.log(this.EnfrentamientosJornadaSeleccionada);
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
+        if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+          // Para cada enfrentamiento
+          // tslint:disable-next-line:prefer-for-of
+          for (let y = 0; y < this.listaEquiposOrdenadaPorPuntos.length; y++) {
+            // Busco a los jugadores del enfrentamiento en la lista de participantes del juego de puntos
+            if (this.listaEquiposOrdenadaPorPuntos[y].equipoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno) {
+              // Saco al jugador uno de la lista de participantes del juego de puntos
+              JugadorUnoEq = this.listaEquiposOrdenadaPorPuntos[y];
+              console.log('Jugador uno ' + JugadorUnoEq);
+              if (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos) {
+                JugadorDosEq = this.listaEquiposOrdenadaPorPuntos[y];
+                console.log('Jugador dos IFF ' + JugadorDosEq);
+              }
+            } else if (this.listaEquiposOrdenadaPorPuntos[y].equipoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos) {
+              // Saco al jugador dos de la lista de participantes del juego de puntos
+              JugadorDosEq = this.listaEquiposOrdenadaPorPuntos[y];
+              console.log('Jugador dos ' + JugadorDosEq);
+            }
+          }
+          if (JugadorUnoEq.PuntosTotalesEquipo > JugadorDosEq.PuntosTotalesEquipo) {
+              console.log('Ha ganado el Jugador uno');
+
+              this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorUno;
+              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno;
+              Resultados = Resultados + '\n' + 'Ganador: ' + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno;
+              console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
+              + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno);
+              console.log(this.EnfrentamientosJornadaSeleccionada[i]);
+              listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+          } else if (JugadorUnoEq.PuntosTotalesEquipo < JugadorDosEq.PuntosTotalesEquipo) {
+              console.log('Ha ganado el Jugador dos');
+              this.EnfrentamientosJornadaSeleccionada[i].Ganador = this.EnfrentamientosJornadaSeleccionada[i].JugadorDos;
+              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos;
+              Resultados = Resultados + '\n' + 'Ganador: ' + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos;
+              console.log('El ganador del enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' es: '
+              + this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos);
+              console.log(this.EnfrentamientosJornadaSeleccionada[i]);
+              listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+          } else {
+              console.log('Empate');
+              this.EnfrentamientosJornadaSeleccionada[i].Ganador = 0;
+              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+              console.log('El enfrentamiento ' + this.EnfrentamientosJornadaSeleccionada[i].id + ' ha quedado en empate: ');
+              Resultados = Resultados + '\n' + 'Empate';
+              console.log(this.EnfrentamientosJornadaSeleccionada[i]);
+              listaEnfrentamientosActualizados.push(this.EnfrentamientosJornadaSeleccionada[i]);
+          }
+          const enfrentamiento = new EnfrentamientoLiga(this.EnfrentamientosJornadaSeleccionada[i].JugadorUno,
+                                                        this.EnfrentamientosJornadaSeleccionada[i].JugadorDos,
+                                                        this.EnfrentamientosJornadaSeleccionada[i].Ganador,
+                                                        this.EnfrentamientosJornadaSeleccionada[i].JornadaDeCompeticionLigaId,
+                                                        undefined, undefined,
+                                                        this.EnfrentamientosJornadaSeleccionada[i].id);
+          this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).subscribe();
+
+        } else {
+          console.log('Este enfrentamiento ya tiene asignado un ganador: ');
+          console.log(this.EnfrentamientosJornadaSeleccionada[i].nombreGanador);
+          Asignados = Asignados + (i + 1) + 'º ' ;
+        }
+      }
+
+      if (Resultados !== '' && Asignados === 'os enfrentamientos: ') {
+        console.log('La lista de enfrentamientos actualizados queda: ');
+        console.log(listaEnfrentamientosActualizados);
+        console.log('Los Resultados son: ' + Resultados);
+        Swal.fire(Resultados, 'Estos son los resultados', 'success');
+      } else if (Resultados === '' && Asignados !== '') {
+        Swal.fire('L' + Asignados + ' ya tienen asignado un gandaor',
+        'No se ha podido asignar ganador a estos enfrentamientos', 'error');
+      } else if (Resultados !== '' && Asignados !== '') {
+        Swal.fire(Resultados, 'No se ha podido asignar ganador a l' + Asignados + 'porque ya tienen asignado un gandaor. ',
+                  'success');
+      }
+
+      console.log('La lista de enfrentamientos actualizados queda: ');
+      console.log(listaEnfrentamientosActualizados);
+      console.log('Este Juego es por Equipos');
+      this.AsignarPuntosEquiposGanadorAleatoriamente(listaEnfrentamientosActualizados, this.equiposJuegoDeCompeticionLiga);
     }
+
   }
 
-  IsAllSelectedDos() {
-    // console.log('Estoy en IsAllSelectedDos()');
-    const numSelected = this.selectionDos.selected.length;
-    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    // console.log('this.selectionDos es:');
-    // console.log(this.selectionDos);
-    return numSelected === numRows;
+  // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
+  RecuperarInscripcionesAlumnoJuego() {
+    console.log ('voy a por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(Number(this.juegodePuntosSeleccionadoID))
+    .subscribe(inscripciones => {
+      this.listaAlumnosOrdenadaPorPuntos = inscripciones;
+      console.log (this.listaAlumnosOrdenadaPorPuntos);
+    });
   }
 
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
+  // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
+  RecuperarInscripcionesEquiposJuego() {
 
-  MasterToggleDos() {
-    if (this.IsAllSelectedDos()) {
-      this.selectionDos.clear(); // Desactivamos todos
-    } else {
-      // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionDos.select(row));
-    }
+    console.log ('vamos por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(Number(this.juegodePuntosSeleccionadoID))
+    .subscribe(inscripciones => {
+      this.listaEquiposOrdenadaPorPuntos = inscripciones;
+      console.log(this.listaEquiposOrdenadaPorPuntos);
+      console.log ('ya tengo las inscripciones');
+
+    });
   }
 
-  /* Para averiguar si todas las filas están seleccionadas */
-  IsAllSelectedTres() {
-    // console.log('Estoy en IsAllSelectedTres()');
-    const numSelected = this.selectionTres.selected.length;
-    const numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    // console.log('this.selectionTres es:');
-    // console.log(this.selectionTres);
-    return numSelected === numRows;
-  }
-
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
-
-  MasterToggleTres() {
-    if (this.IsAllSelectedTres()) {
-      this.selectionTres.clear(); // Desactivamos todos
-    } else {
-      // activamos todos
-      this.dataSourceTablaGanadorIndividual.data.forEach(row => this.selectionTres.select(row));
-    }
-  }
 
 
   goBack() {

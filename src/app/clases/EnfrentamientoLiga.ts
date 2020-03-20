@@ -9,13 +9,16 @@ export class EnfrentamientoLiga {
   id: number;
 
   constructor(JugadorUno?: number, JugadorDos?: number, Ganador?: number, JornadaDeCompeticionLigaId?: number,
-              nombreJugadorUno?: string, nombreJugadorDos?: string) {
+              nombreJugadorUno?: string, nombreJugadorDos?: string, id?: number) {
 
     this.JugadorUno = JugadorUno;
     this.JugadorDos = JugadorDos;
     this.Ganador = Ganador;
     this.JornadaDeCompeticionLigaId = JornadaDeCompeticionLigaId;
-    this.nombreJugadorUno = nombreJugadorUno;
-    this.nombreJugadorDos = nombreJugadorDos;
+    if (nombreJugadorUno !== undefined && nombreJugadorDos !== undefined) {
+      this.nombreJugadorUno = nombreJugadorUno;
+      this.nombreJugadorDos = nombreJugadorDos;
+    }
+    this.id = id;
   }
 }

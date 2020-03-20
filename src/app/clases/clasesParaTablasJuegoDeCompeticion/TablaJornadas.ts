@@ -8,9 +8,10 @@ export class TablaJornadas {
     nombre: string[];
     id: number[]
   } = {nombre: undefined, id: undefined};
+  Disputada: boolean;
 
   constructor(NumeroDeJornada?: number, Fecha?: any, CriterioGanador?: string, id?: number, GanadoresFormulaUno?: string[],
-              GanadoresFormulaUnoId?: number[]) {
+              GanadoresFormulaUnoId?: number[], Disputada?: boolean) {
 
     this.NumeroDeJornada = NumeroDeJornada;
     this.Fecha = Fecha;
@@ -20,6 +21,7 @@ export class TablaJornadas {
       this.GanadoresFormulaUno.nombre = GanadoresFormulaUno;
       this.GanadoresFormulaUno.id = GanadoresFormulaUnoId;
     }
+    this.Disputada = Disputada;
 
   }
 }

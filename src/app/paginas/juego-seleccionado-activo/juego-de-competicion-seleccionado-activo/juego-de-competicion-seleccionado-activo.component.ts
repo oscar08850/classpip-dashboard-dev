@@ -42,8 +42,8 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   // Columnas Tabla
   // displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'partidosTotales',
   //                                      'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
-  displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'partidosTotales',
-                                       'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
+  displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'partidosTotales',
+                                       'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos'];
   displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'partidosTotales', 'partidosJugados',
                                        'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos'];
 
@@ -205,6 +205,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   // En función del modo (Individual/Equipos), recorremos la lisa de Alumnos o de Equipos y vamos rellenando el rankingJuegoDePuntos
   // ESTO DEBERIA IR AL SERVICIO DE CALCULO, PERO DE MOMENTO NO LO HAGO PORQUE SE GENERAN DOS TABLAS
   // Y NO COMPRENDO BIEN LA NECESIDAD DE LAS DOS
+
   TablaClasificacionTotal() {
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
@@ -283,7 +284,12 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     console.log ('Voy a por la información del juego seleccionado');
     this.sesion.TomaJuego (this.juegoSeleccionado);
     console.log('Tomo las jornadas' + this.jornadas);
-    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion( this.juegoSeleccionado, this.jornadas, undefined, undefined);
+    console.log('Los enfrentamientos del juego son: ');
+    console.log(this.enfrentamientosDelJuego);
+    this.JornadasCompeticion = this.calculos.DameTablaJornadasLiga(this.juegoSeleccionado, this.jornadas, this.enfrentamientosDelJuego);
+    console.log('Las tablas JornadasCompeticionLiga son: ');
+    console.log(this.JornadasCompeticion);
+    // this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion( this.juegoSeleccionado, this.jornadas, undefined, undefined);
     console.log ('Voy a por la información de las jornadas del juego');
     this.sesion.TomaDatosJornadas(this.jornadas,
                                       this.JornadasCompeticion);

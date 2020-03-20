@@ -1,5 +1,5 @@
-<div  class="titulo">Información Juego de Competición {{juegoSeleccionado.TipoJuegoCompeticion}}</div>
-<div class="subtitulo">Jornadas del Juego</div>
+<div  class="titulo">Información del Juego</div>
+<div class="subtitulo">Jornadas de {{juegoSeleccionado.NombreJuego}}: {{juegoSeleccionado.Tipo}}  {{juegoSeleccionado.Modo}}</div>
 <mat-divider class="lineaDivisoria"></mat-divider>
 
 <div  class="enColumna">
@@ -13,6 +13,9 @@
               <mat-expansion-panel *ngFor="let jornada of JornadasCompeticion" (click) = "ObtenerEnfrentamientosDeCadaJornada(jornada)">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
+                    <mat-icon *ngIf="JornadaFinalizada(jornada) === true" mat-list-icon><i class="material-icons green">check_circle_outline</i></mat-icon>
+                    <mat-icon *ngIf="JornadaFinalizada(jornada) === false" mat-list-icon><i class="material-icons red">history</i></mat-icon>
+                    &nbsp;&nbsp;&nbsp;
                     Jornada {{jornada.NumeroDeJornada}}:    {{jornada.Fecha | date: 'shortDate'}}
                   </mat-panel-title>
                 </mat-expansion-panel-header>
@@ -21,7 +24,6 @@
                   <div style="margin-left: 20px; font-size: 130%; width: 40%;">
                       <span style="font-weight: bold; font-size: 80%;">Criterio: {{jornada.CriterioGanador}}</span>
                       <!-- (click)="AñadirResultados()" -->
-                      <button type="button" class="btn Aceptar"  style="margin-left: 600px">Resultados<i class="material-icons">emoji_events</i></button>
                       <!-- ///////////////////////////////////// TABLA ENFRENTAMIENTOS POR EQUIPOS ////////////////////////////////////// -->
                       <form style=" width: 100%" *ngIf="juegoSeleccionado.Modo != 'Individual'">
                         <table style="margin-left: 65px;  width: 200%" align="center" mat-table [dataSource]="dataSourceEnfrentamientoEquipo" class="example-container mat-elevation-z8">

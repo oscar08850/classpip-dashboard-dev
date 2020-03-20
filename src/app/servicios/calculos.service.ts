@@ -11,6 +11,9 @@ import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { calcPossibleSecurityContexts } from '@angular/compiler/src/template_parser/binding_parser';
 
+import Swal from 'sweetalert2';
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -32,12 +35,12 @@ export class CalculosService {
   TablaeditarPuntos: TablaPuntosFormulaUno[];
   AlumnoJuegoDeCompeticionLigaId: number;
   EquipoJuegoDeCompeticionLigaId: number;
+  empateAsignado = 0;
 
   constructor(
     private sesion: SesionService,
     private peticionesAPI: PeticionesAPIService
-  ) {
-  }
+   ) {}
 
 
   // Elimina el grupo (tanto el id del profe como del grupo estan en sesión.
@@ -621,8 +624,9 @@ export class CalculosService {
                                enfrentamientosJornadaSeleccionada: EnfrentamientoLiga[],
                                listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[],
                                equiposJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga[],
-                               juegoSeleccionado: Juego, ganador: number) {
-    console.log('Estoy en AsignarGanadorEquipos2()');
+                               juegoSeleccionado: Juego, ganador: number, Resultados: {buenos: string
+                                                                                       malos: string}) {
+    console.log('Estoy en AsignarGanadorEquipos()');
     console.log(enfrentamientosSeleccionadosColumna);
     console.log(enfrentamientosJornadaSeleccionada);
     console.log(listaEquiposClasificacion);
@@ -650,10 +654,17 @@ export class CalculosService {
                   console.log(enfrentamientosJornadaSeleccionada[k]);
                   // Tengo que actualizar el ganador en EnfrentamientoLiga
                   enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
-                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
+                  const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                                enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                                enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                                enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                                undefined, undefined,
+                                                                enfrentamientosJornadaSeleccionada[k].id);
+                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                   subscribe(res => console.log(res));
                   console.log('El enfrentamiento con el ganador actualizado queda: ');
                   console.log(enfrentamientosJornadaSeleccionada[k]);
+                  Resultados.buenos = Resultados.buenos + '\n' + 'Ganador: ' + enfrentamientosSeleccionadosColumna[i].nombreJugadorDos;
 
                   // Tengo que actualizar el EquipoJuegoDeCompeticionLiga con los nuevos puntos
                   console.log('El equipo ganador es: ' + listaEquiposClasificacion[j].nombre);
@@ -682,6 +693,7 @@ export class CalculosService {
                 } else {
                   console.log('Este enfrentamiento ya tiene asignado un ganador: ');
                   console.log(enfrentamientosJornadaSeleccionada[k]);
+                  Resultados.malos = Resultados.malos + ' ' + (k + 1) + 'º';
                 }
               }
           }
@@ -703,10 +715,17 @@ export class CalculosService {
                   console.log(enfrentamientosJornadaSeleccionada[k]);
                   // Tengo que actualizar el ganador en EnfrentamientoLiga
                   enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorUno;
-                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
+                  const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                                enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                                enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                                enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                                undefined, undefined,
+                                                                enfrentamientosJornadaSeleccionada[k].id);
+                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                   subscribe(res => console.log(res));
                   console.log('El enfrentamiento con el ganador actualizado queda: ');
                   console.log(enfrentamientosJornadaSeleccionada[k]);
+                  Resultados.buenos = Resultados.buenos + '\n' + 'Ganador: ' + enfrentamientosSeleccionadosColumna[i].nombreJugadorDos;
 
                   // Tengo que actualizar el EquipoJuegoDeCompeticionLiga con los nuevos puntos
                   console.log('El equipo ganador es: ' + listaEquiposClasificacion[j].nombre);
@@ -735,19 +754,22 @@ export class CalculosService {
                 } else {
                   console.log('Este enfrentamiento ya tiene asignado un ganador: ');
                   console.log(enfrentamientosJornadaSeleccionada[k]);
+                  Resultados.malos = Resultados.malos + ' ' + (k + 1) + 'º';
                 }
               }
           }
         }
       }
     }
+    return Resultados;
   }
 
   public AsignarGanadorIndividual(enfrentamientosSeleccionadosColumna: EnfrentamientoLiga[],
                                   enfrentamientosJornadaSeleccionada: EnfrentamientoLiga[],
                                   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[],
                                   alumnosJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga[],
-                                  juegoSeleccionado: Juego, ganador: number) {
+                                  juegoSeleccionado: Juego, ganador: number, Resultados: {buenos: string
+                                                                                          malos: string}) {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < enfrentamientosSeleccionadosColumna.length; i++) {
       // tslint:disable-next-line:prefer-for-of
@@ -773,10 +795,17 @@ export class CalculosService {
                 console.log(enfrentamientosJornadaSeleccionada[k]);
                 // Tengo que actualizar el ganador en EnfrentamientoLiga
                 enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorDos;
-                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
+                const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                              enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                              enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                              enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                              undefined, undefined,
+                                                              enfrentamientosJornadaSeleccionada[k].id);
+                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                 subscribe(res => console.log(res));
                 console.log('El enfrentamiento con el ganador actualizado queda: ');
                 console.log(enfrentamientosJornadaSeleccionada[k]);
+                Resultados.buenos = Resultados.buenos + '\n' + 'Ganador: ' + enfrentamientosSeleccionadosColumna[i].nombreJugadorDos;
 
                 // Tengo que actualizar el AlumnoJuegoDeCompeticionLiga con los nuevos puntos
                 console.log('El alumno ganador es: ' + listaAlumnosClasificacion[j].nombre);
@@ -805,10 +834,11 @@ export class CalculosService {
               } else {
                 console.log('Este enfrentamiento ya tiene asignado un ganador: ');
                 console.log(enfrentamientosJornadaSeleccionada[k]);
+                Resultados.malos = Resultados.malos + ' ' + (k + 1) + 'º';
               }
             }
           }
-
+        //  GANADOR COLUMNA DOS
         } else if (nombreCompleto === enfrentamientosSeleccionadosColumna[i].nombreJugadorUno && ganador === 1) {
           console.log('He encontrado el alumno: ' + enfrentamientosSeleccionadosColumna[i].nombreJugadorUno);
 
@@ -827,10 +857,17 @@ export class CalculosService {
                 console.log(enfrentamientosJornadaSeleccionada[k]);
                 // Tengo que actualizar el ganador en EnfrentamientoLiga
                 enfrentamientosJornadaSeleccionada[k].Ganador = enfrentamientosSeleccionadosColumna[i].JugadorUno;
-                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
+                const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                              enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                              enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                              enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                              undefined, undefined,
+                                                              enfrentamientosJornadaSeleccionada[k].id);
+                this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                 subscribe(res => console.log(res));
                 console.log('El enfrentamiento con el ganador actualizado queda: ');
                 console.log(enfrentamientosJornadaSeleccionada[k]);
+                Resultados.buenos = Resultados.buenos + '\n' + 'Ganador: ' + enfrentamientosSeleccionadosColumna[i].nombreJugadorUno;
 
                 // Tengo que actualizar el AlumnoJuegoDeCompeticionLiga con los nuevos puntos
                 console.log('El alumno ganador es: ' + listaAlumnosClasificacion[j].nombre);
@@ -859,6 +896,7 @@ export class CalculosService {
               } else {
                 console.log('Este enfrentamiento ya tiene asignado un ganador: ');
                 console.log(enfrentamientosJornadaSeleccionada[k]);
+                Resultados.malos = Resultados.malos + ' ' + (k + 1) + 'º';
               }
             }
           }
@@ -866,13 +904,15 @@ export class CalculosService {
         }
       }
     }
+    return Resultados;
   }
 
   public AsignarEmpateIndividual(enfrentamientosSeleccionadosColumna: EnfrentamientoLiga[],
                                  enfrentamientosJornadaSeleccionada: EnfrentamientoLiga[],
                                  listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[],
                                  alumnosJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga[],
-                                 juegoSeleccionado: Juego, ganador: number) {
+                                 juegoSeleccionado: Juego, Resultados: {buenos: string
+                                                                        malos: string}) {
     let alumnosConPuntosSumados = 0;
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < enfrentamientosSeleccionadosColumna.length; i++) {
@@ -883,7 +923,7 @@ export class CalculosService {
                              + ' ' + listaAlumnosClasificacion[j].segundoApellido;
         if (nombreCompleto === enfrentamientosSeleccionadosColumna[i].nombreJugadorDos ||
             nombreCompleto === enfrentamientosSeleccionadosColumna[i].nombreJugadorUno) {
-          console.log('He encontrado el alumno: ' + enfrentamientosSeleccionadosColumna[i].nombreJugadorDos);
+          console.log('He encontrado el alumno: ' + nombreCompleto);
           console.log('Los puntos antes de registrar el partido ganado: ' + listaAlumnosClasificacion[j].puntos);
 
           // Miramos en la base de datos si para este enfrentamiento ya se había seleccionado un ganador.
@@ -897,6 +937,7 @@ export class CalculosService {
                 enfrentamientosJornadaSeleccionada[k].nombreJugadorDos === enfrentamientosSeleccionadosColumna[i].nombreJugadorDos) {
               console.log('Ya estoy en el el enfrentamiento que quiero');
               if (enfrentamientosJornadaSeleccionada[k].Ganador === undefined) {
+                console.log('Este enfrentamiento no tiene ganador asignado:');
                 // Ahora tengo que actualizar los dos AlumnoJuegoDeCompeticionLiga del enfrentamiento con los nuevos puntos
                 listaAlumnosClasificacion[j].puntos = listaAlumnosClasificacion[j].puntos + 1;
                 console.log('Los puntos actualizados después de registrar el partido ganado: '
@@ -922,15 +963,28 @@ export class CalculosService {
                 subscribe(res => console.log(res));
 
                 if (alumnosConPuntosSumados === 2 && enfrentamientoEmpateRegistrado === false) {
+                  alumnosConPuntosSumados = 0;
                   enfrentamientoEmpateRegistrado = true;
                   enfrentamientosJornadaSeleccionada[k].Ganador = 0;
                   console.log(enfrentamientosJornadaSeleccionada[k]);
-                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
+                  const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                                enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                                enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                                enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                                undefined, undefined,
+                                                                enfrentamientosJornadaSeleccionada[k].id);
+                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                   subscribe(res => console.log(res));
+                  Resultados.buenos = Resultados.buenos + '\n' + 'Empate';
                 }
               } else {
-                console.log('Este enfrentamiento ya tiene asignado un ganador: ');
-                console.log(enfrentamientosJornadaSeleccionada[k]);
+                this.empateAsignado++;
+                if (this.empateAsignado === 2) {
+                  this.empateAsignado = 0;
+                  console.log('Este enfrentamiento ya tiene asignado un ganador: ');
+                  console.log(enfrentamientosJornadaSeleccionada[k]);
+                  Resultados.malos = Resultados.malos + ' ' + (k + 1) + 'º';
+                }
               }
             }
           }
@@ -938,13 +992,15 @@ export class CalculosService {
         }
       }
     }
+    return Resultados;
   }
 
   public AsignarEmpateEquipos(enfrentamientosSeleccionadosColumna: EnfrentamientoLiga[],
                               enfrentamientosJornadaSeleccionada: EnfrentamientoLiga[],
                               listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[],
                               equiposJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga[],
-                              juegoSeleccionado: Juego, ganador: number) {
+                              juegoSeleccionado: Juego, Resultados: {buenos: string
+                                                                     malos: string}) {
     let equiposConPuntosSumados = 0;
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < enfrentamientosSeleccionadosColumna.length; i++) {
@@ -968,6 +1024,7 @@ export class CalculosService {
                 enfrentamientosJornadaSeleccionada[k].nombreJugadorDos === enfrentamientosSeleccionadosColumna[i].nombreJugadorDos) {
               console.log('Ya estoy en el el enfrentamiento que quiero');
               if (enfrentamientosJornadaSeleccionada[k].Ganador === undefined) {
+                console.log('Este enfrentamiento no tiene ganador asignado:');
                 // Ahora tengo que actualizar los dos AlumnoJuegoDeCompeticionLiga del enfrentamiento con los nuevos puntos
                 listaEquiposClasificacion[j].puntos = listaEquiposClasificacion[j].puntos + 1;
                 console.log('Los puntos actualizados después de registrar el partido ganado: '
@@ -993,15 +1050,30 @@ export class CalculosService {
                 subscribe(res => console.log(res));
 
                 if (equiposConPuntosSumados === 2 && enfrentamientoEmpateRegistrado === false) {
+                  equiposConPuntosSumados = 0;
                   enfrentamientoEmpateRegistrado = true;
                   enfrentamientosJornadaSeleccionada[k].Ganador = 0;
                   console.log(enfrentamientosJornadaSeleccionada[k]);
-                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamientosJornadaSeleccionada[k]).
+                  const enfrentamiento = new EnfrentamientoLiga(enfrentamientosJornadaSeleccionada[k].JugadorUno,
+                                                                enfrentamientosJornadaSeleccionada[k].JugadorDos,
+                                                                enfrentamientosJornadaSeleccionada[k].Ganador,
+                                                                enfrentamientosJornadaSeleccionada[k].JornadaDeCompeticionLigaId,
+                                                                undefined, undefined,
+                                                                enfrentamientosJornadaSeleccionada[k].id);
+                  this.peticionesAPI.PonGanadorDelEnfrentamiento(enfrentamiento).
                   subscribe(res => console.log(res));
+                  Resultados.buenos = Resultados.buenos + '\n' + 'Empate';
                 }
               } else {
                 console.log('Este enfrentamiento ya tiene asignado un ganador: ');
                 console.log(enfrentamientosJornadaSeleccionada[k]);
+                this.empateAsignado++;
+                if (this.empateAsignado === 2) {
+                  this.empateAsignado = 0;
+                  console.log('Este enfrentamiento ya tiene asignado un ganador: ');
+                  console.log(enfrentamientosJornadaSeleccionada[k]);
+                  Resultados.malos = Resultados.malos + ' ' + (k + 1) + 'º';
+                }
               }
             }
           }
@@ -1009,6 +1081,7 @@ export class CalculosService {
         }
       }
     }
+    return Resultados;
   }
 
   //////////////////////////////////////// JUEGO DE COMPETICIÓN FÓRUMULA UNO ///////////////////////////////////
@@ -1904,39 +1977,76 @@ export class CalculosService {
     console.log('juego seleccionado:');
     console.log(juegoSeleccionado);
     for (let i = 0; i < juegoSeleccionado.NumeroTotalJornadas; i++) {
-    let jornada: Jornada;
-    const jornadaId = jornadas[i].id;
-    jornada = jornadas.filter(res => res.id === jornadaId)[0];
+      let jornada: Jornada;
+      const jornadaId = jornadas[i].id;
+      jornada = jornadas.filter(res => res.id === jornadaId)[0];
 
-    console.log('Ganadores de la jornada:');
-    console.log(jornada.GanadoresFormulaUno);
-    console.log('Fecha de la jornada');
-    console.log(jornada.Fecha);
-    if (juegoSeleccionado.Tipo === 'Juego De Competición Fórmula Uno') {
-      if (jornada.Fecha === undefined && jornada.GanadoresFormulaUno === undefined) {
-        TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
-      } else if (jornada.Fecha === undefined && jornada.GanadoresFormulaUno !== undefined) {
-        const GanadoresFormulaUno = this.ObtenerNombreGanadoresFormulaUno(juegoSeleccionado, jornada, alumnoJuegoDeCompeticionFormulaUno,
-                                                                          equipoJuegoDeCompeticionFormulaUno);
-        TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, GanadoresFormulaUno.nombre,
-                                            GanadoresFormulaUno.id);
-      } else  if (jornada.Fecha !== undefined && jornada.GanadoresFormulaUno === undefined) {
-        TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
-      } else {
-        const GanadoresFormulaUno = this.ObtenerNombreGanadoresFormulaUno(juegoSeleccionado, jornada, alumnoJuegoDeCompeticionFormulaUno,
-                                                                          equipoJuegoDeCompeticionFormulaUno);
-        TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, GanadoresFormulaUno.nombre,
-                                            GanadoresFormulaUno.id);
-      }
-    } else {
-        // if (jornada.Fecha === undefined) {
-        //   TablaJornada[i] = new TablaJornadas (i + 1, 'Fecha por Determinar', jornada.CriterioGanador, jornada.id);
-        // } else {
+      console.log('Ganadores de la jornada:');
+      console.log(jornada.GanadoresFormulaUno);
+      console.log('Fecha de la jornada');
+      console.log(jornada.Fecha);
+      if (juegoSeleccionado.Tipo === 'Juego De Competición Fórmula Uno') {
+        if (jornada.Fecha === undefined && jornada.GanadoresFormulaUno === undefined) {
           TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
-        // }
+        } else if (jornada.Fecha === undefined && jornada.GanadoresFormulaUno !== undefined) {
+          const GanadoresFormulaUno = this.ObtenerNombreGanadoresFormulaUno(juegoSeleccionado, jornada, alumnoJuegoDeCompeticionFormulaUno,
+                                                                            equipoJuegoDeCompeticionFormulaUno);
+          TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, GanadoresFormulaUno.nombre,
+                                              GanadoresFormulaUno.id);
+        } else  if (jornada.Fecha !== undefined && jornada.GanadoresFormulaUno === undefined) {
+          TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id);
+        } else {
+          const GanadoresFormulaUno = this.ObtenerNombreGanadoresFormulaUno(juegoSeleccionado, jornada, alumnoJuegoDeCompeticionFormulaUno,
+                                                                            equipoJuegoDeCompeticionFormulaUno);
+          TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, GanadoresFormulaUno.nombre,
+                                              GanadoresFormulaUno.id);
+        }
+      } else {
+          TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, undefined, undefined);
       }
     }
     return(TablaJornada);
+  }
+
+  public DameTablaJornadasLiga(juegoSeleccionado, jornadas, enfrentamientosJuego: EnfrentamientoLiga[][]) {
+    const TablaJornada: TablaJornadas [] = [];
+    console.log('juego seleccionado:');
+    console.log(juegoSeleccionado);
+    for (let i = 0; i < jornadas.length; i++) {
+      let jornada: Jornada;
+      const jornadaId = jornadas[i].id;
+      jornada = jornadas.filter(res => res.id === jornadaId)[0];
+      const enfrentamientosJornada: EnfrentamientoLiga[] = [];
+      enfrentamientosJuego[i].forEach(enfrentamientoDeLaJornada => {
+        if (enfrentamientoDeLaJornada.JornadaDeCompeticionLigaId === jornadaId) {
+          enfrentamientosJornada.push(enfrentamientoDeLaJornada);
+        }
+      });
+      console.log('Los enfrentamientosJornada con id ' + jornadaId + ' son:');
+      console.log(enfrentamientosJornada);
+      const Disputada: boolean = this.JornadaFinalizadaLiga(jornada, enfrentamientosJornada);
+      TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, undefined, undefined, Disputada);
+    }
+    return TablaJornada;
+  }
+
+  public JornadaFinalizadaLiga(jornadaSeleccionada: Jornada, EnfrentamientosJornada: EnfrentamientoLiga[]) {
+    let HayGanador = false;
+    let jornadaFinalizada: boolean;
+    if (jornadaSeleccionada.id === EnfrentamientosJornada[0].JornadaDeCompeticionLigaId) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < EnfrentamientosJornada.length; i++) {
+        if (EnfrentamientosJornada[i].Ganador !== undefined) {
+          HayGanador = true;
+        }
+      }
+      if (HayGanador === false) {
+        jornadaFinalizada = false;
+      } else {
+        jornadaFinalizada = true;
+      }
+    }
+    return jornadaFinalizada;
   }
 
  public FormarEquiposAleatorios(individuos: any[], tamEquipos: number): any[] {
@@ -2087,4 +2197,22 @@ export class CalculosService {
     return this.TablaeditarPuntos;
   }
 
+  public JornadaFinalizada(juegoSeleccionado: Juego, jornadaSeleccionada: TablaJornadas) {
+    let jornadaFinalizada = false;
+    if (juegoSeleccionado.Tipo === 'Juego De Competición Liga') {
+      if (jornadaSeleccionada.Disputada === true) {
+        jornadaFinalizada = true;
+      } else {
+        jornadaFinalizada = false;
+      }
+    } else if (juegoSeleccionado.Tipo === 'Juego De Competición Fórmula Uno') {
+      if (jornadaSeleccionada.GanadoresFormulaUno.id === undefined &&
+          jornadaSeleccionada.GanadoresFormulaUno.nombre === undefined) {
+            jornadaFinalizada = false;
+      } else {
+        jornadaFinalizada = true;
+      }
+    }
+    return jornadaFinalizada;
+  }
 }
