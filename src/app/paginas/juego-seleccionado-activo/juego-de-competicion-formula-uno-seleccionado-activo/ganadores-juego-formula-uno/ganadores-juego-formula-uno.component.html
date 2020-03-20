@@ -160,11 +160,11 @@
 
               <mat-card-content>
                 <div class="form-group">
-                  <label  *ngIf="juegoSeleccionado.Modo === 'Individual'" for="inputNombres">Pega/escribe aquí linea a linea nombre y apellidos separados por ; como mínimo de los participantes que puntúan (como en el ejemplo)</label>
-                  <label *ngIf="juegoSeleccionado.Modo !== 'Individual'" for="inputNombres">Pega/escribe aquí linea a linea el nombre de cada equipo, como mínimo de los equipos que puntúan (como en el ejemplo)</label>
+                  <label  *ngIf="juegoSeleccionado.Modo === 'Individual'" for="inputNombres">Pega/escribe aquí linea a linea nombre y apellidos, como mínimo de los participantes que puntúan que son {{juegoSeleccionado.NumeroParticipantesPuntuan}} (como en el ejemplo)</label>
+                  <label *ngIf="juegoSeleccionado.Modo !== 'Individual'" for="inputNombres">Pega/escribe aquí linea a linea el nombre de cada equipo, como mínimo de los equipos que puntúan que son {{juegoSeleccionado.NumeroParticipantesPuntuan}} (como en el ejemplo)</label>
                   <textarea *ngIf="juegoSeleccionado.Modo === 'Individual'" rows="5" autofocus (keyup)="DisabledTexto()" matInput class="form-control" placeholder=
-                            "Àngels;Català;Sebastià
-Alejandro;Gimeno;Marés"
+                            "Àngels Català Sebastià
+Alejandro Gimeno Marés"
                             requiered [(ngModel)]="textoParticipantesPuntuan"></textarea>
                   <textarea *ngIf="juegoSeleccionado.Modo !== 'Individual'" rows="5" autofocus (keyup)="DisabledTexto()" matInput class="form-control" placeholder=
                             "Los Leones
