@@ -118,6 +118,16 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
           z++;
         }
     }
+    // this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado, 1, [1, 2, 0, 0]);
+    // this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado, 2, [1, 2, 0, 0]);
+    // this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado, 3, [1, 2, 0, 0]);
+    // this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado, 4, [0, 1, 1, 2]);
+    // this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado, 5, [0, 1, 1, 2]);
+    // this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado, 6, [0, 1, 1, 2]);
+    // this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado, 7, [0, 1, 2, 2]);
+    // this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado, 8, [1, 0]);
+    // this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado, 9, [1, 2]);
+    this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado, 10, [0, 2]);
   }
 
   ObtenerEnfrentamientosDeCadaJornada(jornadaId: number) {

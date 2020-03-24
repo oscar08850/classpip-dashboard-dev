@@ -79,6 +79,13 @@ export class PeticionesAPIService {
   public DameAlumno(alumnoId: number): Observable<Alumno> {
     return this.http.get<Alumno>(this.APIUrlAlumnos + '/' + alumnoId);
   }
+  public DameAlumnos(): Observable<Alumno[]> {
+    return this.http.get<Alumno[]>(this.APIUrlAlumnos);
+  }
+
+  public DameEquipos(): Observable<Equipo[]> {
+    return this.http.get<Equipo[]>(this.APIUrlEquipos);
+  }
 
   // Falta hacer DameEquipo
 
