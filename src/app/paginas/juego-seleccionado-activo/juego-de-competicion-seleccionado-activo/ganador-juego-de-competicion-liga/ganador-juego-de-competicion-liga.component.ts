@@ -834,6 +834,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         if (this.selectionTres.isSelected(row)) {
               console.log ('empate');
               this.resultados.push (0);
+              this.selectionTres.clear();
         }
 
       });
@@ -848,6 +849,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         if (this.selectionDos.isSelected(row)) {
               console.log ('Gana el 2');
               this.resultados.push (2);
+              this.selectionDos.clear();
         }
 
       });
@@ -863,6 +865,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         if (this.selectionUno.isSelected(row)) {
               console.log ('Gana el 1');
               this.resultados.push (1);
+              this.selectionUno.clear();
         }
 
       });
