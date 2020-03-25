@@ -65,6 +65,10 @@ import { DeactivateGuardCrearGrupo } from './guardas/canExitCrearGrupo.guard';
 import { DeactivateGuardCrearColeccion } from './guardas/canExitCrearColeccion.guard';
 import { DeactivateGuardCrearJuego } from './guardas/canExitCrearJuego.guard';
 
+//Importamos componentes modulo cuestionario
+import { PreguntaComponent } from './paginas/pregunta/pregunta.component';
+import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-cuestionario.component';
+
 const routes: Routes = [
 
 
@@ -176,7 +180,14 @@ const routes: Routes = [
   { path: 'inicio/:id/misPuntos/editarInsignia', component: EditarInsigniaComponent },
 
   // CONFIGURACION
-  { path: 'inicio/:id/configuracionProfesor', component: ConfiguracionProfesorComponent }
+  { path: 'inicio/:id/configuracionProfesor', component: ConfiguracionProfesorComponent },
+
+  //PREGUNTAS
+  { path: 'inicio/:id/crearPregunta', component: PreguntaComponent},
+  //{ path: 'pregunta/:id/misPreguntas', component: MisPreguntasComponent}
+
+  //CUESTIONARIOS
+  { path: 'inicio/:id/crearCuestionario', component: CrearCuestionarioComponent}
 ];
 
 @NgModule({

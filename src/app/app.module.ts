@@ -122,6 +122,8 @@ import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/ju
 import { EditarCromoDialogComponent } from './paginas/mis-colecciones/editar-cromo-dialog/editar-cromo-dialog.component';
 import { MisAlumnosComponent } from './paginas/mis-alumnos/mis-alumnos.component';
 import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introducir-alumnos.component';
+import { PreguntaComponent } from './paginas/pregunta/pregunta.component';
+import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-cuestionario.component';
 
 
 
@@ -188,7 +190,9 @@ import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introduc
 
     EditarCromoDialogComponent,
     MisAlumnosComponent,
-    IntroducirAlumnosComponent
+    IntroducirAlumnosComponent,
+    PreguntaComponent,
+    CrearCuestionarioComponent
 
   ],
   imports: [
