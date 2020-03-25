@@ -108,7 +108,7 @@
           <td mat-cell *matCellDef="let row">
             <mat-checkbox
                   (click)="$event.stopPropagation()"
-                  (change)="$event ? selectionUno.toggle(row) : null; AddToListGanadorUno()"
+                  (change)="$event ? selectionUno.toggle(row) : null; AddResultadosColumnaUno()"
                   [checked]="selectionUno.isSelected(row)">
             </mat-checkbox>
           </td>
@@ -133,7 +133,7 @@
           <td mat-cell *matCellDef="let row">
             <mat-checkbox
                   (click)="$event.stopPropagation()"
-                  (change)="$event ? selectionDos.toggle(row) : null; AddToListGanadorDos()"
+                  (change)="$event ? selectionDos.toggle(row) : null; AddResultadosColumnaDos()"
                   [checked]="selectionDos.isSelected(row)">
             </mat-checkbox>
           </td>
@@ -157,7 +157,7 @@
           <td mat-cell *matCellDef="let row">
             <mat-checkbox
                   (click)="$event.stopPropagation()"
-                  (change)="$event ? selectionTres.toggle(row) : null;  AddToListGanadorTres()"
+                  (change)="$event ? selectionTres.toggle(row) : null;  AddResultadosColumnaTres()"
                   [checked]="selectionTres.isSelected(row)">
             </mat-checkbox>
           </td>
