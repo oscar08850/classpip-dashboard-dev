@@ -61,8 +61,13 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   juegodePuntosSeleccionadoID: number;
   modoAsignacionId: number;
 
+
   // Información de la tabla: Muestra el JugadorUno, JugadorDos, Ganador, JornadaDeCompeticionLigaId y id
   EnfrentamientosJornadaSeleccionada: EnfrentamientoLiga[] = [];
+
+
+  resultados: number [] = [];
+
 
   // Alumnos y Equipos del Juego
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
@@ -479,7 +484,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
   }
 
-  AsignarGanadorManualmenteAntiguo() {
+  AsignarGanadorManualmenteAntigua() {
     let Resultados: {
       buenos: string
       malos: string
@@ -610,6 +615,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       // tslint:disable-next-line:prefer-for-of
       for ( let j = 0; j < this.dataSourceTablaGanadorEquipo.data.length; j++) {
         if (this.selectionUno.isSelected(this.dataSourceTablaGanadorEquipo.data[j])) {
+          console.log ('Gana el 1');
           const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaUno.indexOf(this.dataSourceTablaGanadorEquipo.data[j]);
           if (indexOfUnselected === -1) {
             this.enfrentamientosSeleccionadosColumnaUno.push(this.dataSourceTablaGanadorEquipo.data[j]);
@@ -821,37 +827,133 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   }
 
   // ------------------------------------------------ Metodología nueva ------------------------------------------------------- //
-  AsignarGanadorManualmente() {
+  AddResultadosColumnaTres() {
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      this.dataSourceTablaGanadorIndividual.data.forEach (row => {
 
-    const resultados: number [] = [this.EnfrentamientosJornadaSeleccionada.length];
+        if (this.selectionTres.isSelected(row)) {
+              console.log ('empate');
+              this.resultados.push (0);
+        }
+
+      });
+      console.log('resultados');
+      console.log(this.resultados);
+    }
+  }
+  AddResultadosColumnaDos() {
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      this.dataSourceTablaGanadorIndividual.data.forEach (row => {
+
+        if (this.selectionDos.isSelected(row)) {
+              console.log ('Gana el 2');
+              this.resultados.push (2);
+        }
+
+      });
+      console.log('resultados');
+      console.log(this.resultados);
+    }
+  }
+
+  AddResultadosColumnaUno() {
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      this.dataSourceTablaGanadorIndividual.data.forEach (row => {
+
+        if (this.selectionUno.isSelected(row)) {
+              console.log ('Gana el 1');
+              this.resultados.push (1);
+        }
+
+      });
+      console.log('resultados');
+      console.log(this.resultados);
+    }
+
+    // if (this.juegoSeleccionado.Modo === 'Individual') {
+    //   this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+
+    //     if (this.selectionUno.isSelected(row)) {
+    //       const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaUno.indexOf(row);
+    //       if (indexOfUnselected === -1) {
+    //         this.enfrentamientosSeleccionadosColumnaUno.push(row);
+    //         this.resultados[indexOfUnselected] = 1;
+    //       } else {
+    //         this.enfrentamientosSeleccionadosColumnaUno.splice(indexOfUnselected, 1);
+    //         this.resultados[indexOfUnselected] = -1;
+    //       }
+
+    //     } else if (this.selectionDos.isSelected(row)) {
+    //       const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaDos.indexOf(row);
+    //       if (indexOfUnselected === -1) {
+    //         this.enfrentamientosSeleccionadosColumnaDos.push(row);
+    //         // this.resultados.push (2);
+    //         this.resultados[indexOfUnselected] = 2;
+    //       } else {
+    //         this.enfrentamientosSeleccionadosColumnaDos.splice(indexOfUnselected, 1);
+    //         this.resultados[indexOfUnselected] = -1;
+    //       }
+
+    //     } else if (this.selectionTres.isSelected(row)) {
+    //       const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaTres.indexOf(row);
+    //       if (indexOfUnselected === -1) {
+    //         this.enfrentamientosSeleccionadosColumnaTres.push(row);
+    //         this.resultados[indexOfUnselected] = 0;
+    //       } else {
+    //         this.enfrentamientosSeleccionadosColumnaTres.splice(indexOfUnselected, 1);
+    //         this.resultados[indexOfUnselected] = -1;
+    //       }
+    //     }
+    //   });
+    // }
+  }
+
+  AsignarGanadorManualmente() {
+    console.log('Vector de resultados al entrar en la función');
+    console.log(this.resultados);
     console.log('Estoy en AsignarGanadorManualmente()');
     console.log('La lista de enfrentamientos de esta Jornada es: ');
-      // tslint:disable-next-line:prefer-for-of
-    this.dataSourceTablaGanadorIndividual.data.forEach (row => {
-      console.log ('XXX' + this.selectionUno.isSelected(row));
+    console.log(this.EnfrentamientosJornadaSeleccionada);
 
-      if (this.selectionUno.isSelected(row)) {
-            console.log ('Gana el 1');
-            resultados.push (1);
 
-      } else  if (this.selectionDos.isSelected(row)) {
-            console.log ('Gana el 2');
-            resultados.push (2);
+    console.log('this.enfrentamientosSeleccionadosColumnaUno');
+    console.log(this.enfrentamientosSeleccionadosColumnaUno);
+    console.log('this.enfrentamientosSeleccionadosColumnaDos');
+    console.log(this.enfrentamientosSeleccionadosColumnaDos);
+    console.log('this.enfrentamientosSeleccionadosColumnaTres');
+    console.log(this.enfrentamientosSeleccionadosColumnaTres);
+    console.log('resultados');
+    console.log(this.resultados);
 
-      } else if (this.selectionTres.isSelected(row)) {
-            console.log ('empate');
-            resultados.push (0);
 
-      } else {
-            Swal.fire('Te falta asignar resultados', 'error');
-            return;
-      }
-    });
+    // // tslint:disable-next-line:prefer-for-of
+    // this.dataSourceTablaGanadorIndividual.data.forEach (row => {
+
+    //   if (this.selectionUno.isSelected(row)) {
+    //         console.log ('Gana el 1');
+    //         resultados.push (1);
+
+    //   } else  if (this.selectionDos.isSelected(row)) {
+    //         console.log ('Gana el 2');
+    //         resultados.push (2);
+
+    //   } else if (this.selectionTres.isSelected(row)) {
+    //         console.log ('empate');
+    //         resultados.push (0);
+
+    //   } else {
+    //         Swal.fire('Te falta asignar resultados', 'error');
+    //         return;
+    //   }
+    // });
+    // console.log(resultados);
+    // console.log('resultados');
 
     // this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
-    Swal.fire('Resutados asignados', 'Enhorabuena', 'success');
+    // Swal.fire('Resutados asignados', 'Enhorabuena', 'success');
 
   }
+
 
 
   goBack() {

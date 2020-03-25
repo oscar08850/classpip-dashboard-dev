@@ -557,6 +557,8 @@ export class CalculosService {
     return partidosPerdidos;
   }
 
+  // --------------- Antigua metodología asignar ganadores manualmente --------------- //
+
   public RevisarMultipleSeleccion(enfrentamientosSeleccionadosColumnaUno: EnfrentamientoLiga[],
                                   enfrentamientosSeleccionadosColumnaDos: EnfrentamientoLiga[],
                                   enfrentamientosSeleccionadosColumnaTres: EnfrentamientoLiga[]) {
@@ -1088,7 +1090,6 @@ export class CalculosService {
 
 
 // --------------- Nueva metodología asignar ganadores manualmente --------------- //
-
 
   public AsignarResultadosJornadaLiga(juego: Juego, jornadaId: number, resultados: number[]) {
     const indexEnfrentamientosConResultadosPreviamente: number[] = [];
