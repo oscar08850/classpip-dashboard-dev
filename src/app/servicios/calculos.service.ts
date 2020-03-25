@@ -1191,11 +1191,11 @@ export class CalculosService {
       this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionLiga(juego.id)
       .subscribe(equiposJuegoLiga => {
         if (resultado === 1 || resultado === 2) {
-          equipoGanador = equiposJuegoLiga.filter(alumno => alumno.id === enfrentamiento.Ganador);
+          equipoGanador = equiposJuegoLiga.filter(equipo => equipo.id === enfrentamiento.Ganador);
           equipoGanador[0].PuntosTotalesEquipo = equipoGanador[0].PuntosTotalesEquipo + 3;
         } else if (resultado === 0) {
-          equipoGanador.push(equiposJuegoLiga.filter (alumno => alumno.id === enfrentamiento.JugadorUno)[0]);
-          equipoGanador.push(equiposJuegoLiga.filter (alumno => alumno.id === enfrentamiento.JugadorDos)[0]);
+          equipoGanador.push(equiposJuegoLiga.filter (equipo => equipo.id === enfrentamiento.JugadorUno)[0]);
+          equipoGanador.push(equiposJuegoLiga.filter (equipo => equipo.id === enfrentamiento.JugadorDos)[0]);
           equipoGanador.forEach(equipo => {
             equipo.PuntosTotalesEquipo = equipo.PuntosTotalesEquipo + 1;
           });
