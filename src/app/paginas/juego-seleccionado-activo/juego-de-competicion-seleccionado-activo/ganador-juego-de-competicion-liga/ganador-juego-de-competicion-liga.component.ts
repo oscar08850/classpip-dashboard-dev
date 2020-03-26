@@ -99,87 +99,102 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
     this.numeroTotalJornadas = this.juegoSeleccionado.NumeroTotalJornadas;
-    console.log('Juego seleccionado: ');
-    console.log(this.juegoSeleccionado);
-    console.log('Número total de jornadas: ');
-    console.log(this.numeroTotalJornadas);
     const datos = this.sesion.DameDatosJornadas();
     this.JornadasCompeticion = datos.JornadasCompeticion;
-    console.log('Jornadas Competicion: ');
-    // Teniendo la tabla de Jornadas puedo sacar los enfrentamientos de cada jornada accediendo a la api
-    console.log(this.JornadasCompeticion);
     this.listaAlumnosClasificacion = this.sesion.DameTablaAlumnoJuegoDeCompeticion();
     this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
-    console.log(this.listaAlumnosClasificacion);
     this.alumnosJuegoDeCompeticionLiga = this.sesion.DameInscripcionAlumno();
     this.equiposJuegoDeCompeticionLiga = this.sesion.DameInscripcionEquipo();
     this.juegosActivosPuntos = this.sesion.DameJuegosDePuntosActivos();
-    let z = 0;
-    this.juegosActivosPuntosModo = [];
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.juegosActivosPuntos.length; i++) {
-        if (this.juegosActivosPuntos[i].Modo === this.juegoSeleccionado.Modo) {
-          this.juegosActivosPuntosModo[z] = this.juegosActivosPuntos[i];
-          z++;
-        }
-    }
+    // Me quedo solo con los juegos de puntos que tengan el mismo (individual o equipo) modo que la competición
+    this.juegosActivosPuntosModo = this.juegosActivosPuntos.filter (juego => juego.Modo === this.juegoSeleccionado.Modo);
   }
 
+  ////////////////// FUNCIONES PARA OBTENER LOS DATOS NECESARIOS //////////////////////////
   ObtenerEnfrentamientosDeCadaJornada(jornadaId: number) {
-    console.log('Estoy en ObtenerEnfrentamientosDeCadaJornada()');
-    console.log('El id de la jornada seleccionada es: ' + jornadaId);
     this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga(jornadaId)
     .subscribe(enfrentamientos => {
       this.EnfrentamientosJornadaSeleccionada = enfrentamientos;
-      console.log('Los enfrentamientos de esta jornada son: ');
-      console.log(this.EnfrentamientosJornadaSeleccionada);
-      console.log('Ya tengo los enfrentamientos de la jornada, ahora tengo que mostrarlos en una tabla');
       this.ConstruirTablaElegirGanador();
     });
   }
 
+  // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
+  RecuperarInscripcionesAlumnoJuego() {
+    console.log ('voy a por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(Number(this.juegodePuntosSeleccionadoID))
+    .subscribe(inscripciones => {
+      this.listaAlumnosOrdenadaPorPuntos = inscripciones;
+      console.log (this.listaAlumnosOrdenadaPorPuntos);
+    });
+  }
+
+  // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
+  RecuperarInscripcionesEquiposJuego() {
+    console.log ('vamos por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(Number(this.juegodePuntosSeleccionadoID))
+    .subscribe(inscripciones => {
+      this.listaEquiposOrdenadaPorPuntos = inscripciones;
+      console.log(this.listaEquiposOrdenadaPorPuntos);
+      console.log ('ya tengo las inscripciones');
+    });
+  }
+
+
   ConstruirTablaElegirGanador() {
-    console.log ('Estoy en ConstruitTablaElegirGanador(), los enfrentamientos son:');
-    console.log(this.EnfrentamientosJornadaSeleccionada);
     if (this.juegoSeleccionado.Modo === 'Individual') {
       console.log('Estoy en ConstruirTablaElegirGanador() alumnos');
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
-        // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < this.listaAlumnosClasificacion.length; j++) {
-          if (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno === this.listaAlumnosClasificacion[j].id) {
-            this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = this.listaAlumnosClasificacion[j].nombre + ' ' +
-                                                                          this.listaAlumnosClasificacion[j].primerApellido + ' ' +
-                                                                          this.listaAlumnosClasificacion[j].segundoApellido;
-            if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaAlumnosClasificacion[j].id) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaAlumnosClasificacion[j].nombre + ' ' +
-                                                                                  this.listaAlumnosClasificacion[j].primerApellido + ' ' +
-                                                                                  this.listaAlumnosClasificacion[j].segundoApellido;
-            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-            }
-          } else if (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos === this.listaAlumnosClasificacion[j].id) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = this.listaAlumnosClasificacion[j].nombre + ' ' +
-                                                                            this.listaAlumnosClasificacion[j].primerApellido + ' ' +
-                                                                            this.listaAlumnosClasificacion[j].segundoApellido;
-              if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaAlumnosClasificacion[j].id) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaAlumnosClasificacion[j].nombre + ' ' +
-                                                                                    this.listaAlumnosClasificacion[j].primerApellido + ' ' +
-                                                                                    this.listaAlumnosClasificacion[j].segundoApellido;
-              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-              }
-          }
-        }
+        console.log ('Enfrentamiento');
+        console.log (this.EnfrentamientosJornadaSeleccionada[i]);
+        // tslint:disable-next-line:max-line-length
+        const JugadorUno = this.listaAlumnosClasificacion.filter (alumno => alumno.id === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno )[0];
+        // tslint:disable-next-line:max-line-length
+        this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = JugadorUno.nombre + ' ' + JugadorUno.primerApellido + ' ' + JugadorUno.segundoApellido;
+        // tslint:disable-next-line:max-line-length
+        const JugadorDos = this.listaAlumnosClasificacion.filter (alumno => alumno.id === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos)[0];
+        // tslint:disable-next-line:max-line-length
+        this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = JugadorDos.nombre + ' ' + JugadorDos.primerApellido + ' ' + JugadorDos.segundoApellido;
+        // if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
+        //   // Esa jornada ya se disputó y hubo empate
+
+        //     (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined)) {
+        //   console.log ('Empate');
+        //   this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+        // } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+        //   this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+        // } else {
+        //   console.log ('No hay empate');
+        //   // tslint:disable-next-line:max-line-length
+        //   const Ganador = this.listaAlumnosClasificacion.filter (alumno => alumno.id === this.EnfrentamientosJornadaSeleccionada[i].Ganador)[0];
+        //   console.log (Ganador);
+        //   // tslint:disable-next-line:max-line-length
+        //   this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = Ganador.nombre + ' ' + Ganador.primerApellido + ' ' + Ganador.segundoApellido;
+        // }
       }
       console.log(this.EnfrentamientosJornadaSeleccionada);
       this.dataSourceTablaGanadorIndividual = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
       console.log('El dataSource es:');
       console.log(this.dataSourceTablaGanadorIndividual.data);
+      // Ahora vamos a marcar los resultados en caso de que la jornada se haya disputado ya
+      // PARECE QUE EL CAMPO DISPUTADA NO SE ACTUALIZA
+      let disputada: boolean;
+      disputada = this.JornadasCompeticion.filter (jornada => jornada.id === Number(this.jornadaId))[0].Disputada;
+      console.log ('disputada ' + disputada);
+      //disputada = true;
+      if (disputada) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
+          if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno) {
+            this.selectionUno.select(this.dataSourceTablaGanadorIndividual.data[i]);
+          } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos) {
+            this.selectionDos.select(this.dataSourceTablaGanadorIndividual.data[i]);
+          } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
+            this.selectionTres.select(this.dataSourceTablaGanadorIndividual.data[i]);
+          }
+        }
+      }
 
     } else {
       console.log('Estoy en ConstruirTablaElegirGanador() equipos');
@@ -215,7 +230,8 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
   }
 
-  ///////////////////////////////////////////////////  ALEATORIAMENTE  /////////////////////////////////////////////////////////
+  //////// FUNCIONES PARA CONTROLAR LOS BOTONES Y LOS CHECKBOX ////////////////////////////
+
   /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
      o si debe estar desactivado (si no se ha seleccionado la jornada) */
   ActualizarBoton() {
@@ -236,10 +252,10 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         this.botonAsignarManualDesactivado = true;
         this.botonAsignarAleatorioDesactivado = false;
         this.botonAsignarJuegoDesactivado = true;
-        console.log('Voy a borrar las listas de ganadores');
-        this.enfrentamientosSeleccionadosColumnaUno = [];
-        this.enfrentamientosSeleccionadosColumnaDos = [];
-        this.enfrentamientosSeleccionadosColumnaTres = [];
+        // console.log('Voy a borrar las listas de ganadores');
+        // this.enfrentamientosSeleccionadosColumnaUno = [];
+        // this.enfrentamientosSeleccionadosColumnaDos = [];
+        // this.enfrentamientosSeleccionadosColumnaTres = [];
         this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
       } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID !== undefined) { // JuegoPuntos
         console.log('Modo puntos');
@@ -253,6 +269,86 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         this.botonAsignarAleatorioDesactivado = true;
         this.botonAsignarJuegoDesactivado = true;
       }
+  }
+
+  ActualizarBotonJuego() {
+    for (let i = 0; i < this.juegosActivosPuntosModo.length; i++) {
+          console.log('Entro en el for');
+          console.log(this.juegosActivosPuntosModo[i].id);
+          console.log(this.juegodePuntosSeleccionadoID);
+          console.log(this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID));
+          if (this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID)) {
+          console.log('Entro en el if');
+          console.log(this.juegosActivosPuntosModo[i].Modo);
+            // Vamos a buscar a los alumnos o equipos con sus repectivos puntos
+          if (this.juegosActivosPuntosModo[i].Modo === 'Individual') {
+              this.NumeroDeJuegoDePuntos = i;
+              this.RecuperarInscripcionesAlumnoJuego();
+              console.log(this.listaAlumnosOrdenadaPorPuntos);
+            } else {
+              this.NumeroDeJuegoDePuntos = i;
+              this.RecuperarInscripcionesEquiposJuego();
+              console.log(this.listaEquiposOrdenadaPorPuntos);
+            }
+          console.log('Alumnos');
+          console.log(this.listaAlumnosOrdenadaPorPuntos);
+          console.log('Equipo');
+          console.log(this.listaEquiposOrdenadaPorPuntos);
+          }
+        }
+  }
+
+   // Cuando marco una casilla desmarco las otras casillas de esa fila
+   Verificar(row, n) {
+    if (n === 1) {
+      this.selectionDos.deselect(row);
+      this.selectionTres.deselect(row);
+    }
+    if (n === 2) {
+      this.selectionUno.deselect(row);
+      this.selectionTres.deselect(row);
+    }
+    if (n === 3) {
+      this.selectionUno.deselect(row);
+      this.selectionDos.deselect(row);
+    }
+  }
+
+  ////////////// FUNCIONES PARA ASIGNAR LOS RESULTADOS ///////////////////////////
+
+  AsignarGanadorManualmente() {
+    // tslint:disable-next-line:no-inferrable-types
+    let error: boolean = false;
+    const resultados: number[] = [];
+    // tslint:disable-next-line:prefer-for-of
+    this.dataSourceTablaGanadorIndividual.data.forEach (row => {
+
+      if (this.selectionUno.isSelected(row)) {
+            console.log ('Gana el 1');
+            resultados.push (1);
+
+      } else  if (this.selectionDos.isSelected(row)) {
+            console.log ('Gana el 2');
+            resultados.push (2);
+
+      } else if (this.selectionTres.isSelected(row)) {
+            console.log ('empate');
+            resultados.push (0);
+
+      } else {
+            console.log ('No hay resultado');
+            Swal.fire('Te falta asignar resultados');
+            error = true;
+      }
+    });
+    console.log(resultados);
+    console.log('resultados');
+
+    if (!error) {
+      this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
+      Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
+    }
+
   }
 
   AsignarGanadorAleatoriamente() {
@@ -290,35 +386,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
     Swal.fire('Resutados aleatorios asignados', 'Enhorabuena', 'success');
 
-  }
-
-
-   ///////////////////////////////////////////////////  MEDIANTE JUEGO DE PUNTOS  /////////////////////////////////////////////////////////
-   ActualizarBotonJuego() {
-    for (let i = 0; i < this.juegosActivosPuntosModo.length; i++) {
-          console.log('Entro en el for');
-          console.log(this.juegosActivosPuntosModo[i].id);
-          console.log(this.juegodePuntosSeleccionadoID);
-          console.log(this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID));
-          if (this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID)) {
-          console.log('Entro en el if');
-          console.log(this.juegosActivosPuntosModo[i].Modo);
-            // Vamos a buscar a los alumnos o equipos con sus repectivos puntos
-          if (this.juegosActivosPuntosModo[i].Modo === 'Individual') {
-              this.NumeroDeJuegoDePuntos = i;
-              this.RecuperarInscripcionesAlumnoJuego();
-              console.log(this.listaAlumnosOrdenadaPorPuntos);
-            } else {
-              this.NumeroDeJuegoDePuntos = i;
-              this.RecuperarInscripcionesEquiposJuego();
-              console.log(this.listaEquiposOrdenadaPorPuntos);
-            }
-          console.log('Alumnos');
-          console.log(this.listaAlumnosOrdenadaPorPuntos);
-          console.log('Equipo');
-          console.log(this.listaEquiposOrdenadaPorPuntos);
-          }
-        }
   }
 
   AsignarGanadorJuegoPuntos() {
@@ -361,15 +428,15 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
         // Saco al jugador uno de la lista de participantes del juego de puntos
         // tslint:disable-next-line:max-line-length
-        const JugadorUno = this.listaEquiposOrdenadaPorPuntos.filter (a => a.equipoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno)[0];
+        const equipoUno = this.listaEquiposOrdenadaPorPuntos.filter (a => a.equipoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno)[0];
         // tslint:disable-next-line:max-line-length
-        const JugadorDos = this.listaEquiposOrdenadaPorPuntos.filter (a => a.equipoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos)[0];
+        const equipoDos = this.listaEquiposOrdenadaPorPuntos.filter (a => a.equipoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos)[0];
 
-        if (JugadorUno.PuntosTotalesEquipo > JugadorDos.PuntosTotalesEquipo) {
+        if (equipoUno.PuntosTotalesEquipo > equipoDos.PuntosTotalesEquipo) {
           resultados.push (1);
           this.selectionUno.select(this.dataSourceTablaGanadorEquipo.data[i]);
 
-        } else  if (JugadorUno.PuntosTotalesEquipo < JugadorDos.PuntosTotalesEquipo) {
+        } else  if (equipoUno.PuntosTotalesEquipo < equipoDos.PuntosTotalesEquipo) {
           resultados.push (2);
           this.selectionDos.select(this.dataSourceTablaGanadorEquipo.data[i]);
 
@@ -383,584 +450,522 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     Swal.fire('Resutados asignados', 'Enhorabuena', 'success');
   }
 
-  // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
-  RecuperarInscripcionesAlumnoJuego() {
-    console.log ('voy a por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
-    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(Number(this.juegodePuntosSeleccionadoID))
-    .subscribe(inscripciones => {
-      this.listaAlumnosOrdenadaPorPuntos = inscripciones;
-      console.log (this.listaAlumnosOrdenadaPorPuntos);
-    });
-  }
-
-  // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
-  RecuperarInscripcionesEquiposJuego() {
-    console.log ('vamos por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
-    this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(Number(this.juegodePuntosSeleccionadoID))
-    .subscribe(inscripciones => {
-      this.listaEquiposOrdenadaPorPuntos = inscripciones;
-      console.log(this.listaEquiposOrdenadaPorPuntos);
-      console.log ('ya tengo las inscripciones');
-    });
-  }
-
-
-  ///////////////////////////////////////////////////  MANUALMENTE  /////////////////////////////////////////////////////////
-
-  /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
-     o si debe estar desactivado (si no se ha seleccionado la jornada) */
-  ActualizarBotonManual() {
-    console.log('Estoy en actualizar botón');
-    console.log(this.jornadaId);
-    // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
-    if (this.jornadaId === undefined) {
-      this.botonAsignarManualDesactivado = true;
-    } else {
-      this.botonAsignarManualDesactivado = false;
-      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-    }
-    console.log(this.botonAsignarAleatorioDesactivado);
-  }
-
-  // ------------------------------------------------ Metodología antigua ------------------------------------------------------- //
-  RevisarMultipleSeleccion() {
-    console.log('Selección en ColumnaUno');
-    console.log(this.enfrentamientosSeleccionadosColumnaUno);
-    console.log('Selección en ColumnaDos');
-    console.log(this.enfrentamientosSeleccionadosColumnaDos);
-    console.log('Selección en ColumnaTres');
-    console.log(this.enfrentamientosSeleccionadosColumnaTres);
-
-    this.avisoMasDeUnGanadorMarcadoDosEmpate = false;
-    this.avisoMasDeUnGanadorMarcadoUnoDos = false;
-    this.avisoMasDeUnGanadorMarcadoUnoEmpate = false;
-
-    // Segundo miramos si solo hay una selección por enfrentamiento
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.enfrentamientosSeleccionadosColumnaUno.length; i++) {
-      // tslint:disable-next-line:prefer-for-of
-      for (let j = 0; j < this.enfrentamientosSeleccionadosColumnaDos.length; j++) {
-        if (this.enfrentamientosSeleccionadosColumnaUno[i].id === this.enfrentamientosSeleccionadosColumnaDos[j].id) {
-            this.avisoMasDeUnGanadorMarcadoUnoDos = true;
-            console.log('Hay alguna selección con ganadorUno y ganadorDos, poner el sweatalert');
-            console.log(this.enfrentamientosSeleccionadosColumnaDos[j]);
-            console.log(this.enfrentamientosSeleccionadosColumnaUno[i].id);
-        }
-      }
-      // tslint:disable-next-line:prefer-for-of
-      for (let k = 0; k < this.enfrentamientosSeleccionadosColumnaTres.length; k++) {
-        if (this.enfrentamientosSeleccionadosColumnaUno[i].id === this.enfrentamientosSeleccionadosColumnaTres[k].id) {
-            this.avisoMasDeUnGanadorMarcadoUnoEmpate = true;
-            console.log('Hay alguna selección con ganadorUno y Empate, poner el sweatalert');
-            console.log(this.enfrentamientosSeleccionadosColumnaUno[i]);
-            console.log(this.enfrentamientosSeleccionadosColumnaTres[k].id);
-        }
-      }
-    }
-
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.enfrentamientosSeleccionadosColumnaDos.length; i++) {
-      // tslint:disable-next-line:prefer-for-of
-      for (let j = 0; j < this.enfrentamientosSeleccionadosColumnaTres.length; j++) {
-        if (this.enfrentamientosSeleccionadosColumnaDos[i].id === this.enfrentamientosSeleccionadosColumnaTres[j].id) {
-            this.avisoMasDeUnGanadorMarcadoUnoEmpate = true;
-            console.log('Hay alguna selección con ganadorDos y Empate, poner sweatalert');
-            console.log(this.enfrentamientosSeleccionadosColumnaDos[i]);
-            console.log(this.enfrentamientosSeleccionadosColumnaTres[j].id);
-        }
-      }
-    }
-
-    // tslint:disable-next-line:max-line-length
-    console.log('avisoMasDeUnGanadorMarcadoUnoEmpate = ' + this.avisoMasDeUnGanadorMarcadoUnoEmpate);
-    console.log('avisoMasDeUnGanadorMarcadoDosEmpate = ' + this.avisoMasDeUnGanadorMarcadoDosEmpate);
-    console.log('avisoMasDeUnGanadorMarcadoUnoDos = ' + this.avisoMasDeUnGanadorMarcadoUnoDos);
-
-    if (this.avisoMasDeUnGanadorMarcadoDosEmpate === false && this.avisoMasDeUnGanadorMarcadoUnoDos === false
-      && this.avisoMasDeUnGanadorMarcadoUnoEmpate === false) {
-        return false;
-    } else {
-        return true;
-    }
-  }
-
-  AsignarGanadorManualmenteAntigua() {
-    let Resultados: {
-      buenos: string
-      malos: string
-    } = {buenos: '', malos: 'os enfrentamientos: '};
-    /////////////////////////////////////////////////////   INDIVIDUAL   //////////////////////////////////////////////////
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      const seleccionMultiple = this.calculos.RevisarMultipleSeleccion(this.enfrentamientosSeleccionadosColumnaUno,
-                                                                       this.enfrentamientosSeleccionadosColumnaDos,
-                                                                       this.enfrentamientosSeleccionadosColumnaTres);
-
-      if (seleccionMultiple === false) {
-            // -------------------------------- GANADOR UNO ----------------------------------- //
-            if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
-              Resultados = this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaUno,
-                                                                               this.EnfrentamientosJornadaSeleccionada,
-                                                                               this.listaAlumnosClasificacion,
-                                                                               this.alumnosJuegoDeCompeticionLiga,
-                                                                               this.juegoSeleccionado, 1, Resultados);
-            }
-
-
-            // -------------------------------- GANADOR DOS ----------------------------------- //
-            if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
-              Resultados = this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaDos,
-                                                                  this.EnfrentamientosJornadaSeleccionada,
-                                                                  this.listaAlumnosClasificacion,
-                                                                  this.alumnosJuegoDeCompeticionLiga,
-                                                                  this.juegoSeleccionado, 2, Resultados);
-            }
-
-
-            // ----------------------------------- EMPATE ------------------------------------- //
-            if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
-              Resultados = this.calculos.AsignarEmpateIndividual(this.enfrentamientosSeleccionadosColumnaTres,
-                                                    this.EnfrentamientosJornadaSeleccionada,
-                                                    this.listaAlumnosClasificacion,
-                                                    this.alumnosJuegoDeCompeticionLiga,
-                                                    this.juegoSeleccionado, Resultados);
-            }
-            console.log('Resultados buenos: ' + Resultados.buenos);
-            console.log('Resultados malos: ' + Resultados.malos);
-
-            if (Resultados.buenos !== '' && Resultados.malos === 'os enfrentamientos: ') {
-              console.log('Los Resultados son: ' + Resultados.buenos);
-              Swal.fire(Resultados.buenos, 'Estos son los resultados', 'success');
-            } else if (Resultados.buenos === '' && Resultados.malos !== 'os enfrentamientos: ') {
-              Swal.fire('L' + Resultados.malos + ' ya tienen asignado un gandaor',
-              'No se ha podido asignar ganador a estos enfrentamientos', 'error');
-            } else if (Resultados.buenos !== '' && Resultados.malos !== 'os enfrentamientos: ') {
-              Swal.fire(Resultados.buenos, 'No se ha podido asignar ganador a l' + Resultados.malos +
-                        ' porque ya tienen asignado un gandaor. ', 'success');
-            } else if (Resultados.buenos === '' && Resultados.malos === 'os enfrentamientos: ') {
-              Swal.fire('No se ha seleccionado ningún ganador', '', 'error');
-            }
-      } else {
-          Swal.fire('Hay más de una selección en alguno de los enfrentamientos', ' No se ha podido realizar esta acción', 'error');
-          console.log('Hay más de una selección en alguno de los enfrentamientos');
-      }///////////////////////////////////////////////////////   EQUIPOS   ////////////////////////////////////////////////////
-    } else {
-      const seleccionMultiple = this.calculos.RevisarMultipleSeleccion(this.enfrentamientosSeleccionadosColumnaUno,
-                                                                       this.enfrentamientosSeleccionadosColumnaDos,
-                                                                       this.enfrentamientosSeleccionadosColumnaTres);
-      console.log(seleccionMultiple);
-      if (seleccionMultiple === false) {
-            // -------------------------------- GANADOR UNO ----------------------------------- //
-            if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
-              console.log('Estoy dentro de seleccionados columna uno');
-              Resultados = this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaUno,
-                                                               this.EnfrentamientosJornadaSeleccionada,
-                                                               this.listaEquiposClasificacion,
-                                                               this.equiposJuegoDeCompeticionLiga,
-                                                               this.juegoSeleccionado, 1, Resultados);
-            }
-
-            // -------------------------------- GANADOR DOS ----------------------------------- //
-            if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
-              this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
-                                                  this.listaEquiposClasificacion,
-                                                  this.equiposJuegoDeCompeticionLiga,
-                                                  this.juegoSeleccionado, 2, Resultados);
-            }
-
-            // ----------------------------------- EMPATE ------------------------------------- //
-            if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
-              this.calculos.AsignarEmpateEquipos(this.enfrentamientosSeleccionadosColumnaTres,
-                                                this.EnfrentamientosJornadaSeleccionada,
-                                                this.listaEquiposClasificacion,
-                                                this.equiposJuegoDeCompeticionLiga,
-                                                this.juegoSeleccionado, Resultados) ;
-            }
-            console.log('Resultados buenos: ' + Resultados.buenos);
-            console.log('Resultados malos: ' + Resultados.malos);
-
-            if (Resultados.buenos !== '' && Resultados.malos === 'os enfrentamientos: ') {
-              console.log('Los Resultados son: ' + Resultados.buenos);
-              Swal.fire(Resultados.buenos, 'Estos son los resultados', 'success');
-            } else if (Resultados.buenos === '' && Resultados.malos !== 'os enfrentamientos: ') {
-              Swal.fire('L' + Resultados.malos + ' ya tienen asignado un gandaor',
-              'No se ha podido asignar ganador a estos enfrentamientos', 'error');
-            } else if (Resultados.buenos !== '' && Resultados.malos !== 'os enfrentamientos: ') {
-              Swal.fire(Resultados.buenos, 'No se ha podido asignar ganador a l' + Resultados.malos +
-                        ' porque ya tienen asignado un gandaor. ', 'success');
-            } else if (Resultados.buenos === '' && Resultados.malos === 'os enfrentamientos: ') {
-              Swal.fire('No se ha seleccionado ningún ganador', '', 'error');
-            }
-      } else {
-        Swal.fire('Hay más de una selección en alguno de los enfrentamientos', ' No se ha podido realizar esta acción', 'error');
-        console.log('Hay más de una selección en alguno de los enfrentamientos');
-      }
-    }
-  }
-
-  AddToListGanadorUno() {
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      // tslint:disable-next-line:prefer-for-of
-      for ( let i = 0; i < this.dataSourceTablaGanadorIndividual.data.length; i++) {
-        if (this.selectionUno.isSelected(this.dataSourceTablaGanadorIndividual.data[i]))  {
-          const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaUno.indexOf(this.dataSourceTablaGanadorIndividual.data[i]);
-          if (indexOfUnselected === -1) {
-            this.enfrentamientosSeleccionadosColumnaUno.push(this.dataSourceTablaGanadorIndividual.data[i]);
-          } else {
-            this.enfrentamientosSeleccionadosColumnaUno.splice(indexOfUnselected, 1);
-          }
-          this.selectionUno.deselect(this.dataSourceTablaGanadorIndividual.data[i]);
-        }
-      }
-    } else {
-      // tslint:disable-next-line:prefer-for-of
-      for ( let j = 0; j < this.dataSourceTablaGanadorEquipo.data.length; j++) {
-        if (this.selectionUno.isSelected(this.dataSourceTablaGanadorEquipo.data[j])) {
-          console.log ('Gana el 1');
-          const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaUno.indexOf(this.dataSourceTablaGanadorEquipo.data[j]);
-          if (indexOfUnselected === -1) {
-            this.enfrentamientosSeleccionadosColumnaUno.push(this.dataSourceTablaGanadorEquipo.data[j]);
-          } else {
-            this.enfrentamientosSeleccionadosColumnaUno.splice(indexOfUnselected, 1);
-          }
-          this.selectionUno.deselect(this.dataSourceTablaGanadorEquipo.data[j]);
-        }
-      }
-    }
-  }
-
-  AddToListGanadorDos() {
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      // tslint:disable-next-line:prefer-for-of
-      for ( let i = 0; i < this.dataSourceTablaGanadorIndividual.data.length; i++) {
-        if (this.selectionDos.isSelected(this.dataSourceTablaGanadorIndividual.data[i]))  {
-          const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaDos.indexOf(this.dataSourceTablaGanadorIndividual.data[i]);
-          if (indexOfUnselected === -1) {
-            this.enfrentamientosSeleccionadosColumnaDos.push(this.dataSourceTablaGanadorIndividual.data[i]);
-          } else {
-            this.enfrentamientosSeleccionadosColumnaDos.splice(indexOfUnselected, 1);
-          }
-          this.selectionDos.deselect(this.dataSourceTablaGanadorIndividual.data[i]);
-        }
-      }
-    } else {
-      // tslint:disable-next-line:prefer-for-of
-      for ( let i = 0; i < this.dataSourceTablaGanadorEquipo.data.length; i++) {
-        if (this.selectionDos.isSelected(this.dataSourceTablaGanadorEquipo.data[i]))  {
-          const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaDos.indexOf(this.dataSourceTablaGanadorEquipo.data[i]);
-          if (indexOfUnselected === -1) {
-            this.enfrentamientosSeleccionadosColumnaDos.push(this.dataSourceTablaGanadorEquipo.data[i]);
-          } else {
-            this.enfrentamientosSeleccionadosColumnaDos.splice(indexOfUnselected, 1);
-          }
-          this.selectionDos.deselect(this.dataSourceTablaGanadorEquipo.data[i]);
-        }
-      }
-    }
-  }
-
-  AddToListGanadorTres() {
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      // tslint:disable-next-line:prefer-for-of
-      for ( let i = 0; i < this.dataSourceTablaGanadorIndividual.data.length; i++) {
-        if (this.selectionTres.isSelected(this.dataSourceTablaGanadorIndividual.data[i]))  {
-          const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaTres.indexOf(this.dataSourceTablaGanadorIndividual.data[i]);
-          if (indexOfUnselected === -1) {
-            this.enfrentamientosSeleccionadosColumnaTres.push(this.dataSourceTablaGanadorIndividual.data[i]);
-          } else {
-            this.enfrentamientosSeleccionadosColumnaTres.splice(indexOfUnselected, 1);
-          }
-          this.selectionTres.deselect(this.dataSourceTablaGanadorIndividual.data[i]);
-        }
-      }
-    } else {
-      // tslint:disable-next-line:prefer-for-of
-      for ( let i = 0; i < this.dataSourceTablaGanadorEquipo.data.length; i++) {
-        if (this.selectionTres.isSelected(this.dataSourceTablaGanadorEquipo.data[i]))  {
-          const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaTres.indexOf(this.dataSourceTablaGanadorEquipo.data[i]);
-          if (indexOfUnselected === -1) {
-            this.enfrentamientosSeleccionadosColumnaTres.push(this.dataSourceTablaGanadorEquipo.data[i]);
-          } else {
-            this.enfrentamientosSeleccionadosColumnaTres.splice(indexOfUnselected, 1);
-          }
-          this.selectionTres.deselect(this.dataSourceTablaGanadorEquipo.data[i]);
-        }
-      }
-    }
-  }
-
-  /* Para averiguar si todas las filas están seleccionadas */
-  IsAllSelectedUno() {
-    let numSelected = 0;
-    let numRows = 0;
-    // console.log('Estoy en IsAllSelectedUno()');
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      numSelected = this.selectionUno.selected.length;
-      numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    } else {
-      numSelected = this.selectionUno.selected.length;
-      numRows = this.dataSourceTablaGanadorEquipo.data.length;
-    }
-    // console.log('this.selectionUno es:');
-    // console.log(this.selectionUno);
-    return numSelected === numRows;
-  }
-
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
-  MasterToggleUno() {
-    if (this.IsAllSelectedUno()) {
-      this.selectionUno.clear(); // Desactivamos todos
-      this.enfrentamientosSeleccionadosColumnaUno = [];
-      console.log('Los enfrentamientos con ganadorDos son (individual): ');
-      console.log(this.enfrentamientosSeleccionadosColumnaUno);
-    } else {
-      // activamos todos
-      if (this.juegoSeleccionado.Modo === 'Individual') {
-        this.dataSourceTablaGanadorIndividual.data.forEach(row => {
-          this.selectionUno.select(row);
-          this.enfrentamientosSeleccionadosColumnaUno.push(row);
-        });
-        console.log('Los enfrentamientos con ganadorDos son (individual): ');
-        console.log(this.enfrentamientosSeleccionadosColumnaUno);
-      } else {
-        this.dataSourceTablaGanadorEquipo.data.forEach(row => {
-          this.selectionUno.select(row);
-          this.enfrentamientosSeleccionadosColumnaUno.push(row);
-        });
-        console.log('Los enfrentamientos con ganadorDos son (equipo): ');
-        console.log(this.enfrentamientosSeleccionadosColumnaUno);
-      }
-    }
-  }
-
-  /* Para averiguar si todas las filas están seleccionadas */
-  IsAllSelectedDos() {
-    let numSelected = 0;
-    let numRows = 0;
-    // console.log('Estoy en IsAllSelectedUno()');
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      numSelected = this.selectionDos.selected.length;
-      numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    } else {
-      numSelected = this.selectionDos.selected.length;
-      numRows = this.dataSourceTablaGanadorEquipo.data.length;
-    }
-    // console.log('this.selectionUno es:');
-    // console.log(this.selectionUno);
-    return numSelected === numRows;
-  }
-
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
-  MasterToggleDos() {
-    if (this.IsAllSelectedDos()) {
-      this.selectionDos.clear(); // Desactivamos todos
-      this.enfrentamientosSeleccionadosColumnaDos = [];
-      console.log('Los enfrentamientos con ganadorDos son (individual): ');
-      console.log(this.enfrentamientosSeleccionadosColumnaDos);
-    } else {
-      // activamos todos
-      if (this.juegoSeleccionado.Modo === 'Individual') {
-        this.dataSourceTablaGanadorIndividual.data.forEach(row => {
-          this.selectionDos.select(row);
-          this.enfrentamientosSeleccionadosColumnaDos.push(row);
-        });
-        console.log('Los enfrentamientos con ganadorDos son (individual): ');
-        console.log(this.enfrentamientosSeleccionadosColumnaDos);
-      } else {
-        this.dataSourceTablaGanadorEquipo.data.forEach(row => {
-          this.selectionDos.select(row);
-          this.enfrentamientosSeleccionadosColumnaDos.push(row);
-        });
-        console.log('Los enfrentamientos con ganadorDos son (equipo): ');
-        console.log(this.enfrentamientosSeleccionadosColumnaDos);
-      }
-    }
-  }
-
-  /* Para averiguar si todas las filas están seleccionadas */
-  IsAllSelectedTres() {
-    let numSelected = 0;
-    let numRows = 0;
-    // console.log('Estoy en IsAllSelectedUno()');
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      numSelected = this.selectionTres.selected.length;
-      numRows = this.dataSourceTablaGanadorIndividual.data.length;
-    } else {
-      numSelected = this.selectionTres.selected.length;
-      numRows = this.dataSourceTablaGanadorEquipo.data.length;
-    }
-    // console.log('this.selectionUno es:');
-    // console.log(this.selectionUno);
-    return numSelected === numRows;
-  }
-
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
-  MasterToggleTres() {
-    if (this.IsAllSelectedTres()) {
-      this.selectionTres.clear(); // Desactivamos todos
-      this.enfrentamientosSeleccionadosColumnaTres = [];
-      console.log('Los enfrentamientos con ganadorTres son (individual): ');
-      console.log(this.enfrentamientosSeleccionadosColumnaTres);
-    } else {
-      // activamos todos
-      if (this.juegoSeleccionado.Modo === 'Individual') {
-        this.dataSourceTablaGanadorIndividual.data.forEach(row => {
-          this.selectionTres.select(row);
-          this.enfrentamientosSeleccionadosColumnaTres.push(row);
-        });
-        console.log('Los enfrentamientos con ganadorTres son (individual): ');
-        console.log(this.enfrentamientosSeleccionadosColumnaTres);
-      } else {
-        this.dataSourceTablaGanadorEquipo.data.forEach(row => {
-          this.selectionTres.select(row);
-          this.enfrentamientosSeleccionadosColumnaTres.push(row);
-        });
-        console.log('Los enfrentamientos con ganadorTres son (equipo): ');
-        console.log(this.enfrentamientosSeleccionadosColumnaTres);
-      }
-    }
-  }
-
-  // ------------------------------------------------ Metodología nueva ------------------------------------------------------- //
-  AddResultadosColumnaTres() {
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      this.dataSourceTablaGanadorIndividual.data.forEach (row => {
-
-        if (this.selectionTres.isSelected(row)) {
-              console.log ('empate');
-              this.resultados.push (0);
-              this.selectionTres.clear();
-        }
-
-      });
-      console.log('resultados');
-      console.log(this.resultados);
-    }
-  }
-  AddResultadosColumnaDos() {
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      this.dataSourceTablaGanadorIndividual.data.forEach (row => {
-
-        if (this.selectionDos.isSelected(row)) {
-              console.log ('Gana el 2');
-              this.resultados.push (2);
-              this.selectionDos.clear();
-        }
-
-      });
-      console.log('resultados');
-      console.log(this.resultados);
-    }
-  }
-
-  AddResultadosColumnaUno() {
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      this.dataSourceTablaGanadorIndividual.data.forEach (row => {
-
-        if (this.selectionUno.isSelected(row)) {
-              console.log ('Gana el 1');
-              this.resultados.push (1);
-              this.selectionUno.clear();
-        }
-
-      });
-      console.log('resultados');
-      console.log(this.resultados);
-    }
-
-    // if (this.juegoSeleccionado.Modo === 'Individual') {
-    //   this.dataSourceTablaGanadorIndividual.data.forEach(row => {
-
-    //     if (this.selectionUno.isSelected(row)) {
-    //       const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaUno.indexOf(row);
-    //       if (indexOfUnselected === -1) {
-    //         this.enfrentamientosSeleccionadosColumnaUno.push(row);
-    //         this.resultados[indexOfUnselected] = 1;
-    //       } else {
-    //         this.enfrentamientosSeleccionadosColumnaUno.splice(indexOfUnselected, 1);
-    //         this.resultados[indexOfUnselected] = -1;
-    //       }
-
-    //     } else if (this.selectionDos.isSelected(row)) {
-    //       const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaDos.indexOf(row);
-    //       if (indexOfUnselected === -1) {
-    //         this.enfrentamientosSeleccionadosColumnaDos.push(row);
-    //         // this.resultados.push (2);
-    //         this.resultados[indexOfUnselected] = 2;
-    //       } else {
-    //         this.enfrentamientosSeleccionadosColumnaDos.splice(indexOfUnselected, 1);
-    //         this.resultados[indexOfUnselected] = -1;
-    //       }
-
-    //     } else if (this.selectionTres.isSelected(row)) {
-    //       const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaTres.indexOf(row);
-    //       if (indexOfUnselected === -1) {
-    //         this.enfrentamientosSeleccionadosColumnaTres.push(row);
-    //         this.resultados[indexOfUnselected] = 0;
-    //       } else {
-    //         this.enfrentamientosSeleccionadosColumnaTres.splice(indexOfUnselected, 1);
-    //         this.resultados[indexOfUnselected] = -1;
-    //       }
-    //     }
-    //   });
-    // }
-  }
-
-  AsignarGanadorManualmente() {
-    console.log('Vector de resultados al entrar en la función');
-    console.log(this.resultados);
-    console.log('Estoy en AsignarGanadorManualmente()');
-    console.log('La lista de enfrentamientos de esta Jornada es: ');
-    console.log(this.EnfrentamientosJornadaSeleccionada);
-
-
-    console.log('this.enfrentamientosSeleccionadosColumnaUno');
-    console.log(this.enfrentamientosSeleccionadosColumnaUno);
-    console.log('this.enfrentamientosSeleccionadosColumnaDos');
-    console.log(this.enfrentamientosSeleccionadosColumnaDos);
-    console.log('this.enfrentamientosSeleccionadosColumnaTres');
-    console.log(this.enfrentamientosSeleccionadosColumnaTres);
-    console.log('resultados');
-    console.log(this.resultados);
-
-
-    // // tslint:disable-next-line:prefer-for-of
-    // this.dataSourceTablaGanadorIndividual.data.forEach (row => {
-
-    //   if (this.selectionUno.isSelected(row)) {
-    //         console.log ('Gana el 1');
-    //         resultados.push (1);
-
-    //   } else  if (this.selectionDos.isSelected(row)) {
-    //         console.log ('Gana el 2');
-    //         resultados.push (2);
-
-    //   } else if (this.selectionTres.isSelected(row)) {
-    //         console.log ('empate');
-    //         resultados.push (0);
-
-    //   } else {
-    //         Swal.fire('Te falta asignar resultados', 'error');
-    //         return;
-    //   }
-    // });
-    // console.log(resultados);
-    // console.log('resultados');
-
-    // this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
-    // Swal.fire('Resutados asignados', 'Enhorabuena', 'success');
-
-  }
-
 
 
   goBack() {
     this.location.back();
   }
+
+   ///////////////////////////////////////////////////  MEDIANTE JUEGO DE PUNTOS  /////////////////////////////////////////////////////////
+
+  ///////////////////////////////////////////////////  MANUALMENTE  /////////////////////////////////////////////////////////
+
+  /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
+     o si debe estar desactivado (si no se ha seleccionado la jornada) */
+  // ActualizarBotonManual() {
+  //   console.log('Estoy en actualizar botón');
+  //   console.log(this.jornadaId);
+  //   // if ((this.selection.selected.length === 0) || this.jornadaId === undefined) {
+  //   if (this.jornadaId === undefined) {
+  //     this.botonAsignarManualDesactivado = true;
+  //   } else {
+  //     this.botonAsignarManualDesactivado = false;
+  //     this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+  //   }
+  //   console.log(this.botonAsignarAleatorioDesactivado);
+  // }
+
+  // ------------------------------------------------ Metodología antigua ------------------------------------------------------- //
+  // RevisarMultipleSeleccion() {
+  //   console.log('Selección en ColumnaUno');
+  //   console.log(this.enfrentamientosSeleccionadosColumnaUno);
+  //   console.log('Selección en ColumnaDos');
+  //   console.log(this.enfrentamientosSeleccionadosColumnaDos);
+  //   console.log('Selección en ColumnaTres');
+  //   console.log(this.enfrentamientosSeleccionadosColumnaTres);
+
+  //   this.avisoMasDeUnGanadorMarcadoDosEmpate = false;
+  //   this.avisoMasDeUnGanadorMarcadoUnoDos = false;
+  //   this.avisoMasDeUnGanadorMarcadoUnoEmpate = false;
+
+  //   // Segundo miramos si solo hay una selección por enfrentamiento
+  //   // tslint:disable-next-line:prefer-for-of
+  //   for (let i = 0; i < this.enfrentamientosSeleccionadosColumnaUno.length; i++) {
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for (let j = 0; j < this.enfrentamientosSeleccionadosColumnaDos.length; j++) {
+  //       if (this.enfrentamientosSeleccionadosColumnaUno[i].id === this.enfrentamientosSeleccionadosColumnaDos[j].id) {
+  //           this.avisoMasDeUnGanadorMarcadoUnoDos = true;
+  //           console.log('Hay alguna selección con ganadorUno y ganadorDos, poner el sweatalert');
+  //           console.log(this.enfrentamientosSeleccionadosColumnaDos[j]);
+  //           console.log(this.enfrentamientosSeleccionadosColumnaUno[i].id);
+  //       }
+  //     }
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for (let k = 0; k < this.enfrentamientosSeleccionadosColumnaTres.length; k++) {
+  //       if (this.enfrentamientosSeleccionadosColumnaUno[i].id === this.enfrentamientosSeleccionadosColumnaTres[k].id) {
+  //           this.avisoMasDeUnGanadorMarcadoUnoEmpate = true;
+  //           console.log('Hay alguna selección con ganadorUno y Empate, poner el sweatalert');
+  //           console.log(this.enfrentamientosSeleccionadosColumnaUno[i]);
+  //           console.log(this.enfrentamientosSeleccionadosColumnaTres[k].id);
+  //       }
+  //     }
+  //   }
+
+  //   // tslint:disable-next-line:prefer-for-of
+  //   for (let i = 0; i < this.enfrentamientosSeleccionadosColumnaDos.length; i++) {
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for (let j = 0; j < this.enfrentamientosSeleccionadosColumnaTres.length; j++) {
+  //       if (this.enfrentamientosSeleccionadosColumnaDos[i].id === this.enfrentamientosSeleccionadosColumnaTres[j].id) {
+  //           this.avisoMasDeUnGanadorMarcadoUnoEmpate = true;
+  //           console.log('Hay alguna selección con ganadorDos y Empate, poner sweatalert');
+  //           console.log(this.enfrentamientosSeleccionadosColumnaDos[i]);
+  //           console.log(this.enfrentamientosSeleccionadosColumnaTres[j].id);
+  //       }
+  //     }
+  //   }
+
+  //   // tslint:disable-next-line:max-line-length
+  //   console.log('avisoMasDeUnGanadorMarcadoUnoEmpate = ' + this.avisoMasDeUnGanadorMarcadoUnoEmpate);
+  //   console.log('avisoMasDeUnGanadorMarcadoDosEmpate = ' + this.avisoMasDeUnGanadorMarcadoDosEmpate);
+  //   console.log('avisoMasDeUnGanadorMarcadoUnoDos = ' + this.avisoMasDeUnGanadorMarcadoUnoDos);
+
+  //   if (this.avisoMasDeUnGanadorMarcadoDosEmpate === false && this.avisoMasDeUnGanadorMarcadoUnoDos === false
+  //     && this.avisoMasDeUnGanadorMarcadoUnoEmpate === false) {
+  //       return false;
+  //   } else {
+  //       return true;
+  //   }
+  // }
+
+  // AsignarGanadorManualmenteAntigua() {
+  //   let Resultados: {
+  //     buenos: string
+  //     malos: string
+  //   } = {buenos: '', malos: 'os enfrentamientos: '};
+  //   /////////////////////////////////////////////////////   INDIVIDUAL   //////////////////////////////////////////////////
+  //   if (this.juegoSeleccionado.Modo === 'Individual') {
+  //     const seleccionMultiple = this.calculos.RevisarMultipleSeleccion(this.enfrentamientosSeleccionadosColumnaUno,
+  //                                                                      this.enfrentamientosSeleccionadosColumnaDos,
+  //                                                                      this.enfrentamientosSeleccionadosColumnaTres);
+
+  //     if (seleccionMultiple === false) {
+  //           // -------------------------------- GANADOR UNO ----------------------------------- //
+  //           if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
+  //             Resultados = this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaUno,
+  //                                                                              this.EnfrentamientosJornadaSeleccionada,
+  //                                                                              this.listaAlumnosClasificacion,
+  //                                                                              this.alumnosJuegoDeCompeticionLiga,
+  //                                                                              this.juegoSeleccionado, 1, Resultados);
+  //           }
+
+
+  //           // -------------------------------- GANADOR DOS ----------------------------------- //
+  //           if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
+  //             Resultados = this.calculos.AsignarGanadorIndividual(this.enfrentamientosSeleccionadosColumnaDos,
+  //                                                                 this.EnfrentamientosJornadaSeleccionada,
+  //                                                                 this.listaAlumnosClasificacion,
+  //                                                                 this.alumnosJuegoDeCompeticionLiga,
+  //                                                                 this.juegoSeleccionado, 2, Resultados);
+  //           }
+
+
+  //           // ----------------------------------- EMPATE ------------------------------------- //
+  //           if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
+  //             Resultados = this.calculos.AsignarEmpateIndividual(this.enfrentamientosSeleccionadosColumnaTres,
+  //                                                   this.EnfrentamientosJornadaSeleccionada,
+  //                                                   this.listaAlumnosClasificacion,
+  //                                                   this.alumnosJuegoDeCompeticionLiga,
+  //                                                   this.juegoSeleccionado, Resultados);
+  //           }
+  //           console.log('Resultados buenos: ' + Resultados.buenos);
+  //           console.log('Resultados malos: ' + Resultados.malos);
+
+  //           if (Resultados.buenos !== '' && Resultados.malos === 'os enfrentamientos: ') {
+  //             console.log('Los Resultados son: ' + Resultados.buenos);
+  //             Swal.fire(Resultados.buenos, 'Estos son los resultados', 'success');
+  //           } else if (Resultados.buenos === '' && Resultados.malos !== 'os enfrentamientos: ') {
+  //             Swal.fire('L' + Resultados.malos + ' ya tienen asignado un gandaor',
+  //             'No se ha podido asignar ganador a estos enfrentamientos', 'error');
+  //           } else if (Resultados.buenos !== '' && Resultados.malos !== 'os enfrentamientos: ') {
+  //             Swal.fire(Resultados.buenos, 'No se ha podido asignar ganador a l' + Resultados.malos +
+  //                       ' porque ya tienen asignado un gandaor. ', 'success');
+  //           } else if (Resultados.buenos === '' && Resultados.malos === 'os enfrentamientos: ') {
+  //             Swal.fire('No se ha seleccionado ningún ganador', '', 'error');
+  //           }
+  //     } else {
+  //         Swal.fire('Hay más de una selección en alguno de los enfrentamientos', ' No se ha podido realizar esta acción', 'error');
+  //         console.log('Hay más de una selección en alguno de los enfrentamientos');
+  //     }///////////////////////////////////////////////////////   EQUIPOS   ////////////////////////////////////////////////////
+  //   } else {
+  //     const seleccionMultiple = this.calculos.RevisarMultipleSeleccion(this.enfrentamientosSeleccionadosColumnaUno,
+  //                                                                      this.enfrentamientosSeleccionadosColumnaDos,
+  //                                                                      this.enfrentamientosSeleccionadosColumnaTres);
+  //     console.log(seleccionMultiple);
+  //     if (seleccionMultiple === false) {
+  //           // -------------------------------- GANADOR UNO ----------------------------------- //
+  //           if (this.enfrentamientosSeleccionadosColumnaUno.length > 0) {
+  //             console.log('Estoy dentro de seleccionados columna uno');
+  //             Resultados = this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaUno,
+  //                                                              this.EnfrentamientosJornadaSeleccionada,
+  //                                                              this.listaEquiposClasificacion,
+  //                                                              this.equiposJuegoDeCompeticionLiga,
+  //                                                              this.juegoSeleccionado, 1, Resultados);
+  //           }
+
+  //           // -------------------------------- GANADOR DOS ----------------------------------- //
+  //           if (this.enfrentamientosSeleccionadosColumnaDos.length > 0) {
+  //             this.calculos.AsignarGanadorEquipos(this. enfrentamientosSeleccionadosColumnaDos, this.EnfrentamientosJornadaSeleccionada,
+  //                                                 this.listaEquiposClasificacion,
+  //                                                 this.equiposJuegoDeCompeticionLiga,
+  //                                                 this.juegoSeleccionado, 2, Resultados);
+  //           }
+
+  //           // ----------------------------------- EMPATE ------------------------------------- //
+  //           if (this.enfrentamientosSeleccionadosColumnaTres.length > 0) {
+  //             this.calculos.AsignarEmpateEquipos(this.enfrentamientosSeleccionadosColumnaTres,
+  //                                               this.EnfrentamientosJornadaSeleccionada,
+  //                                               this.listaEquiposClasificacion,
+  //                                               this.equiposJuegoDeCompeticionLiga,
+  //                                               this.juegoSeleccionado, Resultados) ;
+  //           }
+  //           console.log('Resultados buenos: ' + Resultados.buenos);
+  //           console.log('Resultados malos: ' + Resultados.malos);
+
+  //           if (Resultados.buenos !== '' && Resultados.malos === 'os enfrentamientos: ') {
+  //             console.log('Los Resultados son: ' + Resultados.buenos);
+  //             Swal.fire(Resultados.buenos, 'Estos son los resultados', 'success');
+  //           } else if (Resultados.buenos === '' && Resultados.malos !== 'os enfrentamientos: ') {
+  //             Swal.fire('L' + Resultados.malos + ' ya tienen asignado un gandaor',
+  //             'No se ha podido asignar ganador a estos enfrentamientos', 'error');
+  //           } else if (Resultados.buenos !== '' && Resultados.malos !== 'os enfrentamientos: ') {
+  //             Swal.fire(Resultados.buenos, 'No se ha podido asignar ganador a l' + Resultados.malos +
+  //                       ' porque ya tienen asignado un gandaor. ', 'success');
+  //           } else if (Resultados.buenos === '' && Resultados.malos === 'os enfrentamientos: ') {
+  //             Swal.fire('No se ha seleccionado ningún ganador', '', 'error');
+  //           }
+  //     } else {
+  //       Swal.fire('Hay más de una selección en alguno de los enfrentamientos', ' No se ha podido realizar esta acción', 'error');
+  //       console.log('Hay más de una selección en alguno de los enfrentamientos');
+  //     }
+  //   }
+  // }
+
+  // AddToListGanadorUno() {
+  //   if (this.juegoSeleccionado.Modo === 'Individual') {
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for ( let i = 0; i < this.dataSourceTablaGanadorIndividual.data.length; i++) {
+  //       if (this.selectionUno.isSelected(this.dataSourceTablaGanadorIndividual.data[i]))  {
+  //         const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaUno.indexOf(this.dataSourceTablaGanadorIndividual.data[i]);
+  //         if (indexOfUnselected === -1) {
+  //           this.enfrentamientosSeleccionadosColumnaUno.push(this.dataSourceTablaGanadorIndividual.data[i]);
+  //         } else {
+  //           this.enfrentamientosSeleccionadosColumnaUno.splice(indexOfUnselected, 1);
+  //         }
+  //         this.selectionUno.deselect(this.dataSourceTablaGanadorIndividual.data[i]);
+  //       }
+  //     }
+  //   } else {
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for ( let j = 0; j < this.dataSourceTablaGanadorEquipo.data.length; j++) {
+  //       if (this.selectionUno.isSelected(this.dataSourceTablaGanadorEquipo.data[j])) {
+  //         console.log ('Gana el 1');
+  //         const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaUno.indexOf(this.dataSourceTablaGanadorEquipo.data[j]);
+  //         if (indexOfUnselected === -1) {
+  //           this.enfrentamientosSeleccionadosColumnaUno.push(this.dataSourceTablaGanadorEquipo.data[j]);
+  //         } else {
+  //           this.enfrentamientosSeleccionadosColumnaUno.splice(indexOfUnselected, 1);
+  //         }
+  //         this.selectionUno.deselect(this.dataSourceTablaGanadorEquipo.data[j]);
+  //       }
+  //     }
+  //   }
+  // }
+
+  // AddToListGanadorDos() {
+  //   if (this.juegoSeleccionado.Modo === 'Individual') {
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for ( let i = 0; i < this.dataSourceTablaGanadorIndividual.data.length; i++) {
+  //       if (this.selectionDos.isSelected(this.dataSourceTablaGanadorIndividual.data[i]))  {
+  //         const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaDos.indexOf(this.dataSourceTablaGanadorIndividual.data[i]);
+  //         if (indexOfUnselected === -1) {
+  //           this.enfrentamientosSeleccionadosColumnaDos.push(this.dataSourceTablaGanadorIndividual.data[i]);
+  //         } else {
+  //           this.enfrentamientosSeleccionadosColumnaDos.splice(indexOfUnselected, 1);
+  //         }
+  //         this.selectionDos.deselect(this.dataSourceTablaGanadorIndividual.data[i]);
+  //       }
+  //     }
+  //   } else {
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for ( let i = 0; i < this.dataSourceTablaGanadorEquipo.data.length; i++) {
+  //       if (this.selectionDos.isSelected(this.dataSourceTablaGanadorEquipo.data[i]))  {
+  //         const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaDos.indexOf(this.dataSourceTablaGanadorEquipo.data[i]);
+  //         if (indexOfUnselected === -1) {
+  //           this.enfrentamientosSeleccionadosColumnaDos.push(this.dataSourceTablaGanadorEquipo.data[i]);
+  //         } else {
+  //           this.enfrentamientosSeleccionadosColumnaDos.splice(indexOfUnselected, 1);
+  //         }
+  //         this.selectionDos.deselect(this.dataSourceTablaGanadorEquipo.data[i]);
+  //       }
+  //     }
+  //   }
+  // }
+
+  // AddToListGanadorTres() {
+  //   if (this.juegoSeleccionado.Modo === 'Individual') {
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for ( let i = 0; i < this.dataSourceTablaGanadorIndividual.data.length; i++) {
+  //       if (this.selectionTres.isSelected(this.dataSourceTablaGanadorIndividual.data[i]))  {
+  //         const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaTres.indexOf(this.dataSourceTablaGanadorIndividual.data[i]);
+  //         if (indexOfUnselected === -1) {
+  //           this.enfrentamientosSeleccionadosColumnaTres.push(this.dataSourceTablaGanadorIndividual.data[i]);
+  //         } else {
+  //           this.enfrentamientosSeleccionadosColumnaTres.splice(indexOfUnselected, 1);
+  //         }
+  //         this.selectionTres.deselect(this.dataSourceTablaGanadorIndividual.data[i]);
+  //       }
+  //     }
+  //   } else {
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for ( let i = 0; i < this.dataSourceTablaGanadorEquipo.data.length; i++) {
+  //       if (this.selectionTres.isSelected(this.dataSourceTablaGanadorEquipo.data[i]))  {
+  //         const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaTres.indexOf(this.dataSourceTablaGanadorEquipo.data[i]);
+  //         if (indexOfUnselected === -1) {
+  //           this.enfrentamientosSeleccionadosColumnaTres.push(this.dataSourceTablaGanadorEquipo.data[i]);
+  //         } else {
+  //           this.enfrentamientosSeleccionadosColumnaTres.splice(indexOfUnselected, 1);
+  //         }
+  //         this.selectionTres.deselect(this.dataSourceTablaGanadorEquipo.data[i]);
+  //       }
+  //     }
+  //   }
+  // }
+
+
+  // /* Para averiguar si todas las filas están seleccionadas */
+  // IsAllSelectedUno() {
+  //   let numSelected = 0;
+  //   let numRows = 0;
+  //   // console.log('Estoy en IsAllSelectedUno()');
+  //   if (this.juegoSeleccionado.Modo === 'Individual') {
+  //     numSelected = this.selectionUno.selected.length;
+  //     numRows = this.dataSourceTablaGanadorIndividual.data.length;
+  //   } else {
+  //     numSelected = this.selectionUno.selected.length;
+  //     numRows = this.dataSourceTablaGanadorEquipo.data.length;
+  //   }
+  //   // console.log('this.selectionUno es:');
+  //   // console.log(this.selectionUno);
+  //   return numSelected === numRows;
+  // }
+
+
+
+  // /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+  //   * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+  //   * desactivado, en cuyo caso se activan todos */
+  // MasterToggleUno() {
+  //   if (this.IsAllSelectedUno()) {
+  //     this.selectionUno.clear(); // Desactivamos todos
+  //     // this.enfrentamientosSeleccionadosColumnaUno = [];
+  //     // console.log('Los enfrentamientos con ganadorDos son (individual): ');
+  //     // console.log(this.enfrentamientosSeleccionadosColumnaUno);
+  //   } else {
+  //     // activamos todos
+  //     if (this.juegoSeleccionado.Modo === 'Individual') {
+  //       this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+  //         this.selectionUno.select(row);
+  //        // this.enfrentamientosSeleccionadosColumnaUno.push(row);
+  //       });
+  //       console.log('Los enfrentamientos con ganadorDos son (individual): ');
+  //       console.log(this.enfrentamientosSeleccionadosColumnaUno);
+  //     } else {
+  //       this.dataSourceTablaGanadorEquipo.data.forEach(row => {
+  //         this.selectionUno.select(row);
+  //        // this.enfrentamientosSeleccionadosColumnaUno.push(row);
+  //       });
+  //       console.log('Los enfrentamientos con ganadorDos son (equipo): ');
+  //       console.log(this.enfrentamientosSeleccionadosColumnaUno);
+  //     }
+  //   }
+  // }
+
+  /* Para averiguar si todas las filas están seleccionadas */
+  // IsAllSelectedDos() {
+  //   let numSelected = 0;
+  //   let numRows = 0;
+  //   // console.log('Estoy en IsAllSelectedUno()');
+  //   if (this.juegoSeleccionado.Modo === 'Individual') {
+  //     numSelected = this.selectionDos.selected.length;
+  //     numRows = this.dataSourceTablaGanadorIndividual.data.length;
+  //   } else {
+  //     numSelected = this.selectionDos.selected.length;
+  //     numRows = this.dataSourceTablaGanadorEquipo.data.length;
+  //   }
+  //   // console.log('this.selectionUno es:');
+  //   // console.log(this.selectionUno);
+  //   return numSelected === numRows;
+  // }
+
+  // /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+  //   * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+  //   * desactivado, en cuyo caso se activan todos */
+  // MasterToggleDos() {
+  //   if (this.IsAllSelectedDos()) {
+  //     this.selectionDos.clear(); // Desactivamos todos
+  //     // this.enfrentamientosSeleccionadosColumnaDos = [];
+  //     console.log('Los enfrentamientos con ganadorDos son (individual): ');
+  //     console.log(this.enfrentamientosSeleccionadosColumnaDos);
+  //   } else {
+  //     // activamos todos
+  //     if (this.juegoSeleccionado.Modo === 'Individual') {
+  //       this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+  //         this.selectionDos.select(row);
+  //         // this.enfrentamientosSeleccionadosColumnaDos.push(row);
+  //       });
+  //       console.log('Los enfrentamientos con ganadorDos son (individual): ');
+  //       console.log(this.enfrentamientosSeleccionadosColumnaDos);
+  //     } else {
+  //       this.dataSourceTablaGanadorEquipo.data.forEach(row => {
+  //         this.selectionDos.select(row);
+  //         // this.enfrentamientosSeleccionadosColumnaDos.push(row);
+  //       });
+  //       console.log('Los enfrentamientos con ganadorDos son (equipo): ');
+  //       console.log(this.enfrentamientosSeleccionadosColumnaDos);
+  //     }
+  //   }
+  // }
+
+  // /* Para averiguar si todas las filas están seleccionadas */
+  // IsAllSelectedTres() {
+  //   let numSelected = 0;
+  //   let numRows = 0;
+  //   // console.log('Estoy en IsAllSelectedUno()');
+  //   if (this.juegoSeleccionado.Modo === 'Individual') {
+  //     numSelected = this.selectionTres.selected.length;
+  //     numRows = this.dataSourceTablaGanadorIndividual.data.length;
+  //   } else {
+  //     numSelected = this.selectionTres.selected.length;
+  //     numRows = this.dataSourceTablaGanadorEquipo.data.length;
+  //   }
+  //   // console.log('this.selectionUno es:');
+  //   // console.log(this.selectionUno);
+  //   return numSelected === numRows;
+  // }
+
+  // /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
+  //   * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
+  //   * desactivado, en cuyo caso se activan todos */
+  // MasterToggleTres() {
+  //   if (this.IsAllSelectedTres()) {
+  //     this.selectionTres.clear(); // Desactivamos todos
+  //     // this.enfrentamientosSeleccionadosColumnaTres = [];
+  //     console.log('Los enfrentamientos con ganadorTres son (individual): ');
+  //     console.log(this.enfrentamientosSeleccionadosColumnaTres);
+  //   } else {
+  //     // activamos todos
+  //     if (this.juegoSeleccionado.Modo === 'Individual') {
+  //       this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+  //         this.selectionTres.select(row);
+  //         // this.enfrentamientosSeleccionadosColumnaTres.push(row);
+  //       });
+  //       console.log('Los enfrentamientos con ganadorTres son (individual): ');
+  //       console.log(this.enfrentamientosSeleccionadosColumnaTres);
+  //     } else {
+  //       this.dataSourceTablaGanadorEquipo.data.forEach(row => {
+  //         this.selectionTres.select(row);
+  //         // this.enfrentamientosSeleccionadosColumnaTres.push(row);
+  //       });
+  //       console.log('Los enfrentamientos con ganadorTres son (equipo): ');
+  //       console.log(this.enfrentamientosSeleccionadosColumnaTres);
+  //     }
+  //   }
+  // }
+
+  // // ------------------------------------------------ Metodología nueva ------------------------------------------------------- //
+  // AddResultadosColumnaTres() {
+  //   if (this.juegoSeleccionado.Modo === 'Individual') {
+  //     this.dataSourceTablaGanadorIndividual.data.forEach (row => {
+
+  //       if (this.selectionTres.isSelected(row)) {
+  //             console.log ('empate');
+  //             this.resultados.push (0);
+  //             this.selectionTres.clear();
+  //       }
+
+  //     });
+  //     console.log('resultados');
+  //     console.log(this.resultados);
+  //   }
+  // }
+  // AddResultadosColumnaDos() {
+  //   if (this.juegoSeleccionado.Modo === 'Individual') {
+  //     this.dataSourceTablaGanadorIndividual.data.forEach (row => {
+
+  //       if (this.selectionDos.isSelected(row)) {
+  //             console.log ('Gana el 2');
+  //             this.resultados.push (2);
+  //             this.selectionDos.clear();
+  //       }
+
+  //     });
+  //     console.log('resultados');
+  //     console.log(this.resultados);
+  //   }
+  // }
+
+  // AddResultadosColumnaUno() {
+  //   if (this.juegoSeleccionado.Modo === 'Individual') {
+  //     this.dataSourceTablaGanadorIndividual.data.forEach (row => {
+
+  //       if (this.selectionUno.isSelected(row)) {
+  //             console.log ('Gana el 1');
+  //             this.resultados.push (1);
+  //             this.selectionUno.clear();
+  //       }
+
+  //     });
+  //     console.log('resultados');
+  //     console.log(this.resultados);
+  //   }
+
+  //   // if (this.juegoSeleccionado.Modo === 'Individual') {
+  //   //   this.dataSourceTablaGanadorIndividual.data.forEach(row => {
+
+  //   //     if (this.selectionUno.isSelected(row)) {
+  //   //       const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaUno.indexOf(row);
+  //   //       if (indexOfUnselected === -1) {
+  //   //         this.enfrentamientosSeleccionadosColumnaUno.push(row);
+  //   //         this.resultados[indexOfUnselected] = 1;
+  //   //       } else {
+  //   //         this.enfrentamientosSeleccionadosColumnaUno.splice(indexOfUnselected, 1);
+  //   //         this.resultados[indexOfUnselected] = -1;
+  //   //       }
+
+  //   //     } else if (this.selectionDos.isSelected(row)) {
+  //   //       const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaDos.indexOf(row);
+  //   //       if (indexOfUnselected === -1) {
+  //   //         this.enfrentamientosSeleccionadosColumnaDos.push(row);
+  //   //         // this.resultados.push (2);
+  //   //         this.resultados[indexOfUnselected] = 2;
+  //   //       } else {
+  //   //         this.enfrentamientosSeleccionadosColumnaDos.splice(indexOfUnselected, 1);
+  //   //         this.resultados[indexOfUnselected] = -1;
+  //   //       }
+
+  //   //     } else if (this.selectionTres.isSelected(row)) {
+  //   //       const indexOfUnselected = this.enfrentamientosSeleccionadosColumnaTres.indexOf(row);
+  //   //       if (indexOfUnselected === -1) {
+  //   //         this.enfrentamientosSeleccionadosColumnaTres.push(row);
+  //   //         this.resultados[indexOfUnselected] = 0;
+  //   //       } else {
+  //   //         this.enfrentamientosSeleccionadosColumnaTres.splice(indexOfUnselected, 1);
+  //   //         this.resultados[indexOfUnselected] = -1;
+  //   //       }
+  //   //     }
+  //   //   });
+  //   // }
+  // }
+
 
 }
