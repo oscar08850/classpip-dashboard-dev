@@ -144,22 +144,6 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
     }
   }
 
-  seleccionarGanadorLiga(): void {
-    console.log('Aquí estará el proceso para elegir el ganador');
-    console.log ('Voy a por la información del juego seleccionado');
-    this.sesion.TomaJuego (this.juegoSeleccionado);
-    console.log('Tomo las jornadas' + this.jornadas);
-    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion( this.juegoSeleccionado, this.jornadas, undefined, undefined);
-    console.log ('Voy a por la información de las jornadas del juego');
-    this.sesion.TomaDatosJornadas(this.jornadas,
-                                  this.JornadasCompeticion);
-    this.sesion.TomaTablaAlumnoJuegoDeCompeticion(this.listaAlumnosClasificacion);
-    this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.listaEquiposClasificacion);
-    this.sesion.TomaInscripcionAlumno(this.listaAlumnosOrdenadaPorPuntos);
-    this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
-    this.sesion.TomaJuegosDePuntos(this.juegosActivosPuntos);
-  }
-
   JornadaFinalizada(jornadaSeleccionada: TablaJornadas) {
     const jornadaFinalizada = this.calculos.JornadaFinalizada(this.juegoSeleccionado, jornadaSeleccionada);
     if (jornadaFinalizada === true) {
