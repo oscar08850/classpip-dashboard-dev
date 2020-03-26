@@ -1088,7 +1088,6 @@ export class CalculosService {
 
 
 
-
 // --------------- Nueva metodología asignar ganadores manualmente --------------- //
 
   public AsignarResultadosJornadaLiga(juego: Juego, jornadaId: number, resultados: number[]) {
@@ -1163,17 +1162,18 @@ export class CalculosService {
   }
 
   public ActualizarPuntosParticipantesEnfrentamiento(juego: Juego, enfrentamiento: EnfrentamientoLiga, resultado: number) {
+
     if (juego.Modo === 'Individual') {
       console.log('Estoy en ActualizarPuntosParticipantesEnfrentamiento() Individual');
       let alumnoGanador: AlumnoJuegoDeCompeticionLiga[] = [];
       this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionLiga(juego.id)
       .subscribe(alumnosJuegoLiga => {
         if (resultado === 1 || resultado === 2) {
-          alumnoGanador = alumnosJuegoLiga.filter(alumno => alumno.id === enfrentamiento.Ganador);
+          alumnoGanador = alumnosJuegoLiga.filter(alumno => alumno.AlumnoId === enfrentamiento.Ganador);
           alumnoGanador[0].PuntosTotalesAlumno = alumnoGanador[0].PuntosTotalesAlumno + 3;
         } else if (resultado === 0) {
-          alumnoGanador.push(alumnosJuegoLiga.filter (alumno => alumno.id === enfrentamiento.JugadorUno)[0]);
-          alumnoGanador.push(alumnosJuegoLiga.filter (alumno => alumno.id === enfrentamiento.JugadorDos)[0]);
+          alumnoGanador.push(alumnosJuegoLiga.filter (alumno => alumno.AlumnoId === enfrentamiento.JugadorUno)[0]);
+          alumnoGanador.push(alumnosJuegoLiga.filter (alumno => alumno.AlumnoId === enfrentamiento.JugadorDos)[0]);
           alumnoGanador.forEach(alumno => {
             alumno.PuntosTotalesAlumno = alumno.PuntosTotalesAlumno + 1;
           });
@@ -1192,11 +1192,11 @@ export class CalculosService {
       this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionLiga(juego.id)
       .subscribe(equiposJuegoLiga => {
         if (resultado === 1 || resultado === 2) {
-          equipoGanador = equiposJuegoLiga.filter(equipo => equipo.id === enfrentamiento.Ganador);
+          equipoGanador = equiposJuegoLiga.filter(equipo => equipo.EquipoId === enfrentamiento.Ganador);
           equipoGanador[0].PuntosTotalesEquipo = equipoGanador[0].PuntosTotalesEquipo + 3;
         } else if (resultado === 0) {
-          equipoGanador.push(equiposJuegoLiga.filter (equipo => equipo.id === enfrentamiento.JugadorUno)[0]);
-          equipoGanador.push(equiposJuegoLiga.filter (equipo => equipo.id === enfrentamiento.JugadorDos)[0]);
+          equipoGanador.push(equiposJuegoLiga.filter (equipo => equipo.EquipoId === enfrentamiento.JugadorUno)[0]);
+          equipoGanador.push(equiposJuegoLiga.filter (equipo => equipo.EquipoId === enfrentamiento.JugadorDos)[0]);
           equipoGanador.forEach(equipo => {
             equipo.PuntosTotalesEquipo = equipo.PuntosTotalesEquipo + 1;
           });
@@ -2252,8 +2252,8 @@ export class CalculosService {
     if (jornadaSeleccionada.id === EnfrentamientosJornada[0].JornadaDeCompeticionLigaId) {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < EnfrentamientosJornada.length; i++) {
-        if (EnfrentamientosJornada[i].Ganador !== undefined) {
-          HayGanador = true;
+        if (EnfrentamientosJornada[i].Ganador === undefined) {
+          HayGanador = false;
         }
       }
       if (HayGanador === false) {
