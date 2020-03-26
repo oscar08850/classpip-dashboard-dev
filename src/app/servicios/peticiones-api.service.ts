@@ -8,7 +8,8 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         Equipo, AsignacionEquipo, AsignacionPuntosJuego, EquipoJuegoDePuntos, Coleccion,
         AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Cromo, HistorialPuntosAlumno, HistorialPuntosEquipo,
         Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
-        Jornada, EnfrentamientoLiga } from '../clases/index';
+        Jornada, EnfrentamientoLiga, Pregunta } from '../clases/index';
+
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,8 @@ export class PeticionesAPIService {
   private APIUrlEquipos = 'http://localhost:3000/api/Equipos';
 
   private APIUrlColecciones = 'http://localhost:3000/api/Colecciones';
+
+  private APIUrlPreguntas = 'http://localhost:3000/api/Preguntas';
 
   private APIRUrlJuegoDePuntos = 'http://localhost:3000/api/JuegosDePuntos';
   private APIUrlAlumnoJuegoDePuntos = 'http://localhost:3000/api/AlumnoJuegosDePuntos';
@@ -554,4 +557,12 @@ export class PeticionesAPIService {
   public DameJuegoDeCompeticionGrupo(grupoId: number): Observable<Juego[]> {
     return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeCompeticions');
   }
+
+  //Preguntas
+  public CreaPregunta(pregunta: Pregunta, profesorId: number): Observable<Pregunta> {
+    console.log(pregunta, profesorId);
+    return this.http.post<Pregunta>(this.APIUrlProfesores + '/' + profesorId + '/preguntas', pregunta);
+  }
+
+  //Cuestionarios
 }
