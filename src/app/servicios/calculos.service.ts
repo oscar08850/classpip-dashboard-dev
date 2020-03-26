@@ -1092,6 +1092,7 @@ export class CalculosService {
 
   public AsignarResultadosJornadaLiga(juego: Juego, jornadaId: number, resultados: number[]) {
     const indexEnfrentamientosConResultadosPreviamente: number[] = [];
+    let tieneGanadores = false;
     // Primero necesitamos los enfrentamientos de la jornada
     this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga(jornadaId)
     .subscribe(enfrentamientosJornadaSeleccionada => {
@@ -1117,8 +1118,17 @@ export class CalculosService {
                                                              resultados[indexEnfrentamientos]);
           } else {  // el enfrentamiento tenía ganadores
             indexEnfrentamientosConResultadosPreviamente.push(indexEnfrentamientos);
+            console.log('El enfrentamiento ya tenía ganadores');
+            tieneGanadores = true;
+
           }
         }
+        if (tieneGanadores === true) {
+          Swal.fire('Esta jornada ya tiene ganadores', '', 'error');
+        } else {
+          Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
+        }
+
         // Mensaje sweetalert
         console.log('indexEnfrentamientosConResultadosPreviamente');
         console.log(indexEnfrentamientosConResultadosPreviamente);

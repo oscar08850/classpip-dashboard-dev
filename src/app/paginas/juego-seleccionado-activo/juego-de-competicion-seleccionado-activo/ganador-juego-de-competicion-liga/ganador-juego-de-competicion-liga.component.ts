@@ -337,7 +337,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
       } else {
             console.log ('No hay resultado');
-            Swal.fire('Te falta asignar resultados');
+            Swal.fire('Te falta asignar resultados', '', 'error');
             error = true;
       }
     });
@@ -346,7 +346,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
     if (!error) {
       this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
-      Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
+      // Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
     }
 
   }
@@ -384,7 +384,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
 
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
-    Swal.fire('Resutados aleatorios asignados', 'Enhorabuena', 'success');
+    // Swal.fire('Resutados aleatorios asignados', 'Enhorabuena', 'success');
 
   }
 
@@ -447,7 +447,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       }
     }
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
-    Swal.fire('Resutados asignados', 'Enhorabuena', 'success');
+    // Swal.fire('Resutados asignados', 'Enhorabuena', 'success');
   }
 
 
