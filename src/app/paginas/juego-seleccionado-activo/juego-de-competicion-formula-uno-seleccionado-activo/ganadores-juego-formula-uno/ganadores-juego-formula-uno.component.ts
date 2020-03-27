@@ -196,25 +196,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     this.ObtenerClasificaciónDeCadaJornada();
   }
 
-  ObtenerNombreParticipante(participantesId: number[], listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[],
-                            listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[], juegoSeleccionado: Juego) {
-    console.log('Estoy en ObtenerNombreParticipante()');
-    const participantesNombre: string[] = [];
-    if (juegoSeleccionado.Modo === 'Individual') {
-      participantesId.forEach(participanteId => {
-        const alumno = listaAlumnosClasificacion.filter(a => a.id === participanteId)[0];
-        participantesNombre.push(alumno.nombre + ' ' + alumno.primerApellido + ' ' + alumno.segundoApellido);
-      });
-    } else {
-      const equipos: TablaEquipoJuegoDeCompeticion[] = [];
-      participantesId.forEach(participanteId => {
-        participantesNombre.push(listaEquiposClasificacion.filter(e => e.id === participanteId)[0].nombre);
-      });
-    }
-    console.log('Los nombres de los participantes que puntúan son: ');
-    console.log(participantesNombre);
-    return participantesNombre;
-  }
+
 
 
 //////////////////////////////////////// FUNCIONES PARA CONTROLAR LOS BOTONES Y LOS CHECKBOX //////////////////////////////////

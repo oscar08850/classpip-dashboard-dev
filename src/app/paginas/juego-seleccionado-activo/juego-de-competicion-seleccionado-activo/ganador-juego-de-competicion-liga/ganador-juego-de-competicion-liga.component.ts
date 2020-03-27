@@ -194,30 +194,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
          // tslint:disable-next-line:max-line-length
          this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = EquipoDos.nombre;
       }
-
-        // tslint:disable-next-line:prefer-for-of
-      //   for (let j = 0; j < this.listaEquiposClasificacion.length; j++) {
-      //     if (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno === this.listaEquiposClasificacion[j].id) {
-      //       this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = this.listaEquiposClasificacion[j].nombre;
-      //       if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaEquiposClasificacion[j].id) {
-      //         this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
-      //       } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-      //           this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-      //       } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-      //         this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-      //     }
-      //     } else if (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos === this.listaEquiposClasificacion[j].id) {
-      //         this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = this.listaEquiposClasificacion[j].nombre;
-      //         if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaEquiposClasificacion[j].id) {
-      //           this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
-      //         } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-      //           this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-      //         } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-      //           this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-      //       }
-      //     }
-      //   }
-      // }
       console.log(this.EnfrentamientosJornadaSeleccionada);
       this.dataSourceTablaGanadorEquipo = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
       console.log('El dataSource es:');
@@ -241,6 +217,17 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         }
       }
 
+    }
+  }
+
+  ActualizarTablaClasificacion() {
+    console.log('Estoy en ActualizarTablaClasificacion()');
+    const jornadaActualizada = this.JornadasCompeticion.filter (jornada => jornada.id === Number(this.jornadaId))[0];
+    jornadaActualizada.Disputada = true;
+    for (let i = 0; i < this.JornadasCompeticion.length; i++) {
+      if (this.JornadasCompeticion[i].id === Number(this.jornadaId)) {
+        this.JornadasCompeticion[i] = jornadaActualizada;
+      }
     }
   }
 
@@ -305,7 +292,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
           console.log('Equipo');
           console.log(this.listaEquiposOrdenadaPorPuntos);
           }
-        }
+    }
   }
 
    // Cuando marco una casilla desmarco las otras casillas de esa fila
@@ -355,6 +342,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
     if (!error) {
       this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
+      this.ActualizarTablaClasificacion();
       // Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
     }
 
@@ -393,6 +381,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
 
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
+    this.ActualizarTablaClasificacion();
     // Swal.fire('Resutados aleatorios asignados', 'Enhorabuena', 'success');
 
   }
@@ -456,6 +445,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       }
     }
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
+    this.ActualizarTablaClasificacion();
     // Swal.fire('Resutados asignados', 'Enhorabuena', 'success');
   }
 
