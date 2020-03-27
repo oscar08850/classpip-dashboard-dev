@@ -239,8 +239,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     console.log('Tomo las jornadas' + this.jornadas);
     console.log ('Aquí estará la información del juego');
     this.sesion.TomaJuego (this.juegoSeleccionado);
-    // this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion( this.juegoSeleccionado, this.jornadas, undefined, undefined);
-    this.JornadasCompeticion = this.calculos.DameTablaJornadasLiga(this.juegoSeleccionado, this.jornadas, this.enfrentamientosDelJuego);
+    this.JornadasCompeticion = this.calculos.GenerarTablaJornadasLiga(this.juegoSeleccionado, this.jornadas, this.enfrentamientosDelJuego);
     console.log('Juego activo' + this.JornadasCompeticion);
     this.sesion.TomaDatosJornadas(
       this.jornadas,
@@ -287,10 +286,9 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     console.log('Tomo las jornadas' + this.jornadas);
     console.log('Los enfrentamientos del juego son: ');
     console.log(this.enfrentamientosDelJuego);
-    this.JornadasCompeticion = this.calculos.DameTablaJornadasLiga(this.juegoSeleccionado, this.jornadas, this.enfrentamientosDelJuego);
+    this.JornadasCompeticion = this.calculos.GenerarTablaJornadasLiga(this.juegoSeleccionado, this.jornadas, this.enfrentamientosDelJuego);
     console.log('Las tablas JornadasCompeticionLiga son: ');
     console.log(this.JornadasCompeticion);
-    // this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion( this.juegoSeleccionado, this.jornadas, undefined, undefined);
     console.log ('Voy a por la información de las jornadas del juego');
     this.sesion.TomaDatosJornadas(this.jornadas,
                                       this.JornadasCompeticion);
@@ -303,7 +301,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     console.log ('Voy a por la información del juego seleccionado');
     this.sesion.TomaJuego (this.juegoSeleccionado);
     console.log('Tomo las jornadas' + this.jornadas);
-    this.JornadasCompeticion = this.calculos.DameTablaJornadasLiga( this.juegoSeleccionado, this.jornadas, this.enfrentamientosDelJuego);
+    this.JornadasCompeticion = this.calculos.GenerarTablaJornadasLiga( this.juegoSeleccionado, this.jornadas, this.enfrentamientosDelJuego);
     console.log ('Voy a por la información de las jornadas del juego');
     this.sesion.TomaDatosJornadas(this.jornadas,
                                   this.JornadasCompeticion);

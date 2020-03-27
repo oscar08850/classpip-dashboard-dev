@@ -41,17 +41,19 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   botonAsignarManualDesactivado = true;
   botonAsignarJuegoDesactivado = true;
 
-  enfrentamientosSeleccionadosColumnaUno: EnfrentamientoLiga[] = [];
-  enfrentamientosSeleccionadosColumnaDos: EnfrentamientoLiga[] = [];
-  enfrentamientosSeleccionadosColumnaTres: EnfrentamientoLiga[] = [];
-  equiposSeleccionadosUno: any[] = [];
-  equiposSeleccionadosDos: any[] = [];
-  equiposSeleccionadosTres: any[] = [];
+  // enfrentamientosSeleccionadosColumnaUno: EnfrentamientoLiga[] = [];
+  // enfrentamientosSeleccionadosColumnaDos: EnfrentamientoLiga[] = [];
+  // enfrentamientosSeleccionadosColumnaTres: EnfrentamientoLiga[] = [];
+  // equiposSeleccionadosUno: any[] = [];
+  // equiposSeleccionadosDos: any[] = [];
+  // equiposSeleccionadosTres: any[] = [];
+
+
   modoAsignacion: Asignacion[] = ModoAsignacion;
 
-  avisoMasDeUnGanadorMarcadoUnoDos = false;
-  avisoMasDeUnGanadorMarcadoUnoEmpate = false;
-  avisoMasDeUnGanadorMarcadoDosEmpate = false;
+  // avisoMasDeUnGanadorMarcadoUnoDos = false;
+  // avisoMasDeUnGanadorMarcadoUnoEmpate = false;
+  // avisoMasDeUnGanadorMarcadoDosEmpate = false;
 
   // Juego De CompeticionLiga seleccionado
   juegoSeleccionado: Juego;
@@ -73,17 +75,17 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   // Alumnos y Equipos del Juego
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
   listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
-  alumnosJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga[] = [];
-  equiposJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga[] = [];
-  alumnosDelJuego: Alumno[];
-  equiposDelJuego: Equipo[];
-  listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDePuntos[];
+  // alumnosJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga[] = [];
+  // equiposJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga[] = [];
+  // alumnosDelJuego: Alumno[];
+  // equiposDelJuego: Equipo[];
 
+  listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDePuntos[];
   listaEquiposOrdenadaPorPuntos: EquipoJuegoDePuntos[];
   juegosActivosPuntos: Juego[];
   juegosActivosPuntosModo: Juego[];
   NumeroDeJuegoDePuntos: number;
-  AlumnoJuegoDeCompeticionLigaId: number;
+  // AlumnoJuegoDeCompeticionLigaId: number;
 
   dataSourceTablaGanadorIndividual;
   dataSourceTablaGanadorEquipo;
@@ -104,8 +106,8 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     this.JornadasCompeticion = datos.JornadasCompeticion;
     this.listaAlumnosClasificacion = this.sesion.DameTablaAlumnoJuegoDeCompeticion();
     this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
-    this.alumnosJuegoDeCompeticionLiga = this.sesion.DameInscripcionAlumno();
-    this.equiposJuegoDeCompeticionLiga = this.sesion.DameInscripcionEquipo();
+    // this.alumnosJuegoDeCompeticionLiga = this.sesion.DameInscripcionAlumno();
+    // this.equiposJuegoDeCompeticionLiga = this.sesion.DameInscripcionEquipo();
     this.juegosActivosPuntos = this.sesion.DameJuegosDePuntosActivos();
     // Me quedo solo con los juegos de puntos que tengan el mismo (individual o equipo) modo que la competición
     this.juegosActivosPuntosModo = this.juegosActivosPuntos.filter (juego => juego.Modo === this.juegoSeleccionado.Modo);
@@ -160,8 +162,8 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       this.dataSourceTablaGanadorIndividual = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
       console.log('El dataSource es:');
       console.log(this.dataSourceTablaGanadorIndividual.data);
+
       // Ahora vamos a marcar los resultados en caso de que la jornada se haya disputado ya
-      // PARECE QUE EL CAMPO DISPUTADA NO SE ACTUALIZA
       let disputada: boolean;
       disputada = this.JornadasCompeticion.filter (jornada => jornada.id === Number(this.jornadaId))[0].Disputada;
       console.log ('disputada ' + disputada);
@@ -220,6 +222,8 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       this.dataSourceTablaGanadorEquipo = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
       console.log('El dataSource es:');
       console.log(this.dataSourceTablaGanadorEquipo.data);
+
+      // Ahora vamos a marcar los resultados en caso de que la jornada se haya disputado ya
       let disputada: boolean;
       disputada = this.JornadasCompeticion.filter (jornada => jornada.id === Number(this.jornadaId))[0].Disputada;
       console.log ('disputada ' + disputada);

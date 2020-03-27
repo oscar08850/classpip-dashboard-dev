@@ -200,7 +200,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     console.log ('Aquí estará la información del juego');
     console.log ('Voy a pasar la información del juego seleccionado');
     this.sesion.TomaJuego (this.juegoSeleccionado);
-    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion(this.juegoSeleccionado, this.jornadas,
+    this.JornadasCompeticion = this.calculos.GenerarTablaJornadasF1(this.juegoSeleccionado, this.jornadas,
                                                                           this.rankingIndividualFormulaUno, this.rankingEquiposFormulaUno);
     console.log ('Voy a pasar la información de las jornadas del juego');
     this.sesion.TomaDatosJornadas(this.jornadas,
@@ -213,7 +213,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     console.log('Aquí estará el proceso para elegir el ganador');
     console.log ('Voy a por la información del juego seleccionado');
     this.sesion.TomaJuego (this.juegoSeleccionado);
-    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion(this.juegoSeleccionado, this.jornadas,
+    this.JornadasCompeticion = this.calculos.GenerarTablaJornadasF1(this.juegoSeleccionado, this.jornadas,
                                                                           this.rankingIndividualFormulaUno, this.rankingEquiposFormulaUno);
     console.log ('Voy a por la información de las jornadas del juego');
     this.sesion.TomaDatosJornadas(this.jornadas,
@@ -231,7 +231,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     console.log(this.jornadas);
     console.log ('Aquí estará la información del juego');
     this.sesion.TomaJuego (this.juegoSeleccionado);
-    this.JornadasCompeticion = this.calculos.DameTablaJornadasCompeticion(this.juegoSeleccionado, this.jornadas,
+    this.JornadasCompeticion = this.calculos.GenerarTablaJornadasF1(this.juegoSeleccionado, this.jornadas,
                                 this.rankingIndividualFormulaUno, this.rankingEquiposFormulaUno);
     console.log('Juego activo' + this.JornadasCompeticion);
     this.sesion.TomaDatosJornadas(
