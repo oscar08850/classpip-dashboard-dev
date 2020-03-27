@@ -166,10 +166,10 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         //   this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
         // } else {
         //   console.log ('No hay empate');
-        //   // tslint:disable-next-line:max-line-length
+           // tslint:disable-next-line:max-line-length
         //   const Ganador = this.listaAlumnosClasificacion.filter (alumno => alumno.id === this.EnfrentamientosJornadaSeleccionada[i].Ganador)[0];
         //   console.log (Ganador);
-        //   // tslint:disable-next-line:max-line-length
+           // tslint:disable-next-line:max-line-length
         //   this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = Ganador.nombre + ' ' + Ganador.primerApellido + ' ' + Ganador.segundoApellido;
         // }
       }
@@ -182,7 +182,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       let disputada: boolean;
       disputada = this.JornadasCompeticion.filter (jornada => jornada.id === Number(this.jornadaId))[0].Disputada;
       console.log ('disputada ' + disputada);
-      //disputada = true;
+
       if (disputada) {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
@@ -252,10 +252,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         this.botonAsignarManualDesactivado = true;
         this.botonAsignarAleatorioDesactivado = false;
         this.botonAsignarJuegoDesactivado = true;
-        // console.log('Voy a borrar las listas de ganadores');
-        // this.enfrentamientosSeleccionadosColumnaUno = [];
-        // this.enfrentamientosSeleccionadosColumnaDos = [];
-        // this.enfrentamientosSeleccionadosColumnaTres = [];
         this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
       } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID !== undefined) { // JuegoPuntos
         console.log('Modo puntos');
@@ -337,7 +333,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
       } else {
             console.log ('No hay resultado');
-            Swal.fire('Te falta asignar resultados');
+            Swal.fire('Te falta asignar resultados', '', 'error');
             error = true;
       }
     });
@@ -346,7 +342,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
     if (!error) {
       this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
-      Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
+      // Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
     }
 
   }
@@ -384,7 +380,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
 
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
-    Swal.fire('Resutados aleatorios asignados', 'Enhorabuena', 'success');
+    // Swal.fire('Resutados aleatorios asignados', 'Enhorabuena', 'success');
 
   }
 
@@ -447,7 +443,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       }
     }
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
-    Swal.fire('Resutados asignados', 'Enhorabuena', 'success');
+    // Swal.fire('Resutados asignados', 'Enhorabuena', 'success');
   }
 
 

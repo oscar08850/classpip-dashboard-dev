@@ -649,13 +649,13 @@ export class PeticionesAPIService {
   }
 
   // tslint:disable-next-line:max-line-length
-  public PonPuntosAlumnosGanadoresJornadasDeCompeticionFormulaUno(alumno: AlumnoJuegoDeCompeticionFormulaUno): Observable<AlumnoJuegoDeCompeticionFormulaUno> {
+  public PonPuntosAlumnoGanadorJornadasDeCompeticionFormulaUno(alumno: AlumnoJuegoDeCompeticionFormulaUno): Observable<AlumnoJuegoDeCompeticionFormulaUno> {
     // tslint:disable-next-line:max-line-length
     return this.http.put<AlumnoJuegoDeCompeticionFormulaUno>('http://localhost:3000/api/AlumnosJuegoDeCompeticionFormulaUno/' + alumno.id, alumno);
   }
 
    // tslint:disable-next-line:max-line-length
-   public PonPuntoEquiposGanadoresJornadasDeCompeticionFormulaUno(equipo: EquipoJuegoDeCompeticionFormulaUno): Observable<EquipoJuegoDeCompeticionFormulaUno> {
+   public PonPuntosEquipoGanadorJornadasDeCompeticionFormulaUno(equipo: EquipoJuegoDeCompeticionFormulaUno): Observable<EquipoJuegoDeCompeticionFormulaUno> {
     // tslint:disable-next-line:max-line-length
     return this.http.put<EquipoJuegoDeCompeticionFormulaUno>('http://localhost:3000/api/EquiposJuegoDeCompeticionFormulaUno/' + equipo.id, equipo);
   }
