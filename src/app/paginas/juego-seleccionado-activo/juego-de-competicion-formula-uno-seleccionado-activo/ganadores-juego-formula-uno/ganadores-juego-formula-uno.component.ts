@@ -181,10 +181,10 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     console.log('La TablaJornada que hay que actualizar es: ');
     console.log(TablaJornadaActualizada);
     TablaJornadaActualizada.GanadoresFormulaUno.id = participantesPuntuan;
-    TablaJornadaActualizada.GanadoresFormulaUno.nombre =  this.ObtenerNombreParticipante(participantesPuntuan,
-                                                                                         this.listaAlumnosClasificacion,
-                                                                                         this.listaEquiposClasificacion,
-                                                                                         this.juegoSeleccionado);
+    TablaJornadaActualizada.GanadoresFormulaUno.nombre =  this.calculos.ObtenerNombreParticipante(participantesPuntuan,
+                                                                                                  this.listaAlumnosClasificacion,
+                                                                                                  this.listaEquiposClasificacion,
+                                                                                                  this.juegoSeleccionado);
     for (let i = 0; i < this.JornadasCompeticion.length; i++) {
       if (this.JornadasCompeticion[i].id === Number(this.jornadaId)) {
         this.JornadasCompeticion[i] = TablaJornadaActualizada;
@@ -394,7 +394,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       }
     } else {
       console.log('Este juego ya tiene ganadores asignados');
-      Swal.fire('Este juego ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
+      Swal.fire('Esta jornada ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
     }
   }
 
@@ -446,7 +446,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       }
     } else {
       console.log('Este juego ya tiene ganadores asignados');
-      Swal.fire('Este juego ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
+      Swal.fire('Esta jornada ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
     }
   }
 
@@ -479,7 +479,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       }
     } else {
       console.log('Este juego tiene ganadores asignados');
-      Swal.fire('Este juego ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
+      Swal.fire('Esta jornada ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
     }
   }
 
