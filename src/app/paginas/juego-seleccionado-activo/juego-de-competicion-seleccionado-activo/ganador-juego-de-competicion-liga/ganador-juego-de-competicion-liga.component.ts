@@ -13,6 +13,7 @@ import {MatTableDataSource} from '@angular/material/table';
 
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 export interface Asignacion {
   modo: string;
@@ -146,8 +147,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       console.log('Estoy en ConstruirTablaElegirGanador() alumnos');
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
-        console.log ('Enfrentamiento');
-        console.log (this.EnfrentamientosJornadaSeleccionada[i]);
         // tslint:disable-next-line:max-line-length
         const JugadorUno = this.listaAlumnosClasificacion.filter (alumno => alumno.id === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno )[0];
         // tslint:disable-next-line:max-line-length
@@ -156,22 +155,6 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         const JugadorDos = this.listaAlumnosClasificacion.filter (alumno => alumno.id === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos)[0];
         // tslint:disable-next-line:max-line-length
         this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = JugadorDos.nombre + ' ' + JugadorDos.primerApellido + ' ' + JugadorDos.segundoApellido;
-        // if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-        //   // Esa jornada ya se disputó y hubo empate
-
-        //     (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined)) {
-        //   console.log ('Empate');
-        //   this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-        // } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-        //   this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-        // } else {
-        //   console.log ('No hay empate');
-           // tslint:disable-next-line:max-line-length
-        //   const Ganador = this.listaAlumnosClasificacion.filter (alumno => alumno.id === this.EnfrentamientosJornadaSeleccionada[i].Ganador)[0];
-        //   console.log (Ganador);
-           // tslint:disable-next-line:max-line-length
-        //   this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = Ganador.nombre + ' ' + Ganador.primerApellido + ' ' + Ganador.segundoApellido;
-        // }
       }
       console.log(this.EnfrentamientosJornadaSeleccionada);
       this.dataSourceTablaGanadorIndividual = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
@@ -200,33 +183,60 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       console.log('Estoy en ConstruirTablaElegirGanador() equipos');
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
-        // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < this.listaEquiposClasificacion.length; j++) {
-          if (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno === this.listaEquiposClasificacion[j].id) {
-            this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = this.listaEquiposClasificacion[j].nombre;
-            if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaEquiposClasificacion[j].id) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
-            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-          }
-          } else if (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos === this.listaEquiposClasificacion[j].id) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = this.listaEquiposClasificacion[j].nombre;
-              if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaEquiposClasificacion[j].id) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
-              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-            }
-          }
-        }
+         // tslint:disable-next-line:max-line-length
+         const EquipoUno = this.listaEquiposClasificacion.filter (equipo => equipo.id === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno )[0];
+         // tslint:disable-next-line:max-line-length
+         this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = EquipoUno.nombre;
+         // tslint:disable-next-line:max-line-length
+         const EquipoDos = this.listaEquiposClasificacion.filter (equipo => equipo.id === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos)[0];
+         // tslint:disable-next-line:max-line-length
+         this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = EquipoDos.nombre;
       }
+
+        // tslint:disable-next-line:prefer-for-of
+      //   for (let j = 0; j < this.listaEquiposClasificacion.length; j++) {
+      //     if (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno === this.listaEquiposClasificacion[j].id) {
+      //       this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = this.listaEquiposClasificacion[j].nombre;
+      //       if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaEquiposClasificacion[j].id) {
+      //         this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
+      //       } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
+      //           this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+      //       } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+      //         this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+      //     }
+      //     } else if (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos === this.listaEquiposClasificacion[j].id) {
+      //         this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = this.listaEquiposClasificacion[j].nombre;
+      //         if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaEquiposClasificacion[j].id) {
+      //           this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
+      //         } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
+      //           this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
+      //         } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+      //           this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+      //       }
+      //     }
+      //   }
+      // }
       console.log(this.EnfrentamientosJornadaSeleccionada);
       this.dataSourceTablaGanadorEquipo = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
       console.log('El dataSource es:');
       console.log(this.dataSourceTablaGanadorEquipo.data);
+      let disputada: boolean;
+      disputada = this.JornadasCompeticion.filter (jornada => jornada.id === Number(this.jornadaId))[0].Disputada;
+      console.log ('disputada ' + disputada);
+
+      if (disputada) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
+          if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno) {
+            this.selectionUno.select(this.dataSourceTablaGanadorEquipo.data[i]);
+          } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos) {
+            this.selectionDos.select(this.dataSourceTablaGanadorEquipo.data[i]);
+          } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
+            this.selectionTres.select(this.dataSourceTablaGanadorEquipo.data[i]);
+          }
+        }
+      }
+
     }
   }
 
@@ -316,26 +326,25 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     // tslint:disable-next-line:no-inferrable-types
     let error: boolean = false;
     const resultados: number[] = [];
-    // tslint:disable-next-line:prefer-for-of
-    this.dataSourceTablaGanadorIndividual.data.forEach (row => {
+    let dataSource: any;
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      dataSource = this.dataSourceTablaGanadorIndividual;
+    } else {
+      dataSource = this.dataSourceTablaGanadorEquipo;
+    }
+      // tslint:disable-next-line:prefer-for-of
+    dataSource.data.forEach (row => {
+        if (this.selectionUno.isSelected(row)) {
+              resultados.push (1);
+        } else  if (this.selectionDos.isSelected(row)) {
+              resultados.push (2);
+        } else if (this.selectionTres.isSelected(row)) {
+              resultados.push (0);
+        } else {
 
-      if (this.selectionUno.isSelected(row)) {
-            console.log ('Gana el 1');
-            resultados.push (1);
-
-      } else  if (this.selectionDos.isSelected(row)) {
-            console.log ('Gana el 2');
-            resultados.push (2);
-
-      } else if (this.selectionTres.isSelected(row)) {
-            console.log ('empate');
-            resultados.push (0);
-
-      } else {
-            console.log ('No hay resultado');
-            Swal.fire('Te falta asignar resultados', '', 'error');
-            error = true;
-      }
+              Swal.fire('Te falta asignar resultados', '', 'error');
+              error = true;
+        }
     });
     console.log(resultados);
     console.log('resultados');
