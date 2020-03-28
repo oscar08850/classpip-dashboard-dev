@@ -8,7 +8,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         Equipo, AsignacionEquipo, AsignacionPuntosJuego, EquipoJuegoDePuntos, Coleccion,
         AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Cromo, HistorialPuntosAlumno, HistorialPuntosEquipo,
         Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
-        Jornada, EnfrentamientoLiga, Pregunta } from '../clases/index';
+        Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario} from '../clases/index';
 
 
 @Injectable({
@@ -31,6 +31,10 @@ export class PeticionesAPIService {
   private APIUrlColecciones = 'http://localhost:3000/api/Colecciones';
 
   private APIUrlPreguntas = 'http://localhost:3000/api/Preguntas';
+
+  private APIUrlCuestionarios = 'http://localhost:3000/api/Cuestionarios';
+
+  private APIUrlPreguntaDelCuestionario = 'http://localhost:3000/api/PreguntasDelCuestionario';
 
   private APIRUrlJuegoDePuntos = 'http://localhost:3000/api/JuegosDePuntos';
   private APIUrlAlumnoJuegoDePuntos = 'http://localhost:3000/api/AlumnoJuegosDePuntos';
@@ -564,5 +568,21 @@ export class PeticionesAPIService {
     return this.http.post<Pregunta>(this.APIUrlProfesores + '/' + profesorId + '/preguntas', pregunta);
   }
 
+  public DameTodasMisPreguntas(profesorId: number): Observable<Pregunta[]> {
+    return this.http.get<Pregunta[]>(this.APIUrlProfesores + '/' + profesorId + '/preguntas');
+  }
+
   //Cuestionarios
+  public DamePreguntasCuestionario(cuestionarioId: number): Observable<Pregunta[]> {
+    return this.http.get<Pregunta[]>(this.APIUrlCuestionarios + '/' + cuestionarioId + '/Preguntas');
+  }
+  public PreguntasEnCuestionario(preguntaDelCuestionario: PreguntaDelCuestionario): Observable<PreguntaDelCuestionario> {
+    return this.http.post<PreguntaDelCuestionario>(this.APIUrlPreguntaDelCuestionario, preguntaDelCuestionario);
+  }
+  public DamePreguntaDelCuestionario(preguntaId: number, cuestionarioId: number): Observable<PreguntaDelCuestionario> {
+    return this.http.get<PreguntaDelCuestionario>(this.APIUrlPreguntaDelCuestionario + '?filter[where][cuestionarioId]=' + cuestionarioId + '&filter[where][preguntaId]=' + preguntaId);
+  }
+  public BorraPreguntaDelCuestionario(preguntaDelCuestionatioId: number): Observable<any> {
+    return this.http.delete<any>(this.APIUrlPreguntaDelCuestionario + '/' + preguntaDelCuestionatioId);
+  }
 }

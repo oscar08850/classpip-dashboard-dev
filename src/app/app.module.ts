@@ -124,6 +124,7 @@ import { MisAlumnosComponent } from './paginas/mis-alumnos/mis-alumnos.component
 import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introducir-alumnos.component';
 import { PreguntaComponent } from './paginas/pregunta/pregunta.component';
 import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-cuestionario.component';
+import { AgregarPreguntasDialogComponent } from './paginas/crear-cuestionario/agregar-preguntas-dialog/agregar-preguntas-dialog.component';
 
 
 
@@ -192,7 +193,8 @@ import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-c
     MisAlumnosComponent,
     IntroducirAlumnosComponent,
     PreguntaComponent,
-    CrearCuestionarioComponent
+    CrearCuestionarioComponent,
+    AgregarPreguntasDialogComponent
 
   ],
   imports: [

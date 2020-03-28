@@ -35,3 +35,5 @@ export * from './clasesParaTablasJuegoDeCompeticion/TablaJornadas';
 export * from './clasesParaTablasJuegoDeCompeticion/TablaEquipoJuegoDeCompeticion';
 export * from './EnfrentamientoLiga';
 export * from './Pregunta';
+export * from './PreguntaDelCuestionario';
+export * from './Cuestionario';
