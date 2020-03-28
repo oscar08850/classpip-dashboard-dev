@@ -124,7 +124,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   }
 
 
-
+  ///////////////////////// FUNCIONES PARA CREAR LA TABLA QUE SE MUESTRA EN ALEATORIO Y MEDIANTE JUEGO /////////////////////////
   ObtenerClasificaciónDeCadaJornada() {
     console.log('Estoy en ObtenerClasificaciónDeCadaJornada');
     // tslint:disable-next-line:prefer-for-of
@@ -165,6 +165,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   }
 
   ActualizarTablaClasificacion(juegoSeleccionado: Juego, participantesPuntuan: number[]) {
+    console.log('//////////////////////////////////////////////////////////');
     console.log('Estoy en ActualizarTablaClasificacion()');
     console.log('Hay ' + this.TablaClasificacionJornadaSeleccionada.length +
                 ' participantes en la TablaClasificacionJornadaSeleccionada');
@@ -174,40 +175,28 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     console.log(participantesPuntuan);
 
 // ----------------------------------------------------Para actualizar la TablaJornada----------------------------------------------- //
-    // const TablaJornadaActualizada = this.JornadasCompeticion.filter(tablaJornada => tablaJornada.id === Number(this.jornadaId))[0];
-    // console.log('La TablaJornada que hay que actualizar es: ');
-    // console.log(TablaJornadaActualizada);
-    // TablaJornadaActualizada.GanadoresFormulaUno.id = participantesPuntuan;
-    // TablaJornadaActualizada.GanadoresFormulaUno.nombre =  ;
-// ---------------------------------------------------------------------------------------------------------------------------- //
-
-    for (let x = 0; x < participantesPuntuan.length; x++) {
-      // tslint:disable-next-line:prefer-for-of
-      for (let y = 0; y < this.TablaClasificacionJornadaSeleccionada.length; y++) {
-        if (this.TablaClasificacionJornadaSeleccionada[y].id === participantesPuntuan[x]) {
-          this.TablaClasificacionJornadaSeleccionada[y].puntos = puntosDelJuego[x];
-          console.log('puntos de la jornada del participande con id: ' + this.TablaClasificacionJornadaSeleccionada[y].id + ' = ' +
-                      juegoSeleccionado.Puntos[x]);
-        }
+    console.log('Voy a actualizar la JornadaCompetición recién asignada, en este momento JornadasCompeticion está: ');
+    console.log(this.JornadasCompeticion);
+    const TablaJornadaActualizada = this.JornadasCompeticion.filter(tablaJornada => tablaJornada.id === Number(this.jornadaId))[0];
+    console.log('La TablaJornada que hay que actualizar es: ');
+    console.log(TablaJornadaActualizada);
+    TablaJornadaActualizada.GanadoresFormulaUno.id = participantesPuntuan;
+    TablaJornadaActualizada.GanadoresFormulaUno.nombre =  this.calculos.ObtenerNombreParticipante(participantesPuntuan,
+                                                                                                  this.listaAlumnosClasificacion,
+                                                                                                  this.listaEquiposClasificacion,
+                                                                                                  this.juegoSeleccionado);
+    for (let i = 0; i < this.JornadasCompeticion.length; i++) {
+      if (this.JornadasCompeticion[i].id === Number(this.jornadaId)) {
+        this.JornadasCompeticion[i] = TablaJornadaActualizada;
       }
     }
-
-    // Ordenamos la tabla de mayor a menor puntos
-    // tslint:disable-next-line:only-arrow-functions
-    this.TablaClasificacionJornadaSeleccionada = this.TablaClasificacionJornadaSeleccionada.sort(function(obj1, obj2) {
-      return obj2.puntos - obj1.puntos;
-    });
-
-    // Actualizamos las posiciones
-    // tslint:disable-next-line:prefer-for-of
-    for (let z = 0; z < this.TablaClasificacionJornadaSeleccionada.length; z++) {
-       this.TablaClasificacionJornadaSeleccionada[z].posicion = z + 1;
-    }
-    this.dataSourceClasificacionJornada = new MatTableDataSource(this.TablaClasificacionJornadaSeleccionada);
-    console.log('La TablaClasificacionJornadaSeleccionada actualizada queda: ');
-    console.log(this.TablaClasificacionJornadaSeleccionada);
-
+    console.log('La TablaJornada JornadasCompeticion actualizada queda: ');
+    console.log(this.JornadasCompeticion);
+// ---------------------------------------------------------------------------------------------------------------------------- //
+    this.ObtenerClasificaciónDeCadaJornada();
   }
+
+
 
 
 //////////////////////////////////////// FUNCIONES PARA CONTROLAR LOS BOTONES Y LOS CHECKBOX //////////////////////////////////
@@ -339,7 +328,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   }
 
 
-  ///////////////////////////////////////////////////  ALEATORIAMENTE  /////////////////////////////////////////////////////////
+  ///////////////////////////////////////////  FUNCIONES PARA ASIGNAR LOS RESULTADOS  //////////////////////////////////////////////
   AsignarAleatoriamente() {
 
     console.log('Estoy en AsignarAleatoriamente');
@@ -405,7 +394,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       }
     } else {
       console.log('Este juego ya tiene ganadores asignados');
-      Swal.fire('Este juego ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
+      Swal.fire('Esta jornada ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
     }
   }
 
@@ -457,7 +446,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       }
     } else {
       console.log('Este juego ya tiene ganadores asignados');
-      Swal.fire('Este juego ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
+      Swal.fire('Esta jornada ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
     }
   }
 
@@ -490,7 +479,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       }
     } else {
       console.log('Este juego tiene ganadores asignados');
-      Swal.fire('Este juego ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
+      Swal.fire('Esta jornada ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
     }
   }
 
@@ -534,6 +523,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   }
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   goBack() {
     this.location.back();
   }
