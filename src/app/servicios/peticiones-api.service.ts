@@ -8,7 +8,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         Equipo, AsignacionEquipo, AsignacionPuntosJuego, EquipoJuegoDePuntos, Coleccion,
         AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Cromo, HistorialPuntosAlumno, HistorialPuntosEquipo,
         Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
-        Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario} from '../clases/index';
+        Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario, Cuestionario} from '../clases/index';
 
 
 @Injectable({
@@ -573,6 +573,16 @@ export class PeticionesAPIService {
   }
 
   //Cuestionarios
+  public CreaCuestionario(cuestionario: Cuestionario, profesorId: number): Observable<Cuestionario> {
+    console.log('Cuestionario: ' + cuestionario);
+    return this.http.post<Cuestionario>(this.APIUrlProfesores + '/' + profesorId + '/cuestionarios', cuestionario);
+  }
+  public ModificaCuestionario(cuestionario: Cuestionario, profesorId: number, cuestionarioId: number): Observable<Cuestionario> {
+    return this.http.put<Cuestionario>(this.APIUrlProfesores + '/' + profesorId + '/cuestionarios/' + cuestionarioId, cuestionario);
+  }
+  public BorraCuestionario(profesorId: number, cuestionarioId: number): Observable<any> {
+    return this.http.delete<any>(this.APIUrlProfesores + '/' + profesorId + '/cuestionarios/' + cuestionarioId);
+  }
   public DamePreguntasCuestionario(cuestionarioId: number): Observable<Pregunta[]> {
     return this.http.get<Pregunta[]>(this.APIUrlCuestionarios + '/' + cuestionarioId + '/Preguntas');
   }
@@ -584,5 +594,8 @@ export class PeticionesAPIService {
   }
   public BorraPreguntaDelCuestionario(preguntaDelCuestionatioId: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlPreguntaDelCuestionario + '/' + preguntaDelCuestionatioId);
+  }
+  public DamePreguntasDelCuestionarioCuestionario(cuestionarioId: number): Observable<PreguntaDelCuestionario[]> {
+    return this.http.get<PreguntaDelCuestionario[]>(this.APIUrlPreguntaDelCuestionario + '?filter[where][cuestionarioId]=' + cuestionarioId);
   }
 }

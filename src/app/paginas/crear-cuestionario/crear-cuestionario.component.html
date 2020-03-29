@@ -25,13 +25,13 @@
                   </div>
 
                   <div class="btnCambiarStep">
-                    <!-- <button [disabled]="isDisabled" *ngIf="grupoYaCreado === false" mat-raised-button class="btn Next"  (click)= CrearGrupo() matStepperNext>Siguiente</button>
-                    <button [disabled]="isDisabled" *ngIf="grupoYaCreado === true" mat-raised-button class="btn Next"  (click)= EditarGrupo() matStepperNext>Siguiente</button> -->
-                    <button [disabled]="isDisabled" mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                    <button [disabled]="isDisabled" *ngIf="cuestionarioYaCreado === false" mat-raised-button class="btn Next"  (click)= CrearCuestionario() matStepperNext>Siguiente</button>
+                    <button [disabled]="isDisabled" *ngIf="cuestionarioYaCreado === true" mat-raised-button class="btn Next"  (click)= EditarCuestionario() matStepperNext>Siguiente</button>
+                    <!-- <button [disabled]="isDisabled" mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
                       Atrás</button>
                    <button  [disabled]="isDisabled" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
                       Siguiente
-                   </button>
+                   </button> -->
                   </div>
 
                 </mat-step>

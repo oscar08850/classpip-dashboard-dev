@@ -1,11 +1,11 @@
 export class Cuestionario {
-    titulo: string;
-    descripcion: number;
+    Titulo: string;
+    Descripcion: string;
     profesorId: number;
     id: number;
 
-    constructor(titulo?: string, descripcion?: number){
-        this.titulo = titulo;
-        this.descripcion = descripcion;
+    constructor(titulo?: string, descripcion?: string){
+        this.Titulo = titulo;
+        this.Descripcion = descripcion;
     }
 }

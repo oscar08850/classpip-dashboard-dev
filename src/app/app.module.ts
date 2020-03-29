@@ -234,7 +234,7 @@ import { AgregarPreguntasDialogComponent } from './paginas/crear-cuestionario/ag
     HttpClientModule
   ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
-  entryComponents: [AgregarAlumnoDialogComponent, DialogMostrarCromosComponent,
+  entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
     EditarCromoDialogComponent, DialogoComponent ],
   bootstrap: [AppComponent]

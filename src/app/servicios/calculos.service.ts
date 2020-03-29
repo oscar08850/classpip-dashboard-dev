@@ -937,4 +937,50 @@ public PreparaHistorialEquipo(
     return equipos;
   }
 
+  // Elimina el grupo (tanto el id del profe como del grupo estan en sesión.
+  // Lo hago con un observable para que el componente que muestra la lista de grupos
+  // espere hasta que se haya acabado la operacion de borrar el grupo de la base de datos
+  public EliminarCuestionario(): any {
+    const eliminaObservable = new Observable ( obs => {
+
+
+          this.peticionesAPI.BorraCuestionario(
+                    this.sesion.DameProfesor().id,
+                    this.sesion.DameCuestionario().id)
+          .subscribe(() => {
+
+            this.EliminarPreguntasDelCuestionario();
+
+            // Ahora elimino el grupo de la lista de cuestionarios para que desaparezca de la pantalla al regresar
+            let lista = this.sesion.DameListaCuestionarios();
+            lista = lista.filter (g => g.id !== this.sesion.DameCuestionario().id);
+            obs.next ();
+          });
+    });
+    return eliminaObservable;
+  }
+
+  // ESTA FUNCIÓN RECUPERA TODAS LAS PREGUNTAS DEL CUESTIONARIO QUE VAMOS A BORRAR Y DESPUÉS LAS BORRA. ESTO LO HACEMOS PARA NO
+  // DEJAR MATRICULAS QUE NO NOS SIRVEN EN LA BASE DE DATOS
+  private EliminarPreguntasDelCuestionario() {
+    // Pido las matrículas correspondientes al grupo que voy a borrar
+    this.peticionesAPI.DamePreguntasDelCuestionarioCuestionario(this.sesion.DameCuestionario().id)
+    .subscribe( preguntasDelCuestionario => {
+      if (preguntasDelCuestionario[0] !== undefined) {
+
+        // Una vez recibo las matriculas del grupo, las voy borrando una a una
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < preguntasDelCuestionario.length; i++) {
+          this.peticionesAPI.BorraPreguntaDelCuestionario(preguntasDelCuestionario[i].id)
+          .subscribe(() => {
+              console.log('Pregunta del cuestionario borrada correctamente');
+          });
+        }
+      } else {
+        console.log('no hay preguntas en el cuestionario');
+      }
+
+    });
+  }
+
 }
