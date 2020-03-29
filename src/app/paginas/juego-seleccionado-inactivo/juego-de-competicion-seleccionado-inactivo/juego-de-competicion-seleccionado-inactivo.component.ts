@@ -240,7 +240,11 @@ export class JuegoDeCompeticionSeleccionadoInactivoComponent implements OnInit {
     console.log ('Voy a por la información del juego seleccionado');
     this.sesion.TomaJuego (this.juegoSeleccionado);
     console.log('Tomo las jornadas' + this.jornadas);
-    this.JornadasCompeticion = this.calculos.GenerarTablaJornadasF1( this.juegoSeleccionado, this.jornadas, undefined, undefined);
+    console.log('Los enfrentamientos del juego son: ');
+    console.log(this.enfrentamientosDelJuego);
+    this.JornadasCompeticion = this.calculos.GenerarTablaJornadasLiga(this.juegoSeleccionado, this.jornadas, this.enfrentamientosDelJuego);
+    console.log('Las tablas JornadasCompeticionLiga son: ');
+    console.log(this.JornadasCompeticion);
     console.log ('Voy a por la información de las jornadas del juego');
     this.sesion.TomaDatosJornadas(this.jornadas,
                                       this.JornadasCompeticion);
