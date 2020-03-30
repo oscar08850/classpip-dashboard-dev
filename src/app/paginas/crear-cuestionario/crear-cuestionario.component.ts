@@ -56,6 +56,9 @@ export class CrearCuestionarioComponent implements OnInit {
       tituloCuestionario: ['', Validators.required],
       descripcionCuestionario: ['', Validators.required]
     })
+
+    this.peticionesAPI.DameTodosMisCuestionarios (this.profesorId)
+    .subscribe (lista => this.sesion.TomaListaCuestionarios(lista));
   }
 
   // MIRO SI HAY ALGO SIMULTÁNEAMENTE EN EL NOMBRE Y LA DESCRIPCIÓN

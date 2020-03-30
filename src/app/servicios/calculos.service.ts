@@ -937,13 +937,11 @@ public PreparaHistorialEquipo(
     return equipos;
   }
 
-  // Elimina el grupo (tanto el id del profe como del grupo estan en sesión.
+  // Elimina el cuestionario (tanto el id del profe como del cuestinario estan en sesión.
   // Lo hago con un observable para que el componente que muestra la lista de grupos
   // espere hasta que se haya acabado la operacion de borrar el grupo de la base de datos
   public EliminarCuestionario(): any {
     const eliminaObservable = new Observable ( obs => {
-
-
           this.peticionesAPI.BorraCuestionario(
                     this.sesion.DameProfesor().id,
                     this.sesion.DameCuestionario().id)
@@ -953,7 +951,7 @@ public PreparaHistorialEquipo(
 
             // Ahora elimino el grupo de la lista de cuestionarios para que desaparezca de la pantalla al regresar
             let lista = this.sesion.DameListaCuestionarios();
-            lista = lista.filter (g => g.id !== this.sesion.DameCuestionario().id);
+            lista = lista.filter(a => a.id !== this.sesion.DameCuestionario().id);
             obs.next ();
           });
     });

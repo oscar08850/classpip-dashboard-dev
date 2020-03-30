@@ -345,4 +345,8 @@ public  DameCuestionario(): Cuestionario {
 public DameListaCuestionarios(): any {
   return this.listaCuestionarios;
 }
+
+public TomaListaCuestionarios(listaCuestionarios: any){
+  this.listaCuestionarios = listaCuestionarios;
+}
 }
