@@ -125,6 +125,8 @@ import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introduc
 import { PreguntaComponent } from './paginas/pregunta/pregunta.component';
 import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-cuestionario.component';
 import { AgregarPreguntasDialogComponent } from './paginas/crear-cuestionario/agregar-preguntas-dialog/agregar-preguntas-dialog.component';
+import { MisPreguntasComponent } from './paginas/mis-preguntas/mis-preguntas.component';
+import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuestionarios.component';
 
 
 
@@ -194,7 +196,9 @@ import { AgregarPreguntasDialogComponent } from './paginas/crear-cuestionario/ag
     IntroducirAlumnosComponent,
     PreguntaComponent,
     CrearCuestionarioComponent,
-    AgregarPreguntasDialogComponent
+    AgregarPreguntasDialogComponent,
+    MisPreguntasComponent,
+    MisCuestionariosComponent
 
   ],
   imports: [

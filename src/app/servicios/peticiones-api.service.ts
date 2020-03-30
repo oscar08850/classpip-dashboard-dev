@@ -567,9 +567,11 @@ export class PeticionesAPIService {
     console.log(pregunta, profesorId);
     return this.http.post<Pregunta>(this.APIUrlProfesores + '/' + profesorId + '/preguntas', pregunta);
   }
-
   public DameTodasMisPreguntas(profesorId: number): Observable<Pregunta[]> {
     return this.http.get<Pregunta[]>(this.APIUrlProfesores + '/' + profesorId + '/preguntas');
+  }
+  public BorrarPregunta(preguntaId: number): Observable<any> {
+    return this.http.delete<any>(this.APIUrlPreguntas + '/' + preguntaId);
   }
 
   //Cuestionarios
@@ -579,6 +581,9 @@ export class PeticionesAPIService {
   }
   public ModificaCuestionario(cuestionario: Cuestionario, profesorId: number, cuestionarioId: number): Observable<Cuestionario> {
     return this.http.put<Cuestionario>(this.APIUrlProfesores + '/' + profesorId + '/cuestionarios/' + cuestionarioId, cuestionario);
+  }
+  public DameTodosMisCuestionarios(profesorId: number): Observable<Cuestionario[]> {
+    return this.http.get<Cuestionario[]>(this.APIUrlProfesores + '/' + profesorId + '/cuestionarios');
   }
   public BorraCuestionario(profesorId: number, cuestionarioId: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlProfesores + '/' + profesorId + '/cuestionarios/' + cuestionarioId);

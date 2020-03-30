@@ -68,6 +68,9 @@ import { DeactivateGuardCrearJuego } from './guardas/canExitCrearJuego.guard';
 //Importamos componentes modulo cuestionario
 import { PreguntaComponent } from './paginas/pregunta/pregunta.component';
 import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-cuestionario.component';
+import { MisPreguntasComponent } from './paginas/mis-preguntas/mis-preguntas.component';
+import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuestionarios.component';
+import { DeactivateGuardCrearCuestionario } from './guardas/canExitCrearCuestionario.guard';
 
 const routes: Routes = [
 
@@ -184,15 +187,16 @@ const routes: Routes = [
 
   //PREGUNTAS
   { path: 'inicio/:id/crearPregunta', component: PreguntaComponent},
-  //{ path: 'pregunta/:id/misPreguntas', component: MisPreguntasComponent}
+  { path: 'inicio/:id/misPreguntas', component: MisPreguntasComponent},
 
   //CUESTIONARIOS
-  { path: 'inicio/:id/crearCuestionario', component: CrearCuestionarioComponent}
+  { path: 'inicio/:id/crearCuestionario', component: CrearCuestionarioComponent, canDeactivate: [DeactivateGuardCrearCuestionario] },
+  { path: 'inicio/:id/misCuestionarios', component: MisCuestionariosComponent}
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego],
+  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego, DeactivateGuardCrearCuestionario],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
