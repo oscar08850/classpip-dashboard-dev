@@ -1,0 +1,69 @@
+<div class="subtitulo" align="center">Editar pregunta</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<br>
+<div class = "contenedor" >
+  <div class = "enColumna">
+    <form [formGroup]="myForm">
+        <mat-card class= "cardBorder">
+          <mat-card-content>
+                <mat-form-field style=  "width: 100%;">
+                  <mat-label>Título</mat-label>
+                  <input (keyup)="Disabled()" matInput formControlName="titulo" required [(ngModel)]="titulo">
+                </mat-form-field>
+                <div>
+                  <mat-form-field style=  "width: 100%;">
+                    <mat-label>Pregunta</mat-label>
+                      <input (keyup)="Disabled()" matInput formControlName="pregunta" required [(ngModel)]="pregunta">
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field style=  "width: 100%;">
+                    <mat-label>Tematica</mat-label>
+                      <input (keyup)="Disabled()" matInput formControlName="tematica" required [(ngModel)]="tematica">
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field style=  "width: 100%;">
+                    <mat-label>Respuesta Correcta</mat-label>
+                      <input (keyup)="Disabled()" matInput formControlName="respuestaCorrecta" required [(ngModel)]="respuestaCorrecta">
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field style=  "width: 100%;">
+                    <mat-label>Respuesta Incorrecta 1</mat-label>
+                      <input (keyup)="Disabled()" matInput formControlName="respuestaIncorrecta1" required [(ngModel)]="respuestaIncorrecta1">
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field style=  "width: 100%;">
+                    <mat-label>Respuesta Incorrecta 2</mat-label>
+                      <input (keyup)="Disabled()" matInput formControlName="respuestaIncorrecta2" required [(ngModel)]="respuestaIncorrecta2">
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field style=  "width: 100%;">
+                    <mat-label>Respuesta Incorrecta 3</mat-label>
+                      <input (keyup)="Disabled()" matInput formControlName="respuestaIncorrecta3" required [(ngModel)]="respuestaIncorrecta3">
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field style=  "width: 100%;">
+                    <mat-label>Feedback Correcto</mat-label>
+                      <input (keyup)="Disabled()" matInput formControlName="feedbackCorrecto" required [(ngModel)]="feedbackCorrecto">
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field style=  "width: 100%;">
+                    <mat-label>Feedback Incorrecto</mat-label>
+                      <input (keyup)="Disabled()" matInput formControlName="feedbackIncorrecto" required [(ngModel)]="feedbackIncorrecto">
+                  </mat-form-field>
+                </div>
+                <div class="btnCambiarStep">
+                  <button mat-raised-button class="btn Back" style="margin: 5px"> Cerrar </button>
+                  <button [disabled]="isDisabled" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "guardarPregunta();"> Guardar </button>
+                </div>
+          </mat-card-content>
+        </mat-card>
+      </form>
+  </div>
+</div>

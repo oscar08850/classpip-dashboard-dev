@@ -127,6 +127,7 @@ import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-c
 import { AgregarPreguntasDialogComponent } from './paginas/crear-cuestionario/agregar-preguntas-dialog/agregar-preguntas-dialog.component';
 import { MisPreguntasComponent } from './paginas/mis-preguntas/mis-preguntas.component';
 import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuestionarios.component';
+import { EditarPreguntaDialogComponent } from './paginas/mis-preguntas/editar-pregunta-dialog/editar-pregunta-dialog.component';
 
 
 
@@ -198,7 +199,8 @@ import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuest
     CrearCuestionarioComponent,
     AgregarPreguntasDialogComponent,
     MisPreguntasComponent,
-    MisCuestionariosComponent
+    MisCuestionariosComponent,
+    EditarPreguntaDialogComponent
 
   ],
   imports: [
@@ -240,7 +242,7 @@ import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuest
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
-    EditarCromoDialogComponent, DialogoComponent ],
+    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

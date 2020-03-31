@@ -5,6 +5,7 @@ import { Location } from '@angular/common';
 import { Pregunta, Profesor } from 'src/app/clases';
 import Swal from 'sweetalert2';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import { EditarPreguntaDialogComponent } from './editar-pregunta-dialog/editar-pregunta-dialog.component';
 
 @Component({
   selector: 'app-mis-preguntas',
@@ -47,6 +48,21 @@ export class MisPreguntasComponent implements OnInit {
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  AbrirDialogoEditarPregunta(pregunta: Pregunta): void {
+    const dialogRef = this.dialog.open(EditarPreguntaDialogComponent, {
+      width: '50%',
+      height: '80%',
+      position: {
+        top: '0%'
+      },
+      //Pasamos los parametros necesarios
+      data: {
+        pregunta: pregunta,
+        profesorId: this.profesor.id
+      }
+    });
   }
 
   AbrirDialogoConfirmacionEliminarPregunta(pregunta: Pregunta): void {
