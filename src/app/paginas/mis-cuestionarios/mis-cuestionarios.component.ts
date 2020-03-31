@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Cuestionario, Profesor } from 'src/app/clases';
-import { SesionService, PeticionesAPIService } from 'src/app/servicios';
+import { SesionService, PeticionesAPIService, CalculosService } from 'src/app/servicios';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
@@ -23,7 +23,8 @@ export class MisCuestionariosComponent implements OnInit {
   constructor(private sesion: SesionService,
               private peticionesAPI: PeticionesAPIService,
               public dialog: MatDialog,
-              private location: Location) { }
+              private location: Location,
+              private calculos: CalculosService) { }
 
   ngOnInit() {
     this.profesor = this.sesion.DameProfesor();
@@ -62,7 +63,8 @@ export class MisCuestionariosComponent implements OnInit {
   }
 
   EliminarCuestionario(cuestionario: Cuestionario){
-    this.peticionesAPI.BorraCuestionario(this.profesor.id, cuestionario.id)
+    this.sesion.TomaCuestionario (cuestionario);
+    this.calculos.EliminarCuestionario()
     .subscribe (() => {
       this.misCuestionarios = this.misCuestionarios.filter (a => a.id !== cuestionario.id);
       this.dataSource = new MatTableDataSource(this.misCuestionarios )

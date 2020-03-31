@@ -149,13 +149,13 @@ export class CrearCuestionarioComponent implements OnInit {
           const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
             height: '150px',
             data: {
-              mensaje: 'Confirma que quieres abandonar el proceso de creación de grupo',
+              mensaje: 'Confirma que quieres abandonar el proceso de creación de cuestionario',
             }
           });
 
           dialogRef.afterClosed().subscribe((confirmed: boolean) => {
             if (confirmed) {
-              // Si confirma que quiere salir entonces eliminamos el grupo que se ha creado
+              // Si confirma que quiere salir entonces eliminamos el cuestionario que se ha creado
               this.sesion.TomaCuestionario (this.cuestionario);
               this.calculos.EliminarCuestionario().subscribe ( () => obs.next(confirmed));
 

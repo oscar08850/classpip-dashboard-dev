@@ -938,20 +938,15 @@ public PreparaHistorialEquipo(
   }
 
   // Elimina el cuestionario (tanto el id del profe como del cuestinario estan en sesión.
-  // Lo hago con un observable para que el componente que muestra la lista de grupos
-  // espere hasta que se haya acabado la operacion de borrar el grupo de la base de datos
+  // Lo hago con un observable para que el componente que muestra la lista de cuestionarios
+  // espere hasta que se haya acabado la operacion de borrar el cuestionario de la base de datos
   public EliminarCuestionario(): any {
     const eliminaObservable = new Observable ( obs => {
           this.peticionesAPI.BorraCuestionario(
                     this.sesion.DameProfesor().id,
                     this.sesion.DameCuestionario().id)
           .subscribe(() => {
-
             this.EliminarPreguntasDelCuestionario();
-
-            // Ahora elimino el grupo de la lista de cuestionarios para que desaparezca de la pantalla al regresar
-            let lista = this.sesion.DameListaCuestionarios();
-            lista = lista.filter(a => a.id !== this.sesion.DameCuestionario().id);
             obs.next ();
           });
     });
@@ -959,15 +954,51 @@ public PreparaHistorialEquipo(
   }
 
   // ESTA FUNCIÓN RECUPERA TODAS LAS PREGUNTAS DEL CUESTIONARIO QUE VAMOS A BORRAR Y DESPUÉS LAS BORRA. ESTO LO HACEMOS PARA NO
-  // DEJAR MATRICULAS QUE NO NOS SIRVEN EN LA BASE DE DATOS
+  // DEJAR RELACIONES PREGUNTADELCUESTIONARIO QUE NO NOS SIRVEN EN LA BASE DE DATOS
   private EliminarPreguntasDelCuestionario() {
-    // Pido las matrículas correspondientes al grupo que voy a borrar
+    // Pido las preguntasDelCuestionario correspondientes al cuestionario que voy a borrar
     this.peticionesAPI.DamePreguntasDelCuestionarioCuestionario(this.sesion.DameCuestionario().id)
     .subscribe( preguntasDelCuestionario => {
       if (preguntasDelCuestionario[0] !== undefined) {
 
-        // Una vez recibo las matriculas del grupo, las voy borrando una a una
-        // tslint:disable-next-line:prefer-for-of
+        // Una vez recibo las preguntas del cuestionario, las voy borrando una a una
+        for (let i = 0; i < preguntasDelCuestionario.length; i++) {
+          this.peticionesAPI.BorraPreguntaDelCuestionario(preguntasDelCuestionario[i].id)
+          .subscribe(() => {
+              console.log('Pregunta del cuestionario borrada correctamente');
+          });
+        }
+      } else {
+        console.log('no hay preguntas en el cuestionario');
+      }
+
+    });
+  }
+
+  // Elimina la pregunta (La pregunta se guarda previamente en sesión.
+  // Lo hago con un observable para que el componente que muestra la lista de preguntas
+  // espere hasta que se haya acabado la operacion de borrar la pregunta de la base de datos
+  public EliminarPregunta(): any {
+    const eliminaObservable = new Observable ( obs => {
+          this.peticionesAPI.BorrarPregunta(
+                    this.sesion.DamePregunta().id)
+          .subscribe(() => {
+            this.EliminarPreguntasDelCuestionarioConPregunta();
+            obs.next ();
+          });
+    });
+    return eliminaObservable;
+  }
+
+  // ESTA FUNCIÓN RECUPERA TODOS LOS CUESTINARIOS QUE CONTIENEN ESA PREGUNTA Y DESPUÉS LA BORRA DE PREGUNTASDELCUESTIONARIO. ESTO LO HACEMOS PARA NO
+  // DEJAR MATRICULAS QUE NO NOS SIRVEN EN LA BASE DE DATOS
+  private EliminarPreguntasDelCuestionarioConPregunta() {
+    // Pido las preguntasDelCuestionario correspondientes a la pregunta que voy a borrar
+    this.peticionesAPI.DameCuestionariosConPregunta(this.sesion.DamePregunta().id)
+    .subscribe( preguntasDelCuestionario => {
+      if (preguntasDelCuestionario[0] !== undefined) {
+
+        // Una vez recibo las preguntasDelCuestionario con esa pregunta, las voy borrando una a una
         for (let i = 0; i < preguntasDelCuestionario.length; i++) {
           this.peticionesAPI.BorraPreguntaDelCuestionario(preguntasDelCuestionario[i].id)
           .subscribe(() => {

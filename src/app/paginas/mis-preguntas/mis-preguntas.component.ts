@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SesionService, PeticionesAPIService } from 'src/app/servicios';
+import { SesionService, PeticionesAPIService, CalculosService } from 'src/app/servicios';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { Location } from '@angular/common';
 import { Pregunta, Profesor } from 'src/app/clases';
@@ -24,6 +24,7 @@ export class MisPreguntasComponent implements OnInit {
   constructor(  private sesion: SesionService,
                 private peticionesAPI: PeticionesAPIService,
                 public dialog: MatDialog,
+                private calculos: CalculosService,
                 private location: Location) { }
 
   ngOnInit() {
@@ -65,7 +66,8 @@ export class MisPreguntasComponent implements OnInit {
   }
 
   EliminarPregunta(pregunta: Pregunta) {
-    this.peticionesAPI.BorrarPregunta(pregunta.id)
+    this.sesion.TomaPregunta(pregunta);
+    this.calculos.EliminarPregunta()
     .subscribe (() => {
       this.misPreguntas = this.misPreguntas.filter (a => a.id !== pregunta.id);
       this.dataSource = new MatTableDataSource(this.misPreguntas);

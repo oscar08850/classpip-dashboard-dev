@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga,
-         TablaJornadas, Jornada, Cuestionario} from '../clases';
+         TablaJornadas, Jornada, Cuestionario, Pregunta} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 @Injectable({
@@ -45,6 +45,7 @@ export class SesionService {
   JornadasCompeticion: any;
   // listaEquiposGrupo: any;
 
+  pregunta: Pregunta;
   cuestionario: Cuestionario;
   listaCuestionarios: any;
 
@@ -340,6 +341,14 @@ public TomaCuestionario(cuestionario: Cuestionario) {
 
 public  DameCuestionario(): Cuestionario {
   return this.cuestionario;
+}
+
+public DamePregunta(): Pregunta {
+  return this.pregunta;
+}
+
+public TomaPregunta(pregunta: Pregunta) {
+  this.pregunta = pregunta;
 }
 
 public DameListaCuestionarios(): any {

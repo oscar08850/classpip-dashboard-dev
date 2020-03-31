@@ -38,7 +38,7 @@
       <ng-container matColumnDef=" ">
           <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
           <td mat-cell *matCellDef="let cuestionario">
-            <button (click) = "AbrirDialogoConfirmacionEliminarCuestinario(cuestionario)" mat-icon-button matTooltip="Eliminar el cuestionario {{cuestionario.Descripcion}}">
+            <button (click) = "AbrirDialogoConfirmacionEliminarCuestionario(cuestionario)" mat-icon-button matTooltip="Eliminar el cuestionario {{cuestionario.Titulo}}">
               <i class="material-icons red md-36">delete</i>
             </button>
           </td>
