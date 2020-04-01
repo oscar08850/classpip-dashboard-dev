@@ -80,10 +80,15 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
   TablaClasificacionJornadaSeleccionada: TablaClasificacionJornada[];
 
+
   // Columnas Tabla
   displayedColumns: string[] = ['posicion', 'participante', 'puntos'];
+  columnas: string[] = ['participante', 'pon'];
+  columnasPos: string[] = ['posicion','participante', 'quita'];
 
   dataSourceClasificacionJornada;
+  dataSourceGanadores;
+  ganadores: any[] = [];
 
   constructor(public sesion: SesionService,
               public location: Location,
@@ -123,8 +128,41 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     }
   }
 
+  AgregarGanador(participante) {
+    if (this.ganadores.length === this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+      Swal.fire('Cuidado', 'Ya has asignado a todos los alumnos que puntuan', 'warning');
+    } else {
+      this.ganadores.push (participante);
+      // tslint:disable-next-line:max-line-length
+      this.TablaClasificacionJornadaSeleccionada = this.TablaClasificacionJornadaSeleccionada.filter(alumno => alumno.id !== participante.id);
+      this.dataSourceClasificacionJornada = new MatTableDataSource(this.TablaClasificacionJornadaSeleccionada);
+      this.dataSourceGanadores = new MatTableDataSource (this.ganadores);
+    }
+  }
+  QuitarGanador(participante){
+    this.TablaClasificacionJornadaSeleccionada.push (participante);
+    this.TablaClasificacionJornadaSeleccionada.sort((a, b) => a.participante.localeCompare(b.participante));
+    this.dataSourceClasificacionJornada = new MatTableDataSource(this.TablaClasificacionJornadaSeleccionada);
+    this.ganadores = this.ganadores.filter (alumno => alumno.id !== participante.id);
+    this.dataSourceGanadores = new MatTableDataSource (this.ganadores);
+    console.log (this.ganadores);
+  }
 
+  AsignarGanadoresManual() {
+    if (this.ganadores.length < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+      Swal.fire('Cuidado', 'Aún falta asignar alumnos que puntúan', 'warning');
+    } else {
+      const jornadaSeleccionada = this.calculos.ObtenerJornadaSeleccionada(Number(this.jornadaId), this.jornadasDelJuego);
+      let i = 0;
+      const participantesPuntuan = [];
+      while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+        participantesPuntuan.push(this.ganadores[i].id);
+        i++;
+      }
+      this.calculos.AsignarResultadosJornadaF1(this.juegoSeleccionado, jornadaSeleccionada, participantesPuntuan);
+    }
 
+  }
   ObtenerClasificaciónDeCadaJornada() {
     console.log('Estoy en ObtenerClasificaciónDeCadaJornada');
     // tslint:disable-next-line:prefer-for-of
@@ -137,11 +175,13 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     console.log(this.tablaJornadaSelccionada);
     console.log('El id de la jornada seleccionada es: ' + this.tablaJornadaSelccionada.id);
     if (this.tablaJornadaSelccionada.GanadoresFormulaUno === undefined) {
+      console.log ('No tiene ganadores');
       this.datosClasificacionJornada = this.calculos.ClasificacionJornada(this.juegoSeleccionado, this.listaAlumnosClasificacion,
                                                                           this.listaEquiposClasificacion,
                                                                           undefined,
                                                                           undefined);
     } else {
+      console.log ('Si tiene ganadores');
       this.datosClasificacionJornada = this.calculos.ClasificacionJornada(this.juegoSeleccionado, this.listaAlumnosClasificacion,
                                                                           this.listaEquiposClasificacion,
                                                                           this.tablaJornadaSelccionada.GanadoresFormulaUno.nombre,
@@ -159,9 +199,13 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     console.log(this.datosClasificacionJornada.participanteId);
     console.log('Puntos del juego: ');
     console.log(this.juegoSeleccionado.Puntos);
+    console.log ('AAAAAA');
+    console.log (this.datosClasificacionJornada);
     this.TablaClasificacionJornadaSeleccionada = this.calculos.PrepararTablaRankingJornadaFormulaUno(this.datosClasificacionJornada);
+    console.log ('BBBBBBB');
+    console.log (this.TablaClasificacionJornadaSeleccionada);
     this.dataSourceClasificacionJornada = new MatTableDataSource(this.TablaClasificacionJornadaSeleccionada);
-    console.log(this.dataSourceClasificacionJornada.data);
+    console.log(this.dataSourceClasificacionJornada);
   }
 
   ActualizarTablaClasificacion(juegoSeleccionado: Juego, participantesPuntuan: number[]) {
@@ -209,11 +253,18 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
   }
 
+  Disputada(jornadaId): boolean {
+    return this.calculos.JornadaF1TieneGanadores(jornadaId, this.jornadasDelJuego);
+  }
 
 //////////////////////////////////////// FUNCIONES PARA CONTROLAR LOS BOTONES Y LOS CHECKBOX //////////////////////////////////
   ActualizarBoton() {
-    console.log('Estoy en actualizar botón');
-    console.log(this.modoAsignacionId);
+    console.log('777777777777777777Estoy en actualizar botón');
+    console.log(this.jornadaId);
+    if (this.Disputada (this.jornadaId)) {
+      console.log ('Disputada');
+      this.ObtenerClasificaciónDeCadaJornada();
+    }
     if (this.modoAsignacionId === undefined || this.jornadaId === undefined) {
       this.botonAsignarAleatorioDesactivado = true;
       this.botonAsignarManualDesactivado = true;
@@ -223,6 +274,8 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       this.botonAsignarAleatorioDesactivado = true;
       this.botonAsignarManualDesactivado = false;
       this.botonAsignarPuntosDesactivado = true;
+      this.ObtenerClasificaciónDeCadaJornada();
+      this.TablaClasificacionJornadaSeleccionada.sort((a, b) => a.participante.localeCompare(b.participante));
     } else if (Number(this.modoAsignacionId) === 2) { // Aleatorio
       console.log('Modo aleatorio');
       this.botonAsignarManualDesactivado = true;
@@ -400,6 +453,8 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
         // Actualizamos la tabla de la clasificación de la jornada
         this.ActualizarTablaClasificacion(this.juegoSeleccionado, participantesPuntuan);
+        this.ConstruirTablaClasificaciónJornada();
+        this.ActualizarBoton();
       } else {
         console.log('Se ha producido un error: participantesPuntuan.length !== this.juegoSeleccionado.Puntos.length');
       }
@@ -464,7 +519,6 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   AsignarGanadorJuegoPuntos() {
     console.log('Estoy en AsignarJuegoMedianteJuegoPuntos --> AsignarGanadorJuegoPuntos()');
     const jornadaTieneGanadores = this.calculos.JornadaF1TieneGanadores(this.jornadaId, this.jornadasDelJuego);
-    console.log('Tiene Ganadores = ' + jornadaTieneGanadores);
     console.log('Puntos del juego');
     console.log(this.juegoSeleccionado.Puntos);
     if (jornadaTieneGanadores === false) {
@@ -485,6 +539,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
         // Actualizamos la tabla de la clasificación de la jornada
         this.ActualizarTablaClasificacion(this.juegoSeleccionado, participantesPuntuan);
+        this.ObtenerClasificaciónDeCadaJornada();
       } else {
         console.log('Se ha producido un error: participantesPuntuan.length !== this.juegoSeleccionado.Puntos.length');
       }

@@ -140,7 +140,8 @@ import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/ju
 import { EditarCromoDialogComponent } from './paginas/mis-colecciones/editar-cromo-dialog/editar-cromo-dialog.component';
 import { MisAlumnosComponent } from './paginas/mis-alumnos/mis-alumnos.component';
 import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introducir-alumnos.component';
-
+import { DateAdapter } from '@angular/material';
+import { CustomDateAdapter } from './CustomDataAdapter';
 
 
 
@@ -258,6 +259,12 @@ import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introduc
   entryComponents: [AgregarAlumnoDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
     EditarCromoDialogComponent, DialogoComponent ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [
+    {
+        provide: DateAdapter, useClass: CustomDateAdapter
+    }
+  ]
+
 })
 export class AppModule { }

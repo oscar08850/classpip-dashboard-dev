@@ -1409,7 +1409,6 @@ export class CalculosService {
         jornadaTieneGanadores = true;
       }
     });
-    console.log('jornadaTieneGanadore = ' + jornadaTieneGanadores);
     return jornadaTieneGanadores;
   }
 
@@ -2336,9 +2335,9 @@ export class CalculosService {
       if (juegoSeleccionado.Modo === 'Individual') {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
-          const ParticipanteFormulaUno = alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
-                                      + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
-                                      + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
+          const ParticipanteFormulaUno =  alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
+                                        + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
+                                        + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
           const ParticipanteId = alumnoJuegoDeCompeticionFormulaUno[i].id;
           const indexNoGanador = GanadoresFormulaUno.indexOf(ParticipanteFormulaUno);
           if (indexNoGanador === -1) {
@@ -2383,9 +2382,9 @@ export class CalculosService {
       if (juegoSeleccionado.Modo === 'Individual') {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
-          const ParticipanteFormulaUno = alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
-                                      + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
-                                      + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
+          const ParticipanteFormulaUno =  alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
+                                        + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
+                                        + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
           ParticipantesFormulaUno.push(ParticipanteFormulaUno);
           const ParticipanteId = alumnoJuegoDeCompeticionFormulaUno[i].id;
           PuntosFormulaUno.push(0);

@@ -7,19 +7,19 @@
     <mat-tab-group align="center">
 
       <mat-tab label="Editar Jornadas">
-        <div [formGroup]="myForm" class = "enFila" style="width: 80%">
-          <div style="margin-top: 15px;">
+        <div [formGroup]="myForm" class = "enFila" style="width: 100%">
+          <div style="margin-top: 15px; width: 30%">
             Fecha:
             <mat-form-field>
               <mat-label>Seleccione una Fecha del Calendario </mat-label>
-              <input matInput [matDatepicker]="picker" (dateChange)="onChangeEvent($event)" placeholder="Seleccione una Fecha" >
+              <input matInput [matDatepicker]="picker" (dateChange)="onChangeEvent($event)"  placeholder="Seleccione una Fecha" >
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
+              <mat-datepicker #picker ></mat-datepicker>
             </mat-form-field>
           </div>
 
 
-          <div style="margin-top: 15px;">
+          <div style="margin-top: 15px;width: 30%">
             <span>Criterio Ganador: </span>
             <mat-form-field>
               <mat-label>Escriba el Criterio Ganador</mat-label>
@@ -27,7 +27,7 @@
               <input matInput formControlName="CriterioGanador" placeholder="Escribe el Criterio" requiered [(ngModel)]="CriterioGanador" (change) = "ActualizarBotonTablaJornada()">
             </mat-form-field>
           </div>
-          <div style="margin-top: 10px">
+          <div style="margin-top: 15px; width: 30%">
             <button type="button"class="btn Aceptar" [disabled]="botonTablaDesactivadoJornada" (click) = EditarJornada()>Guardar Cambios</button>
           </div>
         </div>
@@ -37,11 +37,11 @@
 
             <ng-container matColumnDef="select">
               <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
-                <mat-checkbox
+                <!-- <mat-checkbox
                               (change)="$event ? MasterToggleJornada() : null; ActualizarBotonTablaJornada ();"
                               [checked]="selection.hasValue() && IsAllSelectedJornada()"
                               [indeterminate]="selection.hasValue() && !IsAllSelectedJornada()">
-                </mat-checkbox>
+                </mat-checkbox> -->
               </th>
               <td mat-cell *matCellDef="let row">
                 <mat-checkbox
@@ -64,13 +64,13 @@
             <ng-container matColumnDef="Fecha">
               <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Fecha </th>
 
-
+<!--
               <div *ngIf="(JornadasCompeticion.Fecha === 'Fecha por Determinar')">
-                <td mat-cell *matCellDef="let jornada; "> {{jornada.Fecha  | date: 'shortDate' }} </td>
-              </div>
+                <td mat-cell *matCellDef="let jornada; "> {{jornada.Fecha  | date: 'dd-MM-yyyy' }} </td>
+              </div> -->
 
               <div *ngIf="(JornadasCompeticion.Fecha !== 'Fecha por Determinar')">
-                <td mat-cell *matCellDef="let jornada; "> {{jornada.Fecha}} </td>
+                <td mat-cell *matCellDef="let jornada; "> {{jornada.Fecha | date: 'dd-MM-yyyy' }} </td>
               </div>
             </ng-container>
 

@@ -141,6 +141,9 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     });
   }
 
+  Disputada(jornadaId): boolean {
+      return this.JornadasCompeticion.filter (jornada => jornada.id === Number(jornadaId))[0].Disputada;
+  }
 
   ConstruirTablaElegirGanador() {
     if (this.juegoSeleccionado.Modo === 'Individual') {
@@ -162,11 +165,11 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       console.log(this.dataSourceTablaGanadorIndividual.data);
       // Ahora vamos a marcar los resultados en caso de que la jornada se haya disputado ya
       // PARECE QUE EL CAMPO DISPUTADA NO SE ACTUALIZA
-      let disputada: boolean;
-      disputada = this.JornadasCompeticion.filter (jornada => jornada.id === Number(this.jornadaId))[0].Disputada;
-      console.log ('disputada ' + disputada);
+      // let disputada: boolean;
+      // disputada = this.JornadasCompeticion.filter (jornada => jornada.id === Number(this.jornadaId))[0].Disputada;
+      // console.log ('disputada ' + disputada);
 
-      if (disputada) {
+      if (this.Disputada (this.jornadaId)) {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
           if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno) {
@@ -220,11 +223,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       this.dataSourceTablaGanadorEquipo = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
       console.log('El dataSource es:');
       console.log(this.dataSourceTablaGanadorEquipo.data);
-      let disputada: boolean;
-      disputada = this.JornadasCompeticion.filter (jornada => jornada.id === Number(this.jornadaId))[0].Disputada;
-      console.log ('disputada ' + disputada);
-
-      if (disputada) {
+      if (this.Disputada (this.jornadaId)) {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
           if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno) {
@@ -246,6 +245,10 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
      o si debe estar desactivado (si no se ha seleccionado la jornada) */
   ActualizarBoton() {
       console.log('Estoy en actualizar botón');
+      // if (this.Disputada (this.jornadaId)) {
+      //   this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+      // }
+      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
       console.log(this.modoAsignacionId);
       if (this.modoAsignacionId === undefined || this.jornadaId === undefined) {
         this.botonAsignarAleatorioDesactivado = true;
