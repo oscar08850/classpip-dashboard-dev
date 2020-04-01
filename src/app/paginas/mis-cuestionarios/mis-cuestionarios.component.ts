@@ -5,6 +5,7 @@ import { MatDialog, MatTableDataSource } from '@angular/material';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mis-cuestionarios',
@@ -21,6 +22,7 @@ export class MisCuestionariosComponent implements OnInit {
   mensaje = 'Confirmar que quieres eliminar el cuestionario: ';
   
   constructor(private sesion: SesionService,
+              private router: Router,
               private peticionesAPI: PeticionesAPIService,
               public dialog: MatDialog,
               private location: Location,
@@ -69,5 +71,9 @@ export class MisCuestionariosComponent implements OnInit {
       this.misCuestionarios = this.misCuestionarios.filter (a => a.id !== cuestionario.id);
       this.dataSource = new MatTableDataSource(this.misCuestionarios )
     })
+  }
+
+  EditarCuestionario(){
+    this.router.navigate(['/inicio/' + this.profesor.id + '/editarCuestionario']);
   }
 }

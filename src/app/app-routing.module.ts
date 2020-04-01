@@ -71,6 +71,7 @@ import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-c
 import { MisPreguntasComponent } from './paginas/mis-preguntas/mis-preguntas.component';
 import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuestionarios.component';
 import { DeactivateGuardCrearCuestionario } from './guardas/canExitCrearCuestionario.guard';
+import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
 
 const routes: Routes = [
 
@@ -191,7 +192,8 @@ const routes: Routes = [
 
   //CUESTIONARIOS
   { path: 'inicio/:id/crearCuestionario', component: CrearCuestionarioComponent, canDeactivate: [DeactivateGuardCrearCuestionario] },
-  { path: 'inicio/:id/misCuestionarios', component: MisCuestionariosComponent}
+  { path: 'inicio/:id/misCuestionarios', component: MisCuestionariosComponent},
+  { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent}
 ];
 
 @NgModule({

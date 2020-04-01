@@ -128,6 +128,7 @@ import { AgregarPreguntasDialogComponent } from './paginas/crear-cuestionario/ag
 import { MisPreguntasComponent } from './paginas/mis-preguntas/mis-preguntas.component';
 import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuestionarios.component';
 import { EditarPreguntaDialogComponent } from './paginas/mis-preguntas/editar-pregunta-dialog/editar-pregunta-dialog.component';
+import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
 
 
 
@@ -200,7 +201,8 @@ import { EditarPreguntaDialogComponent } from './paginas/mis-preguntas/editar-pr
     AgregarPreguntasDialogComponent,
     MisPreguntasComponent,
     MisCuestionariosComponent,
-    EditarPreguntaDialogComponent
+    EditarPreguntaDialogComponent,
+    EditarCuestionarioComponent
 
   ],
   imports: [
