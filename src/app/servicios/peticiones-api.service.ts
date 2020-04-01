@@ -573,6 +573,9 @@ export class PeticionesAPIService {
   public BorrarPregunta(preguntaId: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlPreguntas + '/' + preguntaId);
   }
+  public ModificaPregunta(pregunta: Pregunta, profesorId: number, preguntaId: number): Observable<Pregunta> {
+    return this.http.put<Pregunta>(this.APIUrlProfesores + '/' + profesorId + '/preguntas/' + preguntaId, pregunta);
+  }
 
   //Cuestionarios
   public CreaCuestionario(cuestionario: Cuestionario, profesorId: number): Observable<Cuestionario> {

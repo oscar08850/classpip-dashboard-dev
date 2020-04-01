@@ -63,6 +63,9 @@ export class MisPreguntasComponent implements OnInit {
         profesorId: this.profesor.id
       }
     });
+    dialogRef.afterClosed().subscribe(() => {
+      this.DameTodasMisPreguntas();
+    });
   }
 
   AbrirDialogoConfirmacionEliminarPregunta(pregunta: Pregunta): void {

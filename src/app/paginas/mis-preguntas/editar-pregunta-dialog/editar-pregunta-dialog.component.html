@@ -59,8 +59,8 @@
                   </mat-form-field>
                 </div>
                 <div class="btnCambiarStep">
-                  <button mat-raised-button class="btn Back" style="margin: 5px"> Cerrar </button>
-                  <button [disabled]="isDisabled" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "guardarPregunta();"> Guardar </button>
+                  <button mat-raised-button class="btn Back" style="margin: 5px" (click) = "goBack();"> Cerrar </button>
+                  <button [disabled]="isDisabled" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "GuardarPregunta();"> Guardar </button>
                 </div>
           </mat-card-content>
         </mat-card>
