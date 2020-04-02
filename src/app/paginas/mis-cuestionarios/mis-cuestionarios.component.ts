@@ -73,7 +73,8 @@ export class MisCuestionariosComponent implements OnInit {
     })
   }
 
-  EditarCuestionario(){
+  EditarCuestionario(cuestionario: Cuestionario){
+    this.sesion.TomaCuestionario(cuestionario);
     this.router.navigate(['/inicio/' + this.profesor.id + '/editarCuestionario']);
   }
 }
