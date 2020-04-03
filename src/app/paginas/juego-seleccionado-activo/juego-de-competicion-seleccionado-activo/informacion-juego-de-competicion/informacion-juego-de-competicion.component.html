@@ -16,17 +16,23 @@
                     <mat-icon *ngIf="JornadaFinalizada(jornada) === true" mat-list-icon><i class="material-icons green">check_circle_outline</i></mat-icon>
                     <mat-icon *ngIf="JornadaFinalizada(jornada) === false" mat-list-icon><i class="material-icons red">history</i></mat-icon>
                     &nbsp;&nbsp;&nbsp;
-                    Jornada {{jornada.NumeroDeJornada}}:    {{jornada.Fecha | date: 'shortDate'}}
+                    Jornada {{jornada.NumeroDeJornada}}:    {{jornada.Fecha | date: 'dd-MM-yyyy'}}
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="enFila">
                   <!-- <div style="margin-right: 15%; border: 15px; width: 60%;"> -->
                   <div style="margin-left: 20px; font-size: 130%; width: 40%;">
-                      <span style="font-weight: bold; font-size: 80%;">Criterio: {{jornada.CriterioGanador}}</span>
+                      <br>
+                      <span style="margin-left: 65px;font-size: 80%;"><strong>Criterio: </strong> {{jornada.CriterioGanador}}</span>
+                      <br>
+                      <br>
+                      <br>
+
                       <!-- (click)="AñadirResultados()" -->
                       <!-- ///////////////////////////////////// TABLA ENFRENTAMIENTOS POR EQUIPOS ////////////////////////////////////// -->
                       <form style=" width: 100%" *ngIf="juegoSeleccionado.Modo != 'Individual'">
-                        <table style="margin-left: 65px;  width: 200%" align="center" mat-table [dataSource]="dataSourceEnfrentamientoEquipo" class="example-container mat-elevation-z8">
+
+                          <table style="margin-left: 65px;  width: 100%" align="center" mat-table [dataSource]="dataSourceEnfrentamientoEquipo" class="example-container mat-elevation-z8">
                           <!--- Note that these columns can be defined in any order.
                                 The actual rendered columns are set as a property on the row definition" -->
 

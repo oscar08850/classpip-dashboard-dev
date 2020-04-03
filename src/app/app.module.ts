@@ -140,6 +140,10 @@ import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/ju
 import { EditarCromoDialogComponent } from './paginas/mis-colecciones/editar-cromo-dialog/editar-cromo-dialog.component';
 import { MisAlumnosComponent } from './paginas/mis-alumnos/mis-alumnos.component';
 import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introducir-alumnos.component';
+
+import { DateAdapter } from '@angular/material';
+import { CustomDateAdapter } from './CustomDataAdapter';
+
 import { PreguntaComponent } from './paginas/pregunta/pregunta.component';
 import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-cuestionario.component';
 import { AgregarPreguntasDialogComponent } from './paginas/crear-cuestionario/agregar-preguntas-dialog/agregar-preguntas-dialog.component';
@@ -147,6 +151,7 @@ import { MisPreguntasComponent } from './paginas/mis-preguntas/mis-preguntas.com
 import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuestionarios.component';
 import { EditarPreguntaDialogComponent } from './paginas/mis-preguntas/editar-pregunta-dialog/editar-pregunta-dialog.component';
 import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
+
 
 
 
@@ -274,6 +279,13 @@ import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/edita
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
     EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [
+    {
+        provide: DateAdapter, useClass: CustomDateAdapter
+    }
+  ]
+
+
 })
 export class AppModule { }

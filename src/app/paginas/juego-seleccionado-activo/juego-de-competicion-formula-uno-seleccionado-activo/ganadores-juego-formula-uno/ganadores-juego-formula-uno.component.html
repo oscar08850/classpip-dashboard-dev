@@ -4,136 +4,93 @@
 <div class="contenedor">
   <div class="enColumna">
     <div class = "enFila" style="width: 60%; align-content: left;"  >
+      <!-- selector de jornada -->
       <div>
         Seleccione
         <br>
         <mat-form-field>
           <mat-label>Jornada</mat-label>
-          <select matNativeControl [(ngModel)]="jornadaId"  (change) = "ActualizarBoton()">
-            <option *ngFor="let jornada of JornadasCompeticion" [value]="jornada.id">
-              Jornada {{jornada.NumeroDeJornada}}
+          <select matNativeControl [(ngModel)]="jornadaId"  (change) = "SeleccionaJornada()">
+            <option *ngFor="let jornada of jornadasDelJuego; index as i " [value]="jornada.id">
+
+              <p *ngIf= "!Disputada (jornada.id)">{{i+1}}</p>
+              <p *ngIf= "Disputada (jornada.id)">{{i+1}} (completada)</p>
             </option>
           </select>
         </mat-form-field>
       </div>
+      <!-- Si la jornada elegida no está aun disputada desplegamos el selector de modo de asignación -->
+      <div *ngIf= "!Disputada (jornadaId)">
+
       <div>
         <br>
         <mat-form-field style="margin-left: 10%;">
           <mat-label>Modo</mat-label>
-          <select matNativeControl [(ngModel)]="modoAsignacionId" (change) = "ActualizarBoton()">
+          <select matNativeControl [(ngModel)]="modoAsignacionId" (change) = "SeleccionaModo()">
             <option *ngFor="let modo of modoAsignacion" [value]="modo.id">
               {{modo.modo}}
             </option>
           </select>
         </mat-form-field>
       </div>
+      <!-- Si se elige la asignación via juego de puntos desplegamos el selector del juego que debe usarse -->
+      <div *ngIf="modoAsignacionId == 3 && juegosActivosPuntos !== undefined"  style="margin-left: 5%;">
 
-      <div *ngIf="modoAsignacionId == 3"  style="margin-left: 5%;">
         Seleccione un Juego
         <br>
         <mat-form-field >
           <mat-label>Juegos</mat-label>
-          <select matNativeControl [(ngModel)]="juegodePuntosSeleccionadoID" (change) = "ActualizarBoton()">
-            <option *ngFor="let juego of juegosActivosPuntosModo" [value]="juego.id">
+          <select matNativeControl [(ngModel)]="juegodePuntosSeleccionadoID" (change) = "SeleccionarJuegoPuntos()">
+            <option *ngFor="let juego of juegosActivosPuntos" [value]="juego.id">
               {{juego.NombreJuego}}
             </option>
           </select>
         </mat-form-field>
       </div>
 
-    </div>
 
-    <div  *ngIf="modoAsignacionId == 3" style="margin-top: 10px;"  align="center">
-      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadorJuegoPuntos()"  [disabled]="botonAsignarPuntosDesactivado">Asignar Ganadores<i class="material-icons">emoji_events </i></button>
-      <!-- <button style= "width: 100%"  type="button"class="btn Aceptar" (click) = AsignarAleatorio()>Aleatoriamente</button> -->
-    </div>
-
-    <!-- <div  *ngIf="modoAsignacionId == 1" style="margin-top: 10px; margin-right: 10px;">
-      <button style= "width: 100%" type="button"class="btn Aceptar" [disabled]="botonAsignarManualDesactivado">Manualmente</button>
-    </div> -->
-
-    <div  *ngIf="modoAsignacionId == 2" style="margin-top: 10px;"  align="center">
-      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click) = AsignarAleatoriamente()  [disabled]="botonAsignarAleatorioDesactivado">Asignar Ganadores<i class="material-icons">emoji_events </i></button>
-      <!-- <button style= "width: 100%"  type="button"class="btn Aceptar" (click) = AsignarAleatorio()>Aleatoriamente</button> -->
-    </div>
-
-
-      <div class="contenedor">
-        <ng-template  #Aviso_tiene_ganadores><div class="texto">Esta jornada ya tiene ganadores asignados.</div></ng-template>
+      <!-- El boton de asignar mediante juego de puntos hay que visualizarlo si se a elegido esa opción y ya se ha elegido el juego de puntos -->
+      <div  *ngIf="modoAsignacionId == 3 && juegodePuntosSeleccionadoID !== undefined " style="margin-top: 10px;"  align="center">
+      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadoresJuegoPuntos()"  [disabled]="botonAsignarPuntosDesactivado">Asignar Ganadores<i class="material-icons">emoji_events </i></button>
       </div>
 
-    <!-- ///////////////////////////////////// ALEATORIAMENTE ////////////////////////////////////// -->
-    <table style="width: 80%" align="center" *ngIf="modoAsignacionId == 2 && jornadaId != undefined" mat-table [dataSource]="dataSourceClasificacionJornada" class="mat-elevation-z8">
+      <!-- boton para asignar de forma aleatoria -->
+      <div  *ngIf="modoAsignacionId == 2" style="margin-top: 10px;"  align="center">
+      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click) = AsignarGanadoresAleatoriamente()  [disabled]="botonAsignarAleatorioDesactivado">Asignar Ganadores<i class="material-icons">emoji_events </i></button>
+      </div>
+      </div>
+    </div>
+
+
+    <!-- Mensaje en caso de que la jornada ya se haya disputado -->
+    <div style="width: 100%" *ngIf= "Disputada (jornadaId)">
+      <p class="subtitulo" align="center">Esta jornada ya se ha disputado</p>
+      <p class="subtitulo" align="center">Resultados de esta jornada</p>
+    </div>
+    <!-- Tabla para mostrar los resultados de la jornada, si ya se ha disputado o si la asignación es aleatoria o por juego de puntos (si es manual
+    no queremos que salga la tabla aun, porque tienen que salir las opciones para elegir ganadores de forma manual) -->
+    <!-- Hay una tabla para cada modo (Individual o Equipo) porque las columnas son diferentes -->
+    <table style="width: 80%" align="center" *ngIf= "(juegoSeleccionado.Modo == 'Individual') && (Disputada (jornadaId) || !Disputada(jornadaId) && (modoAsignacionId != 1))" mat-table [dataSource]="dataSourceJornada" class="mat-elevation-z8">
       <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
 
-        <form *ngIf="jornadaTieneGanadores === false; else Aviso_tiene_ganadores"></form>
 
         <!-- Posición Column -->
-        <ng-container matColumnDef="posicion">
-          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Posición Global</th>
-          <td mat-cell *matCellDef="let participante"> {{participante.posicion}} </td>
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Nombre</th>
+          <td mat-cell *matCellDef="let participante"> {{participante.nombre}} </td>
         </ng-container>
 
         <!-- Nombre Alumno Column -->
-        <ng-container matColumnDef="participante">
-          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 60%"  align="center">Nombre</th>
-          <td mat-cell *matCellDef="let participante"> {{participante.participante}} </td>
+        <ng-container matColumnDef="primer">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Primer Apellido</th>
+          <td mat-cell *matCellDef="let participante"> {{participante.primerApellido}} </td>
         </ng-container>
-        <!-- <ng-container matColumnDef="participante">
-          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 600%"  align="center">Nombre</th>
-          <td mat-cell *matCellDef="let participante">
-            <div  *ngIf="HaPuntuado(participante) === true && participantePuntua"
-                  style = "color:green;font-weight: bold; font-size: 150%;">{{participante.posicion}}
-            </div>
-            <div  *ngIf="participantePuntua === undefined && HaPuntuado(participante) === false"
-                  style = "color:black">{{participante.participante}}
-            </div>
-          </td>
-        </ng-container> -->
-
-        <!-- Puntos Column -->
-        <ng-container matColumnDef="puntos">
-            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Puntos en la Jornada</th>
-            <td mat-cell *matCellDef="let participante"> {{participante.puntos}} </td>
+         <!-- Nombre Alumno Column -->
+         <ng-container matColumnDef="segundo">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Segundo Apellido</th>
+          <td mat-cell *matCellDef="let participante"> {{participante.segundoApellido}} </td>
         </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    </table>
-
-    <!-- ///////////////////////////////////// Juego de Puntos ////////////////////////////////////// -->
-    <table style="width: 80%" align="center" *ngIf="modoAsignacionId == 3 && jornadaId != undefined" mat-table [dataSource]="dataSourceClasificacionJornada" class="mat-elevation-z8">
-      <!--- Note that these columns can be defined in any order.
-              The actual rendered columns are set as a property on the row definition" -->
-
-        <form *ngIf="jornadaTieneGanadores === false; else Aviso_tiene_ganadores"></form>
-
-        <!-- Posición Column -->
-        <ng-container matColumnDef="posicion">
-          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Posición Global</th>
-          <td mat-cell *matCellDef="let participante"> {{participante.posicion}} </td>
-        </ng-container>
-
-        <!-- Nombre Alumno Column -->
-        <ng-container matColumnDef="participante">
-          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 60%"  align="center">Nombre</th>
-          <td mat-cell *matCellDef="let participante"> {{participante.participante}} </td>
-        </ng-container>
-
-        <!-- Nombre Alumno Column -->
-        <!-- <ng-container matColumnDef="participante">
-          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 60%"  align="center">Nombre</th>
-          <td mat-cell *matCellDef="let participante">
-            <div  *ngIf="HaPuntuado(participante) === true && participantePuntua"
-                  style = "color:green;font-weight: bold; font-size: 150%;">{{participante.posicion}}
-            </div>
-            <div  *ngIf="participantePuntua === undefined && HaPuntuado(participante) === false"
-                  style = "color:black">{{participante.participante}}
-            </div>
-          </td>
-        </ng-container> -->
 
 
         <!-- Puntos Column -->
@@ -142,25 +99,39 @@
             <td mat-cell *matCellDef="let participante"> {{participante.puntos}} </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-header-row *matHeaderRowDef="columnasJornadaAlumnos; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnasJornadaAlumnos;"></tr>
 
     </table>
+
+    <table style="width: 80%" align="center" *ngIf= "(juegoSeleccionado.Modo !== 'Individual') && (Disputada (jornadaId) || !Disputada(jornadaId) && (modoAsignacionId != 1))" mat-table [dataSource]="dataSourceJornada" class="mat-elevation-z8">
+      <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+
+        <!-- Posición Column -->
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Nombre</th>
+          <td mat-cell *matCellDef="let participante"> {{participante.nombre}} </td>
+        </ng-container>
+
+
+        <!-- Puntos Column -->
+        <ng-container matColumnDef="puntos">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Puntos en la Jornada</th>
+            <td mat-cell *matCellDef="let participante"> {{participante.puntos}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnasJornadaEquipos; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnasJornadaEquipos;"></tr>
+
+    </table>
+
+
+
 
     <!-- ///////////////////////////////////// MANUALMENTE ////////////////////////////////////// -->
-    <mat-tab-group  style="width: 80%" align="center"  *ngIf="modoAsignacionId == 1 && jornadaId != undefined">
-      <!-- <mat-tab label="Introducir participantes que puntúan uno a uno">
-        <div class = "enFila">
-          <div>
-            <mat-card style = 'width: 100%' class="panel">
-              <mat-card-header>
-                <mat-card-title>Nuevo Alumno</mat-card-title>
-                <mat-card-subtitle style = "color:white">Introduce los datos del nuevo alumno</mat-card-subtitle>
-              </mat-card-header>
-            </mat-card>
-          </div>
-        </div>
-      </mat-tab> -->
+    <mat-tab-group  style="width: 80%" align="center"  *ngIf="!Disputada (jornadaId) && modoAsignacionId == 1" (selectedTabChange)="cambioTab($event)">
 
       <mat-tab label="Introducir participantes que puntúan de forma masiva">
         <div class = "enFila">
@@ -172,8 +143,8 @@
 
               <mat-card-content>
                 <div class="form-group">
-                  <label  *ngIf="juegoSeleccionado.Modo === 'Individual'" for="inputNombres">Pega/escribe aquí, linea a linea, nombre y apellidos, como mínimo de los participantes que puntúan que son {{juegoSeleccionado.NumeroParticipantesPuntuan}} (como en el ejemplo)</label>
-                  <label *ngIf="juegoSeleccionado.Modo !== 'Individual'" for="inputNombres">Pega/escribe aquí, linea a linea, el nombre de cada equipo, como mínimo de los equipos que puntúan que son {{juegoSeleccionado.NumeroParticipantesPuntuan}} (como en el ejemplo)</label>
+                  <label  *ngIf="juegoSeleccionado.Modo === 'Individual'" for="inputNombres">Pega/escribe aquí, linea a linea, nombre y dos apellidos (separados por blancos) de los {{juegoSeleccionado.NumeroParticipantesPuntuan}} alumnos que puntúan (como en el ejemplo), de mayor puntuación a menor (como en el ejemplo)</label>
+                  <label *ngIf="juegoSeleccionado.Modo !== 'Individual'" for="inputNombres">Pega/escribe aquí, linea a linea, el nombre de los {{juegoSeleccionado.NumeroParticipantesPuntuan}} equipos que puntúan (como en el ejemplo), de mayor puntuación a menor</label>
                   <textarea *ngIf="juegoSeleccionado.Modo === 'Individual'" rows="5" autofocus (keyup)="DisabledTexto()" matInput class="form-control" placeholder=
                             "Àngels Català Sebastià
 Alejandro Gimeno Marés"
@@ -192,11 +163,189 @@ Los Elefantes"
           </div>
         </div>
       </mat-tab>
+
+      <mat-tab label="Seleccionar participantes que puntúan de la lista">
+
+        <!-- Hay un form para cada modo (individual o equipo) porque las columnas de las tablas son diferentes -->
+        <form *ngIf="juegoSeleccionado.Modo == 'Individual'" style="width: 100%">
+          <br>
+          <div class="subtitulo"> Alumnos que han puntuado en esta jornada</div>
+          <br>
+          <mat-divider></mat-divider>
+          <table style="width: 100%; table-layout:fixed;"  mat-table [dataSource]="dataSourceElegidos" class="example-container mat-elevation-z8">
+
+
+
+            <ng-container matColumnDef="posicion">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%" >Posicion</th>
+              <td mat-cell align = 'left' *matCellDef="let participante; index as pos"> {{pos+1}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%" >Nombre</th>
+              <td mat-cell align = 'left' *matCellDef="let participante"> {{participante.nombre}} </td>
+            </ng-container>
+            <ng-container matColumnDef="primer">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%" >Primer Apellido</th>
+              <td mat-cell align = 'left' *matCellDef="let participante"> {{participante.primerApellido}} </td>
+            </ng-container>
+            <ng-container matColumnDef="segundo">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%" >Segundo Apellido</th>
+              <td mat-cell align = 'left' *matCellDef="let participante"> {{participante.segundoApellido}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="quita" stickyEnd>
+                  <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                  <td mat-cell *matCellDef="let participante">
+                      <button (click) = "QuitarGanador(participante)" mat-icon-button matTooltip = "Quitar a {{participante.nombre}} de los ganadores">
+                        <i class="material-icons red md-36">delete</i>
+                      </button>
+
+                  </td>
+            </ng-container>
+
+
+
+            <tr mat-header-row *matHeaderRowDef="columnasAlumnosElegidos; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnasAlumnosElegidos;"></tr>
+
+
+          </table>
+          <br>
+          <div class="subtitulo"> Seleccione los alumnos que puntuan </div>
+          <br>
+
+          <mat-divider></mat-divider>
+
+          <table style="width: 100%; table-layout:fixed;"  mat-table [dataSource]="dataSourceParticipantes" class="example-container mat-elevation-z8">
+
+
+
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%" >Nombre</th>
+              <td mat-cell align = 'left' *matCellDef="let participante"> {{participante.nombre}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="primer">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%" >Primer Apellido</th>
+              <td mat-cell align = 'left' *matCellDef="let participante"> {{participante.primerApellido}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="segundo">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%" >Segundo Apellido</th>
+              <td mat-cell align = 'left' *matCellDef="let participante"> {{participante.segundoApellido}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="pon" stickyEnd>
+                  <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                  <td mat-cell *matCellDef="let participante">
+                      <button (click) = "AgregarGanador(participante)" mat-icon-button matTooltip = "Añadir a {{participante.nombre}} a los ganadores">
+                          <i class="material-icons green md-36">add_circle_outline</i>
+                      </button>
+                  </td>
+            </ng-container>
+
+
+
+            <tr mat-header-row *matHeaderRowDef="columnasAlumnosParticipantes; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnasAlumnosParticipantes;"></tr>
+
+
+          </table>
+
+
+           <mat-dialog-actions align= "center">
+
+              <button   type="button" class="btn Aceptar" (click)="AsignarGanadoresElegidos()" cdkFocusInitial>Asignar Ganadores</button>
+          </mat-dialog-actions>
+        </form>
+
+        <form *ngIf="juegoSeleccionado.Modo != 'Individual'" style="width: 100%">
+          <br>
+          <div class="subtitulo"> Equipos que han puntuado en esta jornada</div>
+          <br>
+          <mat-divider></mat-divider>
+          <table style="width: 100%; table-layout:fixed;"  mat-table [dataSource]="dataSourceElegidos" class="example-container mat-elevation-z8">
+
+            <ng-container matColumnDef="posicion">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%" >Posicion</th>
+              <td mat-cell align = 'left' *matCellDef="let participante; index as pos"> {{pos+1}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 40%" >Nombre</th>
+              <td mat-cell align = 'left' *matCellDef="let participante"> {{participante.nombre}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="quita" stickyEnd>
+                  <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                  <td mat-cell align = 'right' *matCellDef="let participante">
+                      <button (click) = "QuitarGanador(participante)" mat-icon-button matTooltip = "Quitar a {{participante.nombre}} de los ganadores">
+                        <i class="material-icons red md-36">delete</i>
+                      </button>
+
+                  </td>
+            </ng-container>
+
+
+
+            <tr mat-header-row *matHeaderRowDef="columnasEquiposElegidos; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnasEquiposElegidos;"></tr>
+
+
+          </table>
+          <br>
+          <div class="subtitulo"> Seleccione los equipos que puntuan </div>
+          <br>
+
+          <mat-divider></mat-divider>
+
+          <table style="width: 100%; table-layout:fixed;"  mat-table [dataSource]="dataSourceParticipantes" class="example-container mat-elevation-z8">
+
+
+
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 40%" >Nombre</th>
+              <td mat-cell align = 'left' *matCellDef="let participante"> {{participante.nombre}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="pon" stickyEnd>
+                  <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                  <td mat-cell align = 'right' *matCellDef="let participante">
+                      <button (click) = "AgregarGanador(participante)" mat-icon-button matTooltip = "Añadir a {{participante.nombre}} a los ganadores">
+                          <i class="material-icons green md-36">add_circle_outline</i>
+                      </button>
+                  </td>
+            </ng-container>
+
+
+
+            <tr mat-header-row *matHeaderRowDef="columnasEquiposParticipantes; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnasEquiposParticipantes;"></tr>
+
+
+          </table>
+
+
+           <mat-dialog-actions align= "center">
+
+              <button   type="button" class="btn Aceptar" (click)="AsignarGanadoresElegidos()" cdkFocusInitial>Asignar Ganadores</button>
+          </mat-dialog-actions>
+        </form>
+
+      </mat-tab>
     </mat-tab-group>
+
 
     <br>
     <button type="button" class="btn Back" (click)="goBack()">Volver </button>
-  </div>
+
 
 
 </div>
