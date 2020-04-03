@@ -1,0 +1,60 @@
+<div class="titulo">Editar Cuestionario</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class="contenedor">
+  <div class="enColumna">
+    <div class="enColumna">
+      <div class="texto" style=" text-align: left;">
+        <p>
+          <span style="font-weight: bold;">Titulo: </span>
+          <input style="background-color: transparent" type="text" name="nombre" requiered [(ngModel)]="titulo">
+        </p>
+      </div>
+      <div class="texto" style=" text-align: left;">
+        <p>
+            <span  style="font-weight: bold;">Descripción: </span>
+            <input style="background-color: transparent; width: 450px;" type="text" name="descripcion"  requiered [(ngModel)]="descripcion">
+        </p>
+      </div>
+      <button type="button"  class="btn Aceptar" (click)= "ModificarCuestionario()"> Aceptar Cambios <i class="material-icons">
+          check </i>  </button>
+    </div>
+    <div class="enColumna" >
+      <button type="button" style="width: auto;" class="btn Agregar btn-block" (click) = "AbrirDialogoAgregarPreguntas()">  Añadir/Eliminar Preguntas <i class="material-icons">
+        post_add </i></button>
+    </div>
+
+  <form style="width: 70%" *ngIf="preguntasCuestionarioSeleccionado;else Aviso_no_preguntas">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar pregunta...">
+        <i class="material-icons" matSuffix>search</i>
+      </mat-form-field>
+    <table style="width: 100%" align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- Titulo Pregunta Column -->
+      <ng-container matColumnDef="tituloPregunta">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Titulo </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Titulo}} </td>
+      </ng-container>
+
+      <!-- Pregunta Pregunta Column -->
+      <ng-container matColumnDef="preguntaPregunta">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Pregunta </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Pregunta}} </td>
+      </ng-container>
+
+      <!-- Tematica Pregunta Column -->
+      <ng-container matColumnDef="tematicaPregunta">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Tematica </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Tematica}} </td>
+      </ng-container>
+
+      <!-- Aquí indicamos de donde saca los identificadores de las columnas-->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </form>
+  <div class="contenedor">
+      <ng-template  #Aviso_no_preguntas><div class="texto">Todavía no hay preguntas en este cuestionario.</div></ng-template>
+  </div>
+  <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+  </div>
+</div>

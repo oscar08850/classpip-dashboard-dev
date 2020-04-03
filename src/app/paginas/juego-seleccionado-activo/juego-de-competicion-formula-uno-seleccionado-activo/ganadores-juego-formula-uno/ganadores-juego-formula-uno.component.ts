@@ -124,6 +124,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         return obj2.PuntosTotalesEquipo - obj1.PuntosTotalesEquipo;
       });
     });
+
   }
 
   Disputada(jornadaId): boolean {
@@ -218,7 +219,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     const ganadores: any[] = [];
     const participantes: any[] = [];
     // Preparo la lista de participantes de la que iré eligiendo aleatoriamente
-    if (this.juegoSeleccionado.Modo == 'Individual') {
+    if (this.juegoSeleccionado.Modo === 'Individual') {
       this.listaAlumnosClasificacion.forEach(alumno => participantes.push(alumno));
     } else {
       this.listaEquiposClasificacion.forEach(equipo => participantes.push(equipo));
@@ -317,9 +318,6 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   }
 
 
-
-  // Ejecuto esta opción cuando llego al tab para asignar ganadores de forma manual seleccionado de la lista de participantes
-
   cambioTab(tabChangeEvent) {
     if (tabChangeEvent.index === 1) {
       // preparamos las tablas para elegir a los ganadores de la lista de participantes
@@ -338,6 +336,9 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         this.equiposParticipantes.sort((a, b) => a.nombre.localeCompare(b.nombre));
         this.dataSourceParticipantes = new MatTableDataSource (this.equiposParticipantes);
       }
+    } else {
+      console.log('Este juego ya tiene ganadores asignados');
+      Swal.fire('Esta jornada ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
     }
   }
 
@@ -346,13 +347,14 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     if (this.ganadoresElegidos.length === this.juegoSeleccionado.NumeroParticipantesPuntuan) {
       Swal.fire('Cuidado', 'Ya has asignado a todos los participantes que puntuan', 'warning');
     } else {
+
       this.ganadoresElegidos.push (participante);
       this.dataSourceElegidos = new MatTableDataSource (this.ganadoresElegidos);
       if (this.juegoSeleccionado.Modo === 'Individual') {
         // tslint:disable-next-line:max-line-length
         this.alumnosParticipantes = this.alumnosParticipantes.filter(alumno => alumno.id !== participante.id);
         this.dataSourceParticipantes = new MatTableDataSource (this.alumnosParticipantes);
-      } else {
+       } else {
          // tslint:disable-next-line:max-line-length
         this.equiposParticipantes = this.equiposParticipantes.filter(equipo => equipo.id !== participante.id);
         this.dataSourceParticipantes = new MatTableDataSource (this.equiposParticipantes);
@@ -399,6 +401,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       this.asignados = true;
     }
   }
+
   goBack() {
     if (!this.asignados && !this.Disputada(this.jornadaId)) {
       Swal.fire({
