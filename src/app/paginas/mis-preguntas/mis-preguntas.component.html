@@ -1,0 +1,63 @@
+<div class="titulo">Mis Preguntas</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class ='enColumna'>
+  <form style='width: 80%' *ngIf="misPreguntas;else Aviso_no_preguntas">
+  
+    <div class = "filter">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar pregunta...">
+        <i class="material-icons" matSuffix>search</i>
+      </mat-form-field>
+    </div>
+    <table align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  
+      <!-- Titulo Column -->
+      <ng-container matColumnDef="titulo">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Titulo </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Titulo}} </td>
+  
+      </ng-container>
+  
+      <!-- Pregunta Column -->
+      <ng-container matColumnDef="pregunta">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Pregunta </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Pregunta}} </td>
+  
+      </ng-container>
+  
+      <!-- Tematica Column -->
+      <ng-container matColumnDef="tematica">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Tematica </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Tematica}} </td>
+  
+      </ng-container>
+  
+      <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+        <td mat-cell *matCellDef="let pregunta">
+          <button (click) = "AbrirDialogoEditarPregunta (pregunta)" mat-icon-button matTooltip="Editar la pregunta {{pregunta.Pregunta}}">
+            <i class="material-icons green md-36">edit</i>
+          </button>
+        </td>
+    </ng-container>
+  
+      <ng-container matColumnDef=" ">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+          <td mat-cell *matCellDef="let pregunta">
+            <button (click) = "AbrirDialogoConfirmacionEliminarPregunta (pregunta)" mat-icon-button matTooltip="Eliminar la pregunta {{pregunta.Pregunta}}">
+              <i class="material-icons red md-36">delete</i>
+            </button>
+          </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </form>
+  
+  <div class="contenedor">
+      <ng-template  #Aviso_no_preguntas><div class="texto">No tienes preguntas</div></ng-template>
+  </div>  
+</div>
+  
+  
