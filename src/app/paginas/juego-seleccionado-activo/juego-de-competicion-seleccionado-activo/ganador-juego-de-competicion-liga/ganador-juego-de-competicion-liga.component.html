@@ -51,15 +51,15 @@
 
     <div *ngIf = "jornadaId != undefined && !Disputada (jornadaId)">
     <div  *ngIf="modoAsignacionId == 3" style="margin-top: 10px; margin-right: 10px;">
-      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadorJuegoPuntos()"  [disabled]="botonAsignarJuegoDesactivado">Asignar Ganadores<i class="material-icons">emoji_events </i></button>
+      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadorJuegoPuntos()"  [disabled]="botonAsignarJuegoDesactivado">Asignar ganadores mediante juego de puntos<i class="material-icons">emoji_events </i></button>
     </div>
 
     <div  *ngIf="modoAsignacionId == 1" style="margin-top: 10px; margin-right: 10px;">
-      <button style= "width: 100%" type="button"class="btn Aceptar" (click)= "AsignarGanadorManualmente()" [disabled]="botonAsignarManualDesactivado">Asignar Ganadores<i class="material-icons">emoji_events </i></button>
+      <button style= "width: 100%" type="button"class="btn Aceptar" (click)= "AsignarGanadorManualmente()" [disabled]="botonAsignarManualDesactivado">Asignar ganadores manualmente<i class="material-icons">emoji_events </i></button>
     </div>
 
     <div  *ngIf="modoAsignacionId == 2" style="margin-top: 10px; margin-right: 10px;">
-      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadorAleatoriamente()"  [disabled]="botonAsignarAleatorioDesactivado">Asignar Ganadores<i class="material-icons">emoji_events </i></button>
+      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadorAleatoriamente()"  [disabled]="botonAsignarAleatorioDesactivado">Asignar ganadores aleatoriamente<i class="material-icons">emoji_events </i></button>
     </div>
 
     <br>

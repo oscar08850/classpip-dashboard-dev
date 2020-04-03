@@ -12,6 +12,7 @@ import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { calcPossibleSecurityContexts } from '@angular/compiler/src/template_parser/binding_parser';
 
 import Swal from 'sweetalert2';
+import { isNullOrUndefined } from 'util';
 
 
 @Injectable({
@@ -1123,18 +1124,15 @@ export class CalculosService {
 
           }
         }
-        if (tieneGanadores === true) {
-          Swal.fire('Esta jornada ya tiene ganadores', '', 'error');
-        } else {
-          Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
-        }
+        // if (tieneGanadores === true) {
+        //   Swal.fire('Esta jornada ya tiene ganadores', '', 'error');
+        // } else {
+        //   Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
+        // }
 
         // Mensaje sweetalert
         console.log('indexEnfrentamientosConResultadosPreviamente');
         console.log(indexEnfrentamientosConResultadosPreviamente);
-        // no sé como hacer para devolver Mensaje
-        const Mensaje = this.MensajeSweetalert(juego, enfrentamientosJornadaSeleccionada, resultados,
-                                               indexEnfrentamientosConResultadosPreviamente);
       } else {
         console.log('Se ha producido algún error: resultados.length !== enfrentamientosJornadaSeleccionada.length');
       }
@@ -1420,113 +1418,149 @@ export class CalculosService {
       }
     }
   }
+  public DameIdAlumnos(lineas: string[], listaAlumnosClasificacion: any[]): any [] {
+    const ganadores: any [] = [];
 
-  public GanadoresMasivamenteNombre(lineas: string[], juegoSeleccionado: Juego) {
-    let nombresClasificacion: string[] = [];
-    let encontrado = false; // Detecta problema de línia en blanco y repetición de nombre
-    let i = 0;
-    while (i < lineas.length && encontrado === false) {
-      const nombreClasificacion = lineas[i];
-      const indexOfUnselected = nombresClasificacion.indexOf(nombreClasificacion);
-      if (indexOfUnselected === -1 && nombreClasificacion !== '') {
-        nombresClasificacion.push(nombreClasificacion);
-      } else if (nombreClasificacion === '' && lineas.length === juegoSeleccionado.NumeroParticipantesPuntuan ||
-                 nombreClasificacion === '' && i < juegoSeleccionado.NumeroParticipantesPuntuan ) {
-        encontrado = true;
-        nombresClasificacion = [];
-        Swal.fire('Alguna de las líneas introducidas está en blanco', ' No se ha podido realizar esta acción', 'error');
-      } else if (nombreClasificacion === '' && (i + 1) > juegoSeleccionado.NumeroParticipantesPuntuan) {
-        console.log('linea: ' + (i + 1));
-        // Si el espacio en blanco no está en una posición que puntúa no me importa porque antes de salir de la función irá fuera
-        console.log('Hay líneas en blanco pero no en la posición de ganador. Este caso no me afecta');
-      } else if (indexOfUnselected !== -1 && nombreClasificacion !== '') {
-        encontrado = true;
-        nombresClasificacion = [];
-        console.log(i);
-        console.log('Alguno de los participantes introducidos está repetido');
-        Swal.fire('Alguno de los participantes introducidos está repetido', ' No se ha podido realizar esta acción', 'error');
-      } else {
-        encontrado = true;
-        Swal.fire('se ha producido algún error', ' No se ha podido realizar esta acción', 'error');
-
-      }
-      i++;
-    }
-    const participantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
-    if (nombresClasificacion.length > participantesPuntuan) {
-      let k = nombresClasificacion.length;
-      while (k > participantesPuntuan) {
-        nombresClasificacion.pop();
-        k = k - 1;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < lineas.length; i++) {
+      // Busco a cada uno de los ganadores (uno por linea de texto) y si esta guardo su id
+      // tslint:disable-next-line:max-line-length
+      const ganador = listaAlumnosClasificacion.filter (alumno => lineas[i] === alumno.nombre + ' ' + alumno.primerApellido + ' ' + alumno.segundoApellido)[0];
+      if (ganador !== undefined) {
+        ganadores.push (ganador.id);
       }
     }
-    console.log('nombresClasificacion:');
-    console.log(nombresClasificacion);
-    return nombresClasificacion;
+    if (ganadores.length === lineas.length) {
+      return ganadores;
+    } else { // alguno de los ganadores no se ha encontrado
+      return undefined;
+    }
   }
 
-  public GanadoresMasivamenteId(ganadoresNombre: string[], listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[],
-                                listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[], juegoSeleccionado: Juego) {
-    console.log('listaAlumnosClasificacion');
-    console.log(listaAlumnosClasificacion);
-    console.log('listaEquiposClasificacion');
-    console.log(listaEquiposClasificacion);
-    const numeroParticipantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
-    let participantesPuntuan: number[] = [];
-    if (juegoSeleccionado.Modo === 'Individual') {
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < ganadoresNombre.length; i++) {
-        let encontrado = false;
-        // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < listaAlumnosClasificacion.length; j++) {
-          if (ganadoresNombre[i] === listaAlumnosClasificacion[j].nombre + ' '
-                                     + listaAlumnosClasificacion[j].primerApellido + ' '
-                                     + listaAlumnosClasificacion[j].segundoApellido) {
-            encontrado = true;
-            console.log(ganadoresNombre[i] + '===' + listaAlumnosClasificacion[j].nombre + ' '
-                                                   + listaAlumnosClasificacion[j].primerApellido + ' '
-                                                   + listaAlumnosClasificacion[j].segundoApellido);
-            if (participantesPuntuan.length < numeroParticipantesPuntuan) {
-              participantesPuntuan.push(listaAlumnosClasificacion[j].id);
-            }
-          }
-        }
-        if (encontrado === false) {
-          console.log('participantesPuntuan.length: ' + participantesPuntuan.length);
-          console.log('Alguno de los nombres introducidos no se corresponde con ninguno de los alumnos del grupo');
-          console.log(participantesPuntuan);
-          // tslint:disable-next-line:max-line-length
-          Swal.fire('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo', ' No se ha podido realizar esta acción', 'error');
-          participantesPuntuan = [];
-        }
+  public DameIdEquipos(lineas: string[], listaEquiposClasificacion: any[]): any [] {
+    const ganadores: any [] = [];
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < lineas.length; i++) {
+      // Busco a cada uno de los ganadores (uno por linea de texto) y si esta guardo su id
+      // tslint:disable-next-line:max-line-length
+      const ganador = listaEquiposClasificacion.filter (equipo => lineas[i] === equipo.nombre)[0];
+      if (ganador !== undefined) {
+        ganadores.push (ganador.id);
       }
-      console.log(participantesPuntuan);
-    } else {
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < ganadoresNombre.length; i++) {
-          let encontrado = false;
-          // tslint:disable-next-line:prefer-for-of
-          for (let j = 0; j < listaEquiposClasificacion.length; j++) {
-            if (ganadoresNombre[i] === listaEquiposClasificacion[j].nombre) {
-              encontrado = true;
-              if (participantesPuntuan.length < numeroParticipantesPuntuan) {
-                participantesPuntuan.push(listaEquiposClasificacion[j].id);
-              }
-            }
-          }
-          if (encontrado === false) {
-            console.log('participantesPuntuan.length = ' + participantesPuntuan.length);
-            console.log('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo');
-            // tslint:disable-next-line:max-line-length
-            Swal.fire('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo', ' No se ha podido realizar esta acción', 'error');
-            participantesPuntuan = [];
-          }
-        }
-        console.log(participantesPuntuan);
     }
-    return participantesPuntuan;
+    if (ganadores.length === lineas.length) {
+      return ganadores;
+    } else { // alguno de los ganadores no se ha encontrado
+      return undefined;
+    }
   }
-  // ----------------------------------------------------------------------------- //
+  // public GanadoresMasivamenteNombre(lineas: string[], juegoSeleccionado: Juego) {
+  //   let nombresClasificacion: string[] = [];
+  //   let encontrado = false; // Detecta problema de línia en blanco y repetición de nombre
+  //   let i = 0;
+  //   while (i < lineas.length && encontrado === false) {
+  //     const nombreClasificacion = lineas[i];
+  //     const indexOfUnselected = nombresClasificacion.indexOf(nombreClasificacion);
+  //     if (indexOfUnselected === -1 && nombreClasificacion !== '') {
+  //       nombresClasificacion.push(nombreClasificacion);
+  //     } else if (nombreClasificacion === '' && lineas.length === juegoSeleccionado.NumeroParticipantesPuntuan ||
+  //                nombreClasificacion === '' && i < juegoSeleccionado.NumeroParticipantesPuntuan ) {
+  //       encontrado = true;
+  //       nombresClasificacion = [];
+  //       Swal.fire('Alguna de las líneas introducidas está en blanco', ' No se ha podido realizar esta acción', 'error');
+  //     } else if (nombreClasificacion === '' && (i + 1) > juegoSeleccionado.NumeroParticipantesPuntuan) {
+  //       console.log('linea: ' + (i + 1));
+  //       // Si el espacio en blanco no está en una posición que puntúa no me importa porque antes de salir de la función irá fuera
+  //       console.log('Hay líneas en blanco pero no en la posición de ganador. Este caso no me afecta');
+  //     } else if (indexOfUnselected !== -1 && nombreClasificacion !== '') {
+  //       encontrado = true;
+  //       nombresClasificacion = [];
+  //       console.log(i);
+  //       console.log('Alguno de los participantes introducidos está repetido');
+  //       Swal.fire('Alguno de los participantes introducidos está repetido', ' No se ha podido realizar esta acción', 'error');
+  //     } else {
+  //       encontrado = true;
+  //       Swal.fire('se ha producido algún error', ' No se ha podido realizar esta acción', 'error');
+
+  //     }
+  //     i++;
+  //   }
+  //   const participantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
+  //   if (nombresClasificacion.length > participantesPuntuan) {
+  //     let k = nombresClasificacion.length;
+  //     while (k > participantesPuntuan) {
+  //       nombresClasificacion.pop();
+  //       k = k - 1;
+  //     }
+  //   }
+  //   console.log('nombresClasificacion:');
+  //   console.log(nombresClasificacion);
+  //   return nombresClasificacion;
+  // }
+
+  // public GanadoresMasivamenteId(ganadoresNombre: string[], listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[],
+  //                               listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[], juegoSeleccionado: Juego) {
+  //   console.log('listaAlumnosClasificacion');
+  //   console.log(listaAlumnosClasificacion);
+  //   console.log('listaEquiposClasificacion');
+  //   console.log(listaEquiposClasificacion);
+  //   const numeroParticipantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
+  //   let participantesPuntuan: number[] = [];
+  //   if (juegoSeleccionado.Modo === 'Individual') {
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for (let i = 0; i < ganadoresNombre.length; i++) {
+  //       let encontrado = false;
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let j = 0; j < listaAlumnosClasificacion.length; j++) {
+  //         if (ganadoresNombre[i] === listaAlumnosClasificacion[j].nombre + ' '
+  //                                    + listaAlumnosClasificacion[j].primerApellido + ' '
+  //                                    + listaAlumnosClasificacion[j].segundoApellido) {
+  //           encontrado = true;
+  //           console.log(ganadoresNombre[i] + '===' + listaAlumnosClasificacion[j].nombre + ' '
+  //                                                  + listaAlumnosClasificacion[j].primerApellido + ' '
+  //                                                  + listaAlumnosClasificacion[j].segundoApellido);
+  //           if (participantesPuntuan.length < numeroParticipantesPuntuan) {
+  //             participantesPuntuan.push(listaAlumnosClasificacion[j].id);
+  //           }
+  //         }
+  //       }
+  //       if (encontrado === false) {
+  //         console.log('participantesPuntuan.length: ' + participantesPuntuan.length);
+  //         console.log('Alguno de los nombres introducidos no se corresponde con ninguno de los alumnos del grupo');
+  //         console.log(participantesPuntuan);
+  //         // tslint:disable-next-line:max-line-length
+  //         Swal.fire('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo', ' No se ha podido realizar esta acción', 'error');
+  //         participantesPuntuan = [];
+  //       }
+  //     }
+  //     console.log(participantesPuntuan);
+  //   } else {
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let i = 0; i < ganadoresNombre.length; i++) {
+  //         let encontrado = false;
+  //         // tslint:disable-next-line:prefer-for-of
+  //         for (let j = 0; j < listaEquiposClasificacion.length; j++) {
+  //           if (ganadoresNombre[i] === listaEquiposClasificacion[j].nombre) {
+  //             encontrado = true;
+  //             if (participantesPuntuan.length < numeroParticipantesPuntuan) {
+  //               participantesPuntuan.push(listaEquiposClasificacion[j].id);
+  //             }
+  //           }
+  //         }
+  //         if (encontrado === false) {
+  //           console.log('participantesPuntuan.length = ' + participantesPuntuan.length);
+  //           console.log('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo');
+  //           // tslint:disable-next-line:max-line-length
+  //           Swal.fire('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo', ' No se ha podido realizar esta acción', 'error');
+  //           participantesPuntuan = [];
+  //         }
+  //       }
+  //       console.log(participantesPuntuan);
+  //   }
+  //   return participantesPuntuan;
+  // }
+  // // ----------------------------------------------------------------------------- //
 
 
   public PrepararTablaRankingIndividualFormulaUno(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionFormulaUno[],

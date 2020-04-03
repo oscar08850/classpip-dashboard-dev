@@ -92,6 +92,8 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   // displayedColumnsAlumno: string[] = ['select1', 'nombreJugadorUno', 'select2', 'nombreJugadorDos', 'select3', 'Empate'];
   displayedColumnsAlumno: string[] = ['select1', 'nombreJugadorUno', 'select2', 'nombreJugadorDos', 'select3', 'Empate'];
 
+  asignados: boolean;
+
   constructor( public sesion: SesionService,
                public location: Location,
                public calculos: CalculosService,
@@ -109,6 +111,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     this.juegosActivosPuntos = this.sesion.DameJuegosDePuntosActivos();
     // Me quedo solo con los juegos de puntos que tengan el mismo (individual o equipo) modo que la competición
     this.juegosActivosPuntosModo = this.juegosActivosPuntos.filter (juego => juego.Modo === this.juegoSeleccionado.Modo);
+    this.asignados = false;
   }
 
   ////////////////// FUNCIONES PARA OBTENER LOS DATOS NECESARIOS //////////////////////////
@@ -354,7 +357,8 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
     if (!error) {
       this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
-      // Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
+      Swal.fire('Resutados asignados manualmente');
+      this.asignados = true;
     }
 
   }
@@ -392,7 +396,8 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
 
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
-    // Swal.fire('Resutados aleatorios asignados', 'Enhorabuena', 'success');
+    Swal.fire('Resutados aleatorios asignados');
+    this.asignados = true;
 
   }
 
@@ -409,10 +414,19 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
         // Saco al jugador uno de la lista de participantes del juego de puntos
         // tslint:disable-next-line:max-line-length
-        const JugadorUno = this.listaAlumnosOrdenadaPorPuntos.filter (a => a.alumnoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno)[0];
-        // tslint:disable-next-line:max-line-length
-        const JugadorDos = this.listaAlumnosOrdenadaPorPuntos.filter (a => a.alumnoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos)[0];
+        console.log ('Clasificacion juego');
+        console.log (this.listaAlumnosOrdenadaPorPuntos);
+        console.log ('Enfrentamiento ');
+        console.log (this.EnfrentamientosJornadaSeleccionada[i]);
 
+        // tslint:disable-next-line:max-line-length
+        const JugadorUno = this.listaAlumnosOrdenadaPorPuntos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno))[0];
+        // tslint:disable-next-line:max-line-length
+        const JugadorDos = this.listaAlumnosOrdenadaPorPuntos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos))[0];
+        console.log ('uno');
+        console.log (JugadorUno);
+        console.log ('dos');
+        console.log (JugadorDos);
         if (JugadorUno.PuntosTotalesAlumno > JugadorDos.PuntosTotalesAlumno) {
           resultados.push (1);
           this.selectionUno.select(this.dataSourceTablaGanadorIndividual.data[i]);
@@ -456,12 +470,30 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
     // Swal.fire('Resutados asignados', 'Enhorabuena', 'success');
+    Swal.fire('Resutados asignados mediante juego de puntos');
+    this.asignados = true;
   }
 
 
 
   goBack() {
-    this.location.back();
+    if (!this.asignados && !this.Disputada(this.jornadaId)) {
+      Swal.fire({
+        title: '¿Estas seguro?',
+        text: 'No has realizado la asignación',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, estoy seguro'
+      }).then((result) => {
+        if (result.value) {
+          this.location.back();
+        }
+      });
+    } else {
+      this.location.back();
+    }
   }
 
    ///////////////////////////////////////////////////  MEDIANTE JUEGO DE PUNTOS  /////////////////////////////////////////////////////////
