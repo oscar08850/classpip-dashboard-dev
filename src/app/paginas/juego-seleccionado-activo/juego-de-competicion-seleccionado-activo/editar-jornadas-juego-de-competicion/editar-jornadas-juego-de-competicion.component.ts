@@ -11,8 +11,11 @@ import { Alumno, Juego, Jornada, TablaJornadas, AlumnoJuegoDeCompeticionLiga, Ta
 // Servicio
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../../servicios/index';
 
-// Imports para abrir diálogo
-import { MatDialog } from '@angular/material';
+
+// Imports para abrir diálogo y snackbar
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { from } from 'rxjs';
+
 
 
 @Component({
@@ -39,11 +42,10 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
   JornadaSeleccionadaId: number;
   seleccionados: boolean[];
   JornadasCompeticion: TablaJornadas[] = [];
+  NuevaFecha: Date;
 
   displayedColumnsJornada: string[] = ['select', 'NumeroDeJornada', 'Fecha', 'CriterioGanador'];
 
-
-  startDate = new Date(2000, 0, 2);
 
   constructor(    public sesion: SesionService,
                   public location: Location,
@@ -56,6 +58,10 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
     const datos = this.sesion.DameDatosJornadas();
     this.jornadas = datos.jornadas;
     this.JornadasCompeticion = datos.JornadasCompeticion;
+    // console.log ('this.JornadasCompeticion[1].Fecha');
+    // console.log (this.JornadasCompeticion[0].Fecha);
+    // console.log (this.JornadasCompeticion[1].Fecha);
+    // console.log (this.JornadasCompeticion[2].Fecha);
     this.juegoSeleccionado = this.sesion.DameJuego();
     console.log ('juego seleccionado ' + this.juegoSeleccionado.Modo);
     console.log('Jornadas: ');
@@ -107,28 +113,44 @@ export class EditarJornadasJuegoDeCompeticionComponent implements OnInit {
     }
   }
 
+  onChangeEvent(e): void {
 
+    console.log('Nueva fecha seleccionada :' + e.target.value);
+
+    this.NuevaFecha = e.target.value;
+
+    let NuevoCriterio: string;
+    NuevoCriterio = this.myForm.value.CriterioGanador;
+    console.log(this.selection.selected.length);
+    console.log(this.NuevaFecha);
+    console.log(NuevoCriterio);
+    if ((this.selection.selected.length === 0) || ( this.NuevaFecha === undefined) || ( NuevoCriterio === undefined)) {
+      this.botonTablaDesactivado = true;
+    } else {
+      this.botonTablaDesactivado = false;
+    }
+  }
 
   EditarJornada() {
     // Tengo que hacer un recorrido diferente del dataSource porque necesito saber el
     // valor de i
 
-    let NuevaFecha: Date;
-    NuevaFecha = this.myForm.value.picker;
+
     let NuevoCriterio: string;
     NuevoCriterio = this.myForm.value.CriterioGanador;
-    console.log('Voy a asignar 1 ' + NuevaFecha + NuevoCriterio);
+    console.log('Voy a asignar Fecha ' + this.NuevaFecha );
+    console.log('Voy a asignar criterio ' + NuevoCriterio);
     for ( let i = 0; i < this.dataSource.data.length; i++) {
-      console.log ('Vuelta ' + i);
+      console.log ('Vuelta para guardar, check jornada ' + i + 1);
 
 
       // Buscamos los alumnos que hemos seleccionado
       if (this.selection.isSelected(this.dataSource.data[i]))  {
-        console.log('Voy a asignar 2 ' + NuevaFecha + NuevoCriterio);
+        console.log('Voy a asignar 2 ' + this.NuevaFecha + NuevoCriterio);
         console.log(this.jornadas[i]);
-        console.log(NuevaFecha, NuevoCriterio, this.jornadas[i].id);
+        console.log(this.NuevaFecha, NuevoCriterio, this.jornadas[i].id);
         this.IDJornada = this.jornadas[i].id;
-        this.jornadas[i] = new Jornada (NuevaFecha, NuevoCriterio, this.jornadas[i].JuegoDeCompeticionLigaId);
+        this.jornadas[i] = new Jornada (this.NuevaFecha, NuevoCriterio, this.jornadas[i].JuegoDeCompeticionLigaId);
         console.log('Nueva Jornada ' + this.IDJornada);
         console.log(this.jornadas[i]);
         this.peticionesAPI.ModificarJornada (this.jornadas[i], this.IDJornada)

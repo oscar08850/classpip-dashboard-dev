@@ -8,8 +8,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         Equipo, AsignacionEquipo, AsignacionPuntosJuego, EquipoJuegoDePuntos, Coleccion,
         AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Cromo, HistorialPuntosAlumno, HistorialPuntosEquipo,
         Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
-        Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario, Cuestionario} from '../clases/index';
-
+        Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario, Cuestionario, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno} from '../clases/index';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +53,11 @@ export class PeticionesAPIService {
   private APIUrlEquipoJuegoDeCompeticionLiga = 'http://localhost:3000/api/EquiposJuegoDeCompeticionLiga';
   private APIUrlJornadasJuegoDeCompeticionLiga = 'http://localhost:3000/api/JornadasDeCompeticionLiga';
 
+  private APIUrlJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/JuegosDecompeticionFormulaUno';
+  private APIUrlAlumnoJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/AlumnosJuegoDeCompeticionFormulaUno';
+  private APIUrlEquipoJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/EquiposJuegoDeCompeticionFormulaUno';
+  private APIUrlJornadasJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/JornadasDeCompeticionFormulaUno';
+
   // Para cargar y descargar imagenes
   private APIUrlImagenAlumno = 'http://localhost:3000/api/imagenes/imagenAlumno';
   private APIUrlImagenColeccion = 'http://localhost:3000/api/imagenes/ImagenColeccion';
@@ -77,6 +81,19 @@ export class PeticionesAPIService {
   public DameTodosMisAlumnos(profesorId: number): Observable<Alumno[]> {
     return this.http.get<Alumno[]>(this.APIUrlProfesores + '/' + profesorId + '/alumnos');
   }
+
+  public DameAlumno(alumnoId: number): Observable<Alumno> {
+    return this.http.get<Alumno>(this.APIUrlAlumnos + '/' + alumnoId);
+  }
+  public DameAlumnos(): Observable<Alumno[]> {
+    return this.http.get<Alumno[]>(this.APIUrlAlumnos);
+  }
+
+  public DameEquipos(): Observable<Equipo[]> {
+    return this.http.get<Equipo[]>(this.APIUrlEquipos);
+  }
+
+  // Falta hacer DameEquipo
 
   public DameAlumnoConcreto(alumno: Alumno, ProfesorId: number): Observable<Alumno> {
     console.log('Entro a buscar a ' + alumno.Nombre + ' ' + alumno.PrimerApellido + ' ' + alumno.SegundoApellido );
@@ -448,9 +465,47 @@ export class PeticionesAPIService {
     return this.http.post<AlbumEquipo>(this.APIRUrlAlbumEquipo, album);
   }
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Gestion del juego de colecciones, individual
+
+  public BorrarCromoAlumno(albumId: number ) {
+    // tslint:disable-next-line:max-line-length
+    return this.http.delete(this.APIRUrlAlbum + '/' + albumId);
+  }
+
+
+
+  // Una cosa es obtener los cromos (funcion anterior) y otra es obtener las asignacionese
+  // de cromos (esta función) que retorna una lista de objetos de tipo Album (nombre muy poco
+  // apropiado para esto)
+  public DameAsignacionesCromosAlumno(inscripcionAlumnoId: number, cromoId: number): Observable<Album[]> {
+    return this.http.get<Album[]>(this.APIRUrlAlbum + '?filter[where][alumnoJuegoDeColeccionId]='
+          + inscripcionAlumnoId + '&filter[where][cromoId]=' + cromoId);
+  }
+
+
+
+
+  // Una cosa es obtener los cromos (funcion anterior) y otra es obtener las asignacionese
+  // de cromos (esta función) que retorna una lista de objetos de tipo Album (nombre muy poco
+  // apropiado para esto)
+  public DameAsignacionesCromosEquipo(inscripcionEquipoId: number, cromoId: number): Observable<AlbumEquipo[]> {
+    return this.http.get<AlbumEquipo[]>(this.APIRUrlAlbumEquipo + '?filter[where][equipoJuegoDeColeccionId]='
+          + inscripcionEquipoId + '&filter[where][cromoId]=' + cromoId);
+  }
+  public BorrarCromoEquipo(albumId: number ) {
+    // tslint:disable-next-line:max-line-length
+    return this.http.delete(this.APIRUrlAlbumEquipo + '/' + albumId);
+  }
   // Juego de competición
-  // CREAMOS UN NUEVO JUEGO DE COMPETICION EN EL GRUPO
+  public DameJuegoDeCompeticionGrupo(grupoId: number): Observable<Juego[]> {
+    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeCompeticions');
+  }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+  // Juego de competición Liga
+  // CREAMOS UN NUEVO JUEGO DE COMPETICION LIGA EN EL GRUPO
   public CreaJuegoDeCompeticionLiga(juego: Juego, grupoId: number): Observable<Juego> {
     console.log('voy a crear el juego de competicion liga');
     console.log(juego);
@@ -488,7 +543,7 @@ export class PeticionesAPIService {
   }
 
   public ModificarJornada(JornadaNueva: Jornada, JornadaId: number): Observable<Jornada> {
-    return this.http.put<Jornada>(this.APIUrlJornadasJuegoDeCompeticionLiga + '/' + JornadaId, JornadaNueva );
+    return this.http.patch<Jornada>(this.APIUrlJornadasJuegoDeCompeticionLiga + '/' + JornadaId, JornadaNueva );
   }
 
   public DameJornadasDeCompeticionLiga(juegoDeCompeticionLigaId: number): Observable<Jornada[]> {
@@ -498,10 +553,26 @@ export class PeticionesAPIService {
     // return this.http.get<Jornada[]>(this.APIUrlJuegoDeCompeticionLiga + '/' + juegoDeCompeticionID + '/JornadasDeCompeticionLiga');
   }
 
-  public DameEnfrentamientosDeJornadaLiga(jornadasDeCompeticionLigaId: number): Observable<EnfrentamientoLiga[]> {
-    return this.http.get<EnfrentamientoLiga[]>('http://localhost:3000/api/JornadasDeCompeticionLiga/' + jornadasDeCompeticionLigaId +
+  public DameEnfrentamientosDeCadaJornadaLiga(jornadasDeCompeticionLigaId: number): Observable<Array<EnfrentamientoLiga>> {
+    return this.http.get<Array<EnfrentamientoLiga>>('http://localhost:3000/api/JornadasDeCompeticionLiga/' + jornadasDeCompeticionLigaId +
     '/enfrentamientosLiga');
   }
+  public CrearEnrentamientoLiga(Enfrentamiento: EnfrentamientoLiga, jornadasDeCompeticionLigaId: number): Observable<EnfrentamientoLiga> {
+    return this.http.post<EnfrentamientoLiga>('http://localhost:3000/api/JornadasDeCompeticionLiga/' + jornadasDeCompeticionLigaId +
+    '/enfrentamientosLiga', Enfrentamiento);
+  }
+
+  public PonGanadorDelEnfrentamiento(enfrentamiento: EnfrentamientoLiga): Observable<EnfrentamientoLiga> {
+    return this.http.put<EnfrentamientoLiga>('http://localhost:3000/api/EnfrentamientosLiga/' + enfrentamiento.id, enfrentamiento);
+  }
+
+  // public DameAlumnosEnfrentamiento(alumnoUnoId: number, alumnoDosId: number): Observable<Alumno[]> {
+  //   const AlumnosEnfrentamiento: Alumno[] = [];
+  //   AlumnosEnfrentamiento[0] = this.http.get<Alumno>(this.APIUrlAlumnos + '/' + alumnoUnoId);
+  //   AlumnosEnfrentamiento[1] = this.http.get<Alumno>(this.APIUrlAlumnos + '/' + alumnoDosId);
+  //   return AlumnosEnfrentamiento;
+  // } //No entiendo porque no funciona
+
   ///////////////////////////////////////////////////////////////////////////////////////////
   // Gestion del juego de competiciones, individual
   public DameAlumnosJuegoDeCompeticionLiga(juegoDeCompeticionLigaId: number): Observable<Alumno[]> {
@@ -513,6 +584,13 @@ export class PeticionesAPIService {
     return this.http.get<AlumnoJuegoDeCompeticionLiga[]>(this.APIUrlAlumnoJuegoDeCompeticionLiga
                                                           + '?filter[where][JuegoDeCompeticionLigaId]=' + juegoDeCompeticionLigaId);
   }
+
+  // tslint:disable-next-line:max-line-length
+  public PonPuntosAlumnoGanadorJuegoDeCompeticionLiga(alumnoGanadorJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga): Observable<AlumnoJuegoDeCompeticionLiga> {
+    return this.http.put<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionLiga + '/'
+                                                       + alumnoGanadorJuegoDeCompeticionLiga.id, alumnoGanadorJuegoDeCompeticionLiga);
+  }
+
   ///////////////////////////////////////////////////////////////////////////////////////////
   // Gestion del juego de competiciones, equipos
   public DameEquiposJuegoDeCompeticionLiga(juegoDeCompeticionLigaId: number): Observable<Equipo[]> {
@@ -524,42 +602,116 @@ export class PeticionesAPIService {
                                                           + '?filter[where][JuegoDeCompeticionLigaId]=' + juegoDeCompeticionLigaId);
   }
 
+  // tslint:disable-next-line:max-line-length
+  public PonPuntosEquipoGanadorJuegoDeCompeticionLiga(ganadorJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga): Observable<EquipoJuegoDeCompeticionLiga> {
+    return this.http.put<EquipoJuegoDeCompeticionLiga>('http://localhost:3000/api/EquiposJuegoDeCompeticionLiga/'
+                                                       + ganadorJuegoDeCompeticionLiga.id, ganadorJuegoDeCompeticionLiga);
+  }
+
+
+  public CreaJuegoDeCompeticionFormulaUno(juego: Juego, grupoId: number): Observable<Juego> {
+    console.log('voy a crear el juego de competicion FormulaUno');
+    console.log(juego);
+    return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionFormulaUno', juego);
+  }
+
+  // jornadas juego de competición liga
+  public CrearJornadasFormulaUno( JornadasDeCompeticionFormulaUno: Jornada, juegoDeCompeticionID: number): Observable<Jornada> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.post<Jornada>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionID + '/JornadasDeCompeticionFormulaUno',
+    JornadasDeCompeticionFormulaUno);
+
+    // return this.http.post<Jornada>('http://localhost:3000/api/JornadasDeCompeticionFormulaUno',
+  }
+
+  public InscribeAlumnoJuegoDeCompeticionFormulaUno(alumnoJuegoDeCompeticionFormulaUno: AlumnoJuegoDeCompeticionFormulaUno) {
+    return this.http.post<AlumnoJuegoDeCompeticionFormulaUno>(this.APIUrlAlumnoJuegoDeCompeticionFormulaUno,
+      alumnoJuegoDeCompeticionFormulaUno);
+  }
+
+  public InscribeEquipoJuegoDeCompeticionFormulaUno(equipoJuegoDeCompeticionFormulaUno: EquipoJuegoDeCompeticionFormulaUno) {
+    return this.http.post<EquipoJuegoDeCompeticionFormulaUno>(this.APIUrlEquipoJuegoDeCompeticionFormulaUno,
+      equipoJuegoDeCompeticionFormulaUno);
+  }
+
+  public DameJuegoDeCompeticionFormulaUnoGrupo(grupoId: number): Observable<Juego[]> {
+    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionFormulaUno');
+  }
+  ///////////////////////////////////////////////////////////////////////////////////////////
+  // Juego de Competición Formula Uno
+
+  public DameJornadasDeCompeticionFormulaUno(juegoDeCompeticionId: number): Observable<Jornada[]> {
+    return this.http.get<Jornada[]>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionId
+                                     + '/jornadasDeCompeticionFormulaUno');
+  }
+
+  public ActualizaGanadoresJornadasDeCompeticionFormulaUno(juegoDeCompeticionFormulaUnoId: number): Observable<Jornada[]> {
+    return this.http.get<Jornada[]>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionFormulaUnoId
+                                     + '/jornadasDeCompeticionFormulaUno');
+  }
+
+  public PonGanadoresJornadasDeCompeticionFormulaUno(jornada: Jornada): Observable<Jornada> {
+    return this.http.put<Jornada>('http://localhost:3000/api/JornadasDeCompeticionFormulaUno/' + jornada.id, jornada);
+  }
+
+  // tslint:disable-next-line:max-line-length
+  public PonPuntosAlumnoGanadorJornadasDeCompeticionFormulaUno(alumno: AlumnoJuegoDeCompeticionFormulaUno): Observable<AlumnoJuegoDeCompeticionFormulaUno> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.put<AlumnoJuegoDeCompeticionFormulaUno>('http://localhost:3000/api/AlumnosJuegoDeCompeticionFormulaUno/' + alumno.id, alumno);
+  }
+
+   // tslint:disable-next-line:max-line-length
+   public PonPuntosEquipoGanadorJornadasDeCompeticionFormulaUno(equipo: EquipoJuegoDeCompeticionFormulaUno): Observable<EquipoJuegoDeCompeticionFormulaUno> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.put<EquipoJuegoDeCompeticionFormulaUno>('http://localhost:3000/api/EquiposJuegoDeCompeticionFormulaUno/' + equipo.id, equipo);
+  }
+
+   ///////////////////////////////////////////////////////////////////////////////////////////
+  // Gestion del juego de competicion formula uno, individual
+  public DameAlumnosJuegoDeCompeticionFormulaUno(juegoDeCompeticionFormulaUnoId: number): Observable<Alumno[]> {
+    console.log('Voy a por los alumnos');
+    return this.http.get<Alumno[]>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionFormulaUnoId + '/alumnos');
+  }
+
+  // tslint:disable-next-line:max-line-length
+  public DameInscripcionesAlumnoJuegoDeCompeticionFormulaUno(juegoDeCompeticionFormulaUnoId: number): Observable<AlumnoJuegoDeCompeticionFormulaUno[]> {
+    return this.http.get<AlumnoJuegoDeCompeticionFormulaUno[]>(this.APIUrlAlumnoJuegoDeCompeticionFormulaUno
+                                                      + '?filter[where][JuegoDeCompeticionFormulaUnoId]=' + juegoDeCompeticionFormulaUnoId);
+  }
 
   ///////////////////////////////////////////////////////////////////////////////////////////
-  // Gestion del juego de colecciones, individual
-
-  public BorrarCromoAlumno(albumId: number ) {
-    // tslint:disable-next-line:max-line-length
-    return this.http.delete(this.APIRUrlAlbum + '/' + albumId);
+  // Gestion del juego de competicion formula uno, equipo
+  public DameEquiposJuegoDeCompeticionFormulaUno(juegoDeCompeticionLigaId: number): Observable<Equipo[]> {
+    console.log('Voy a por los equipos');
+    return this.http.get<Equipo[]>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionLigaId + '/equipos');
+  }
+// tslint:disable-next-line:max-line-length
+  public DameInscripcionesEquipoJuegoDeCompeticionFormulaUno(juegoDeCompeticionFormulaUnoId: number): Observable<EquipoJuegoDeCompeticionFormulaUno[]> {
+    return this.http.get<EquipoJuegoDeCompeticionFormulaUno[]>(this.APIUrlEquipoJuegoDeCompeticionFormulaUno
+                                                      + '?filter[where][JuegoDeCompeticionFormulaUnoId]=' + juegoDeCompeticionFormulaUnoId);
   }
 
-
-
-  // Una cosa es obtener los cromos (funcion anterior) y otra es obtener las asignacionese
-  // de cromos (esta función) que retorna una lista de objetos de tipo Album (nombre muy poco
-  // apropiado para esto)
-  public DameAsignacionesCromosAlumno(inscripcionAlumnoId: number, cromoId: number): Observable<Album[]> {
-    return this.http.get<Album[]>(this.APIRUrlAlbum + '?filter[where][alumnoJuegoDeColeccionId]='
-          + inscripcionAlumnoId + '&filter[where][cromoId]=' + cromoId);
+  public ModificarJornadaFormulaUno(JornadaNueva: Jornada, JornadaId: number): Observable<Jornada> {
+    return this.http.patch<Jornada>(this.APIUrlJornadasJuegoDeCompeticionFormulaUno + '/' + JornadaId, JornadaNueva );
   }
 
+  public CambiaEstadoJuegoDeCompeticionFormulaUno(JuegosDeCompeticionF1: Juego,
+                                                  juegoDeCompeticionId: number,
+                                                  grupoId: number): Observable<Juego> {
+    return this.http.put<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionFormulaUno/' + juegoDeCompeticionId,
+  JuegosDeCompeticionF1);
+}
 
-
-
-  // Una cosa es obtener los cromos (funcion anterior) y otra es obtener las asignacionese
-  // de cromos (esta función) que retorna una lista de objetos de tipo Album (nombre muy poco
-  // apropiado para esto)
-  public DameAsignacionesCromosEquipo(inscripcionEquipoId: number, cromoId: number): Observable<AlbumEquipo[]> {
-    return this.http.get<AlbumEquipo[]>(this.APIRUrlAlbumEquipo + '?filter[where][equipoJuegoDeColeccionId]='
-          + inscripcionEquipoId + '&filter[where][cromoId]=' + cromoId);
+  public BorraJuegoDeCompeticionFormulaUno(juegoDeCompeticionId: number, grupoId: number): Observable<Juego> {
+    return this.http.delete<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionFormulaUno/' + juegoDeCompeticionId);
   }
-  public BorrarCromoEquipo(albumId: number ) {
-    // tslint:disable-next-line:max-line-length
-    return this.http.delete(this.APIRUrlAlbumEquipo + '/' + albumId);
-  }
-  // Juego de competición
-  public DameJuegoDeCompeticionGrupo(grupoId: number): Observable<Juego[]> {
-    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeCompeticions');
+
+  public ModificaJuegoDeCompeticionFormulaUno(juego: Juego, grupoId: number): Observable<Juego> {
+    console.log('voy a modificar el juego de competicion FormulaUno');
+    console.log(juego);
+    console.log(grupoId);
+    console.log(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + grupoId);
+    return this.http.patch<Juego>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + grupoId, juego);
   }
 
   //Preguntas

@@ -1,6 +1,6 @@
 
-<div class="titulo">{{juegoSeleccionado.Tipo}}</div>
-<div class="subtitulo">{{juegoSeleccionado.Modo}}</div>
+<div class="titulo">{{juegoSeleccionado.NombreJuego}}</div>
+<div class="subtitulo">{{juegoSeleccionado.Tipo}} {{juegoSeleccionado.Modo}}</div>
 <mat-divider class="lineaDivisoria"></mat-divider>
 
 <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Puntos'">
@@ -13,6 +13,10 @@
 
 <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Competición Liga'">
   <app-juego-de-competicion-seleccionado-activo></app-juego-de-competicion-seleccionado-activo>
+</div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Competición Fórmula Uno'">
+  <app-juego-formula-uno-seleccionado-activo></app-juego-formula-uno-seleccionado-activo>
 </div>
 
 <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver</button>

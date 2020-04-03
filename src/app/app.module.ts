@@ -106,7 +106,25 @@ import { JuegoDeCompeticionSeleccionadoInactivoComponent } from './paginas/juego
 // tslint:disable-next-line:max-line-length
 import { InformacionJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/informacion-juego-de-competicion/informacion-juego-de-competicion.component';
 // tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-seleccionado-inactivo/informacion-juego-de-competicion-inactivo/informacion-juego-de-competicion-inactivo.component';
+// tslint:disable-next-line:max-line-length
 import { EditarJornadasJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/editar-jornadas-juego-de-competicion/editar-jornadas-juego-de-competicion.component';
+// tslint:disable-next-line:max-line-length
+import { GanadorJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/ganador-juego-de-competicion-liga/ganador-juego-de-competicion-liga.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/juego-formula-uno-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-formula-uno-seleccionado-inactivo/juego-formula-uno-seleccionado-inactivo.component';
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/informacion-juego-formula-uno/informacion-juego-formula-uno.component';
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionFormulaUnoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-formula-uno-seleccionado-inactivo/informacion-juego-formula-uno-inactivo/informacion-juego-formula-uno-inactivo.component';
+// tslint:disable-next-line:max-line-length
+import { GanadoresJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/ganadores-juego-formula-uno/ganadores-juego-formula-uno.component';
+// tslint:disable-next-line:max-line-length
+import { EditarJornadasJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/editar-jornadas-juego-formula-uno/editar-jornadas-juego-formula-uno.component';
+// tslint:disable-next-line:max-line-length
+import { EditarPuntosJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/editar-puntos-juego-formula-uno/editar-puntos-juego-formula-uno.component';
 
 // COMPONENTES EN COMPARTIDO
 import { DialogoConfirmacionComponent } from './paginas/COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
@@ -192,17 +210,28 @@ import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/edita
     InformacionJuegoDeCompeticionComponent,
     EditarJornadasJuegoDeCompeticionComponent,
     AlumnosSeleccionadoJuegoDeCompeticionLigaComponent,
+    InformacionJuegoDeCompeticionInactivoComponent,
 
     EditarCromoDialogComponent,
     MisAlumnosComponent,
     IntroducirAlumnosComponent,
+
     PreguntaComponent,
     CrearCuestionarioComponent,
     AgregarPreguntasDialogComponent,
     MisPreguntasComponent,
     MisCuestionariosComponent,
     EditarPreguntaDialogComponent,
-    EditarCuestionarioComponent
+    EditarCuestionarioComponent,
+
+    GanadorJuegoDeCompeticionLigaComponent,
+    JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent,
+    InformacionJuegoDeCompeticionFormulaUnoComponent,
+    GanadoresJuegoDeCompeticionFormulaUnoComponent,
+    EditarJornadasJuegoDeCompeticionFormulaUnoComponent,
+    EditarPuntosJuegoDeCompeticionFormulaUnoComponent,
+    InformacionJuegoDeCompeticionFormulaUnoInactivoComponent,
+    JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent
 
   ],
   imports: [

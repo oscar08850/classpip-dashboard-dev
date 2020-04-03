@@ -189,7 +189,7 @@ export class EditarColeccionComponent implements OnInit {
 
     // tslint:disable-next-line:no-shadowed-variable
     dialogRef.afterClosed().subscribe( cromo => {
-      //console.log ('volvemos de editar cromos ' + cromosEditados.length);
+      // console.log ('volvemos de editar cromos ' + cromosEditados.length);
       // tslint:disable-next-line:prefer-for-of
       this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
       this.cromosColeccion.push (cromo);

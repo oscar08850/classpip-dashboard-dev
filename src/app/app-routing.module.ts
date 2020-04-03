@@ -52,11 +52,26 @@ import {IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introduci
 // tslint:disable-next-line:max-line-length
 import { InformacionJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/informacion-juego-de-competicion/informacion-juego-de-competicion.component';
 // tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-seleccionado-inactivo/informacion-juego-de-competicion-inactivo/informacion-juego-de-competicion-inactivo.component';
+
+// tslint:disable-next-line:max-line-length
 import { EditarJornadasJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/editar-jornadas-juego-de-competicion/editar-jornadas-juego-de-competicion.component';
 // tslint:disable-next-line:max-line-length
 import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/alumnos-seleccionado-juego-de-competicion-liga/alumnos-seleccionado-juego-de-competicion-liga.component';
 
+// tslint:disable-next-line:max-line-length
+import { GanadorJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/ganador-juego-de-competicion-liga/ganador-juego-de-competicion-liga.component';
 
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/informacion-juego-formula-uno/informacion-juego-formula-uno.component';
+// tslint:disable-next-line:max-line-length
+import { GanadoresJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/ganadores-juego-formula-uno/ganadores-juego-formula-uno.component';
+// tslint:disable-next-line:max-line-length
+import { EditarJornadasJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/editar-jornadas-juego-formula-uno/editar-jornadas-juego-formula-uno.component';
+// tslint:disable-next-line:max-line-length
+import { EditarPuntosJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/editar-puntos-juego-formula-uno/editar-puntos-juego-formula-uno.component';
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionFormulaUnoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-formula-uno-seleccionado-inactivo/informacion-juego-formula-uno-inactivo/informacion-juego-formula-uno-inactivo.component';
 import { AppComponent } from './app.component';
 import { ElementosComponent } from './elementos/elementos.component';
 import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.component';
@@ -172,6 +187,22 @@ const routes: Routes = [
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/editarjornadasJuegoDeCompeticion', component: EditarJornadasJuegoDeCompeticionComponent },
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionAlumnoJuegoCompeticionLiga', component: AlumnosSeleccionadoJuegoDeCompeticionLigaComponent },
+  // tslint:disable-next-line:max-line-length
+  {path: 'grupo/:id/juegos/juegoSeleccionadoActivo/seleccionarGanadorJuegoDeCompeticionLiga', component: GanadorJuegoDeCompeticionLigaComponent},
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionJuegoDeCompeticionInactivo', component: InformacionJuegoDeCompeticionInactivoComponent },
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoDeCompeticionFormulaUno', component: InformacionJuegoDeCompeticionFormulaUnoComponent },
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/ganadoresJuegoDeCompeticionFormulaUno', component: GanadoresJuegoDeCompeticionFormulaUnoComponent },
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/editarjornadasJuegoDeCompeticionFormulaUno', component: EditarJornadasJuegoDeCompeticionFormulaUnoComponent },
+   // tslint:disable-next-line:max-line-length
+   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/editarpuntosJuegoDeCompeticionFormulaUno', component: EditarPuntosJuegoDeCompeticionFormulaUnoComponent },
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionJuegoDeCompeticionFormulaUnoInactivo', component: InformacionJuegoDeCompeticionFormulaUnoInactivoComponent },
+
+
 
 
   // COLECCIÓN
