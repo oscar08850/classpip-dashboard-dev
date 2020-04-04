@@ -14,18 +14,32 @@ The software architecture is composed by a mobile application for performing “
 
 This repository contains the main dashboard panel administration for the classpip project. With this admin panel you could manage all the classpip opertations and data for the website. The project is created using [angular CLI](https://github.com/angular/angular-cli) and some operations are related to this client.
 
-[Angular CLI](https://github.com/angular/angular-cli) version 7.0.6
+## NodeJS
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Make sure you have NodeJS installed. Download the installer or use your favorite package manager. It's best to get the 10x version of node. This offers the best in stability and speed for building.
 
-## Global dependencies
-
-Make sure you have NodeJS installed. Download the installer [here](https://nodejs.org/dist/latest-v8.x/) or use your favorite package manager. It's best to get the 8x version of node along with the 10x version of npm. This offers the best in stability and speed for building.
+You may also need development tools to build native addons.
 
 ```
 node -v
 > v10.13.0
+```
 
+### To build native addons on Linux (Ubuntu)
+
+```
+sudo apt-get install gcc g++ make
+```
+
+### To build native addons on Windows
+
+```
+npm install -g windows-build-tools
+```
+
+## Global dependencies
+
+```
 npm install -g @angular/cli
 ```
 
