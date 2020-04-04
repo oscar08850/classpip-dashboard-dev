@@ -25,6 +25,8 @@ Make sure you have NodeJS installed. Download the installer [here](https://nodej
 ```
 node -v
 > v10.13.0
+
+npm install -g @angular/cli
 ```
 
 ## Local dependencies
