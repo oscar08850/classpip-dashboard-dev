@@ -263,10 +263,11 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         this.botonAsignarJuegoDesactivado = false;
         this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
         this.ActualizarBotonJuego();
-      } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID === undefined) { // JuegoPuntos
+      } else if (Number(this.modoAsignacionId) === 3 && this.juegosActivosPuntosModo.length === 0) { // JuegoPuntos
         this.botonAsignarManualDesactivado = true;
         this.botonAsignarAleatorioDesactivado = true;
         this.botonAsignarJuegoDesactivado = true;
+        Swal.fire('No existe ningún juego de puntos activo en este grupo');
       }
   }
 

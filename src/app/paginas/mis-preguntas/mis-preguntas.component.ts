@@ -35,7 +35,7 @@ export class MisPreguntasComponent implements OnInit {
 
   //Cogemos todas las preguntas del profesor para rellenar la tabla
   DameTodasMisPreguntas() {
-    this.peticionesAPI.DameTodasMisPreguntas(this.profesor.id)
+    this.peticionesAPI.DameTodasMisPreguntas (this.profesor.id)
     .subscribe( res => {
       if (res[0] !== undefined) {
         this.misPreguntas = res;

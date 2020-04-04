@@ -97,6 +97,8 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     }
     // Selecciono los juegos de puntos activos que sean del mosmo modo que el juego de liga (individual o en equipo)
     this.juegosActivosPuntos = this.sesion.DameJuegosDePuntosActivos().filter (juego => juego.Modo === this.juegoSeleccionado.Modo);
+    console.log ('Juegos de puntos ');
+    console.log (this.juegosActivosPuntos);
     this.asignados = false;
   }
 
@@ -183,6 +185,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
   // Esta función se ejecuta al seleccionar el modo de asignación
   SeleccionaModo() {
+    console.log ('SeleccionaModo');
     // activamos el boton correspondiente si se eligió manual ao aleatorio
     if (Number(this.modoAsignacionId) === 1) { // Manual
         this.botonAsignarAleatorioDesactivado = true;
@@ -194,11 +197,12 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         this.botonAsignarPuntosDesactivado = true;
     // Si se elijió asignación por juego de puntos y no hay juego de puntos para elegir se muestra una alarma
     // Si  hay juego de puntos no se hace nada porque ya aparecerá automáticamente el selector del juego
-      } else if (Number(this.modoAsignacionId) === 3 && this.juegosActivosPuntos === undefined) { // JuegoPuntos
+      } else if ((Number(this.modoAsignacionId) === 3) && (this.juegosActivosPuntos.length === 0)) { // JuegoPuntos
         this.botonAsignarManualDesactivado = true;
         this.botonAsignarAleatorioDesactivado = true;
         this.botonAsignarPuntosDesactivado = true;
-        Swal.fire('Cuidado', 'No hay juegos de puntos disponibles', 'warning');
+        console.log ('Aviso');
+        Swal.fire('Cuidado', 'No hay juegos de puntos disponibles para este grupo', 'warning');
       }
   }
 

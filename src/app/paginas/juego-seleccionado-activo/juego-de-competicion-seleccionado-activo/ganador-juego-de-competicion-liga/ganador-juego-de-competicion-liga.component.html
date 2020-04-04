@@ -33,7 +33,7 @@
         </mat-form-field>
       </div>
 
-      <div *ngIf="modoAsignacionId == 3"  style="margin-left: 5%;">
+      <div *ngIf="(modoAsignacionId == 3) && (juegosActivosPuntosModo.length !== 0)"  style="margin-left: 5%;">
         Seleccione un Juego
         <br>
         <mat-form-field >
@@ -50,7 +50,7 @@
 
 
     <div *ngIf = "jornadaId != undefined && !Disputada (jornadaId)">
-    <div  *ngIf="modoAsignacionId == 3" style="margin-top: 10px; margin-right: 10px;">
+    <div  *ngIf="(modoAsignacionId == 3) && (juegodePuntosSeleccionadoID !== undefined)" style="margin-top: 10px; margin-right: 10px;">
       <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadorJuegoPuntos()"  [disabled]="botonAsignarJuegoDesactivado">Asignar ganadores mediante juego de puntos<i class="material-icons">emoji_events </i></button>
     </div>
 
