@@ -854,6 +854,7 @@ export class CalculosService {
 
       });
     }
+  }
 
 
 
@@ -1348,7 +1349,8 @@ export class CalculosService {
       }
 
     });
-    
+  }
+
   public calcularLigaNumEquipos(numEquipos: number, numRondas: number): any[] {
     if (numEquipos % 2 !== 0) {
        numEquipos = numEquipos + 1;
@@ -2452,101 +2454,104 @@ export class CalculosService {
         } else {
           Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
         }
-
-  public ClasificacionJornada(juegoSeleccionado: Juego, alumnoJuegoDeCompeticionFormulaUno: TablaAlumnoJuegoDeCompeticion[],
-                              equipoJuegoDeCompeticionFormulaUno: TablaEquipoJuegoDeCompeticion[], GanadoresFormulaUno: string[],
-                              GanadoresFormulaUnoId: number[]) {
-    if (GanadoresFormulaUno !== undefined) {
-      const ParticipantesFormulaUno: string[] = GanadoresFormulaUno;
-      const PuntosFormulaUno: number[] = [];
-      juegoSeleccionado.Puntos.forEach(punto => { PuntosFormulaUno.push(punto); });
-      // const PuntosFormulaUno: number[] = juegoSeleccionado.Puntos;
-      const Posicion: number[] = [];
-      const ParticipantesId: number[] = GanadoresFormulaUnoId;
-      if (juegoSeleccionado.Modo === 'Individual') {
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
-          const ParticipanteFormulaUno =  alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
-                                        + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
-                                        + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
-          const ParticipanteId = alumnoJuegoDeCompeticionFormulaUno[i].id;
-          const indexNoGanador = GanadoresFormulaUno.indexOf(ParticipanteFormulaUno);
-          if (indexNoGanador === -1) {
-            ParticipantesFormulaUno.push(ParticipanteFormulaUno);
-            PuntosFormulaUno.push(0);
-            ParticipantesId.push(ParticipanteId);
-          }
-        }
-        for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
-          Posicion[j] = j + 1;
-        }
-      } else {
-        console.log('Estamos en ClasificacionJornada() equipo');
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < equipoJuegoDeCompeticionFormulaUno.length; i++) {
-          const ParticipanteFormulaUno = equipoJuegoDeCompeticionFormulaUno[i].nombre;
-          const ParticipanteId = equipoJuegoDeCompeticionFormulaUno[i].id;
-          const indexNoGanador = GanadoresFormulaUno.indexOf(ParticipanteFormulaUno);
-          if (indexNoGanador === -1) {
-            ParticipantesFormulaUno.push(ParticipanteFormulaUno);
-            PuntosFormulaUno.push(0);
-            ParticipantesId.push(ParticipanteId);
-          }
-        }
-        for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
-          Posicion[j] = j + 1;
-        }
       }
-      const datosClasificaciónJornada = {
-        participante: ParticipantesFormulaUno,
-        puntos: PuntosFormulaUno,
-        posicion: Posicion,
-        participanteId: ParticipantesId
-      };
-      return datosClasificaciónJornada;
-    } else {
-      console.log('Esta jornada aún no tiene ganadores asignados');
-      const ParticipantesFormulaUno: string[] = [];
-      const PuntosFormulaUno: number[] = [];
-      const Posicion: number[] = [];
-      const ParticipantesId: number[] = [];
-      if (juegoSeleccionado.Modo === 'Individual') {
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
-          const ParticipanteFormulaUno =  alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
-                                        + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
-                                        + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
-          ParticipantesFormulaUno.push(ParticipanteFormulaUno);
-          const ParticipanteId = alumnoJuegoDeCompeticionFormulaUno[i].id;
-          PuntosFormulaUno.push(0);
-          ParticipantesId.push(ParticipanteId);
-        }
-        for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
-          Posicion[j] = j + 1;
-        }
-
-      } else {
-     // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < equipoJuegoDeCompeticionFormulaUno.length; i++) {
-          const ParticipanteFormulaUno = equipoJuegoDeCompeticionFormulaUno[i].nombre;
-          ParticipantesFormulaUno.push(ParticipanteFormulaUno);
-          const ParticipanteId = equipoJuegoDeCompeticionFormulaUno[i].id;
-          PuntosFormulaUno.push(0);
-          ParticipantesId.push(ParticipanteId);
-        }
-        for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
-          Posicion[j] = j + 1;
-        }
-      }
-      const datosClasificaciónJornada = {
-        participante: ParticipantesFormulaUno,
-        puntos: PuntosFormulaUno,
-        posicion: Posicion,
-        participanteId: ParticipantesId
-      };
-      return datosClasificaciónJornada;
-    }
+    });
   }
+
+  // public ClasificacionJornada(juegoSeleccionado: Juego, alumnoJuegoDeCompeticionFormulaUno: TablaAlumnoJuegoDeCompeticion[],
+  //                             equipoJuegoDeCompeticionFormulaUno: TablaEquipoJuegoDeCompeticion[], GanadoresFormulaUno: string[],
+  //                             GanadoresFormulaUnoId: number[]) {
+  //   if (GanadoresFormulaUno !== undefined) {
+  //     const ParticipantesFormulaUno: string[] = GanadoresFormulaUno;
+  //     const PuntosFormulaUno: number[] = [];
+  //     juegoSeleccionado.Puntos.forEach(punto => { PuntosFormulaUno.push(punto); });
+  //     // const PuntosFormulaUno: number[] = juegoSeleccionado.Puntos;
+  //     const Posicion: number[] = [];
+  //     const ParticipantesId: number[] = GanadoresFormulaUnoId;
+  //     if (juegoSeleccionado.Modo === 'Individual') {
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
+  //         const ParticipanteFormulaUno =  alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
+  //                                       + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
+  //                                       + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
+  //         const ParticipanteId = alumnoJuegoDeCompeticionFormulaUno[i].id;
+  //         const indexNoGanador = GanadoresFormulaUno.indexOf(ParticipanteFormulaUno);
+  //         if (indexNoGanador === -1) {
+  //           ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+  //           PuntosFormulaUno.push(0);
+  //           ParticipantesId.push(ParticipanteId);
+  //         }
+  //       }
+  //       for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
+  //         Posicion[j] = j + 1;
+  //       }
+  //     } else {
+  //       console.log('Estamos en ClasificacionJornada() equipo');
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let i = 0; i < equipoJuegoDeCompeticionFormulaUno.length; i++) {
+  //         const ParticipanteFormulaUno = equipoJuegoDeCompeticionFormulaUno[i].nombre;
+  //         const ParticipanteId = equipoJuegoDeCompeticionFormulaUno[i].id;
+  //         const indexNoGanador = GanadoresFormulaUno.indexOf(ParticipanteFormulaUno);
+  //         if (indexNoGanador === -1) {
+  //           ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+  //           PuntosFormulaUno.push(0);
+  //           ParticipantesId.push(ParticipanteId);
+  //         }
+  //       }
+  //       for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
+  //         Posicion[j] = j + 1;
+  //       }
+  //     }
+  //     const datosClasificaciónJornada = {
+  //       participante: ParticipantesFormulaUno,
+  //       puntos: PuntosFormulaUno,
+  //       posicion: Posicion,
+  //       participanteId: ParticipantesId
+  //     };
+  //     return datosClasificaciónJornada;
+  //   } else {
+  //     console.log('Esta jornada aún no tiene ganadores asignados');
+  //     const ParticipantesFormulaUno: string[] = [];
+  //     const PuntosFormulaUno: number[] = [];
+  //     const Posicion: number[] = [];
+  //     const ParticipantesId: number[] = [];
+  //     if (juegoSeleccionado.Modo === 'Individual') {
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
+  //         const ParticipanteFormulaUno =  alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
+  //                                       + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
+  //                                       + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
+  //         ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+  //         const ParticipanteId = alumnoJuegoDeCompeticionFormulaUno[i].id;
+  //         PuntosFormulaUno.push(0);
+  //         ParticipantesId.push(ParticipanteId);
+  //       }
+  //       for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
+  //         Posicion[j] = j + 1;
+  //       }
+
+  //     } else {
+  //    // tslint:disable-next-line:prefer-for-of
+  //       for (let i = 0; i < equipoJuegoDeCompeticionFormulaUno.length; i++) {
+  //         const ParticipanteFormulaUno = equipoJuegoDeCompeticionFormulaUno[i].nombre;
+  //         ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+  //         const ParticipanteId = equipoJuegoDeCompeticionFormulaUno[i].id;
+  //         PuntosFormulaUno.push(0);
+  //         ParticipantesId.push(ParticipanteId);
+  //       }
+  //       for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
+  //         Posicion[j] = j + 1;
+  //       }
+  //     }
+  //     const datosClasificaciónJornada = {
+  //       participante: ParticipantesFormulaUno,
+  //       puntos: PuntosFormulaUno,
+  //       posicion: Posicion,
+  //       participanteId: ParticipantesId
+  //     };
+  //     return datosClasificaciónJornada;
+  //   }
+  // }
 
   public GuardarGanadorEnfrentamiento(enfrentamiento: EnfrentamientoLiga, resultado: number) {
     let enfrentamientoActualizado: EnfrentamientoLiga;
@@ -2864,7 +2869,6 @@ export class CalculosService {
         jornadaTieneGanadores = true;
       }
     });
-    console.log('jornadaTieneGanadore = ' + jornadaTieneGanadores);
     return jornadaTieneGanadores;
   }
 
@@ -2878,6 +2882,6 @@ export class CalculosService {
   }
 
 
-  
+
 
 }

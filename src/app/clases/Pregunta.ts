@@ -11,6 +11,8 @@ export class Pregunta {
     id: number;
     profesorId: number;
 
+    // tslint:disable-next-line:one-line
+    // tslint:disable-next-line:max-line-length
     constructor(titulo?: string, pregunta?: string, tematica?: string, respuestaCorrecta?: string, respuestaIncorrecta1?: string, respuestaIncorrecta2?: string, respuestaIncorrecta3?: string, feedbackCorrecto?: string, feedbackIncorrecto?: string){
         this.Titulo = titulo;
         this.Pregunta = pregunta;

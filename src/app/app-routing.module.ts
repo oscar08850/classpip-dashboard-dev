@@ -120,6 +120,7 @@ const routes: Routes = [
 
 
 
+
   // COLECCIÓN
   { path: 'inicio/:id/crearColeccion', component: CrearColeccionComponent, canDeactivate: [DeactivateGuardCrearColeccion] },
   { path: 'inicio/:id/misColecciones', component: MisColeccionesComponent },
@@ -217,11 +218,11 @@ const routes: Routes = [
   // CONFIGURACION
   { path: 'inicio/:id/configuracionProfesor', component: ConfiguracionProfesorComponent },
 
-  //PREGUNTAS
+  // PREGUNTAS
   { path: 'inicio/:id/crearPregunta', component: PreguntaComponent},
   { path: 'inicio/:id/misPreguntas', component: MisPreguntasComponent},
 
-  //CUESTIONARIOS
+  // CUESTIONARIOS
   { path: 'inicio/:id/crearCuestionario', component: CrearCuestionarioComponent, canDeactivate: [DeactivateGuardCrearCuestionario] },
   { path: 'inicio/:id/misCuestionarios', component: MisCuestionariosComponent},
   { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent}

@@ -42,7 +42,7 @@ export class PreguntaComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              public dialog: MatDialog, 
+              public dialog: MatDialog,
               public sesion: SesionService,
               public peticionesAPI: PeticionesAPIService,
               private _formBuilder: FormBuilder) { }
@@ -73,7 +73,7 @@ export class PreguntaComponent implements OnInit {
   }
 
   //CREAMOS Y GUARDAMOS LA PREGUNTA CON LOS VALORES AÑADIDOS
-  CrearPregunta(){
+  CrearPregunta() {
     let tituloPregunta: string;
     let preguntaPregunta: string;
     let tematicaPregunta: string;
@@ -94,20 +94,22 @@ export class PreguntaComponent implements OnInit {
     feedbackCorrecto = this.myForm2.value.feedbackCorrecto;
     feedbackIncorrecto = this.myForm2.value.feedbackIncorrecto;
 
-    this.peticionesAPI.CreaPregunta(new Pregunta(tituloPregunta, preguntaPregunta, 
-      tematicaPregunta, respuestaCorrecta, respuestaIncorrecta1, 
+    const pregunta = new Pregunta(tituloPregunta, preguntaPregunta,
+      tematicaPregunta, respuestaCorrecta, respuestaIncorrecta1,
       respuestaIncorrecta2, respuestaIncorrecta3, feedbackCorrecto,
-      feedbackIncorrecto), this.profesorId)
+      feedbackIncorrecto);
+    console.log ('vamos a crear pregunta');
+    this.peticionesAPI.CreaPregunta(pregunta, this.profesorId)
       .subscribe((res) => {
         if (res != null) {
           console.log('Pregunta creada correctamente' + res);
-          this.pregunta=res
+          this.pregunta = res;
           this.aceptarGoBack();
-        }else{
+        } else {
           console.log('Fallo en la creacion de la pregunta');
           Swal.fire('Se ha producido un error creando la pregunta', 'ERROR', 'error');
         }
-      })
+      });
   }
 
 

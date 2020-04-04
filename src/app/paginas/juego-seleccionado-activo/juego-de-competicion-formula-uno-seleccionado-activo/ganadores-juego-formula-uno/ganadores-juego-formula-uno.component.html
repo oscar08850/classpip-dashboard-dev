@@ -34,7 +34,7 @@
         </mat-form-field>
       </div>
       <!-- Si se elige la asignación via juego de puntos desplegamos el selector del juego que debe usarse -->
-      <div *ngIf="modoAsignacionId == 3 && juegosActivosPuntos !== undefined"  style="margin-left: 5%;">
+      <div *ngIf="((modoAsignacionId == 3) &&  (juegosActivosPuntos.length !== 0))"  style="margin-left: 5%;">
 
         Seleccione un Juego
         <br>
