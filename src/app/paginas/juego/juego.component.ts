@@ -78,7 +78,8 @@ export class JuegoComponent implements OnInit {
   seleccionTipoJuego: ChipColor[] = [
     {nombre: 'Juego De Puntos', color: 'primary'},
     {nombre: 'Juego De Colección', color: 'accent'},
-    {nombre: 'Juego De Competición', color: 'warn'}
+    {nombre: 'Juego De Competición', color: 'warn'},
+    {nombre: 'Juego De Cuestionario', color: 'primary'}
   ];
 
   // En el segundo paso mostraremos dos Chips con los dos modos de juego que podemos crear y su color
@@ -100,6 +101,19 @@ export class JuegoComponent implements OnInit {
   NumeroDeVueltasValueInd: number;
   NumeroDeVueltasValueEqu: number;
 
+  //Todo lo relacionado con juego de cuestionario
+  myFormPuntuacion: FormGroup;
+  PuntuacionCorrecta: string;
+  PuntuacionIncorrecta: string;
+
+  //Tipos de presentacion para el juego de cuestionario
+  seleccionModoPresentacion: ChipColor[] = [
+    {nombre: 'Mismo orden para todos', color: 'primary'},
+    {nombre: 'Preguntas desordenadas', color: 'accent'},
+    {nombre: 'Preguntas y respuestas desordenadas', color: 'warn'}
+  ]
+  //Recogemos el tipo de presentacion para el juego de cuestionario
+  tipoDePresentacion: string
   //
   tipoJuegoCompeticionSeleccionado: string;
 
@@ -197,6 +211,11 @@ export class JuegoComponent implements OnInit {
     this.myForm2 = this._formBuilder.group({
       NombredelJuego: ['', Validators.required],
     });
+
+    this.myFormPuntuacion = this._formBuilder.group({
+      PuntuacionCorrecta: ['', Validators.required],
+      PuntuacionIncorrecta: ['', Validators.required]
+    })
 
     this.TablaPuntuacion = [];
     this.TablaPuntuacion[0] = new TablaPuntosFormulaUno(1, 10);
@@ -737,6 +756,29 @@ export class JuegoComponent implements OnInit {
     } else {
       this.isDisabledJornadas = false;
     }
+  }
+
+  TipoDePuntuacionSeleccionado(tipo: ChipColor) {
+    this.tipoDePresentacion = tipo.nombre;
+    console.log(this.tipoDePresentacion);
+    /* this.isDisabled = false; */
+  }
+
+
+  AbrirDialogoAgregarPreguntas() {
+    console.log('ABRIMOS EL DIALOGO PARA ESCOGER CUESTIOANRIO');
+  }
+
+  ActualizarBotonPasoCuestionario() {
+    console.log('AQUI YA HABRA ESCOGIDO EL CUESTIONARIO Y PROCEDEMOS A COGERLO DE LA SESION');
+  }
+
+  ActualizarBotonPasoPuntuacion() {
+    console.log('AQUI PASAMOS PUNTUACION DEL CUESTIONARIO');
+  }
+
+  ActualizarBotonPasoPresentacion() {
+    console.log('AQUI PASAMOS LA ORDENACION ESCOGIDA');
   }
 
   NumeroDeVueltas() {
