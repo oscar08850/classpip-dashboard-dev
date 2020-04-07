@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // Clases
 // tslint:disable-next-line:max-line-length
-import { Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno} from '../../clases/index';
+import { Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno, Cuestionario} from '../../clases/index';
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
@@ -19,6 +19,7 @@ import 'rxjs';
 
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import Swal from 'sweetalert2';
+import { AsignaCuestionarioComponent } from './asigna-cuestionario/asigna-cuestionario.component';
 
 
 
@@ -105,13 +106,19 @@ export class JuegoComponent implements OnInit {
   myFormPuntuacion: FormGroup;
   PuntuacionCorrecta: string;
   PuntuacionIncorrecta: string;
+  profesorId: number;
+  cuestionario: Cuestionario;
+  DisabledCuestionario: Boolean = true;
+  DisabledPuntuacion: Boolean = true;
+  DisabledPresentacion: Boolean =  true;
 
   //Tipos de presentacion para el juego de cuestionario
-  seleccionModoPresentacion: ChipColor[] = [
-    {nombre: 'Mismo orden para todos', color: 'primary'},
-    {nombre: 'Preguntas desordenadas', color: 'accent'},
-    {nombre: 'Preguntas y respuestas desordenadas', color: 'warn'}
-  ]
+  seleccionModoPresentacion: string[] = ['Mismo orden para todos', 
+    'Preguntas desordenadas',
+    'Preguntas y respuestas desordenadas'];
+  ModoPresentacionFavorito: string;
+  myFormPresentacion: FormGroup;
+
   //Recogemos el tipo de presentacion para el juego de cuestionario
   tipoDePresentacion: string
   //
@@ -159,6 +166,7 @@ export class JuegoComponent implements OnInit {
   ngOnInit() {
     this.grupo = this.sesion.DameGrupo();
     this.alumnosGrupo = this.sesion.DameAlumnosGrupo();
+    this.profesorId = this.sesion.DameProfesor().id;
     // La lista de equipos del grupo no esta en el servicio sesión. Asi que hay que
     // ir a buscarla
     this.peticionesAPI.DameEquiposDelGrupo(this.grupo.id)
@@ -215,6 +223,10 @@ export class JuegoComponent implements OnInit {
     this.myFormPuntuacion = this._formBuilder.group({
       PuntuacionCorrecta: ['', Validators.required],
       PuntuacionIncorrecta: ['', Validators.required]
+    })
+
+    this.myFormPresentacion = this._formBuilder.group({
+      ModoPresentacionFavorito: ['', Validators.required]
     })
 
     this.TablaPuntuacion = [];
@@ -765,16 +777,39 @@ export class JuegoComponent implements OnInit {
   }
 
 
-  AbrirDialogoAgregarPreguntas() {
-    console.log('ABRIMOS EL DIALOGO PARA ESCOGER CUESTIOANRIO');
-  }
-
-  ActualizarBotonPasoCuestionario() {
-    console.log('AQUI YA HABRA ESCOGIDO EL CUESTIONARIO Y PROCEDEMOS A COGERLO DE LA SESION');
+  AbrirDialogoAgregarCuestionario(): void {
+    const dialogRef = this.dialog.open(AsignaCuestionarioComponent, {
+      width: '70%',
+      height: '80%',
+      position: {
+        top: '0%'
+      },
+      //Pasamos los parametros necesarios
+      data: {
+        profesorId: this.profesorId
+      }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.cuestionario = this.sesion.DameCuestionario();
+      this.DisabledCuestionario = false;
+      console.log('CUESTIONARIO SELECCIONADO --->' + this.cuestionario.Titulo);
+    })
   }
 
   ActualizarBotonPasoPuntuacion() {
-    console.log('AQUI PASAMOS PUNTUACION DEL CUESTIONARIO');
+    this.PuntuacionCorrecta = this.myFormPuntuacion.value.PuntuacionCorrecta;
+    this.PuntuacionIncorrecta = this.myFormPuntuacion.value.PuntuacionIncorrecta;
+    console.log('SUMAMOS: ' + this.PuntuacionCorrecta);
+    console.log('RESTAMOS: ' + this.PuntuacionIncorrecta);
+  }
+
+  //MIRO SI LAS CASILLAS DE LAS PUNTUACIONES ESTAN RELLENADAS
+  DisabledPuntos() {
+    if (this.myFormPuntuacion.value.PuntuacionCorrecta === '' || this.myFormPuntuacion.value.PuntuacionIncorrecta === ''){
+      this.DisabledPuntuacion = true;
+    } else {
+      this.DisabledPuntuacion = false;
+    }
   }
 
   ActualizarBotonPasoPresentacion() {

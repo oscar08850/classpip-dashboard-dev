@@ -212,12 +212,12 @@
             <mat-step>
               <ng-template matStepLabel><div>Cuestionario</div></ng-template>
               <div>
-                <button type="button" class="btn Agregar" (click)= "AbrirDialogoAgregarPreguntas()">Añadir cuestionario<i class="material-icons">
+                <button type="button" class="btn Agregar" (click)= "AbrirDialogoAgregarCuestionario()" style="width: auto;">Añadir cuestionario<i class="material-icons">
                     post_add </i></button>
               </div>
               <div class="btnCambiarStep">
                 <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                <button (click)="ActualizarBotonPasoCuestionario()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                <button [disabled]="DisabledCuestionario" type="button" class="btn Next" matStepperNext>Siguiente</button>
               </div>
             </mat-step>
             <!--Segundo paso, establecemos la puntiacion-->
@@ -226,30 +226,35 @@
                 <!-- casilla para introducir puntuacion que sumamos -->
                 <mat-form-field>
                   <mat-label>Introduzca la puntuacion por respuesta correcta</mat-label>
-                  <input matInput formControlName="PuntuacionCorrecta" placeholder="Escriba la puntuacion" requiered [(ngModel)]="PuntuacionCorrecta">
+                  <input (keyup)="DisabledPuntos()" matInput formControlName="PuntuacionCorrecta" placeholder="Escriba la puntuacion" requiered>
                 </mat-form-field>
                 <!-- casilla para introducir puntuacion que restamos -->
                 <mat-form-field>
                   <mat-label>Introduzca la puntuacion por respuesta incorrecta (si no quiere restar ponga 0)</mat-label>
-                  <input matInput formControlName="PuntuacionIncorrecta" placeholder="Escriba la puntuacion" requiered [(ngModel)]="PuntuacionIncorrecta">
+                  <input (keyup)="DisabledPuntos()" matInput formControlName="PuntuacionIncorrecta" placeholder="Escriba la puntuacion" requiered>
                 </mat-form-field>
               <div class="btnCambiarStep">
                 <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                <button (click) = "ActualizarBotonPasoPuntuacion()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                <button [disabled]="DisabledPuntuacion" (click) = "ActualizarBotonPasoPuntuacion()" type="button" class="btn Next" matStepperNext>Siguiente</button>
               </div>
             </mat-step>
             <!--Tercer paso, escogemos la presentacion de preguntas y respuestas-->
-            <mat-step>
+            <mat-step [formGroup]="myFormPresentacion">
               <ng-template matStepLabel><div>Presentación</div></ng-template>
               <div class = "colorsChips">
                 <label class = "LabelStepper">Selecciona un modo de presentacion:</label>
-                <mat-chip-list class="mat-chip-list-stacked">
+                <mat-radio-group aria-labelledby="radio-group-label" class="radio-group" formControlName="ModoPresentacionFavorito">
+                    <mat-radio-button class="radio-button" *ngFor="let presentacion of seleccionModoPresentacion" [value]="presentacion">
+                      {{presentacion}}
+                    </mat-radio-button>
+                </mat-radio-group>
+                <!-- <mat-chip-list class="mat-chip-list-stacked">
                   <mat-chip *ngFor="let tipo of seleccionModoPresentacion; let i = index" selected [color]="tipo.color"  selected="{{seleccionModoPresentacion[i].selected}}"
-                     (click)="TipoDePresentacionSeleccionado(seleccionModoPresentacion[i])" [value]="tipo.nombre" [selectable]="true" >
+                     (click)="TipoDePresentacionSeleccionado(seleccionModoPresentacion[i])" [value]="tipo.nombre" [selectable]="true">
                       {{tipo.nombre}}
                   </mat-chip>
-                </mat-chip-list>
-                <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDePresentacion}}</span>
+                </mat-chip-list> -->
+                <span style ="font-weight: bold;color:green;"> Has elegido ... {{ModoPresentacionFavorito}}</span>
 
               </div>
               <div class="btnCambiarStep">
