@@ -48,9 +48,9 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Estás seguro/a de que quieres desactivar el ';
 
-  displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos'];
+  displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos', ' '];
 
-  displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'puntos'];
+  displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'puntos', ' '];
 
   constructor(public dialog: MatDialog,
               public sesion: SesionService,
@@ -124,6 +124,20 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
       console.log ('ya tengo las inscripciones');
       this.TablaClasificacionTotal();
     });
+  }
+
+  // La uso para señalar en la clasificacion general al ganador cuando la competición ha finalizado
+
+  CompeticionFinalizada(): boolean {
+  // tslint:disable-next-line:no-inferrable-types
+      let finalizada: boolean = true;
+      this.jornadas.forEach (jornada => {
+                if (!this.calculos.JornadaF1TieneGanadores (jornada.id, this.jornadas)) {
+                  console.log ('La jornada ' + jornada.id + 'no se ha disputado');
+                  finalizada = false;
+                }
+      });
+      return finalizada;
   }
 
   TablaClasificacionTotal() {

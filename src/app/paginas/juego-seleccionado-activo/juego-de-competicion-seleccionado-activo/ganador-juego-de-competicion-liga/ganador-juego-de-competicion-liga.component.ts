@@ -467,7 +467,9 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
 
   goBack() {
-    if (!this.asignados && !this.Disputada(this.jornadaId)) {
+    if (this.jornadaId === undefined) {
+      this.location.back();
+    } else if (!this.asignados && !this.Disputada(this.jornadaId)) {
       Swal.fire({
         title: '¿Estas seguro?',
         text: 'No has realizado la asignación',

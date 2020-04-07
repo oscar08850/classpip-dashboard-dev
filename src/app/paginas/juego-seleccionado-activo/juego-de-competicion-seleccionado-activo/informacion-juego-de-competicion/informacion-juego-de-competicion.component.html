@@ -21,7 +21,7 @@
                 </mat-expansion-panel-header>
                 <div class="enFila">
                   <!-- <div style="margin-right: 15%; border: 15px; width: 60%;"> -->
-                  <div style="margin-left: 20px; font-size: 130%; width: 40%;">
+                  <div style="margin-left: 20px; font-size: 130%; width: 100%;">
                       <br>
                       <span style="margin-left: 65px;font-size: 80%;"><strong>Criterio: </strong> {{jornada.CriterioGanador}}</span>
                       <br>
@@ -32,7 +32,7 @@
                       <!-- ///////////////////////////////////// TABLA ENFRENTAMIENTOS POR EQUIPOS ////////////////////////////////////// -->
                       <form style=" width: 100%" *ngIf="juegoSeleccionado.Modo != 'Individual'">
 
-                          <table style="margin-left: 65px;  width: 100%" align="center" mat-table [dataSource]="dataSourceEnfrentamientoEquipo" class="example-container mat-elevation-z8">
+                          <table style="margin-left: 65px; width: 100%" align="center" mat-table [dataSource]="dataSourceEnfrentamientoEquipo" class="example-container mat-elevation-z8">
                           <!--- Note that these columns can be defined in any order.
                                 The actual rendered columns are set as a property on the row definition" -->
 
@@ -65,14 +65,12 @@
                           <tr mat-header-row *matHeaderRowDef="displayedColumnsEnfrentamientos; sticky: true"></tr>
                           <tr mat-row *matRowDef="let row; columns: displayedColumnsEnfrentamientos;"></tr>
                         </table>
-                        <br>
-                        <div  *ngIf="ParticipanteDescansa(jornada) !== true && participanteDescansa === null; else Aviso_participante_descansa"></div>
-                        <ng-template #Aviso_participante_descansa>En este enfrentamiento {{participanteDescansa}}</ng-template>
+
                       </form>
 
                       <!-- ///////////////////////////////////// TABLA ENFRENTAMIENTOS INDIVIDUAL ////////////////////////////////////// -->
                       <form style=" width: 100%" *ngIf="juegoSeleccionado.Modo == 'Individual'">
-                        <table style="margin-left: 65px;  width: 200%" align="center" mat-table [dataSource]="dataSourceEnfrentamientoIndividual" class="example-container mat-elevation-z8">
+                        <table style="margin-left: 65px; width: 100%" align="center" mat-table [dataSource]="dataSourceEnfrentamientoIndividual" class="example-container mat-elevation-z8">
                           <!--- Note that these columns can be defined in any order.
                                 The actual rendered columns are set as a property on the row definition" -->
 
@@ -97,11 +95,14 @@
                           <tr mat-header-row *matHeaderRowDef="displayedColumnsEnfrentamientos; sticky: true"></tr>
                           <tr mat-row *matRowDef="let row; columns: displayedColumnsEnfrentamientos;"></tr>
                         </table>
-                        <br>
-                        <div  *ngIf="ParticipanteDescansa(jornada) !== true && participanteDescansa === null; else Aviso_participante_descansa"></div>
-                        <ng-template #Aviso_participante_descansa>En este enfrentamiento {{participanteDescansa}}</ng-template>
+
                       </form>
 
+                      <br>
+                      <span style="margin-left: 65px;font-size: 80%;width: 100%" *ngIf="ParticipanteDescansa(jornada)">En esta jornada <strong>{{participanteDescansa}}</strong></span>
+                      <br>
+                      <br>
+                      <br>
                   </div>
                   <!-- <div>
                       <span style="font-weight: bold; font-size:150%;">PX</span>
