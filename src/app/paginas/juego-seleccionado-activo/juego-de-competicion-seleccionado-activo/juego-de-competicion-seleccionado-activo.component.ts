@@ -43,9 +43,9 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   // displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'partidosTotales',
   //                                      'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'partidosTotales',
-                                       'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos'];
+                                       'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
   displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'partidosTotales', 'partidosJugados',
-                                       'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos'];
+                                       'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
 
   datasourceAlumno;
   datasourceEquipo;
@@ -327,4 +327,23 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     return this.juegosActivosPuntos;
 
   }
+
+  // const jornadaFinalizada = this.calculos.JornadaFinalizada(this.juegoSeleccionado, jornadaSeleccionada);
+// La uso para señalar en la clasificacion general al ganador cuando la competición ha finalizado
+
+CompeticionFinalizada(): boolean {
+      // tslint:disable-next-line:max-line-length
+      this.JornadasCompeticion = this.calculos.GenerarTablaJornadasLiga(this.juegoSeleccionado, this.jornadas, this.enfrentamientosDelJuego);
+  // tslint:disable-next-line:no-inferrable-types
+      let finalizada: boolean = true;
+      this.JornadasCompeticion.forEach (jornada => {
+                console.log (jornada);
+                if (!this.calculos.JornadaFinalizada (this.juegoSeleccionado, jornada)) {
+                  console.log ('La jornada ' + jornada.id + 'no se ha disputado');
+                  finalizada = false;
+                }
+      });
+      return finalizada;
+  }
+
 }

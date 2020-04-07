@@ -1017,7 +1017,69 @@ export class CalculosService {
   // // ----------------------------------------------------------------------------- //
 /////////////////////////////////////////////////////  COMPETICIONES  ////////////////////////////////////////////////////
 
-  public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any [] {
+public BorraJuegoCompeticionLiga(juegoDeCompeticion: Juego) {
+  // Pido las inscripciones de los participantes en el juego y las borro todas
+  if (juegoDeCompeticion.Modo === 'Individual') {
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionLiga (juegoDeCompeticion.id)
+    // tslint:disable-next-line:max-line-length
+    .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionLiga(inscripcion).subscribe()));
+  } else {
+    console.log ('inscripciones equipos');
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionLiga (juegoDeCompeticion.id)
+    // tslint:disable-next-line:max-line-length
+    .subscribe ( inscripciones => {
+      console.log ('inscripciones');
+      console.log (inscripciones);
+      inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionLiga(inscripcion).subscribe());
+    }
+    );
+  }
+  // Pido las jornadas y para cada jornada pido los enfrentamientos y los borro. Y luego borro la jornada
+  this.peticionesAPI.DameJornadasDeCompeticionLiga (juegoDeCompeticion.id)
+  .subscribe (jornadas => {
+    jornadas.forEach (jornada => {
+              this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga (jornada.id)
+              // tslint:disable-next-line:max-line-length
+              .subscribe (enfrentamientos => enfrentamientos.forEach (enfrentamiento => this.peticionesAPI.BorraEnrentamientoLiga (enfrentamiento).subscribe()));
+              // Borrar jornada
+              this.peticionesAPI.BorrarJornadaLiga (jornada).subscribe();
+            });
+  });
+
+
+  // Borro el juego
+  this.peticionesAPI.BorraJuegoDeCompeticionLiga (juegoDeCompeticion.id, juegoDeCompeticion.grupoId).subscribe();
+
+}
+
+
+public BorraJuegoCompeticionFormulaUno(juegoDeCompeticion: Juego) {
+  // Pido las inscripciones de los participantes en el juego y las borro todas
+  if (juegoDeCompeticion.Modo === 'Individual') {
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id)
+    // tslint:disable-next-line:max-line-length
+    .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(inscripcion).subscribe()));
+  } else {
+    console.log ('inscripciones equipos');
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id)
+    // tslint:disable-next-line:max-line-length
+    .subscribe ( inscripciones => {
+      console.log ('inscripciones');
+      console.log (inscripciones);
+      inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(inscripcion).subscribe());
+    }
+    );
+  }
+  // Pido las jornadas y para cada jornada pido los enfrentamientos y los borro. Y luego borro la jornada
+  this.peticionesAPI.DameJornadasDeCompeticionFormulaUno (juegoDeCompeticion.id)
+  .subscribe (jornadas => jornadas.forEach (jornada => this.peticionesAPI.BorrarJornadaFormulaUno (jornada).subscribe()));
+
+
+  // Borro el juego
+  this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id, juegoDeCompeticion.grupoId).subscribe();
+}
+
+public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any [] {
     this.jornadasnuevas = [];
     for (let i = 0; i < NumeroDeJornadas; i++) {
       // tslint:disable-next-line:max-line-length '2000-01-01T01:01:01.000Z'
@@ -2449,11 +2511,11 @@ export class CalculosService {
 
           }
         }
-        if (tieneGanadores === true) {
-          Swal.fire('Esta jornada ya tiene ganadores', '', 'error');
-        } else {
-          Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
-        }
+        // if (tieneGanadores === true) {
+        //   Swal.fire('Esta jornada ya tiene ganadores', '', 'error');
+        // } else {
+        //   Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
+        // }
       }
     });
   }

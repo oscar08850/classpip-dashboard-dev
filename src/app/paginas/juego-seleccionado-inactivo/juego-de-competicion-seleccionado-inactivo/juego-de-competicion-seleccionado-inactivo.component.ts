@@ -281,11 +281,8 @@ export class JuegoDeCompeticionSeleccionadoInactivoComponent implements OnInit {
   }
 
   EliminarJuego() {
-    this.peticionesAPI.BorraJuegoDeCompeticionLiga(this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
-    .subscribe(res => {
-      console.log('Juego eliminado');
-      this.location.back();
-    });
+    this.calculos.BorraJuegoCompeticionLiga (this.juegoSeleccionado);
+    this.location.back();
   }
 
   AbrirDialogoConfirmacionEliminar(): void {
