@@ -813,7 +813,10 @@ export class JuegoComponent implements OnInit {
   }
 
   ActualizarBotonPasoPresentacion() {
-    console.log('AQUI PASAMOS LA ORDENACION ESCOGIDA');
+    this.DisabledPresentacion = false;
+  }
+  ActualizarBotonPasoPresentacion2() {
+    console.log('AQUI PASAMOS LA ORDENACION ESCOGIDA: ' + this.ModoPresentacionFavorito);
   }
 
   NumeroDeVueltas() {

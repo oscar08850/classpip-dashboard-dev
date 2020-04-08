@@ -241,11 +241,11 @@
             <!--Tercer paso, escogemos la presentacion de preguntas y respuestas-->
             <mat-step [formGroup]="myFormPresentacion">
               <ng-template matStepLabel><div>Presentación</div></ng-template>
-              <div class = "colorsChips">
+              <div>
                 <label class = "LabelStepper">Selecciona un modo de presentacion:</label>
-                <mat-radio-group aria-labelledby="radio-group-label" class="radio-group" formControlName="ModoPresentacionFavorito">
-                    <mat-radio-button class="radio-button" *ngFor="let presentacion of seleccionModoPresentacion" [value]="presentacion">
-                      {{presentacion}}
+                <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group" formControlName="ModoPresentacionFavorito" [(ngModel)]="ModoPresentacionFavorito">
+                    <mat-radio-button (click)="ActualizarBotonPasoPresentacion()" class="radio-button" *ngFor="let presentacion of seleccionModoPresentacion" [value]="presentacion">
+                      <label style="color: black;">{{presentacion}}</label>
                     </mat-radio-button>
                 </mat-radio-group>
                 <!-- <mat-chip-list class="mat-chip-list-stacked">
@@ -259,7 +259,7 @@
               </div>
               <div class="btnCambiarStep">
                 <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                <button (click)="ActualizarBotonPasoPresentacion()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                <button [disabled]="DisabledPresentacion" (click)="ActualizarBotonPasoPresentacion2()" type="button" class="btn Next" matStepperNext>Siguiente</button>
               </div>
             </mat-step>
             <!--Cuarto paso, finalizamos-->
