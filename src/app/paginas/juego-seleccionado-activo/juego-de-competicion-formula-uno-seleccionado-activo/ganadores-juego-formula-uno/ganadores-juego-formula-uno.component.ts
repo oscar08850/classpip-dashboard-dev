@@ -164,11 +164,13 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     // ganadores es un vector con los id de los ganadores de la jornada
     // Los puntos que hay que asignar a cada uno de los ganadores, segun su posición, estan en juegoSeleccionado.Puntos
 
-    let i;
-    for (i = 0; i < ganadores.length ; i++) {
-      this.tablaJornada.filter (participante => participante.id === ganadores[i])[0].puntos = this.juegoSeleccionado.Puntos[i];
+    if (ganadores !== undefined) {
+      let i;
+      for (i = 0; i < ganadores.length ; i++) {
+        this.tablaJornada.filter (participante => participante.id === ganadores[i])[0].puntos = this.juegoSeleccionado.Puntos[i];
+      }
+      this.tablaJornada.sort ((a , b) => b.puntos - a.puntos);
     }
-    this.tablaJornada.sort ((a , b) => b.puntos - a.puntos);
   }
 
   // Esta función se ejecuta al seleccionar una jornada
@@ -314,8 +316,10 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       // Selecciono la jornada implicada
       const jornadaSeleccionada = this.jornadasDelJuego.filter (jornada => jornada.id === Number(this.jornadaId))[0];
       // Asigno los resultados a la jornada
-      this.calculos.AsignarResultadosJornadaF1(this.juegoSeleccionado, jornadaSeleccionada, ganadores);
-      Swal.fire('Resutados asignados manualmente');
+      if (ganadores !== undefined) {
+        this.calculos.AsignarResultadosJornadaF1(this.juegoSeleccionado, jornadaSeleccionada, ganadores);
+        Swal.fire('Resutados asignados manualmente');
+      }
       this.asignados = true;
 
     }
@@ -324,7 +328,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
   cambioTab(tabChangeEvent) {
     if (tabChangeEvent.index === 1) {
-      // preparamos las tablas para elegir a los ganadores de la lista de participantes
+      // preparamos las tablas para elegir a los ganadores manualmente a partir de la lista de participantes
 
       this.ganadoresElegidos = [];
       this.dataSourceElegidos = new MatTableDataSource (this.ganadoresElegidos);
@@ -341,8 +345,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         this.dataSourceParticipantes = new MatTableDataSource (this.equiposParticipantes);
       }
     } else {
-      console.log('Este juego ya tiene ganadores asignados');
-      Swal.fire('Esta jornada ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
+      // Para el método manualmente masivo no necesitamos cargar nada
     }
   }
 
