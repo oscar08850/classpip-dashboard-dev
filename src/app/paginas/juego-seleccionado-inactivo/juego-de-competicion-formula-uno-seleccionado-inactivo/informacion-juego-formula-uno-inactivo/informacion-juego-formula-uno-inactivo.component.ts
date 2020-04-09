@@ -93,6 +93,11 @@ export class InformacionJuegoDeCompeticionFormulaUnoInactivoComponent implements
     console.log(this.dataSourceClasificacionJornada.data);
   }
 
+  JornadaFinalizada(jornadaSeleccionada: TablaJornadas) {
+    const jornadaFinalizada = this.calculos.JornadaFinalizada(this.juegoSeleccionado, jornadaSeleccionada);
+    return jornadaFinalizada;
+  }
+
   goBack() {
     this.location.back();
   }

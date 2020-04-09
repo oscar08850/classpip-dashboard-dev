@@ -67,7 +67,6 @@ export class InformacionJuegoDeCompeticionComponent implements OnInit {
     this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
     this.listaAlumnosOrdenadaPorPuntos = this.sesion.DameInscripcionAlumno();
     this.listaEquiposOrdenadaPorPuntos = this.sesion.DameInscripcionEquipo();
-    this.juegosActivosPuntos = this.sesion.DameJuegosDePuntosActivos();
   }
 
   ObtenerEnfrentamientosDeCadaJornada(jornadaSeleccionada: TablaJornadas) {
