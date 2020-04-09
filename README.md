@@ -22,6 +22,14 @@ Check that you have the correc NodeJS version:
 node -v
 > v10.13.0
 ```
+## Git and GitHub
+
+You need to install Git and have an account in GitHub:
+ 
+https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+ 
+https://github.com/
+
 
 ### To build native addons on Linux (Ubuntu)
 
