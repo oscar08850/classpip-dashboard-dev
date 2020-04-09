@@ -1196,22 +1196,15 @@ export class CalculosService {
 
   public calcularLiga(numEquipos: number, NumeroDeJornadas: number, participantes: any, ID: number, Jornadas: Jornada[]) {
           console.log('Voy a por los enrentamientos');
-          // let jornadas: Jornada[];
-          // this.peticionesAPI.DameJornadasDeCompeticionLiga(ID)
-          //   .subscribe(inscripciones => {
-          //     jornadas = inscripciones;
-          //     console.log('Las jornadas son: ');
-          //     console.log(jornadas);
-          //   });
           this.rondas = this.calcularLigaNumEquipos(participantes.length, NumeroDeJornadas);
           console.log('rondas');
           console.log(this.rondas);
-          this.guardarenrentamientos(this.rondas, NumeroDeJornadas, participantes, Jornadas);
+          this.guardarenfrentamientos(this.rondas, NumeroDeJornadas, participantes, Jornadas);
           console.log('Enrentaminetos guardados');
   }
 
-  public guardarenrentamientos(rondas: Array<Array<EnfrentamientoLiga>>, NumeroDeJornadas: number,
-                               participantes: any[], jornadas: Jornada[]) {
+  public guardarenfrentamientos(rondas: Array<Array<EnfrentamientoLiga>>, NumeroDeJornadas: number,
+                                participantes: any[], jornadas: Jornada[]) {
 
     const numPartidosPorRonda = participantes.length / 2;
     console.log(participantes.length);
