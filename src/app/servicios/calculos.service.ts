@@ -12,6 +12,7 @@ import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { calcPossibleSecurityContexts } from '@angular/compiler/src/template_parser/binding_parser';
 
 import Swal from 'sweetalert2';
+import { isNullOrUndefined } from 'util';
 
 
 @Injectable({
@@ -684,14 +685,12 @@ export class CalculosService {
   return rankingEquiposJuegoDePuntos;
 }
 
-
   public AsignarPuntosAlumno(
     alumno: AlumnoJuegoDePuntos,
     nivelesDelJuego: Nivel[],
     puntosNuevos: any,
     puntoSeleccionadoId: any,
   ) {
-
         alumno.PuntosTotalesAlumno = alumno.PuntosTotalesAlumno + puntosNuevos;
         if (nivelesDelJuego.length > 0 ) {
           const nivelId = this.DameNivelId (nivelesDelJuego, alumno.PuntosTotalesAlumno );
@@ -855,8 +854,9 @@ export class CalculosService {
 
       });
     }
-
   }
+
+
 
   // Esta función recibe una lista de cromos en la que puede haber repetidos
   // y geneera otra en la que cada cromo aparece una sola vez y se le asocia el número
@@ -872,10 +872,219 @@ export class CalculosService {
     }
     return listaCromosSinRepetidos;
   }
+  public DameIdAlumnos(lineas: string[], listaAlumnosClasificacion: any[]): any [] {
+    const ganadores: any [] = [];
 
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < lineas.length; i++) {
+      // Busco a cada uno de los ganadores (uno por linea de texto) y si esta guardo su id
+      // tslint:disable-next-line:max-line-length
+      const ganador = listaAlumnosClasificacion.filter (alumno => lineas[i] === alumno.nombre + ' ' + alumno.primerApellido + ' ' + alumno.segundoApellido)[0];
+      if (ganador !== undefined) {
+        ganadores.push (ganador.id);
+      }
+    }
+    if (ganadores.length === lineas.length) {
+      console.log('ganadores: ');
+      console.log(ganadores);
+      return ganadores;
+    } else { // alguno de los ganadores no se ha encontrado
+      console.log('alguno de los ganadores no se ha encontrado');
+      Swal.fire('Cuidado', 'Alguno de los alumnos introducidos no se corresponde con ninguno de los participantes del juego', 'warning');
+      return undefined;
+    }
+  }
+
+  public DameIdEquipos(lineas: string[], listaEquiposClasificacion: any[]): any [] {
+    const ganadores: any [] = [];
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < lineas.length; i++) {
+      // Busco a cada uno de los ganadores (uno por linea de texto) y si esta guardo su id
+      // tslint:disable-next-line:max-line-length
+      const ganador = listaEquiposClasificacion.filter (equipo => lineas[i] === equipo.nombre)[0];
+      if (ganador !== undefined) {
+        ganadores.push (ganador.id);
+      }
+    }
+    if (ganadores.length === lineas.length) {
+      return ganadores;
+    } else { // alguno de los ganadores no se ha encontrado
+      Swal.fire('Cuidado', 'Alguno de los equipos introducidos no se corresponde con ninguno de los participantes del juego', 'warning');
+      return undefined;
+    }
+  }
+  // public GanadoresMasivamenteNombre(lineas: string[], juegoSeleccionado: Juego) {
+  //   let nombresClasificacion: string[] = [];
+  //   let encontrado = false; // Detecta problema de línia en blanco y repetición de nombre
+  //   let i = 0;
+  //   while (i < lineas.length && encontrado === false) {
+  //     const nombreClasificacion = lineas[i];
+  //     const indexOfUnselected = nombresClasificacion.indexOf(nombreClasificacion);
+  //     if (indexOfUnselected === -1 && nombreClasificacion !== '') {
+  //       nombresClasificacion.push(nombreClasificacion);
+  //     } else if (nombreClasificacion === '' && lineas.length === juegoSeleccionado.NumeroParticipantesPuntuan ||
+  //                nombreClasificacion === '' && i < juegoSeleccionado.NumeroParticipantesPuntuan ) {
+  //       encontrado = true;
+  //       nombresClasificacion = [];
+  //       Swal.fire('Alguna de las líneas introducidas está en blanco', ' No se ha podido realizar esta acción', 'error');
+  //     } else if (nombreClasificacion === '' && (i + 1) > juegoSeleccionado.NumeroParticipantesPuntuan) {
+  //       console.log('linea: ' + (i + 1));
+  //       // Si el espacio en blanco no está en una posición que puntúa no me importa porque antes de salir de la función irá fuera
+  //       console.log('Hay líneas en blanco pero no en la posición de ganador. Este caso no me afecta');
+  //     } else if (indexOfUnselected !== -1 && nombreClasificacion !== '') {
+  //       encontrado = true;
+  //       nombresClasificacion = [];
+  //       console.log(i);
+  //       console.log('Alguno de los participantes introducidos está repetido');
+  //       Swal.fire('Alguno de los participantes introducidos está repetido', ' No se ha podido realizar esta acción', 'error');
+  //     } else {
+  //       encontrado = true;
+  //       Swal.fire('se ha producido algún error', ' No se ha podido realizar esta acción', 'error');
+
+  //     }
+  //     i++;
+  //   }
+  //   const participantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
+  //   if (nombresClasificacion.length > participantesPuntuan) {
+  //     let k = nombresClasificacion.length;
+  //     while (k > participantesPuntuan) {
+  //       nombresClasificacion.pop();
+  //       k = k - 1;
+  //     }
+  //   }
+  //   console.log('nombresClasificacion:');
+  //   console.log(nombresClasificacion);
+  //   return nombresClasificacion;
+  // }
+
+  // public GanadoresMasivamenteId(ganadoresNombre: string[], listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[],
+  //                               listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[], juegoSeleccionado: Juego) {
+  //   console.log('listaAlumnosClasificacion');
+  //   console.log(listaAlumnosClasificacion);
+  //   console.log('listaEquiposClasificacion');
+  //   console.log(listaEquiposClasificacion);
+  //   const numeroParticipantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
+  //   let participantesPuntuan: number[] = [];
+  //   if (juegoSeleccionado.Modo === 'Individual') {
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for (let i = 0; i < ganadoresNombre.length; i++) {
+  //       let encontrado = false;
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let j = 0; j < listaAlumnosClasificacion.length; j++) {
+  //         if (ganadoresNombre[i] === listaAlumnosClasificacion[j].nombre + ' '
+  //                                    + listaAlumnosClasificacion[j].primerApellido + ' '
+  //                                    + listaAlumnosClasificacion[j].segundoApellido) {
+  //           encontrado = true;
+  //           console.log(ganadoresNombre[i] + '===' + listaAlumnosClasificacion[j].nombre + ' '
+  //                                                  + listaAlumnosClasificacion[j].primerApellido + ' '
+  //                                                  + listaAlumnosClasificacion[j].segundoApellido);
+  //           if (participantesPuntuan.length < numeroParticipantesPuntuan) {
+  //             participantesPuntuan.push(listaAlumnosClasificacion[j].id);
+  //           }
+  //         }
+  //       }
+  //       if (encontrado === false) {
+  //         console.log('participantesPuntuan.length: ' + participantesPuntuan.length);
+  //         console.log('Alguno de los nombres introducidos no se corresponde con ninguno de los alumnos del grupo');
+  //         console.log(participantesPuntuan);
+  //         // tslint:disable-next-line:max-line-length
+  //         Swal.fire('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo', ' No se ha podido realizar esta acción', 'error');
+  //         participantesPuntuan = [];
+  //       }
+  //     }
+  //     console.log(participantesPuntuan);
+  //   } else {
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let i = 0; i < ganadoresNombre.length; i++) {
+  //         let encontrado = false;
+  //         // tslint:disable-next-line:prefer-for-of
+  //         for (let j = 0; j < listaEquiposClasificacion.length; j++) {
+  //           if (ganadoresNombre[i] === listaEquiposClasificacion[j].nombre) {
+  //             encontrado = true;
+  //             if (participantesPuntuan.length < numeroParticipantesPuntuan) {
+  //               participantesPuntuan.push(listaEquiposClasificacion[j].id);
+  //             }
+  //           }
+  //         }
+  //         if (encontrado === false) {
+  //           console.log('participantesPuntuan.length = ' + participantesPuntuan.length);
+  //           console.log('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo');
+  //           // tslint:disable-next-line:max-line-length
+  //           Swal.fire('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo', ' No se ha podido realizar esta acción', 'error');
+  //           participantesPuntuan = [];
+  //         }
+  //       }
+  //       console.log(participantesPuntuan);
+  //   }
+  //   return participantesPuntuan;
+  // }
+  // // ----------------------------------------------------------------------------- //
 /////////////////////////////////////////////////////  COMPETICIONES  ////////////////////////////////////////////////////
 
-  public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any [] {
+public BorraJuegoCompeticionLiga(juegoDeCompeticion: Juego) {
+  // Pido las inscripciones de los participantes en el juego y las borro todas
+  if (juegoDeCompeticion.Modo === 'Individual') {
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionLiga (juegoDeCompeticion.id)
+    // tslint:disable-next-line:max-line-length
+    .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionLiga(inscripcion).subscribe()));
+  } else {
+    console.log ('inscripciones equipos');
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionLiga (juegoDeCompeticion.id)
+    // tslint:disable-next-line:max-line-length
+    .subscribe ( inscripciones => {
+      console.log ('inscripciones');
+      console.log (inscripciones);
+      inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionLiga(inscripcion).subscribe());
+    }
+    );
+  }
+  // Pido las jornadas y para cada jornada pido los enfrentamientos y los borro. Y luego borro la jornada
+  this.peticionesAPI.DameJornadasDeCompeticionLiga (juegoDeCompeticion.id)
+  .subscribe (jornadas => {
+    jornadas.forEach (jornada => {
+              this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga (jornada.id)
+              // tslint:disable-next-line:max-line-length
+              .subscribe (enfrentamientos => enfrentamientos.forEach (enfrentamiento => this.peticionesAPI.BorraEnrentamientoLiga (enfrentamiento).subscribe()));
+              // Borrar jornada
+              this.peticionesAPI.BorrarJornadaLiga (jornada).subscribe();
+            });
+  });
+
+
+  // Borro el juego
+  this.peticionesAPI.BorraJuegoDeCompeticionLiga (juegoDeCompeticion.id, juegoDeCompeticion.grupoId).subscribe();
+
+}
+
+
+public BorraJuegoCompeticionFormulaUno(juegoDeCompeticion: Juego) {
+  // Pido las inscripciones de los participantes en el juego y las borro todas
+  if (juegoDeCompeticion.Modo === 'Individual') {
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id)
+    // tslint:disable-next-line:max-line-length
+    .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(inscripcion).subscribe()));
+  } else {
+    console.log ('inscripciones equipos');
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id)
+    // tslint:disable-next-line:max-line-length
+    .subscribe ( inscripciones => {
+      console.log ('inscripciones');
+      console.log (inscripciones);
+      inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(inscripcion).subscribe());
+    }
+    );
+  }
+  // Pido las jornadas y para cada jornada pido los enfrentamientos y los borro. Y luego borro la jornada
+  this.peticionesAPI.DameJornadasDeCompeticionFormulaUno (juegoDeCompeticion.id)
+  .subscribe (jornadas => jornadas.forEach (jornada => this.peticionesAPI.BorrarJornadaFormulaUno (jornada).subscribe()));
+
+
+  // Borro el juego
+  this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id, juegoDeCompeticion.grupoId).subscribe();
+}
+
+public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any [] {
     this.jornadasnuevas = [];
     for (let i = 0; i < NumeroDeJornadas; i++) {
       // tslint:disable-next-line:max-line-length '2000-01-01T01:01:01.000Z'
@@ -1132,6 +1341,81 @@ export class CalculosService {
     }
     equipos.push (listaInicial);
     return equipos;
+  }
+
+  // Elimina el cuestionario (tanto el id del profe como del cuestinario estan en sesión.
+  // Lo hago con un observable para que el componente que muestra la lista de cuestionarios
+  // espere hasta que se haya acabado la operacion de borrar el cuestionario de la base de datos
+  public EliminarCuestionario(): any {
+    const eliminaObservable = new Observable ( obs => {
+          this.peticionesAPI.BorraCuestionario(
+                    this.sesion.DameProfesor().id,
+                    this.sesion.DameCuestionario().id)
+          .subscribe(() => {
+            this.EliminarPreguntasDelCuestionario();
+            obs.next ();
+          });
+    });
+    return eliminaObservable;
+  }
+
+  // ESTA FUNCIÓN RECUPERA TODAS LAS PREGUNTAS DEL CUESTIONARIO QUE VAMOS A BORRAR Y DESPUÉS LAS BORRA. ESTO LO HACEMOS PARA NO
+  // DEJAR RELACIONES PREGUNTADELCUESTIONARIO QUE NO NOS SIRVEN EN LA BASE DE DATOS
+  private EliminarPreguntasDelCuestionario() {
+    // Pido las preguntasDelCuestionario correspondientes al cuestionario que voy a borrar
+    this.peticionesAPI.DamePreguntasDelCuestionarioCuestionario(this.sesion.DameCuestionario().id)
+    .subscribe( preguntasDelCuestionario => {
+      if (preguntasDelCuestionario[0] !== undefined) {
+
+        // Una vez recibo las preguntas del cuestionario, las voy borrando una a una
+        for (let i = 0; i < preguntasDelCuestionario.length; i++) {
+          this.peticionesAPI.BorraPreguntaDelCuestionario(preguntasDelCuestionario[i].id)
+          .subscribe(() => {
+              console.log('Pregunta del cuestionario borrada correctamente');
+          });
+        }
+      } else {
+        console.log('no hay preguntas en el cuestionario');
+      }
+
+    });
+  }
+
+  // Elimina la pregunta (La pregunta se guarda previamente en sesión.
+  // Lo hago con un observable para que el componente que muestra la lista de preguntas
+  // espere hasta que se haya acabado la operacion de borrar la pregunta de la base de datos
+  public EliminarPregunta(): any {
+    const eliminaObservable = new Observable ( obs => {
+          this.peticionesAPI.BorrarPregunta(
+                    this.sesion.DamePregunta().id)
+          .subscribe(() => {
+            this.EliminarPreguntasDelCuestionarioConPregunta();
+            obs.next ();
+          });
+    });
+    return eliminaObservable;
+  }
+
+  // ESTA FUNCIÓN RECUPERA TODOS LOS CUESTINARIOS QUE CONTIENEN ESA PREGUNTA Y DESPUÉS LA BORRA DE PREGUNTASDELCUESTIONARIO. ESTO LO HACEMOS PARA NO
+  // DEJAR MATRICULAS QUE NO NOS SIRVEN EN LA BASE DE DATOS
+  private EliminarPreguntasDelCuestionarioConPregunta() {
+    // Pido las preguntasDelCuestionario correspondientes a la pregunta que voy a borrar
+    this.peticionesAPI.DameCuestionariosConPregunta(this.sesion.DamePregunta().id)
+    .subscribe( preguntasDelCuestionario => {
+      if (preguntasDelCuestionario[0] !== undefined) {
+
+        // Una vez recibo las preguntasDelCuestionario con esa pregunta, las voy borrando una a una
+        for (let i = 0; i < preguntasDelCuestionario.length; i++) {
+          this.peticionesAPI.BorraPreguntaDelCuestionario(preguntasDelCuestionario[i].id)
+          .subscribe(() => {
+              console.log('Pregunta del cuestionario borrada correctamente');
+          });
+        }
+      } else {
+        console.log('no hay preguntas en el cuestionario');
+      }
+
+    });
   }
 
   public calcularLigaNumEquipos(numEquipos: number, numRondas: number): any[] {
@@ -2225,25 +2509,109 @@ export class CalculosService {
 
           }
         }
-        if (tieneGanadores === true) {
-          Swal.fire('Esta jornada ya tiene ganadores', '', 'error');
-        } else {
-          Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
-        }
-
-        // Mensaje sweetalert
-        console.log('indexEnfrentamientosConResultadosPreviamente');
-        console.log(indexEnfrentamientosConResultadosPreviamente);
-        // no sé como hacer para devolver Mensaje
-        const Mensaje = this.MensajeSweetalert(juego, enfrentamientosJornadaSeleccionada, resultados,
-                                               indexEnfrentamientosConResultadosPreviamente);
-      } else {
-        console.log('Se ha producido algún error: resultados.length !== enfrentamientosJornadaSeleccionada.length');
+        // if (tieneGanadores === true) {
+        //   Swal.fire('Esta jornada ya tiene ganadores', '', 'error');
+        // } else {
+        //   Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
+        // }
       }
-      console.log('indexEnfrentamientosConResultadosPreviamente:');
-      console.log(indexEnfrentamientosConResultadosPreviamente);
     });
   }
+
+  // public ClasificacionJornada(juegoSeleccionado: Juego, alumnoJuegoDeCompeticionFormulaUno: TablaAlumnoJuegoDeCompeticion[],
+  //                             equipoJuegoDeCompeticionFormulaUno: TablaEquipoJuegoDeCompeticion[], GanadoresFormulaUno: string[],
+  //                             GanadoresFormulaUnoId: number[]) {
+  //   if (GanadoresFormulaUno !== undefined) {
+  //     const ParticipantesFormulaUno: string[] = GanadoresFormulaUno;
+  //     const PuntosFormulaUno: number[] = [];
+  //     juegoSeleccionado.Puntos.forEach(punto => { PuntosFormulaUno.push(punto); });
+  //     // const PuntosFormulaUno: number[] = juegoSeleccionado.Puntos;
+  //     const Posicion: number[] = [];
+  //     const ParticipantesId: number[] = GanadoresFormulaUnoId;
+  //     if (juegoSeleccionado.Modo === 'Individual') {
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
+  //         const ParticipanteFormulaUno =  alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
+  //                                       + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
+  //                                       + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
+  //         const ParticipanteId = alumnoJuegoDeCompeticionFormulaUno[i].id;
+  //         const indexNoGanador = GanadoresFormulaUno.indexOf(ParticipanteFormulaUno);
+  //         if (indexNoGanador === -1) {
+  //           ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+  //           PuntosFormulaUno.push(0);
+  //           ParticipantesId.push(ParticipanteId);
+  //         }
+  //       }
+  //       for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
+  //         Posicion[j] = j + 1;
+  //       }
+  //     } else {
+  //       console.log('Estamos en ClasificacionJornada() equipo');
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let i = 0; i < equipoJuegoDeCompeticionFormulaUno.length; i++) {
+  //         const ParticipanteFormulaUno = equipoJuegoDeCompeticionFormulaUno[i].nombre;
+  //         const ParticipanteId = equipoJuegoDeCompeticionFormulaUno[i].id;
+  //         const indexNoGanador = GanadoresFormulaUno.indexOf(ParticipanteFormulaUno);
+  //         if (indexNoGanador === -1) {
+  //           ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+  //           PuntosFormulaUno.push(0);
+  //           ParticipantesId.push(ParticipanteId);
+  //         }
+  //       }
+  //       for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
+  //         Posicion[j] = j + 1;
+  //       }
+  //     }
+  //     const datosClasificaciónJornada = {
+  //       participante: ParticipantesFormulaUno,
+  //       puntos: PuntosFormulaUno,
+  //       posicion: Posicion,
+  //       participanteId: ParticipantesId
+  //     };
+  //     return datosClasificaciónJornada;
+  //   } else {
+  //     console.log('Esta jornada aún no tiene ganadores asignados');
+  //     const ParticipantesFormulaUno: string[] = [];
+  //     const PuntosFormulaUno: number[] = [];
+  //     const Posicion: number[] = [];
+  //     const ParticipantesId: number[] = [];
+  //     if (juegoSeleccionado.Modo === 'Individual') {
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let i = 0; i < alumnoJuegoDeCompeticionFormulaUno.length; i++) {
+  //         const ParticipanteFormulaUno =  alumnoJuegoDeCompeticionFormulaUno[i].nombre + ' '
+  //                                       + alumnoJuegoDeCompeticionFormulaUno[i].primerApellido + ' '
+  //                                       + alumnoJuegoDeCompeticionFormulaUno[i].segundoApellido;
+  //         ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+  //         const ParticipanteId = alumnoJuegoDeCompeticionFormulaUno[i].id;
+  //         PuntosFormulaUno.push(0);
+  //         ParticipantesId.push(ParticipanteId);
+  //       }
+  //       for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
+  //         Posicion[j] = j + 1;
+  //       }
+
+  //     } else {
+  //    // tslint:disable-next-line:prefer-for-of
+  //       for (let i = 0; i < equipoJuegoDeCompeticionFormulaUno.length; i++) {
+  //         const ParticipanteFormulaUno = equipoJuegoDeCompeticionFormulaUno[i].nombre;
+  //         ParticipantesFormulaUno.push(ParticipanteFormulaUno);
+  //         const ParticipanteId = equipoJuegoDeCompeticionFormulaUno[i].id;
+  //         PuntosFormulaUno.push(0);
+  //         ParticipantesId.push(ParticipanteId);
+  //       }
+  //       for (let j = 0; j < ParticipantesFormulaUno.length; j++) {
+  //         Posicion[j] = j + 1;
+  //       }
+  //     }
+  //     const datosClasificaciónJornada = {
+  //       participante: ParticipantesFormulaUno,
+  //       puntos: PuntosFormulaUno,
+  //       posicion: Posicion,
+  //       participanteId: ParticipantesId
+  //     };
+  //     return datosClasificaciónJornada;
+  //   }
+  // }
 
   public GuardarGanadorEnfrentamiento(enfrentamiento: EnfrentamientoLiga, resultado: number) {
     let enfrentamientoActualizado: EnfrentamientoLiga;
@@ -2561,7 +2929,6 @@ export class CalculosService {
         jornadaTieneGanadores = true;
       }
     });
-    console.log('jornadaTieneGanadore = ' + jornadaTieneGanadores);
     return jornadaTieneGanadores;
   }
 
@@ -2574,110 +2941,7 @@ export class CalculosService {
     }
   }
 
-  public GanadoresMasivamenteNombre(lineas: string[], juegoSeleccionado: Juego) {
-    let nombresClasificacion: string[] = [];
-    let encontrado = false; // Detecta problema de línia en blanco y repetición de nombre
-    let i = 0;
-    while (i < lineas.length && encontrado === false) {
-      const nombreClasificacion = lineas[i];
-      const indexOfUnselected = nombresClasificacion.indexOf(nombreClasificacion);
-      if (indexOfUnselected === -1 && nombreClasificacion !== '') {
-        nombresClasificacion.push(nombreClasificacion);
-      } else if (nombreClasificacion === '' && lineas.length === juegoSeleccionado.NumeroParticipantesPuntuan ||
-                 nombreClasificacion === '' && i < juegoSeleccionado.NumeroParticipantesPuntuan ) {
-        encontrado = true;
-        nombresClasificacion = [];
-        Swal.fire('Alguna de las líneas introducidas está en blanco', ' No se ha podido realizar esta acción', 'error');
-      } else if (nombreClasificacion === '' && (i + 1) > juegoSeleccionado.NumeroParticipantesPuntuan) {
-        console.log('linea: ' + (i + 1));
-        // Si el espacio en blanco no está en una posición que puntúa no me importa porque antes de salir de la función irá fuera
-        console.log('Hay líneas en blanco pero no en la posición de ganador. Este caso no me afecta');
-      } else if (indexOfUnselected !== -1 && nombreClasificacion !== '') {
-        encontrado = true;
-        nombresClasificacion = [];
-        console.log(i);
-        console.log('Alguno de los participantes introducidos está repetido');
-        Swal.fire('Alguno de los participantes introducidos está repetido', ' No se ha podido realizar esta acción', 'error');
-      } else {
-        encontrado = true;
-        Swal.fire('se ha producido algún error', ' No se ha podido realizar esta acción', 'error');
 
-      }
-      i++;
-    }
-    const participantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
-    if (nombresClasificacion.length > participantesPuntuan) {
-      let k = nombresClasificacion.length;
-      while (k > participantesPuntuan) {
-        nombresClasificacion.pop();
-        k = k - 1;
-      }
-    }
-    console.log('nombresClasificacion:');
-    console.log(nombresClasificacion);
-    return nombresClasificacion;
-  }
 
-  public GanadoresMasivamenteId(ganadoresNombre: string[], listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[],
-                                listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[], juegoSeleccionado: Juego) {
-    console.log('listaAlumnosClasificacion');
-    console.log(listaAlumnosClasificacion);
-    console.log('listaEquiposClasificacion');
-    console.log(listaEquiposClasificacion);
-    const numeroParticipantesPuntuan = juegoSeleccionado.NumeroParticipantesPuntuan;
-    let participantesPuntuan: number[] = [];
-    if (juegoSeleccionado.Modo === 'Individual') {
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < ganadoresNombre.length; i++) {
-        let encontrado = false;
-        // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < listaAlumnosClasificacion.length; j++) {
-          if (ganadoresNombre[i] === listaAlumnosClasificacion[j].nombre + ' '
-                                     + listaAlumnosClasificacion[j].primerApellido + ' '
-                                     + listaAlumnosClasificacion[j].segundoApellido) {
-            encontrado = true;
-            console.log(ganadoresNombre[i] + '===' + listaAlumnosClasificacion[j].nombre + ' '
-                                                   + listaAlumnosClasificacion[j].primerApellido + ' '
-                                                   + listaAlumnosClasificacion[j].segundoApellido);
-            if (participantesPuntuan.length < numeroParticipantesPuntuan) {
-              participantesPuntuan.push(listaAlumnosClasificacion[j].id);
-            }
-          }
-        }
-        if (encontrado === false) {
-          console.log('participantesPuntuan.length: ' + participantesPuntuan.length);
-          console.log('Alguno de los nombres introducidos no se corresponde con ninguno de los alumnos del grupo');
-          console.log(participantesPuntuan);
-          // tslint:disable-next-line:max-line-length
-          Swal.fire('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo', ' No se ha podido realizar esta acción', 'error');
-          participantesPuntuan = [];
-        }
-      }
-      console.log(participantesPuntuan);
-    } else {
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < ganadoresNombre.length; i++) {
-          let encontrado = false;
-          // tslint:disable-next-line:prefer-for-of
-          for (let j = 0; j < listaEquiposClasificacion.length; j++) {
-            if (ganadoresNombre[i] === listaEquiposClasificacion[j].nombre) {
-              encontrado = true;
-              if (participantesPuntuan.length < numeroParticipantesPuntuan) {
-                participantesPuntuan.push(listaEquiposClasificacion[j].id);
-              }
-            }
-          }
-          if (encontrado === false) {
-            console.log('participantesPuntuan.length = ' + participantesPuntuan.length);
-            console.log('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo');
-            // tslint:disable-next-line:max-line-length
-            Swal.fire('Alguno de los nombres introducidos no se corresponde con ninguno de los equipos del grupo', ' No se ha podido realizar esta acción', 'error');
-            participantesPuntuan = [];
-          }
-        }
-        console.log(participantesPuntuan);
-    }
-    return participantesPuntuan;
-  }
 
 }

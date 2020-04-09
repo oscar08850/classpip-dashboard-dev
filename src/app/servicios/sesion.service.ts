@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga,
-         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno} from '../clases';
+         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 @Injectable({
@@ -48,6 +48,10 @@ export class SesionService {
   TablaeditarPuntos: TablaPuntosFormulaUno[];
   JuegosDePuntosActivos: Juego[];
   // listaEquiposGrupo: any;
+
+  pregunta: Pregunta;
+  cuestionario: Cuestionario;
+  listaCuestionarios: any;
 
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
@@ -333,6 +337,30 @@ console.log(this.jornadas);
 console.log(this.JornadasCompeticion);
 
 return datos;
+}
+
+public TomaCuestionario(cuestionario: Cuestionario) {
+  this.cuestionario = cuestionario;
+}
+
+public  DameCuestionario(): Cuestionario {
+  return this.cuestionario;
+}
+
+public DamePregunta(): Pregunta {
+  return this.pregunta;
+}
+
+public TomaPregunta(pregunta: Pregunta) {
+  this.pregunta = pregunta;
+}
+
+public DameListaCuestionarios(): any {
+  return this.listaCuestionarios;
+}
+
+public TomaListaCuestionarios(listaCuestionarios: any){
+  this.listaCuestionarios = listaCuestionarios;
 }
 
 public TomaDatosJornadasJuegoComponent(

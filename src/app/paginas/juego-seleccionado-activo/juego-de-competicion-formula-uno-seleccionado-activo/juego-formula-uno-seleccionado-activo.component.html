@@ -7,6 +7,10 @@
     <button type="button" class="btn Aceptar" (click) = seleccionarGanadorLiga();  routerLink = "ganadoresJuegoDeCompeticionFormulaUno">Resultados<i class="material-icons">emoji_events</i></button>
     <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionDesactivar()"> Desactivar<i class="material-icons">history</i></button>
   </div>
+  <br>
+  <div  *ngIf="(jornadas !== undefined) && CompeticionFinalizada()" class="subtitulo">Clasificación general definitiva</div>
+  <div  *ngIf="(jornadas !== undefined) && !CompeticionFinalizada()" class="subtitulo">Clasificación general</div>
+  <br>
 
   <!-- ////////////////////////////////////// CLASIFICACIÓN INDIVIDUAL ////////////////////////////////////////////////////-->
   <form style="width: 100%"  *ngIf="juegoSeleccionado.Modo === 'Individual'">
@@ -24,42 +28,64 @@
         <!-- Posición Column -->
         <ng-container matColumnDef="posicion">
           <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Posición Global</th>
-          <td mat-cell *matCellDef="let alumno"> {{alumno.posicion}} </td>
+          <td mat-cell *matCellDef="let alumno; let i = index">
+            <div *ngIf = "(i == 0) && (CompeticionFinalizada())" style="color: green; font-size: xx-large;">{{alumno.posicion}} </div>
+            <div *ngIf = "(i != 0) || (!CompeticionFinalizada())">{{alumno.posicion}}</div>
+          </td>
         </ng-container>
 
         <!-- Nombre Alumno Column -->
         <ng-container matColumnDef="nombreAlumno">
           <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Nombre</th>
-          <td mat-cell *matCellDef="let alumno"> {{alumno.nombre}} </td>
+          <td mat-cell *matCellDef="let alumno; let i = index">
+            <div *ngIf = "(i == 0) && (CompeticionFinalizada())" style="color: green; font-size: xx-large;">{{alumno.nombre}} </div>
+            <div *ngIf = "(i != 0) || (!CompeticionFinalizada())">{{alumno.nombre}}</div>
+          </td>
         </ng-container>
 
         <!-- Primer Apellido Column -->
         <ng-container matColumnDef="primerApellido">
             <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Primer Apellido</th>
-            <td mat-cell *matCellDef="let alumno"> {{alumno.primerApellido}} </td>
+            <td mat-cell *matCellDef="let alumno; let i = index">
+              <div *ngIf = "(i == 0) && (CompeticionFinalizada())" style="color: green; font-size: xx-large;">{{alumno.primerApellido}} </div>
+              <div *ngIf = "(i != 0) || (!CompeticionFinalizada())">{{alumno.primerApellido}}</div>
+            </td>
         </ng-container>
 
          <!-- Segundo Apellido Column -->
         <ng-container matColumnDef="segundoApellido">
             <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Segundo Apellido</th>
-            <td mat-cell *matCellDef="let alumno"> {{alumno.segundoApellido}} </td>
+            <td mat-cell *matCellDef="let alumno; let i = index">
+              <div *ngIf = "(i == 0) && (CompeticionFinalizada())" style="color: green; font-size: xx-large;">{{alumno.segundoApellido}} </div>
+              <div *ngIf = "(i != 0) || (!CompeticionFinalizada())">{{alumno.segundoApellido}}</div>
+            </td>
         </ng-container>
 
         <!-- Puntos Column -->
         <ng-container matColumnDef="puntos">
             <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Puntos</th>
-            <td mat-cell *matCellDef="let alumno"> {{alumno.puntos}} </td>
+            <td mat-cell *matCellDef="let alumno; let i = index">
+              <div *ngIf = "(i == 0) && (CompeticionFinalizada())" style="color: green; font-size: xx-large;">{{alumno.puntos}} </div>
+              <div *ngIf = "(i != 0) || (!CompeticionFinalizada())">{{alumno.puntos}}</div>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef=" ">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center"></th>
+          <td mat-cell *matCellDef="let alumno; let i = index">
+            <div *ngIf = "(i == 0) && (CompeticionFinalizada())"><i class="material-icons" style="color: green; font-size:xx-large;">emoji_events</i></div>
+          </td>
         </ng-container>
 
         <!-- More Column -->
-        <ng-container matColumnDef=" ">
+        <!-- <ng-container matColumnDef=" ">
             <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 0%" align="center"> </th>
             <td mat-cell *matCellDef="let alumno">
                 <button (click) = "AccederAlumno(alumno)" routerLink = "informacionAlumnoJuegoCompeticionLiga" mat-icon-button matTooltip="Ver progreso de {{alumno.nombre}} en el juego">
                     <i class="material-icons">more_horiz</i>
                 </button>
             </td>
-        </ng-container>
+        </ng-container> -->
 
         <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnos; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnos;"></tr>
@@ -85,13 +111,19 @@
         <!-- Posición Column -->
         <ng-container matColumnDef="posicion">
           <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Posición Global</th>
-          <td mat-cell *matCellDef="let equipo"> {{equipo.posicion}} </td>
+          <td mat-cell *matCellDef="let equipo; let i = index">
+            <div *ngIf = "(i == 0) && (CompeticionFinalizada())" style="color: green; font-size: xx-large;">{{equipo.posicion}} </div>
+            <div *ngIf = "(i != 0) || (!CompeticionFinalizada())">{{equipo.posicion}}</div>
+          </td>
         </ng-container>
 
         <!-- Nombre Alumno Column -->
         <ng-container matColumnDef="nombreEquipo">
           <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 30%"  align="center">Nombre</th>
-          <td mat-cell *matCellDef="let equipo"> {{equipo.nombre}} </td>
+          <td mat-cell *matCellDef="let equipo; let i = index">
+            <div *ngIf = "(i == 0) && (CompeticionFinalizada())" style="color: green; font-size: xx-large;">{{equipo.nombre}} </div>
+            <div *ngIf = "(i != 0) || (!CompeticionFinalizada())">{{equipo.nombre}}</div>
+          </td>
         </ng-container>
 
          <!-- Miembros Column -->
@@ -120,7 +152,17 @@
         <!-- Puntos Column -->
         <ng-container matColumnDef="puntos">
             <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Puntos</th>
-            <td mat-cell *matCellDef="let equipo"> {{equipo.puntos}} </td>
+            <td mat-cell *matCellDef="let equipo; let i = index">
+              <div *ngIf = "(i == 0) && (CompeticionFinalizada())" style="color: green; font-size: xx-large;">{{equipo.puntos}} </div>
+              <div *ngIf = "(i != 0) || (!CompeticionFinalizada())">{{equipo.puntos}}</div>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef=" ">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center"></th>
+          <td mat-cell *matCellDef="let equipo; let i = index">
+            <div *ngIf = "(i == 0) && (CompeticionFinalizada())"><i class="material-icons" style="color: green; font-size:xx-large;">emoji_events</i></div>
+          </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumnsEquipos; sticky: true"></tr>

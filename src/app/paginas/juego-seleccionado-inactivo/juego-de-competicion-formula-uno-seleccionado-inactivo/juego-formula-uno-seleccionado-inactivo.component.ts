@@ -221,11 +221,8 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent implement
   }
 
   EliminarJuego() {
-    this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno(this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
-    .subscribe(res => {
-      console.log('Juego eliminado');
+      this.calculos.BorraJuegoCompeticionFormulaUno (this.juegoSeleccionado);
       this.location.back();
-    });
   }
 
   AbrirDialogoConfirmacionEliminar(): void {

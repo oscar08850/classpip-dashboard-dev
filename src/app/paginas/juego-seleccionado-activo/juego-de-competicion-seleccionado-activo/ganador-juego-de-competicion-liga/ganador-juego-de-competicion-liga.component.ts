@@ -94,6 +94,8 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   // displayedColumnsAlumno: string[] = ['select1', 'nombreJugadorUno', 'select2', 'nombreJugadorDos', 'select3', 'Empate'];
   displayedColumnsAlumno: string[] = ['select1', 'nombreJugadorUno', 'select2', 'nombreJugadorDos', 'select3', 'Empate'];
 
+  asignados: boolean;
+
   constructor( public sesion: SesionService,
                public location: Location,
                public calculos: CalculosService,
@@ -111,6 +113,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     this.juegosActivosPuntos = this.sesion.DameJuegosDePuntosActivos();
     // Me quedo solo con los juegos de puntos que tengan el mismo (individual o equipo) modo que la competición
     this.juegosActivosPuntosModo = this.juegosActivosPuntos.filter (juego => juego.Modo === this.juegoSeleccionado.Modo);
+    this.asignados = false;
   }
 
   ////////////////// FUNCIONES PARA OBTENER LOS DATOS NECESARIOS //////////////////////////
@@ -143,6 +146,9 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     });
   }
 
+  Disputada(jornadaId): boolean {
+      return this.JornadasCompeticion.filter (jornada => jornada.id === Number(jornadaId))[0].Disputada;
+  }
 
   ConstruirTablaElegirGanador() {
     if (this.juegoSeleccionado.Modo === 'Individual') {
@@ -164,11 +170,9 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       console.log(this.dataSourceTablaGanadorIndividual.data);
 
       // Ahora vamos a marcar los resultados en caso de que la jornada se haya disputado ya
-      let disputada: boolean;
-      disputada = this.JornadasCompeticion.filter (jornada => jornada.id === Number(this.jornadaId))[0].Disputada;
-      console.log ('disputada ' + disputada);
 
-      if (disputada) {
+
+      if (this.Disputada (this.jornadaId)) {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
           if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno) {
@@ -198,13 +202,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       this.dataSourceTablaGanadorEquipo = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
       console.log('El dataSource es:');
       console.log(this.dataSourceTablaGanadorEquipo.data);
-
-      // Ahora vamos a marcar los resultados en caso de que la jornada se haya disputado ya
-      let disputada: boolean;
-      disputada = this.JornadasCompeticion.filter (jornada => jornada.id === Number(this.jornadaId))[0].Disputada;
-      console.log ('disputada ' + disputada);
-
-      if (disputada) {
+      if (this.Disputada (this.jornadaId)) {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
           if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno) {
@@ -237,6 +235,10 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
      o si debe estar desactivado (si no se ha seleccionado la jornada) */
   ActualizarBoton() {
       console.log('Estoy en actualizar botón');
+      // if (this.Disputada (this.jornadaId)) {
+      //   this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+      // }
+      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
       console.log(this.modoAsignacionId);
       if (this.modoAsignacionId === undefined || this.jornadaId === undefined) {
         this.botonAsignarAleatorioDesactivado = true;
@@ -261,10 +263,11 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         this.botonAsignarJuegoDesactivado = false;
         this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
         this.ActualizarBotonJuego();
-      } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID === undefined) { // JuegoPuntos
+      } else if (Number(this.modoAsignacionId) === 3 && this.juegosActivosPuntosModo.length === 0) { // JuegoPuntos
         this.botonAsignarManualDesactivado = true;
         this.botonAsignarAleatorioDesactivado = true;
         this.botonAsignarJuegoDesactivado = true;
+        Swal.fire('No existe ningún juego de puntos activo en este grupo');
       }
   }
 
@@ -343,7 +346,9 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     if (!error) {
       this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
       this.ActualizarTablaClasificacion();
-      // Swal.fire('Resultados asignados', 'Enhorabuena', 'success');
+      Swal.fire('Resutados asignados manualmente');
+      this.asignados = true;
+
     }
 
   }
@@ -382,7 +387,8 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
     this.ActualizarTablaClasificacion();
-    // Swal.fire('Resutados aleatorios asignados', 'Enhorabuena', 'success');
+    Swal.fire('Resutados aleatorios asignados');
+    this.asignados = true;
 
   }
 
@@ -399,10 +405,19 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
         // Saco al jugador uno de la lista de participantes del juego de puntos
         // tslint:disable-next-line:max-line-length
-        const JugadorUno = this.listaAlumnosOrdenadaPorPuntos.filter (a => a.alumnoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno)[0];
-        // tslint:disable-next-line:max-line-length
-        const JugadorDos = this.listaAlumnosOrdenadaPorPuntos.filter (a => a.alumnoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos)[0];
+        console.log ('Clasificacion juego');
+        console.log (this.listaAlumnosOrdenadaPorPuntos);
+        console.log ('Enfrentamiento ');
+        console.log (this.EnfrentamientosJornadaSeleccionada[i]);
 
+        // tslint:disable-next-line:max-line-length
+        const JugadorUno = this.listaAlumnosOrdenadaPorPuntos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno))[0];
+        // tslint:disable-next-line:max-line-length
+        const JugadorDos = this.listaAlumnosOrdenadaPorPuntos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos))[0];
+        console.log ('uno');
+        console.log (JugadorUno);
+        console.log ('dos');
+        console.log (JugadorDos);
         if (JugadorUno.PuntosTotalesAlumno > JugadorDos.PuntosTotalesAlumno) {
           resultados.push (1);
           this.selectionUno.select(this.dataSourceTablaGanadorIndividual.data[i]);
@@ -447,12 +462,32 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
     this.ActualizarTablaClasificacion();
     // Swal.fire('Resutados asignados', 'Enhorabuena', 'success');
+    Swal.fire('Resutados asignados mediante juego de puntos');
+    this.asignados = true;
   }
 
 
 
   goBack() {
-    this.location.back();
+    if (this.jornadaId === undefined) {
+      this.location.back();
+    } else if (!this.asignados && !this.Disputada(this.jornadaId)) {
+      Swal.fire({
+        title: '¿Estas seguro?',
+        text: 'No has realizado la asignación',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, estoy seguro'
+      }).then((result) => {
+        if (result.value) {
+          this.location.back();
+        }
+      });
+    } else {
+      this.location.back();
+    }
   }
 
    ///////////////////////////////////////////////////  MEDIANTE JUEGO DE PUNTOS  /////////////////////////////////////////////////////////

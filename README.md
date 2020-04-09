@@ -6,7 +6,7 @@
 
 Classpip is a software architecture for teachers and students to perform school gamification activities inside the school environment through different platforms such as mobiles, tablets and computers.
 
-The software architecture is composed by a mobile application for performing “quick” class activities oriented to teachers and students. For “long” operations such as deep into reports and setup the platform there is an administration dashboard accessible from every computer. These two pieces shares the information through a service-oriented architecture that exposes the main methods for data manipulation.
+The software architecture is composed by two mobile applications for performing “quick” class activities oriented to teachers and students. For “long” operations such as deep into reports and setup the platform there is an administration dashboard accessible from every computer. These three pieces share the information through a service-oriented architecture that exposes the main methods for data manipulation.
 
 ![classpip-arch](https://github.com/classpip/classpip/raw/master/images/project-architecture.png)
 
@@ -14,23 +14,44 @@ The software architecture is composed by a mobile application for performing “
 
 This repository contains the main dashboard panel administration for the classpip project. With this admin panel you could manage all the classpip opertations and data for the website. The project is created using [angular CLI](https://github.com/angular/angular-cli) and some operations are related to this client.
 
-[Angular CLI](https://github.com/angular/angular-cli) version 7.0.6
+## NodeJS
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-
-## Global dependencies
-
-Make sure you have NodeJS installed. Download the installer [here](https://nodejs.org/dist/latest-v8.x/) or use your favorite package manager. It's best to get the 8x version of node along with the 10x version of npm. This offers the best in stability and speed for building.
-
+You need to install NodeJS v10.13.0. This will install also npm (Node Package Manager). 
+Check that you have the correc NodeJS version:
 ```
 node -v
 > v10.13.0
 ```
+## Git and GitHub
+
+You need to install Git and have an account in GitHub:
+ 
+https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+ 
+https://github.com/
+
+
+### To build native addons on Linux (Ubuntu)
+
+```
+sudo apt-get install gcc g++ make
+```
+
+### To build native addons on Windows
+
+```
+npm install -g windows-build-tools@~5.1.0
+```
+
+## Global dependencies
+
+```
+npm install -g @angular/cli@~7.0.6
+```
 
 ## Local dependencies
 
-All the project dependencies are manage through [npmjs](https://www.npmjs.com/). This command will also download the typings configured in the **typings.json** file. To install this dependencies you should run:
-
+After cloning this repository you must install the local dependencies:
 ```
 npm install
 ```

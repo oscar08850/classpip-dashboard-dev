@@ -80,6 +80,14 @@ import { DeactivateGuardCrearGrupo } from './guardas/canExitCrearGrupo.guard';
 import { DeactivateGuardCrearColeccion } from './guardas/canExitCrearColeccion.guard';
 import { DeactivateGuardCrearJuego } from './guardas/canExitCrearJuego.guard';
 
+//Importamos componentes modulo cuestionario
+import { PreguntaComponent } from './paginas/pregunta/pregunta.component';
+import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-cuestionario.component';
+import { MisPreguntasComponent } from './paginas/mis-preguntas/mis-preguntas.component';
+import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuestionarios.component';
+import { DeactivateGuardCrearCuestionario } from './guardas/canExitCrearCuestionario.guard';
+import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
+
 const routes: Routes = [
 
 
@@ -108,6 +116,7 @@ const routes: Routes = [
   // { path: 'inicio/:id/crearGrupo', component: CrearGrupoComponent},
 
   { path: 'inicio/:id/misGrupos', component: MisGruposComponent },
+
 
 
 
@@ -207,12 +216,21 @@ const routes: Routes = [
   { path: 'inicio/:id/misPuntos/editarInsignia', component: EditarInsigniaComponent },
 
   // CONFIGURACION
-  { path: 'inicio/:id/configuracionProfesor', component: ConfiguracionProfesorComponent }
+  { path: 'inicio/:id/configuracionProfesor', component: ConfiguracionProfesorComponent },
+
+  // PREGUNTAS
+  { path: 'inicio/:id/crearPregunta', component: PreguntaComponent},
+  { path: 'inicio/:id/misPreguntas', component: MisPreguntasComponent},
+
+  // CUESTIONARIOS
+  { path: 'inicio/:id/crearCuestionario', component: CrearCuestionarioComponent, canDeactivate: [DeactivateGuardCrearCuestionario] },
+  { path: 'inicio/:id/misCuestionarios', component: MisCuestionariosComponent},
+  { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent}
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego],
+  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego, DeactivateGuardCrearCuestionario],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
