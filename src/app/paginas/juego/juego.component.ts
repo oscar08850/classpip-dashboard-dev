@@ -20,6 +20,8 @@ import 'rxjs';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import Swal from 'sweetalert2';
 import { AsignaCuestionarioComponent } from './asigna-cuestionario/asigna-cuestionario.component';
+import { JuegoDeCuestionario } from 'src/app/clases/JuegoDeCuestionario';
+import { AlumnoJuegoDeCuestionario } from 'src/app/clases/AlumnoJuegoDeCuestionario';
 
 
 
@@ -104,13 +106,14 @@ export class JuegoComponent implements OnInit {
 
   //Todo lo relacionado con juego de cuestionario
   myFormPuntuacion: FormGroup;
-  PuntuacionCorrecta: string;
-  PuntuacionIncorrecta: string;
+  PuntuacionCorrecta: number;
+  PuntuacionIncorrecta: number;
   profesorId: number;
   cuestionario: Cuestionario;
   DisabledCuestionario: Boolean = true;
   DisabledPuntuacion: Boolean = true;
   DisabledPresentacion: Boolean =  true;
+  juegoDeCuestionarioId: number;
 
   //Tipos de presentacion para el juego de cuestionario
   seleccionModoPresentacion: string[] = ['Mismo orden para todos', 
@@ -818,6 +821,32 @@ export class JuegoComponent implements OnInit {
   ActualizarBotonPasoPresentacion2() {
     console.log('AQUI PASAMOS LA ORDENACION ESCOGIDA: ' + this.ModoPresentacionFavorito);
   }
+
+  CrearJuegoDeCuestionario() {
+    
+    let NombredelJuego: string;
+    NombredelJuego = this.myForm2.value.NombredelJuego;
+    console.log(new JuegoDeCuestionario (NombredelJuego, this.PuntuacionCorrecta, this.PuntuacionIncorrecta, this.ModoPresentacionFavorito,
+                  false, false, this.profesorId, this.cuestionario.id, this.grupo.id));
+    // tslint:disable-next-line:max-line-length
+    this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (NombredelJuego, this.PuntuacionCorrecta, this.PuntuacionIncorrecta, this.ModoPresentacionFavorito,
+      false, false, this.profesorId, this.cuestionario.id, this.grupo.id), this.grupo.id)
+    .subscribe(juegoCreado => {
+      this.juegoDeCuestionarioId = juegoCreado.id;
+      console.log(juegoCreado);
+      console.log('Juego creado correctamente');
+      this.AñadirAlumnosJuegoCuestionario();
+    });
+  }
+
+  AñadirAlumnosJuegoCuestionario(){
+    for (let i = 0; i < this.alumnosGrupo.length; i++) {
+      // tslint:disable-next-line:max-line-length
+      this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, this.juegoDeCuestionarioId, this.alumnosGrupo[i].id ))
+      .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
+      this.location.back();
+  }
+}
 
   NumeroDeVueltas() {
 

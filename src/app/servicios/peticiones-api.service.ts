@@ -9,6 +9,8 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Cromo, HistorialPuntosAlumno, HistorialPuntosEquipo,
         Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
         Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario, Cuestionario, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno} from '../clases/index';
+import { JuegoDeCuestionario } from '../clases/JuegoDeCuestionario';
+import { AlumnoJuegoDeCuestionario } from '../clases/AlumnoJuegoDeCuestionario';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +36,7 @@ export class PeticionesAPIService {
   private APIUrlCuestionarios = 'http://localhost:3000/api/Cuestionarios';
 
   private APIUrlPreguntaDelCuestionario = 'http://localhost:3000/api/PreguntasDelCuestionario';
+  private APIUrlAlumnoJuegoDeCuestionario = 'http://localhost:3000/api/AlumnosJuegoDeCuestionario';
 
   private APIRUrlJuegoDePuntos = 'http://localhost:3000/api/JuegosDePuntos';
   private APIUrlAlumnoJuegoDePuntos = 'http://localhost:3000/api/AlumnoJuegosDePuntos';
@@ -760,5 +763,18 @@ export class PeticionesAPIService {
   }
   public DameCuestionariosConPregunta(preguntaId: number): Observable<PreguntaDelCuestionario[]> {
     return this.http.get<PreguntaDelCuestionario[]>(this.APIUrlPreguntaDelCuestionario + '?filter[where][preguntaId]=' + preguntaId);
+  }
+
+  //Juego de Cuestionario
+  public CreaJuegoDeCuestionario(juegoDeCuestionario: JuegoDeCuestionario, grupoId: number): Observable<JuegoDeCuestionario> {
+    console.log('voy a crear el juego de cuestionario');
+    console.log(juegoDeCuestionario);
+    return this.http.post<JuegoDeCuestionario>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCuestionario', juegoDeCuestionario);
+  }
+  public InscribeAlumnoJuegoDeCuestionario(alumnoJuegoDeCuestionario: AlumnoJuegoDeCuestionario) {
+    return this.http.post<AlumnoJuegoDeCuestionario>(this.APIUrlAlumnoJuegoDeCuestionario, alumnoJuegoDeCuestionario);
+  }
+  public DameJuegoDeCuestionario(grupoId: number): Observable<Juego[]> {
+    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCuestionario');
   }
 }

@@ -143,6 +143,7 @@ export class CalculosService {
                 juegosInactivos.push(juegosCompeticion[i]);
               }
             }
+            //ahora toca los juegos de competicion de formula uno
             console.log ('vamos a por los juegos de competicion formula uno del grupo: ' + grupoID);
             this.peticionesAPI.DameJuegoDeCompeticionFormulaUnoGrupo(grupoID)
             .subscribe(juegosCompeticionFormulaUno => {
@@ -156,9 +157,24 @@ export class CalculosService {
                 juegosInactivos.push(juegosCompeticionFormulaUno[i]);
               }
             }
+              //Ahora recogemos los juegos de cuestionario
+              console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
+              this.peticionesAPI.DameJuegoDeCuestionario(grupoID)
+              .subscribe(juegosCuestionario => {
+              console.log('He recibido los juegos de competición formula uno');
+              console.log(juegosCuestionario);
+              // tslint:disable-next-line:prefer-for-of
+              for (let i = 0; i < juegosCuestionario.length; i++) {
+                if (juegosCuestionario[i].JuegoActivo === true) {
+                  juegosActivos.push(juegosCuestionario[i]);
+                } else {
+                  juegosInactivos.push(juegosCuestionario[i]);
+                }
+              }
             const resultado = { activos: juegosActivos, inactivos: juegosInactivos};
             obs.next (resultado);
-            // this.PreparaListas ();
+            // this.PreparaListas ();ç
+              });
             });
           });
         });
