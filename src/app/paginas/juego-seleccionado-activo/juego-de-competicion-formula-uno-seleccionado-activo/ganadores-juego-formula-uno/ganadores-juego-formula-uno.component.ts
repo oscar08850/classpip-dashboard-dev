@@ -247,7 +247,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     const jornadaSeleccionada = this.jornadasDelJuego.filter (jornada => jornada.id === Number(this.jornadaId))[0];
     // Asigno los resultados a la jornada
     this.calculos.AsignarResultadosJornadaF1(this.juegoSeleccionado, jornadaSeleccionada, ganadores);
-    Swal.fire('Resutados asignados aleatoriamente');
+    Swal.fire('Enhorabuena', 'Resutados asignados aleatoriamente', 'success');
     this.asignados = true;
   }
   AsignarGanadoresJuegoPuntos() {
@@ -274,7 +274,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     const jornadaSeleccionada = this.jornadasDelJuego.filter (jornada => jornada.id === Number(this.jornadaId))[0];
     // Asigno los resultados a la jornada
     this.calculos.AsignarResultadosJornadaF1(this.juegoSeleccionado, jornadaSeleccionada, ganadores);
-    Swal.fire('Resutados asignados mediante juego de puntos');
+    Swal.fire('Enhorabuena', 'Resutados asignados mediante juego de puntos', 'success');
     this.asignados = true;
   }
 
@@ -300,9 +300,8 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     console.log ('Numero de lineas ' + lineas.length);
     console.log(lineas.length + ' === ' + this.juegoSeleccionado.NumeroParticipantesPuntuan);
     if (lineas.length !== this.juegoSeleccionado.NumeroParticipantesPuntuan) {
-      Swal.fire('Esta jornada tiene ' + this.juegoSeleccionado.NumeroParticipantesPuntuan +
-      ' participantes que puntúan, pero se han introducido ' + lineas.length,
-      ' No se ha podido realizar esta acción', 'error');
+      Swal.fire('Cuidado', 'Esta jornada tiene ' + this.juegoSeleccionado.NumeroParticipantesPuntuan +
+      ' participantes que puntúan, pero se han introducido ' + lineas.length, 'warning');
     } else {
       let ganadores;
       if (this.juegoSeleccionado.Modo === 'Individual') {
@@ -318,7 +317,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       // Asigno los resultados a la jornada
       if (ganadores !== undefined) {
         this.calculos.AsignarResultadosJornadaF1(this.juegoSeleccionado, jornadaSeleccionada, ganadores);
-        Swal.fire('Resutados asignados manualmente');
+        Swal.fire('Enhorabuena', 'Resutados asignados manualmente', 'success');
       }
       this.asignados = true;
 
@@ -388,7 +387,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   // Para asignar los elegidos mediante selección de la lista
   AsignarGanadoresElegidos() {
     if (this.ganadoresElegidos.length < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
-      Swal.fire('Cuidado', 'Aún falta asignar alumnos que puntúan', 'warning');
+      Swal.fire('Cuidado', 'Aún falta seleccionar algún alumno que puntúa', 'warning');
     } else {
       // Preparo el vector con los identificadores de los ganadores
       const ganadores: any[] = [];
@@ -404,7 +403,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       const jornadaSeleccionada = this.jornadasDelJuego.filter (jornada => jornada.id === Number(this.jornadaId))[0];
     // Asigno los resultados a la jornada
       this.calculos.AsignarResultadosJornadaF1(this.juegoSeleccionado, jornadaSeleccionada, ganadores);
-      Swal.fire('Resutados asignados manualmente');
+      Swal.fire('Enhorabuena', 'Resutados asignados manualmente', 'success');
       this.asignados = true;
     }
   }

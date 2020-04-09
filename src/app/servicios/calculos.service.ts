@@ -890,7 +890,7 @@ export class CalculosService {
       return ganadores;
     } else { // alguno de los ganadores no se ha encontrado
       console.log('alguno de los ganadores no se ha encontrado');
-      Swal.fire('Alguno de los alumnos introducidos no se corresponde con ninguno de los participantes del juego');
+      Swal.fire('Cuidado', 'Alguno de los alumnos introducidos no se corresponde con ninguno de los participantes del juego', 'warning');
       return undefined;
     }
   }
@@ -910,7 +910,7 @@ export class CalculosService {
     if (ganadores.length === lineas.length) {
       return ganadores;
     } else { // alguno de los ganadores no se ha encontrado
-      Swal.fire('Alguno de los equipos introducidos no se corresponde con ninguno de los participantes del juego');
+      Swal.fire('Cuidado', 'Alguno de los equipos introducidos no se corresponde con ninguno de los participantes del juego', 'warning');
       return undefined;
     }
   }
