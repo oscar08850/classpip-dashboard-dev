@@ -50,13 +50,12 @@
                               [checked]="selection.isSelected(row)">
 
                 </mat-checkbox>
-
               </td>
             </ng-container>
 
             <!-- NumeroDeJornada Column -->
             <ng-container matColumnDef="NumeroDeJornada">
-              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Jornada </th>
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 20%"  align="right"> Jornada </th>
               <td mat-cell *matCellDef="let jornada"> {{jornada.NumeroDeJornada}} </td>
             </ng-container>
 
@@ -76,8 +75,8 @@
 
             <!-- CriterioGanador Column -->
             <ng-container matColumnDef="CriterioGanador">
-              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Criterio Ganador </th>
-              <td mat-cell *matCellDef="let jornada;"> {{jornada.CriterioGanador}} </td>
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 00%"  align="right"> Criterio Ganador </th>
+              <td mat-cell *matCellDef="let jornada"> {{jornada.CriterioGanador}} </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumnsJornada"></tr>
@@ -139,8 +138,6 @@
               <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Puntos </th>
               <td mat-cell *matCellDef="let tablaPuntuacion; "> {{tablaPuntuacion.Puntuacion}} </td>
             </ng-container>
-
-
 
             <tr mat-header-row *matHeaderRowDef="displayedColumnsTablaPuntuacion"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumnsTablaPuntuacion;"></tr>

@@ -267,7 +267,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         this.botonAsignarManualDesactivado = true;
         this.botonAsignarAleatorioDesactivado = true;
         this.botonAsignarJuegoDesactivado = true;
-        Swal.fire('No existe ningún juego de puntos activo en este grupo');
+        Swal.fire('Cuidado', 'No hay juegos de puntos disponibles para este grupo', 'warning');
       }
   }
 
@@ -336,7 +336,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
               resultados.push (0);
         } else {
 
-              Swal.fire('Te falta asignar resultados', '', 'error');
+              Swal.fire('Cuidado', 'No se han seleccionado resultados para todos los enfrentamientos de la jornada', 'warning');
               error = true;
         }
     });
@@ -346,7 +346,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     if (!error) {
       this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
       this.ActualizarTablaClasificacion();
-      Swal.fire('Resutados asignados manualmente');
+      Swal.fire('Enhorabuena', 'Resutados asignados manualmente', 'success');
       this.asignados = true;
 
     }
@@ -387,7 +387,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
     this.ActualizarTablaClasificacion();
-    Swal.fire('Resutados aleatorios asignados');
+    Swal.fire('Enhorabuena', 'Resutados asignados aleatoriamente', 'success');
     this.asignados = true;
 
   }
@@ -462,7 +462,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
     this.ActualizarTablaClasificacion();
     // Swal.fire('Resutados asignados', 'Enhorabuena', 'success');
-    Swal.fire('Resutados asignados mediante juego de puntos');
+    Swal.fire('Enhorabuena', 'Resutados asignados mediante juego de puntos', 'success');
     this.asignados = true;
   }
 

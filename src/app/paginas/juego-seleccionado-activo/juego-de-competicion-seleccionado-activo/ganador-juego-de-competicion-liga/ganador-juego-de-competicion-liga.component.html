@@ -21,19 +21,20 @@
       </div>
 
       <div *ngIf = "jornadaId != undefined && !Disputada (jornadaId)">
-      <div>
-        <br>
-        <mat-form-field style="margin-left: 10%;">
-          <mat-label>Modo</mat-label>
-          <select matNativeControl [(ngModel)]="modoAsignacionId" (change) = "ActualizarBoton()">
-            <option *ngFor="let modo of modoAsignacion" [value]="modo.id">
-              {{modo.modo}}
-            </option>
-          </select>
-        </mat-form-field>
+        <div>
+          <br>
+          <mat-form-field style="margin-left: 10%;">
+            <mat-label>Modo</mat-label>
+            <select matNativeControl [(ngModel)]="modoAsignacionId" (change) = "ActualizarBoton()">
+              <option *ngFor="let modo of modoAsignacion" [value]="modo.id">
+                {{modo.modo}}
+              </option>
+            </select>
+          </mat-form-field>
+        </div>
       </div>
 
-      <div *ngIf="(modoAsignacionId == 3) && (juegosActivosPuntosModo.length !== 0)"  style="margin-left: 5%;">
+      <div *ngIf="(modoAsignacionId == 3) && (juegosActivosPuntosModo.length !== 0)  && !Disputada (jornadaId)"  style="margin-left: 5%;">
         Seleccione un Juego
         <br>
         <mat-form-field >
@@ -45,7 +46,7 @@
           </select>
         </mat-form-field>
       </div>
-     </div>
+
     </div>
 
 
