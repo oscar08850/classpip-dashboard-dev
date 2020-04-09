@@ -345,6 +345,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
     if (!error) {
       this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
+      this.ActualizarTablaClasificacion();
       Swal.fire('Resutados asignados manualmente');
       this.asignados = true;
 
@@ -385,6 +386,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     }
 
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
+    this.ActualizarTablaClasificacion();
     Swal.fire('Resutados aleatorios asignados');
     this.asignados = true;
 

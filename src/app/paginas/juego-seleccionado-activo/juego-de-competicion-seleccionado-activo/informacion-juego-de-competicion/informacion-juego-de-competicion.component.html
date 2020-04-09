@@ -32,7 +32,7 @@
                       <!-- ///////////////////////////////////// TABLA ENFRENTAMIENTOS POR EQUIPOS ////////////////////////////////////// -->
                       <form style=" width: 100%" *ngIf="juegoSeleccionado.Modo != 'Individual'">
 
-                          <table style="margin-left: 65px; width: 100%" align="center" mat-table [dataSource]="dataSourceEnfrentamientoEquipo" class="example-container mat-elevation-z8">
+                          <table style="margin-left: 65px; width: 80%" align="center" mat-table [dataSource]="dataSourceEnfrentamientoEquipo" class="example-container mat-elevation-z8">
                           <!--- Note that these columns can be defined in any order.
                                 The actual rendered columns are set as a property on the row definition" -->
 
@@ -70,7 +70,7 @@
 
                       <!-- ///////////////////////////////////// TABLA ENFRENTAMIENTOS INDIVIDUAL ////////////////////////////////////// -->
                       <form style=" width: 100%" *ngIf="juegoSeleccionado.Modo == 'Individual'">
-                        <table style="margin-left: 65px; width: 100%" align="center" mat-table [dataSource]="dataSourceEnfrentamientoIndividual" class="example-container mat-elevation-z8">
+                        <table style="margin-left: 65px; width: 80%" align="center" mat-table [dataSource]="dataSourceEnfrentamientoIndividual" class="example-container mat-elevation-z8">
                           <!--- Note that these columns can be defined in any order.
                                 The actual rendered columns are set as a property on the row definition" -->
 
