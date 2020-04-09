@@ -21,7 +21,6 @@
       </div>
       <!-- Si la jornada elegida no está aun disputada desplegamos el selector de modo de asignación -->
       <div *ngIf= "!Disputada (jornadaId)">
-
       <div>
         <br>
         <mat-form-field style="margin-left: 10%;">
@@ -66,7 +65,7 @@
 
       <!-- boton para asignar de forma aleatoria -->
       <div  *ngIf="modoAsignacionId == 2" style="margin-top: 10px;"  align="center">
-      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click) = AsignarGanadoresAleatoriamente()  [disabled]="botonAsignarAleatorioDesactivado">Asignar Ganadores aleatoriamente<i class="material-icons">emoji_events </i></button>
+      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click) = AsignarGanadoresAleatoriamente()  [disabled]="botonAsignarAleatorioDesactivado">Asignar ganadores aleatoriamente<i class="material-icons">emoji_events </i></button>
       </div>
     </div>
 
@@ -168,8 +167,9 @@ Los Elefantes"
                 </div>
               </mat-card-content>
               <mat-card-actions  align="end">
-                <button style="margin: 5px" (click) = "LimpiarCamposTexto()"  [disabled]="isDisabledAnadirGanadores" type="button" class="btn Back" >Limpiar Campos<i class="material-icons">delete_sweep </i></button>
-                <button  style="margin: 5px" (click) = "AsignarMasivoManualmente()" [disabled]="isDisabledAnadirGanadores"type="button" class="btn Aceptar" >Asignar Ganadores<i class="material-icons">emoji_events </i></button>
+                <button style="margin: 5px" (click) = "LimpiarCamposTexto()"  [disabled]="isDisabledAnadirGanadores" type="button" class="btn Back" >Limpiar campos<i class="material-icons">delete_sweep </i></button>
+                <button  style="margin: 5px; width: 40%" (click) = "AsignarMasivoManualmente()" [disabled]="isDisabledAnadirGanadores"type="button" class="btn Aceptar" >Asignar ganadores manualmente<i class="material-icons">emoji_events </i></button>
+                <!-- <button style= "width: 100%"  type="button"class="btn Aceptar"  (click) = AsignarGanadoresAleatoriamente()  [disabled]="botonAsignarAleatorioDesactivado">Asignar Ganadores aleatoriamente<i class="material-icons">emoji_events </i></button> -->
               </mat-card-actions>
             </mat-card>
           </div>
@@ -272,9 +272,8 @@ Los Elefantes"
 
 
            <mat-dialog-actions align= "center">
-
-              <button   type="button" class="btn Aceptar" (click)="AsignarGanadoresElegidos()" cdkFocusInitial>Asignar Ganadores</button>
-          </mat-dialog-actions>
+              <button  style="margin: 5px; width: 40%" type="button" class="btn Aceptar" (click)="AsignarGanadoresElegidos()" cdkFocusInitial>Asignar ganadores manualmente<i class="material-icons">emoji_events </i></button>
+           </mat-dialog-actions>
         </form>
 
         <form *ngIf="juegoSeleccionado.Modo != 'Individual'" style="width: 100%">
@@ -347,7 +346,9 @@ Los Elefantes"
 
            <mat-dialog-actions align= "center">
 
-              <button   type="button" class="btn Aceptar" (click)="AsignarGanadoresElegidos()" cdkFocusInitial>Asignar Ganadores</button>
+              <button  style="margin: 5px; width: 40%"  type="button" class="btn Aceptar" (click)="AsignarGanadoresElegidos()" cdkFocusInitial>Asignar ganadores manualmente<i class="material-icons">emoji_events </i></button>
+              <!-- <button  style="margin: 5px; width: 40%" type="button" class="btn Aceptar" (click)="AsignarGanadoresElegidos()" cdkFocusInitial>Asignar ganadores manualmente<i class="material-icons">emoji_events </i></button> -->
+
           </mat-dialog-actions>
         </form>
 
