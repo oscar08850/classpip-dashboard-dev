@@ -152,6 +152,7 @@ import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuest
 import { EditarPreguntaDialogComponent } from './paginas/mis-preguntas/editar-pregunta-dialog/editar-pregunta-dialog.component';
 import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
 import { AsignaCuestionarioComponent } from './paginas/juego/asigna-cuestionario/asigna-cuestionario.component';
+import { JuegoDeCuestionarioSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo.component';
 
 
 
@@ -238,7 +239,8 @@ import { AsignaCuestionarioComponent } from './paginas/juego/asigna-cuestionario
     EditarJornadasJuegoDeCompeticionFormulaUnoComponent,
     EditarPuntosJuegoDeCompeticionFormulaUnoComponent,
     InformacionJuegoDeCompeticionFormulaUnoInactivoComponent,
-    JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent
+    JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent,
+    JuegoDeCuestionarioSeleccionadoInactivoComponent
 
   ],
   imports: [

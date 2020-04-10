@@ -13,6 +13,8 @@ import { calcPossibleSecurityContexts } from '@angular/compiler/src/template_par
 
 import Swal from 'sweetalert2';
 import { isNullOrUndefined } from 'util';
+import { AlumnoJuegoDeCuestionario } from '../clases/AlumnoJuegoDeCuestionario';
+import { TablaAlumnoJuegoDeCuestionario } from '../clases/TablaAlumnoJuegoDeCuestionario';
 
 
 @Injectable({
@@ -166,8 +168,10 @@ export class CalculosService {
               // tslint:disable-next-line:prefer-for-of
               for (let i = 0; i < juegosCuestionario.length; i++) {
                 if (juegosCuestionario[i].JuegoActivo === true) {
+                  juegosCuestionario[i].Tipo = "Juego De Cuestionario";
                   juegosActivos.push(juegosCuestionario[i]);
                 } else {
+                  juegosCuestionario[i].Tipo = "Juego De Cuestionario";
                   juegosInactivos.push(juegosCuestionario[i]);
                 }
               }
@@ -2898,6 +2902,20 @@ export class CalculosService {
   }
 
 
+    //////////////////////////////////////// JUEGO DE CUESTIONARIO ///////////////////////////////////
+  public PrepararTablaRankingCuestionario(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCuestionario[],
+    alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeCuestionario[] {
+    const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeCuestionario [] = [];
+    // tslint:disable-next-line:prefer-for-oF
+    for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+    let alumno: Alumno;
+    const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
+    alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+    rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeCuestionario(alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+    listaAlumnosOrdenadaPorPuntos[i].Nota, alumnoId);
+    }
+    return rankingJuegoDeCompeticion;
+  }
 
 
 }
