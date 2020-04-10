@@ -20,7 +20,7 @@
         </mat-form-field>
       </div>
       <!-- Si la jornada elegida no está aun disputada desplegamos el selector de modo de asignación -->
-      <div *ngIf= "!Disputada (jornadaId)">
+      <div *ngIf= "!Disputada (jornadaId) && jornadaId !== undefined">
       <div>
         <br>
         <mat-form-field style="margin-left: 10%;">
