@@ -874,6 +874,7 @@ export class CalculosService {
   }
   public DameIdAlumnos(lineas: string[], listaAlumnosClasificacion: any[]): any [] {
     const ganadores: any [] = [];
+    let nombreRepetido = false;
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < lineas.length; i++) {
@@ -881,13 +882,30 @@ export class CalculosService {
       // tslint:disable-next-line:max-line-length
       const ganador = listaAlumnosClasificacion.filter (alumno => lineas[i] === alumno.nombre + ' ' + alumno.primerApellido + ' ' + alumno.segundoApellido)[0];
       if (ganador !== undefined) {
-        ganadores.push (ganador.id);
+        const indexOfRepetido = ganadores.indexOf(ganador.id);
+        if (indexOfRepetido === -1) {
+          ganadores.push (ganador.id);
+        } else {
+          nombreRepetido = true;
+          console.log('nombreRepetido = ' + nombreRepetido);
+        }
       }
+      // const indexOfRepetido = ganadores.indexOf(ganador.id);
+      // if (ganador !== undefined && indexOfRepetido === -1) {
+      //   ganadores.push (ganador.id);
+      // } else if (indexOfRepetido !== -1) {
+      //   nombreRepetido = true;
+      //   console.log('nombreRepetido = ' + nombreRepetido);
+      // }
     }
-    if (ganadores.length === lineas.length) {
+    if (ganadores.length === lineas.length && nombreRepetido === false) {
       console.log('ganadores: ');
       console.log(ganadores);
       return ganadores;
+    } else if (ganadores.length !== lineas.length && nombreRepetido === true) {
+      Swal.fire('Cuidado', 'Alguno de los alumnos introducidos está repetido', 'warning');
+      nombreRepetido = false;
+      return undefined;
     } else { // alguno de los ganadores no se ha encontrado
       console.log('alguno de los ganadores no se ha encontrado');
       Swal.fire('Cuidado', 'Alguno de los alumnos introducidos no se corresponde con ninguno de los participantes del juego', 'warning');
@@ -897,19 +915,44 @@ export class CalculosService {
 
   public DameIdEquipos(lineas: string[], listaEquiposClasificacion: any[]): any [] {
     const ganadores: any [] = [];
+    let nombreRepetido = false;
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < lineas.length; i++) {
       // Busco a cada uno de los ganadores (uno por linea de texto) y si esta guardo su id
       // tslint:disable-next-line:max-line-length
       const ganador = listaEquiposClasificacion.filter (equipo => lineas[i] === equipo.nombre)[0];
+      // if (ganador !== undefined) {
+      //   ganadores.push (ganador.id);
+      // }
+
       if (ganador !== undefined) {
-        ganadores.push (ganador.id);
+        const indexOfRepetido = ganadores.indexOf(ganador.id);
+        if (indexOfRepetido === -1) {
+          ganadores.push (ganador.id);
+        } else {
+          nombreRepetido = true;
+          console.log('nombreRepetido = ' + nombreRepetido);
+        }
       }
     }
-    if (ganadores.length === lineas.length) {
+    // if (ganadores.length === lineas.length) {
+    //   return ganadores;
+    // } else { // alguno de los ganadores no se ha encontrado
+    //   Swal.fire('Cuidado', 'Alguno de los equipos introducidos no se corresponde con ninguno de los participantes del juego', 'warning');
+    //   return undefined;
+    // }
+
+    if (ganadores.length === lineas.length && nombreRepetido === false) {
+      console.log('ganadores: ');
+      console.log(ganadores);
       return ganadores;
+    } else if (ganadores.length !== lineas.length && nombreRepetido === true) {
+      Swal.fire('Cuidado', 'Alguno de los equipos introducidos está repetido', 'warning');
+      nombreRepetido = false;
+      return undefined;
     } else { // alguno de los ganadores no se ha encontrado
+      console.log('alguno de los ganadores no se ha encontrado');
       Swal.fire('Cuidado', 'Alguno de los equipos introducidos no se corresponde con ninguno de los participantes del juego', 'warning');
       return undefined;
     }

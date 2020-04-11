@@ -248,7 +248,7 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
     const JuegoEmpezado: boolean = this.JuegoEmpezado();
     if (JuegoEmpezado === false) {
       let NuevaPuntuacion: number;
-      NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
+      NuevaPuntuacion = Number(this.myForm1.value.NuevaPuntuacion);
       console.log('Voy a asignar NuevaPuntuacion ' + NuevaPuntuacion);
       if (!isNaN(NuevaPuntuacion)) {
           for ( let i = 0; i < this.dataSource.data.length; i++) {

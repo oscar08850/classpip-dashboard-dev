@@ -387,7 +387,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   // Para asignar los elegidos mediante selección de la lista
   AsignarGanadoresElegidos() {
     if (this.ganadoresElegidos.length < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
-      Swal.fire('Cuidado', 'Aún falta seleccionar algún alumno que puntúa', 'warning');
+      Swal.fire('Cuidado', 'Aún falta seleccionar algún participante que puntúa', 'warning');
     } else {
       // Preparo el vector con los identificadores de los ganadores
       const ganadores: any[] = [];
