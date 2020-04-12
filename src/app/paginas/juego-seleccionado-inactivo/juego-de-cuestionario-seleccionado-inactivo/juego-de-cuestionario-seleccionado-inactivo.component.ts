@@ -8,6 +8,7 @@ import { JuegoDeCuestionario } from 'src/app/clases/JuegoDeCuestionario';
 import Swal from 'sweetalert2';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import { TablaAlumnoJuegoDeCuestionario } from 'src/app/clases/TablaAlumnoJuegoDeCuestionario';
+import { InformacionJuegoDeCuestionarioDialogComponent } from '../../juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/informacion-juego-de-cuestionario-dialog/informacion-juego-de-cuestionario-dialog.component';
 
 @Component({
   selector: 'app-juego-de-cuestionario-seleccionado-inactivo',
@@ -121,6 +122,16 @@ export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit 
       if (confirmed) {
         this.EliminarJuego();
         Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
+      }
+    });
+  }
+
+  AbrirDialogoInformacionJuego(): void {
+    const dialogRef = this.dialog.open(InformacionJuegoDeCuestionarioDialogComponent, {
+      width: '45%',
+      height: '60%',
+      position: {
+        top: '0%'
       }
     });
   }

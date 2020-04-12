@@ -103,8 +103,8 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
   AbrirDialogoInformacionJuego(): void {
     const dialogRef = this.dialog.open(InformacionJuegoDeCuestionarioDialogComponent, {
-      width: '50%',
-      height: '80%',
+      width: '45%',
+      height: '60%',
       position: {
         top: '0%'
       }
