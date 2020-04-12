@@ -2917,5 +2917,40 @@ export class CalculosService {
     return rankingJuegoDeCompeticion;
   }
 
+  // Elimina juego de cuestionario y posterior mente procederemos a eliminar los alumnos de ese juego de cuestionario
+  public EliminarJuegoDeCuestionario(): any {
+    const eliminaObservable = new Observable ( obs => {
+          this.peticionesAPI.BorrarJuegoDeCuestionario(
+                    this.sesion.DameJuego().id)
+          .subscribe(() => {
+            this.EliminarAlumnosJuegoDeCuestionario();
+            obs.next ();
+          });
+    });
+    return eliminaObservable;
+  }
+
+  // Esta funcion recupera todos los alumnos que estaban inscritos en el juego de cuestionario y los borra. Esto lo hacemos para no dejar matriculas que no
+  // nos sirven dentro de la vase de datos
+  private EliminarAlumnosJuegoDeCuestionario() {
+    // Pido los alumnos correspondientes al juego que voy a borrar
+    this.peticionesAPI.DameAlumnosDelJuegoDeCuestionario(this.sesion.DameJuego().id)
+    .subscribe( AlumnosDelJuego => {
+      if (AlumnosDelJuego[0] !== undefined) {
+
+        // Una vez recibo las inscripciones, las voy borrando una a una
+        for (let i = 0; i < AlumnosDelJuego.length; i++) {
+          this.peticionesAPI.BorraAlumnoDelJuegoDeCuestionario(AlumnosDelJuego[i].id)
+          .subscribe(() => {
+              console.log('Inscripcion al juego borrada correctamente');
+          });
+        }
+      } else {
+        console.log('No hay alumnos en el juego de cuestionario');
+      }
+
+    });
+  }
+
 
 }

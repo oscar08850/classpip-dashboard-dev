@@ -765,6 +765,9 @@ export class PeticionesAPIService {
   public DameCuestionariosConPregunta(preguntaId: number): Observable<PreguntaDelCuestionario[]> {
     return this.http.get<PreguntaDelCuestionario[]>(this.APIUrlPreguntaDelCuestionario + '?filter[where][preguntaId]=' + preguntaId);
   }
+  public DameCuestionario(cuestionarioId: number): Observable<Cuestionario> {
+    return this.http.get<Cuestionario>(this.APIUrlCuestionarios + '/' + cuestionarioId);
+  }
 
   //Juego de Cuestionario
   public CreaJuegoDeCuestionario(juegoDeCuestionario: JuegoDeCuestionario, grupoId: number): Observable<JuegoDeCuestionario> {
@@ -787,5 +790,14 @@ export class PeticionesAPIService {
     juegoDeCuestionarioId: number, grupoId: number): Observable<JuegoDeCuestionario> {
       return this.http.put<JuegoDeCuestionario>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCuestionario/' + juegoDeCuestionarioId,
       JuegosDeCuestionario);
+  }
+  public BorrarJuegoDeCuestionario(juegoDeCuestionarioId: number): Observable<any> {
+    return this.http.delete<any>(this.APIUrlJuegoDeCuestionario + '/' + juegoDeCuestionarioId);
+  }
+  public DameAlumnosDelJuegoDeCuestionario(juegoDeCuestionarioId: number): Observable<AlumnoJuegoDeCuestionario[]> {
+    return this.http.get<AlumnoJuegoDeCuestionario[]>(this.APIUrlAlumnoJuegoDeCuestionario + '?filter[where][juegoDeCuestionarioId]=' + juegoDeCuestionarioId);
+  }
+  public BorraAlumnoDelJuegoDeCuestionario(alumnoJuegoDeCuestionarioId: number): Observable<any> {
+    return this.http.delete<any>(this.APIUrlAlumnoJuegoDeCuestionario + '/' + alumnoJuegoDeCuestionarioId);
   }
 }

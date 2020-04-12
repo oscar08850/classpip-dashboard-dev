@@ -1,0 +1,55 @@
+<div class="subtitulo" align="center">Informacion Juego</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<br>
+<div class = "contenedor" >
+  <div class = "enColumna">
+    <form>
+        <mat-card class= "cardBorder">
+          <mat-card-content>
+                  <p style=  "width: 100%;">
+                    <span style="font-weight: bold;">Nombre del Juego: </span>
+                    {{NombreJuego}}
+                  </p>
+                <div>
+                  <p>
+                    <span style="font-weight: bold;">Puntuacion correcta: </span>
+                    {{PuntuacionCorrecta}}
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    <span style="font-weight: bold;">Puntuacion Incorrecta: </span>
+                    {{PuntuacionIncorrecta}}
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    <span style="font-weight: bold;">Presentacion: </span>
+                    {{Presentacion}}
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    <span style="font-weight: bold;">Juego Activo: </span>
+                    {{JuegoActivo}}
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    <span style="font-weight: bold;">Juego Termiando: </span>
+                    {{JuegoTerminado}}
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    <span style="font-weight: bold;">Cuestionario: </span>
+                    {{TituloCuestionario}}
+                  </p>
+                </div>
+                <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+                </div>
+          </mat-card-content>
+        </mat-card>
+      </form>
+  </div>
+</div>

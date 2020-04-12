@@ -153,6 +153,8 @@ import { EditarPreguntaDialogComponent } from './paginas/mis-preguntas/editar-pr
 import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
 import { AsignaCuestionarioComponent } from './paginas/juego/asigna-cuestionario/asigna-cuestionario.component';
 import { JuegoDeCuestionarioSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo.component';
+import { JuegoDeCuestionarioSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/juego-de-cuestionario-seleccionado-activo.component';
+import { InformacionJuegoDeCuestionarioDialogComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/informacion-juego-de-cuestionario-dialog/informacion-juego-de-cuestionario-dialog.component';
 
 
 
@@ -240,7 +242,9 @@ import { JuegoDeCuestionarioSeleccionadoInactivoComponent } from './paginas/jueg
     EditarPuntosJuegoDeCompeticionFormulaUnoComponent,
     InformacionJuegoDeCompeticionFormulaUnoInactivoComponent,
     JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent,
-    JuegoDeCuestionarioSeleccionadoInactivoComponent
+    JuegoDeCuestionarioSeleccionadoInactivoComponent,
+    JuegoDeCuestionarioSeleccionadoActivoComponent,
+    InformacionJuegoDeCuestionarioDialogComponent
 
   ],
   imports: [
@@ -283,7 +287,8 @@ import { JuegoDeCuestionarioSeleccionadoInactivoComponent } from './paginas/jueg
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
-    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AsignaCuestionarioComponent],
+    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AsignaCuestionarioComponent, 
+    InformacionJuegoDeCuestionarioDialogComponent],
   bootstrap: [AppComponent],
   providers: [
     {

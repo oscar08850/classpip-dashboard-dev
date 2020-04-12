@@ -19,5 +19,9 @@
   <app-juego-formula-uno-seleccionado-activo></app-juego-formula-uno-seleccionado-activo>
 </div>
 
+<div *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuestionario'">
+  <app-juego-de-cuestionario-seleccionado-activo></app-juego-de-cuestionario-seleccionado-activo>
+</div>
+
 <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver</button>
 </div>
