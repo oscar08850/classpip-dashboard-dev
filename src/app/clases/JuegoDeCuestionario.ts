@@ -5,7 +5,7 @@ export class JuegoDeCuestionario {
     PuntuacionIncorrecta: number;
     Presentacion: string;
     JuegoActivo: boolean;
-    JuegoTermiando: boolean;
+    JuegoTerminado: boolean;
     id: number;
     profesorId: number;
     grupoId: number;
@@ -17,7 +17,7 @@ export class JuegoDeCuestionario {
         this.PuntuacionIncorrecta = PuntuacionIncorrecta;
         this.Presentacion = Presentacion;
         this.JuegoActivo = JuegoActivo;
-        this.JuegoTermiando = JuegoTerminado;
+        this.JuegoTerminado = JuegoTerminado;
         this.profesorId = profesorId;
         this.grupoId = grupoId;
         this.cuestionarioId = cuestionarioId;

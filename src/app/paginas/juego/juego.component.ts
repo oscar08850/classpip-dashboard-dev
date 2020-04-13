@@ -22,6 +22,7 @@ import Swal from 'sweetalert2';
 import { AsignaCuestionarioComponent } from './asigna-cuestionario/asigna-cuestionario.component';
 import { JuegoDeCuestionario } from 'src/app/clases/JuegoDeCuestionario';
 import { AlumnoJuegoDeCuestionario } from 'src/app/clases/AlumnoJuegoDeCuestionario';
+import { Router } from '@angular/router';
 
 
 
@@ -163,6 +164,7 @@ export class JuegoComponent implements OnInit {
                private peticionesAPI: PeticionesAPIService,
                // tslint:disable-next-line:variable-name
                private _formBuilder: FormBuilder,
+               private router: Router
                ) { }
 
 
@@ -844,7 +846,7 @@ export class JuegoComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, this.juegoDeCuestionarioId, this.alumnosGrupo[i].id ))
       .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
-      this.location.back();
+      this.router.navigate(['/grupo/' + this.grupo.id]);
   }
 }
 

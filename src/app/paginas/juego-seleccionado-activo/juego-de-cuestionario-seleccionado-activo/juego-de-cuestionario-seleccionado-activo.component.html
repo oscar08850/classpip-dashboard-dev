@@ -1,8 +1,8 @@
 <div class="contenedor">
   <div class="enColumna">
-    <div class="enFila" style="width:30%">
-      <button type="button" class="btn Info" style="width: auto;" (click) ="AbrirDialogoInformacionJuego()">Información<i class="material-icons">info</i></button>
-      <button type="button" class="btn Eliminar" style="width: auto;" (click) = "AbrirDialogoConfirmacionDesactivar()">Desactivar<i class="material-icons">history</i></button>
+    <div class="enFila" style= "width : 27%">
+      <button type="button" class="btn Info" (click) ="AbrirDialogoInformacionJuego()">Información<i class="material-icons">info</i></button>
+      <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionDesactivar()">Desactivar<i class="material-icons">history</i></button>
     </div>
 
     <!-- ////////////////////////////////////// CLASIFICACIÓN ////////////////////////////////////////////////////-->
@@ -14,7 +14,7 @@
       </mat-form-field>
       </div>
 
-      <table style="width: 80%"  align="center"  mat-table [dataSource]="dataSourceAlumno" class="example-container mat-elevation-z8">
+      <table align="center"  mat-table [dataSource]="dataSourceAlumno" class="example-container mat-elevation-z8">
         <!--- Note that these columns can be defined in any order.
                 The actual rendered columns are set as a property on the row definition" -->
 
