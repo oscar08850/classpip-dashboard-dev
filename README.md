@@ -42,13 +42,13 @@ sudo apt-get install gcc g++ make
 ### To build native addons on Windows
 
 ```
-npm install -g windows-build-tools@~5.1.0
+npm install -g windows-build-tools@5.1.0
 ```
 
 ## Global dependencies
 
 ```
-npm install -g @angular/cli@~7.0.6
+npm install -g @angular/cli@7.0.6
 ```
 
 ## Local dependencies
