@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import { Grupo, Alumno } from '../../clases/index';
 
 // Servicios
-import { GrupoService, MatriculaService, AlumnoService } from '../../servicios/index';
+
 import { SesionService, PeticionesAPIService } from '../../servicios/index';
 // Imports para abrir diálogo agregar alumno/confirmar eliminar grupo
 import { MatDialog } from '@angular/material';

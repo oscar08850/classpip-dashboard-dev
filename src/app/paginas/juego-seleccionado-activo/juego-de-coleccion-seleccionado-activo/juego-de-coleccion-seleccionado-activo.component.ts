@@ -6,7 +6,6 @@ import { Location } from '@angular/common';
 import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion } from '../../../clases/index';
 
 // Services
-import { JuegoService, EquipoService, AlumnoService, ColeccionService, JuegoDeColeccionService } from '../../../servicios/index';
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
 
 // Imports para abrir diálogo y Swal
@@ -43,11 +42,7 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
   inscripcionesAlumnos: AlumnoJuegoDeColeccion[];
   inscripcionesEquipos: EquipoJuegoDeColeccion[];
 
-  constructor( private juegoService: JuegoService,
-               private alumnoService: AlumnoService,
-               private equipoService: EquipoService,
-               private coleccionService: ColeccionService,
-               private juegoDeColeccionService: JuegoDeColeccionService,
+  constructor(
                public dialog: MatDialog,
                public sesion: SesionService,
                public peticionesAPI: PeticionesAPIService,

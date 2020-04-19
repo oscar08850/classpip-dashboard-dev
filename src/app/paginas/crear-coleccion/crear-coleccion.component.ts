@@ -5,8 +5,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // Imports para abrir diálogo confirmar eliminar equipo
 import { MatDialog, MatTabGroup } from '@angular/material';
 
-// Servicios
-import { ColeccionService, ProfesorService } from '../../servicios/index';
 
 
 // Servicios
@@ -103,7 +101,6 @@ export class CrearColeccionComponent implements OnInit {
 
 
   constructor(
-    private coleccionService: ColeccionService,
     private router: Router,
     public dialog: MatDialog,
     public sesion: SesionService,

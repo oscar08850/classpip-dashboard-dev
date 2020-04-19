@@ -8,9 +8,6 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { Cromo, Coleccion } from '../../../clases/index';
 
 // Servicios
-import { ColeccionService } from '../../../servicios/index';
-
-// Servicios
 import { SesionService, PeticionesAPIService } from '../../../servicios/index';
 
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
@@ -72,7 +69,6 @@ export class EditarCromoDialogComponent implements OnInit {
     ];
     opcionSeleccionadaNivel: string;
   constructor(
-              private coleccionService: ColeccionService,
               public dialog: MatDialog,
               // private location: Location,
               private sesion: SesionService,

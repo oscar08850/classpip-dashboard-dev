@@ -8,8 +8,7 @@ import Swal from 'sweetalert2';
 import { MatDialog, MatTabGroup } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
-// Servicios
-import { ColeccionService, ProfesorService } from '../../servicios/index';
+
 
 
 // Servicios
@@ -41,8 +40,6 @@ export class MisColeccionesComponent implements OnInit {
   mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
 
   constructor(
-    private coleccionService: ColeccionService,
-    private profesorService: ProfesorService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
     public sesion: SesionService,

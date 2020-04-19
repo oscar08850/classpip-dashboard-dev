@@ -6,7 +6,6 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { Cromo, Coleccion } from '../../../clases/index';
 
 // Servicios
-import { ColeccionService } from '../../../servicios/index';
 import { PeticionesAPIService } from '../../../servicios/index';
 
 
@@ -67,7 +66,7 @@ export class AgregarCromoDialogComponent implements OnInit {
   displayedColumns: string[] = ['nombreCromo', 'probabilidadCromo', 'nivelCromo', ' '];
 
 
-  constructor(  private coleccionService: ColeccionService,
+  constructor(
                 private formBuilder: FormBuilder,
                 public dialogRef: MatDialogRef<AgregarCromoDialogComponent>,
                 private peticionesAPI: PeticionesAPIService,

@@ -8,8 +8,6 @@ import Swal from 'sweetalert2';
 // Clases
 import { Grupo, Alumno } from '../../clases/index';
 
-// Servicios
-import { GrupoService, MatriculaService, AlumnoService } from '../../servicios/index';
 
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../servicios/index';
