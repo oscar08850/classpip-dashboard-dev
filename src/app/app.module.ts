@@ -155,6 +155,8 @@ import { AsignaCuestionarioComponent } from './paginas/juego/asigna-cuestionario
 import { JuegoDeCuestionarioSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo.component';
 import { JuegoDeCuestionarioSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/juego-de-cuestionario-seleccionado-activo.component';
 import { InformacionJuegoDeCuestionarioDialogComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/informacion-juego-de-cuestionario-dialog/informacion-juego-de-cuestionario-dialog.component';
+import { JuegoSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-seleccionado-preparado.component';
+import { JuegoDeCuestionarioSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-de-cuestionario-seleccionado-preparado/juego-de-cuestionario-seleccionado-preparado.component';
 
 
 
@@ -244,7 +246,9 @@ import { InformacionJuegoDeCuestionarioDialogComponent } from './paginas/juego-s
     JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent,
     JuegoDeCuestionarioSeleccionadoInactivoComponent,
     JuegoDeCuestionarioSeleccionadoActivoComponent,
-    InformacionJuegoDeCuestionarioDialogComponent
+    InformacionJuegoDeCuestionarioDialogComponent,
+    JuegoSeleccionadoPreparadoComponent,
+    JuegoDeCuestionarioSeleccionadoPreparadoComponent
 
   ],
   imports: [

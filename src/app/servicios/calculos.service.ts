@@ -101,6 +101,7 @@ export class CalculosService {
 
       const juegosActivos: Juego[] = [];
       const juegosInactivos: Juego[] = [];
+      const juegosPreparados: Juego[] = [];
 
       console.log ('vamos a por los juegos de puntos del grupo: ' + grupoID);
       this.peticionesAPI.DameJuegoDePuntosGrupo(grupoID)
@@ -170,12 +171,15 @@ export class CalculosService {
                 if (juegosCuestionario[i].JuegoActivo === true) {
                   juegosCuestionario[i].Tipo = "Juego De Cuestionario";
                   juegosActivos.push(juegosCuestionario[i]);
-                } else {
+                } else if (juegosCuestionario[i].JuegoTerminado === false && juegosCuestionario[i].JuegoActivo === false){
+                  juegosCuestionario[i].Tipo = "Juego De Cuestionario";
+                  juegosPreparados.push(juegosCuestionario[i]);
+                } else if (juegosCuestionario[i].JuegoTerminado === true) {
                   juegosCuestionario[i].Tipo = "Juego De Cuestionario";
                   juegosInactivos.push(juegosCuestionario[i]);
                 }
               }
-            const resultado = { activos: juegosActivos, inactivos: juegosInactivos};
+            const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
             obs.next (resultado);
             // this.PreparaListas ();ç
               });

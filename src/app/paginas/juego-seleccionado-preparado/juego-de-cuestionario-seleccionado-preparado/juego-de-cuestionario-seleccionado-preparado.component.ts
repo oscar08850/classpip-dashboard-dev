@@ -11,11 +11,11 @@ import { TablaAlumnoJuegoDeCuestionario } from 'src/app/clases/TablaAlumnoJuegoD
 import { InformacionJuegoDeCuestionarioDialogComponent } from '../../juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/informacion-juego-de-cuestionario-dialog/informacion-juego-de-cuestionario-dialog.component';
 
 @Component({
-  selector: 'app-juego-de-cuestionario-seleccionado-inactivo',
-  templateUrl: './juego-de-cuestionario-seleccionado-inactivo.component.html',
-  styleUrls: ['./juego-de-cuestionario-seleccionado-inactivo.component.scss']
+  selector: 'app-juego-de-cuestionario-seleccionado-preparado',
+  templateUrl: './juego-de-cuestionario-seleccionado-preparado.component.html',
+  styleUrls: ['./juego-de-cuestionario-seleccionado-preparado.component.scss']
 })
-export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit {
+export class JuegoDeCuestionarioSeleccionadoPreparadoComponent implements OnInit {
 
   //Juego de Cuestionario saleccionado
   juegoSeleccionado: Juego;
@@ -27,6 +27,9 @@ export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit 
   listaAlumnosOrdenadaPorNota: AlumnoJuegoDeCuestionario[];
   rankingAlumnosPorNota: TablaAlumnoJuegoDeCuestionario[];
 
+  mensaje: string = 'Estas segura/o que quieres activar: ';
+
+  mensajeFinalizar: string = 'Estas segura/o de que quieres finalizar: ';
   mensajeEliminar: string = 'Estas segura/o de que quieres eliminar: ';
 
   //Orden conlumnas de la tabla
@@ -71,6 +74,32 @@ export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit 
     this.dataSourceAlumno = new MatTableDataSource(this.rankingAlumnosPorNota)
   }
 
+  ActivarJuego(){
+    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.PuntuacionCorrecta,
+      this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, true, this.juegoSeleccionado.JuegoTerminado,
+      this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
+      .subscribe(res => {
+        this.location.back();
+      })
+  }
+
+  AbrirDialogoConfirmacionActivar(): void {
+
+    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+      height: '150px',
+      data: {
+        mensaje: this.mensaje,
+        nombre: this.juegoSeleccionado.Tipo,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.ActivarJuego();
+        Swal.fire('Activado', this.juegoSeleccionado.Tipo + ' activado correctamente', 'success');
+      }
+    });
+  }
 
   EliminarJuego(){
     this.calculos.EliminarJuegoDeCuestionario()
@@ -100,7 +129,7 @@ export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit 
   AbrirDialogoInformacionJuego(): void {
     const dialogRef = this.dialog.open(InformacionJuegoDeCuestionarioDialogComponent, {
       width: '45%',
-      height: '60%',
+      height: '70%',
       position: {
         top: '0%'
       }

@@ -53,6 +53,22 @@
                   No hay juegos inactivos
               </ng-template>
 
+              <!-- /////////////////////// LISTA JUEGOS PREPARADOS ///////////////////////////////////// -->
+              <br>
+              <br>
+              <h3 class = "CabeceraPreparados" style= "color: white;font-style: bold;font-size: 2em;" mat-subheader>Juegos Preparados</h3>
+
+              <form *ngIf="juegosPreparados ;else Aviso_no_juegos_Preparados">
+                <mat-list-item *ngFor="let juego of juegosPreparados" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionadoPreparado">
+
+                  <mat-icon mat-list-icon><i class="material-icons green">alarm_on</i></mat-icon>
+                  <h4 mat-line>{{juego.NombreJuego}}</h4>
+                  <p mat-line> {{juego.Tipo}}: {{juego.Modo}} </p>
+                </mat-list-item>
+              </form>
+              <ng-template #Aviso_no_juegos_Preparados>
+                No hay juegos preparados
+              </ng-template>
           </mat-list>
 
         </div>

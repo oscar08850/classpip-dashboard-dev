@@ -65,9 +65,10 @@ export class JuegoComponent implements OnInit {
   myForm1: FormGroup;
   myForm2: FormGroup;
 
-  // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS E INACTIVOS DE LOS TRES TIPOS DE JUEGOS
+  // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS, INACTIVOS Y PREPARADOS
   juegosActivos: Juego[];
   juegosInactivos: Juego[];
+  juegosPreparados: Juego[];
 
 
   // tslint:disable-next-line:no-inferrable-types
@@ -208,6 +209,11 @@ export class JuegoComponent implements OnInit {
             } else {
               this.juegosInactivos = listas.inactivos;
               console.log ('hay inactivos');
+            }
+            if (listas.preparados[0] === undefined) {
+              this.juegosPreparados = undefined
+            } else {
+              this.juegosPreparados = listas.preparados;
             }
 
     });

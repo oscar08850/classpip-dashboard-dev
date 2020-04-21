@@ -786,7 +786,7 @@ export class PeticionesAPIService {
     return this.http.get<AlumnoJuegoDeCuestionario[]>(this.APIUrlAlumnoJuegoDeCuestionario
                                                       + '?filter[where][juegoDeCuestionarioId]=' + juegoDeCuestionarioId);
   }
-  public CambiaEstadoJuegoDeCuestionario(JuegosDeCuestionario: JuegoDeCuestionario,
+  public ModificaJuegoDeCuestionario(JuegosDeCuestionario: JuegoDeCuestionario,
     juegoDeCuestionarioId: number, grupoId: number): Observable<JuegoDeCuestionario> {
       return this.http.put<JuegoDeCuestionario>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCuestionario/' + juegoDeCuestionarioId,
       JuegosDeCuestionario);

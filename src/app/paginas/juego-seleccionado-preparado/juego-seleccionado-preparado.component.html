@@ -1,0 +1,26 @@
+<div class="titulo">{{juegoSeleccionado.Tipo}}</div>
+<div class="subtitulo">{{juegoSeleccionado.Modo}}</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<!-- <div *ngIf= "juegoSeleccionado.Tipo === 'Juego De Puntos'">
+  <app-juego-de-puntos-seleccionado-preparado></app-juego-de-puntos-seleccionado-preparado>
+</div>
+
+<div  *ngIf= "juegoSeleccionado.Tipo === 'Juego De Colección'">
+  <app-juego-de-coleccion-seleccionado-preparado></app-juego-de-coleccion-seleccionado-preparado>
+</div>
+
+<div  *ngIf= "juegoSeleccionado.Tipo === 'Juego De Competición Fórmula Uno'">
+  <app-juego-formula-uno-seleccionado-preparado></app-juego-formula-uno-seleccionado-preparado>
+</div>
+
+<div  *ngIf= "juegoSeleccionado.Tipo === 'Juego De Competición Liga'">
+  <app-juego-de-competicion-seleccionado-preparado></app-juego-de-competicion-seleccionado-preparado>
+</div> -->
+
+<div *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuestionario'">
+  <app-juego-de-cuestionario-seleccionado-preparado></app-juego-de-cuestionario-seleccionado-preparado>
+</div>
+
+<div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+</div>

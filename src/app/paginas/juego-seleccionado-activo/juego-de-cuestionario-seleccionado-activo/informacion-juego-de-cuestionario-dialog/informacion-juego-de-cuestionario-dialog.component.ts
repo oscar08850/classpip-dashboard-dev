@@ -4,7 +4,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { PeticionesAPIService, SesionService } from 'src/app/servicios';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { JuegoDeCuestionario } from 'src/app/clases/JuegoDeCuestionario';
 
 @Component({
   selector: 'app-informacion-juego-de-cuestionario-dialog',
@@ -25,7 +26,18 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
   cuestionarioId: number;
   profesorId: number;
 
+  // Se usará para el selector de modo de asignación de ganadores
+  Presentaciones: string[] = ['Mismo orden para todos', 
+  'Preguntas desordenadas',
+  'Preguntas y respuestas desordenadas'
+  ];
+
   TituloCuestionario: string;
+
+  myForm: FormGroup;
+
+  //PARA SABER SI TENEMOS TODOS LOS CAMPOS RELLENADOS
+  isDisabled: Boolean = true;
 
   constructor(public dialog: MatDialog,
               private router: Router,
@@ -48,10 +60,28 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
     this.cuestionarioId = this.juegoSeleccionado.cuestionarioId;
     this.profesorId = this.juegoSeleccionado.profesorId;
 
+    this.myForm = this._formBuilder.group({
+      NombreJuego: ['', Validators.required],
+      PuntuacionCorrecta: ['', Validators.required],
+      PuntuacionIncorrecta: ['', Validators.required],
+      Presentacion: ['', Validators.required],
+    });
+
     this.peticionesAPI.DameCuestionario(this.cuestionarioId)
     .subscribe(res =>{
       this.TituloCuestionario = res.Titulo;
     });
+  }
+
+  //COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN EL JUEGO
+  GuardarCambios() {
+    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.NombreJuego, this.PuntuacionCorrecta,
+      this.PuntuacionIncorrecta, this.Presentacion, this.JuegoActivo, this.JuegoTerminado,
+      this.profesorId, this.juegoSeleccionado.grupoId, this.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
+      .subscribe(() => {
+        this.location.back();
+      })
+
   }
 
   //Cuando pulsamos en el boton volver
@@ -59,4 +89,14 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  Disabled() {
+    if (this.myForm.value.NombreJuego === '' || this.myForm.value.PuntuacionCorrecta === '' || this.myForm.value.PuntuacionIncorrecta === '' ||
+    this.myForm.value.Presentacion === '') {
+      // Si alguno de los valores es igual a nada, entonces estará desactivado
+      this.isDisabled = true;
+    } else {
+      // Si ambos son diferentes a nulo, estará activado.
+      this.isDisabled = false;
+    }
+  }
 }
