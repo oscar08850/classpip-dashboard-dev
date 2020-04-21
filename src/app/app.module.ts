@@ -152,8 +152,8 @@ import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuest
 import { EditarPreguntaDialogComponent } from './paginas/mis-preguntas/editar-pregunta-dialog/editar-pregunta-dialog.component';
 import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
 
-
-
+// para el uso de graficos
+import { NgxEchartsModule } from 'ngx-echarts';
 
 
 @NgModule({
@@ -273,7 +273,9 @@ import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/edita
     MatDatepickerModule,
     MatNativeDateModule,
 
-    HttpClientModule
+    HttpClientModule,
+
+    NgxEchartsModule
   ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
