@@ -27,13 +27,14 @@ export class PasarListaComponent implements OnInit {
   botonTablaDesactivado = true;
   //
   alumnosSeleccionados: Alumno[];
+  alumnosConMarcaTiempo: any [] = [];
 
   alumnosElegido: Alumno;
 
   dataSource;
   mensaje: string = null;
 
-  displayedColumns: string[] = ['select', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'alumnoId'];
+  displayedColumns: string[] = ['select', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'marca'];
   selection = new SelectionModel<Alumno>(true, []);
 
 
@@ -50,7 +51,10 @@ export class PasarListaComponent implements OnInit {
     this.alumnosGrupoSeleccionado = this.sesion.DameAlumnosGrupo();
     if (this.alumnosGrupoSeleccionado !== undefined) {
       // Al principio no hay alumnos seleccionados para eliminar
-      this.dataSource = new MatTableDataSource(this.alumnosGrupoSeleccionado);
+      this.alumnosGrupoSeleccionado.forEach (a => this.alumnosConMarcaTiempo.push ({alumno: a, marca: undefined}));
+      console.log ('Alumnos con marca');
+      console.log (this.alumnosConMarcaTiempo);
+      this.dataSource = new MatTableDataSource(this.alumnosConMarcaTiempo);
     }
   }
 
@@ -78,13 +82,20 @@ export class PasarListaComponent implements OnInit {
 
   /* Esta función decide si el boton debe estar activo (si hay al menos
   una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
-  ActualizarBotonTabla() {
+  ActualizarBotonTabla(row) {
     if (this.selection.selected.length === 0) {
       this.botonTablaDesactivado = true;
     } else {
       this.botonTablaDesactivado = false;
     }
     this.mensaje = '';
+    if (!this.selection.isSelected(row)) {
+      row.marca = undefined;
+    } else {
+      const d = new Date();
+      const marca = d.getHours() + ':' + d.getMinutes();
+      row.marca = marca;
+    }
   }
   ProcesarSeleccionados() {
     this.mensaje = 'Aun no hay nada que hacer con los seleccionados';

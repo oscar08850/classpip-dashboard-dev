@@ -48,7 +48,7 @@
 
         <mat-checkbox
                       (click)="$event.stopPropagation()"
-                      (change)="$event ? selection.toggle(row) : null; ActualizarBotonTabla ();"
+                      (change)="$event ? selection.toggle(row) : null; ActualizarBotonTabla (row);"
                       [checked]="selection.isSelected(row)"
        >
       </mat-checkbox>
@@ -61,28 +61,28 @@
     <!-- Nombre Alumno Column -->
     <ng-container matColumnDef="nombreAlumno">
       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
-      <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.alumno.Nombre}} </td>
 
     </ng-container>
 
     <!-- Primer Apellido Column -->
     <ng-container matColumnDef="primerApellido">
       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Primer Apellido </th>
-      <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.alumno.PrimerApellido}} </td>
 
     </ng-container>
 
     <!-- Segundo Apellido Column -->
     <ng-container matColumnDef="segundoApellido">
       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Segundo Apellido </th>
-      <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.alumno.SegundoApellido}} </td>
 
     </ng-container>
 
     <!-- alumnoId Column -->
-    <ng-container matColumnDef="alumnoId">
-      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Identificador Alumno </th>
-      <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
+    <ng-container matColumnDef="marca">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Hora llegada </th>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.marca}} </td>
 
     </ng-container>
 
