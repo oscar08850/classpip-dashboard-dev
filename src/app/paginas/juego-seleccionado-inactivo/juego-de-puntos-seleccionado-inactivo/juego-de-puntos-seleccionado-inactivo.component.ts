@@ -344,7 +344,7 @@ export class JuegoDePuntosSeleccionadoInactivoComponent implements OnInit {
   }
 
   EliminarJuego() {
-    this.peticionesAPI.BorraJuegoDePuntos(this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
+    this.peticionesAPI.BorraJuegoDePuntos(this.juegoSeleccionado.id)
     .subscribe(res => {
       console.log('Juego eliminado');
       this.location.back();

@@ -49,45 +49,163 @@ export class CalculosService {
   // espere hasta que se haya acabado la operacion de borrar el grupo de la base de datos
   public EliminarGrupo(): any {
     const eliminaObservable = new Observable ( obs => {
-
-
-          this.peticionesAPI.BorraGrupo(
-                    this.sesion.DameProfesor().id,
-                    this.sesion.DameGrupo().id)
-          .subscribe(() => {
-
-            this.EliminarMatriculas();
-
-            // Ahora elimino el grupo de la lista de grupos para que desaparezca de la pantalla al regresar
-            let lista = this.sesion.DameListaGrupos();
-            lista = lista.filter (g => g.id !== this.sesion.DameGrupo().id);
-            obs.next ();
-          });
+          // Las siguientes funciones retornan observables para que pueda esperar a que acaben
+          // antes de continuar borrando cosas.
+          this.EliminarMatriculas()
+          .subscribe (() => this.EliminarSesionesClase()
+          .subscribe (() => this.EliminaJuegos ()
+          .subscribe (() => {
+              this.peticionesAPI.BorraGrupo(
+                this.sesion.DameProfesor().id,
+                this.sesion.DameGrupo().id)
+              .subscribe(() => {
+                // Ahora elimino el grupo de la lista de grupos para que desaparezca de la pantalla al regresar
+                let lista = this.sesion.DameListaGrupos();
+                lista = lista.filter (g => g.id !== this.sesion.DameGrupo().id);
+                obs.next ();
+              });
+          })));
     });
     return eliminaObservable;
   }
 
+  // Esta función genera un observable para avisar al que suscriba de cuándo se ha completado
+  private EliminaJuegos(): any {
+    const eliminaJuegosObservable = new Observable ( obs => {
+      console.log ('Vamos a borrar los juegos');
+      this.DameListaJuegos(this.sesion.DameGrupo().id)
+      .subscribe ( listas => {
+              console.log ('Ya tengo los juegos');
+              console.log (listas.activos);
+              let cont = 0;
+              listas.activos.forEach (juego => {
+                if (juego.Tipo === 'Juego De Puntos') {
+                  // Primero borramos las inscripciones de alumnos o equipos
+                  if (juego.Modo === 'Individual') {
+                    console.log ('Juego de puntos individual');
+                    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos (juego.id)
+                    // tslint:disable-next-line:max-line-length
+                    .subscribe ( inscripciones => inscripciones.forEach (inscripcion => {
+                      console.log ('Borro inscripcion');
+                      console.log (inscripcion);
+                      // Borro los historiales de puntos de ese alumno
+                      this.peticionesAPI.DameHistorialPuntosAlumno (inscripcion.id)
+                      // tslint:disable-next-line:max-line-length
+                      .subscribe (historiales => historiales.forEach (historial => this.peticionesAPI.BorrarPuntosAlumno (historial.id).subscribe()));
+                      // Borro la inscripcion del alumno
+                      this.peticionesAPI.BorraInscripcionAlumnoJuegoDePuntos (inscripcion.id).subscribe();
+                    }));
+                  } else {
+                    this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos (juego.id)
+                    // tslint:disable-next-line:max-line-length
+                    .subscribe ( inscripciones => inscripciones.forEach (inscripcion => {
+                      // Borro los historiales de puntos de ese equipo
+                      this.peticionesAPI.DameHistorialPuntosEquipo (inscripcion.id)
+                      // tslint:disable-next-line:max-line-length
+                      .subscribe (historiales => historiales.forEach (historial => this.peticionesAPI.BorraPuntosEquipo (historial.id).subscribe()));
+                      // Borro la inscripcion del equipo
+                      this.peticionesAPI.BorraInscripcionEquipoJuegoDePuntos (inscripcion.id).subscribe();
+                    }));
+                  }
+                  // Ahora borramos las asignaciones de puntos
+                  this.peticionesAPI.DamePuntosJuego (juego.id)
+                  .subscribe ( puntos => puntos.forEach (punto => this.peticionesAPI.BorraPuntoJuego (punto.id).subscribe()));
+                  // y los niveles e imagenes
+                  this.peticionesAPI.DameNivelesJuego (juego.id)
+                  .subscribe ( niveles => niveles.forEach (nivel => {
+                      this.peticionesAPI.BorraNivel (nivel.id).subscribe();
+                      if (nivel.Imagen !== undefined) {
+                        this.peticionesAPI.BorraImagenNivel (nivel.Imagen).subscribe();
+                      }
+                  }));
+                  // Ahora borramos el juego
+                  this.peticionesAPI.BorraJuegoDePuntos (juego.id)
+                  .subscribe (() => {
+                    cont++;
+                    if (cont === listas.activos.length) {
+                      obs.next();
+                    }
+                  });
+                }
+              });
+      });
+    });
+    return eliminaJuegosObservable;
+  }
+
   // ESTA FUNCIÓN RECUPERA TODAS LAS MATRICULAS DEL GRUPO QUE VAMOS A BORRAR Y DESPUÉS LAS BORRA. ESTO LO HACEMOS PARA NO
   // DEJAR MATRICULAS QUE NO NOS SIRVEN EN LA BASE DE DATOS
-  private EliminarMatriculas() {
-    // Pido las matrículas correspondientes al grupo que voy a borrar
-    this.peticionesAPI.DameMatriculasGrupo(this.sesion.DameGrupo().id)
-    .subscribe( matriculas => {
-      if (matriculas[0] !== undefined) {
+  // Lo hacemos como observable para que el que la use tenga que suscribirse y pueda esperar a que se complete
+  // la operación antes de avanzar
+  private EliminarMatriculas(): any {
+    const eliminaMatriculasObservable = new Observable ( obs => {
+      // Pido las matrículas correspondientes al grupo que voy a borrar
+      this.peticionesAPI.DameMatriculasGrupo(this.sesion.DameGrupo().id)
+      .subscribe( matriculas => {
+        if (matriculas[0] !== undefined) {
+          let cont = 0;
 
-        // Una vez recibo las matriculas del grupo, las voy borrando una a una
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < matriculas.length; i++) {
-          this.peticionesAPI.BorraMatricula(matriculas[i].id)
-          .subscribe(() => {
-              console.log('matricula borrada correctamente');
-          });
+          // Una vez recibo las matriculas del grupo, las voy borrando una a una
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < matriculas.length; i++) {
+            this.peticionesAPI.BorraMatricula(matriculas[i].id)
+            .subscribe(() => {
+              cont++;
+              if (cont === matriculas.length) {
+                // Ya hemos borrado todas
+                obs.next();
+              }
+            });
+          }
+        } else {
+          // no hay matricular que borrar
+          obs.next();
         }
-      } else {
-        console.log('no hay matriculas');
-      }
 
+      });
     });
+    return eliminaMatriculasObservable;
+  }
+
+  // ESTA FUNCIÓN RECUPERA TODAS LAS SESIONES DE CLASE DEL GRUPO QUE VAMOS A BORRAR Y DESPUÉS LAS BORRA.
+    // Lo hacemos como observable para que el que la use tenga que suscribirse y pueda esperar a que se complete
+  // la operación antes de avanzar
+  private EliminarSesionesClase(): any {
+    const eliminaSesionesObservable = new Observable ( obs => {
+      // Pido las matrículas correspondientes al grupo que voy a borrar
+      this.peticionesAPI.DameSesionesClaseGrupo(this.sesion.DameGrupo().id)
+      .subscribe( sesiones => {
+        if (sesiones[0] !== undefined) {
+
+          let cont = 0;
+          // Una vez recibo las sesiones de clase del grupo, las voy borrando una a una
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < sesiones.length; i++) {
+            // primero tengo que borrar los registros de asistencia a la sesión
+            this.peticionesAPI.DameAsistenciasClase (sesiones[i].id).
+            subscribe (asistencias => {
+              console.log ('borro asistencias');
+              console.log (asistencias);
+              asistencias.forEach (asistencia => this.peticionesAPI.BorraAsistenciaClase (asistencia.id).subscribe());
+            });
+            // Ahora borro la sesión
+            this.peticionesAPI.BorraSesionClase(sesiones[i].id)
+            .subscribe(() => {
+              cont++;
+              if (cont === sesiones.length) {
+                // Ya hemos borrado todas las sesiones
+                obs.next();
+              }
+            });
+          }
+        } else {
+          // nada que eliminar
+          obs.next();
+        }
+
+      });
+    });
+    return eliminaSesionesObservable;
   }
 
 
@@ -1053,7 +1171,7 @@ public BorraJuegoCompeticionLiga(juegoDeCompeticion: Juego) {
 
 
   // Borro el juego
-  this.peticionesAPI.BorraJuegoDeCompeticionLiga (juegoDeCompeticion.id, juegoDeCompeticion.grupoId).subscribe();
+  this.peticionesAPI.BorraJuegoDeCompeticionLiga (juegoDeCompeticion.id).subscribe();
 
 }
 
@@ -1081,7 +1199,7 @@ public BorraJuegoCompeticionFormulaUno(juegoDeCompeticion: Juego) {
 
 
   // Borro el juego
-  this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id, juegoDeCompeticion.grupoId).subscribe();
+  this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id).subscribe();
 }
 
 public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any [] {

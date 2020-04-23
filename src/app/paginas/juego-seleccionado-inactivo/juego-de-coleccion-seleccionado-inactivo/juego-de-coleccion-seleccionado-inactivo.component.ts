@@ -193,7 +193,7 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
   }
 
   EliminarJuego() {
-    this.peticionesAPI.BorraJuegoDeColeccion(this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
+    this.peticionesAPI.BorraJuegoDeColeccion(this.juegoSeleccionado.id)
     .subscribe(res => {
       console.log('Juego eliminado');
       this.location.back();

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PasarListaComponent } from './pasar-lista.component';
+import { SesionesClaseComponent } from './sesiones-clase.component';
 
 describe('PasarListaComponent', () => {
-  let component: PasarListaComponent;
-  let fixture: ComponentFixture<PasarListaComponent>;
+  let component: SesionesClaseComponent;
+  let fixture: ComponentFixture<SesionesClaseComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PasarListaComponent ]
+      declarations: [ SesionesClaseComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PasarListaComponent);
+    fixture = TestBed.createComponent(SesionesClaseComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

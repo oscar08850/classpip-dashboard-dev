@@ -561,9 +561,9 @@ export class JuegoComponent implements OnInit {
               // this.calculos.EliminarGrupo();
               // this.BorrarColeccion (this.coleccionCreada);
               if (this.tipoDeJuegoSeleccionado === 'Juego De Puntos') {
-                this.peticionesAPI.BorraJuegoDePuntos(this.juego.id, this.juego.grupoId).subscribe();
+                this.peticionesAPI.BorraJuegoDePuntos(this.juego.id).subscribe();
               } else if (this.tipoDeJuegoSeleccionado === 'Juego De Colección') {
-                this.peticionesAPI.BorraJuegoDeColeccion(this.juego.id, this.juego.grupoId).subscribe();
+                this.peticionesAPI.BorraJuegoDeColeccion(this.juego.id).subscribe();
               }
             }
             obs.next (confirmed);
