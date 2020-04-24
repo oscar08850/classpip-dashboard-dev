@@ -212,6 +212,8 @@ export class JuegoComponent implements OnInit {
   // Función que usaremos para clicar en un juego y entrar en él,
   // Enviamos juego a la sesión
   JuegoSeleccionado(juego: Juego) {
+    console.log ('**************guardo juego en la sesion');
+    console.log (juego);
     this.sesion.TomaJuego(juego);
   }
 

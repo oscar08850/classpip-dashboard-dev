@@ -35,7 +35,7 @@ export class PeticionesAPIService {
   private APIUrlNiveles = this.host + ':3000/api/Niveles';
   private APIUrlHistorialPuntosAlumno = this.host + ':3000/api/HistorialesPuntosAlumno';
   private APIUrlHistorialPuntosEquipo = this.host + ':3000/api/HistorialesPuntosEquipo';
-  private APIRUrlJuegoDeColeccion = this.host + '3000/api/JuegosDeColeccion';
+  private APIRUrlJuegoDeColeccion = this.host + ':3000/api/JuegosDeColeccion';
   private APIUrlAlumnoJuegoDeColeccion = this.host + ':3000/api/AlumnosJuegoDeColeccion';
   private APIUrlEquipoJuegoDeColeccion = this.host + ':3000/api/EquiposJuegoDeColeccion';
   private APIRUrlAlbum = this.host + ':3000/api/Albumes';
@@ -512,12 +512,19 @@ export class PeticionesAPIService {
   ///////////////////////////////////////// GESTION DE JUEGO DE COLECCIÓN INDIVIDUAL //////////////////////////////////////////////////
 
   public DameAlumnosJuegoDeColeccion(juegoDeColeccionId: number): Observable<Alumno[]> {
+    console.log ('pido alumnos del juego ' + juegoDeColeccionId);
     return this.http.get<Alumno[]>(this.APIRUrlJuegoDeColeccion + '/' + juegoDeColeccionId + '/alumnos');
   }
   public DameInscripcionesAlumnoJuegoDeColeccion(juegoDeColeccionId: number): Observable<AlumnoJuegoDeColeccion[]> {
     return this.http.get<AlumnoJuegoDeColeccion[]>(this.APIUrlAlumnoJuegoDeColeccion + '?filter[where][juegoDeColeccionId]='
     + juegoDeColeccionId);
   }
+
+  public BorraInscripcionAlumnoJuegoDeColeccion(inscripcionId: number ) {
+    // tslint:disable-next-line:max-line-length
+    return this.http.delete(this.APIUrlAlumnoJuegoDeColeccion + '/' + inscripcionId);
+  }
+
   public AsignarCromoAlumno(album: Album) {
     return this.http.post<Album>(this.APIRUrlAlbum, album);
   }
@@ -526,17 +533,27 @@ export class PeticionesAPIService {
     return this.http.get<Cromo[]>(this.APIUrlAlumnoJuegoDeColeccion + '/' + alumnoJuegoDeColeccionId + '/cromos');
   }
 
-  public BorrarCromoAlumno(albumId: number ) {
-    // tslint:disable-next-line:max-line-length
-    return this.http.delete(this.APIRUrlAlbum + '/' + albumId);
-  }
+
 
   // Una cosa es obtener los cromos (funcion anterior) y otra es obtener las asignacionese
   // de cromos (esta función) que retorna una lista de objetos de tipo Album (nombre muy poco
   // apropiado para esto)
-  public DameAsignacionesCromosAlumno(inscripcionAlumnoId: number, cromoId: number): Observable<Album[]> {
+
+  public DameAsignacionesCromosAlumno(inscripcionAlumnoId: number): Observable<Album[]> {
+    return this.http.get<Album[]>(this.APIRUrlAlbum + '?filter[where][alumnoJuegoDeColeccionId]='
+          + inscripcionAlumnoId);
+  }
+
+  // Esta es para obtener las asignaciones de un cromo concreto
+  public DameAsignacionesCromoConcretoAlumno(inscripcionAlumnoId: number, cromoId: number): Observable<Album[]> {
     return this.http.get<Album[]>(this.APIRUrlAlbum + '?filter[where][alumnoJuegoDeColeccionId]='
           + inscripcionAlumnoId + '&filter[where][cromoId]=' + cromoId);
+  }
+
+
+  public BorrarAsignacionCromoAlumno(albumId: number ) {
+    // tslint:disable-next-line:max-line-length
+    return this.http.delete(this.APIRUrlAlbum + '/' + albumId);
   }
 
 
@@ -545,25 +562,38 @@ export class PeticionesAPIService {
   public DameEquiposJuegoDeColeccion(juegoDeColeccionId: number): Observable<Equipo[]> {
     return this.http.get<Equipo[]>(this.APIRUrlJuegoDeColeccion + '/' + juegoDeColeccionId + '/equipos');
   }
-  public DameCromosEquipo(equipoJuegoDeColeccionId: number): Observable<Cromo[]> {
-    return this.http.get<Cromo[]>(this.APIUrlEquipoJuegoDeColeccion + '/' + equipoJuegoDeColeccionId + '/cromos');
-  }
+
   public DameInscripcionesEquipoJuegoDeColeccion(juegoDeColeccionId: number): Observable<EquipoJuegoDeColeccion[]> {
     return this.http.get<EquipoJuegoDeColeccion[]>(this.APIUrlEquipoJuegoDeColeccion + '?filter[where][juegoDeColeccionId]='
     + juegoDeColeccionId);
   }
+
+  public BorraInscripcionEquipoJuegoDeColeccion(inscripcionId: number ) {
+    // tslint:disable-next-line:max-line-length
+    return this.http.delete(this.APIUrlEquipoJuegoDeColeccion + '/' + inscripcionId);
+  }
+
   public AsignarCromoEquipo(album: AlbumEquipo) {
     return this.http.post<AlbumEquipo>(this.APIRUrlAlbumEquipo, album);
   }
 
+  public DameCromosEquipo(equipoJuegoDeColeccionId: number): Observable<Cromo[]> {
+    return this.http.get<Cromo[]>(this.APIUrlEquipoJuegoDeColeccion + '/' + equipoJuegoDeColeccionId + '/cromos');
+  }
+
   // Una cosa es obtener los cromos (funcion anterior) y otra es obtener las asignacionese
-  // de cromos (esta función) que retorna una lista de objetos de tipo Album (nombre muy poco
+  // de cromos (esta función) que retorna una lista de objetos de tipo AlbumEquipo (nombre muy poco
   // apropiado para esto)
-  public DameAsignacionesCromosEquipo(inscripcionEquipoId: number, cromoId: number): Observable<AlbumEquipo[]> {
+
+  public DameAsignacionesCromosEquipo(inscripcionEquipoId: number): Observable<AlbumEquipo[]> {
+    return this.http.get<AlbumEquipo[]>(this.APIRUrlAlbumEquipo + '?filter[where][alumnoJuegoDeColeccionId]='
+          + inscripcionEquipoId);
+  }
+  public DameAsignacionesCromoConcretoEquipo(inscripcionEquipoId: number, cromoId: number): Observable<AlbumEquipo[]> {
     return this.http.get<AlbumEquipo[]>(this.APIRUrlAlbumEquipo + '?filter[where][equipoJuegoDeColeccionId]='
           + inscripcionEquipoId + '&filter[where][cromoId]=' + cromoId);
   }
-  public BorrarCromoEquipo(albumId: number ) {
+  public BorrarAsignacionCromoEquipo(albumId: number ) {
     // tslint:disable-next-line:max-line-length
     return this.http.delete(this.APIRUrlAlbumEquipo + '/' + albumId);
   }

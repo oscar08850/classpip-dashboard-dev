@@ -51,6 +51,8 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
+    console.log ('juego de coleccion ');
+    console.log (this.juegoSeleccionado);
 
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
@@ -58,6 +60,7 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
     } else {
       this.EquiposDelJuego();
     }
+
   }
 
   applyFilter(filterValue: string) {
@@ -70,8 +73,10 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
 
   // Recupera los alumnos que pertenecen al juego
   AlumnosDelJuego() {
+    console.log ('voy a por los alumnos del juego ' + this.juegoSeleccionado.id);
     this.peticionesAPI.DameAlumnosJuegoDeColeccion(this.juegoSeleccionado.id)
     .subscribe(alumnosJuego => {
+      console.log ('ya los tengo');
       console.log(alumnosJuego);
       this.alumnosDelJuego = alumnosJuego;
       this.RecuperarInscripcionesAlumnoJuego();

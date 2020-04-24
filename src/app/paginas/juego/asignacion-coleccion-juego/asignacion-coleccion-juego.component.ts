@@ -102,6 +102,7 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
     this.emisorNombreColeccion.emit (coleccion.Nombre);
     this.isDisabled = false;
     console.log(this.coleccionSeleccionada);
+    this.AsignarColeccionJuego();
   }
 
   AsignarColeccionJuego() {
