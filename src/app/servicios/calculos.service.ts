@@ -78,11 +78,13 @@ export class CalculosService {
       console.log ('Vamos a borrar los juegos');
       this.DameListaJuegos(this.sesion.DameGrupo().id)
       .subscribe ( listas => {
+              // Hago una lista con todos los juegos (activos e inactivos)
+              const juegos = listas.activos.concat (listas.inactivos);
               console.log ('Ya tengo los juegos');
-              console.log (listas.activos);
+              console.log (juegos);
               let cont = 0;
-              if (listas.activos[0] !== undefined) {
-                listas.activos.forEach (juego => {
+              if (juegos[0] !== undefined) {
+                juegos.forEach (juego => {
                   if (juego.Tipo === 'Juego De Puntos') {
                     // Primero borramos las inscripciones de alumnos o equipos
                     if (juego.Modo === 'Individual') {
@@ -124,7 +126,7 @@ export class CalculosService {
                     this.peticionesAPI.BorraJuegoDePuntos (juego.id)
                     .subscribe (() => {
                       cont++;
-                      if (cont === listas.activos.length) {
+                      if (cont === juegos.length) {
                         obs.next();
                       }
                     });
@@ -166,7 +168,7 @@ export class CalculosService {
                     this.peticionesAPI.BorraJuegoDeColeccion (juego.id)
                     .subscribe (() => {
                       cont++;
-                      if (cont === listas.activos.length) {
+                      if (cont === juegos.length) {
                         obs.next();
                       }
                     });
@@ -200,7 +202,7 @@ export class CalculosService {
                     .subscribe (() => {
                       // Esto es lo que no hace la funcion que borra el juego de liga
                       cont++;
-                      if (cont === listas.activos.length) {
+                      if (cont === juegos.length) {
                         obs.next();
                       }
                     });
@@ -211,7 +213,7 @@ export class CalculosService {
                     // es igual al de la función, pero añadiendole el obs.next al acabar de borrar
 
                     if (juego.Modo === 'Individual') {
-                      console.log ('Voy a borrar liga individual');
+                      console.log ('Voy a borrar formula 1 individual');
                       this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionFormulaUno (juego.id)
                       // tslint:disable-next-line:max-line-length
                       .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(inscripcion.id).subscribe()));
@@ -232,7 +234,7 @@ export class CalculosService {
                     .subscribe (() => {
                       // Esto es lo que no hace la funcion que borra el juego de liga
                       cont++;
-                      if (cont === listas.activos.length) {
+                      if (cont === juegos.length) {
                         obs.next();
                       }
                     });
