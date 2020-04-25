@@ -170,6 +170,72 @@ export class CalculosService {
                         obs.next();
                       }
                     });
+                  } else if (juego.Tipo === 'Juego De Competición Liga') {
+                    // Para borrar un juego de Liga ya hay una funcion en calculos, pero no la puedo
+                    // usar porque esa funcion no hace el obs.next que necesito aqui. ASi que el código que viene a continuación
+                    // es igual al de la función, pero añadiendole el obs.next al acabar de borrar
+                    console.log ('Voy a borrar liga');
+                    if (juego.Modo === 'Individual') {
+                      console.log ('Voy a borrar liga individual');
+                      this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionLiga (juego.id)
+                      // tslint:disable-next-line:max-line-length
+                      .subscribe (inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionLiga (inscripcion.id).subscribe()));
+                    } else {
+                      this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionLiga (juego.id)
+                      // tslint:disable-next-line:max-line-length
+                      .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionLiga(inscripcion.id).subscribe()));
+                    }
+                    this.peticionesAPI.DameJornadasDeCompeticionLiga (juego.id)
+                    .subscribe (jornadas => {
+                      jornadas.forEach (jornada => {
+                                this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga (jornada.id)
+                                // tslint:disable-next-line:max-line-length
+                                .subscribe (enfrentamientos => enfrentamientos.forEach (enfrentamiento => this.peticionesAPI.BorraEnrentamientoLiga (enfrentamiento).subscribe()));
+                                // Borrar jornada
+                                this.peticionesAPI.BorrarJornadaLiga (jornada).subscribe();
+                              });
+                    });
+                    // Borro el juego
+                    this.peticionesAPI.BorraJuegoDeCompeticionLiga (juego.id)
+                    .subscribe (() => {
+                      // Esto es lo que no hace la funcion que borra el juego de liga
+                      cont++;
+                      if (cont === listas.activos.length) {
+                        obs.next();
+                      }
+                    });
+
+                  } else if (juego.Tipo === 'Juego De Competición Fórmula Uno') {
+                     // Para borrar un juego de formula uno ya hay una funcion en calculos, pero no la puedo
+                    // usar porque esa funcion no hace el obs.next que necesito aqui. ASi que el código que viene a continuación
+                    // es igual al de la función, pero añadiendole el obs.next al acabar de borrar
+
+                    if (juego.Modo === 'Individual') {
+                      console.log ('Voy a borrar liga individual');
+                      this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionFormulaUno (juego.id)
+                      // tslint:disable-next-line:max-line-length
+                      .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(inscripcion.id).subscribe()));
+                    } else {
+                      this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionFormulaUno (juego.id)
+                      // tslint:disable-next-line:max-line-length
+                      .subscribe ( inscripciones => {
+                        // tslint:disable-next-line:max-line-length
+                        inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(inscripcion.id).subscribe());
+                      }
+                      );
+                    }
+                    // Pido las jornadas y para cada jornada pido los enfrentamientos y los borro. Y luego borro la jornada
+                    this.peticionesAPI.DameJornadasDeCompeticionFormulaUno (juego.id)
+                    .subscribe (jornadas => jornadas.forEach (jornada => this.peticionesAPI.BorrarJornadaFormulaUno (jornada).subscribe()));
+                    // Borro el juego
+                    this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno (juego.id)
+                    .subscribe (() => {
+                      // Esto es lo que no hace la funcion que borra el juego de liga
+                      cont++;
+                      if (cont === listas.activos.length) {
+                        obs.next();
+                      }
+                    });
                   }
                 });
               } else {
@@ -1204,7 +1270,7 @@ public BorraJuegoCompeticionLiga(juegoDeCompeticion: Juego) {
   if (juegoDeCompeticion.Modo === 'Individual') {
     this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionLiga (juegoDeCompeticion.id)
     // tslint:disable-next-line:max-line-length
-    .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionLiga(inscripcion).subscribe()));
+    .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionLiga(inscripcion.id).subscribe()));
   } else {
     console.log ('inscripciones equipos');
     this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionLiga (juegoDeCompeticion.id)
@@ -1212,7 +1278,7 @@ public BorraJuegoCompeticionLiga(juegoDeCompeticion: Juego) {
     .subscribe ( inscripciones => {
       console.log ('inscripciones');
       console.log (inscripciones);
-      inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionLiga(inscripcion).subscribe());
+      inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionLiga(inscripcion.id).subscribe());
     }
     );
   }
@@ -1240,7 +1306,7 @@ public BorraJuegoCompeticionFormulaUno(juegoDeCompeticion: Juego) {
   if (juegoDeCompeticion.Modo === 'Individual') {
     this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id)
     // tslint:disable-next-line:max-line-length
-    .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(inscripcion).subscribe()));
+    .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(inscripcion.id).subscribe()));
   } else {
     console.log ('inscripciones equipos');
     this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id)
@@ -1248,7 +1314,8 @@ public BorraJuegoCompeticionFormulaUno(juegoDeCompeticion: Juego) {
     .subscribe ( inscripciones => {
       console.log ('inscripciones');
       console.log (inscripciones);
-      inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(inscripcion).subscribe());
+      // tslint:disable-next-line:max-line-length
+      inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(inscripcion.id).subscribe());
     }
     );
   }

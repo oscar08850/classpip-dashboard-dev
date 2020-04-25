@@ -616,20 +616,6 @@ export class PeticionesAPIService {
     return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga');
   }
 
-  public InscribeAlumnoJuegoDeCompeticionLiga(alumnoJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga) {
-    return this.http.post<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionLiga, alumnoJuegoDeCompeticionLiga);
-  }
-  public BorraInscripcionAlumnoJuegoDeCompeticionLiga(alumnoJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga) {
-    return this.http.delete<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionLiga + '/' + alumnoJuegoDeCompeticionLiga.id);
-  }
-
-  public BorraInscripcionEquipoJuegoDeCompeticionLiga(equipoJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga) {
-    return this.http.delete<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionLiga + '/' + equipoJuegoDeCompeticionLiga.id);
-  }
-
-  public InscribeEquipoJuegoDeCompeticionLiga(equipoJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga) {
-    return this.http.post<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionLiga, equipoJuegoDeCompeticionLiga);
-  }
 
   public CambiaEstadoJuegoDeCompeticionLiga(JuegosDeCompeticionLiga: Juego,
                                             juegoDeCompeticionId: number,
@@ -688,6 +674,13 @@ export class PeticionesAPIService {
     return this.http.get<Alumno[]>(this.APIUrlJuegoDeCompeticionLiga + '/' + juegoDeCompeticionLigaId + '/alumnos');
   }
 
+  public InscribeAlumnoJuegoDeCompeticionLiga(alumnoJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga) {
+    return this.http.post<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionLiga, alumnoJuegoDeCompeticionLiga);
+  }
+  public BorraInscripcionAlumnoJuegoDeCompeticionLiga(inscripcionId: number) {
+    return this.http.delete<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionLiga + '/' + inscripcionId);
+  }
+
   public DameInscripcionesAlumnoJuegoDeCompeticionLiga(juegoDeCompeticionLigaId: number): Observable<AlumnoJuegoDeCompeticionLiga[]> {
     return this.http.get<AlumnoJuegoDeCompeticionLiga[]>(this.APIUrlAlumnoJuegoDeCompeticionLiga
                                                           + '?filter[where][JuegoDeCompeticionLigaId]=' + juegoDeCompeticionLigaId);
@@ -709,6 +702,15 @@ export class PeticionesAPIService {
                                                           + '?filter[where][JuegoDeCompeticionLigaId]=' + juegoDeCompeticionLigaId);
   }
 
+
+  public BorraInscripcionEquipoJuegoDeCompeticionLiga(inscripcionId: number) {
+    return this.http.delete<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionLiga + '/' + inscripcionId);
+  }
+
+  public InscribeEquipoJuegoDeCompeticionLiga(equipoJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga) {
+    return this.http.post<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionLiga, equipoJuegoDeCompeticionLiga);
+  }
+
   // tslint:disable-next-line:max-line-length
   public PonPuntosEquipoGanadorJuegoDeCompeticionLiga(ganadorJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga): Observable<EquipoJuegoDeCompeticionLiga> {
     // tslint:disable-next-line:max-line-length
@@ -726,7 +728,7 @@ export class PeticionesAPIService {
   }
 
   public BorraJuegoDeCompeticionFormulaUno(juegoDeCompeticionId: number): Observable<Juego> {
-    return this.http.delete<Juego>(this.APIUrlJornadasJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionId);
+    return this.http.delete<Juego>(this.APIUrlJuegoDeCompeticionFormulaUno + '/' + juegoDeCompeticionId);
   }
 
   public ModificaJuegoDeCompeticionFormulaUno(juego: Juego, grupoId: number): Observable<Juego> {
@@ -787,9 +789,9 @@ export class PeticionesAPIService {
     return this.http.get<AlumnoJuegoDeCompeticionFormulaUno[]>(this.APIUrlAlumnoJuegoDeCompeticionFormulaUno
                                                       + '?filter[where][JuegoDeCompeticionFormulaUnoId]=' + juegoDeCompeticionFormulaUnoId);
   }
-  public BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(alumnoJuegoDeCompeticionFormulaUno: AlumnoJuegoDeCompeticionFormulaUno) {
+  public BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(inscripcionId: number) {
     // tslint:disable-next-line:max-line-length
-    return this.http.delete<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionFormulaUno + '/' + alumnoJuegoDeCompeticionFormulaUno.id);
+    return this.http.delete<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionFormulaUno + '/' + inscripcionId);
   }
 
   // tslint:disable-next-line:max-line-length
@@ -814,9 +816,9 @@ export class PeticionesAPIService {
                                                       + '?filter[where][JuegoDeCompeticionFormulaUnoId]=' + juegoDeCompeticionFormulaUnoId);
   }
 
-  public BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(equipoJuegoDeCompeticionFormulaUno: EquipoJuegoDeCompeticionFormulaUno) {
+  public BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(inscripcionId: number) {
     // tslint:disable-next-line:max-line-length
-    return this.http.delete<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionFormulaUno + '/' + equipoJuegoDeCompeticionFormulaUno.id);
+    return this.http.delete<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionFormulaUno + '/' + inscripcionId);
   }
 
    // tslint:disable-next-line:max-line-length
