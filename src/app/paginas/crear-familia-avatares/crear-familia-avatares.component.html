@@ -1,0 +1,272 @@
+<div class="titulo">Crear nueva familia de avatares</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class = "contenedor">
+  <mat-horizontal-stepper [linear]="true" #stepper>
+      <!-- PASO 1 (INTRODUCIR EL NOMBRE DE LA FAMILIA) -->
+      <mat-step [stepControl]="nombreFormGroup">
+        <form [formGroup]="nombreFormGroup">
+          <ng-template matStepLabel>Nombre de la familia</ng-template>
+          <mat-form-field style= "width: 40%">
+            <mat-label>Nombre</mat-label>
+            <input  (keyup)="GuardarNombreFamilia()" matInput placeholder="Escribe el nombre de la familia" formControlName="nombreFamilia" required>
+          </mat-form-field>
+
+          <div class="btnCambiarStep">
+            <button [disabled]="botonAvanzarAPaso2Desactivado"  mat-raised-button class="btn Next" matStepperNext>Siguiente
+                <i class="material-icons">
+                    navigate_next</i>
+            </button>
+          </div>
+
+        </form>
+      </mat-step>
+      <!-- PASO 2 (INTRODUCIR IMAGEN DE LA SILUETA ) -->
+      <mat-step>
+          <ng-template matStepLabel>Silueta</ng-template>
+          <div>
+              <input #file id = "inputSilueta" type="file" accept= 'image/*' (change)="CargarImagenSilueta($event)" style="display:none">
+              <img class="imagen" *ngIf="imagenSilueta" hight = "150" width = "150" mat-card-image [src]="imagenSilueta" style="margin: 5px">
+              <button (click) = "ActivarInputSilueta()" type="button" class="btn Agregar">
+                Selecciona silueta<i class="material-icons">add_photo_alternate</i>
+              </button>
+          </div>
+
+
+          <div class="btnCambiarStep">
+              <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                Atrás <i class="material-icons">
+                    navigate_before</i></button>
+              <!-- El botón de avanzar se habilita en cuanto se haya cargado una imagen de la silueta -->
+              <button  [disabled]="!imagenSiluetaCargada" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                Siguiente <i class="material-icons">
+                    navigate_next</i>
+              </button>
+          </div>
+
+      </mat-step>
+      <!-- PASO 3 (INTRODUCIR IMAGENES PARA COMPLEMENTO 1) -->
+      <mat-step [stepControl]="complemento1FormGroup">
+        <form [formGroup]="complemento1FormGroup">
+          <ng-template matStepLabel>Complemento 1</ng-template>
+          <mat-form-field style= "width: 40%">
+            <mat-label>Nombre del complemento 1</mat-label>
+            <input  (keyup)="GuardarNombreComplemento1()" matInput placeholder="Escribe el nombre del complemento 1" formControlName="nombreComplemento1" required>
+          </mat-form-field>
+
+          <div *ngIf = "activarCargaComplemento1">
+            <ng-template matStepLabel>Complemento 1</ng-template>
+            <div class = "enFila" >
+              <div style = "width: 20%">
+                  <input #file id = "inputComplemento1" type="file" accept= 'image/*' (change)="CargarImagenComplemento(0,$event)" style="display:none">
+
+                  <button *ngIf = "!imagenComplementoCargada" style = "width: 100%" (click) = "ActivarInputComplemento1()" type="button" class="btn Agregar">
+                    Selecciona<i class="material-icons">add_photo_alternate</i>
+                  </button>
+                  <div *ngIf = "imagenComplementoCargada" class ="enFila" style = 'top: 100px'>
+                    <button style = "width: 50%" (click) = "AceptarComplemento(0)" type="button" class="btn Aceptar" >
+                      Acepta </button>
+                    <button style = "width: 50%" (click) = "RechazarComplemento(0)" type="button" class="btn Eliminar" >
+                      Rechaza </button>
+                  </div>
+                  <div id="muestracomplemento1">
+                    <img id= "silueta" *ngIf="imagenSilueta"   [src]="imagenSilueta">
+                  </div>
+              </div>
+              <div class = "enColumna" style = "width: 80%">
+                <div style = "color: green; font-size: larger;">{{familiaAvatares.NombreComplemento1}}</div>
+                <br>
+                <div id="complementos1">
+                  <!-- En este bloque se colocarán las imagenes de las diferentes opciones del complemento -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="btnCambiarStep">
+              <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                Atrás <i class="material-icons">
+                    navigate_before</i></button>
+                <!-- El botón de avanzar se habilita en cuanto se haya cargado una imagen para el complemento -->
+              <button  [disabled]="familiaAvatares && familiaAvatares.Complemento1.length === 0" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                Siguiente <i class="material-icons">
+                    navigate_next</i>
+              </button>
+          </div>
+        </form>
+      </mat-step>
+      <!-- PASO 4 (INTRODUCIR IMAGENES PARA COMPLEMENTO 2) -->
+      <mat-step [stepControl]="complemento2FormGroup">
+        <form [formGroup]="complemento2FormGroup">
+          <ng-template matStepLabel>Complemento 2</ng-template>
+          <mat-form-field style= "width: 40%">
+            <mat-label>Nombre del complemento 2</mat-label>
+            <input  (keyup)="GuardarNombreComplemento2()" matInput placeholder="Escribe el nombre del complemento 2" formControlName="nombreComplemento2" required>
+          </mat-form-field>
+
+          <div *ngIf = "activarCargaComplemento2">
+            <ng-template matStepLabel>Complemento 2</ng-template>
+            <div class = "enFila" >
+              <div style = "width: 20%">
+                  <input #file id = "inputComplemento2" type="file" accept= 'image/*' (change)="CargarImagenComplemento(1,$event)" style="display:none">
+
+                  <button *ngIf = "!imagenComplementoCargada" style = "width: 100%" (click) = "ActivarInputComplemento2()" type="button" class="btn Agregar">
+                    Selecciona<i class="material-icons">add_photo_alternate</i>
+                  </button>
+                  <div *ngIf = "imagenComplementoCargada" class ="enFila" style = 'top: 100px'>
+                    <button style = "width: 50%" (click) = "AceptarComplemento(1)" type="button" class="btn Aceptar" >
+                      Acepta </button>
+                    <button style = "width: 50%" (click) = "RechazarComplemento(1)" type="button" class="btn Eliminar" >
+                      Rechaza </button>
+                  </div>
+                  <div id="muestracomplemento2">
+                    <img id= "silueta" *ngIf="imagenSilueta"   [src]="imagenSilueta">
+                  </div>
+              </div>
+              <div class = "enColumna" style = "width: 80%">
+                <div style = "color: green; font-size: larger;">{{familiaAvatares.NombreComplemento2}}</div>
+                <br>
+                <div id="complementos2">
+                  <!-- En este bloque se colocarán las imagenes de las diferentes opciones del complemento -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="btnCambiarStep">
+              <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                Atrás <i class="material-icons">
+                    navigate_before</i></button>
+                <!-- El botón de avanzar se habilita en cuanto se haya cargado una imagen para el complemento -->
+              <button  [disabled]="familiaAvatares && familiaAvatares.Complemento2.length === 0" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                Siguiente <i class="material-icons">
+                    navigate_next</i>
+              </button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- PASO 5 (INTRODUCIR IMAGENES PARA COMPLEMENTO 3) -->
+
+      <mat-step [stepControl]="complemento3FormGroup">
+        <form [formGroup]="complemento3FormGroup">
+          <ng-template matStepLabel>Complemento 3</ng-template>
+          <mat-form-field style= "width: 40%">
+            <mat-label>Nombre del complemento 3</mat-label>
+            <input  (keyup)="GuardarNombreComplemento3()" matInput placeholder="Escribe el nombre del complemento 3" formControlName="nombreComplemento3" required>
+          </mat-form-field>
+
+          <div *ngIf = "activarCargaComplemento3">
+            <ng-template matStepLabel>Complemento 3</ng-template>
+            <div class = "enFila" >
+              <div style = "width: 20%">
+                  <input #file id = "inputComplemento3" type="file" accept= 'image/*' (change)="CargarImagenComplemento(2,$event)" style="display:none">
+
+                  <button *ngIf = "!imagenComplementoCargada" style = "width: 100%" (click) = "ActivarInputComplemento3()" type="button" class="btn Agregar">
+                    Selecciona<i class="material-icons">add_photo_alternate</i>
+                  </button>
+                  <div *ngIf = "imagenComplementoCargada" class ="enFila" style = 'top: 100px'>
+                    <button style = "width: 50%" (click) = "AceptarComplemento(2)" type="button" class="btn Aceptar" >
+                      Acepta </button>
+                    <button style = "width: 50%" (click) = "RechazarComplemento(2)" type="button" class="btn Eliminar" >
+                      Rechaza </button>
+                  </div>
+                  <div id="muestracomplemento3">
+                    <img id= "silueta" *ngIf="imagenSilueta"   [src]="imagenSilueta">
+                  </div>
+              </div>
+              <div class = "enColumna" style = "width: 80%">
+                <div style = "color: green; font-size: larger;">{{familiaAvatares.NombreComplemento3}}</div>
+                <br>
+                <div id="complementos3">
+                  <!-- En este bloque se colocarán las imagenes de las diferentes opciones del complemento -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="btnCambiarStep">
+              <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                Atrás <i class="material-icons">
+                    navigate_before</i></button>
+                <!-- El botón de avanzar se habilita en cuanto se haya cargado una imagen para el complemento -->
+              <button  [disabled]="familiaAvatares && familiaAvatares.Complemento3.length === 0" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                Siguiente <i class="material-icons">
+                    navigate_next</i>
+              </button>
+          </div>
+        </form>
+      </mat-step>
+      <!-- PASO 6 (INTRODUCIR IMAGENES PARA COMPLEMENTO 4) -->
+      <mat-step [stepControl]="complemento4FormGroup">
+        <form [formGroup]="complemento4FormGroup">
+          <ng-template matStepLabel>Complemento 4</ng-template>
+          <mat-form-field style= "width: 40%">
+            <mat-label>Nombre del complemento 4</mat-label>
+            <input  (keyup)="GuardarNombreComplemento4()" matInput placeholder="Escribe el nombre del complemento 4" formControlName="nombreComplemento4" required>
+          </mat-form-field>
+
+          <div *ngIf = "activarCargaComplemento4">
+            <ng-template matStepLabel>Complemento 4</ng-template>
+            <div class = "enFila" >
+              <div style = "width: 20%">
+                  <input #file id = "inputComplemento4" type="file" accept= 'image/*' (change)="CargarImagenComplemento(3,$event)" style="display:none">
+
+                  <button *ngIf = "!imagenComplementoCargada" style = "width: 100%" (click) = "ActivarInputComplemento4()" type="button" class="btn Agregar">
+                    Selecciona<i class="material-icons">add_photo_alternate</i>
+                  </button>
+                  <div *ngIf = "imagenComplementoCargada" class ="enFila" style = 'top: 100px'>
+                    <button style = "width: 50%" (click) = "AceptarComplemento(3)" type="button" class="btn Aceptar" >
+                      Acepta </button>
+                    <button style = "width: 50%" (click) = "RechazarComplemento(3)" type="button" class="btn Eliminar" >
+                      Rechaza </button>
+                  </div>
+                  <div id="muestracomplemento4">
+                    <img id= "silueta" *ngIf="imagenSilueta"   [src]="imagenSilueta">
+                  </div>
+              </div>
+              <div class = "enColumna" style = "width: 80%">
+                <div style = "color: green; font-size: larger;">{{familiaAvatares.NombreComplemento4}}</div>
+                <br>
+                <div id="complementos4">
+                  <!-- En este bloque se colocarán las imagenes de las diferentes opciones del complemento -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="btnCambiarStep">
+              <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                Atrás <i class="material-icons">
+                    navigate_before</i></button>
+                <!-- El botón de avanzar se habilita en cuanto se haya cargado una imagen para el complemento -->
+              <button  [disabled]="familiaAvatares && familiaAvatares.Complemento4.length === 0" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                Siguiente <i class="material-icons">
+                    navigate_next</i>
+              </button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- PASO 7 (REGISTRAR LA NUEVA FAMILIA EN LA BASE DE DATOS) -->
+
+      <mat-step>
+        <ng-template matStepLabel>Listo</ng-template>
+        Has terminado
+        <div class="btnCambiarStep">
+            <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+              Atrás</button>
+              <!-- La función Mostrar simplemente construye en resultadoStepper la frase con los datos de la persona -->
+            <button  mat-raised-button class="btn Next" style="margin: 5px" (click)= RegistrarFamiliaAvatares()>
+              Registar familia
+            </button>
+            <!-- Para reinicar primero reinicializamos las variables (con la función Reinicar) y reiniciamos
+            el stepper con una función predefinida -->
+
+            <button  mat-raised-button class="btn Next" style="margin: 5px" (click)= "Reiniciar(); stepper.reset()">
+              Reiniciar
+            </button>
+        </div>
+      </mat-step>
+  </mat-horizontal-stepper>
+</div>

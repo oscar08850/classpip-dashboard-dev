@@ -155,6 +155,10 @@ import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/edita
 // para el uso de graficos
 import { NgxEchartsModule } from 'ngx-echarts';
 
+// avatares
+import { MisFamiliasAvataresComponent } from './paginas/mis-familias-avatares/mis-familias-avatares.component';
+import { CrearFamiliaAvataresComponent } from './paginas/crear-familia-avatares/crear-familia-avatares.component';
+
 
 @NgModule({
   declarations: [
@@ -236,7 +240,10 @@ import { NgxEchartsModule } from 'ngx-echarts';
     EditarJornadasJuegoDeCompeticionFormulaUnoComponent,
     EditarPuntosJuegoDeCompeticionFormulaUnoComponent,
     InformacionJuegoDeCompeticionFormulaUnoInactivoComponent,
-    JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent
+    JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent,
+
+    MisFamiliasAvataresComponent,
+    CrearFamiliaAvataresComponent
 
   ],
   imports: [

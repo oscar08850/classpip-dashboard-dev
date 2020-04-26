@@ -44,3 +44,4 @@ export * from './clasesParaTablasJuegoDeCompeticion/InformacionPartidosLiga';
 export * from './clasesParaTablasJuegoDeCompeticionFormulaUno/TablaClasificacionJornada';
 export * from './SesionClase';
 export * from './AsistenciaClase';
+export * from './FamiliaAvatares';

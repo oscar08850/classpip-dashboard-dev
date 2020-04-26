@@ -88,6 +88,15 @@ import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuest
 import { DeactivateGuardCrearCuestionario } from './guardas/canExitCrearCuestionario.guard';
 import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
 
+
+
+// componentes para avatares
+
+import { CrearFamiliaAvataresComponent } from './paginas/crear-familia-avatares/crear-familia-avatares.component';
+
+import { MisFamiliasAvataresComponent } from './paginas/mis-familias-avatares/mis-familias-avatares.component';
+
+
 const routes: Routes = [
 
 
@@ -225,7 +234,11 @@ const routes: Routes = [
   // CUESTIONARIOS
   { path: 'inicio/:id/crearCuestionario', component: CrearCuestionarioComponent, canDeactivate: [DeactivateGuardCrearCuestionario] },
   { path: 'inicio/:id/misCuestionarios', component: MisCuestionariosComponent},
-  { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent}
+  { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent},
+
+  // AVATARES
+  { path: 'inicio/:id/misFamiliasAvatares', component: MisFamiliasAvataresComponent},
+  { path: 'inicio/:id/crearFamiliaAvatares', component: CrearFamiliaAvataresComponent}
 ];
 
 @NgModule({

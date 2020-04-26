@@ -9,7 +9,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Cromo, HistorialPuntosAlumno, HistorialPuntosEquipo,
         Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
         Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario, Cuestionario, AlumnoJuegoDeCompeticionFormulaUno,
-        EquipoJuegoDeCompeticionFormulaUno, SesionClase, AsistenciaClase} from '../clases/index';
+        EquipoJuegoDeCompeticionFormulaUno, SesionClase, AsistenciaClase, FamiliaAvatares} from '../clases/index';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +53,7 @@ export class PeticionesAPIService {
   private APIUrlAsistenciasClase = this.host + ':3000/api/AsistenciasClase';
   private APIUrlSesionesClase = this.host + ':3000/api/SesionesClase';
 
+  private APIUrlFamiliarAvatares = this.host + ':3000/api/familiasAvatares';
 
   // Para cargar y descargar imagenes
   private APIUrlImagenAlumno = this.host + ':3000/api/imagenes/imagenAlumno';
@@ -61,6 +62,8 @@ export class PeticionesAPIService {
   private APIUrlImagenNivel = this.host + ':3000/api/imagenes/imagenNivel';
   private APIURLImagenInsignia = this.host + ':3000/api/imagenes/ImagenInsignia';
   private APIUrlLogosEquipos = this.host + ':3000/api/imagenes/LogosEquipos';
+
+  private APIUrlImagenesAvatares =  this.host + ':3000/api/imagenes/ImagenesAvatares';
 
 
   constructor(
@@ -878,4 +881,30 @@ export class PeticionesAPIService {
   public DameCuestionariosConPregunta(preguntaId: number): Observable<PreguntaDelCuestionario[]> {
     return this.http.get<PreguntaDelCuestionario[]>(this.APIUrlPreguntaDelCuestionario + '?filter[where][preguntaId]=' + preguntaId);
   }
+
+
+  ////////////////////////////// GESTION FAMILIAS DE AVATARES ////////////////////////////////////
+
+  public CreaFamiliaAvatares(familia: FamiliaAvatares): Observable<FamiliaAvatares> {
+    return this.http.post<FamiliaAvatares>(this.APIUrlFamiliarAvatares, familia);
+  }
+
+  public  BorraFamiliaAvatares(familiaId: number): Observable<any> {
+    return this.http.delete<any>(this.APIUrlFamiliarAvatares + '/' +  familiaId);
+  }
+
+  public PonImagenAvatar(formData: FormData): Observable<any> {
+    return this.http.post<any>(this.APIUrlImagenesAvatares + '/upload', formData);
+  }
+  public DameImagenAvatar(imagen: string): Observable<any> {
+    return this.httpImagenes.get(this.APIUrlImagenesAvatares + '/download/' + imagen,
+      { responseType: ResponseContentType.Blob });
+  }
+
+  public BorrarImagenAvatar(imagen: string): Observable<any> {
+    console.log('Voy a quitar la foto');
+    return this.http.delete<any>(this.APIUrlImagenesAvatares + '/files/' + imagen);
+  }
+
+
 }
