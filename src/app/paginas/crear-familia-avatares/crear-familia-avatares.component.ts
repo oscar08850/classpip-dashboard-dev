@@ -47,7 +47,8 @@ export class CrearFamiliaAvataresComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private peticionesAPI: PeticionesAPIService
+    private peticionesAPI: PeticionesAPIService,
+    private sesion: SesionService
   ) { }
 
   ngOnInit() {
@@ -334,11 +335,11 @@ export class CrearFamiliaAvataresComponent implements OnInit {
    } else if (n === 2) {
       document.getElementById('muestracomplemento3').appendChild(this.imagen);
       document.getElementById('complementos3').appendChild(this.imagen);
-      this.familiaAvatares.Complemento1.push (this.file.name);
+      this.familiaAvatares.Complemento3.push (this.file.name);
    } else {
       document.getElementById('muestracomplemento4').appendChild(this.imagen);
       document.getElementById('complementos4').appendChild(this.imagen);
-      this.familiaAvatares.Complemento1.push (this.file.name);
+      this.familiaAvatares.Complemento4.push (this.file.name);
    }
     this.imagenComplementoCargada = false;
   }
@@ -389,7 +390,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
               .subscribe();
           }
         }
-        this.peticionesAPI.CreaFamiliaAvatares (this.familiaAvatares)
+        this.peticionesAPI.CreaFamiliaAvatares (this.familiaAvatares, this.sesion.DameProfesor().id)
         .subscribe (() =>  Swal.fire('La familia de avatares se ha registrado correctamente')
         );
       }

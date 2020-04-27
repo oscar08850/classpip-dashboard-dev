@@ -1,3 +1,64 @@
-<p>
-  mis-familias-avatares works!
-</p>
+<div class="titulo">Mis familias de avatares</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+    <div class = "enFila" style="width: 60%; align-content: left;"  >
+      <div>
+        Seleccione una familia
+        <br>
+        <mat-form-field>
+          <mat-label>Familias</mat-label>
+          <select matNativeControl [(ngModel)]="familiaId"  (change) = "TraeImagenesFamilia()">
+            <option *ngFor="let familia of listaFamilias" [value]="familia.id">
+              <p >{{familia.NombreFamilia}}</p>
+            </option>
+          </select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div *ngIf = "familiaCargada" class = "enFila">
+      <div>
+      <div  id = "imagenAvatar"  style = "width: 20%; margin-top: 5%; position: absolute;">
+        <img  id ="silueta" *ngIf="imagenSilueta"   width="240" height="280" [src]="imagenSilueta">
+      </div>
+      </div>
+      <div class = "enColumna" style = "width: 80%">
+        <h4> Haz click sobre el complemento que quieres colocar en la silueta</h4>
+        <br>
+        <div class="enFila">
+          <div style = "text-align: center; margin-left: 5%;">
+            <h3>{{familiaElegida.NombreComplemento1}}</h3>
+            <button style = "width: 20%; height: 25%"  mat-button  (click) = "QuitarComplemento (1)" class="btn Eliminar" >Quitar </button>
+          </div>
+        <div id = "imagenesComplementos1" style = "width: 80%;">
+        </div>
+        </div>
+        <div class="enFila">
+          <div style = "text-align: center; margin-left: 5%;">
+            <h3>{{familiaElegida.NombreComplemento2}}</h3>
+            <button style = "width: 20%; height: 25%"  mat-button  (click) = "QuitarComplemento (2)" class="btn Eliminar" >Quitar </button>
+          </div>
+        <div id = "imagenesComplementos2" style = "width: 80%; ">
+        </div>
+        </div>
+        <div class="enFila" styte = "width:20%">
+          <div style = "text-align: center; margin-left: 5%;">
+            <h3>{{familiaElegida.NombreComplemento3}}</h3>
+            <button  style = "width: 20%; height: 25%" mat-button  (click) = "QuitarComplemento (3)" class="btn Eliminar" >Quitar </button>
+          </div>
+        <div id = "imagenesComplementos3" style = "width: 80%; ">
+        </div>
+        </div>
+        <div class="enFila" styte = "width:20%">
+          <div style = "text-align: center; margin-left: 5%;">
+            <h3>{{familiaElegida.NombreComplemento4}}</h3>
+            <button style = "width: 20%; height: 25%" mat-button  (click) = "QuitarComplemento (4)" class="btn Eliminar" >Quitar </button>
+          </div>
+        <div id = "imagenesComplementos4" style = "width: 80%; ">
+        </div>
+        </div>
+      </div>
+    </div>
+</div>
+

@@ -115,7 +115,7 @@ export class EditarColeccionComponent implements OnInit {
           if (blob) {
             reader.readAsDataURL(blob);
           }
-      });
+        });
       }
     }
   }

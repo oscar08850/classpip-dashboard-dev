@@ -885,8 +885,13 @@ export class PeticionesAPIService {
 
   ////////////////////////////// GESTION FAMILIAS DE AVATARES ////////////////////////////////////
 
-  public CreaFamiliaAvatares(familia: FamiliaAvatares): Observable<FamiliaAvatares> {
-    return this.http.post<FamiliaAvatares>(this.APIUrlFamiliarAvatares, familia);
+
+  public CreaFamiliaAvatares(familia: FamiliaAvatares, profesorId: number): Observable<FamiliaAvatares> {
+    return this.http.post<FamiliaAvatares>(this.APIUrlProfesores + '/' + profesorId + '/familiaAvatares', familia);
+  }
+
+  public DameFamiliasAvataresProfesor(profesorId: number): Observable<FamiliaAvatares[]> {
+    return this.http.get<FamiliaAvatares[]>(this.APIUrlProfesores + '/' + profesorId + '/familiaAvatares');
   }
 
   public  BorraFamiliaAvatares(familiaId: number): Observable<any> {

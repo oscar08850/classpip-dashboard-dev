@@ -10,6 +10,7 @@ export class FamiliaAvatares {
   Complemento3: string[];
   NombreComplemento4: string;
   Complemento4: string[];
+  profesorId: number;
   id: number;
   constructor(nombre?: string) {
 
