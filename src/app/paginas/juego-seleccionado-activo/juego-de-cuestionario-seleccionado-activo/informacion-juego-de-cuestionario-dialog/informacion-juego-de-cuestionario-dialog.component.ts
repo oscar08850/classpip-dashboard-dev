@@ -91,7 +91,8 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
 
   Disabled() {
     if (this.myForm.value.NombreJuego === '' || this.myForm.value.PuntuacionCorrecta === '' || this.myForm.value.PuntuacionIncorrecta === '' ||
-    this.myForm.value.Presentacion === '') {
+    (this.myForm.value.Presentacion === this.juegoSeleccionado.Presentacion && this.myForm.value.NombreJuego === this.juegoSeleccionado.NombreJuego && 
+      this.myForm.value.PuntuacionCorrecta.toString() === this.juegoSeleccionado.PuntuacionCorrecta.toString() && this.myForm.value.PuntuacionIncorrecta.toString() === this.juegoSeleccionado.PuntuacionIncorrecta.toString())) {
       // Si alguno de los valores es igual a nada, entonces estará desactivado
       this.isDisabled = true;
     } else {
