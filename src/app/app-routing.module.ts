@@ -88,6 +88,10 @@ import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuest
 import { DeactivateGuardCrearCuestionario } from './guardas/canExitCrearCuestionario.guard';
 import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
 
+
+import { DeactivateGuardCrearEscenario } from './guardas/canExitCrearEscenario.guard';
+import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenario.component';
+
 const routes: Routes = [
 
 
@@ -225,12 +229,15 @@ const routes: Routes = [
   // CUESTIONARIOS
   { path: 'inicio/:id/crearCuestionario', component: CrearCuestionarioComponent, canDeactivate: [DeactivateGuardCrearCuestionario] },
   { path: 'inicio/:id/misCuestionarios', component: MisCuestionariosComponent},
-  { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent}
+  { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent},
+
+  //escenarios
+  { path: 'inicio/:id/crearEscenario', component: CrearEscenarioComponent, canDeactivate: [DeactivateGuardCrearEscenario] }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego, DeactivateGuardCrearCuestionario],
+  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego, DeactivateGuardCrearCuestionario,DeactivateGuardCrearEscenario],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

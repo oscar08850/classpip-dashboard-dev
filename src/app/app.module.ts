@@ -153,6 +153,8 @@ import { EditarPreguntaDialogComponent } from './paginas/mis-preguntas/editar-pr
 import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
 
 
+import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenario.component';
+
 
 
 
@@ -236,7 +238,9 @@ import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/edita
     EditarJornadasJuegoDeCompeticionFormulaUnoComponent,
     EditarPuntosJuegoDeCompeticionFormulaUnoComponent,
     InformacionJuegoDeCompeticionFormulaUnoInactivoComponent,
-    JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent
+    JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent,
+
+    CrearEscenarioComponent
 
   ],
   imports: [

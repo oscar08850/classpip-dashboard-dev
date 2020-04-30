@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga,
          TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
+import { Escenario } from '../clases/Escenario';
+import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +54,9 @@ export class SesionService {
   pregunta: Pregunta;
   cuestionario: Cuestionario;
   listaCuestionarios: any;
+  escenario: Escenario;
+  puntogeolocalizable: PuntoGeolocalizable;
+  listaEscenarios: any;
 
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
@@ -362,6 +367,35 @@ public DameListaCuestionarios(): any {
 public TomaListaCuestionarios(listaCuestionarios: any){
   this.listaCuestionarios = listaCuestionarios;
 }
+
+
+
+
+public TomaEscenario(escenario: Escenario) {
+  this.escenario = escenario;
+}
+
+public  DameEscenario(): Escenario {
+  return this.escenario;
+}
+
+public DamePuntoGeolocalizable(): PuntoGeolocalizable {
+  return this.puntogeolocalizable;
+}
+
+public TomaPuntoGeolocalizable(puntogeolocalizable: PuntoGeolocalizable) {
+  this.puntogeolocalizable = puntogeolocalizable;
+}
+
+public DameListaEscenarios(): any {
+  return this.listaEscenarios;
+}
+
+public TomaListaEscenarios(listaEscenarios: any){
+  this.listaEscenarios = listaEscenarios;
+}
+
+
 
 public TomaDatosJornadasJuegoComponent(
   jornadas: Jornada[],

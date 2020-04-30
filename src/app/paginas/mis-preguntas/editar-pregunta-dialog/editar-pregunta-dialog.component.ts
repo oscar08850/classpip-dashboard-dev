@@ -76,7 +76,7 @@ export class EditarPreguntaDialogComponent implements OnInit {
         Swal.fire('Pregunta editada correctamente', 'Bien hecho', 'success');
         this.goBack();
       }else{
-        Swal.fire('Alerta', 'Hay algun problema con el servidor intenelo mas tarde', 'error');
+        Swal.fire('Alerta', 'Hay algun problema con el servidor intentelo mas tarde', 'error');
       }
     })
 
