@@ -2,7 +2,8 @@
 <mat-divider class="lineaDivisoria"></mat-divider>
 
 <div class = "contenedor">
-  <mat-horizontal-stepper [linear]="true" #stepper>
+
+  <mat-horizontal-stepper [linear]="true"  #stepper>
       <!-- PASO 1 (INTRODUCIR EL NOMBRE DE LA FAMILIA) -->
       <mat-step [stepControl]="nombreFormGroup">
         <form [formGroup]="nombreFormGroup">
@@ -26,7 +27,8 @@
           <ng-template matStepLabel>Silueta</ng-template>
           <div>
               <input #file id = "inputSilueta" type="file" accept= 'image/*' (change)="CargarImagenSilueta($event)" style="display:none">
-              <img class="imagen" *ngIf="imagenSilueta" hight = "150" width = "150" mat-card-image [src]="imagenSilueta" style="margin: 5px">
+              <!-- Cuando se cargue la imagen se activara la función que hara que si visualice con tamaño doble -->
+              <img #img *ngIf="imagenSilueta"  [src]="imagenSilueta" (load)="PonDoble(img)" style="margin: 5px; ">
               <button (click) = "ActivarInputSilueta()" type="button" class="btn Agregar">
                 Selecciona silueta<i class="material-icons">add_photo_alternate</i>
               </button>
@@ -54,30 +56,33 @@
             <input  (keyup)="GuardarNombreComplemento1()" matInput placeholder="Escribe el nombre del complemento 1" formControlName="nombreComplemento1" required>
           </mat-form-field>
 
+
+
           <div *ngIf = "activarCargaComplemento1">
             <ng-template matStepLabel>Complemento 1</ng-template>
-            <div class = "enFila" >
+              <div class = "enFila" >
               <div style = "width: 20%">
                   <input #file id = "inputComplemento1" type="file" accept= 'image/*' (change)="CargarImagenComplemento(0,$event)" style="display:none">
 
-                  <button *ngIf = "!imagenComplementoCargada" style = "width: 100%" (click) = "ActivarInputComplemento1()" type="button" class="btn Agregar">
+                  <button *ngIf = "muestraSeleccionarComplemento1" style = "width: 100%" (click) = "ActivarInputComplemento1()" type="button" class="btn Agregar">
                     Selecciona<i class="material-icons">add_photo_alternate</i>
                   </button>
-                  <div *ngIf = "imagenComplementoCargada" class ="enFila" style = 'top: 100px'>
-                    <button style = "width: 50%" (click) = "AceptarComplemento(0)" type="button" class="btn Aceptar" >
+                  <div *ngIf = "!muestraSeleccionarComplemento1" class ="enFila" style = 'top: 100px'>
+                    <button  (click) = "AceptarComplemento(0)" type="button" class="btn Aceptar" >
                       Acepta </button>
-                    <button style = "width: 50%" (click) = "RechazarComplemento(0)" type="button" class="btn Eliminar" >
+                    <button  (click) = "RechazarComplemento(0)" type="button" class="btn Eliminar" >
                       Rechaza </button>
                   </div>
-                  <div id="muestracomplemento1">
-                    <img id= "silueta" *ngIf="imagenSilueta"   [src]="imagenSilueta">
+                  <div id="muestracomplemento1" style = "position: relative;">
+                    <!-- La imagen debe verse con tamaño doble -->
+                    <img  #siluetaComplementos1 [src]="imagenSilueta" (load)="PonDoble(siluetaComplementos1)">
                   </div>
               </div>
-              <div class = "enColumna" style = "width: 80%">
+              <div  class = "enColumna" style = "width: 80%">
                 <div style = "color: green; font-size: larger;">{{familiaAvatares.NombreComplemento1}}</div>
                 <br>
                 <div id="complementos1">
-                  <!-- En este bloque se colocarán las imagenes de las diferentes opciones del complemento -->
+
                 </div>
               </div>
             </div>
@@ -110,20 +115,21 @@
               <div style = "width: 20%">
                   <input #file id = "inputComplemento2" type="file" accept= 'image/*' (change)="CargarImagenComplemento(1,$event)" style="display:none">
 
-                  <button *ngIf = "!imagenComplementoCargada" style = "width: 100%" (click) = "ActivarInputComplemento2()" type="button" class="btn Agregar">
+                  <button *ngIf = "muestraSeleccionarComplemento2" style = "width: 100%" (click) = "ActivarInputComplemento2()" type="button" class="btn Agregar">
                     Selecciona<i class="material-icons">add_photo_alternate</i>
                   </button>
-                  <div *ngIf = "imagenComplementoCargada" class ="enFila" style = 'top: 100px'>
-                    <button style = "width: 50%" (click) = "AceptarComplemento(1)" type="button" class="btn Aceptar" >
+                  <div *ngIf = "!muestraSeleccionarComplemento2" class ="enFila" style = 'top: 100px'>
+                    <button  (click) = "AceptarComplemento(1)" type="button" class="btn Aceptar" >
                       Acepta </button>
-                    <button style = "width: 50%" (click) = "RechazarComplemento(1)" type="button" class="btn Eliminar" >
+                    <button  (click) = "RechazarComplemento(1)" type="button" class="btn Eliminar" >
                       Rechaza </button>
                   </div>
-                  <div id="muestracomplemento2">
-                    <img id= "silueta" *ngIf="imagenSilueta"   [src]="imagenSilueta">
+
+                  <div id="muestracomplemento2" style = "position: relative;">
+                    <img  #siluetaComplementos2 [src]="imagenSilueta" (load)="PonDoble(siluetaComplementos2)">
                   </div>
               </div>
-              <div class = "enColumna" style = "width: 80%">
+              <div  class = "enColumna" style = "width: 80%">
                 <div style = "color: green; font-size: larger;">{{familiaAvatares.NombreComplemento2}}</div>
                 <br>
                 <div id="complementos2">
@@ -145,9 +151,7 @@
           </div>
         </form>
       </mat-step>
-
       <!-- PASO 5 (INTRODUCIR IMAGENES PARA COMPLEMENTO 3) -->
-
       <mat-step [stepControl]="complemento3FormGroup">
         <form [formGroup]="complemento3FormGroup">
           <ng-template matStepLabel>Complemento 3</ng-template>
@@ -162,20 +166,20 @@
               <div style = "width: 20%">
                   <input #file id = "inputComplemento3" type="file" accept= 'image/*' (change)="CargarImagenComplemento(2,$event)" style="display:none">
 
-                  <button *ngIf = "!imagenComplementoCargada" style = "width: 100%" (click) = "ActivarInputComplemento3()" type="button" class="btn Agregar">
+                  <button *ngIf = "muestraSeleccionarComplemento3" style = "width: 100%" (click) = "ActivarInputComplemento3()" type="button" class="btn Agregar">
                     Selecciona<i class="material-icons">add_photo_alternate</i>
                   </button>
-                  <div *ngIf = "imagenComplementoCargada" class ="enFila" style = 'top: 100px'>
-                    <button style = "width: 50%" (click) = "AceptarComplemento(2)" type="button" class="btn Aceptar" >
+                  <div *ngIf = "!muestraSeleccionarComplemento3" class ="enFila" style = 'top: 100px'>
+                    <button  (click) = "AceptarComplemento(2)" type="button" class="btn Aceptar" >
                       Acepta </button>
-                    <button style = "width: 50%" (click) = "RechazarComplemento(2)" type="button" class="btn Eliminar" >
+                    <button  (click) = "RechazarComplemento(2)" type="button" class="btn Eliminar" >
                       Rechaza </button>
                   </div>
-                  <div id="muestracomplemento3">
-                    <img id= "silueta" *ngIf="imagenSilueta"   [src]="imagenSilueta">
+                  <div id="muestracomplemento3" style = "position: relative;">
+                    <img  #siluetaComplementos3 [src]="imagenSilueta" (load)="PonDoble(siluetaComplementos3)">
                   </div>
               </div>
-              <div class = "enColumna" style = "width: 80%">
+              <div  class = "enColumna" style = "width: 80%">
                 <div style = "color: green; font-size: larger;">{{familiaAvatares.NombreComplemento3}}</div>
                 <br>
                 <div id="complementos3">
@@ -212,20 +216,20 @@
               <div style = "width: 20%">
                   <input #file id = "inputComplemento4" type="file" accept= 'image/*' (change)="CargarImagenComplemento(3,$event)" style="display:none">
 
-                  <button *ngIf = "!imagenComplementoCargada" style = "width: 100%" (click) = "ActivarInputComplemento4()" type="button" class="btn Agregar">
+                  <button *ngIf = "muestraSeleccionarComplemento4" style = "width: 100%" (click) = "ActivarInputComplemento4()" type="button" class="btn Agregar">
                     Selecciona<i class="material-icons">add_photo_alternate</i>
                   </button>
-                  <div *ngIf = "imagenComplementoCargada" class ="enFila" style = 'top: 100px'>
-                    <button style = "width: 50%" (click) = "AceptarComplemento(3)" type="button" class="btn Aceptar" >
+                  <div *ngIf = "!muestraSeleccionarComplemento4" class ="enFila" style = 'top: 100px'>
+                    <button  (click) = "AceptarComplemento(3)" type="button" class="btn Aceptar" >
                       Acepta </button>
-                    <button style = "width: 50%" (click) = "RechazarComplemento(3)" type="button" class="btn Eliminar" >
+                    <button  (click) = "RechazarComplemento(3)" type="button" class="btn Eliminar" >
                       Rechaza </button>
                   </div>
-                  <div id="muestracomplemento4">
-                    <img id= "silueta" *ngIf="imagenSilueta"   [src]="imagenSilueta">
+                  <div id="muestracomplemento4" style = "position: relative;">
+                    <img  #siluetaComplementos4 [src]="imagenSilueta" (load)="PonDoble(siluetaComplementos4)">
                   </div>
               </div>
-              <div class = "enColumna" style = "width: 80%">
+              <div  class = "enColumna" style = "width: 80%">
                 <div style = "color: green; font-size: larger;">{{familiaAvatares.NombreComplemento4}}</div>
                 <br>
                 <div id="complementos4">
@@ -247,7 +251,6 @@
           </div>
         </form>
       </mat-step>
-
       <!-- PASO 7 (REGISTRAR LA NUEVA FAMILIA EN LA BASE DE DATOS) -->
 
       <mat-step>

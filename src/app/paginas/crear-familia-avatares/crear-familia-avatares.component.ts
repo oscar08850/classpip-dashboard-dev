@@ -28,7 +28,6 @@ export class CrearFamiliaAvataresComponent implements OnInit {
 
 
   fileComplemento: File [][];
-  //imagenComplementoCargada: boolean[];
   imagenComplementoCargada = false;
 
   imagenComplemento: string[];
@@ -40,10 +39,21 @@ export class CrearFamiliaAvataresComponent implements OnInit {
   activarCargaComplemento3 = false;
   activarCargaComplemento4 = false;
 
+  muestraSeleccionarComplemento1 = false;
+  muestraSeleccionarComplemento2 = false;
+  muestraSeleccionarComplemento3 = false;
+  muestraSeleccionarComplemento4 = false;
+
   alturaSilueta;
 
   imagen;
   file;
+
+  dobleancho: string;
+  doblealto: string;
+  ancho: string;
+  alto: string;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -71,29 +81,21 @@ export class CrearFamiliaAvataresComponent implements OnInit {
 
     this.fileComplemento = Array(4).fill([]);
     this.imagenComplemento = Array(4).fill(undefined);
-    //this.imagenComplementoCargada = Array(4).fill(false);
     this.cont = Array(4).fill(0);
-
-
   }
 
 
 
-
-  // MIRO SI HAY ALGO SIMULTÁNEAMENTE EN EL NOMBRE Y LA EDAD
   GuardarNombreFamilia() {
     if (this.nombreFormGroup.value.nombreFamilia === '') {
-      // Si alguno de los valores es igual a nada, entonces estará desactivado
       this.botonAvanzarAPaso2Desactivado = true;
     } else {
-      // Si ambos son diferentes a nulo, estará activado.
       this.botonAvanzarAPaso2Desactivado = false;
       this.familiaAvatares = new FamiliaAvatares (this.nombreFormGroup.value.nombreFamilia);
       this.familiaAvatares.Complemento1 = [];
       this.familiaAvatares.Complemento2 = [];
       this.familiaAvatares.Complemento3 = [];
       this.familiaAvatares.Complemento4 = [];
-      console.log ('activo');
     }
   }
 
@@ -103,6 +105,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       this.activarCargaComplemento1 = false;
     } else {
       this.activarCargaComplemento1 = true;
+      this.muestraSeleccionarComplemento1 = true;
       this.familiaAvatares.NombreComplemento1 =  this.complemento1FormGroup.value.nombreComplemento1;
     }
   }
@@ -113,6 +116,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       this.activarCargaComplemento2 = false;
     } else {
       this.activarCargaComplemento2 = true;
+      this.muestraSeleccionarComplemento2 = true;
       this.familiaAvatares.NombreComplemento2 =  this.complemento2FormGroup.value.nombreComplemento2;
     }
   }
@@ -122,6 +126,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       this.activarCargaComplemento3 = false;
     } else {
       this.activarCargaComplemento3 = true;
+      this.muestraSeleccionarComplemento3 = true;
       this.familiaAvatares.NombreComplemento3 =  this.complemento3FormGroup.value.nombreComplemento3;
     }
   }
@@ -132,37 +137,14 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       this.activarCargaComplemento4 = false;
     } else {
       this.activarCargaComplemento4 = true;
+      this.muestraSeleccionarComplemento4 = true;
       this.familiaAvatares.NombreComplemento4 =  this.complemento4FormGroup.value.nombreComplemento4;
     }
   }
 
-
-
-   // MIRO SI HAY ALGO SIMULTÁNEAMENTE EN EL NOMBRE Y LA EDAD
-
-
-
   ActivarInputSilueta() {
-    console.log('Activar input');
     document.getElementById('inputSilueta').click();
   }
-
-  // onChange(evt:any){
-  //   this.percentDone = 100;
-  //   this.uploadSuccess = true;
-  //   let image:any = evt.target.files[0];
-  //   this.size = image.size;
-  //   let fr = new FileReader();
-  //   fr.onload = () => { // when file has loaded
-  //    var img = new Image();
-
-  //    img.onload = () => {
-  //        this.width = img.width;
-  //        this.height = img.height;
-  //    };
-
-  //    img.src = fr.result; // This is the data URL
-  //   };
 
   CargarImagenSilueta($event) {
     this.fileSilueta = $event.target.files[0];
@@ -171,11 +153,32 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsDataURL(this.fileSilueta);
     reader.onload = () => {
-      const img = new Image();
+
+      // lo que se hace a continuación es para obtener el ancho y alto de la imagen
+      // de la silueta
+      const imagen = new Image();
+      imagen.src = reader.result.toString();
+      imagen.onload = () => {
+        // Necesitaré el ancho y alto y el doble del ancho y del alto
+        this.ancho = imagen.width.toString();
+        this.alto = imagen.height.toString();
+        this.dobleancho = (imagen.width * 2).toString();
+        this.doblealto = (imagen.height * 2).toString();
+      };
       this.imagenSiluetaCargada = true;
       this.imagenSilueta = reader.result.toString();
+
     };
+}
+
+  // Cuando se carge la imagen se activará esta función para hacer que esa imagen
+  // se muestre en tamaño grande
+  PonDoble(img) {
+        img.setAttribute ('width', this.dobleancho);
+        img.setAttribute ('height', this.doblealto );
   }
+
+
   CargarImagenComplemento(n, $event) {
     if (this.cont[n] === 5) {
       Swal.fire('No puedes elegir más de 5 opciones para un complemento', ' ', 'error');
@@ -186,51 +189,11 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       const reader = new FileReader();
       reader.readAsDataURL(this.file);
       reader.onload = () => {
-        this.imagenComplementoCargada = true;
-
-        // Guardamos la imagen aqui para mostrarla en la pantalla
         this.imagenComplemento[n] = (reader.result.toString());
-
         this.MostrarComplemento(n);
-
-        console.log ('Complemento cargado');
       };
     }
 
-  }
-
-  CargarImagenComplemento2(n, $event) {
-
-    if (this.cont[n] === 5) {
-      Swal.fire('No puedes elegir más de 5 opciones para un complemento', ' ', 'error');
-
-    } else {
-      const file = $event.target.files[0];
-      this.fileComplemento[n].push (file);
-      if (n === 0) {
-        this.familiaAvatares.Complemento1.push (file.name);
-      } else if (n === 1) {
-        this.familiaAvatares.Complemento2.push (file.name);
-      } else if (n === 2) {
-        this.familiaAvatares.Complemento3.push (file.name);
-      } else {
-        this.familiaAvatares.Complemento4.push (file.name);
-      }
-
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.imagenComplementoCargada[n] = true;
-
-        // Guardamos la imagen aqui para mostrarla en la pantalla
-        this.imagenComplemento[n] = (reader.result.toString());
-
-        this.cont[n]++;
-        this.MostrarComplemento(n);
-
-        console.log ('Complemento cargado');
-      };
-    }
   }
 
   ActivarInputComplemento1() {
@@ -257,63 +220,30 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       // de complemento (por ejemplo, 13 sería el identificador de la tercera opción del primer complemento de )
       this.imagen.id = (n + 1) * 10 + this.cont[n] + 1; // coloco el identificador
 
-
-
       this.imagen.style.left = '0px';
-      // Por alguna razon que no entiendo el top tiene que ser negativo, con la misma magnitud
-      // que la altura de la figura de la silueta.
-      const altura = document.getElementById('silueta').clientHeight;
-      this.imagen.style.top = '-' + altura + 'px';
-      // La posición es relativa dentro del bloque
-      this.imagen.style.position = 'relative';
+      this.imagen.style.top = '0px';
+      this.imagen.style.position = 'absolute';
       this.imagen.style.zIndex = '1';
-
+      // al coloar la imagen sobre la silueta debe verse con tamaño doble
+      this.imagen.width = this.dobleancho;
+      this.imagen.height = this.doblealto;
 
       // Coloco el nombre del fichero en el que está la imagen
       this.imagen.src =  this.imagenComplemento[n];
 
-
-      // Le añado la función que hay que ejecutar cuando se haga click
-      // en la imagen.
-      // La función tiene 3 parámetros: el identificador de la imagen
-      // sobre la que se ha clicado, el indice y el estado.
-      // El estado me dice si esa imagen está colocada ya sobre el avator
-      // o no.
-      // imagen.onclick = (function(elemento, i, estado) {
-      //     return function () {
-      //       console.log ('Elemento ' + elemento);
-      //       console.log ('Id ' + i);
-      //       console.log ('Estado ' + estado);
-
-      //       if (estado) {
-      //         // Si la imagen está sobre el avatar entonces cuando se clica
-      //         // hay que regresarla a su posición original en el bloque de elementos
-      //         document.getElementById(elemento).style.left = i * 120 + 'px';
-      //         document.getElementById(elemento).style.top = '0px';
-      //         document.getElementById('elementos')
-      //          .appendChild(document.getElementById(elemento));
-      //         estado = false;
-      //       } else {
-      //         // Si la imagen no está en el avatar hay que moverla al avatar
-      //         document.getElementById(elemento).style.left = '0px';
-      //         document.getElementById(elemento).style.top = '0px';
-      //         document.getElementById('avatar')
-      //         .appendChild(document.getElementById(elemento));
-      //         estado = true;
-      //       }
-      //     };
-      // })(this.elementos.pelos[i].identificador, i, this.estadoPelo[i]); //Estos son los
-      // // parametros reales que le paso a la función
-
       // Coloco la imagen sobre la silueta
       if (n === 0) {
         document.getElementById('muestracomplemento1').appendChild(this.imagen);
+        this.muestraSeleccionarComplemento1 = false;
       } else if (n === 1) {
         document.getElementById('muestracomplemento2').appendChild(this.imagen);
+        this.muestraSeleccionarComplemento2 = false;
       } else if (n === 2) {
         document.getElementById('muestracomplemento3').appendChild(this.imagen);
+        this.muestraSeleccionarComplemento3 = false;
       } else {
         document.getElementById('muestracomplemento4').appendChild(this.imagen);
+        this.muestraSeleccionarComplemento4 = false;
       }
 
   }
@@ -322,26 +252,32 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     // Guardamos el fichero y movemos la imagen de la silueta al grupo de opciones
 
     this.fileComplemento[n].push (this.file);
-    this.imagen.style.left = 10 * (this.cont[n] - 1) + 'px';
+    this.imagen.style.left = '0px';
     this.imagen.style.top = '0px';
+    this.imagen.style.position = 'relative';
+
+    // La mostraremos con tamaño normal
+    this.imagen.width = this.ancho;
+    this.imagen.height = this.alto;
     if (n === 0) {
-      document.getElementById('muestracomplemento1').appendChild(this.imagen);
       document.getElementById('complementos1').appendChild(this.imagen);
       this.familiaAvatares.Complemento1.push (this.file.name);
+      this.muestraSeleccionarComplemento1 = true;
    } else if (n === 1) {
-      document.getElementById('muestracomplemento2').appendChild(this.imagen);
       document.getElementById('complementos2').appendChild(this.imagen);
       this.familiaAvatares.Complemento2.push (this.file.name);
+      this.muestraSeleccionarComplemento2 = true;
    } else if (n === 2) {
-      document.getElementById('muestracomplemento3').appendChild(this.imagen);
       document.getElementById('complementos3').appendChild(this.imagen);
+
       this.familiaAvatares.Complemento3.push (this.file.name);
+      this.muestraSeleccionarComplemento3 = true;
    } else {
-      document.getElementById('muestracomplemento4').appendChild(this.imagen);
       document.getElementById('complementos4').appendChild(this.imagen);
       this.familiaAvatares.Complemento4.push (this.file.name);
+      this.muestraSeleccionarComplemento4 = true;
    }
-    this.imagenComplementoCargada = false;
+
   }
 
   RechazarComplemento(n) {
@@ -349,20 +285,22 @@ export class CrearFamiliaAvataresComponent implements OnInit {
 
     if (n === 0) {
      document.getElementById('muestracomplemento1').removeChild(this.imagen);
+     this.muestraSeleccionarComplemento1 = true;
     } else if (n === 1) {
       document.getElementById('muestracomplemento2').removeChild(this.imagen);
+      this.muestraSeleccionarComplemento2 = true;
     } else if (n === 2) {
       document.getElementById('muestracomplemento3').removeChild(this.imagen);
+      this.muestraSeleccionarComplemento3 = true;
     } else {
       document.getElementById('muestracomplemento4').removeChild(this.imagen);
+      this.muestraSeleccionarComplemento4 = true;
     }
-    this.imagenComplementoCargada = false;
+
 
   }
 
   RegistrarFamiliaAvatares() {
-    console.log ('ya tenemos la familia');
-    console.log (this.familiaAvatares);
     Swal.fire({
       title: '¿Seguro que quieres registrar esta familia de avatares?',
       text: 'La operación no podrá deshaceerse',
@@ -404,21 +342,25 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     this.complemento3FormGroup.reset();
     this.complemento4FormGroup.reset();
 
-    this.fileComplemento = [];
-    this.fileComplemento[0] = [];
-    this.fileComplemento[1] = [];
-    this.fileComplemento[2] = [];
-    this.fileComplemento[3] = [];
 
     this.fileComplemento = Array(4).fill([]);
     this.imagenComplemento = Array(4).fill(undefined);
-    //this.imagenComplementoCargada = Array(4).fill(false);
     this.cont = Array(4).fill(0);
+
+    this.imagenSiluetaCargada = false;
+    this.imagenSilueta = undefined;
+
+    this.imagenComplementoCargada = false;
 
     this.activarCargaComplemento1 = false;
     this.activarCargaComplemento2 = false;
     this.activarCargaComplemento3 = false;
     this.activarCargaComplemento4 = false;
+
+    this.muestraSeleccionarComplemento1 = false;
+    this.muestraSeleccionarComplemento2 = false;
+    this.muestraSeleccionarComplemento3 = false;
+    this.muestraSeleccionarComplemento4 = false;
   }
 
 }
