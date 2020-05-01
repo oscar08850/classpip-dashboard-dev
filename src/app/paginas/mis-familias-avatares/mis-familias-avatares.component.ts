@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios';
 import { FamiliaAvatares } from 'src/app/clases';
+import Swal from 'sweetalert2';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-mis-familias-avatares',
@@ -31,7 +33,7 @@ export class MisFamiliasAvataresComponent implements OnInit {
 
 
   constructor( private peticionesAPI: PeticionesAPIService,
-               private sesion: SesionService
+               private sesion: SesionService,   private location: Location
   ) { }
 
   ngOnInit() {
@@ -50,7 +52,7 @@ export class MisFamiliasAvataresComponent implements OnInit {
      // de complemento (por ejemplo, 13 sería el identificador de la tercera opción del primer complemento de )
      imagen.id = numeroComplemento * 10 + (opcion + 1); // coloco el identificador
      // La posición es relativa dentro del bloque
-     imagen.style.position = 'relative';
+     imagen.style.position = 'alsolute';
      imagen.style.zIndex = '1';
      // Coloco el nombre del fichero en el que está la imagen
      imagen.src =  stringImagen;
@@ -103,6 +105,7 @@ export class MisFamiliasAvataresComponent implements OnInit {
            // lo coloco sobre la silueta, ampliando el tamaño
            elemento.style.left = '0px';
            elemento.style.top =  '0px';
+           elemento.style.position = 'absolute';
            elemento.setAttribute('width', dobleancho);
            elemento.setAttribute('height', doblealto);
            document.getElementById('imagenAvatar')
@@ -284,5 +287,46 @@ export class MisFamiliasAvataresComponent implements OnInit {
   PonDoble(img) {
     img.setAttribute ('width', this.dobleancho);
     img.setAttribute ('height', this.doblealto );
+  }
+
+  BorrarFamilia() {
+    this.familiaElegida.Complemento1.forEach (imagenComplemento =>
+      this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
+    this.familiaElegida.Complemento2.forEach (imagenComplemento =>
+      this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
+    this.familiaElegida.Complemento3.forEach (imagenComplemento =>
+      this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
+    this.familiaElegida.Complemento4.forEach (imagenComplemento =>
+      this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
+    this.peticionesAPI.BorrarImagenAvatar (this.familiaElegida.Silueta).subscribe();
+    this.peticionesAPI.BorraFamiliaAvatares (this.familiaElegida.id).subscribe();
+    this.listaFamilias = this.listaFamilias.filter (familia => familia.id !== Number(this.familiaElegida.id));
+
+    Swal.fire({
+      title: '¿Seguro que quieres eliminar familia de avatares?',
+      text: 'La operación no podrá deshaceerse',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then((result) => {
+      if (result.value) {
+        this.familiaElegida.Complemento1.forEach (imagenComplemento =>
+          this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
+        this.familiaElegida.Complemento2.forEach (imagenComplemento =>
+          this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
+        this.familiaElegida.Complemento3.forEach (imagenComplemento =>
+          this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
+        this.familiaElegida.Complemento4.forEach (imagenComplemento =>
+          this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
+        this.peticionesAPI.BorrarImagenAvatar (this.familiaElegida.Silueta).subscribe();
+        this.peticionesAPI.BorraFamiliaAvatares (this.familiaElegida.id).subscribe(() => {
+          this.listaFamilias = this.listaFamilias.filter (familia => familia.id !== Number(this.familiaElegida.id));
+          Swal.fire('La familia de avatares se ha eliminado correctamente');
+          this.location.back();
+        });
+      }
+    });
   }
 }

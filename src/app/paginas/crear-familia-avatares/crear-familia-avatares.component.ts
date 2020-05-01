@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { FamiliaAvatares } from 'src/app/clases';
 import Swal from 'sweetalert2';
+import { Location } from '@angular/common';
 
 import { SesionService, PeticionesAPIService, CalculosService } from '../../servicios/index';
 
@@ -58,7 +59,8 @@ export class CrearFamiliaAvataresComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private peticionesAPI: PeticionesAPIService,
-    private sesion: SesionService
+    private sesion: SesionService,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -329,8 +331,10 @@ export class CrearFamiliaAvataresComponent implements OnInit {
           }
         }
         this.peticionesAPI.CreaFamiliaAvatares (this.familiaAvatares, this.sesion.DameProfesor().id)
-        .subscribe (() =>  Swal.fire('La familia de avatares se ha registrado correctamente')
-        );
+        .subscribe (() => {
+          Swal.fire('La familia de avatares se ha registrado correctamente');
+          this.location.back();
+        });
       }
     });
   }

@@ -907,7 +907,6 @@ export class PeticionesAPIService {
   }
 
   public BorrarImagenAvatar(imagen: string): Observable<any> {
-    console.log('Voy a quitar la foto');
     return this.http.delete<any>(this.APIUrlImagenesAvatares + '/files/' + imagen);
   }
 
