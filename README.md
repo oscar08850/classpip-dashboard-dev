@@ -1,6 +1,8 @@
 # Classpip Administration Dashboard
+
 [![Classpip Badge](https://img.shields.io/badge/classpip-dashboard-brightgreen.svg)](https://github.com/rocmeseguer/classpip-dashboard)
-[![Classpip Badge](https://img.shields.io/badge/classpip-mobile-brightgreen.svg)](https://github.com/rocmeseguer/classpip-mobile)
+[![Classpip Badge](https://img.shields.io/badge/classpip-mobile--profe-brightgreen)](https://github.com/rocmeseguer/classpip-mobile-profe)
+[![Classpip Badge](https://img.shields.io/badge/classpip-mobile--student-brightgreen)](https://github.com/rocmeseguer/classpip-mobile-student)
 [![Classpip Badge](https://img.shields.io/badge/classpip-services-brightgreen.svg)](https://github.com/rocmeseguer/classpip-services)
 [![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/classpip/classpip/blob/master/LICENSE)
 
@@ -40,13 +42,13 @@ sudo apt-get install gcc g++ make
 ### To build native addons on Windows
 
 ```
-npm install -g windows-build-tools@~5.1.0
+npm install -g windows-build-tools@5.1.0
 ```
 
 ## Global dependencies
 
 ```
-npm install -g @angular/cli@~7.0.6
+npm install -g @angular/cli@7.0.6
 ```
 
 ## Local dependencies

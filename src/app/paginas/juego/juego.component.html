@@ -53,6 +53,22 @@
                   No hay juegos inactivos
               </ng-template>
 
+              <!-- /////////////////////// LISTA JUEGOS PREPARADOS ///////////////////////////////////// -->
+              <br>
+              <br>
+              <h3 class = "CabeceraPreparados" style= "color: white;font-style: bold;font-size: 2em;" mat-subheader>Juegos Preparados</h3>
+
+              <form *ngIf="juegosPreparados ;else Aviso_no_juegos_Preparados">
+                <mat-list-item *ngFor="let juego of juegosPreparados" (click) = JuegoSeleccionado(juego) routerLink = "juegoSeleccionadoPreparado">
+
+                  <mat-icon mat-list-icon><i class="material-icons green">alarm_on</i></mat-icon>
+                  <h4 mat-line>{{juego.NombreJuego}}</h4>
+                  <p mat-line> {{juego.Tipo}}: {{juego.Modo}} </p>
+                </mat-list-item>
+              </form>
+              <ng-template #Aviso_no_juegos_Preparados>
+                No hay juegos preparados
+              </ng-template>
           </mat-list>
 
         </div>
@@ -122,7 +138,7 @@
 
 
           <!-- //////////////////////// SEGUNDO PASO: SELECCIÓN DEL MODO DE JUEGO ///////////////////////// -->
-          <div *ngIf="(tipoDeJuegoSeleccionado !== 'Juego De Competición')">
+          <div *ngIf="(tipoDeJuegoSeleccionado !== 'Juego De Competición' && tipoDeJuegoSeleccionado !== 'Juego De Cuestionario')">
           <mat-step>
             <ng-template matStepLabel><div>Modo De Juego</div></ng-template>
 
@@ -206,8 +222,72 @@
             </div>
 
           </div>
+          <!--/////////////////////// SI ESCOGEMOS EL JUEGO DE TIPO CUESTIONARIO //////////////////////////////////-->
+          <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Cuestionario'">
+            <!--Primer paso, escogemos el cuestionario-->
+            <mat-step>
+              <ng-template matStepLabel><div>Cuestionario</div></ng-template>
+              <div>
+                <button type="button" class="btn Agregar" (click)= "AbrirDialogoAgregarCuestionario()" style="width: auto;">Añadir cuestionario<i class="material-icons">
+                    post_add </i></button>
+              </div>
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button [disabled]="DisabledCuestionario" type="button" class="btn Next" matStepperNext>Siguiente</button>
+              </div>
+            </mat-step>
+            <!--Segundo paso, establecemos la puntiacion-->
+            <mat-step [formGroup]="myFormPuntuacion"> 
+              <ng-template matStepLabel><div>Puntuación</div></ng-template>
+                <!-- casilla para introducir puntuacion que sumamos -->
+                <mat-form-field>
+                  <mat-label>Introduzca la puntuacion por respuesta correcta</mat-label>
+                  <input (keyup)="DisabledPuntos()" matInput formControlName="PuntuacionCorrecta" placeholder="Escriba la puntuacion" requiered>
+                </mat-form-field>
+                <!-- casilla para introducir puntuacion que restamos -->
+                <mat-form-field>
+                  <mat-label>Introduzca la puntuacion por respuesta incorrecta (si no quiere restar ponga 0)</mat-label>
+                  <input (keyup)="DisabledPuntos()" matInput formControlName="PuntuacionIncorrecta" placeholder="Escriba la puntuacion" requiered>
+                </mat-form-field>
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button [disabled]="DisabledPuntuacion" (click) = "ActualizarBotonPasoPuntuacion()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+              </div>
+            </mat-step>
+            <!--Tercer paso, escogemos la presentacion de preguntas y respuestas-->
+            <mat-step [formGroup]="myFormPresentacion">
+              <ng-template matStepLabel><div>Presentación</div></ng-template>
+              <div>
+                <label class = "LabelStepper">Selecciona un modo de presentacion:</label>
+                <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group" formControlName="ModoPresentacionFavorito" [(ngModel)]="ModoPresentacionFavorito">
+                    <mat-radio-button (click)="ActualizarBotonPasoPresentacion()" class="radio-button" *ngFor="let presentacion of seleccionModoPresentacion" [value]="presentacion">
+                      <label style="color: black;">{{presentacion}}</label>
+                    </mat-radio-button>
+                </mat-radio-group>
+                <!-- <mat-chip-list class="mat-chip-list-stacked">
+                  <mat-chip *ngFor="let tipo of seleccionModoPresentacion; let i = index" selected [color]="tipo.color"  selected="{{seleccionModoPresentacion[i].selected}}"
+                     (click)="TipoDePresentacionSeleccionado(seleccionModoPresentacion[i])" [value]="tipo.nombre" [selectable]="true">
+                      {{tipo.nombre}}
+                  </mat-chip>
+                </mat-chip-list> -->
+                <span style ="font-weight: bold;color:green;"> Has elegido ... {{ModoPresentacionFavorito}}</span>
 
+              </div>
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button [disabled]="DisabledPresentacion" (click)="ActualizarBotonPasoPresentacion2()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+              </div>
+            </mat-step>
+            <!--Cuarto paso, finalizamos-->
+            <mat-step>
+              <ng-template matStepLabel><div>Finalizar</div></ng-template>
 
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button type="button" class="btn Next" matStepperNext (click) = "CrearJuegoDeCuestionario()">Finalizar</button>
+              </div>
+            </mat-step>
+          </div>
           <!-- ////////////////////// SI ESCOGEMOS EL JUEGO DE TIPO DE COMPETICIÓN ////////////////////////////////-->
 
           <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Competición'">
@@ -401,6 +481,7 @@
 
           </div>
 
+
           <!-- ////////////////////// SI ESCOGEMOS JUEGO DE AVATAR ////////////////////////////////-->
           <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Avatar'">
 
@@ -544,7 +625,9 @@
 
           <!-- //////////////////////////////// -->
 
-          <div *ngIf="tipoDeJuegoSeleccionado !== 'Juego De Competición'">
+       
+          <div *ngIf="tipoDeJuegoSeleccionado !== 'Juego De Competición' && tipoDeJuegoSeleccionado !== 'Juego De Cuestionario'">
+
             <mat-step>
               <ng-template matStepLabel>Finalizar</ng-template>
 

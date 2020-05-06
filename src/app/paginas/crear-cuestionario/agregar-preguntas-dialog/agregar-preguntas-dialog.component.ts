@@ -46,6 +46,7 @@ export class AgregarPreguntasDialogComponent implements OnInit {
 
     this.peticionesAPI.DameTodasMisPreguntas (this.profesorId)
     .subscribe (res => {
+      console.log(res);
       this.misPreguntas = res;
       this.misPreguntas.sort((a, b) => a.Tematica.localeCompare(b.Tematica));
       this.dataSourceMisPreguntas = new MatTableDataSource (this.misPreguntas);
@@ -69,7 +70,7 @@ export class AgregarPreguntasDialogComponent implements OnInit {
   }
 
   AsignarPregunta(pregunta: Pregunta) {
-    const found = this.preguntasDelCuestionario.find (a => a.Titulo === pregunta.Titulo && a.Pregunta === pregunta.Pregunta && a.Tematica === pregunta.Tematica);
+    const found = this.preguntasDelCuestionario.find (a => a.Titulo === pregunta.Titulo && a.Pregunta === pregunta.Pregunta);
     if (found === undefined){
       this.peticionesAPI.PreguntasEnCuestionario( new PreguntaDelCuestionario (pregunta.id, this.cuestionarioId))
       .subscribe();
@@ -79,7 +80,7 @@ export class AgregarPreguntasDialogComponent implements OnInit {
       this.preguntasDelCuestionario.sort((a, b) => a.Tematica.localeCompare(b.Tematica));
       this.dataSourcePreguntasDelCuestionario = new MatTableDataSource (this.preguntasDelCuestionario);
   
-      this.misPreguntas = this.misPreguntas.filter (a => a.Titulo !== pregunta.Titulo && a.Pregunta !== pregunta.Pregunta && a.Tematica !== pregunta.Tematica);
+      this.misPreguntas = this.misPreguntas.filter (a => a.Titulo !== pregunta.Titulo && a.Pregunta !== pregunta.Pregunta);
       this.dataSourceMisPreguntas = new MatTableDataSource (this.misPreguntas);
     }else {
       Swal.fire('Cuidado', 'Esta pregunta ya esta en el cuestionario', 'error');

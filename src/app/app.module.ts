@@ -15,7 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material';
+import { MatInputModule, MatRadioModule } from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
@@ -151,6 +151,12 @@ import { MisPreguntasComponent } from './paginas/mis-preguntas/mis-preguntas.com
 import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuestionarios.component';
 import { EditarPreguntaDialogComponent } from './paginas/mis-preguntas/editar-pregunta-dialog/editar-pregunta-dialog.component';
 import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
+import { AsignaCuestionarioComponent } from './paginas/juego/asigna-cuestionario/asigna-cuestionario.component';
+import { JuegoDeCuestionarioSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo.component';
+import { JuegoDeCuestionarioSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/juego-de-cuestionario-seleccionado-activo.component';
+import { InformacionJuegoDeCuestionarioDialogComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/informacion-juego-de-cuestionario-dialog/informacion-juego-de-cuestionario-dialog.component';
+import { JuegoSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-seleccionado-preparado.component';
+import { JuegoDeCuestionarioSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-de-cuestionario-seleccionado-preparado/juego-de-cuestionario-seleccionado-preparado.component';
 
 // para el uso de graficos
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -239,6 +245,7 @@ import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-ac
     MisCuestionariosComponent,
     EditarPreguntaDialogComponent,
     EditarCuestionarioComponent,
+    AsignaCuestionarioComponent,
 
     GanadorJuegoDeCompeticionLigaComponent,
     JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent,
@@ -254,7 +261,13 @@ import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-ac
     AsignarFamiliasJuegoAvataresComponent,
     JuegoDeAvatarSeleccionadoActivoComponent,
     MostrarAvatarAlumnoComponent,
-    InformacionJuegoAvatarComponent
+    InformacionJuegoAvatarComponent,
+    JuegoDeCuestionarioSeleccionadoInactivoComponent,
+    JuegoDeCuestionarioSeleccionadoActivoComponent,
+    InformacionJuegoDeCuestionarioDialogComponent,
+    JuegoSeleccionadoPreparadoComponent,
+    JuegoDeCuestionarioSeleccionadoPreparadoComponent
+
 
   ],
   imports: [
@@ -290,6 +303,7 @@ import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-ac
     MatPaginatorModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatRadioModule,
 
     HttpClientModule,
 
@@ -298,7 +312,8 @@ import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-ac
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
-    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent ],
+    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AsignaCuestionarioComponent, 
+    InformacionJuegoDeCuestionarioDialogComponent],
   bootstrap: [AppComponent],
   providers: [
     {

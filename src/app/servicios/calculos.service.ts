@@ -13,6 +13,8 @@ import { calcPossibleSecurityContexts } from '@angular/compiler/src/template_par
 
 import Swal from 'sweetalert2';
 import { isNullOrUndefined } from 'util';
+import { AlumnoJuegoDeCuestionario } from '../clases/AlumnoJuegoDeCuestionario';
+import { TablaAlumnoJuegoDeCuestionario } from '../clases/TablaAlumnoJuegoDeCuestionario';
 
 
 @Injectable({
@@ -359,6 +361,7 @@ export class CalculosService {
 
       const juegosActivos: Juego[] = [];
       const juegosInactivos: Juego[] = [];
+      const juegosPreparados: Juego[] = [];
 
       console.log ('vamos a por los juegos de puntos del grupo: ' + grupoID);
       this.peticionesAPI.DameJuegoDePuntosGrupo(grupoID)
@@ -403,6 +406,7 @@ export class CalculosService {
                 juegosInactivos.push(juegosCompeticion[i]);
               }
             }
+            //ahora toca los juegos de competicion de formula uno
             console.log ('vamos a por los juegos de competicion formula uno del grupo: ' + grupoID);
             this.peticionesAPI.DameJuegoDeCompeticionFormulaUnoGrupo(grupoID)
             .subscribe(juegosCompeticionFormulaUno => {
@@ -432,6 +436,30 @@ export class CalculosService {
                 const resultado = { activos: juegosActivos, inactivos: juegosInactivos};
                 obs.next (resultado);
               // this.PreparaListas ();
+
+            }
+              //Ahora recogemos los juegos de cuestionario
+              console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
+              this.peticionesAPI.DameJuegoDeCuestionario(grupoID)
+              .subscribe(juegosCuestionario => {
+              console.log('He recibido los juegos de competición formula uno');
+              console.log(juegosCuestionario);
+              // tslint:disable-next-line:prefer-for-of
+              for (let i = 0; i < juegosCuestionario.length; i++) {
+                if (juegosCuestionario[i].JuegoActivo === true) {
+                  juegosCuestionario[i].Tipo = "Juego De Cuestionario";
+                  juegosActivos.push(juegosCuestionario[i]);
+                } else if (juegosCuestionario[i].JuegoTerminado === false && juegosCuestionario[i].JuegoActivo === false){
+                  juegosCuestionario[i].Tipo = "Juego De Cuestionario";
+                  juegosPreparados.push(juegosCuestionario[i]);
+                } else if (juegosCuestionario[i].JuegoTerminado === true) {
+                  juegosCuestionario[i].Tipo = "Juego De Cuestionario";
+                  juegosInactivos.push(juegosCuestionario[i]);
+                }
+              }
+            const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+            obs.next (resultado);
+            // this.PreparaListas ();ç
               });
             });
           });
@@ -1148,6 +1176,7 @@ export class CalculosService {
   }
   public DameIdAlumnos(lineas: string[], listaAlumnosClasificacion: any[]): any [] {
     const ganadores: any [] = [];
+    let nombreRepetido = false;
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < lineas.length; i++) {
@@ -1155,13 +1184,30 @@ export class CalculosService {
       // tslint:disable-next-line:max-line-length
       const ganador = listaAlumnosClasificacion.filter (alumno => lineas[i] === alumno.nombre + ' ' + alumno.primerApellido + ' ' + alumno.segundoApellido)[0];
       if (ganador !== undefined) {
-        ganadores.push (ganador.id);
+        const indexOfRepetido = ganadores.indexOf(ganador.id);
+        if (indexOfRepetido === -1) {
+          ganadores.push (ganador.id);
+        } else {
+          nombreRepetido = true;
+          console.log('nombreRepetido = ' + nombreRepetido);
+        }
       }
+      // const indexOfRepetido = ganadores.indexOf(ganador.id);
+      // if (ganador !== undefined && indexOfRepetido === -1) {
+      //   ganadores.push (ganador.id);
+      // } else if (indexOfRepetido !== -1) {
+      //   nombreRepetido = true;
+      //   console.log('nombreRepetido = ' + nombreRepetido);
+      // }
     }
-    if (ganadores.length === lineas.length) {
+    if (ganadores.length === lineas.length && nombreRepetido === false) {
       console.log('ganadores: ');
       console.log(ganadores);
       return ganadores;
+    } else if (ganadores.length !== lineas.length && nombreRepetido === true) {
+      Swal.fire('Cuidado', 'Alguno de los alumnos introducidos está repetido', 'warning');
+      nombreRepetido = false;
+      return undefined;
     } else { // alguno de los ganadores no se ha encontrado
       console.log('alguno de los ganadores no se ha encontrado');
       Swal.fire('Cuidado', 'Alguno de los alumnos introducidos no se corresponde con ninguno de los participantes del juego', 'warning');
@@ -1171,19 +1217,44 @@ export class CalculosService {
 
   public DameIdEquipos(lineas: string[], listaEquiposClasificacion: any[]): any [] {
     const ganadores: any [] = [];
+    let nombreRepetido = false;
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < lineas.length; i++) {
       // Busco a cada uno de los ganadores (uno por linea de texto) y si esta guardo su id
       // tslint:disable-next-line:max-line-length
       const ganador = listaEquiposClasificacion.filter (equipo => lineas[i] === equipo.nombre)[0];
+      // if (ganador !== undefined) {
+      //   ganadores.push (ganador.id);
+      // }
+
       if (ganador !== undefined) {
-        ganadores.push (ganador.id);
+        const indexOfRepetido = ganadores.indexOf(ganador.id);
+        if (indexOfRepetido === -1) {
+          ganadores.push (ganador.id);
+        } else {
+          nombreRepetido = true;
+          console.log('nombreRepetido = ' + nombreRepetido);
+        }
       }
     }
-    if (ganadores.length === lineas.length) {
+    // if (ganadores.length === lineas.length) {
+    //   return ganadores;
+    // } else { // alguno de los ganadores no se ha encontrado
+    //   Swal.fire('Cuidado', 'Alguno de los equipos introducidos no se corresponde con ninguno de los participantes del juego', 'warning');
+    //   return undefined;
+    // }
+
+    if (ganadores.length === lineas.length && nombreRepetido === false) {
+      console.log('ganadores: ');
+      console.log(ganadores);
       return ganadores;
+    } else if (ganadores.length !== lineas.length && nombreRepetido === true) {
+      Swal.fire('Cuidado', 'Alguno de los equipos introducidos está repetido', 'warning');
+      nombreRepetido = false;
+      return undefined;
     } else { // alguno de los ganadores no se ha encontrado
+      console.log('alguno de los ganadores no se ha encontrado');
       Swal.fire('Cuidado', 'Alguno de los equipos introducidos no se corresponde con ninguno de los participantes del juego', 'warning');
       return undefined;
     }
@@ -3217,6 +3288,55 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any [] {
   }
 
 
+    //////////////////////////////////////// JUEGO DE CUESTIONARIO ///////////////////////////////////
+  public PrepararTablaRankingCuestionario(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCuestionario[],
+    alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeCuestionario[] {
+    const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeCuestionario [] = [];
+    // tslint:disable-next-line:prefer-for-oF
+    for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+    let alumno: Alumno;
+    const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
+    alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+    rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeCuestionario(alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+    listaAlumnosOrdenadaPorPuntos[i].Nota, alumnoId);
+    }
+    return rankingJuegoDeCompeticion;
+  }
+
+  // Elimina juego de cuestionario y posterior mente procederemos a eliminar los alumnos de ese juego de cuestionario
+  public EliminarJuegoDeCuestionario(): any {
+    const eliminaObservable = new Observable ( obs => {
+          this.peticionesAPI.BorrarJuegoDeCuestionario(
+                    this.sesion.DameJuego().id)
+          .subscribe(() => {
+            this.EliminarAlumnosJuegoDeCuestionario();
+            obs.next ();
+          });
+    });
+    return eliminaObservable;
+  }
+
+  // Esta funcion recupera todos los alumnos que estaban inscritos en el juego de cuestionario y los borra. Esto lo hacemos para no dejar matriculas que no
+  // nos sirven dentro de la vase de datos
+  private EliminarAlumnosJuegoDeCuestionario() {
+    // Pido los alumnos correspondientes al juego que voy a borrar
+    this.peticionesAPI.DameAlumnosDelJuegoDeCuestionario(this.sesion.DameJuego().id)
+    .subscribe( AlumnosDelJuego => {
+      if (AlumnosDelJuego[0] !== undefined) {
+
+        // Una vez recibo las inscripciones, las voy borrando una a una
+        for (let i = 0; i < AlumnosDelJuego.length; i++) {
+          this.peticionesAPI.BorraAlumnoDelJuegoDeCuestionario(AlumnosDelJuego[i].id)
+          .subscribe(() => {
+              console.log('Inscripcion al juego borrada correctamente');
+          });
+        }
+      } else {
+        console.log('No hay alumnos en el juego de cuestionario');
+      }
+
+    });
+  }
 
 
 }
