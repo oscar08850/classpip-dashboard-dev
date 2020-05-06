@@ -13,14 +13,28 @@
 $custom-primary: mat-palette($mat-blue, 800);
 $custom-accent:  mat-palette($mat-green, 600);
 $custom-warn:  mat-palette($mat-red, 700);
+// Create the theme object (a Sass map containing all of the palettes).
+$custom-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
+
+
+
+// Define the default theme (same as the example above).
+$candy-app-primary: mat-palette($mat-indigo);
+$candy-app-accent:  mat-palette($mat-pink, A200, A100, A400);
+$candy-app-theme:   mat-light-theme($candy-app-primary, $candy-app-accent);
+
+// Include the default theme styles.
+//@include angular-material-theme($candy-app-theme);
+
 
 // Create the theme object (a Sass map containing all of the palettes).
-$candy-app-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
+//$candy-app-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 .colorsChips {
   @include angular-material-theme($candy-app-theme);
+  @include angular-material-theme($custom-theme);
 }
 

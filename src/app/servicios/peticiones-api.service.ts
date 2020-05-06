@@ -9,7 +9,8 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Cromo, HistorialPuntosAlumno, HistorialPuntosEquipo,
         Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
         Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario, Cuestionario, AlumnoJuegoDeCompeticionFormulaUno,
-        EquipoJuegoDeCompeticionFormulaUno, SesionClase, AsistenciaClase, FamiliaAvatares} from '../clases/index';
+        EquipoJuegoDeCompeticionFormulaUno, SesionClase, AsistenciaClase, FamiliaAvatares, JuegoDeAvatar,
+        AlumnoJuegoDeAvatar} from '../clases/index';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +65,8 @@ export class PeticionesAPIService {
   private APIUrlLogosEquipos = this.host + ':3000/api/imagenes/LogosEquipos';
 
   private APIUrlImagenesAvatares =  this.host + ':3000/api/imagenes/ImagenesAvatares';
+  private APIUrlJuegoDeAvatar = this.host + ':3000/api/juegosDeAvatar';
+  private APIUrlAlumnoJuegoDeAvatar = this.host + ':3000/api/alumnosJuegoAvatar';
 
 
   constructor(
@@ -894,6 +897,14 @@ export class PeticionesAPIService {
     return this.http.get<FamiliaAvatares[]>(this.APIUrlProfesores + '/' + profesorId + '/familiaAvatares');
   }
 
+  public DameFamilia(familiaId: number): Observable<FamiliaAvatares> {
+    return this.http.get<FamiliaAvatares>(this.APIUrlFamiliarAvatares + '/' + familiaId);
+  }
+
+  public ModificaFamiliaAvatares(familia: FamiliaAvatares): Observable<FamiliaAvatares> {
+    return this.http.put<FamiliaAvatares>(this.APIUrlFamiliarAvatares + '/' + familia.id, familia);
+  }
+
   public  BorraFamiliaAvatares(familiaId: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlFamiliarAvatares + '/' +  familiaId);
   }
@@ -910,5 +921,48 @@ export class PeticionesAPIService {
     return this.http.delete<any>(this.APIUrlImagenesAvatares + '/files/' + imagen);
   }
 
+    ////////////////////////////// GESTION JUEGO DE AVATARES ////////////////////////////////////
+
+  public CreaJuegoDeAvatar(juego: JuegoDeAvatar, grupoId: number): Observable<JuegoDeAvatar> {
+      return this.http.post<JuegoDeAvatar>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeAvatars', juego);
+  }
+
+  public BorraJuegoDeAvatar(juegoDeAvatarId: number): Observable<JuegoDeAvatar> {
+    return this.http.delete<JuegoDeAvatar>(this.APIUrlJuegoDeAvatar + '/' + juegoDeAvatarId);
+  }
+
+  public ModificaJuegoDeAvatar(juego: Juego): Observable<Juego> {
+    return this.http.put<Juego>(this.APIUrlJuegoDeAvatar + '/' + juego.id, juego);
+  }
+  public DameJuegoDeAvatarGrupo(grupoId: number): Observable<JuegoDeAvatar[]> {
+    return this.http.get<JuegoDeAvatar[]>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeAvatars');
+  }
+
+  //////////////////////////////// GESTION DE ALUMNOS EN JUEGO DE AVATAR //////////////
+
+  public InscribeAlumnoJuegoDeAvatar(alumnoJuegoDeAvatar: AlumnoJuegoDeAvatar) {
+    return this.http.post<AlumnoJuegoDeAvatar>(this.APIUrlAlumnoJuegoDeAvatar,
+      alumnoJuegoDeAvatar);
+  }
+
+  public DameAlumnosJuegoDeAvatar(juegoDeAvatarId: number): Observable<Alumno[]> {
+    console.log('Voy a por los alumnos');
+    return this.http.get<Alumno[]>(this.APIUrlJuegoDeAvatar + '/' + juegoDeAvatarId + '/alumnos');
+  }
+
+  // tslint:disable-next-line:max-line-length
+  public DameInscripcionesAlumnoJuegoDeAvatar(juegoDeAvatarId: number): Observable<AlumnoJuegoDeAvatar[]> {
+    return this.http.get<AlumnoJuegoDeAvatar[]>(this.APIUrlAlumnoJuegoDeAvatar
+                                                      + '?filter[where][juegoDeAvatarId]=' + juegoDeAvatarId);
+  }
+  public BorraInscripcionAlumnoJuegoDeAvatar(inscripcionId: number) {
+    // tslint:disable-next-line:max-line-length
+    return this.http.delete<AlumnoJuegoDeAvatar>(this.APIUrlAlumnoJuegoDeAvatar + '/' + inscripcionId);
+  }
+
+  public ModificaInscripcionAlumnoJuegoDeAvatar(inscripcion: AlumnoJuegoDeAvatar): Observable<AlumnoJuegoDeAvatar> {
+    return this.http.put<AlumnoJuegoDeAvatar>(this.APIUrlAlumnoJuegoDeAvatar + '/' + inscripcion.id, inscripcion);
+  }
+  //////////////////////////////// GESTION DE EQUIPOS EN JUEGO DE AVATAR /////////////////
 
 }

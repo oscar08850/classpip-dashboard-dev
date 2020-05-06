@@ -96,6 +96,11 @@ import { CrearFamiliaAvataresComponent } from './paginas/crear-familia-avatares/
 
 import { MisFamiliasAvataresComponent } from './paginas/mis-familias-avatares/mis-familias-avatares.component';
 
+// tslint:disable-next-line:max-line-length
+import { MostrarAvatarAlumnoComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/mostrar-avatar-alumno/mostrar-avatar-alumno.component';
+
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/informacion-juego-avatar/informacion-juego-avatar.component';
 
 const routes: Routes = [
 
@@ -238,7 +243,9 @@ const routes: Routes = [
 
   // AVATARES
   { path: 'inicio/:id/misFamiliasAvatares', component: MisFamiliasAvataresComponent},
-  { path: 'inicio/:id/crearFamiliaAvatares', component: CrearFamiliaAvataresComponent}
+  { path: 'inicio/:id/crearFamiliaAvatares', component: CrearFamiliaAvataresComponent},
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/MostrarAvatarAlumno', component: MostrarAvatarAlumnoComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoAvatar', component: InformacionJuegoAvatarComponent },
 ];
 
 @NgModule({

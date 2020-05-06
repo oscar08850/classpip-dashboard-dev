@@ -142,6 +142,7 @@ export class MisFamiliasAvataresComponent implements OnInit {
 
 
   TraeImagenesFamilia() {
+    this.familiaCargada = false;
     this.familiaElegida = this.listaFamilias.filter (familia => familia.id === Number(this.familiaId))[0];
     // Traigo la imagen de la silueta
     this.peticionesAPI.DameImagenAvatar (this.familiaElegida.Silueta)

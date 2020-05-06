@@ -158,7 +158,14 @@ import { NgxEchartsModule } from 'ngx-echarts';
 // avatares
 import { MisFamiliasAvataresComponent } from './paginas/mis-familias-avatares/mis-familias-avatares.component';
 import { CrearFamiliaAvataresComponent } from './paginas/crear-familia-avatares/crear-familia-avatares.component';
-
+// tslint:disable-next-line:max-line-length
+import { AsignarFamiliasJuegoAvataresComponent } from './paginas/juego/asignar-familias-juego-avatares/asignar-familias-juego-avatares.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeAvatarSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/juego-de-avatar-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
+import { MostrarAvatarAlumnoComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/mostrar-avatar-alumno/mostrar-avatar-alumno.component';
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/informacion-juego-avatar/informacion-juego-avatar.component';
 
 @NgModule({
   declarations: [
@@ -243,7 +250,11 @@ import { CrearFamiliaAvataresComponent } from './paginas/crear-familia-avatares/
     JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent,
 
     MisFamiliasAvataresComponent,
-    CrearFamiliaAvataresComponent
+    CrearFamiliaAvataresComponent,
+    AsignarFamiliasJuegoAvataresComponent,
+    JuegoDeAvatarSeleccionadoActivoComponent,
+    MostrarAvatarAlumnoComponent,
+    InformacionJuegoAvatarComponent
 
   ],
   imports: [

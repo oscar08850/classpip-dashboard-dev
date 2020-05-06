@@ -45,3 +45,5 @@ export * from './clasesParaTablasJuegoDeCompeticionFormulaUno/TablaClasificacion
 export * from './SesionClase';
 export * from './AsistenciaClase';
 export * from './FamiliaAvatares';
+export * from './JuegoDeAvatar';
+export * from './AlumnoJuegoDeAvatar';

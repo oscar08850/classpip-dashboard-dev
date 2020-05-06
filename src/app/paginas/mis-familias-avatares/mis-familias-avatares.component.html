@@ -18,11 +18,11 @@
     </div>
 
     <div *ngIf = "familiaCargada" class = "enFila">
-      <div  id = "imagenAvatar"  style = "width: 20%; margin-top: 15%; position: relative;">
+      <div  id = "imagenAvatar"  style = "width: 30%; margin-top: 15%; position: relative;">
         <!-- Cuando se cargue la imagen se activa la función para que se muestra a tamaño doble -->
         <img  #img id ="silueta" *ngIf="imagenSilueta"  (load)="PonDoble(img)"  [src]="imagenSilueta">
       </div>
-      <div class = "enColumna" style = "width: 80%">
+      <div class = "enColumna" style = "width: 70%">
         <button type="button" align = "left" class="btn Eliminar" (click) = "BorrarFamilia();" >Eliminar familia <i class="material-icons">
           delete
         </i></button>

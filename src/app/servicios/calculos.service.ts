@@ -238,6 +238,21 @@ export class CalculosService {
                         obs.next();
                       }
                     });
+                  } else if (juego.Tipo === 'Juego De Avatar') {
+                    if (juego.Modo === 'Individual') {
+                      this.peticionesAPI.DameInscripcionesAlumnoJuegoDeAvatar (juego.id)
+                      // tslint:disable-next-line:max-line-length
+                      .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeAvatar(inscripcion.id).subscribe()));
+                    }
+                    this.peticionesAPI.BorraJuegoDeAvatar (juego.id)
+                    .subscribe (() => {
+                      // Esto es lo que no hace la funcion que borra el juego de liga
+                      cont++;
+                      if (cont === juegos.length) {
+                        obs.next();
+                      }
+                    });
+
                   }
                 });
               } else {
@@ -391,19 +406,33 @@ export class CalculosService {
             console.log ('vamos a por los juegos de competicion formula uno del grupo: ' + grupoID);
             this.peticionesAPI.DameJuegoDeCompeticionFormulaUnoGrupo(grupoID)
             .subscribe(juegosCompeticionFormulaUno => {
-            console.log('He recibido los juegos de competición formula uno');
-            console.log(juegosCompeticionFormulaUno);
-            // tslint:disable-next-line:prefer-for-of
-            for (let i = 0; i < juegosCompeticionFormulaUno.length; i++) {
-              if (juegosCompeticionFormulaUno[i].JuegoActivo === true) {
-                juegosActivos.push(juegosCompeticionFormulaUno[i]);
-              } else {
-                juegosInactivos.push(juegosCompeticionFormulaUno[i]);
+              console.log('He recibido los juegos de competición formula uno');
+              console.log(juegosCompeticionFormulaUno);
+              // tslint:disable-next-line:prefer-for-of
+              for (let i = 0; i < juegosCompeticionFormulaUno.length; i++) {
+                if (juegosCompeticionFormulaUno[i].JuegoActivo === true) {
+                  juegosActivos.push(juegosCompeticionFormulaUno[i]);
+                } else {
+                  juegosInactivos.push(juegosCompeticionFormulaUno[i]);
+                }
               }
-            }
-            const resultado = { activos: juegosActivos, inactivos: juegosInactivos};
-            obs.next (resultado);
-            // this.PreparaListas ();
+              console.log ('vamos a por los juegos de avatar del grupo: ' + grupoID);
+              this.peticionesAPI.DameJuegoDeAvatarGrupo(grupoID)
+              .subscribe(juegosAvatar => {
+                console.log('He recibido los juegos de avatar');
+                console.log(juegosAvatar);
+                // tslint:disable-next-line:prefer-for-of
+                for (let i = 0; i < juegosAvatar.length; i++) {
+                  if (juegosAvatar[i].JuegoActivo === true) {
+                    juegosActivos.push(juegosAvatar[i]);
+                  } else {
+                    juegosInactivos.push(juegosAvatar[i]);
+                  }
+                }
+                const resultado = { activos: juegosActivos, inactivos: juegosInactivos};
+                obs.next (resultado);
+              // this.PreparaListas ();
+              });
             });
           });
         });

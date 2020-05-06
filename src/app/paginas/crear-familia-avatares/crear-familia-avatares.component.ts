@@ -322,7 +322,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
         // ahora guardamos las imagenes de los complementos
         for (let i = 0; i < 4 ; i++) {
           // tslint:disable-next-line:prefer-for-of
-          for (let j = 0; j < this.fileComplemento[i].length; j++){
+          for (let j = 0; j < this.fileComplemento[i].length; j++) {
             const imagen = this.fileComplemento[i][j];
             const complementoData: FormData = new FormData();
             complementoData.append(imagen.name, imagen);
