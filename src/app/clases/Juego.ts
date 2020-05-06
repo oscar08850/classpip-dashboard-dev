@@ -1,4 +1,5 @@
 export class Juego {
+  [x: string]: any;
   Tipo: string;
   Modo: string;
   JuegoActivo: boolean;

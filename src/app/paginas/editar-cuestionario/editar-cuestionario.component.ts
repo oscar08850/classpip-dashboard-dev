@@ -52,6 +52,7 @@ export class EditarCuestionarioComponent implements OnInit {
   }
 
   ModificarCuestionario(){
+    // tslint:disable-next-line:max-line-length
     this.peticionesAPI.ModificaCuestionario(new Cuestionario(this.titulo, this.descripcion), this.profesorId, this.cuestinarioSeleccionado.id)
     .subscribe((res) => {
       if(res != null) {

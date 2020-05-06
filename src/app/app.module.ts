@@ -89,7 +89,7 @@ import { InformacionJuegoColeccionComponent } from './paginas/juego-seleccionado
 import { AlumnoSeleccionadoJuegoDeColeccionComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/alumno-seleccionado-juego-de-coleccion/alumno-seleccionado-juego-de-coleccion.component';
 // tslint:disable-next-line:max-line-length
 import { EquipoSeleccionadoJuegoDeColeccionComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/equipo-seleccionado-juego-de-coleccion/equipo-seleccionado-juego-de-coleccion.component';
-import { PasarListaComponent } from './paginas/pasar-lista/pasar-lista.component';
+import { SesionesClaseComponent } from './paginas/sesiones-clase/sesiones-clase.component';
 // tslint:disable-next-line:max-line-length
 import { AlbumDelAlumnoComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/alumno-seleccionado-juego-de-coleccion/album-del-alumno/album-del-alumno.component';
 // tslint:disable-next-line:max-line-length
@@ -158,9 +158,20 @@ import { InformacionJuegoDeCuestionarioDialogComponent } from './paginas/juego-s
 import { JuegoSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-seleccionado-preparado.component';
 import { JuegoDeCuestionarioSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-de-cuestionario-seleccionado-preparado/juego-de-cuestionario-seleccionado-preparado.component';
 
+// para el uso de graficos
+import { NgxEchartsModule } from 'ngx-echarts';
 
-
-
+// avatares
+import { MisFamiliasAvataresComponent } from './paginas/mis-familias-avatares/mis-familias-avatares.component';
+import { CrearFamiliaAvataresComponent } from './paginas/crear-familia-avatares/crear-familia-avatares.component';
+// tslint:disable-next-line:max-line-length
+import { AsignarFamiliasJuegoAvataresComponent } from './paginas/juego/asignar-familias-juego-avatares/asignar-familias-juego-avatares.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeAvatarSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/juego-de-avatar-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
+import { MostrarAvatarAlumnoComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/mostrar-avatar-alumno/mostrar-avatar-alumno.component';
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/informacion-juego-avatar/informacion-juego-avatar.component';
 
 @NgModule({
   declarations: [
@@ -205,7 +216,7 @@ import { JuegoDeCuestionarioSeleccionadoPreparadoComponent } from './paginas/jue
     InformacionJuegoColeccionComponent,
     AlumnoSeleccionadoJuegoDeColeccionComponent,
     EquipoSeleccionadoJuegoDeColeccionComponent,
-    PasarListaComponent,
+    SesionesClaseComponent,
     AlbumDelAlumnoComponent,
     AlbumEquipoComponent,
     ConfiguracionProfesorComponent,
@@ -244,11 +255,19 @@ import { JuegoDeCuestionarioSeleccionadoPreparadoComponent } from './paginas/jue
     EditarPuntosJuegoDeCompeticionFormulaUnoComponent,
     InformacionJuegoDeCompeticionFormulaUnoInactivoComponent,
     JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent,
+
+    MisFamiliasAvataresComponent,
+    CrearFamiliaAvataresComponent,
+    AsignarFamiliasJuegoAvataresComponent,
+    JuegoDeAvatarSeleccionadoActivoComponent,
+    MostrarAvatarAlumnoComponent,
+    InformacionJuegoAvatarComponent,
     JuegoDeCuestionarioSeleccionadoInactivoComponent,
     JuegoDeCuestionarioSeleccionadoActivoComponent,
     InformacionJuegoDeCuestionarioDialogComponent,
     JuegoSeleccionadoPreparadoComponent,
     JuegoDeCuestionarioSeleccionadoPreparadoComponent
+
 
   ],
   imports: [
@@ -286,7 +305,9 @@ import { JuegoDeCuestionarioSeleccionadoPreparadoComponent } from './paginas/jue
     MatNativeDateModule,
     MatRadioModule,
 
-    HttpClientModule
+    HttpClientModule,
+
+    NgxEchartsModule
   ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,

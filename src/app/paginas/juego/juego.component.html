@@ -481,7 +481,153 @@
 
           </div>
 
+
+          <!-- ////////////////////// SI ESCOGEMOS JUEGO DE AVATAR ////////////////////////////////-->
+          <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Avatar'">
+
+
+            <!-- TERCER PASO: SELECCIONAR FAMILIAS DE AVATARES -->
+            <mat-step>
+              <ng-template matStepLabel><div>Familias</div></ng-template>
+
+              <label class = "LabelStepper">Selecciona las familias de avatares para el juego</label>
+              <!-- Nos vamos al componente para asignar la colección -->
+              <app-asignar-familias-juego-avatares
+                (emisorFamiliasElegidas) = "GuardaFamiliasElegidas ($event)"
+              ></app-asignar-familias-juego-avatares>
+
+            </mat-step>
+
+          <!-- CUARTO PASO: ESTABLECER CRITERIO PARA OBTENER PRIVILEGIO DE CAMBIAR COMPLEMENTO 1 -->
+
+          <mat-step>
+                <ng-template matStepLabel><div>Complemento 1</div></ng-template>
+
+                <div [formGroup] = "myFormPrivilegiosAvatar">
+
+                    <label class = "LabelStepper">Introduzca el criterio para obtener el privilegio de  <strong>cambiar el primer complemento</strong></label>
+                    <mat-form-field>
+                      <input matInput formControlName="criterioPrivilegioComplemento1" placeholder="Escriba el criterio" requiered>
+                    </mat-form-field>
+                </div>
+
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+          </mat-step>
+
+          <!-- QUINTO PASO: ESTABLECER CRITERIO PARA OBTENER PRIVILEGIO DE CAMBIAR COMPLEMENTO 2 -->
+
+          <mat-step>
+            <ng-template matStepLabel><div>Complemento 2</div></ng-template>
+
+            <div [formGroup] = "myFormPrivilegiosAvatar" >
+
+                <label class = "LabelStepper">Introduzca el criterio para obtener el privilegio de  <strong>cambiar el segundo complemento</strong></label>
+                <mat-form-field>
+                  <input matInput formControlName="criterioPrivilegioComplemento2" placeholder="Escriba el criterio" requiered>
+                </mat-form-field>
+            </div>
+
+            <div class="btnCambiarStep">
+              <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+              <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+            </div>
+          </mat-step>
+
+
+          <!-- SEXTO PASO: ESTABLECER CRITERIO PARA OBTENER PRIVILEGIO DE CAMBIAR COMPLEMENTO 3 -->
+          <mat-step>
+            <ng-template matStepLabel><div>Complemento 3</div></ng-template>
+
+            <div [formGroup] = "myFormPrivilegiosAvatar" >
+
+                <label class = "LabelStepper">Introduzca el criterio para obtener el privilegio de  <strong>cambiar el tercer complemento</strong></label>
+                <mat-form-field>
+                  <input matInput formControlName="criterioPrivilegioComplemento3" placeholder="Escriba el criterio" requiered>
+                </mat-form-field>
+            </div>
+
+            <div class="btnCambiarStep">
+              <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+              <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+            </div>
+          </mat-step>
+
+          <!-- SEPTIMO PASO: ESTABLECER CRITERIO PARA OBTENER PRIVILEGIO DE CAMBIAR COMPLEMENTO 4 -->
+          <mat-step>
+            <ng-template matStepLabel><div>Complemento 4</div></ng-template>
+
+            <div [formGroup] = "myFormPrivilegiosAvatar" >
+
+                <label class = "LabelStepper">Introduzca el criterio para obtener el privilegio de <strong>cambiar el cuarto complemento</strong></label>
+                <mat-form-field>
+                  <input matInput formControlName="criterioPrivilegioComplemento4" placeholder="Escriba el criterio" requiered>
+                </mat-form-field>
+            </div>
+
+            <div class="btnCambiarStep">
+              <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+              <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+            </div>
+          </mat-step>
+
+          <!-- OCTAVO PASO: ESTABLECER CRITERIO PARA OBTENER PRIVILEGIO DE AGREGAR VOZ -->
+          <mat-step>
+            <ng-template matStepLabel><div>Voz</div></ng-template>
+
+            <div [formGroup] = "myFormPrivilegiosAvatar" >
+
+                <label class = "LabelStepper">Introduzca el criterio para obtener el privilegio de <strong> agragar voz </strong></label>
+                <mat-form-field>
+                  <input matInput formControlName="criterioPrivilegioVoz" placeholder="Escriba el criterio" requiered>
+                </mat-form-field>
+            </div>
+
+            <div class="btnCambiarStep">
+              <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+              <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+            </div>
+          </mat-step>
+
+          <!-- NOVENO PASO: ESTABLECER CRITERIO PARA OBTENER PRIVILEGIO DE VER AVATARES DE COMPAÑEROS -->
+          <mat-step>
+            <ng-template matStepLabel><div>Ver avatares</div></ng-template>
+
+            <div [formGroup] = "myFormPrivilegiosAvatar" >
+
+                <label class = "LabelStepper">Introduzca el criterio para obtener el privilegio de <strong>ver los avatares de los compañeros</strong></label>
+                <mat-form-field>
+                  <input matInput formControlName="criterioPrivilegioVerTodos" placeholder="Escriba el criterio" requiered>
+                </mat-form-field>
+            </div>
+
+            <div class="btnCambiarStep">
+              <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+              <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+            </div>
+          </mat-step>
+          <!-- FINALIZAR  -->
+          <mat-step>
+                    <ng-template matStepLabel>Finalizar</ng-template>
+
+                    <span style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}}... {{tipoJuegoCompeticionSeleccionado}} ... {{modoDeJuegoSeleccionado}} </span>
+                    <div class="btnCambiarStep">
+
+                            <button type="button" class="btn Aceptar" (click) = "FinalizarJuegoAvatar();">Finalizar</button>
+
+                    </div>
+          </mat-step>
+          </div>
+
+
+
+          <!-- //////////////////////////////// -->
+
+       
           <div *ngIf="tipoDeJuegoSeleccionado !== 'Juego De Competición' && tipoDeJuegoSeleccionado !== 'Juego De Cuestionario'">
+
             <mat-step>
               <ng-template matStepLabel>Finalizar</ng-template>
 

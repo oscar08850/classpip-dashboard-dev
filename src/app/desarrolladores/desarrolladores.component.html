@@ -306,6 +306,31 @@ y con un dialogo -->
     {{fraseCard}}
   </mat-tab>
 
+  <mat-tab label="Ejemplos de graficos">
+    La libreria recomendada es <strong> E-Chart </strong>
+    <br>
+    La información relevante está en los enlaces siguientes:
+    <br>
+    https://www.freakyjolly.com/angular-e-charts-tutorial/
+    <br>
+    https://echarts.apache.org/examples/en/index.html
+    <br>
+    <br>
+    Estos son tres Ejemplos
+    <br>
+    <br>
+    <div class = "enColumna">
+        <div class= "enFila" style = "width : 50%">
+          <button type="button" (click) = "opcion = estratos">Gráfico de estratos </button>
+          <button type="button" (click) = "opcion = barras">Gráfico de barras </button>
+          <button type="button" (click) = "opcion = donut">Gráfico de donut </button>
+        </div>
+        <br>
+        <br>
+        <div style = "width : 50%" echarts [options]="opcion"  theme="macarons" class="demo-chart"></div>
+        <br>
+    </div>
+  </mat-tab>
   </mat-tab-group>
 </div>
 

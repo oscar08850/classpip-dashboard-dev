@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga,
-         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta} from '../clases';
+         // tslint:disable-next-line:max-line-length
+         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta, JuegoDeAvatar, AlumnoJuegoDeAvatar} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 @Injectable({
@@ -11,6 +12,7 @@ export class SesionService {
   profesor: Profesor;
   grupo: Grupo;
   juego: Juego;
+  juegoAvatar: JuegoDeAvatar;
   equipo: Equipo;
   alumnosEquipo: Alumno[];
   alumnosGrupo: Alumno[];
@@ -53,6 +55,8 @@ export class SesionService {
   cuestionario: Cuestionario;
   listaCuestionarios: any;
 
+  inscripcionAlumnoJuegoAvatar: AlumnoJuegoDeAvatar;
+
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
     this.profesor = profesor;
@@ -89,6 +93,18 @@ export class SesionService {
   }
   public  DameJuego(): Juego {
     return this.juego;
+  }
+  public TomaJuegoAvatar(juego: JuegoDeAvatar) {
+    this.juegoAvatar = juego;
+  }
+  public  DameJuegoAvatar(): JuegoDeAvatar {
+    return this.juegoAvatar;
+  }
+  public TomaAlumnoJuegoAvatar (alumnoJuegoAvatar: AlumnoJuegoDeAvatar) {
+    this.inscripcionAlumnoJuegoAvatar = alumnoJuegoAvatar;
+  }
+  public DameAlumnoJuegoAvatar(): AlumnoJuegoDeAvatar {
+    return this.inscripcionAlumnoJuegoAvatar;
   }
   public TomaEquipo(equipo: Equipo) {
     this.equipo = equipo;

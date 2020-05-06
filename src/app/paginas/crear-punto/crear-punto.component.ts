@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material';
 import Swal from 'sweetalert2';
 
 // Servicios
-import { ProfesorService, PeticionesAPIService } from '../../servicios/index';
+import { PeticionesAPIService } from '../../servicios/index';
 
 // Clases
 import { Punto, Insignia } from '../../clases/index';
@@ -54,7 +54,6 @@ export class CrearPuntoComponent implements OnInit {
   logoCargado: Boolean = false;
 
   constructor( private peticionesAPI: PeticionesAPIService,
-               private profesorService: ProfesorService,
                private route: ActivatedRoute,
                public dialog: MatDialog) { }
 

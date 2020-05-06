@@ -1,0 +1,282 @@
+<div class="titulo"><h2>Gestión de las sesiones de clase</h2></div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+<div class="contenedor">
+  <mat-tab-group (selectedTabChange)='onSelectChange($event)'>
+    <mat-tab label="Elegir alumnos aleatoriamente">
+      <div *ngIf="alumnosGrupoSeleccionado[0];else Aviso_no_alumnos" class = "enColumna">
+        <br>
+        <button type="button" style = "width: 30%" class="btn Aceptar" (click)="ElegirAleatoriamente()">Elegir a un alumno aleatoriamente </button>
+        <br>
+        <table align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+          <!-- Nombre Alumno Column -->
+          <ng-container matColumnDef="nombreAlumno">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+            <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+
+          </ng-container>
+
+          <!-- Primer Apellido Column -->
+          <ng-container matColumnDef="primerApellido">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Primer Apellido </th>
+            <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+
+          </ng-container>
+
+          <!-- Segundo Apellido Column -->
+          <ng-container matColumnDef="segundoApellido">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Segundo Apellido </th>
+            <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnasElegirAleatoriamente"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnasElegirAleatoriamente;">
+          </tr>
+        </table>
+      </div>
+
+    </mat-tab>
+    <mat-tab label="Registrar asistencia de nueva sesión">
+      <div *ngIf="alumnosGrupoSeleccionado[0];else Aviso_no_alumnos">
+
+      <div class = "enColumna">
+
+        <div [formGroup]="myForm" class = "enFila" align = "center">
+          <div style="margin-top: 15px; width: 20%">
+            Fecha:
+            <mat-form-field>
+              <mat-label>Fecha de la sesión </mat-label>
+              <input matInput [matDatepicker]="picker"   (dateChange)="GuardarFecha($event)" placeholder="Seleccione una Fecha" >
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker ></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+
+          <div style="margin-top: 15px;width: 10%">
+            <span>Hora de inicio: </span>
+            <mat-form-field>
+              <mat-label> (hh:mm)</mat-label>
+              <!--- <input matInput placeholder="Introduzca el Número de jornadas" > -->
+              <input matInput formControlName="hora" placeholder="Escribe la hora" requiered [(ngModel)] = "horaSesion">
+            </mat-form-field>
+          </div>
+
+          <div style="margin-top: 15px;width: 30%">
+            <span>Descripción: </span>
+            <mat-form-field>
+              <mat-label>Escriba la descripción de la sesión</mat-label>
+              <!--- <input matInput placeholder="Introduzca el Número de jornadas" > -->
+              <input matInput formControlName="descripcionSesion" placeholder="Escribe la descripcion" requiered [(ngModel)] = "descripcionSesion">
+            </mat-form-field>
+          </div>
+
+          <div style="margin-top: 15px; width: 30%">
+            <button type="button"class="btn Aceptar" [disabled]="(fecha === null)|| (horaSesion === null) || (descripcionSesion === null)" (click) = CrearSesion()>Crear Jornada</button>
+          </div>
+        </div>
+
+        <div *ngIf = "sesionCreada" class = "enColumna">
+
+
+          <mat-form-field style = "width: 40%">
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
+              <i class="material-icons" matSuffix>search</i>
+          </mat-form-field>
+          <br>
+          <h3 align= "center">Marca los alumnos según vaya entrando a clase </h3>
+          <br>
+          <table align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+                <mat-checkbox
+                              (change)="$event ? MasterToggle() : null; ActualizarBotonTabla ();"
+                              [checked]="selection.hasValue() && IsAllSelected()"
+                              >
+                </mat-checkbox>
+
+              </th>
+              <td mat-cell *matCellDef="let row">
+
+                <mat-checkbox
+                              (click)="$event.stopPropagation()"
+                              (change)="$event ? selection.toggle(row) : null; ActualizarBotonTabla (row);"
+                              [checked]="selection.isSelected(row)"
+              >
+              </mat-checkbox>
+
+
+
+              </td>
+            </ng-container>
+
+            <!-- Nombre Alumno Column -->
+            <ng-container matColumnDef="nombreAlumno">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+              <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+
+            </ng-container>
+
+            <!-- Primer Apellido Column -->
+            <ng-container matColumnDef="primerApellido">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Primer Apellido </th>
+              <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+
+            </ng-container>
+
+            <!-- Segundo Apellido Column -->
+            <ng-container matColumnDef="segundoApellido">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Segundo Apellido </th>
+              <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+
+            </ng-container>
+
+            <!-- alumnoId Column -->
+            <ng-container matColumnDef="marca">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Hora llegada </th>
+              <td mat-cell *matCellDef="let alumno"> {{alumno.marca}} </td>
+
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="columnasMarcarHora"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnasMarcarHora;">
+            </tr>
+          </table>
+          <br>
+          <button type="button" class="btn Aceptar" (click) = RegistrarAsistencia()>Registrar asistencia</button>
+          <br>
+        </div>
+      </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Asistencia en sesiones anteriores">
+      <br>
+      <br>
+      <table *ngIf = 'asistencias' class="table">
+        <thead>
+           <tr>
+               <th style = "width: 40px !important"></th>
+               <!-- <th style = "width: 10px !important"></th>
+               <th style = "width: 30px !important"></th> -->
+               <th style=" width: 5px !important; font-size:70%" *ngFor="let sesion of asistencias">{{sesion.s.Dia | date: 'dd-MM-yyyy'}}</th>
+               <th style = "width: 10px !important; color:green; font-size:70%"> % asistencia</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tiemposAlumno of tiempos; let i = index">
+              <td style = "width: 40px !important">{{alumnosGrupoSeleccionado[i].Nombre}} {{alumnosGrupoSeleccionado[i].PrimerApellido}} {{alumnosGrupoSeleccionado[i].SegundoApellido}}
+              </td>
+              <!-- <td style = "width: 10px !important">{{alumnosGrupoSeleccionado[i].PrimerApellido}}</td>
+              <td style = "width: 30px !important">{{alumnosGrupoSeleccionado[i].SegundoApellido}}</td> -->
+              <td style=" width: 5px !important;" *ngFor="let tiempo of tiemposAlumno">{{tiempo}}</td>
+              <td style="font-size:120%; color:green; width: 10px !important"> {{porcentajeAsistencia[i]}}%</td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-tab>
+  </mat-tab-group>
+  <div class="contenedor">
+    <ng-template  #Aviso_no_alumnos><div class="texto">Todavía no hay alumnos en este grupo.</div></ng-template>
+  </div>
+
+  <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+
+  </div>
+</div>
+<!-- <div class="contenedor">
+  <mat-form-field>
+    <input matInput [matDatepicker]="dp" placeholder="Different locale">
+    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+    <mat-datepicker #dp></mat-datepicker>
+  </mat-form-field>
+
+  <button mat-button (click)="french()">Dynamically switch to French</button>
+</div> -->
+<!--
+<form *ngIf="alumnosGrupoSeleccionado[0];else Aviso_no_alumnos">
+
+  <div class = "filter">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
+      <i class="material-icons" matSuffix>search</i>
+    </mat-form-field>
+  </div>
+
+
+  <div class="enColumna">
+      <button type="button" class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = ProcesarSeleccionados()>Procesar elegidos</button>
+      {{mensaje}}
+      <br>
+      <button type="button" style = "width: 30%" class="btn Aceptar" (click)="ElegirAleatoriamente()">Elegir a un alumno aleatoriamente </button>
+
+  </div>
+
+
+
+  <table align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+        <mat-checkbox
+                      (change)="$event ? MasterToggle() : null; ActualizarBotonTabla ();"
+                      [checked]="selection.hasValue() && IsAllSelected()"
+                      >
+        </mat-checkbox>
+
+      </th>
+      <td mat-cell *matCellDef="let row">
+
+        <mat-checkbox
+                      (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null; ActualizarBotonTabla (row);"
+                      [checked]="selection.isSelected(row)"
+       >
+      </mat-checkbox>
+
+
+
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="nombreAlumno">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.alumno.Nombre}} </td>
+
+    </ng-container>
+
+
+    <ng-container matColumnDef="primerApellido">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Primer Apellido </th>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.alumno.PrimerApellido}} </td>
+
+    </ng-container>
+
+
+    <ng-container matColumnDef="segundoApellido">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Segundo Apellido </th>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.alumno.SegundoApellido}} </td>
+
+    </ng-container>
+
+
+    <ng-container matColumnDef="marca">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Hora llegada </th>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.marca}} </td>
+
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+</form> -->
+
+
+

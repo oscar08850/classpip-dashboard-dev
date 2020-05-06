@@ -38,7 +38,7 @@ import { InformacionJuegoColeccionComponent } from './paginas/juego-seleccionado
 import { AlumnoSeleccionadoJuegoDeColeccionComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/alumno-seleccionado-juego-de-coleccion/alumno-seleccionado-juego-de-coleccion.component';
 // tslint:disable-next-line:max-line-length
 import { EquipoSeleccionadoJuegoDeColeccionComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/equipo-seleccionado-juego-de-coleccion/equipo-seleccionado-juego-de-coleccion.component';
-import { PasarListaComponent } from './paginas/pasar-lista/pasar-lista.component';
+import { SesionesClaseComponent } from './paginas/sesiones-clase/sesiones-clase.component';
 // tslint:disable-next-line:max-line-length
 import { AlbumDelAlumnoComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/alumno-seleccionado-juego-de-coleccion/album-del-alumno/album-del-alumno.component';
 // tslint:disable-next-line:max-line-length
@@ -88,6 +88,20 @@ import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuest
 import { DeactivateGuardCrearCuestionario } from './guardas/canExitCrearCuestionario.guard';
 import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
 import { JuegoSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-seleccionado-preparado.component';
+
+
+
+// componentes para avatares
+
+import { CrearFamiliaAvataresComponent } from './paginas/crear-familia-avatares/crear-familia-avatares.component';
+
+import { MisFamiliasAvataresComponent } from './paginas/mis-familias-avatares/mis-familias-avatares.component';
+
+// tslint:disable-next-line:max-line-length
+import { MostrarAvatarAlumnoComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/mostrar-avatar-alumno/mostrar-avatar-alumno.component';
+
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/informacion-juego-avatar/informacion-juego-avatar.component';
 
 const routes: Routes = [
 
@@ -143,8 +157,8 @@ const routes: Routes = [
   { path: 'grupo/:id', component: GrupoComponent },
   { path: 'grupo/:id/editarGrupo', component: EditarGrupoComponent },
 
-  // GRUPOS --> PASAR LISTA
-  { path: 'grupo/:id/pasarLista', component: PasarListaComponent },
+  // GRUPOS --> SESIONES CLASE
+  { path: 'grupo/:id/sesionesClase', component: SesionesClaseComponent },
 
   // GRUPOS --> EQUIPOS
   { path: 'grupo/:id/equiposGrupo', component: EquiposComponent },
@@ -227,7 +241,13 @@ const routes: Routes = [
   // CUESTIONARIOS
   { path: 'inicio/:id/crearCuestionario', component: CrearCuestionarioComponent, canDeactivate: [DeactivateGuardCrearCuestionario] },
   { path: 'inicio/:id/misCuestionarios', component: MisCuestionariosComponent},
-  { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent}
+  { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent},
+
+  // AVATARES
+  { path: 'inicio/:id/misFamiliasAvatares', component: MisFamiliasAvataresComponent},
+  { path: 'inicio/:id/crearFamiliaAvatares', component: CrearFamiliaAvataresComponent},
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/MostrarAvatarAlumno', component: MostrarAvatarAlumnoComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoAvatar', component: InformacionJuegoAvatarComponent },
 ];
 
 @NgModule({

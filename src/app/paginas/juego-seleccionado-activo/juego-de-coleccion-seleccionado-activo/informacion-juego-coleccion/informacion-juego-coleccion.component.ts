@@ -5,7 +5,6 @@ import { ResponseContentType, Http, Response } from '@angular/http';
 import { Cromo, Coleccion } from '../../../../clases/index';
 
 // Servicios
-import { ColeccionService } from '../../../../servicios/index';
 import { SesionService, PeticionesAPIService } from '../../../../servicios/index';
 import { Location } from '@angular/common';
 
@@ -36,7 +35,7 @@ export class InformacionJuegoColeccionComponent implements OnInit {
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
 
-  constructor(  private coleccionService: ColeccionService,
+  constructor(
                 private sesion: SesionService,
                 private peticionesAPI: PeticionesAPIService,
                 public location: Location,

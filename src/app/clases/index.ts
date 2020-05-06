@@ -42,3 +42,8 @@ export * from './PreguntaDelCuestionario';
 export * from './Cuestionario';
 export * from './clasesParaTablasJuegoDeCompeticion/InformacionPartidosLiga';
 export * from './clasesParaTablasJuegoDeCompeticionFormulaUno/TablaClasificacionJornada';
+export * from './SesionClase';
+export * from './AsistenciaClase';
+export * from './FamiliaAvatares';
+export * from './JuegoDeAvatar';
+export * from './AlumnoJuegoDeAvatar';
