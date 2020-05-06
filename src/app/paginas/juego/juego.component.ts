@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // Clases
 // tslint:disable-next-line:max-line-length
-import { Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno} from '../../clases/index';
+import { Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno, AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno, Cuestionario} from '../../clases/index';
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
@@ -19,6 +19,10 @@ import 'rxjs';
 
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import Swal from 'sweetalert2';
+import { AsignaCuestionarioComponent } from './asigna-cuestionario/asigna-cuestionario.component';
+import { JuegoDeCuestionario } from 'src/app/clases/JuegoDeCuestionario';
+import { AlumnoJuegoDeCuestionario } from 'src/app/clases/AlumnoJuegoDeCuestionario';
+import { Router } from '@angular/router';
 
 
 
@@ -61,9 +65,10 @@ export class JuegoComponent implements OnInit {
   myForm1: FormGroup;
   myForm2: FormGroup;
 
-  // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS E INACTIVOS DE LOS TRES TIPOS DE JUEGOS
+  // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS, INACTIVOS Y PREPARADOS
   juegosActivos: Juego[];
   juegosInactivos: Juego[];
+  juegosPreparados: Juego[];
 
 
   // tslint:disable-next-line:no-inferrable-types
@@ -78,7 +83,8 @@ export class JuegoComponent implements OnInit {
   seleccionTipoJuego: ChipColor[] = [
     {nombre: 'Juego De Puntos', color: 'primary'},
     {nombre: 'Juego De Colección', color: 'accent'},
-    {nombre: 'Juego De Competición', color: 'warn'}
+    {nombre: 'Juego De Competición', color: 'warn'},
+    {nombre: 'Juego De Cuestionario', color: 'primary'}
   ];
 
   // En el segundo paso mostraremos dos Chips con los dos modos de juego que podemos crear y su color
@@ -100,6 +106,26 @@ export class JuegoComponent implements OnInit {
   NumeroDeVueltasValueInd: number;
   NumeroDeVueltasValueEqu: number;
 
+  //Todo lo relacionado con juego de cuestionario
+  myFormPuntuacion: FormGroup;
+  PuntuacionCorrecta: number;
+  PuntuacionIncorrecta: number;
+  profesorId: number;
+  cuestionario: Cuestionario;
+  DisabledCuestionario: Boolean = true;
+  DisabledPuntuacion: Boolean = true;
+  DisabledPresentacion: Boolean =  true;
+  juegoDeCuestionarioId: number;
+
+  //Tipos de presentacion para el juego de cuestionario
+  seleccionModoPresentacion: string[] = ['Mismo orden para todos', 
+    'Preguntas desordenadas',
+    'Preguntas y respuestas desordenadas'];
+  ModoPresentacionFavorito: string;
+  myFormPresentacion: FormGroup;
+
+  //Recogemos el tipo de presentacion para el juego de cuestionario
+  tipoDePresentacion: string
   //
   tipoJuegoCompeticionSeleccionado: string;
 
@@ -139,12 +165,14 @@ export class JuegoComponent implements OnInit {
                private peticionesAPI: PeticionesAPIService,
                // tslint:disable-next-line:variable-name
                private _formBuilder: FormBuilder,
+               private router: Router
                ) { }
 
 
   ngOnInit() {
     this.grupo = this.sesion.DameGrupo();
     this.alumnosGrupo = this.sesion.DameAlumnosGrupo();
+    this.profesorId = this.sesion.DameProfesor().id;
     // La lista de equipos del grupo no esta en el servicio sesión. Asi que hay que
     // ir a buscarla
     this.peticionesAPI.DameEquiposDelGrupo(this.grupo.id)
@@ -182,6 +210,11 @@ export class JuegoComponent implements OnInit {
               this.juegosInactivos = listas.inactivos;
               console.log ('hay inactivos');
             }
+            if (listas.preparados[0] === undefined) {
+              this.juegosPreparados = undefined
+            } else {
+              this.juegosPreparados = listas.preparados;
+            }
 
     });
     console.log ('Ya he traido los juegos');
@@ -197,6 +230,15 @@ export class JuegoComponent implements OnInit {
     this.myForm2 = this._formBuilder.group({
       NombredelJuego: ['', Validators.required],
     });
+
+    this.myFormPuntuacion = this._formBuilder.group({
+      PuntuacionCorrecta: ['', Validators.required],
+      PuntuacionIncorrecta: ['', Validators.required]
+    })
+
+    this.myFormPresentacion = this._formBuilder.group({
+      ModoPresentacionFavorito: ['', Validators.required]
+    })
 
     this.TablaPuntuacion = [];
     this.TablaPuntuacion[0] = new TablaPuntosFormulaUno(1, 10);
@@ -738,6 +780,81 @@ export class JuegoComponent implements OnInit {
       this.isDisabledJornadas = false;
     }
   }
+
+  TipoDePuntuacionSeleccionado(tipo: ChipColor) {
+    this.tipoDePresentacion = tipo.nombre;
+    console.log(this.tipoDePresentacion);
+    /* this.isDisabled = false; */
+  }
+
+
+  AbrirDialogoAgregarCuestionario(): void {
+    const dialogRef = this.dialog.open(AsignaCuestionarioComponent, {
+      width: '70%',
+      height: '80%',
+      position: {
+        top: '0%'
+      },
+      //Pasamos los parametros necesarios
+      data: {
+        profesorId: this.profesorId
+      }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.cuestionario = this.sesion.DameCuestionario();
+      this.DisabledCuestionario = false;
+      console.log('CUESTIONARIO SELECCIONADO --->' + this.cuestionario.Titulo);
+    })
+  }
+
+  ActualizarBotonPasoPuntuacion() {
+    this.PuntuacionCorrecta = this.myFormPuntuacion.value.PuntuacionCorrecta;
+    this.PuntuacionIncorrecta = this.myFormPuntuacion.value.PuntuacionIncorrecta;
+    console.log('SUMAMOS: ' + this.PuntuacionCorrecta);
+    console.log('RESTAMOS: ' + this.PuntuacionIncorrecta);
+  }
+
+  //MIRO SI LAS CASILLAS DE LAS PUNTUACIONES ESTAN RELLENADAS
+  DisabledPuntos() {
+    if (this.myFormPuntuacion.value.PuntuacionCorrecta === '' || this.myFormPuntuacion.value.PuntuacionIncorrecta === ''){
+      this.DisabledPuntuacion = true;
+    } else {
+      this.DisabledPuntuacion = false;
+    }
+  }
+
+  ActualizarBotonPasoPresentacion() {
+    this.DisabledPresentacion = false;
+  }
+  ActualizarBotonPasoPresentacion2() {
+    console.log('AQUI PASAMOS LA ORDENACION ESCOGIDA: ' + this.ModoPresentacionFavorito);
+  }
+
+  CrearJuegoDeCuestionario() {
+    
+    let NombredelJuego: string;
+    NombredelJuego = this.myForm2.value.NombredelJuego;
+    console.log(new JuegoDeCuestionario (NombredelJuego, this.PuntuacionCorrecta, this.PuntuacionIncorrecta, this.ModoPresentacionFavorito,
+                  false, false, this.profesorId, this.cuestionario.id, this.grupo.id));
+    // tslint:disable-next-line:max-line-length
+    this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (NombredelJuego, this.PuntuacionCorrecta, this.PuntuacionIncorrecta, this.ModoPresentacionFavorito,
+      false, false, this.profesorId, this.cuestionario.id, this.grupo.id), this.grupo.id)
+    .subscribe(juegoCreado => {
+      this.juegoDeCuestionarioId = juegoCreado.id;
+      console.log(juegoCreado);
+      console.log('Juego creado correctamente');
+      this.AñadirAlumnosJuegoCuestionario();
+    });
+  }
+
+  AñadirAlumnosJuegoCuestionario(){
+    for (let i = 0; i < this.alumnosGrupo.length; i++) {
+      // tslint:disable-next-line:max-line-length
+      this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, this.juegoDeCuestionarioId, this.alumnosGrupo[i].id ))
+      .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
+      this.router.navigate(['/grupo/' + this.grupo.id]);
+  }
+}
 
   NumeroDeVueltas() {
 

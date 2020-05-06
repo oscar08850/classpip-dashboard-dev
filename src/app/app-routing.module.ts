@@ -87,6 +87,7 @@ import { MisPreguntasComponent } from './paginas/mis-preguntas/mis-preguntas.com
 import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuestionarios.component';
 import { DeactivateGuardCrearCuestionario } from './guardas/canExitCrearCuestionario.guard';
 import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
+import { JuegoSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-seleccionado-preparado.component';
 
 const routes: Routes = [
 
@@ -154,6 +155,7 @@ const routes: Routes = [
   { path: 'grupo/:id/juegos', component: JuegoComponent, canDeactivate: [DeactivateGuardCrearJuego] },
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo', component: JuegoSeleccionadoActivoComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo', component: JuegoSeleccionadoInactivoComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoPreparado', component: JuegoSeleccionadoPreparadoComponent},
 
   // GRUPOS --> JUEGOS --> JUEGO DE PUNTOS
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/asignarPuntos', component: AsignarPuntosComponent },
