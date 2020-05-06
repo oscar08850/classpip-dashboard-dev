@@ -834,11 +834,12 @@ export class JuegoComponent implements OnInit {
     
     let NombredelJuego: string;
     NombredelJuego = this.myForm2.value.NombredelJuego;
+    console.log('----------', this.cuestionario.id);
     console.log(new JuegoDeCuestionario (NombredelJuego, this.PuntuacionCorrecta, this.PuntuacionIncorrecta, this.ModoPresentacionFavorito,
                   false, false, this.profesorId, this.cuestionario.id, this.grupo.id));
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (NombredelJuego, this.PuntuacionCorrecta, this.PuntuacionIncorrecta, this.ModoPresentacionFavorito,
-      false, false, this.profesorId, this.cuestionario.id, this.grupo.id), this.grupo.id)
+      false, false, this.profesorId, this.grupo.id, this.cuestionario.id), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juegoDeCuestionarioId = juegoCreado.id;
       console.log(juegoCreado);
