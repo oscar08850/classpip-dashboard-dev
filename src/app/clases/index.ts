@@ -47,3 +47,6 @@ export * from './AsistenciaClase';
 export * from './FamiliaAvatares';
 export * from './JuegoDeAvatar';
 export * from './AlumnoJuegoDeAvatar';
+export * from './Cuestionario';
+export * from './AlumnoJuegoDeCuestionario';
+export * from './JuegoDeCuestionario';

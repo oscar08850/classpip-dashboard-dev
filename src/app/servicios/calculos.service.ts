@@ -406,7 +406,7 @@ export class CalculosService {
                 juegosInactivos.push(juegosCompeticion[i]);
               }
             }
-            //ahora toca los juegos de competicion de formula uno
+            // ahora toca los juegos de competicion de formula uno
             console.log ('vamos a por los juegos de competicion formula uno del grupo: ' + grupoID);
             this.peticionesAPI.DameJuegoDeCompeticionFormulaUnoGrupo(grupoID)
             .subscribe(juegosCompeticionFormulaUno => {
@@ -447,18 +447,18 @@ export class CalculosService {
               // tslint:disable-next-line:prefer-for-of
               for (let i = 0; i < juegosCuestionario.length; i++) {
                 if (juegosCuestionario[i].JuegoActivo === true) {
-                  juegosCuestionario[i].Tipo = "Juego De Cuestionario";
+                  juegosCuestionario[i].Tipo = 'Juego De Cuestionario';
                   juegosActivos.push(juegosCuestionario[i]);
                 } else if (juegosCuestionario[i].JuegoTerminado === false && juegosCuestionario[i].JuegoActivo === false){
-                  juegosCuestionario[i].Tipo = "Juego De Cuestionario";
+                  juegosCuestionario[i].Tipo = 'Juego De Cuestionario';
                   juegosPreparados.push(juegosCuestionario[i]);
                 } else if (juegosCuestionario[i].JuegoTerminado === true) {
-                  juegosCuestionario[i].Tipo = "Juego De Cuestionario";
+                  juegosCuestionario[i].Tipo = 'Juego De Cuestionario';
                   juegosInactivos.push(juegosCuestionario[i]);
                 }
               }
-            const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-            obs.next (resultado);
+              const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+              obs.next (resultado);
             // this.PreparaListas ();ç
               });
             });
@@ -1714,6 +1714,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any [] {
       if (preguntasDelCuestionario[0] !== undefined) {
 
         // Una vez recibo las preguntas del cuestionario, las voy borrando una a una
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < preguntasDelCuestionario.length; i++) {
           this.peticionesAPI.BorraPreguntaDelCuestionario(preguntasDelCuestionario[i].id)
           .subscribe(() => {
@@ -3290,7 +3291,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any [] {
 
     //////////////////////////////////////// JUEGO DE CUESTIONARIO ///////////////////////////////////
   public PrepararTablaRankingCuestionario(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCuestionario[],
-    alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeCuestionario[] {
+                                          alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeCuestionario[] {
     const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeCuestionario [] = [];
     // tslint:disable-next-line:prefer-for-oF
     for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
@@ -3325,6 +3326,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any [] {
       if (AlumnosDelJuego[0] !== undefined) {
 
         // Una vez recibo las inscripciones, las voy borrando una a una
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < AlumnosDelJuego.length; i++) {
           this.peticionesAPI.BorraAlumnoDelJuegoDeCuestionario(AlumnosDelJuego[i].id)
           .subscribe(() => {

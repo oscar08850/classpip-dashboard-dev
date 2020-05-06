@@ -991,7 +991,7 @@ export class PeticionesAPIService {
                                                       + '?filter[where][juegoDeCuestionarioId]=' + juegoDeCuestionarioId);
   }
   public ModificaJuegoDeCuestionario(JuegosDeCuestionario: JuegoDeCuestionario,
-    juegoDeCuestionarioId: number, grupoId: number): Observable<JuegoDeCuestionario> {
+                                     juegoDeCuestionarioId: number, grupoId: number): Observable<JuegoDeCuestionario> {
       return this.http.put<JuegoDeCuestionario>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCuestionario/' + juegoDeCuestionarioId,
       JuegosDeCuestionario);
   }
@@ -999,9 +999,10 @@ export class PeticionesAPIService {
     return this.http.delete<any>(this.APIUrlJuegoDeCuestionario + '/' + juegoDeCuestionarioId);
   }
   public DameAlumnosDelJuegoDeCuestionario(juegoDeCuestionarioId: number): Observable<AlumnoJuegoDeCuestionario[]> {
+    // tslint:disable-next-line:max-line-length
     return this.http.get<AlumnoJuegoDeCuestionario[]>(this.APIUrlAlumnoJuegoDeCuestionario + '?filter[where][juegoDeCuestionarioId]=' + juegoDeCuestionarioId);
   }
   public BorraAlumnoDelJuegoDeCuestionario(alumnoJuegoDeCuestionarioId: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlAlumnoJuegoDeCuestionario + '/' + alumnoJuegoDeCuestionarioId);
-  
+  }
 }
