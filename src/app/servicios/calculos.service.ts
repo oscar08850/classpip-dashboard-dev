@@ -433,33 +433,29 @@ export class CalculosService {
                     juegosInactivos.push(juegosAvatar[i]);
                   }
                 }
-                const resultado = { activos: juegosActivos, inactivos: juegosInactivos};
-                obs.next (resultado);
-              // this.PreparaListas ();
-
-            }
-              //Ahora recogemos los juegos de cuestionario
-              console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
-              this.peticionesAPI.DameJuegoDeCuestionario(grupoID)
-              .subscribe(juegosCuestionario => {
-              console.log('He recibido los juegos de competición formula uno');
-              console.log(juegosCuestionario);
-              // tslint:disable-next-line:prefer-for-of
-              for (let i = 0; i < juegosCuestionario.length; i++) {
-                if (juegosCuestionario[i].JuegoActivo === true) {
-                  juegosCuestionario[i].Tipo = 'Juego De Cuestionario';
-                  juegosActivos.push(juegosCuestionario[i]);
-                } else if (juegosCuestionario[i].JuegoTerminado === false && juegosCuestionario[i].JuegoActivo === false){
-                  juegosCuestionario[i].Tipo = 'Juego De Cuestionario';
-                  juegosPreparados.push(juegosCuestionario[i]);
-                } else if (juegosCuestionario[i].JuegoTerminado === true) {
-                  juegosCuestionario[i].Tipo = 'Juego De Cuestionario';
-                  juegosInactivos.push(juegosCuestionario[i]);
-                }
-              }
-              const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-              obs.next (resultado);
-            // this.PreparaListas ();ç
+                // Ahora recogemos los juegos de cuestionario
+                // console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
+                console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
+                this.peticionesAPI.DameJuegoDeCuestionario(grupoID)
+                .subscribe(juegosCuestionario => {
+                  console.log('He recibido los juegos de cuestionario');
+                  console.log(juegosCuestionario);
+                  // tslint:disable-next-line:prefer-for-of
+                  for (let i = 0; i < juegosCuestionario.length; i++) {
+                    if (juegosCuestionario[i].JuegoActivo === true) {
+                      juegosCuestionario[i].Tipo = 'Juego De Cuestionario';
+                      juegosActivos.push(juegosCuestionario[i]);
+                    } else if (juegosCuestionario[i].JuegoTerminado === false && juegosCuestionario[i].JuegoActivo === false) {
+                      juegosCuestionario[i].Tipo = 'Juego De Cuestionario';
+                      juegosPreparados.push(juegosCuestionario[i]);
+                    } else if (juegosCuestionario[i].JuegoTerminado === true) {
+                      juegosCuestionario[i].Tipo = 'Juego De Cuestionario';
+                      juegosInactivos.push(juegosCuestionario[i]);
+                    }
+                  }
+                  const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+                  obs.next (resultado);
+                });
               });
             });
           });
@@ -499,7 +495,7 @@ export class CalculosService {
 
       return (rankingJuegoDePuntos);
 
-  }
+    }
 
 
 

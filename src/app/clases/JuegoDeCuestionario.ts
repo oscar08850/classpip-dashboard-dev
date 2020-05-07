@@ -11,7 +11,8 @@ export class JuegoDeCuestionario {
     grupoId: number;
     cuestionarioId: number;
 
-    constructor(NombreJuego?: string, PuntuacionCorrecta?: number, PuntuacionIncorrecta?: number, Presentacion?: string, JuegoActivo?: boolean, JuegoTerminado?: boolean, profesorId?: number, grupoId?: number, cuestionarioId?: number){
+    // tslint:disable-next-line:max-line-length
+    constructor(NombreJuego?: string, PuntuacionCorrecta?: number, PuntuacionIncorrecta?: number, Presentacion?: string, JuegoActivo?: boolean, JuegoTerminado?: boolean, profesorId?: number, grupoId?: number, cuestionarioId?: number) {
         this.NombreJuego = NombreJuego;
         this.PuntuacionCorrecta = PuntuacionCorrecta;
         this.PuntuacionIncorrecta = PuntuacionIncorrecta;
