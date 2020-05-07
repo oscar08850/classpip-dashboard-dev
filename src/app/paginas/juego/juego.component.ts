@@ -123,7 +123,7 @@ export class JuegoComponent implements OnInit {
   juegoDeCuestionarioId: number;
 
   //Tipos de presentacion para el juego de cuestionario
-  seleccionModoPresentacion: string[] = ['Mismo orden para todos', 
+  seleccionModoPresentacion: string[] = ['Mismo orden para todos',
     'Preguntas desordenadas',
     'Preguntas y respuestas desordenadas'];
   ModoPresentacionFavorito: string;
@@ -198,6 +198,7 @@ export class JuegoComponent implements OnInit {
     this.calculos.DameListaJuegos(this.grupo.id)
     .subscribe ( listas => {
             console.log ('He recibido los juegos');
+            console.log (listas);
             this.juegosActivos = listas.activos;
             // Si la lista aun esta vacia la dejo como indefinida para que me
             // salga el mensaje de que aun no hay juegos
@@ -216,7 +217,7 @@ export class JuegoComponent implements OnInit {
               console.log ('hay inactivos');
             }
             if (listas.preparados[0] === undefined) {
-              this.juegosPreparados = undefined
+              this.juegosPreparados = undefined;
             } else {
               this.juegosPreparados = listas.preparados;
             }
@@ -871,7 +872,7 @@ export class JuegoComponent implements OnInit {
   }
 
   CrearJuegoDeCuestionario() {
-    
+
     let NombredelJuego: string;
     NombredelJuego = this.myForm2.value.NombredelJuego;
     console.log('----------', this.cuestionario.id);
@@ -888,12 +889,16 @@ export class JuegoComponent implements OnInit {
     });
   }
 
-  AñadirAlumnosJuegoCuestionario(){
+  AñadirAlumnosJuegoCuestionario() {
+    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.alumnosGrupo.length; i++) {
       // tslint:disable-next-line:max-line-length
       this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, this.juegoDeCuestionarioId, this.alumnosGrupo[i].id ))
       .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
-      this.router.navigate(['/grupo/' + this.grupo.id]);
+      // this.router.navigate(['/grupo/' + this.grupo.id]);
+      Swal.fire('Juego de cuestionrio creado con éxito');
+      this.location.back();
+      // this.goBack();
   }
 }
 
@@ -920,7 +925,7 @@ export class JuegoComponent implements OnInit {
 
 
 
-  FinalizarJuegoAvatar( ){
+  FinalizarJuegoAvatar( ) {
 
     const juego = new JuegoDeAvatar ( this.myForm2.value.NombredelJuego,
                                       this.tipoDeJuegoSeleccionado,

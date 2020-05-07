@@ -16,7 +16,7 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
 
   juegoSeleccionado: Juego;
 
-  //Propiedades del juego
+  // Propiedades del juego
   NombreJuego: string;
   PuntuacionCorrecta: number;
   PuntuacionIncorrecta: number;
@@ -27,7 +27,7 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
   profesorId: number;
 
   // Se usará para el selector de modo de asignación de ganadores
-  Presentaciones: string[] = ['Mismo orden para todos', 
+  Presentaciones: string[] = ['Mismo orden para todos',
   'Preguntas desordenadas',
   'Preguntas y respuestas desordenadas'
   ];
@@ -36,7 +36,8 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
 
   myForm: FormGroup;
 
-  //PARA SABER SI TENEMOS TODOS LOS CAMPOS RELLENADOS
+  // PARA SABER SI TENEMOS TODOS LOS CAMPOS RELLENADOS
+  // tslint:disable-next-line:ban-types
   isDisabled: Boolean = true;
 
   constructor(public dialog: MatDialog,
@@ -44,13 +45,13 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
               public location: Location,
               private peticionesAPI: PeticionesAPIService,
               public sesion: SesionService,
+              // tslint:disable-next-line:variable-name
               private _formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<InformacionJuegoDeCuestionarioDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
-    
     this.NombreJuego = this.juegoSeleccionado.NombreJuego;
     this.PuntuacionCorrecta = this.juegoSeleccionado.PuntuacionCorrecta;
     this.PuntuacionIncorrecta = this.juegoSeleccionado.PuntuacionIncorrecta;
@@ -68,30 +69,33 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
     });
 
     this.peticionesAPI.DameCuestionario(this.cuestionarioId)
-    .subscribe(res =>{
+    .subscribe(res => {
       this.TituloCuestionario = res.Titulo;
     });
   }
 
-  //COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN EL JUEGO
+  // COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN EL JUEGO
   GuardarCambios() {
     this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.NombreJuego, this.PuntuacionCorrecta,
       this.PuntuacionIncorrecta, this.Presentacion, this.JuegoActivo, this.JuegoTerminado,
       this.profesorId, this.juegoSeleccionado.grupoId, this.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
       .subscribe(() => {
         this.location.back();
-      })
+      });
 
   }
 
-  //Cuando pulsamos en el boton volver
+  // Cuando pulsamos en el boton volver
   goBack() {
     this.dialogRef.close();
   }
 
   Disabled() {
+    // tslint:disable-next-line:max-line-length
     if (this.myForm.value.NombreJuego === '' || this.myForm.value.PuntuacionCorrecta === '' || this.myForm.value.PuntuacionIncorrecta === '' ||
-    (this.myForm.value.Presentacion === this.juegoSeleccionado.Presentacion && this.myForm.value.NombreJuego === this.juegoSeleccionado.NombreJuego && 
+    // tslint:disable-next-line:max-line-length
+    (this.myForm.value.Presentacion === this.juegoSeleccionado.Presentacion && this.myForm.value.NombreJuego === this.juegoSeleccionado.NombreJuego &&
+      // tslint:disable-next-line:max-line-length
       this.myForm.value.PuntuacionCorrecta.toString() === this.juegoSeleccionado.PuntuacionCorrecta.toString() && this.myForm.value.PuntuacionIncorrecta.toString() === this.juegoSeleccionado.PuntuacionIncorrecta.toString())) {
       // Si alguno de los valores es igual a nada, entonces estará desactivado
       this.isDisabled = true;

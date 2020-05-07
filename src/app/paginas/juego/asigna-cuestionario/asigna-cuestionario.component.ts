@@ -13,7 +13,7 @@ import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmac
 })
 export class AsignaCuestionarioComponent implements OnInit {
 
-  //COLUMNAS DE LA TABLA DE LOS CUESTIONARIOS
+  // COLUMNAS DE LA TABLA DE LOS CUESTIONARIOS
   displayedColumnsMisCuestionarios: string[] = ['titulo', 'descripcion', ' '];
   dataSourceMisCuestionarios;
   misCuestionarios: Cuestionario[] = [];
@@ -33,19 +33,19 @@ export class AsignaCuestionarioComponent implements OnInit {
     this.DameTodosMisCuestionarios();
   }
 
-  DameTodosMisCuestionarios(){
+  DameTodosMisCuestionarios() {
     this.peticionesAPI.DameTodosMisCuestionarios(this.profesorId)
     .subscribe ( res => {
       if (res[0] !== undefined) {
         this.misCuestionarios = res;
         this.dataSourceMisCuestionarios = new MatTableDataSource(this.misCuestionarios);
-      }else{
+      } else {
         Swal.fire('Alerta', 'Aun no tiene ningun cuestionario', 'warning');
       }
     });
   }
 
-  applyFilter(filterValue: string){
+  applyFilter(filterValue: string) {
     this.dataSourceMisCuestionarios.filter = filterValue.trim().toLowerCase();
   }
 
@@ -57,9 +57,9 @@ export class AsignaCuestionarioComponent implements OnInit {
         titulo: cuestionario.Titulo,
       }
     });
-    dialogRef.afterClosed().subscribe((confirmed:boolean) => {
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       this.sesion.TomaCuestionario(cuestionario);
-      this.dialogRef.close();      
+      this.dialogRef.close();
     });
   }
 

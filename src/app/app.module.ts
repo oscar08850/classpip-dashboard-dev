@@ -156,6 +156,7 @@ import { JuegoDeCuestionarioSeleccionadoInactivoComponent } from './paginas/jueg
 import { JuegoDeCuestionarioSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/juego-de-cuestionario-seleccionado-activo.component';
 import { InformacionJuegoDeCuestionarioDialogComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/informacion-juego-de-cuestionario-dialog/informacion-juego-de-cuestionario-dialog.component';
 import { JuegoSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-seleccionado-preparado.component';
+// tslint:disable-next-line:max-line-length
 import { JuegoDeCuestionarioSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-de-cuestionario-seleccionado-preparado/juego-de-cuestionario-seleccionado-preparado.component';
 
 // para el uso de graficos
@@ -312,7 +313,7 @@ import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-ac
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
-    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AsignaCuestionarioComponent, 
+    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AsignaCuestionarioComponent,
     InformacionJuegoDeCuestionarioDialogComponent],
   bootstrap: [AppComponent],
   providers: [

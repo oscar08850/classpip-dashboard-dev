@@ -8,6 +8,7 @@ import { JuegoDeCuestionario } from 'src/app/clases/JuegoDeCuestionario';
 import Swal from 'sweetalert2';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import { TablaAlumnoJuegoDeCuestionario } from 'src/app/clases/TablaAlumnoJuegoDeCuestionario';
+// tslint:disable-next-line:max-line-length
 import { InformacionJuegoDeCuestionarioDialogComponent } from '../../juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/informacion-juego-de-cuestionario-dialog/informacion-juego-de-cuestionario-dialog.component';
 
 @Component({
@@ -17,19 +18,20 @@ import { InformacionJuegoDeCuestionarioDialogComponent } from '../../juego-selec
 })
 export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit {
 
-  //Juego de Cuestionario saleccionado
+  // Juego de Cuestionario saleccionado
   juegoSeleccionado: Juego;
 
-  //Recuperamos la informacion del juego
+  // Recuperamos la informacion del juego
   alumnosDelJuego: Alumno[];
-  
-  //Lista de los alumnos ordenada segun su nota
+
+  // Lista de los alumnos ordenada segun su nota
   listaAlumnosOrdenadaPorNota: AlumnoJuegoDeCuestionario[];
   rankingAlumnosPorNota: TablaAlumnoJuegoDeCuestionario[];
 
+  // tslint:disable-next-line:no-inferrable-types
   mensajeEliminar: string = 'Estas segura/o de que quieres eliminar: ';
 
-  //Orden conlumnas de la tabla
+  // Orden conlumnas de la tabla
   displayedColumnsAlumnos: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'nota'];
 
   dataSourceAlumno;
@@ -45,7 +47,7 @@ export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit 
     this.AlumnosDelJuego();
   }
 
-  AlumnosDelJuego(){
+  AlumnosDelJuego() {
     this.peticionesAPI.DameAlumnosJuegoDeCuestionario(this.juegoSeleccionado.id)
     .subscribe(alumnosJuego => {
       this.alumnosDelJuego = alumnosJuego;
@@ -53,30 +55,30 @@ export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit 
     });
   }
 
-  RecuperarInscripcionesAlumnoJuego(){
+  RecuperarInscripcionesAlumnoJuego() {
     this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionario(this.juegoSeleccionado.id)
     .subscribe(inscripciones => {
       this.listaAlumnosOrdenadaPorNota = inscripciones;
-      this.listaAlumnosOrdenadaPorNota = this.listaAlumnosOrdenadaPorNota.sort(function(a, b){
+      // tslint:disable-next-line:only-arrow-functions
+      this.listaAlumnosOrdenadaPorNota = this.listaAlumnosOrdenadaPorNota.sort(function(a, b) {
         return b.Nota - a.Nota;
       });
       this.TablaClasificacionTotal();
     });
   }
 
-  TablaClasificacionTotal(){
+  TablaClasificacionTotal() {
     this.rankingAlumnosPorNota = this.calculos.PrepararTablaRankingCuestionario(this.listaAlumnosOrdenadaPorNota,
       this.alumnosDelJuego);
-    
-    this.dataSourceAlumno = new MatTableDataSource(this.rankingAlumnosPorNota)
+    this.dataSourceAlumno = new MatTableDataSource(this.rankingAlumnosPorNota);
   }
 
 
-  EliminarJuego(){
+  EliminarJuego() {
     this.calculos.EliminarJuegoDeCuestionario()
       .subscribe(() => {
         this.location.back();
-      })
+      });
   }
 
   AbrirDialogoConfirmacionEliminar(): void {
@@ -107,7 +109,7 @@ export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit 
     });
   }
 
-  applyFilter(filterValue: string){
+  applyFilter(filterValue: string) {
     this.dataSourceAlumno.filter = filterValue.trim().toLowerCase();
   }
 
