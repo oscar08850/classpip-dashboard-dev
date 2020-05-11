@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { FamiliaAvatares } from 'src/app/clases';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 import { SesionService, PeticionesAPIService, CalculosService } from '../../servicios/index';
 
@@ -50,17 +51,18 @@ export class CrearFamiliaAvataresComponent implements OnInit {
   imagen;
   file;
 
-  dobleancho: string;
-  doblealto: string;
-  ancho: string;
-  alto: string;
+  dobleancho: '300';
+  doblealto: '324';
+  ancho = '150';
+  alto = '162';
 
 
   constructor(
     private formBuilder: FormBuilder,
     private peticionesAPI: PeticionesAPIService,
     private sesion: SesionService,
-    private location: Location
+    private location: Location,
+    private http: HttpClient
   ) { }
 
   ngOnInit() {
@@ -155,30 +157,11 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsDataURL(this.fileSilueta);
     reader.onload = () => {
-
-      // lo que se hace a continuación es para obtener el ancho y alto de la imagen
-      // de la silueta
-      const imagen = new Image();
-      imagen.src = reader.result.toString();
-      imagen.onload = () => {
-        // Necesitaré el ancho y alto y el doble del ancho y del alto
-        this.ancho = imagen.width.toString();
-        this.alto = imagen.height.toString();
-        this.dobleancho = (imagen.width * 2).toString();
-        this.doblealto = (imagen.height * 2).toString();
-      };
       this.imagenSiluetaCargada = true;
       this.imagenSilueta = reader.result.toString();
 
     };
 }
-
-  // Cuando se carge la imagen se activará esta función para hacer que esa imagen
-  // se muestre en tamaño grande
-  PonDoble(img) {
-        img.setAttribute ('width', this.dobleancho);
-        img.setAttribute ('height', this.doblealto );
-  }
 
 
   CargarImagenComplemento(n, $event) {
@@ -191,6 +174,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       const reader = new FileReader();
       reader.readAsDataURL(this.file);
       reader.onload = () => {
+        console.log ('tengo complemento');
         this.imagenComplemento[n] = (reader.result.toString());
         this.MostrarComplemento(n);
       };
@@ -215,6 +199,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
 
 
   MostrarComplemento(n) {
+      console.log ('voy a mostrar complemento ' + (n + 1));
       // Coloco una nueva opcion para el complemento (n+1)
 
       this.imagen = document.createElement('img'); // creo una imagen
@@ -227,8 +212,8 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       this.imagen.style.position = 'absolute';
       this.imagen.style.zIndex = '1';
       // al coloar la imagen sobre la silueta debe verse con tamaño doble
-      this.imagen.width = this.dobleancho;
-      this.imagen.height = this.doblealto;
+      this.imagen.width = '300';
+      this.imagen.height = '324';
 
       // Coloco el nombre del fichero en el que está la imagen
       this.imagen.src =  this.imagenComplemento[n];
@@ -259,8 +244,8 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     this.imagen.style.position = 'relative';
 
     // La mostraremos con tamaño normal
-    this.imagen.width = this.ancho;
-    this.imagen.height = this.alto;
+    this.imagen.width = '150';
+    this.imagen.height = '162';
     if (n === 0) {
       document.getElementById('complementos1').appendChild(this.imagen);
       this.familiaAvatares.Complemento1.push (this.file.name);
@@ -366,6 +351,9 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     this.muestraSeleccionarComplemento3 = false;
     this.muestraSeleccionarComplemento4 = false;
   }
+
+
+
 
 }
 

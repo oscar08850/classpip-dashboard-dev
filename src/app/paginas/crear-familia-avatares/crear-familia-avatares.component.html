@@ -28,7 +28,7 @@
           <div>
               <input #file id = "inputSilueta" type="file" accept= 'image/*' (change)="CargarImagenSilueta($event)" style="display:none">
               <!-- Cuando se cargue la imagen se activara la función que hara que si visualice con tamaño doble -->
-              <img #img *ngIf="imagenSilueta"  [src]="imagenSilueta" (load)="PonDoble(img)" style="margin: 5px; ">
+              <img #img *ngIf="imagenSilueta"  [src]="imagenSilueta" width= '300' heigth = '324' style="margin: 5px; ">
               <button (click) = "ActivarInputSilueta()" type="button" class="btn Agregar">
                 Selecciona silueta<i class="material-icons">add_photo_alternate</i>
               </button>
@@ -75,7 +75,7 @@
                   </div>
                   <div id="muestracomplemento1" style = "position: relative;">
                     <!-- La imagen debe verse con tamaño doble -->
-                    <img  #siluetaComplementos1 [src]="imagenSilueta" (load)="PonDoble(siluetaComplementos1)">
+                    <img  #siluetaComplementos1 [src]="imagenSilueta" width= '300' heigth = '324'>
                   </div>
               </div>
               <div  class = "enColumna" style = "width: 80%">
@@ -126,7 +126,7 @@
                   </div>
 
                   <div id="muestracomplemento2" style = "position: relative;">
-                    <img  #siluetaComplementos2 [src]="imagenSilueta" (load)="PonDoble(siluetaComplementos2)">
+                    <img  #siluetaComplementos2 [src]="imagenSilueta" width= '300' heigth = '324'>
                   </div>
               </div>
               <div  class = "enColumna" style = "width: 80%">
@@ -176,7 +176,7 @@
                       Rechaza </button>
                   </div>
                   <div id="muestracomplemento3" style = "position: relative;">
-                    <img  #siluetaComplementos3 [src]="imagenSilueta" (load)="PonDoble(siluetaComplementos3)">
+                    <img  #siluetaComplementos3 [src]="imagenSilueta" width= '300' heigth = '324'>
                   </div>
               </div>
               <div  class = "enColumna" style = "width: 80%">
@@ -226,7 +226,7 @@
                       Rechaza </button>
                   </div>
                   <div id="muestracomplemento4" style = "position: relative;">
-                    <img  #siluetaComplementos4 [src]="imagenSilueta" (load)="PonDoble(siluetaComplementos4)">
+                    <img  #siluetaComplementos4 [src]="imagenSilueta" width= '300' heigth = '324'>
                   </div>
               </div>
               <div  class = "enColumna" style = "width: 80%">

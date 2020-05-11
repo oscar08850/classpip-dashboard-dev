@@ -54,7 +54,8 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   JornadasCompeticion: TablaJornadas[] = [];
   // enfrentamientosDelJuego: EnfrentamientoLiga[] = [];
   enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>;
-  juegosActivosPuntos: Juego[] = [];
+  juegosPuntos: Juego[] = [];
+  juegosCuestionariosTerminados: Juego[] = [];
 
   constructor(  public dialog: MatDialog,
                 public sesion: SesionService,
@@ -66,7 +67,8 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     this.juegoSeleccionado = this.sesion.DameJuego();
     console.log(this.juegoSeleccionado);
     this.DameJornadasDelJuegoDeCompeticionSeleccionado();
-    this.DameJuegosdePuntosActivos();
+    this.DameJuegosDePuntos();
+    this.DameJuegosDeCuestionariosAcabados();
   }
 
 
@@ -309,24 +311,39 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposJuegoDeCompeticion);
     this.sesion.TomaInscripcionAlumno(this.listaAlumnosOrdenadaPorPuntos);
     this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
-    this.sesion.TomaJuegosDePuntos(this.juegosActivosPuntos);
+    this.sesion.TomaJuegosDePuntos(this.juegosPuntos);
+    this.sesion.TomaJuegosDeCuestionario (this.juegosCuestionariosTerminados);
   }
 
-  DameJuegosdePuntosActivos() {
+
+  DameJuegosDePuntos() {
     this.peticionesAPI.DameJuegoDePuntosGrupo(this.juegoSeleccionado.grupoId)
     .subscribe(juegosPuntos => {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < juegosPuntos.length; i++) {
-        if (juegosPuntos[i].JuegoActivo === true) {
-          this.juegosActivosPuntos.push(juegosPuntos[i]);
-        }
+          this.juegosPuntos.push(juegosPuntos[i]);
       }
     });
-    console.log('Juegos disponibles');
-    console.log(this.juegosActivosPuntos);
-    return this.juegosActivosPuntos;
 
   }
+
+  DameJuegosDeCuestionariosAcabados() {
+    console.log ('vamos a por los juegos de cuestionarios del grupo ' + this.juegoSeleccionado.grupoId);
+    this.peticionesAPI.DameJuegoDeCuestionario(this.juegoSeleccionado.grupoId)
+    .subscribe(juegosCuestionarios => {
+      console.log ('Ya tengo los juegos cuestionarios');
+      console.log (juegosCuestionarios);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegosCuestionarios.length; i++) {
+        if (juegosCuestionarios[i].JuegoTerminado === true) {
+          this.juegosCuestionariosTerminados.push(juegosCuestionarios[i]);
+        }
+      }
+      console.log('Juegos de cuestionario disponibles');
+      console.log(this.juegosCuestionariosTerminados);
+    });
+  }
+
 
   // const jornadaFinalizada = this.calculos.JornadaFinalizada(this.juegoSeleccionado, jornadaSeleccionada);
 // La uso para señalar en la clasificacion general al ganador cuando la competición ha finalizado

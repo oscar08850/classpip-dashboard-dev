@@ -48,7 +48,8 @@ export class SesionService {
   TablaAlumnoJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion[];
   TablaEquipoJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion[];
   TablaeditarPuntos: TablaPuntosFormulaUno[];
-  JuegosDePuntosActivos: Juego[];
+  JuegosDePuntos: Juego[];
+  JuegosDeCuestionariosAcabados: Juego[];
   // listaEquiposGrupo: any;
 
   pregunta: Pregunta;
@@ -100,7 +101,7 @@ export class SesionService {
   public  DameJuegoAvatar(): JuegoDeAvatar {
     return this.juegoAvatar;
   }
-  public TomaAlumnoJuegoAvatar (alumnoJuegoAvatar: AlumnoJuegoDeAvatar) {
+  public TomaAlumnoJuegoAvatar(alumnoJuegoAvatar: AlumnoJuegoDeAvatar) {
     this.inscripcionAlumnoJuegoAvatar = alumnoJuegoAvatar;
   }
   public DameAlumnoJuegoAvatar(): AlumnoJuegoDeAvatar {
@@ -375,7 +376,7 @@ public DameListaCuestionarios(): any {
   return this.listaCuestionarios;
 }
 
-public TomaListaCuestionarios(listaCuestionarios: any){
+public TomaListaCuestionarios(listaCuestionarios: any) {
   this.listaCuestionarios = listaCuestionarios;
 }
 
@@ -416,13 +417,23 @@ public DameTablaEquipoJuegoDeCompeticion(): TablaEquipoJuegoDeCompeticion[] {
   return Tabla;
 }
 
-public TomaJuegosDePuntos(juegosActivos: Juego[]) {
-  this.JuegosDePuntosActivos = juegosActivos;
+public TomaJuegosDePuntos(juegosPuntos: Juego[]) {
+  this.JuegosDePuntos = juegosPuntos;
 }
-public DameJuegosDePuntosActivos(): Juego[] {
-  const juegosActivosPuntos = this.JuegosDePuntosActivos ;
-  return juegosActivosPuntos;
+public DameJuegosDePuntos(): Juego[] {
+  return this.JuegosDePuntos;
 }
+
+ public TomaJuegosDeCuestionario(juegosCuestionarios: Juego[]) {
+   console.log ('guardo juegos cuestionarios acabados');
+   console.log (juegosCuestionarios);
+   this.JuegosDeCuestionariosAcabados = juegosCuestionarios;
+ }
+
+ public DameJuegosDeCuestionariosAcabados(): Juego[] {
+  return this.JuegosDeCuestionariosAcabados;
+}
+
 public TomaTablaeditarPuntos( TablaeditarPuntos: TablaPuntosFormulaUno[]) {
   this.TablaeditarPuntos = TablaeditarPuntos;
 }
