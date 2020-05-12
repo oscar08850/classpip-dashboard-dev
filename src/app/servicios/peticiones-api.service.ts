@@ -938,8 +938,8 @@ export class PeticionesAPIService {
   public ModificaJuegoDeAvatar(juego: Juego): Observable<Juego> {
     return this.http.put<Juego>(this.APIUrlJuegoDeAvatar + '/' + juego.id, juego);
   }
-  public DameJuegoDeAvatarGrupo(grupoId: number): Observable<JuegoDeAvatar[]> {
-    return this.http.get<JuegoDeAvatar[]>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeAvatars');
+  public DameJuegoDeAvatarGrupo(grupoId: number): Observable<Juego[]> {
+    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeAvatars');
   }
 
   //////////////////////////////// GESTION DE ALUMNOS EN JUEGO DE AVATAR //////////////
