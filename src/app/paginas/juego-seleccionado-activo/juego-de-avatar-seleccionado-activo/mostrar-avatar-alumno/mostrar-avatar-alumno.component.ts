@@ -18,8 +18,8 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
   complemento2: string;
   complemento3: string;
   complemento4: string;
-  anchogrande: string;
-  altogrande: string;
+  anchogrande: '450px';
+  altogrande: '486px';
 
   constructor(
     private location: Location,
@@ -42,19 +42,10 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
           // lo que se hace a continuación es para obtener el ancho y alto de la imagen
         // de la silueta
 
-        const imgSilueta = new Image();
-        imgSilueta.src = readerSilueta.result.toString();
-        imgSilueta.onload = () => {
-          // Necesitaré la imagen a tamaño grande
-          this.anchogrande = (imgSilueta.width * 3).toString();
-          this.altogrande = (imgSilueta.height * 3).toString();
-          // Ahora coloco la imagen en su sitio
-          // Esto provocará que se ejecute la función Ajusta, en la que ajustamos el tamaño
-          // con el que se mostrará la imagen
-          this.imagenSilueta = readerSilueta.result.toString();
+        this.imagenSilueta = readerSilueta.result.toString();
 
           // Y ahora vamos apor los complementos
-          this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento1)
+        this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento1)
           .subscribe(response => {
             const blob = new Blob([response.blob()], { type: 'image/jpg'});
             const reader = new FileReader();
@@ -67,7 +58,7 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
               reader.readAsDataURL(blob);
             }
           });
-          this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento2)
+        this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento2)
           .subscribe(response => {
             const blob = new Blob([response.blob()], { type: 'image/jpg'});
             const reader = new FileReader();
@@ -79,7 +70,7 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
               reader.readAsDataURL(blob);
             }
           });
-          this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento3)
+        this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento3)
           .subscribe(response => {
             const blob = new Blob([response.blob()], { type: 'image/jpg'});
             const reader = new FileReader();
@@ -91,7 +82,7 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
               reader.readAsDataURL(blob);
             }
           });
-          this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento4)
+        this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento4)
           .subscribe(response => {
             const blob = new Blob([response.blob()], { type: 'image/jpg'});
             const reader = new FileReader();
@@ -103,7 +94,6 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
               reader.readAsDataURL(blob);
             }
           });
-        };
       }, false);
 
       if (blobSilueta) {
@@ -117,19 +107,21 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
     imagen.style.top = '0px';
     imagen.style.position = 'absolute';
     imagen.style.zIndex = '1';
-    // muestro la imagen grande
-    imagen.setAttribute ('width', this.anchogrande);
-    imagen.setAttribute ('height', this.altogrande );
+    imagen.style.width = '450px';
+    imagen.style.height = '486px';
+    // // muestro la imagen grande
+    // imagen.setAttribute ('width', this.anchogrande);
+    // imagen.setAttribute ('height', this.altogrande );
     // Coloco el nombre del fichero en el que está la imagen
     imagen.src =  imagenString;
     return imagen;
   }
 
-  // Esta función se ejecuta en cuanto se pone la imagen de la silueta en su sitio
-  Ajusta(img) {
-    img.setAttribute ('width', this.anchogrande);
-    img.setAttribute ('height', this.altogrande );
-  }
+  // // Esta función se ejecuta en cuanto se pone la imagen de la silueta en su sitio
+  // Ajusta(img) {
+  //   img.setAttribute ('width', this.anchogrande);
+  //   img.setAttribute ('height', this.altogrande );
+  // }
 
   goBack() {
     this.location.back();

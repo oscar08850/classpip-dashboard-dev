@@ -21,10 +21,7 @@ export class InformacionJuegoAvatarComponent implements OnInit {
   familiaElegida;
   imagenSilueta;
   imagenComp1;
-  dobleancho;
-  doblealto;
-  ancho;
-  alto;
+
   familiaCargada = false;
   criterioCambiado = false;
 
@@ -76,18 +73,7 @@ export class InformacionJuegoAvatarComponent implements OnInit {
           const reader = new FileReader();
           reader.addEventListener('load', () => {
             this.imagenSilueta = reader.result.toString();
-            // Lo siguiente es para conseguir el tamaño de la silueta
-            const imagen = new Image();
-            imagen.src = reader.result.toString();
-            console.log ('ya he cargado la silueta');
-            imagen.onload = () => {
-              this.ancho = imagen.width.toString();
-              this.alto = imagen.height.toString();
-              this.dobleancho = (imagen.width * 2).toString();
-              this.doblealto = (imagen.height * 2).toString();
-              this.TraerImagenesComplementos();
-
-          };
+            this.TraerImagenesComplementos();
           }, false);
           if (blob) {
             reader.readAsDataURL(blob);
@@ -163,10 +149,6 @@ export class InformacionJuegoAvatarComponent implements OnInit {
     this.familiaCargada = true;
   }
 
-  PonDoble(img) {
-    img.setAttribute ('width', this.dobleancho);
-    img.setAttribute ('height', this.doblealto );
-  }
 
   goBack() {
     if (this.criterioCambiado) {

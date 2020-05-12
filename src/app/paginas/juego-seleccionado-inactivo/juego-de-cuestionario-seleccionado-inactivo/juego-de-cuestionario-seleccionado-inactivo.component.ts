@@ -83,20 +83,35 @@ export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit 
 
   AbrirDialogoConfirmacionEliminar(): void {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensajeEliminar,
-        nombre: this.juegoSeleccionado.Tipo,
+    Swal.fire({
+      title: 'Confirma que quieres eliminar el juego <b>' + this.juegoSeleccionado.NombreJuego + '</b>',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+    }).then((result) => {
+      if (result.value) {
+        this.EliminarJuego();
+        Swal.fire('Juego eliminado correctamente', ' ', 'success');
       }
     });
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.EliminarJuego();
-        Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
-      }
-    });
+
+
+
+
+    // const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+    //   height: '150px',
+    //   data: {
+    //     mensaje: this.mensajeEliminar,
+    //     nombre: this.juegoSeleccionado.Tipo,
+    //   }
+    // });
+
+    // dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    //   if (confirmed) {
+    //     this.EliminarJuego();
+    //     Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
+    //   }
+    // });
   }
 
   AbrirDialogoInformacionJuego(): void {
