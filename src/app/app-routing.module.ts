@@ -80,7 +80,7 @@ import { DeactivateGuardCrearGrupo } from './guardas/canExitCrearGrupo.guard';
 import { DeactivateGuardCrearColeccion } from './guardas/canExitCrearColeccion.guard';
 import { DeactivateGuardCrearJuego } from './guardas/canExitCrearJuego.guard';
 
-//Importamos componentes modulo cuestionario
+// Importamos componentes modulo cuestionario
 import { PreguntaComponent } from './paginas/pregunta/pregunta.component';
 import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-cuestionario.component';
 import { MisPreguntasComponent } from './paginas/mis-preguntas/mis-preguntas.component';
@@ -249,10 +249,10 @@ const routes: Routes = [
   { path: 'inicio/:id/misCuestionarios', component: MisCuestionariosComponent},
   { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent},
 
-  //escenarios
+  // escenarios
   { path: 'inicio/:id/crearEscenario', component: CrearEscenarioComponent, canDeactivate: [DeactivateGuardCrearEscenario] },
   { path: 'inicio/:id/misEscenarios', component: MisEscenariosComponent },
-  { path: 'inicio/:id/misEscenarios/editarEscenario', component: EditarEscenarioComponent }
+  { path: 'inicio/:id/misEscenarios/editarEscenario', component: EditarEscenarioComponent },
 
   // AVATARES
   { path: 'inicio/:id/misFamiliasAvatares', component: MisFamiliasAvataresComponent},
@@ -263,7 +263,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego, DeactivateGuardCrearCuestionario,DeactivateGuardCrearEscenario],
+  // tslint:disable-next-line:max-line-length
+  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego, DeactivateGuardCrearCuestionario, DeactivateGuardCrearEscenario],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

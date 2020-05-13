@@ -36,9 +36,10 @@ export class EditarPuntoGeolocalizableDialogComponent implements OnInit {
   longitudPuntoGeolocalizable: string;
   pistafacilPuntoGeolocalizable: string;
   pistadificilPuntoGeolocalizable: string;
-  
 
 
+
+  // tslint:disable-next-line:ban-types
   cambios: Boolean = false;
 
 
@@ -68,11 +69,12 @@ export class EditarPuntoGeolocalizableDialogComponent implements OnInit {
 
   EditarPuntoGeolocalizable() {
 
+    // tslint:disable-next-line:max-line-length
     this.peticionesAPI.ModificaPuntoGeolocalizableEscenario(new PuntoGeolocalizable(this.nombrePuntoGeolocalizable, this.latitudPuntoGeolocalizable, this.longitudPuntoGeolocalizable, this.pistafacilPuntoGeolocalizable, this.pistadificilPuntoGeolocalizable), this.puntogeolocalizable.idescenario, this.puntogeolocalizable.id)
     .subscribe((res) => {
       if (res != null) {
         this.puntogeolocalizable = res;
-      } 
+      }
     });
 
     this.cambios = false;

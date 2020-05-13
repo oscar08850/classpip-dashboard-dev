@@ -86,7 +86,6 @@ export class JuegoComponent implements OnInit {
   seleccionTipoJuego: ChipColor[] = [
     {nombre: 'Juego De Puntos', color: 'primary'},
     {nombre: 'Juego De Colección', color: 'accent'},
-    {nombre: 'Juego De Competición', color: 'warn'}
     {nombre: 'Juego De Competición', color: 'warn'},
     {nombre: 'Juego De Avatar', color: 'primary'},
     {nombre: 'Juego De Cuestionario', color: 'accent'}
@@ -113,26 +112,29 @@ export class JuegoComponent implements OnInit {
   NumeroDeVueltasValueInd: number;
   NumeroDeVueltasValueEqu: number;
 
-  //Todo lo relacionado con juego de cuestionario
+  // Todo lo relacionado con juego de cuestionario
   myFormPuntuacion: FormGroup;
   PuntuacionCorrecta: number;
   PuntuacionIncorrecta: number;
   profesorId: number;
   cuestionario: Cuestionario;
+  // tslint:disable-next-line:ban-types
   DisabledCuestionario: Boolean = true;
+   // tslint:disable-next-line:ban-types
   DisabledPuntuacion: Boolean = true;
+   // tslint:disable-next-line:ban-types
   DisabledPresentacion: Boolean =  true;
   juegoDeCuestionarioId: number;
 
-  //Tipos de presentacion para el juego de cuestionario
+  // Tipos de presentacion para el juego de cuestionario
   seleccionModoPresentacion: string[] = ['Mismo orden para todos',
     'Preguntas desordenadas',
     'Preguntas y respuestas desordenadas'];
   ModoPresentacionFavorito: string;
   myFormPresentacion: FormGroup;
 
-  //Recogemos el tipo de presentacion para el juego de cuestionario
-  tipoDePresentacion: string
+  // Recogemos el tipo de presentacion para el juego de cuestionario
+  tipoDePresentacion: string;
   //
   tipoJuegoCompeticionSeleccionado: string;
 
@@ -467,21 +469,20 @@ export class JuegoComponent implements OnInit {
       this.CrearJuegoDeCompeticionFormulaUno();
     }
     Swal.fire('Creado', this.tipoDeJuegoSeleccionado + ' creado correctamente', 'success');
-    }
-    if (this.tipoDeJuegoSeleccionado !== 'Juego De Avatar') {
-      // El juego de avatar a no lo he creado
-      Swal.fire('Creado', this.tipoDeJuegoSeleccionado + ' creado correctamente', 'success');
-    }
+    // if (this.tipoDeJuegoSeleccionado !== 'Juego De Avatar') {
+    //   // El juego de avatar a no lo he creado
+    //   Swal.fire('Creado', this.tipoDeJuegoSeleccionado + ' creado correctamente', 'success');
+    // }
   }
 
-  TipoDeJuegoCompeticionSeleccionado(tipoCompeticion: ChipColor) {
+TipoDeJuegoCompeticionSeleccionado(tipoCompeticion: ChipColor) {
     this.tipoJuegoCompeticionSeleccionado = tipoCompeticion.nombre;
     console.log('El juego de competición será tipo: ' + tipoCompeticion.nombre);
     this.isDisabledTipoCompeticion = false;
   }
 
 
-  Finalizar() {
+Finalizar() {
     console.log ('Entro en finalizar');
     console.log (this.tipoDeJuegoSeleccionado);
     const datos = this.sesion.DameDatosJornadasJuegoComponent();
@@ -621,15 +622,15 @@ export class JuegoComponent implements OnInit {
   }
 
   // Recibo el nombre de la colección elegida en el componente hijo
-   RecibeNombre($event) {
+RecibeNombre($event) {
     this.nombreColeccionSeleccionada = $event;
   }
 
-  goBack() {
+goBack() {
     this.location.back();
   }
 
-  canExit(): Observable <boolean> {
+canExit(): Observable <boolean> {
     if (!this.juegoCreado || this.finalizar) {
       return of (true);
     } else {
@@ -662,7 +663,7 @@ export class JuegoComponent implements OnInit {
 
   // Funciones Para creacion de Competicion Formula Uno
   // Para averiguar si todas las filas están seleccionadas */
-  IsAllSelected() {
+IsAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
@@ -672,7 +673,7 @@ export class JuegoComponent implements OnInit {
     * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
     * desactivado, en cuyo caso se activan todos */
 
-  MasterToggle() {
+MasterToggle() {
     if (this.IsAllSelected()) {
       this.selection.clear(); // Desactivamos todos
     } else {
@@ -683,7 +684,7 @@ export class JuegoComponent implements OnInit {
   /* Esta función decide si el boton debe estar activo (si hay al menos
   una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
   /* En este caso para que esté activo también debe haber seleccionado el tipo de punto a asignar */
-  ActualizarBotonTabla() {
+ActualizarBotonTabla() {
     let NuevaPuntuacion: number;
     NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
     if ((this.selection.selected.length === 0) || ( NuevaPuntuacion === undefined)) {
@@ -693,7 +694,7 @@ export class JuegoComponent implements OnInit {
     }
   }
 
-  BotonDesactivado() {
+BotonDesactivado() {
     let NuevaPuntuacion: number;
     NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
 
@@ -709,7 +710,7 @@ export class JuegoComponent implements OnInit {
 
    /* Esta función decide si el boton debe estar activo (si hay al menos
   una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
-  ActualizarBoton() {
+ActualizarBoton() {
     if (this.selection.selected.length === 0) {
       this.isDisabled = true;
     } else {
@@ -717,7 +718,7 @@ export class JuegoComponent implements OnInit {
     }
   }
 
-  Disabled() {
+Disabled() {
 
       if (this.seleccionados.filter(res => res === true)[0] !== undefined) {
         console.log('Hay alguno seleccionado');
@@ -730,7 +731,7 @@ export class JuegoComponent implements OnInit {
 
     }
 
-  AnadirPuntos() {
+AnadirPuntos() {
  // Tengo que hacer un recorrido diferente del dataSource porque necesito saber el
     // valor de i
 
@@ -760,7 +761,7 @@ export class JuegoComponent implements OnInit {
     this.botonTablaDesactivado = true;
 
   }
-  AnadirJugadorconPuntos() {
+AnadirJugadorconPuntos() {
 
       let i: number;
       let NumeroParticipantes: number;
@@ -785,7 +786,7 @@ export class JuegoComponent implements OnInit {
 
   }
 
-  EliminarJugadorconPuntos() {
+EliminarJugadorconPuntos() {
 
       let i: number;
       i = this.Puntuacion.length;
@@ -804,7 +805,7 @@ export class JuegoComponent implements OnInit {
 
   }
 
-  ActualizarBotonPaso1() {
+ActualizarBotonPaso1() {
     let NombredelJuego: string;
     NombredelJuego = this.myForm2.value.NombredelJuego;
     if ( NombredelJuego === undefined) {
@@ -814,7 +815,7 @@ export class JuegoComponent implements OnInit {
     }
   }
 
-  ActualizarBotonPasoJornadas() {
+ActualizarBotonPasoJornadas() {
     let NumeroDeJornadas: number;
     NumeroDeJornadas = this.myForm.value.NumeroDeJornadas;
     console.log('Estoy en Actualizar boton');
@@ -826,21 +827,21 @@ export class JuegoComponent implements OnInit {
     }
   }
 
-  TipoDePuntuacionSeleccionado(tipo: ChipColor) {
+TipoDePuntuacionSeleccionado(tipo: ChipColor) {
     this.tipoDePresentacion = tipo.nombre;
     console.log(this.tipoDePresentacion);
     /* this.isDisabled = false; */
   }
 
 
-  AbrirDialogoAgregarCuestionario(): void {
+AbrirDialogoAgregarCuestionario(): void {
     const dialogRef = this.dialog.open(AsignaCuestionarioComponent, {
       width: '70%',
       height: '80%',
       position: {
         top: '0%'
       },
-      //Pasamos los parametros necesarios
+      // Pasamos los parametros necesarios
       data: {
         profesorId: this.profesorId
       }
@@ -852,15 +853,15 @@ export class JuegoComponent implements OnInit {
     })
   }
 
-  ActualizarBotonPasoPuntuacion() {
+ActualizarBotonPasoPuntuacion() {
     this.PuntuacionCorrecta = this.myFormPuntuacion.value.PuntuacionCorrecta;
     this.PuntuacionIncorrecta = this.myFormPuntuacion.value.PuntuacionIncorrecta;
     console.log('SUMAMOS: ' + this.PuntuacionCorrecta);
     console.log('RESTAMOS: ' + this.PuntuacionIncorrecta);
   }
 
-  //MIRO SI LAS CASILLAS DE LAS PUNTUACIONES ESTAN RELLENADAS
-  DisabledPuntos() {
+  // MIRO SI LAS CASILLAS DE LAS PUNTUACIONES ESTAN RELLENADAS
+DisabledPuntos() {
     if (this.myFormPuntuacion.value.PuntuacionCorrecta === '' || this.myFormPuntuacion.value.PuntuacionIncorrecta === ''){
       this.DisabledPuntuacion = true;
     } else {
@@ -868,14 +869,14 @@ export class JuegoComponent implements OnInit {
     }
   }
 
-  ActualizarBotonPasoPresentacion() {
+ActualizarBotonPasoPresentacion() {
     this.DisabledPresentacion = false;
   }
-  ActualizarBotonPasoPresentacion2() {
+ActualizarBotonPasoPresentacion2() {
     console.log('AQUI PASAMOS LA ORDENACION ESCOGIDA: ' + this.ModoPresentacionFavorito);
   }
 
-  CrearJuegoDeCuestionario() {
+CrearJuegoDeCuestionario() {
 
     let NombredelJuego: string;
     NombredelJuego = this.myForm2.value.NombredelJuego;
@@ -893,7 +894,7 @@ export class JuegoComponent implements OnInit {
     });
   }
 
-  AñadirAlumnosJuegoCuestionario() {
+AñadirAlumnosJuegoCuestionario() {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.alumnosGrupo.length; i++) {
       // tslint:disable-next-line:max-line-length
@@ -906,7 +907,7 @@ export class JuegoComponent implements OnInit {
   }
 }
 
-  NumeroDeVueltas() {
+NumeroDeVueltas() {
 
     if (this.alumnosGrupo.length % 2 === 0) {
       this.NumeroDeVueltasValueInd = this.alumnosGrupo.length - 1;
@@ -923,13 +924,13 @@ export class JuegoComponent implements OnInit {
     console.log(this.NumeroDeVueltasValueEqu);
   }
 
-  GuardarCriterio1() {
+GuardarCriterio1() {
     console.log (this.myFormPrivilegiosAvatar.value.criterioPrivilegioComplemento1);
   }
 
 
 
-  FinalizarJuegoAvatar( ) {
+FinalizarJuegoAvatar( ) {
 
     const juego = new JuegoDeAvatar ( this.myForm2.value.NombredelJuego,
                                       this.tipoDeJuegoSeleccionado,
@@ -966,7 +967,7 @@ export class JuegoComponent implements OnInit {
       }});
   }
 
-  GuardaFamiliasElegidas($event){
+GuardaFamiliasElegidas($event) {
     this.familiasElegidas = $event;
     console.log ('Ya tengo familias elegidas');
     console.log (this.familiasElegidas);
