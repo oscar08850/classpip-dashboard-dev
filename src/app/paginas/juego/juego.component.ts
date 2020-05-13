@@ -86,9 +86,11 @@ export class JuegoComponent implements OnInit {
   seleccionTipoJuego: ChipColor[] = [
     {nombre: 'Juego De Puntos', color: 'primary'},
     {nombre: 'Juego De Colección', color: 'accent'},
+    {nombre: 'Juego De Competición', color: 'warn'}
     {nombre: 'Juego De Competición', color: 'warn'},
     {nombre: 'Juego De Avatar', color: 'primary'},
     {nombre: 'Juego De Cuestionario', color: 'accent'}
+
 
   ];
 
@@ -463,6 +465,8 @@ export class JuegoComponent implements OnInit {
     } else if (this.tipoDeJuegoSeleccionado === 'Juego De Competición' && this.tipoJuegoCompeticionSeleccionado === 'Fórmula Uno') {
       console.log('Voy a crear juego de Competición Formula Uno');
       this.CrearJuegoDeCompeticionFormulaUno();
+    }
+    Swal.fire('Creado', this.tipoDeJuegoSeleccionado + ' creado correctamente', 'success');
     }
     if (this.tipoDeJuegoSeleccionado !== 'Juego De Avatar') {
       // El juego de avatar a no lo he creado

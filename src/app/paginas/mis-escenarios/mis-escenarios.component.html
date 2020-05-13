@@ -1,0 +1,38 @@
+<div class="titulo">Mis escenarios</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+    <mat-card class="panel">
+        <mat-card-content>
+    <form>
+        <!-- <mat-accordion *ngIf="escenariosProfesor;else #Aviso_no_escenarios"> -->
+            <mat-accordion *ngIf="escenariosProfesor; else Aviso_no_escenarios">
+
+            <mat-expansion-panel *ngFor="let escenario of escenariosProfesor" (click) = "DamePuntosGeolocalizablesDelEscenario(escenario)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{escenario.Mapa}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+                <div class="enFila" style = "width: 100%">
+                    <div class="enColumna">
+                        <button type="button" class="btn Editar" style="width: 180px; "routerLink= "editarEscenario" (click) = "GuardarEscenario(escenario)">Editar Escenario <i class="material-icons">
+                          edit </i>  </button>
+
+                        <button type="button" class="btn Eliminar" style="width: 180px; " (click) = "AbrirDialogoConfirmacionBorrarEscenario(escenario)">Eliminar Escenario <i class="material-icons">
+                          delete
+                          </i></button>
+
+                    </div>
+                </div>
+
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <ng-template #Aviso_no_escenarios>Todavía no hay escenarios creados.</ng-template>
+
+
+    </form>
+</mat-card-content>
+</mat-card>
+</div>

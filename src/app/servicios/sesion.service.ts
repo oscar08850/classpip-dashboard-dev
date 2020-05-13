@@ -3,6 +3,8 @@ import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insign
          // tslint:disable-next-line:max-line-length
          TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta, JuegoDeAvatar, AlumnoJuegoDeAvatar} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
+import { Escenario } from '../clases/Escenario';
+import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +57,10 @@ export class SesionService {
   pregunta: Pregunta;
   cuestionario: Cuestionario;
   listaCuestionarios: any;
+  escenario: Escenario;
+  puntogeolocalizable: PuntoGeolocalizable;
+  listaEscenarios: any;
+  puntosgeolocalizables: PuntoGeolocalizable[];
 
   inscripcionAlumnoJuegoAvatar: AlumnoJuegoDeAvatar;
 
@@ -379,6 +385,43 @@ public DameListaCuestionarios(): any {
 public TomaListaCuestionarios(listaCuestionarios: any) {
   this.listaCuestionarios = listaCuestionarios;
 }
+
+
+
+
+public TomaEscenario(escenario: Escenario) {
+  this.escenario = escenario;
+}
+
+public  DameEscenario(): Escenario {
+  return this.escenario;
+}
+
+public DamePuntoGeolocalizable(): PuntoGeolocalizable {
+  return this.puntogeolocalizable;
+}
+
+public TomaPuntoGeolocalizable(puntogeolocalizable: PuntoGeolocalizable) {
+  this.puntogeolocalizable = puntogeolocalizable;
+}
+
+public TomaPuntosGeolocalizables(puntosgeolocalizablesEscenario: PuntoGeolocalizable[]) {
+  this.puntosgeolocalizables = puntosgeolocalizablesEscenario;
+}
+public DamePuntosGeolocalizables(): PuntoGeolocalizable[] {
+  return this.puntosgeolocalizables;
+}
+
+
+public DameListaEscenarios(): any {
+  return this.listaEscenarios;
+}
+
+public TomaListaEscenarios(listaEscenarios: any){
+  this.listaEscenarios = listaEscenarios;
+}
+
+
 
 public TomaDatosJornadasJuegoComponent(
   jornadas: Jornada[],

@@ -162,6 +162,13 @@ import { JuegoDeCuestionarioSeleccionadoPreparadoComponent } from './paginas/jue
 // para el uso de graficos
 import { NgxEchartsModule } from 'ngx-echarts';
 
+
+import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenario.component';
+import { MisEscenariosComponent } from './paginas/mis-escenarios/mis-escenarios.component';
+import { EditarPuntoGeolocalizableDialogComponent } from './paginas/mis-escenarios/editar-puntogeolocalizable-dialog/editar-puntogeolocalizable-dialog.component';
+import { AgregarPuntoGeolocalizableDialogComponent } from './paginas/mis-escenarios/agregar-puntogeolocalizable-dialog/agregar-puntogeolocalizable-dialog.component';
+import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escenario/editar-escenario.component';
+
 // avatares
 import { MisFamiliasAvataresComponent } from './paginas/mis-familias-avatares/mis-familias-avatares.component';
 import { CrearFamiliaAvataresComponent } from './paginas/crear-familia-avatares/crear-familia-avatares.component';
@@ -173,6 +180,7 @@ import { JuegoDeAvatarSeleccionadoActivoComponent } from './paginas/juego-selecc
 import { MostrarAvatarAlumnoComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/mostrar-avatar-alumno/mostrar-avatar-alumno.component';
 // tslint:disable-next-line:max-line-length
 import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/informacion-juego-avatar/informacion-juego-avatar.component';
+
 
 @NgModule({
   declarations: [
@@ -257,6 +265,12 @@ import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-ac
     InformacionJuegoDeCompeticionFormulaUnoInactivoComponent,
     JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent,
 
+    CrearEscenarioComponent,
+    MisEscenariosComponent,
+    EditarPuntoGeolocalizableDialogComponent,
+    AgregarPuntoGeolocalizableDialogComponent,
+    EditarEscenarioComponent,
+    
     MisFamiliasAvataresComponent,
     CrearFamiliaAvataresComponent,
     AsignarFamiliasJuegoAvataresComponent,
@@ -268,6 +282,7 @@ import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-ac
     InformacionJuegoDeCuestionarioDialogComponent,
     JuegoSeleccionadoPreparadoComponent,
     JuegoDeCuestionarioSeleccionadoPreparadoComponent
+
 
 
   ],
@@ -313,8 +328,8 @@ import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-ac
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
-    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AsignaCuestionarioComponent,
-    InformacionJuegoDeCuestionarioDialogComponent],
+    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AgregarPuntoGeolocalizableDialogComponent, EditarPuntoGeolocalizableDialogComponent, AsignaCuestionarioComponent,
+    InformacionJuegoDeCuestionarioDialogComponent]
   bootstrap: [AppComponent],
   providers: [
     {

@@ -1,0 +1,171 @@
+
+<div class="titulo"><h2>Crear Escenario</h2></div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+
+<div class="contenedor">
+  <!-- STEPPER -->
+
+    <mat-card class="panel" style= "width: 70%">
+
+      <mat-card-content>
+
+      <mat-horizontal-stepper #linearHorizontalStepper="matHorizontalStepper" [linear]="true" #stepper>
+
+
+        <!-- PRIMER PASO -->
+        <mat-step [stepControl]="myForm">
+
+         <form [formGroup]="myForm">
+          <ng-template matStepLabel>Mapa y descripción</ng-template>
+          <mat-form-field>
+            <mat-label>Mapa</mat-label>
+            <input matInput formControlName="mapaEscenario" required>
+            <mat-error>Este campo es obligatorio</mat-error>
+          </mat-form-field>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Descripción</mat-label>
+              <input matInput formControlName="descripcionEscenario" required>
+              <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+
+
+          <div class="btnCambiarStep">
+            <button *ngIf="escenarioYaCreado === false" class="btn Next"matStepperNext (click)= CrearEscenario()>Siguiente</button>
+            <button *ngIf="escenarioYaCreado === true"  class="btn Next" matStepperNext (click)= EditarEscenario() >Siguiente</button>
+          </div>
+        </form>
+        </mat-step>
+
+
+
+
+
+
+        
+         <mat-step [stepControl]="myForm2">
+          <ng-template matStepLabel>Puntos Geolocalizables</ng-template>
+
+            <mat-card class="panel" >
+            <mat-card-header>
+              <mat-card-title>Crear nuevo Punto Geolocalizable</mat-card-title>
+              <mat-card-subtitle>Introduce los parámetros</mat-card-subtitle>
+           </mat-card-header>
+           <mat-card-content>
+
+            <div class="form-group" style="margin: 15px;">
+              <label for="nombrePuntoGeolocalizable">Nombre</label>
+              <input  type="text" id="nombrePuntoGeolocalizable" class="form-control" required [(ngModel)]="nombrePuntoGeolocalizable" placeholder="Escribe el nombre">
+          </div>
+
+              <div class="form-group" style="margin: 15px;">
+                  <label for="latitudPuntoGeolocalizable">Latitud</label>
+                  <input  type="text" id="latitudPuntoGeolocalizable" class="form-control" required [(ngModel)]="latitudPuntoGeolocalizable" placeholder="Escribe la latitud">
+              </div>
+
+              <div class="form-group" style="margin: 15px;">
+                <label for="longitudPuntoGeolocalizable">Longitud</label>
+                <input  type="text" id="longitudPuntoGeolocalizable" class="form-control" required [(ngModel)]="longitudPuntoGeolocalizable" placeholder="Escribe la longitud">
+            </div>
+            
+            <div class="form-group" style="margin: 15px;">
+              <label for="pistafacilPuntoGeolocalizable">Pista Facil</label>
+              <input  type="text" id="pistafacilPuntoGeolocalizable" class="form-control" required [(ngModel)]="pistafacilPuntoGeolocalizable" placeholder="Escribe la pista facil">
+          </div>
+
+          <div class="form-group" style="margin: 15px;">
+            <label for="pistadificilPuntoGeolocalizable">Pista Dificil</label>
+            <input  type="text" id="pistadificilPuntoGeolocalizable" class="form-control" required [(ngModel)]="pistadificilPuntoGeolocalizable" placeholder="Escribe la pista dificil">
+          </div>
+ 
+          </mat-card-content>
+
+
+          <mat-card-actions align="end">
+            <button  (click) = "LimpiarCampos()" type="button" class="btn Back">Limpiar Campos</button>
+            <button  (click) = "AgregarPuntoGeolocalizableEscenario()"  class="btn Aceptar">Agregar Punto Geolocalizable</button>
+          </mat-card-actions>
+
+              </mat-card>
+
+              <div>
+                <form *ngIf="puntosgeolocalizablesAgregados[0]">
+  
+                  <div>
+                    <p style="margin: 10px">
+                      <span style="font-weight: bold;">PuntosGeolocalizables creados recientemente:</span>
+                    </p>
+                  </div>
+  
+                  <table  align="center" mat-table [dataSource]="puntosgeolocalizablesAgregados" class="example-container mat-elevation-z8">
+  
+                    <ng-container matColumnDef="nombrePuntoGeolocalizable">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Nombre </th>
+                      <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.Nombre}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="latitudPuntoGeolocalizable">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Latitud </th>
+                      <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.Latitud}} </td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="longitudPuntoGeolocalizable">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Longitud </th>
+                      <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.Longitud}} </td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="pistafacilPuntoGeolocalizable">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> PistaFacil </th>
+                      <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.PistaFacil}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="pistadificilPuntoGeolocalizable">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> PistaDificil </th>
+                      <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.PistaDificil}} </td>
+                    </ng-container>
+  
+                    <!-- Delete Column -->
+                    <ng-container matColumnDef=" ">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                      <td mat-cell *matCellDef="let puntogeolocalizable">
+                        <button (click) = "BorrarPuntoGeolocalizable(puntogeolocalizable)" mat-icon-button matTooltip="Borrar el puntogeolocalizable {{puntogeolocalizable.Nombre}}">
+                          <i class="material-icons red md-36">delete</i>
+                        </button>
+                      </td>
+                    </ng-container>
+  
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+                  </table>
+                </form>
+              </div>
+  
+            <div class="btnCambiarStep" style="margin-top:10px;">
+                <button type="button" class="btn Back"   matStepperPrevious>Atrás</button>
+                <button type="button" class="btn Next" matStepperNext (click) = "Finalizar()">Finalizar</button>
+            </div>
+
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>Finalizar</ng-template>
+         <div>
+          <p> Escenario creado correctamente. </p>
+          <p> Haga click en "Finalizar" para guardar los cambios.</p>
+         </div>
+
+          <div class="btnCambiarStep">
+            <button  type="button" class="btn Back"  matStepperPrevious>Atrás</button>
+            <button  type="button" class="btn Aceptar" (click) = "Finalizar()">Finalizar</button>
+          </div>
+        </mat-step>
+
+
+      </mat-horizontal-stepper>
+    </mat-card-content>
+  </mat-card>
+</div>
+

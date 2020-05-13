@@ -103,6 +103,12 @@ import { MostrarAvatarAlumnoComponent } from './paginas/juego-seleccionado-activ
 // tslint:disable-next-line:max-line-length
 import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/informacion-juego-avatar/informacion-juego-avatar.component';
 
+
+import { DeactivateGuardCrearEscenario } from './guardas/canExitCrearEscenario.guard';
+import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenario.component';
+import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escenario/editar-escenario.component';
+import { MisEscenariosComponent } from './paginas/mis-escenarios/mis-escenarios.component';
+
 const routes: Routes = [
 
 
@@ -243,6 +249,11 @@ const routes: Routes = [
   { path: 'inicio/:id/misCuestionarios', component: MisCuestionariosComponent},
   { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent},
 
+  //escenarios
+  { path: 'inicio/:id/crearEscenario', component: CrearEscenarioComponent, canDeactivate: [DeactivateGuardCrearEscenario] },
+  { path: 'inicio/:id/misEscenarios', component: MisEscenariosComponent },
+  { path: 'inicio/:id/misEscenarios/editarEscenario', component: EditarEscenarioComponent }
+
   // AVATARES
   { path: 'inicio/:id/misFamiliasAvatares', component: MisFamiliasAvataresComponent},
   { path: 'inicio/:id/crearFamiliaAvatares', component: CrearFamiliaAvataresComponent},
@@ -252,7 +263,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego, DeactivateGuardCrearCuestionario],
+  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego, DeactivateGuardCrearCuestionario,DeactivateGuardCrearEscenario],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
