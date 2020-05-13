@@ -9,7 +9,6 @@ import { MatDialog, MatTabGroup } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
 // Servicios
-import { ProfesorService } from '../../servicios/index';
 import { EscenarioService } from 'src/app/servicios/escenario.service';
 
 // Servicios
@@ -37,11 +36,11 @@ export class MisEscenariosComponent implements OnInit {
 
   file: File;
 
+  // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Estás seguro/a de que quieres eliminar el escenario llamado: ';
 
   constructor(
     private escenarioService: EscenarioService,
-    private profesorService: ProfesorService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
     public sesion: SesionService,

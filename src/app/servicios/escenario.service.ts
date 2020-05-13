@@ -56,7 +56,9 @@ export class EscenarioService {
   }
 
   // EDITAMOS UN CROMO EN CONCRETO DE UNA COLECCIÓN DETERMINADA
+  // tslint:disable-next-line:max-line-length
   PUT_PuntoGeolocalizableEscenario(puntogeolocalizable: PuntoGeolocalizable, idescenario: number, idpuntogeolocalizable: number): Observable<PuntoGeolocalizable> {
+    // tslint:disable-next-line:max-line-length
     return this.http.put<PuntoGeolocalizable>(this.APIUrl + '/' + idescenario + '/puntosgeolocalizables/' + idpuntogeolocalizable, puntogeolocalizable);
   }
 

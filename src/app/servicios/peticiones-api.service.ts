@@ -13,61 +13,12 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         AlumnoJuegoDeAvatar, JuegoDeCuestionario, AlumnoJuegoDeCuestionario} from '../clases/index';
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
-        
 
 @Injectable({
   providedIn: 'root'
 })
 export class PeticionesAPIService {
 
-
-  private APIUrlProfesores = 'http://localhost:3000/api/Profesores';
-
-  private APIUrlAlumnos = 'http://localhost:3000/api/Alumnos';
-
-
-  private APIUrlGrupos = 'http://localhost:3000/api/Grupos';
-
-  private APIUrlMatriculas = 'http://localhost:3000/api/Matriculas';
-
-  private APIUrlEquipos = 'http://localhost:3000/api/Equipos';
-
-  private APIUrlColecciones = 'http://localhost:3000/api/Colecciones';
-
-  private APIUrlPreguntas = 'http://localhost:3000/api/Preguntas';
-
-  private APIUrlCuestionarios = 'http://localhost:3000/api/Cuestionarios';
-
-  private APIUrlEscenarios = 'http://localhost:3000/api/Escenarios';
-  private APIUrlPuntosGeolocalizables = 'http://localhost:3000/api/PuntosGeolocalizables';
-
-  private APIUrlPreguntaDelCuestionario = 'http://localhost:3000/api/PreguntasDelCuestionario';
-
-  private APIRUrlJuegoDePuntos = 'http://localhost:3000/api/JuegosDePuntos';
-  private APIUrlAlumnoJuegoDePuntos = 'http://localhost:3000/api/AlumnoJuegosDePuntos';
-  private APIUrlEquipoJuegoDePuntos = 'http://localhost:3000/api/EquiposJuegosDePuntos';
-  private APIUrlPuntosJuego = 'http://localhost:3000/api/AsignacionPuntosJuego';
-  private APIUrlHistorialPuntosAlumno = 'http://localhost:3000/api/HistorialesPuntosAlumno';
-  private APIUrlHistorialPuntosEquipo = 'http://localhost:3000/api/HistorialesPuntosEquipo';
-
-  private APIRUrlJuegoDeColeccion = 'http://localhost:3000/api/JuegosDeColeccion';
-  private APIUrlAlumnoJuegoDeColeccion = 'http://localhost:3000/api/AlumnosJuegoDeColeccion';
-  private APIUrlEquipoJuegoDeColeccion = 'http://localhost:3000/api/EquiposJuegoDeColeccion';
-  private APIRUrlAlbum = 'http://localhost:3000/api/Albumes';
-  private APIRUrlAlbumEquipo = 'http://localhost:3000/api/albumsEquipo';
-
-  private APIUrlJuegoDeCompeticionLiga = 'http://localhost:3000/api/JuegosDeCompeticionLiga';
-  private APIUrlAlumnoJuegoDeCompeticionLiga = 'http://localhost:3000/api/AlumnosJuegoDeCompeticionLiga';
-  private APIUrlEquipoJuegoDeCompeticionLiga = 'http://localhost:3000/api/EquiposJuegoDeCompeticionLiga';
-  private APIUrlJornadasJuegoDeCompeticionLiga = 'http://localhost:3000/api/JornadasDeCompeticionLiga';
-  private APIUrlEnfrentamientosLiga = 'http://localhost:3000/api/EnfrentamientosLiga';
-
-
-
-  private APIUrlJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/JuegosDecompeticionFormulaUno';
-  private APIUrlAlumnoJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/AlumnosJuegoDeCompeticionFormulaUno';
-  private APIUrlEquipoJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/EquiposJuegoDeCompeticionFormulaUno';
-  private APIUrlJornadasJuegoDeCompeticionFormulaUno = 'http://localhost:3000/api/JornadasDeCompeticionFormulaUno';
 
   // private host = 'http://localhost';
   private host = 'http://147.83.118.92';
@@ -123,6 +74,10 @@ export class PeticionesAPIService {
   private APIUrlImagenesAvatares =  this.host + ':3000/api/imagenes/ImagenesAvatares';
   private APIUrlJuegoDeAvatar = this.host + ':3000/api/juegosDeAvatar';
   private APIUrlAlumnoJuegoDeAvatar = this.host + ':3000/api/alumnosJuegoAvatar';
+
+
+  private APIUrlEscenarios = this.host + ':3000/api/Escenarios';
+  private APIUrlPuntosGeolocalizables = this.host + ':3000/api/PuntosGeolocalizables';
 
 
   constructor(
@@ -678,23 +633,6 @@ export class PeticionesAPIService {
     return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionLiga');
   }
 
-
-  public InscribeAlumnoJuegoDeCompeticionLiga(alumnoJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga) {
-    return this.http.post<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionLiga, alumnoJuegoDeCompeticionLiga);
-  }
-  public BorraInscripcionAlumnoJuegoDeCompeticionLiga(alumnoJuegoDeCompeticionLiga: AlumnoJuegoDeCompeticionLiga) {
-    return this.http.delete<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionLiga + '/' + alumnoJuegoDeCompeticionLiga.id);
-  }
-
-  public BorraInscripcionEquipoJuegoDeCompeticionLiga(equipoJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga) {
-    return this.http.delete<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionLiga + '/' + equipoJuegoDeCompeticionLiga.id);
-  }
-
-  public InscribeEquipoJuegoDeCompeticionLiga(equipoJuegoDeCompeticionLiga: EquipoJuegoDeCompeticionLiga) {
-    return this.http.post<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionLiga, equipoJuegoDeCompeticionLiga);
-  }
-
-
   public CambiaEstadoJuegoDeCompeticionLiga(JuegosDeCompeticionLiga: Juego,
                                             juegoDeCompeticionId: number,
                                             grupoId: number): Observable<Juego> {
@@ -826,11 +764,6 @@ export class PeticionesAPIService {
 
   }
 
-  public InscribeAlumnoJuegoDeCompeticionFormulaUno(alumnoJuegoDeCompeticionFormulaUno: AlumnoJuegoDeCompeticionFormulaUno) {
-    return this.http.post<AlumnoJuegoDeCompeticionFormulaUno>(this.APIUrlAlumnoJuegoDeCompeticionFormulaUno,
-      alumnoJuegoDeCompeticionFormulaUno);
-
-  }
   public ModificarJornadaFormulaUno(JornadaNueva: Jornada, JornadaId: number): Observable<Jornada> {
     return this.http.patch<Jornada>(this.APIUrlJornadasJuegoDeCompeticionFormulaUno + '/' + JornadaId, JornadaNueva );
   }
@@ -849,17 +782,6 @@ export class PeticionesAPIService {
   public PonGanadoresJornadasDeCompeticionFormulaUno(jornada: Jornada): Observable<Jornada> {
     return this.http.put<Jornada>(this.APIUrlJornadasJuegoDeCompeticionFormulaUno + '/' + jornada.id, jornada);
   }
-
-  // tslint:disable-next-line:max-line-length
-  public PonPuntosAlumnoGanadorJornadasDeCompeticionFormulaUno(alumno: AlumnoJuegoDeCompeticionFormulaUno): Observable<AlumnoJuegoDeCompeticionFormulaUno> {
-    // tslint:disable-next-line:max-line-length
-    return this.http.put<AlumnoJuegoDeCompeticionFormulaUno>(this.APIUrlAlumnoJuegoDeCompeticionFormulaUno + '/' + alumno.id, alumno);
-  }
-
-   // tslint:disable-next-line:max-line-length
-   public PonPuntosEquipoGanadorJornadasDeCompeticionFormulaUno(equipo: EquipoJuegoDeCompeticionFormulaUno): Observable<EquipoJuegoDeCompeticionFormulaUno> {
-    // tslint:disable-next-line:max-line-length
-    return this.http.put<EquipoJuegoDeCompeticionFormulaUno>(this.APIUrlEquipoJuegoDeCompeticionFormulaUno + '/' + equipo.id, equipo);
 
   public BorrarJornadaFormulaUno( jornadaDeCompeticionFormulaUno: Jornada): Observable<Jornada> {
     return this.http.delete<Jornada>(this.APIUrlJornadasJuegoDeCompeticionFormulaUno  + '/' + jornadaDeCompeticionFormulaUno.id);
@@ -885,15 +807,11 @@ export class PeticionesAPIService {
                                                       + '?filter[where][JuegoDeCompeticionFormulaUnoId]=' + juegoDeCompeticionFormulaUnoId);
   }
 
-  public BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(alumnoJuegoDeCompeticionFormulaUno: AlumnoJuegoDeCompeticionFormulaUno) {
+  public BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(alumnoJuegoDeCompeticionFormulaUnoId: number) {
     // tslint:disable-next-line:max-line-length
-    return this.http.delete<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionFormulaUno + '/' + alumnoJuegoDeCompeticionFormulaUno.id);
+    return this.http.delete<AlumnoJuegoDeCompeticionFormulaUno>(this.APIUrlAlumnoJuegoDeCompeticionFormulaUno + '/' + alumnoJuegoDeCompeticionFormulaUnoId);
   }
 
-  public BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(inscripcionId: number) {
-    // tslint:disable-next-line:max-line-length
-    return this.http.delete<AlumnoJuegoDeCompeticionLiga>(this.APIUrlAlumnoJuegoDeCompeticionFormulaUno + '/' + inscripcionId);
-  }
 
   // tslint:disable-next-line:max-line-length
   public PonPuntosAlumnoGanadorJornadasDeCompeticionFormulaUno(alumno: AlumnoJuegoDeCompeticionFormulaUno): Observable<AlumnoJuegoDeCompeticionFormulaUno> {
@@ -917,35 +835,9 @@ export class PeticionesAPIService {
                                                       + '?filter[where][JuegoDeCompeticionFormulaUnoId]=' + juegoDeCompeticionFormulaUnoId);
   }
 
-  public BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(equipoJuegoDeCompeticionFormulaUno: EquipoJuegoDeCompeticionFormulaUno) {
+  public BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(equipoJuegoDeCompeticionFormulaUnoId: number) {
     // tslint:disable-next-line:max-line-length
-    return this.http.delete<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionFormulaUno + '/' + equipoJuegoDeCompeticionFormulaUno.id);
-  }
-
-  public ModificarJornadaFormulaUno(JornadaNueva: Jornada, JornadaId: number): Observable<Jornada> {
-    return this.http.patch<Jornada>(this.APIUrlJornadasJuegoDeCompeticionFormulaUno + '/' + JornadaId, JornadaNueva );
-  }
-
-  public CambiaEstadoJuegoDeCompeticionFormulaUno(JuegosDeCompeticionF1: Juego,
-                                                  juegoDeCompeticionId: number,
-                                                  grupoId: number): Observable<Juego> {
-    // tslint:disable-next-line:max-line-length
-    return this.http.put<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionFormulaUno/' + juegoDeCompeticionId, JuegosDeCompeticionF1);
-  }
-
-   // jornadas juego de competición liga
-   public BorrarJornadaFormulaUno( jornadaDeCompeticionFormulaUno: Jornada): Observable<Jornada> {
-    console.log ('voy a borrar jornada ' + jornadaDeCompeticionFormulaUno.id);
-    return this.http.delete<Jornada>(this.APIUrlJornadasJuegoDeCompeticionFormulaUno  + '/' + jornadaDeCompeticionFormulaUno.id);
-
-  }
-
-  public BorraJuegoDeCompeticionFormulaUno(juegoDeCompeticionId: number, grupoId: number): Observable<Juego> {
-    return this.http.delete<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegosDeCompeticionFormulaUno/' + juegoDeCompeticionId);
-
-  public BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(inscripcionId: number) {
-    // tslint:disable-next-line:max-line-length
-    return this.http.delete<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionFormulaUno + '/' + inscripcionId);
+    return this.http.delete<EquipoJuegoDeCompeticionLiga>(this.APIUrlEquipoJuegoDeCompeticionFormulaUno + '/' + equipoJuegoDeCompeticionFormulaUnoId);
   }
 
    // tslint:disable-next-line:max-line-length
@@ -1041,7 +933,9 @@ export class PeticionesAPIService {
     return this.http.get<PuntoGeolocalizable[]>(this.APIUrlEscenarios + '/' + idescenario + '/puntosgeolocalizables');
   }
 
+  // tslint:disable-next-line:max-line-length
   public ModificaPuntoGeolocalizableEscenario(puntogeolocalizable: PuntoGeolocalizable, idescenario: number, idpuntogeolocalizable: number): Observable<PuntoGeolocalizable> {
+    // tslint:disable-next-line:max-line-length
     return this.http.put<PuntoGeolocalizable>(this.APIUrlEscenarios + '/' + idescenario + '/puntosgeolocalizables/' + idpuntogeolocalizable, puntogeolocalizable);
   }
 
@@ -1050,7 +944,6 @@ export class PeticionesAPIService {
     return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeGeocaching', juego);
   }
 
-}
 
   ////////////////////////////// GESTION FAMILIAS DE AVATARES ////////////////////////////////////
 

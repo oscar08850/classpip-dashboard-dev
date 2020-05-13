@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatTabGroup } from '@angular/material';
 
 // Servicios
-import { ProfesorService } from '../../servicios/index';
+
 
 
 // Servicios
@@ -73,6 +73,7 @@ export class CrearEscenarioComponent implements OnInit {
 
 
   // PONEMOS LAS COLUMNAS DE LA TABLA Y LA LISTA QUE TENDRÁ LA INFORMACIÓN QUE QUEREMOS MOSTRAR
+  // tslint:disable-next-line:max-line-length
   displayedColumns: string[] = ['nombrePuntoGeolocalizable', 'latitudPuntoGeolocalizable', 'longitudPuntoGeolocalizable', 'pistafacilPuntoGeolocalizable','pistadificilPuntoGeolocalizable', ' '];
 
 
@@ -161,7 +162,7 @@ export class CrearEscenarioComponent implements OnInit {
     let longitudPuntoGeolocalizable: string;
     let pistafacilPuntoGeolocalizable: string;
     let pistadificilPuntoGeolocalizable: string;
-    
+
     nombrePuntoGeolocalizable = this.myForm2.value.nombrePuntoGeolocalizable;
     latitudPuntoGeolocalizable = this.myForm2.value.latitudPuntoGeolocalizable;
     longitudPuntoGeolocalizable = this.myForm2.value.longitudPuntoGeolocalizable;
@@ -253,7 +254,7 @@ export class CrearEscenarioComponent implements OnInit {
 
 
         this.peticionesAPI.BorraEscenario(escenario.id, escenario.profesorId)
-        .subscribe( () => { console.log ('Ya he borrado el escenario'); 
+        .subscribe( () => { console.log ('Ya he borrado el escenario');
                             obs.next();
         });
     });
