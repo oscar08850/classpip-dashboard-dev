@@ -165,6 +165,8 @@ export class CrearFamiliaAvataresComponent implements OnInit {
 
 
   CargarImagenComplemento(n, $event) {
+    console.log ('Cargo');
+    console.log (this.cont[n]);
     if (this.cont[n] === 5) {
       Swal.fire('No puedes elegir más de 5 opciones para un complemento', ' ', 'error');
 
@@ -264,6 +266,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       this.familiaAvatares.Complemento4.push (this.file.name);
       this.muestraSeleccionarComplemento4 = true;
    }
+    this.cont[n]++;
 
   }
 

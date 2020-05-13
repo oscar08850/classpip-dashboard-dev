@@ -92,8 +92,13 @@ export class MisFamiliasAvataresComponent implements OnInit {
              const elemento = document.getElementById(id);
              // La voy a visualizar a tamaño normal
 
+             console.log ('antes ');
+             console.log (elemento);
              elemento.setAttribute('width', ancho);
              elemento.setAttribute('height', alto);
+
+             console.log ('despues ');
+             console.log (elemento);
              elemento.style.position = 'relative';
              // Coloco la imagen en la zona de complementos correspondiente
              document.getElementById('imagenesComplementos' + numComplemento)
@@ -105,7 +110,7 @@ export class MisFamiliasAvataresComponent implements OnInit {
           //  hayComplementoPuesto.forEach (hay => { if (hay) { cont++; }});
            // para colocar el complemento elegido necesito la altura de la silueta
           //  const altura = document.getElementById('silueta').clientHeight;
-
+           console.log ('voy a colocar el elemento ' + elementoId);
            // obtengo el complemento elegido
            const elemento = document.getElementById(elementoId);
            // lo coloco sobre la silueta, ampliando el tamaño
