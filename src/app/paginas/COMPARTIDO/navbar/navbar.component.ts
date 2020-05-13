@@ -40,6 +40,7 @@ export class NavbarComponent implements OnInit {
   URLMisCuestionarios: string;
   URLCrearCuestionario: string;
   URLCrearEscenario: string;
+  URLMisEscenarios: string;
 
   constructor( private sesion: SesionService,
                private router: Router) { }
@@ -64,7 +65,7 @@ export class NavbarComponent implements OnInit {
     this.URLMisCuestionarios = this.URLInicio + '/misCuestionarios';
     this.URLCrearCuestionario = this.URLInicio + '/crearCuestionario';
     this.URLCrearEscenario = this.URLInicio + '/crearEscenario';
-
+    this.URLMisEscenarios = this.URLInicio + '/misEscenarios';
 
 
 

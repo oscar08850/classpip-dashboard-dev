@@ -45,9 +45,6 @@
 
 
         
-
-
-        <!-- PASO AÑADIR CROMOS -->
          <mat-step [stepControl]="myForm2">
           <ng-template matStepLabel>Puntos Geolocalizables</ng-template>
 
@@ -57,6 +54,11 @@
               <mat-card-subtitle>Introduce los parámetros</mat-card-subtitle>
            </mat-card-header>
            <mat-card-content>
+
+            <div class="form-group" style="margin: 15px;">
+              <label for="nombrePuntoGeolocalizable">Nombre</label>
+              <input  type="text" id="nombrePuntoGeolocalizable" class="form-control" required [(ngModel)]="nombrePuntoGeolocalizable" placeholder="Escribe el nombre">
+          </div>
 
               <div class="form-group" style="margin: 15px;">
                   <label for="latitudPuntoGeolocalizable">Latitud</label>
@@ -99,6 +101,11 @@
   
                   <table  align="center" mat-table [dataSource]="puntosgeolocalizablesAgregados" class="example-container mat-elevation-z8">
   
+                    <ng-container matColumnDef="nombrePuntoGeolocalizable">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Nombre </th>
+                      <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.Nombre}} </td>
+                    </ng-container>
+
                     <ng-container matColumnDef="latitudPuntoGeolocalizable">
                       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Latitud </th>
                       <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.Latitud}} </td>
@@ -123,7 +130,7 @@
                     <ng-container matColumnDef=" ">
                       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
                       <td mat-cell *matCellDef="let puntogeolocalizable">
-                        <button (click) = "BorrarPuntoGeolocalizable(puntogeolocalizable)" mat-icon-button matTooltip="Borrar el puntogeolocalizable {{puntogeolocalizable.Latitud}}">
+                        <button (click) = "BorrarPuntoGeolocalizable(puntogeolocalizable)" mat-icon-button matTooltip="Borrar el puntogeolocalizable {{puntogeolocalizable.Nombre}}">
                           <i class="material-icons red md-36">delete</i>
                         </button>
                       </td>
@@ -143,11 +150,10 @@
 
         </mat-step>
 
-        <!-- PASO FINALIZAR -->
         <mat-step>
           <ng-template matStepLabel>Finalizar</ng-template>
          <div>
-          <p> Coleccion creada correctamente. </p>
+          <p> Escenario creado correctamente. </p>
           <p> Haga click en "Finalizar" para guardar los cambios.</p>
          </div>
 

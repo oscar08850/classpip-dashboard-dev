@@ -91,6 +91,8 @@ import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/edita
 
 import { DeactivateGuardCrearEscenario } from './guardas/canExitCrearEscenario.guard';
 import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenario.component';
+import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escenario/editar-escenario.component';
+import { MisEscenariosComponent } from './paginas/mis-escenarios/mis-escenarios.component';
 
 const routes: Routes = [
 
@@ -232,7 +234,9 @@ const routes: Routes = [
   { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent},
 
   //escenarios
-  { path: 'inicio/:id/crearEscenario', component: CrearEscenarioComponent, canDeactivate: [DeactivateGuardCrearEscenario] }
+  { path: 'inicio/:id/crearEscenario', component: CrearEscenarioComponent, canDeactivate: [DeactivateGuardCrearEscenario] },
+  { path: 'inicio/:id/misEscenarios', component: MisEscenariosComponent },
+  { path: 'inicio/:id/misEscenarios/editarEscenario', component: EditarEscenarioComponent }
 ];
 
 @NgModule({

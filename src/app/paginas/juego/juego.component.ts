@@ -79,6 +79,7 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Puntos', color: 'primary'},
     {nombre: 'Juego De Colección', color: 'accent'},
     {nombre: 'Juego De Competición', color: 'warn'}
+
   ];
 
   // En el segundo paso mostraremos dos Chips con los dos modos de juego que podemos crear y su color
@@ -382,8 +383,8 @@ export class JuegoComponent implements OnInit {
     } else if (this.tipoDeJuegoSeleccionado === 'Juego De Competición' && this.tipoJuegoCompeticionSeleccionado === 'Fórmula Uno') {
       console.log('Voy a crear juego de Competición Formula Uno');
       this.CrearJuegoDeCompeticionFormulaUno();
-    }
 
+    }
     Swal.fire('Creado', this.tipoDeJuegoSeleccionado + ' creado correctamente', 'success');
   }
 

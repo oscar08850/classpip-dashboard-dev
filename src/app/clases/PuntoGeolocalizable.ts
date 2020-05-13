@@ -1,4 +1,5 @@
 export class PuntoGeolocalizable {
+    Nombre: string;
     Latitud: string;
     Longitud: string;
     PistaFacil: string;
@@ -7,7 +8,8 @@ export class PuntoGeolocalizable {
     idescenario: number;
     profesorId: number;
 
-    constructor(latitud?: string, longitud?: string, pistafacil?: string, pistadificil?: string){
+    constructor(nombre?:string, latitud?: string, longitud?: string, pistafacil?: string, pistadificil?: string){
+        this.Nombre = nombre;
         this.Latitud = latitud;
         this.Longitud = longitud;
         this.PistaFacil = pistafacil;

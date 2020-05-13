@@ -154,8 +154,10 @@ import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/edita
 
 
 import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenario.component';
-
-
+import { MisEscenariosComponent } from './paginas/mis-escenarios/mis-escenarios.component';
+import { EditarPuntoGeolocalizableDialogComponent } from './paginas/mis-escenarios/editar-puntogeolocalizable-dialog/editar-puntogeolocalizable-dialog.component';
+import { AgregarPuntoGeolocalizableDialogComponent } from './paginas/mis-escenarios/agregar-puntogeolocalizable-dialog/agregar-puntogeolocalizable-dialog.component';
+import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escenario/editar-escenario.component';
 
 
 @NgModule({
@@ -240,7 +242,12 @@ import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenar
     InformacionJuegoDeCompeticionFormulaUnoInactivoComponent,
     JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent,
 
-    CrearEscenarioComponent
+    CrearEscenarioComponent,
+    MisEscenariosComponent,
+    EditarPuntoGeolocalizableDialogComponent,
+    AgregarPuntoGeolocalizableDialogComponent,
+    EditarEscenarioComponent
+
 
   ],
   imports: [
@@ -282,7 +289,7 @@ import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenar
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
-    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent ],
+    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AgregarPuntoGeolocalizableDialogComponent, EditarPuntoGeolocalizableDialogComponent ],
   bootstrap: [AppComponent],
   providers: [
     {

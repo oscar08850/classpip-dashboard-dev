@@ -57,6 +57,7 @@ export class SesionService {
   escenario: Escenario;
   puntogeolocalizable: PuntoGeolocalizable;
   listaEscenarios: any;
+  puntosgeolocalizables: PuntoGeolocalizable[];
 
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
@@ -386,6 +387,14 @@ public DamePuntoGeolocalizable(): PuntoGeolocalizable {
 public TomaPuntoGeolocalizable(puntogeolocalizable: PuntoGeolocalizable) {
   this.puntogeolocalizable = puntogeolocalizable;
 }
+
+public TomaPuntosGeolocalizables(puntosgeolocalizablesEscenario: PuntoGeolocalizable[]) {
+  this.puntosgeolocalizables = puntosgeolocalizablesEscenario;
+}
+public DamePuntosGeolocalizables(): PuntoGeolocalizable[] {
+  return this.puntosgeolocalizables;
+}
+
 
 public DameListaEscenarios(): any {
   return this.listaEscenarios;

@@ -830,4 +830,24 @@ export class PeticionesAPIService {
     return this.http.delete<any>(this.APIUrlEscenarios + '/' + idescenario + '/puntosgeolocalizables/' + idpuntogeolocalizable);
   }
 
+
+  //mis escenarios
+
+  public DameEscenariosDelProfesor(profesorId: number): Observable<Escenario[]> {
+    return this.http.get<Escenario[]>(this.APIUrlProfesores + '/' + profesorId + '/escenarios');
+  }
+
+  public DamePuntosGeolocalizablesEscenario(idescenario: number): Observable<PuntoGeolocalizable[]> {
+    return this.http.get<PuntoGeolocalizable[]>(this.APIUrlEscenarios + '/' + idescenario + '/puntosgeolocalizables');
+  }
+
+  public ModificaPuntoGeolocalizableEscenario(puntogeolocalizable: PuntoGeolocalizable, idescenario: number, idpuntogeolocalizable: number): Observable<PuntoGeolocalizable> {
+    return this.http.put<PuntoGeolocalizable>(this.APIUrlEscenarios + '/' + idescenario + '/puntosgeolocalizables/' + idpuntogeolocalizable, puntogeolocalizable);
+  }
+
+
+  public CreaJuegoDeGeocaching(juego: Juego, grupoId: number): Observable<Juego> {
+    return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeGeocaching', juego);
+  }
+
 }

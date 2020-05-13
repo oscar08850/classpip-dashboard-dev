@@ -49,6 +49,7 @@ export class CrearEscenarioComponent implements OnInit {
   descripcionEscenario: string;
 
   // CREAR CROMO
+  nombrePuntoGeolocalizable: string;
   latitudPuntoGeolocalizable: string;
   longitudPuntoGeolocalizable: string;
   pistafacilPuntoGeolocalizable: string;
@@ -59,7 +60,6 @@ export class CrearEscenarioComponent implements OnInit {
 
   // COMPARTIDO
   profesorId: number;
-  nombreImagen: string;
 
 
   // Al principio coleccion no creada y imagen no cargada
@@ -73,7 +73,7 @@ export class CrearEscenarioComponent implements OnInit {
 
 
   // PONEMOS LAS COLUMNAS DE LA TABLA Y LA LISTA QUE TENDRÁ LA INFORMACIÓN QUE QUEREMOS MOSTRAR
-  displayedColumns: string[] = ['latitudPuntoGeolocalizable', 'longitudPuntoGeolocalizable', 'pistafacilPuntoGeolocalizable','pistadificilPuntoGeolocalizable', ' '];
+  displayedColumns: string[] = ['nombrePuntoGeolocalizable', 'latitudPuntoGeolocalizable', 'longitudPuntoGeolocalizable', 'pistafacilPuntoGeolocalizable','pistadificilPuntoGeolocalizable', ' '];
 
 
 
@@ -88,7 +88,6 @@ export class CrearEscenarioComponent implements OnInit {
 
   ngOnInit() {
 
-    console.log('vamos a empezar');
     console.log(this.sesion.DameProfesor());
     // REALMENTE LA APP FUNCIONARÁ COGIENDO AL PROFESOR DEL SERVICIO, NO OBSTANTE AHORA LO RECOGEMOS DE LA URL
     // this.profesorId = this.profesorService.RecibirProfesorIdDelServicio();
@@ -101,6 +100,7 @@ export class CrearEscenarioComponent implements OnInit {
      mapaEscenario: ['', Validators.required]
     });
     this.myForm2 = this.formBuilder.group({
+      nombrePuntoGeolocalizable : ['', Validators.required],
       latitudPuntoGeolocalizable : ['', Validators.required],
       longitudPuntoGeolocalizable : ['', Validators.required],
       pistafacilPuntoGeolocalizable : ['', Validators.required],
@@ -109,8 +109,6 @@ export class CrearEscenarioComponent implements OnInit {
 
     }
 
-
-  // Creamos una coleccion dandole un nombre y una imagen
   CrearEscenario() {
 
     let descripcionEscenario: string;
@@ -119,16 +117,14 @@ export class CrearEscenarioComponent implements OnInit {
     descripcionEscenario = this.myForm.value.descripcionEscenario;
     mapaEscenario = this.myForm.value.mapaEscenario;
 
-    // Hace el POST del equipo
     this.peticionesAPI.CreaEscenario (new Escenario(mapaEscenario, descripcionEscenario), this.profesorId)
-    // this.peticionesAPI.CreaColeccion(new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
     .subscribe((res) => {
       if (res != null) {
         console.log ('ESCENARIO CREADO: ' + res.id );
         console.log(res);
-        this.escenarioYaCreado = true; // Si tiro atrás y cambio algo se hará un PUT y no otro POST
-        this.escenarioCreado = res; // Lo metemos en coleccionCreada, y no en coleccion!!
-        // Hago el POST de la imagen SOLO si hay algo cargado. Ese boolean se cambiará en la función ExaminarImagen
+        this.escenarioYaCreado = true;
+        this.escenarioCreado = res;
+
 
       } else {
         console.log('Fallo en la creación');
@@ -136,9 +132,6 @@ export class CrearEscenarioComponent implements OnInit {
     });
   }
 
-  // Si estamos creando la coleccion y pasamos al siguiente paso, pero volvemos hacia atrás para modificar el nombre y/o el
-  // imagen, entonces no deberemos hacer un POST al darle a siguiente, sino un PUT. Por eso se hace esta función, que funciona
-  // de igual manera que la de Crear Equipo pero haciendo un PUT.
   EditarEscenario() {
 
     console.log('Entro a editar');
@@ -151,7 +144,7 @@ export class CrearEscenarioComponent implements OnInit {
     this.peticionesAPI.ModificaEscenario(new Escenario(this.mapaEscenario, descripcionEscenario), this.profesorId, this.escenarioCreado.id)
     .subscribe((res) => {
       if (res != null) {
-        console.log('Voy a editar la coleccion con id ' + this.escenarioCreado.id);
+        console.log('Voy a editar el escenario con id ' + this.escenarioCreado.id);
         this.escenarioCreado = res;
 
       } else {
@@ -161,17 +154,15 @@ export class CrearEscenarioComponent implements OnInit {
   }
 
 
-
-
-
-  // Creamos una cromo y lo añadimos a la coleccion dandole un nombre, una probabilidad, un nivel y una imagen
   AgregarPuntoGeolocalizableEscenario() {
 
+    let nombrePuntoGeolocalizable: string;
     let latitudPuntoGeolocalizable: string;
     let longitudPuntoGeolocalizable: string;
     let pistafacilPuntoGeolocalizable: string;
     let pistadificilPuntoGeolocalizable: string;
     
+    nombrePuntoGeolocalizable = this.myForm2.value.nombrePuntoGeolocalizable;
     latitudPuntoGeolocalizable = this.myForm2.value.latitudPuntoGeolocalizable;
     longitudPuntoGeolocalizable = this.myForm2.value.longitudPuntoGeolocalizable;
     pistafacilPuntoGeolocalizable = this.myForm2.value.pistafacilPuntoGeolocalizable;
@@ -180,14 +171,12 @@ export class CrearEscenarioComponent implements OnInit {
 
 
     this.peticionesAPI.PonPuntoGeolocalizableEscenario(
-      new PuntoGeolocalizable(this.latitudPuntoGeolocalizable, this.longitudPuntoGeolocalizable , this.pistafacilPuntoGeolocalizable, this.pistadificilPuntoGeolocalizable), this.escenarioCreado.id)
+      new PuntoGeolocalizable(this.nombrePuntoGeolocalizable, this.latitudPuntoGeolocalizable, this.longitudPuntoGeolocalizable , this.pistafacilPuntoGeolocalizable, this.pistadificilPuntoGeolocalizable), this.escenarioCreado.id)
     .subscribe((res) => {
       if (res != null) {
         console.log('asignado correctamente');
-        // Añadimos el cromo a la lista
         this.puntosgeolocalizablesAgregados.push(res);
         this.puntosgeolocalizablesAgregados = this.puntosgeolocalizablesAgregados.filter(result => result.Latitud !== '');
-        // this.CromosAgregados(res);
         this.LimpiarCampos();
       } else {
         console.log('fallo en la asignación');
@@ -195,45 +184,37 @@ export class CrearEscenarioComponent implements OnInit {
     });
   }
 
-
-  // Utilizamos esta función para eliminar un cromo de la base de datos y de la lista de añadidos recientemente
   BorrarPuntoGeolocalizable(puntogeolocalizable: PuntoGeolocalizable) {
     this.peticionesAPI.BorrarPuntoGeolocalizable(puntogeolocalizable.id, this.escenarioCreado.id)
     .subscribe(() => {
-      // Elimino el cromo de la lista
       this.puntosgeolocalizablesAgregados = this.puntosgeolocalizablesAgregados.filter(res => res.id !== puntogeolocalizable.id);
-     // this.CromosEliminados(cromo);
-      console.log('Cromo borrado correctamente');
+      console.log('PuntoGeolocalizable borrado correctamente');
 
     });
   }
-  // Limpiamos los campos del cromo
   LimpiarCampos() {
+      this.nombrePuntoGeolocalizable = '';
       this.latitudPuntoGeolocalizable = '';
       this.longitudPuntoGeolocalizable = '';
       this.pistafacilPuntoGeolocalizable = '';
       this.pistadificilPuntoGeolocalizable = '';
   }
 
-  // Esta función se utiliza para controlar si el botón de siguiente del stepper esta desativado.
-  // Si en alguno de los inputs no hay nada, esta disabled. Sino, podremos clicar.
   Disabled() {
 
-  if (this.latitudPuntoGeolocalizable === '' || this.longitudPuntoGeolocalizable === '' || this.pistafacilPuntoGeolocalizable === '' ||
+  if (this.nombrePuntoGeolocalizable === '' || this.latitudPuntoGeolocalizable === '' || this.longitudPuntoGeolocalizable === '' || this.pistafacilPuntoGeolocalizable === '' ||
         this.pistadificilPuntoGeolocalizable === '') {
         this.isDisabledPuntoGeolocalizable = true;
   } else {
         this.isDisabledPuntoGeolocalizable = false;
     }
   }
-    // Función que se activará al clicar en finalizar el último paso del stepper
+
   Finalizar() {
-      // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
       this.myForm.reset();
       this.myForm2.reset();
       this.stepper.reset();
 
-      // Tambien limpiamos las variables utilizadas para crear el nueva coleccion, por si queremos crear otra.
       this.escenarioYaCreado = false;
       this.mapaEscenario = '';
       this.descripcionEscenario = '';
@@ -251,15 +232,12 @@ export class CrearEscenarioComponent implements OnInit {
           const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
             height: '150px',
             data: {
-              mensaje: 'Confirma que quieres abandonar el proceso de creación de coleccion',
+              mensaje: 'Confirma que quieres abandonar el proceso de creación del escenario',
             }
           });
 
           dialogRef.afterClosed().subscribe((confirmed: boolean) => {
             if (confirmed) {
-              // Si confirma que quiere salir entonces eliminamos el grupo que se ha creado
-              // this.sesion.TomaGrupo (this.grupo);
-              // this.calculos.EliminarGrupo();
               this.BorrarEscenario (this.escenarioCreado).subscribe ( () => obs.next (confirmed));
             } else {
               obs.next (confirmed);
@@ -270,19 +248,15 @@ export class CrearEscenarioComponent implements OnInit {
     }
   }
 
-  // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
-  // Retornamos un observable para que el que la llame espere hasta que se haya completado la eliminación
-  // en la base de datos.
   BorrarEscenario(escenario: Escenario): any {
     const eliminaObservable = new Observable ( obs => {
 
 
         this.peticionesAPI.BorraEscenario(escenario.id, escenario.profesorId)
-        .subscribe( () => { console.log ('Ya he borrado la coleccion'); 
+        .subscribe( () => { console.log ('Ya he borrado el escenario'); 
                             obs.next();
         });
     });
-        //this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
     return eliminaObservable;
   }
 }
