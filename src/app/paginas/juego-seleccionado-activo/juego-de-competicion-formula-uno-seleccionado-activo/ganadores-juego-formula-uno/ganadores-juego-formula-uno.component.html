@@ -1,6 +1,7 @@
 <div class="titulo">Pantalla para asignar el Ganador</div>
 <div class="subtitulo">{{juegoSeleccionado.NombreJuego}}: {{juegoSeleccionado.Tipo}}  {{juegoSeleccionado.Modo}}</div>
 <mat-divider class="lineaDivisoria"></mat-divider>
+
 <div class="contenedor">
   <div class="enColumna">
     <div class = "enFila" style="width: 60%; align-content: left;"  >
@@ -20,8 +21,7 @@
         </mat-form-field>
       </div>
       <!-- Si la jornada elegida no está aun disputada desplegamos el selector de modo de asignación -->
-      <div *ngIf= "!Disputada (jornadaId)">
-
+      <div *ngIf= "!Disputada (jornadaId) && jornadaId !== undefined">
       <div>
         <br>
         <mat-form-field style="margin-left: 10%;">
@@ -33,33 +33,45 @@
           </select>
         </mat-form-field>
       </div>
-      <!-- Si se elige la asignación via juego de puntos desplegamos el selector del juego que debe usarse -->
-      <div *ngIf="((modoAsignacionId == 3) &&  (juegosActivosPuntos.length !== 0))"  style="margin-left: 5%;">
-
-        Seleccione un Juego
-        <br>
-        <mat-form-field >
-          <mat-label>Juegos</mat-label>
-          <select matNativeControl [(ngModel)]="juegodePuntosSeleccionadoID" (change) = "SeleccionarJuegoPuntos()">
-            <option *ngFor="let juego of juegosActivosPuntos" [value]="juego.id">
-              {{juego.NombreJuego}}
-            </option>
-          </select>
-        </mat-form-field>
-      </div>
 
 
-      <!-- El boton de asignar mediante juego de puntos hay que visualizarlo si se a elegido esa opción y ya se ha elegido el juego de puntos -->
-      <div  *ngIf="modoAsignacionId == 3 && juegodePuntosSeleccionadoID !== undefined " style="margin-top: 10px;"  align="center">
-      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadoresJuegoPuntos()"  [disabled]="botonAsignarPuntosDesactivado">Asignar Ganadores<i class="material-icons">emoji_events </i></button>
+    </div>
+
+    <!-- Si se elige la asignación via juego de puntos desplegamos el selector del juego que debe usarse -->
+    <div *ngIf="((modoAsignacionId == 3) &&  (juegosDisponibles.length !== 0)) && !Disputada (jornadaId)"  style="margin-left: 5%;">
+
+      Seleccione un Juego
+      <br>
+      <mat-form-field >
+        <mat-label>Juegos</mat-label>
+        <select matNativeControl [(ngModel)]="juegoDisponibleSeleccionadoID" (change) = "TraerJuegoDisponibleSeleccionado()">
+          <option *ngFor="let juego of juegosDisponibles" [value]="juego.id">
+            {{juego.NombreJuego}}
+          </option>
+        </select>
+      </mat-form-field>
+    </div>
+
+    </div>
+
+    <!-- El boton de asignar mediante juego de puntos hay que visualizarlo si se a elegido esa opción y ya se ha elegido el juego de puntos -->
+    <!-- <div  *ngIf="modoAsignacionId == 3 && juegodePuntosSeleccionadoID !== undefined " style="margin-top: 10px;"  align="center">
+    <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadoresJuegoPuntos()"  [disabled]="botonAsignarPuntosDesactivado">Asignar Ganadores<i class="material-icons">emoji_events </i></button>
+    </div> -->
+
+    <div *ngIf = "jornadaId != undefined && !Disputada (jornadaId)">
+      <div  *ngIf="(modoAsignacionId == 3) && (juegoDisponibleSeleccionadoID !== undefined)" style="margin-top: 10px; margin-right: 10px;">
+        <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadoresJuegoDisponibleSeleccionado()"  [disabled]="botonAsignarJuegoDesactivado">Asignar ganadores mediante juego seleccionado<i class="material-icons">emoji_events </i></button>
       </div>
 
       <!-- boton para asignar de forma aleatoria -->
       <div  *ngIf="modoAsignacionId == 2" style="margin-top: 10px;"  align="center">
-      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click) = AsignarGanadoresAleatoriamente()  [disabled]="botonAsignarAleatorioDesactivado">Asignar Ganadores<i class="material-icons">emoji_events </i></button>
-      </div>
+      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click) = AsignarGanadoresAleatoriamente()  [disabled]="botonAsignarAleatorioDesactivado">Asignar ganadores aleatoriamente<i class="material-icons">emoji_events </i></button>
       </div>
     </div>
+
+
+    <br>
 
 
     <!-- Mensaje en caso de que la jornada ya se haya disputado -->
@@ -156,8 +168,9 @@ Los Elefantes"
                 </div>
               </mat-card-content>
               <mat-card-actions  align="end">
-                <button style="margin: 5px" (click) = "LimpiarCamposTexto()"  [disabled]="isDisabledAnadirGanadores" type="button" class="btn Back" >Limpiar Campos<i class="material-icons">delete_sweep </i></button>
-                <button  style="margin: 5px" (click) = "AsignarMasivoManualmente()" [disabled]="isDisabledAnadirGanadores"type="button" class="btn Aceptar" >Asignar Ganadores<i class="material-icons">emoji_events </i></button>
+                <button style="margin: 5px" (click) = "LimpiarCamposTexto()"  [disabled]="isDisabledAnadirGanadores" type="button" class="btn Back" >Limpiar campos<i class="material-icons">delete_sweep </i></button>
+                <button  style="margin: 5px; width: 40%" (click) = "AsignarMasivoManualmente()" [disabled]="isDisabledAnadirGanadores"type="button" class="btn Aceptar" >Asignar ganadores manualmente<i class="material-icons">emoji_events </i></button>
+                <!-- <button style= "width: 100%"  type="button"class="btn Aceptar"  (click) = AsignarGanadoresAleatoriamente()  [disabled]="botonAsignarAleatorioDesactivado">Asignar Ganadores aleatoriamente<i class="material-icons">emoji_events </i></button> -->
               </mat-card-actions>
             </mat-card>
           </div>
@@ -260,9 +273,8 @@ Los Elefantes"
 
 
            <mat-dialog-actions align= "center">
-
-              <button   type="button" class="btn Aceptar" (click)="AsignarGanadoresElegidos()" cdkFocusInitial>Asignar Ganadores</button>
-          </mat-dialog-actions>
+              <button  style="margin: 5px; width: 40%" type="button" class="btn Aceptar" (click)="AsignarGanadoresElegidos()" cdkFocusInitial>Asignar ganadores manualmente<i class="material-icons">emoji_events </i></button>
+           </mat-dialog-actions>
         </form>
 
         <form *ngIf="juegoSeleccionado.Modo != 'Individual'" style="width: 100%">
@@ -335,7 +347,9 @@ Los Elefantes"
 
            <mat-dialog-actions align= "center">
 
-              <button   type="button" class="btn Aceptar" (click)="AsignarGanadoresElegidos()" cdkFocusInitial>Asignar Ganadores</button>
+              <button  style="margin: 5px; width: 40%"  type="button" class="btn Aceptar" (click)="AsignarGanadoresElegidos()" cdkFocusInitial>Asignar ganadores manualmente<i class="material-icons">emoji_events </i></button>
+              <!-- <button  style="margin: 5px; width: 40%" type="button" class="btn Aceptar" (click)="AsignarGanadoresElegidos()" cdkFocusInitial>Asignar ganadores manualmente<i class="material-icons">emoji_events </i></button> -->
+
           </mat-dialog-actions>
         </form>
 

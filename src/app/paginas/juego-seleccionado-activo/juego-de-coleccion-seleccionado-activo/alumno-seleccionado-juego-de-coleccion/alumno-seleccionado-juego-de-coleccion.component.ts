@@ -150,10 +150,10 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
    // Utilizamos esta función para eliminar un cromo de la base de datos y actualiza la lista de cromos
    BorrarCromo(cromo: Cromo) {
     // primero obtengo todas las asignaciones del cromo al alumno
-    this.peticionesAPI.DameAsignacionesCromosAlumno (this.inscripcionAlumno.id, cromo.id)
+    this.peticionesAPI.DameAsignacionesCromoConcretoAlumno (this.inscripcionAlumno.id, cromo.id)
     .subscribe((res) => {
       // Y ahora elimino la primera de ellas (una cualquiera)
-      this.peticionesAPI.BorrarCromoAlumno (res[0].id)
+      this.peticionesAPI.BorrarAsignacionCromoAlumno (res[0].id)
       .subscribe ( () => this.CromosDelAlumno());
     });
   }

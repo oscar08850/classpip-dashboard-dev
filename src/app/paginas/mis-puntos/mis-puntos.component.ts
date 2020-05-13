@@ -9,7 +9,7 @@ import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion
 import Swal from 'sweetalert2';
 
 // Servicios
-import { ProfesorService, PeticionesAPIService, SesionService } from '../../servicios/index';
+import { PeticionesAPIService, SesionService } from '../../servicios/index';
 
 // Clases
 import { Punto, Insignia } from '../../clases/index';
@@ -35,7 +35,6 @@ export class MisPuntosComponent implements OnInit {
   mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
 
   constructor(
-    private profesorService: ProfesorService,
     private route: ActivatedRoute,
     private sesion: SesionService,
     private peticionesAPI: PeticionesAPIService,

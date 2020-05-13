@@ -1,0 +1,68 @@
+<div class="titulo">Mis familias de avatares</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+    <div class = "enFila" style="width: 60%; align-content: left;"  >
+      <div>
+        Seleccione una familia
+        <br>
+        <mat-form-field>
+          <mat-label>Familias</mat-label>
+          <select matNativeControl [(ngModel)]="familiaId"  (change) = "TraeImagenesFamilia()">
+            <option *ngFor="let familia of listaFamilias" [value]="familia.id">
+              <p >{{familia.NombreFamilia}}</p>
+            </option>
+          </select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div *ngIf = "familiaCargada" class = "enFila">
+      <div  id = "imagenAvatar"  style = "width: 30%; margin-top: 15%; position: relative;">
+        <!-- Cuando se cargue la imagen se activa la función para que se muestra a tamaño doble -->
+        <!-- <img  #img id ="silueta"  *ngIf="imagenSilueta"  (load)="PonDoble(img)"  [src]="imagenSilueta"> -->
+        <img  #img id ="silueta" widht = '300' height= '324' *ngIf="imagenSilueta"   [src]="imagenSilueta">
+      </div>
+      <div class = "enColumna" style = "width: 70%">
+        <button type="button" align = "left" class="btn Eliminar" (click) = "BorrarFamilia();" >Eliminar familia <i class="material-icons">
+          delete
+        </i></button>
+        <br>
+        <h4> Haz click sobre el complemento que quieres colocar en la silueta</h4>
+        <br>
+        <div class="enFila" styte = "width:20%">
+          <div style = "margin-left: 5%;">
+            <h4>{{familiaElegida.NombreComplemento1}}</h4>
+            <button style = "width: 30%; height: 35%"  mat-button  (click) = "QuitarComplemento (1)" class="btn Eliminar" >Quitar </button>
+          </div>
+         <div id = "imagenesComplementos1" style = "width: 80%;">
+        </div>
+        </div>
+        <div class="enFila" styte = "width:20%">
+          <div style = "margin-left: 5%;">
+            <h4>{{familiaElegida.NombreComplemento2}}</h4>
+            <button style = "width: 30%; height: 35%"  mat-button  (click) = "QuitarComplemento (2)" class="btn Eliminar" >Quitar </button>
+          </div>
+        <div id = "imagenesComplementos2" style = "width: 80%; ">
+        </div>
+        </div>
+        <div class="enFila" styte = "width:20%">
+          <div style = "margin-left: 5%;">
+            <h4>{{familiaElegida.NombreComplemento3}}</h4>
+            <button style = "width: 30%; height: 35%" mat-button  (click) = "QuitarComplemento (3)" class="btn Eliminar" >Quitar </button>
+          </div>
+        <div id = "imagenesComplementos3" style = "width: 80%; ">
+        </div>
+        </div>
+        <div class="enFila" styte = "width:20%">
+          <div style = "margin-left: 5%;">
+            <h4>{{familiaElegida.NombreComplemento4}}</h4>
+            <button style = "width: 30%; height: 35%" mat-button  (click) = "QuitarComplemento (4)" class="btn Eliminar" >Quitar </button>
+          </div>
+        <div id = "imagenesComplementos4" style = "width: 80%; ">
+        </div>
+        </div>
+      </div>
+    </div>
+</div>
+

@@ -245,28 +245,33 @@ export class EditarJornadasJuegoDeCompeticionFormulaUnoComponent implements OnIn
   AnadirPuntos() {
     // Tengo que hacer un recorrido diferente del dataSource porque necesito saber el
     // valor de i
-    let NuevaPuntuacion: number;
-    NuevaPuntuacion = this.myForm1.value.NuevaPuntuacion;
-    console.log('Voy a asignar NuevaPuntuacion ' + NuevaPuntuacion);
-    if (!isNaN(NuevaPuntuacion)) {
-      for ( let i = 0; i < this.dataSource.data.length; i++) {
-        // Buscamos los alumnos que hemos seleccionado
-        if (this.selectionPuntos.isSelected(this.dataSource.data[i]))  {
-          console.log('Voy a asignar tantos puntos ' + NuevaPuntuacion);
-          console.log(this.Puntuacion[i]);
-          console.log(NuevaPuntuacion);
-          this.Puntuacion[i] = NuevaPuntuacion;
-          console.log(this.Puntuacion);
-          this.TablaPuntuacion[i].Puntuacion = NuevaPuntuacion;
-          console.log(this.TablaPuntuacion[i]);
-          }
+    const JuegoEmpezado: boolean = this.JuegoEmpezado();
+    if (JuegoEmpezado === false) {
+      let NuevaPuntuacion: number;
+      NuevaPuntuacion = Number(this.myForm1.value.NuevaPuntuacion);
+      console.log('Voy a asignar NuevaPuntuacion ' + NuevaPuntuacion);
+      if (!isNaN(NuevaPuntuacion)) {
+          for ( let i = 0; i < this.dataSource.data.length; i++) {
+            // Buscamos los alumnos que hemos seleccionado
+            if (this.selectionPuntos.isSelected(this.dataSource.data[i]))  {
+              console.log('Voy a asignar tantos puntos ' + NuevaPuntuacion);
+              console.log(this.Puntuacion[i]);
+              console.log(NuevaPuntuacion);
+              this.Puntuacion[i] = NuevaPuntuacion;
+              console.log(this.Puntuacion);
+              this.TablaPuntuacion[i].Puntuacion = NuevaPuntuacion;
+              console.log(this.TablaPuntuacion[i]);
+              }
+            }
+          } else {
+            Swal.fire('Introduzca una puntuación válida', 'Le recordamos que debe ser un Número', 'error');
         }
-    } else {
-        Swal.fire('Introduzca una puntuación válida', 'Le recordamos que debe ser un Número', 'error');
-    }
-    this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
-    this.selectionPuntos.clear();
-    this.botonTablaDesactivado = true;
+      this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
+      this.selectionPuntos.clear();
+      this.botonTablaDesactivado = true;
+      } else {
+    Swal.fire('Esta competición ya ha empezado', 'No es posible modificar las puntuaciones', 'error');
+  }
   }
 
   AnadirJugadorconPuntos() {

@@ -181,6 +181,14 @@ label{
   width: 100%;
 }
 
+.CabeceraPreparados {
+  background-color: rgb(197, 197, 37);
+  color: white;
+  font-style: bold;
+  width: 100%;
+  font-size: 2em;
+}
+
 
 // Iconos
 .material-icons{
@@ -358,7 +366,6 @@ input[type=text] {
   display: flex;
   display: -webkit-flex;
   display: -ms-flexbox;
-
   justify-content: space-between;
   width: 100%;
 }

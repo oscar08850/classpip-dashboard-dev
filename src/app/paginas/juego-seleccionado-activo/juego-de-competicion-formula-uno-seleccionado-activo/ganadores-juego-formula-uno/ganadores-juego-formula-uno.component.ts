@@ -5,7 +5,7 @@ import { Location } from '@angular/common';
 import { Juego, Jornada, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
          TablaEquipoJuegoDeCompeticion, TablaClasificacionJornada, AlumnoJuegoDeCompeticionFormulaUno,
          EquipoJuegoDeCompeticionFormulaUno, AlumnoJuegoDePuntos, EquipoJuegoDePuntos,
-         Alumno} from '../../../../clases/index';
+         Alumno, AlumnoJuegoDeCuestionario} from '../../../../clases/index';
 
 // Servicio
 import { SesionService , CalculosService, PeticionesAPIService } from '../../../../servicios/index';
@@ -24,7 +24,7 @@ export interface Asignacion {
 const ModoAsignacion: Asignacion[] = [
   {modo: 'Manualmente', id: 1},
   {modo: 'Aleatoriamente', id: 2},
-  {modo: 'Juego de Puntos', id: 3},
+  {modo: 'Según resultados de un juego', id: 3},
 ];
 
 @Component({
@@ -65,11 +65,14 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   botonAsignarPuntosDesactivado = true;
 
 
-  juegosActivosPuntos: Juego[];
+  juegosDisponibles: Juego[];
 
-  juegodePuntosSeleccionadoID: number;
+  juegoDisponibleSeleccionadoID: number;
+  juegoDisponibleSeleccionado: Juego;
   listaAlumnosOrdenadaPorPuntosJuegoDePuntos: AlumnoJuegoDePuntos[];
   listaEquiposOrdenadaPorPuntosJuegoDePuntos: EquipoJuegoDePuntos[];
+
+  listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario: AlumnoJuegoDeCuestionario[];
 
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
   listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
@@ -95,17 +98,20 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     } else {
       this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
     }
-    // Selecciono los juegos de puntos activos que sean del mosmo modo que el juego de liga (individual o en equipo)
-    this.juegosActivosPuntos = this.sesion.DameJuegosDePuntosActivos().filter (juego => juego.Modo === this.juegoSeleccionado.Modo);
-    console.log ('Juegos de puntos ');
-    console.log (this.juegosActivosPuntos);
+    // Selecciono los juegos entre los que puedo elegir para decidir resultados
+    // Son los juegos de puntos (tanto activos como acabados) y los juegos de cuestionario acabados
+    this.juegosDisponibles = this.sesion.DameJuegosDePuntos().filter (juego => juego.Modo === this.juegoSeleccionado.Modo);
+    // tslint:disable-next-line:max-line-length
+    this.juegosDisponibles = this.juegosDisponibles.concat (this.sesion.DameJuegosDeCuestionariosAcabados());
+    console.log ('Juegos para elegir ganadores ');
+    console.log (this.juegosDisponibles);
     this.asignados = false;
   }
 
-  //////////////////////////////////////// FUNCIONES PARA RECUPERAR INSCRIPCIONES JUEGO DE PUNTOS //////////////////////////////////
+  /////////////// FUNCIONES PARA RECUPERAR INSCRIPCIONES DE JUEGOS DISPOBIBLES PARA ASIGNAR GANADORES //////////////////////////////////
 
   RecuperarInscripcionesAlumnosJuegoPuntos() {
-    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(this.juegodePuntosSeleccionadoID)
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(this.juegoDisponibleSeleccionadoID)
     .subscribe(inscripciones => {
       this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos = inscripciones;
       // ordena la lista por puntos
@@ -117,7 +123,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   }
 
   RecuperarInscripcionesEquiposJuegoPuntos() {
-    this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(this.juegodePuntosSeleccionadoID)
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(this.juegoDisponibleSeleccionadoID)
     .subscribe(inscripciones => {
       this.listaEquiposOrdenadaPorPuntosJuegoDePuntos = inscripciones;
       console.log(this.listaEquiposOrdenadaPorPuntosJuegoDePuntos);
@@ -127,6 +133,19 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       });
     });
 
+  }
+
+  RecuperarInscripcionesAlumnosJuegoCuestionario() {
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionario(this.juegoDisponibleSeleccionadoID)
+    .subscribe(inscripciones => {
+      this.listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario = inscripciones;
+      // ordena la lista por puntos
+      // tslint:disable-next-line:only-arrow-functions
+      // tslint:disable-next-line:max-line-length
+      this.listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario = this.listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario.sort(function(obj1, obj2) {
+        return obj2.Nota - obj1.Nota;
+      });
+    });
   }
 
   Disputada(jornadaId): boolean {
@@ -164,11 +183,13 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     // ganadores es un vector con los id de los ganadores de la jornada
     // Los puntos que hay que asignar a cada uno de los ganadores, segun su posición, estan en juegoSeleccionado.Puntos
 
-    let i;
-    for (i = 0; i < ganadores.length ; i++) {
-      this.tablaJornada.filter (participante => participante.id === ganadores[i])[0].puntos = this.juegoSeleccionado.Puntos[i];
+    if (ganadores !== undefined) {
+      let i;
+      for (i = 0; i < ganadores.length ; i++) {
+        this.tablaJornada.filter (participante => participante.id === ganadores[i])[0].puntos = this.juegoSeleccionado.Puntos[i];
+      }
+      this.tablaJornada.sort ((a , b) => b.puntos - a.puntos);
     }
-    this.tablaJornada.sort ((a , b) => b.puntos - a.puntos);
   }
 
   // Esta función se ejecuta al seleccionar una jornada
@@ -197,25 +218,34 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         this.botonAsignarPuntosDesactivado = true;
     // Si se elijió asignación por juego de puntos y no hay juego de puntos para elegir se muestra una alarma
     // Si  hay juego de puntos no se hace nada porque ya aparecerá automáticamente el selector del juego
-      } else if ((Number(this.modoAsignacionId) === 3) && (this.juegosActivosPuntos.length === 0)) { // JuegoPuntos
+      } else if ((Number(this.modoAsignacionId) === 3) && (this.juegosDisponibles.length === 0)) { // JuegoPuntos
         this.botonAsignarManualDesactivado = true;
         this.botonAsignarAleatorioDesactivado = true;
         this.botonAsignarPuntosDesactivado = true;
         console.log ('Aviso');
-        Swal.fire('Cuidado', 'No hay juegos de puntos disponibles para este grupo', 'warning');
+        Swal.fire('Cuidado', 'No hay juegos finalizados disponibles para este grupo', 'warning');
       }
   }
 
-  // Cuando se seleccione el juego de puntos entonces activo el botón correspondiente y me traigo las inscripciones
-  // para ese juego elegido
-  SeleccionarJuegoPuntos() {
+  // Me traigo el juego elegido para decidir los resultados de la jornada
+  TraerJuegoDisponibleSeleccionado() {
     this.botonAsignarManualDesactivado = true;
     this.botonAsignarAleatorioDesactivado = true;
     this.botonAsignarPuntosDesactivado = false;
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      this.RecuperarInscripcionesAlumnosJuegoPuntos();
+    console.log ('ID del juego seleccionado ' + this.juegoDisponibleSeleccionadoID);
+    console.log (this.juegosDisponibles);
+    this.juegoDisponibleSeleccionado = this.juegosDisponibles.filter (juego => juego.id === Number (this.juegoDisponibleSeleccionadoID))[0];
+    console.log ('ya he seleccionado el juego');
+    console.log (this.juegoDisponibleSeleccionado);
+    if ( this.juegoDisponibleSeleccionado.Tipo === 'Juego De Puntos') {
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.RecuperarInscripcionesAlumnosJuegoPuntos();
+      } else {
+        this.RecuperarInscripcionesEquiposJuegoPuntos();
+      }
     } else {
-      this.RecuperarInscripcionesEquiposJuegoPuntos();
+      // Tiene que ser de cuestionario, y de momento solo hay individual
+      this.RecuperarInscripcionesAlumnosJuegoCuestionario();
     }
   }
 
@@ -245,18 +275,26 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     const jornadaSeleccionada = this.jornadasDelJuego.filter (jornada => jornada.id === Number(this.jornadaId))[0];
     // Asigno los resultados a la jornada
     this.calculos.AsignarResultadosJornadaF1(this.juegoSeleccionado, jornadaSeleccionada, ganadores);
-    Swal.fire('Resutados asignados aleatoriamente');
+    Swal.fire('Enhorabuena', 'Resutados asignados aleatoriamente', 'success');
     this.asignados = true;
   }
-  AsignarGanadoresJuegoPuntos() {
+  AsignarGanadoresJuegoDisponibleSeleccionado() {
     const ganadores: any[] = [];
 
     // Selecciono los ganadores a partir del ranking del juego de puntos
     if (this.juegoSeleccionado.Modo === 'Individual') {
-      let i = 0;
-      while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
-        ganadores.push(this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos[i].alumnoId);
-        i++;
+      if (this.juegoDisponibleSeleccionado.Tipo === 'Juego De Puntos') {
+        let i = 0;
+        while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+          ganadores.push(this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos[i].alumnoId);
+          i++;
+        }
+      } else {
+        let i = 0;
+        while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+          ganadores.push(this.listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario[i].alumnoId);
+          i++;
+        }
       }
     } else {
       let i = 0;
@@ -272,7 +310,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     const jornadaSeleccionada = this.jornadasDelJuego.filter (jornada => jornada.id === Number(this.jornadaId))[0];
     // Asigno los resultados a la jornada
     this.calculos.AsignarResultadosJornadaF1(this.juegoSeleccionado, jornadaSeleccionada, ganadores);
-    Swal.fire('Resutados asignados mediante juego de puntos');
+    Swal.fire('Enhorabuena', 'Resutados asignados mediante juego de puntos', 'success');
     this.asignados = true;
   }
 
@@ -298,9 +336,8 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     console.log ('Numero de lineas ' + lineas.length);
     console.log(lineas.length + ' === ' + this.juegoSeleccionado.NumeroParticipantesPuntuan);
     if (lineas.length !== this.juegoSeleccionado.NumeroParticipantesPuntuan) {
-      Swal.fire('Esta jornada tiene ' + this.juegoSeleccionado.NumeroParticipantesPuntuan +
-      ' participantes que puntúan, pero se han introducido ' + lineas.length,
-      ' No se ha podido realizar esta acción', 'error');
+      Swal.fire('Cuidado', 'Esta jornada tiene ' + this.juegoSeleccionado.NumeroParticipantesPuntuan +
+      ' participantes que puntúan, pero se han introducido ' + lineas.length, 'warning');
     } else {
       let ganadores;
       if (this.juegoSeleccionado.Modo === 'Individual') {
@@ -314,8 +351,10 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       // Selecciono la jornada implicada
       const jornadaSeleccionada = this.jornadasDelJuego.filter (jornada => jornada.id === Number(this.jornadaId))[0];
       // Asigno los resultados a la jornada
-      this.calculos.AsignarResultadosJornadaF1(this.juegoSeleccionado, jornadaSeleccionada, ganadores);
-      Swal.fire('Resutados asignados manualmente');
+      if (ganadores !== undefined) {
+        this.calculos.AsignarResultadosJornadaF1(this.juegoSeleccionado, jornadaSeleccionada, ganadores);
+        Swal.fire('Enhorabuena', 'Resutados asignados manualmente', 'success');
+      }
       this.asignados = true;
 
     }
@@ -324,7 +363,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
   cambioTab(tabChangeEvent) {
     if (tabChangeEvent.index === 1) {
-      // preparamos las tablas para elegir a los ganadores de la lista de participantes
+      // preparamos las tablas para elegir a los ganadores manualmente a partir de la lista de participantes
 
       this.ganadoresElegidos = [];
       this.dataSourceElegidos = new MatTableDataSource (this.ganadoresElegidos);
@@ -341,8 +380,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         this.dataSourceParticipantes = new MatTableDataSource (this.equiposParticipantes);
       }
     } else {
-      console.log('Este juego ya tiene ganadores asignados');
-      Swal.fire('Esta jornada ya tiene ganadores asignados', ' No se ha podido realizar esta acción', 'error');
+      // Para el método manualmente masivo no necesitamos cargar nada
     }
   }
 
@@ -385,7 +423,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   // Para asignar los elegidos mediante selección de la lista
   AsignarGanadoresElegidos() {
     if (this.ganadoresElegidos.length < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
-      Swal.fire('Cuidado', 'Aún falta asignar alumnos que puntúan', 'warning');
+      Swal.fire('Cuidado', 'Aún falta seleccionar algún participante que puntúa', 'warning');
     } else {
       // Preparo el vector con los identificadores de los ganadores
       const ganadores: any[] = [];
@@ -401,7 +439,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       const jornadaSeleccionada = this.jornadasDelJuego.filter (jornada => jornada.id === Number(this.jornadaId))[0];
     // Asigno los resultados a la jornada
       this.calculos.AsignarResultadosJornadaF1(this.juegoSeleccionado, jornadaSeleccionada, ganadores);
-      Swal.fire('Resutados asignados manualmente');
+      Swal.fire('Enhorabuena', 'Resutados asignados manualmente', 'success');
       this.asignados = true;
     }
   }

@@ -23,7 +23,7 @@ export class InformacionJuegoDeCompeticionInactivoComponent implements OnInit {
   numeroTotalJornadas: number;
   jornadasDelJuego: Jornada[];
   JornadasCompeticion: TablaJornadas[] = [];
-
+  jornadas: Jornada[];
   // Información de la tabla: Muestra el JugadorUno, JugadorDos, Ganador, JornadaDeCompeticionLigaId y id
   EnfrentamientosJornadaSeleccionada: EnfrentamientoLiga[] = [];
 
@@ -32,7 +32,7 @@ export class InformacionJuegoDeCompeticionInactivoComponent implements OnInit {
 
   // Columnas Tabla
   displayedColumnsEnfrentamientos: string[] = ['nombreJugadorUno', 'nombreJugadorDos', 'nombreGanador'];
-
+  participanteDescansa;
   dataSourceEnfrentamientoIndividual;
   dataSourceEnfrentamientoEquipo;
 
@@ -50,12 +50,13 @@ export class InformacionJuegoDeCompeticionInactivoComponent implements OnInit {
     console.log(this.numeroTotalJornadas);
     const datos = this.sesion.DameDatosJornadas();
     this.JornadasCompeticion = datos.JornadasCompeticion;
+    this.jornadas = datos.Jornadas;
     console.log('Jornadas Competicion: ');
     // Teniendo la tabla de Jornadas puedo sacar los enfrentamientos de cada jornada accediendo a la api
     console.log(this.JornadasCompeticion);
     this.listaAlumnosClasificacion = this.sesion.DameTablaAlumnoJuegoDeCompeticion();
     this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
-  }
+    }
 
   ObtenerEnfrentamientosDeCadaJornada(jornadaSeleccionada: TablaJornadas) {
     console.log('El id de la jornada seleccionada es: ' + jornadaSeleccionada.id);
@@ -69,81 +70,71 @@ export class InformacionJuegoDeCompeticionInactivoComponent implements OnInit {
     });
   }
 
-
   ConstruirTablaEnfrentamientos() {
     console.log ('Aquí tendré la tabla de enfrentamientos, los enfrentamientos sonc:');
     console.log(this.EnfrentamientosJornadaSeleccionada);
     console.log('Distinción entre Individual y equipos');
     if (this.juegoSeleccionado.Modo === 'Individual') {
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
-        // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < this.listaAlumnosClasificacion.length; j++) {
-          if (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno === this.listaAlumnosClasificacion[j].id) {
-            this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = this.listaAlumnosClasificacion[j].nombre + ' ' +
-                                                                          this.listaAlumnosClasificacion[j].primerApellido + ' ' +
-                                                                          this.listaAlumnosClasificacion[j].segundoApellido;
-            if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaAlumnosClasificacion[j].id) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaAlumnosClasificacion[j].nombre + ' ' +
-                                                                                  this.listaAlumnosClasificacion[j].primerApellido + ' ' +
-                                                                                  this.listaAlumnosClasificacion[j].segundoApellido;
-            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-            }
-          } else if (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos === this.listaAlumnosClasificacion[j].id) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = this.listaAlumnosClasificacion[j].nombre + ' ' +
-                                                                            this.listaAlumnosClasificacion[j].primerApellido + ' ' +
-                                                                            this.listaAlumnosClasificacion[j].segundoApellido;
-              if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaAlumnosClasificacion[j].id) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaAlumnosClasificacion[j].nombre + ' ' +
-                                                                                    this.listaAlumnosClasificacion[j].primerApellido + ' ' +
-                                                                                    this.listaAlumnosClasificacion[j].segundoApellido;
-              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-              }
-          }
-        }
-      }
-      console.log(this.EnfrentamientosJornadaSeleccionada);
+      this.EnfrentamientosJornadaSeleccionada = this.calculos.ConstruirTablaEnfrentamientos(this.EnfrentamientosJornadaSeleccionada,
+                                                                                            this.listaAlumnosClasificacion,
+                                                                                            this.listaEquiposClasificacion,
+                                                                                            this.juegoSeleccionado);
       this.dataSourceEnfrentamientoIndividual = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
+      console.log('La tabla de enfrentamientos individual queda: ');
+      console.log(this.dataSourceEnfrentamientoIndividual.data);
 
     } else {
-      console.log('Estoy en ConstruirTablaEnfrentamientos() equipos');
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
-        // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < this.listaEquiposClasificacion.length; j++) {
-          if (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno === this.listaEquiposClasificacion[j].id) {
-            this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = this.listaEquiposClasificacion[j].nombre;
-            if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaEquiposClasificacion[j].id) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
-            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-            } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-            }
-          } else if (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos === this.listaEquiposClasificacion[j].id) {
-              this.EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = this.listaEquiposClasificacion[j].nombre;
-              if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === this.listaEquiposClasificacion[j].id) {
-                this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = this.listaEquiposClasificacion[j].nombre;
-              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === 0) {
-                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = 'Empate';
-              } else if (this.EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
-                  this.EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
-              }
-          }
-        }
-      }
-      console.log(this.EnfrentamientosJornadaSeleccionada);
+      this.EnfrentamientosJornadaSeleccionada = this.calculos.ConstruirTablaEnfrentamientos(this.EnfrentamientosJornadaSeleccionada,
+                                                                                            this.listaAlumnosClasificacion,
+                                                                                            this.listaEquiposClasificacion,
+                                                                                            this.juegoSeleccionado);
       this.dataSourceEnfrentamientoEquipo = new MatTableDataSource(this.EnfrentamientosJornadaSeleccionada);
       console.log('La tabla de enfrentamientos por equipos queda: ');
       console.log(this.dataSourceEnfrentamientoEquipo.data);
 
     }
+  }
+
+  ParticipanteDescansa(jornadaSeleccionada: TablaJornadas) {
+    this.participanteDescansa = null;
+    if (this.juegoSeleccionado.Modo === 'Individual' && this.listaAlumnosClasificacion.length % 2 !== 0) {
+      // Comparar lista alumnos del juego con los alumnos de los enfrentamientos, si alguno de los alumnos
+      // no está en ningún enfrentamiento es por que este descansa
+      this.ComprobarQuienDescansa(this.listaAlumnosClasificacion, this.EnfrentamientosJornadaSeleccionada);
+      return true;
+    } else if (this.juegoSeleccionado.Modo === 'Equipos' && this.listaEquiposClasificacion.length % 2 !== 0) {
+      this.ComprobarQuienDescansa(this.listaEquiposClasificacion, this.EnfrentamientosJornadaSeleccionada);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  ComprobarQuienDescansa(participantes: any[], enfrentamientosJornadaSeleccionada: EnfrentamientoLiga[]) {
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < participantes.length; i++) {
+      let encontrado = false;
+      // tslint:disable-next-line:prefer-for-of
+      for (let k = 0; k < enfrentamientosJornadaSeleccionada.length; k++) {
+        if (enfrentamientosJornadaSeleccionada[k].JugadorUno === participantes[i].id ||
+            enfrentamientosJornadaSeleccionada[k].JugadorDos === participantes[i].id) {
+              encontrado = true;
+        }
+      }
+      if (encontrado === false) {
+        if (this.juegoSeleccionado.Modo === 'Individual') {
+          this.participanteDescansa = ' descansa ' + participantes[i].nombre + ' ' + participantes[i].primerApellido
+                                      + ' ' + participantes[i].segundoApellido;
+        } else {
+          this.participanteDescansa = ' descansan ' + participantes[i].nombre;
+        }
+      }
+    }
+  }
+
+  JornadaFinalizada(jornadaSeleccionada: TablaJornadas) {
+    const jornadaFinalizada = this.calculos.JornadaFinalizada(this.juegoSeleccionado, jornadaSeleccionada);
+    return jornadaFinalizada;
   }
 
   goBack() {

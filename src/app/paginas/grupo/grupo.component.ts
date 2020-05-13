@@ -75,7 +75,11 @@ export class GrupoComponent implements OnInit {
   }
   EliminarGrupo() {
     // Para eliminar grupo hay muchas cosas que hacer. Estar en el servicio de calculos
-    this.calculos.EliminarGrupo ().subscribe (this.goBack());
+    this.calculos.EliminarGrupo ().subscribe (() => {
+      Swal.fire('Grupo borrado', 'success');
+      this.goBack();
+    }
+    );
    // this.goBack();
   }
 
@@ -93,7 +97,6 @@ export class GrupoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.EliminarGrupo();
-        Swal.fire('Eliminado', this.grupo.Nombre + ' eliminado correctamente', 'success');
       }
     });
   }

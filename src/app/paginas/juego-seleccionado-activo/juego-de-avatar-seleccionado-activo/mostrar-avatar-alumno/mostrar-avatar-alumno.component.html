@@ -1,0 +1,18 @@
+<div class="titulo">Avatar de {{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+
+  <div class = "enColumna" >
+    <div>
+        <div id="imagenAvatar" style = "position: relative;">
+          <!-- Cuando se cargue la imagen de la silueta aquí se ejecuta la función Ajusta
+          en la que hago que la imagen se visualice grande -->
+          <img  #silueta [src]="imagenSilueta" width = '450' heigth = '486'>
+        </div>
+    </div>
+
+    <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+
+</div>
+
+

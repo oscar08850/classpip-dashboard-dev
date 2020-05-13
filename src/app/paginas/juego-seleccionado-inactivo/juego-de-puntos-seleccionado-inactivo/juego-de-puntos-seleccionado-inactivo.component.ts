@@ -7,8 +7,6 @@ import { Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, EquipoJuegoDe
   TablaAlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos } from '../../../clases/index';
 
 // Services
-import { JuegoService, EquipoService, AlumnoService, JuegoDePuntosService } from '../../../servicios/index';
-// Services
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
 
 
@@ -65,14 +63,11 @@ export class JuegoDePuntosSeleccionadoInactivoComponent implements OnInit {
 
   alumnosEquipo: Alumno[];
 
-  constructor( private juegoService: JuegoService,
+  constructor(
                public dialog: MatDialog,
-               private alumnoService: AlumnoService,
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
                private calculos: CalculosService,
-               private equipoService: EquipoService,
-               private juegoDePuntosService: JuegoDePuntosService,
                private location: Location ) { }
 
   ngOnInit() {
@@ -349,7 +344,7 @@ export class JuegoDePuntosSeleccionadoInactivoComponent implements OnInit {
   }
 
   EliminarJuego() {
-    this.peticionesAPI.BorraJuegoDePuntos(this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
+    this.peticionesAPI.BorraJuegoDePuntos(this.juegoSeleccionado.id)
     .subscribe(res => {
       console.log('Juego eliminado');
       this.location.back();

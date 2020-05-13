@@ -10,8 +10,7 @@ import Swal from 'sweetalert2';
 // Clases
 import { Cromo, Coleccion } from '../../../clases/index';
 
-// Servicios
-import { ColeccionService } from '../../../servicios/index';
+
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../../servicios/index';
 
@@ -47,7 +46,6 @@ export class EditarColeccionComponent implements OnInit {
   cambios: Boolean = false;
 
   constructor(
-              private coleccionService: ColeccionService,
               public dialog: MatDialog,
               private location: Location,
               private http: Http,
@@ -117,7 +115,7 @@ export class EditarColeccionComponent implements OnInit {
           if (blob) {
             reader.readAsDataURL(blob);
           }
-      });
+        });
       }
     }
   }

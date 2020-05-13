@@ -11,8 +11,6 @@ import Swal from 'sweetalert2';
 import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion,
  Album, AlbumEquipo, Coleccion, Cromo, AlumnoJuegoDePuntos } from '../../../../clases/index';
 
-// Services
-import { JuegoService, EquipoService, ColeccionService, JuegoDeColeccionService } from '../../../../servicios/index';
 
 import {SesionService, PeticionesAPIService, CalculosService} from '../../../../servicios/index';
 
@@ -105,13 +103,10 @@ export class AsignarCromosComponent implements OnInit {
   tercerEquipo: Equipo;
   mostrarLista = true;
 
-  constructor( private juegoService: JuegoService,
-               private equipoService: EquipoService,
-               private coleccionService: ColeccionService,
+  constructor(
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
                private calculos: CalculosService,
-               private juegoDeColeccionService: JuegoDeColeccionService,
                public dialog: MatDialog,
                private http: Http,
                public location: Location) { }

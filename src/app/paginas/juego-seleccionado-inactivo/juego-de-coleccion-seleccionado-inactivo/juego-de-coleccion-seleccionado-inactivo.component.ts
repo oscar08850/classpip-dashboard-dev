@@ -6,14 +6,12 @@ import { Location } from '@angular/common';
 import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion } from '../../../clases/index';
 
 // Services
-import { JuegoService, EquipoService, AlumnoService, JuegoDeColeccionService, ColeccionService} from '../../../servicios/index';
 
 import { SesionService, CalculosService, PeticionesAPIService } from '../../../servicios/index';
 
 // Imports para abrir diálogo y swal
 import { MatDialog } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
-import { CompileShallowModuleMetadata } from '@angular/compiler';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -52,11 +50,6 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
               private sesion: SesionService,
               private peticionesAPI: PeticionesAPIService,
               private calculos: CalculosService,
-              private juegoService: JuegoService,
-              private alumnoService: AlumnoService,
-              private equipoService: EquipoService,
-              private coleccionService: ColeccionService,
-              private juegoDeColeccionService: JuegoDeColeccionService,
               public dialog: MatDialog,
               private location: Location) { }
 
@@ -200,7 +193,7 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
   }
 
   EliminarJuego() {
-    this.peticionesAPI.BorraJuegoDeColeccion(this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
+    this.peticionesAPI.BorraJuegoDeColeccion(this.juegoSeleccionado.id)
     .subscribe(res => {
       console.log('Juego eliminado');
       this.location.back();

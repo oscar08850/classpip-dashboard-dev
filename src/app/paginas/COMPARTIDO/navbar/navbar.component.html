@@ -53,9 +53,6 @@
     </mat-menu>
 
 
-
-
-
     <button mat-button [matMenuTriggerFor]="Escenarios" class="btnNavbar"> Escenarios </button>
     <mat-menu #Escenarios="matMenu" class="mat-menu">
       <button mat-menu-item routerLink = {{URLCrearEscenario}}> Crear Escenarios </button>
@@ -63,6 +60,11 @@
     </mat-menu>
 
 
+    <button mat-button [matMenuTriggerFor]="Avatares" class="btnNavbar"> Avatares </button>
+    <mat-menu #Avatares="matMenu">
+      <button mat-menu-item routerLink= "{{URLMisFamiliasAvatares}}"> Mis familias de avatares </button>
+      <button mat-menu-item routerLink= "{{URLCrearFamiliaAvatares}}"> Crear familia </button>
+    </mat-menu>
 
 
     <button routerLink = {{URLDesarrolladores}} mat-button [matMenuTriggerFor]="Desarrollo" class="btnNavbarAmarillo"> Para desarrolladores </button>
