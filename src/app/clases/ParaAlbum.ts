@@ -1,4 +1,4 @@
-export class AlbumDelAlumno {
+export class ParaAlbum {
   Nombre: string;
   ImagenDelante: string;
   ImagenDetras: string;

@@ -18,7 +18,7 @@ import 'rxjs';
 
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import { Observable} from 'rxjs';
-
+import Swal from 'sweetalert2';
 
 export interface OpcionSeleccionada {
   nombre: string;
@@ -48,7 +48,8 @@ export class CrearColeccionComponent implements OnInit {
   nombreCromo: string;
   probabilidadCromo: string;
   nivelCromo: string;
-  imagenCromo: string;
+  imagenCromoDelante: string;
+  imagenCromoDetras: string;
   cromosAgregados: Cromo [] = [];
   // tslint:disable-next-line:ban-types
   isDisabledCromo: Boolean = true;
@@ -58,8 +59,10 @@ export class CrearColeccionComponent implements OnInit {
   nombreImagen: string;
   file: File;
 
-  nombreImagenCromo: string;
-  fileCromo: File;
+  nombreImagenCromoDelante: string;
+  nombreImagenCromoDetras: string;
+  fileCromoDelante: File;
+  fileCromoDetras: File;
 
   // Al principio coleccion no creada y imagen no cargada
   // tslint:disable-next-line:ban-types
@@ -198,39 +201,52 @@ export class CrearColeccionComponent implements OnInit {
 
     console.log('Entro a asignar el cromo ' + this.nombreCromo);
     console.log('Entro a asignar el cromo a la coleccionID' + this.coleccionCreada.id);
-    console.log(this.nombreImagenCromo );
+    console.log(this.nombreImagenCromoDelante );
+    console.log(this.nombreImagenCromoDetras );
 
     this.peticionesAPI.PonCromoColeccion(
-      new Cromo(this.nombreCromo, this.nombreImagenCromo , this.probabilidadCromo, this.nivelCromo), this.coleccionCreada.id)
-    .subscribe((res) => {
-      if (res != null) {
-        console.log('asignado correctamente');
-        // Añadimos el cromo a la lista
-        this.cromosAgregados.push(res);
-        this.cromosAgregados = this.cromosAgregados.filter(result => result.Nombre !== '');
-        // this.CromosAgregados(res);
+      // tslint:disable-next-line:max-line-length
+      new Cromo(this.nombreCromo , this.probabilidadCromo, this.nivelCromo, this.nombreImagenCromoDelante, this.nombreImagenCromoDetras), this.coleccionCreada.id)
+      .subscribe((res) => {
+        if (res != null) {
+          console.log('asignado correctamente');
+          // Añadimos el cromo a la lista
+          this.cromosAgregados.push(res);
+          this.cromosAgregados = this.cromosAgregados.filter(result => result.Nombre !== '');
+          // this.CromosAgregados(res);
 
-         // Hago el POST de la imagen SOLO si hay algo cargado. Ese boolean se cambiará en la función ExaminarImagenCromo
-        if (this.imagenCargadoCromo === true) {
+          // Hago el POST de la imagen de delante SOLO si hay algo cargado.
+          if (this.imagenCromoDelante !== undefined) {
 
-          // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagenCromo
-          const formData: FormData = new FormData();
-          formData.append(this.nombreImagenCromo, this.fileCromo);
-          this.peticionesAPI.PonImagenCromo(formData)
-          .subscribe(() => console.log('Imagen cargado'));
+            // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagenCromo
+            const formData: FormData = new FormData();
+            formData.append(this.nombreImagenCromoDelante, this.fileCromoDelante);
+            this.peticionesAPI.PonImagenCromo(formData)
+            .subscribe(() => console.log('Imagen cargado'));
+          }
+
+          // Hago el POST de la imagen de detras SOLO si hay algo cargado.
+          if (this.imagenCromoDetras !== undefined) {
+
+            // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagenCromo
+            const formData: FormData = new FormData();
+            formData.append(this.nombreImagenCromoDetras, this.fileCromoDetras);
+            this.peticionesAPI.PonImagenCromo(formData)
+            .subscribe(() => console.log('Imagen cargado'));
+          }
+
+          this.LimpiarCampos();
+        } else {
+          console.log('fallo en la asignación');
         }
-        this.LimpiarCampos();
-      } else {
-        console.log('fallo en la asignación');
-      }
-    });
+      });
   }
 
 
   // Utilizamos esta función para eliminar un cromo de la base de datos y de la lista de añadidos recientemente
   BorrarCromo(cromo: Cromo) {
     console.log('Id cromo ' + this.coleccionCreada.id);
-    this.peticionesAPI.BorrarCromo(cromo.id, this.coleccionCreada.id)
+    this.peticionesAPI.BorrarCromo(cromo.id)
     .subscribe(() => {
       // Elimino el cromo de la lista
       this.cromosAgregados = this.cromosAgregados.filter(res => res.id !== cromo.id);
@@ -238,7 +254,10 @@ export class CrearColeccionComponent implements OnInit {
       console.log('Cromo borrado correctamente');
 
     });
-    this.peticionesAPI.BorrarImagenCromo (cromo.Imagen).subscribe();
+    this.peticionesAPI.BorrarImagenCromo (cromo.ImagenDelante).subscribe();
+    if (cromo.ImagenDetras !== undefined) {
+      this.peticionesAPI.BorrarImagenCromo (cromo.ImagenDetras).subscribe();
+    }
   }
 
   // Activa la función ExaminarImagenColeccion
@@ -247,11 +266,17 @@ export class CrearColeccionComponent implements OnInit {
     document.getElementById('inputColeccion').click();
   }
 
-    // Activa la función ExaminarImagenCromo
-  ActivarInputCromo() {
+  // Activa la función ExaminarImagenCromoDelante
+  ActivarInputCromoDelante() {
     console.log('Activar input');
-    document.getElementById('inputCromo').click();
+    document.getElementById('inputCromoDelante').click();
   }
+
+    // Activa la función ExaminarImagenCromoDetras
+    ActivarInputCromoDetras() {
+      console.log('Activar input');
+      document.getElementById('inputCromoDetras').click();
+    }
 
 
   // Buscaremos la imagen en nuestro ordenador y después se mostrará en el form con la variable "imagen" y guarda el
@@ -260,7 +285,7 @@ export class CrearColeccionComponent implements OnInit {
     this.file = $event.target.files[0];
     console.log('fichero ' + this.file.name);
     this.nombreImagen = this.file.name;
-    this.nombreImagenCromo = this.file.name;
+   // this.nombreImagenCromo = this.file.name;
 
     const reader = new FileReader();
     reader.readAsDataURL(this.file);
@@ -272,43 +297,37 @@ export class CrearColeccionComponent implements OnInit {
     };
   }
 
-  ExaminarImagenCromo($event) {
-    this.fileCromo = $event.target.files[0];
+  ExaminarImagenCromoDelante($event) {
+    this.fileCromoDelante = $event.target.files[0];
 
-    console.log('fichero ' + this.fileCromo.name);
-    this.nombreImagenCromo = this.fileCromo.name;
+    console.log('fichero ' + this.fileCromoDelante.name);
+    this.nombreImagenCromoDelante = this.fileCromoDelante.name;
 
     const reader = new FileReader();
-    reader.readAsDataURL(this.fileCromo);
+    reader.readAsDataURL(this.fileCromoDelante);
     reader.onload = () => {
       console.log('ya Cromo');
-      this.imagenCargadoCromo = true;
-      this.imagenCromo = reader.result.toString();
+      // this.imagenCargadoCromo = true;
+      this.imagenCromoDelante = reader.result.toString();
     };
   }
 
-  // // Una vez seleccionada la probabilidad se asigna a la varible del cromo
-  // OpcionProbabilidadSeleccionada() {
-  //   // Opcion selecionada para probabilidad
-  //   if (this.opcionSeleccionadaProbabilidad === 'Muy Baja') {
-  //     this.probabilidadCromo = 'Muy Baja';
-  //   }
-  //   if (this.opcionSeleccionadaProbabilidad === 'Baja') {
-  //     this.probabilidadCromo = 'Baja';
-  //   }
+  ExaminarImagenCromoDetras($event) {
+    this.fileCromoDetras = $event.target.files[0];
 
-  //   if (this.opcionSeleccionadaProbabilidad === 'Media') {
-  //     this.probabilidadCromo = 'Media';
-  //   }
+    console.log('fichero ' + this.fileCromoDetras.name);
+    this.nombreImagenCromoDetras = this.fileCromoDetras.name;
 
-  //   if (this.opcionSeleccionadaProbabilidad === 'Alta') {
-  //     this.probabilidadCromo = 'Alta';
-  //   }
+    const reader = new FileReader();
+    reader.readAsDataURL(this.fileCromoDetras);
+    reader.onload = () => {
+      console.log('ya Cromo');
+      // this.imagenCargadoCromo = true;
+      this.imagenCromoDetras = reader.result.toString();
+    };
+  }
 
-  //   if (this.opcionSeleccionadaProbabilidad === 'Muy Alta') {
-  //     this.probabilidadCromo = 'Muy Alta';
-  //   }
-  // }
+
 
   OpcionNivelSeleccionado() {
     console.log('AAAAA' + this.opcionSeleccionadaNivel);
@@ -351,8 +370,10 @@ export class CrearColeccionComponent implements OnInit {
       this.nivelCromo = null;
       this.isDisabledCromo = true;
       this.imagenCargadoCromo = false;
-      this.imagenCromo = undefined;
-      this.nombreImagenCromo = undefined;
+      this.imagenCromoDelante = undefined;
+      this.nombreImagenCromoDelante = undefined;
+      this.imagenCromoDetras = undefined;
+      this.nombreImagenCromoDetras = undefined;
      // this.opcionSeleccionadaProbabilidad = null;
       this.opcionSeleccionadaNivel = null;
   }
@@ -380,10 +401,12 @@ export class CrearColeccionComponent implements OnInit {
       this.imagenCargado = false;
       this.imagen = undefined;
       this.imagenCargadoCromo = false;
-      this.imagenCromo = undefined;
+      this.imagenCromoDelante = undefined;
+      this.imagenCromoDetras = undefined;
       this.coleccionCreada = undefined;
       this.cromosAgregados = [];
       this.finalizar = true;
+      Swal.fire('Coleccion creada con éxito', '', 'success');
       this.router.navigate(['/inicio/' + this.profesorId]);
 
 
@@ -427,12 +450,16 @@ export class CrearColeccionComponent implements OnInit {
         .subscribe( () => { console.log ('Ya he borrado la coleccion');
                             this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe();
                             for (let i = 0; i < (this.cromosAgregados.length); i++) {
-                                this.peticionesAPI.BorrarImagenCromo(this.cromosAgregados[i].Imagen).subscribe();
+                                this.peticionesAPI.BorrarCromo (this.cromosAgregados[i].id).subscribe();
+                                this.peticionesAPI.BorrarImagenCromo(this.cromosAgregados[i].ImagenDelante).subscribe();
+                                if (this.cromosAgregados[i].ImagenDetras !== undefined) {
+                                  this.peticionesAPI.BorrarImagenCromo(this.cromosAgregados[i].ImagenDetras).subscribe();
+                                }
                             }
                             obs.next();
         });
     });
-        //this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
+        // this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
     return eliminaObservable;
   }
 }

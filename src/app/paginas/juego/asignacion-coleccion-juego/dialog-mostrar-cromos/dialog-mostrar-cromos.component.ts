@@ -21,7 +21,8 @@ export class DialogMostrarCromosComponent implements OnInit {
   coleccion: Coleccion;
   cromosColeccion: Cromo[];
 
-  imagenesCromos: string[] = [];
+  imagenesCromosDelante: string[] = [];
+  imagenesCromosDetras: string[] = [];
 
 
   cromo: Cromo;
@@ -59,24 +60,41 @@ export class DialogMostrarCromosComponent implements OnInit {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.cromosColeccion.length; i++) {
-    this.cromo = this.cromosColeccion[i];
+      this.cromo = this.cromosColeccion[i];
 
-    if (this.cromo.Imagen !== undefined ) {
-      // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-      this.peticionesAPI.DameImagenCromo (this.cromo.Imagen)
-      .subscribe(response => {
-        const blob = new Blob([response.blob()], { type: 'image/jpg'});
+      if (this.cromo.ImagenDelante !== undefined ) {
+        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+        this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDelante)
+        .subscribe(response => {
+          const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-        const reader = new FileReader();
-        reader.addEventListener('load', () => {
-          this.imagenesCromos[i] = reader.result.toString();
-        }, false);
+          const reader = new FileReader();
+          reader.addEventListener('load', () => {
+            this.imagenesCromosDelante[i] = reader.result.toString();
+          }, false);
 
-        if (blob) {
-          reader.readAsDataURL(blob);
-        }
-    });
-  }
+          if (blob) {
+            reader.readAsDataURL(blob);
+          }
+      });
+      }
+
+      if (this.cromo.ImagenDetras !== undefined ) {
+        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+        this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDetras)
+        .subscribe(response => {
+          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+          const reader = new FileReader();
+          reader.addEventListener('load', () => {
+            this.imagenesCromosDetras[i] = reader.result.toString();
+          }, false);
+
+          if (blob) {
+            reader.readAsDataURL(blob);
+          }
+      });
+      }
     }
   }
 

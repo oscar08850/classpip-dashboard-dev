@@ -81,11 +81,17 @@
 
 
 
-        <div class="enFila" style="width: 70%">
-              <input #file id = "inputCromo" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromo($event)" style="display:none">
-              <img class="imagen" *ngIf="imagenCromo" hight = "150" width = "150" mat-card-image [src]="imagenCromo">
-              <button (click) = "ActivarInputCromo()" type="button" class="btn Agregar">
-               Agregar Imagen <i class="material-icons">add_photo_alternate</i>
+          <div class="enFila" style="width: 70%">
+              <input #file id = "inputCromoDelante" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromoDelante($event)" style="display:none">
+              <img class="imagen" *ngIf="imagenCromoDelante" mat-card-image [src]="imagenCromoDelante">
+              <button (click) = "ActivarInputCromoDelante()" type="button" class="btn Agregar">
+               Agregar imagen de delante <i class="material-icons">add_photo_alternate</i>
+              </button>
+
+              <input #file id = "inputCromoDetras" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromoDetras($event)" style="display:none">
+              <img class="imagen" *ngIf="imagenCromoDetras"  mat-card-image [src]="imagenCromoDetras">
+              <button (click) = "ActivarInputCromoDetras()" type="button" class="btn Agregar">
+               Agregar imagen de detras <i class="material-icons">add_photo_alternate</i>
               </button>
           </div>
 

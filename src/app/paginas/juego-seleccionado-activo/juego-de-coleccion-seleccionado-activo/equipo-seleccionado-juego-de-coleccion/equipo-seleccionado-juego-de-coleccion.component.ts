@@ -35,7 +35,8 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   listaCromosSinRepetidos: any [];
   cromo: Cromo;
 
-  imagenCromoArray: string[] = [];
+  imagenCromoDelante: string[] = [];
+  imagenCromoDetras: string[] = [];
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Confirma que quieres eliminar el cromo: ';
 
@@ -92,35 +93,79 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   }
 
 
-
   GET_ImagenesCromos() {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.listaCromosSinRepetidos.length; i++) {
 
-      this.cromo = this.listaCromosSinRepetidos[i].cromo;
 
-      if (this.cromo.Imagen !== undefined ) {
+      const elem  = this.listaCromosSinRepetidos[i];
 
+      if (elem.cromo.ImagenDelante !== undefined ) {
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.http.get('http://localhost:3000/api/imagenes/ImagenCromo/download/' + this.cromo.Imagen,
-        { responseType: ResponseContentType.Blob })
+        this.peticionesAPI.DameImagenCromo (elem.cromo.ImagenDelante)
         .subscribe(response => {
           const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
           const reader = new FileReader();
           reader.addEventListener('load', () => {
-            this.imagenCromoArray[i] = reader.result.toString();
+            this.imagenCromoDelante[i] = reader.result.toString();
           }, false);
 
           if (blob) {
             reader.readAsDataURL(blob);
           }
+        });
+      }
 
+      if (elem.cromo.ImagenDetras !== undefined ) {
+        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+        this.peticionesAPI.DameImagenCromo (elem.cromo.ImagenDetras)
+        .subscribe(response => {
+          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+          const reader = new FileReader();
+          reader.addEventListener('load', () => {
+            this.imagenCromoDetras[i] = reader.result.toString();
+          }, false);
+
+          if (blob) {
+            reader.readAsDataURL(blob);
+          }
         });
       }
     }
   }
+
+
+  // GET_ImagenesCromos() {
+
+  //   // tslint:disable-next-line:prefer-for-of
+  //   for (let i = 0; i < this.listaCromosSinRepetidos.length; i++) {
+
+  //     this.cromo = this.listaCromosSinRepetidos[i].cromo;
+
+  //     if (this.cromo.Imagen !== undefined ) {
+
+  //       // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+  //       this.http.get('http://localhost:3000/api/imagenes/ImagenCromo/download/' + this.cromo.Imagen,
+  //       { responseType: ResponseContentType.Blob })
+  //       .subscribe(response => {
+  //         const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+  //         const reader = new FileReader();
+  //         reader.addEventListener('load', () => {
+  //           this.imagenCromoArray[i] = reader.result.toString();
+  //         }, false);
+
+  //         if (blob) {
+  //           reader.readAsDataURL(blob);
+  //         }
+
+  //       });
+  //     }
+  //   }
+  // }
 
 
 

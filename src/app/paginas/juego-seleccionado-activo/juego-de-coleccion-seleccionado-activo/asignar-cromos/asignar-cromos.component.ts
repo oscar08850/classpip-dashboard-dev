@@ -51,7 +51,8 @@ export class AsignarCromosComponent implements OnInit {
 
   cromoSeleccionadoId: number;
   cromoSeleccionado: Cromo;
-  imagenCromoSeleccionado: string;
+  imagenDelanteCromoSeleccionado: string;
+  imagenDetrasCromoSeleccionado: string;
 
   alumnosEquipo: Alumno[];
 
@@ -562,15 +563,32 @@ export class AsignarCromosComponent implements OnInit {
     // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
     GET_ImagenCromo() {
 
-      if (this.cromoSeleccionado.Imagen !== undefined ) {
+      if (this.cromoSeleccionado.ImagenDelante !== undefined ) {
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.peticionesAPI.DameImagenCromo (this.cromoSeleccionado.Imagen)
+        this.peticionesAPI.DameImagenCromo (this.cromoSeleccionado.ImagenDelante)
         .subscribe(response => {
           const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
           const reader = new FileReader();
           reader.addEventListener('load', () => {
-            this.imagenCromoSeleccionado = reader.result.toString();
+            this.imagenDelanteCromoSeleccionado = reader.result.toString();
+          }, false);
+
+          if (blob) {
+            reader.readAsDataURL(blob);
+          }
+      });
+      }
+
+      if (this.cromoSeleccionado.ImagenDetras !== undefined ) {
+        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+        this.peticionesAPI.DameImagenCromo (this.cromoSeleccionado.ImagenDetras)
+        .subscribe(response => {
+          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+          const reader = new FileReader();
+          reader.addEventListener('load', () => {
+            this.imagenDetrasCromoSeleccionado = reader.result.toString();
           }, false);
 
           if (blob) {

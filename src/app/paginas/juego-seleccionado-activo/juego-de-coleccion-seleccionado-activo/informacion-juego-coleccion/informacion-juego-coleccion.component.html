@@ -3,7 +3,7 @@
 
 <div class="contenedor">
   <div class="enColumna">
-          <img class ="logo" style="margin-top: 5px" *ngIf="imagenColeccion" hight = "200" width = "200" mat-card-image [src]="imagenColeccion" >
+          <img class ="imagen" style="margin-top: 5px" *ngIf="imagenColeccion"  mat-card-image [src]="imagenColeccion" >
           <p>
           <span style="font-weight: bold;">Nombre:</span>
                     {{nombreColeccion}}
@@ -36,7 +36,7 @@
         </mat-card-header>
         <mat-card-content style="display: flex; align-items: center;justify-content: center;">
         <div class="posicionImagen" >
-        <img class ="imagenCromo" *ngIf="imagenCromoArray[i]" mat-card-image [src]="imagenCromoArray[i]" >
+        <img class ="imagenCromo" *ngIf="imagenCromoDelante[i]" mat-card-image [src]="imagenCromoDelante[i]" >
       </div>
     </mat-card-content>
       </mat-card>

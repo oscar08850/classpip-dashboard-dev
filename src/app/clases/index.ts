@@ -50,3 +50,4 @@ export * from './AlumnoJuegoDeAvatar';
 export * from './Cuestionario';
 export * from './AlumnoJuegoDeCuestionario';
 export * from './JuegoDeCuestionario';
+export * from './ParaAlbum';

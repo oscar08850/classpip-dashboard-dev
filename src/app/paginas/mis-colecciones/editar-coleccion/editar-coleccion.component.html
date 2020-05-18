@@ -12,7 +12,7 @@
               <br>
               <br>
               <input #file id = "input" type="file" accept= 'image/*' (change)="Mostrar($event)" style="display:none">
-              <img class ="logo" *ngIf="imagenColeccion"  mat-card-image [src]="imagenColeccion" >
+              <img class ="imagen" *ngIf="imagenColeccion"  mat-card-image [src]="imagenColeccion" >
 
               <button (click) = "ActivarInput()" type="button"  class="btn Aceptar">
                     Cambiar Imagen<i class="material-icons">add_photo_alternate</i>
@@ -55,7 +55,7 @@
                     <p style="margin-bottom: -2px;">Probabilidad: {{cromo.Probabilidad}} </p>
                   </mat-card-subtitle>
                 </div>
-                <div class="elementoCromo">
+                <div class="enColumna">
 
                   <button type="button" style="width: 50px !important;" class="btn Editar" (click) = "AbrirDialogoEditarCromo(cromo)">
                     <i style="margin-top: 3px; margin-right: 8px;" class="material-icons">edit </i>
@@ -70,7 +70,7 @@
             </mat-card-header>
             <mat-card-content style="display: flex; align-items: center;justify-content: center;">
               <div class="posicionImagen" >
-                <img class ="imagenCromo" *ngIf="imagenesCromos[i]" mat-card-image [src]="imagenesCromos[i]" >
+                <img class ="imagenCromo" *ngIf="imagenesCromosDelante[i]"  mat-card-image [src]="imagenesCromosDelante[i]" >
               </div>
             </mat-card-content>
           </mat-card>

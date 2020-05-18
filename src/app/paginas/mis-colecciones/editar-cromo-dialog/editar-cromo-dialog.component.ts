@@ -37,12 +37,17 @@ export class EditarCromoDialogComponent implements OnInit {
 
 
   // imagen cromo
-  imagenCromo: string;
-  nombreImagenCromo: string;
-  fileCromo: File;
+  imagenCromoDelante: string;
+  imagenCromoDetras: string;
+  nombreImagenCromoDelante: string;
+  nombreImagenCromoDetras: string;
+  fileCromoDelante: File;
+  fileCromoDetras: File;
 
   // tslint:disable-next-line:ban-types
-  imagenCargadoCromo: Boolean = false;
+  imagenDelanteCargada: Boolean = false;
+  // tslint:disable-next-line:ban-types
+  imagenDetrasCargada: Boolean = false;
 
   // tslint:disable-next-line:ban-types
   cambios: Boolean = false;
@@ -81,7 +86,7 @@ export class EditarCromoDialogComponent implements OnInit {
 
   ngOnInit() {
     this.cromo = this.data.cr;
-    console.log ('recibo cromo ' + this.cromo.Imagen);
+
     this.nombreCromo = this.cromo.Nombre;
     this.nivelCromo = this.cromo.Nivel;
     this.probabilidadCromo = this.cromo.Probabilidad;
@@ -97,24 +102,33 @@ export class EditarCromoDialogComponent implements OnInit {
   EditarCromo() {
     console.log('Entro a editar');
     console.log(this.probabilidadCromo);
-    const ImagenAntigua = this.data.cr.Imagen;
+    const ImagenAntiguaDelante = this.data.cr.ImagenDelante;
+    const ImagenAntiguaDetras = this.data.cr.ImagenDetras;
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaCromoColeccion(new Cromo(this.nombreCromo, this.nombreImagenCromo, this.probabilidadCromo, this.nivelCromo), this.cromo.coleccionId, this.cromo.id)
+    this.peticionesAPI.ModificaCromoColeccion(new Cromo(this.nombreCromo,  this.probabilidadCromo, this.nivelCromo, this.nombreImagenCromoDelante, this.nombreImagenCromoDetras), this.cromo.coleccionId, this.cromo.id)
     .subscribe((res) => {
       if (res != null) {
         this.cromo = res;
         // this.cromosEditados.push (res);
         // console.log('nombre del cromo + nivel' + this.cromosEditados[0].Nombre + this.cromosEditados[0].Nivel);
-        if (this.imagenCargadoCromo === true) {
+        if (this.imagenDelanteCargada === true) {
           // HACEMOS EL POST DE LA NUEVA IMAGEN EN LA BASE DE DATOS
           console.log ('Nueva imagen');
           const formData: FormData = new FormData();
-          formData.append(this.nombreImagenCromo, this.fileCromo);
+          formData.append(this.nombreImagenCromoDelante, this.fileCromoDelante);
           this.peticionesAPI.PonImagenCromo(formData)
           .subscribe(() => console.log('Imagen cargado'));
-          console.log(this.nombreImagenCromo);
-          console.log(ImagenAntigua);
-          this.peticionesAPI.BorrarImagenCromo(ImagenAntigua).subscribe();
+          this.peticionesAPI.BorrarImagenCromo(ImagenAntiguaDelante).subscribe();
+        }
+
+        if (this.imagenDetrasCargada === true) {
+          // HACEMOS EL POST DE LA NUEVA IMAGEN EN LA BASE DE DATOS
+          console.log ('Nueva imagen');
+          const formData: FormData = new FormData();
+          formData.append(this.nombreImagenCromoDetras, this.fileCromoDetras);
+          this.peticionesAPI.PonImagenCromo(formData)
+          .subscribe(() => console.log('Imagen cargado'));
+          this.peticionesAPI.BorrarImagenCromo(ImagenAntiguaDetras).subscribe();
         }
       } else {
         console.log('fallo editando');
@@ -126,15 +140,15 @@ export class EditarCromoDialogComponent implements OnInit {
 
   TraeImagenCromo() {
 
-    if (this.cromo.Imagen !== undefined ) {
+    if (this.cromo.ImagenDelante !== undefined ) {
         // Busca en la base de datos la imágen con el nombre registrado en cromo.Imagen y la recupera
-        this.peticionesAPI.DameImagenCromo (this.cromo.Imagen)
+        this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDelante)
         .subscribe(response => {
           const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
           const reader = new FileReader();
           reader.addEventListener('load', () => {
-            this.imagenCromo = reader.result.toString();
+            this.imagenCromoDelante = reader.result.toString();
           }, false);
 
           if (blob) {
@@ -142,24 +156,56 @@ export class EditarCromoDialogComponent implements OnInit {
           }
       });
     }
+
+    if (this.cromo.ImagenDetras !== undefined ) {
+      // Busca en la base de datos la imágen con el nombre registrado en cromo.Imagen y la recupera
+      this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDetras)
+      .subscribe(response => {
+        const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+        const reader = new FileReader();
+        reader.addEventListener('load', () => {
+          this.imagenCromoDetras = reader.result.toString();
+        }, false);
+
+        if (blob) {
+          reader.readAsDataURL(blob);
+        }
+    });
+  }
   }
     // AL CLICAR EN AGREGAR LOGO NOS ACTIVARÁ LA FUNCIÓN MOSTRAR DE ABAJO
-  ActivarInputCromo() {
-      console.log('Activar input 2');
-      document.getElementById('inputCromo').click();
+  ActivarInputCromoDelante() {
+      document.getElementById('inputCromoDelante').click();
   }
+
+  ActivarInputCromoDetras() {
+    document.getElementById('inputCromoDetras').click();
+}
     // Buscaremos la imagen en nuestro ordenador y después se mostrará en el form con la variable "imagen" y guarda el
     // nombre de la foto en la variable nombreImagen
-  ExaminarImagenCromo($event) {
-    this.fileCromo = $event.target.files[0];
-    console.log('fichero ' + this.fileCromo.name);
-    this.nombreImagenCromo = this.fileCromo.name;
+  ExaminarImagenCromoDelante($event) {
+    this.fileCromoDelante = $event.target.files[0];
+    this.nombreImagenCromoDelante = this.fileCromoDelante.name;
     const reader = new FileReader();
-    reader.readAsDataURL(this.fileCromo);
+    reader.readAsDataURL(this.fileCromoDelante);
     reader.onload = () => {
       console.log('ya Cromo');
-      this.imagenCargadoCromo = true;
-      this.imagenCromo = reader.result.toString();
+      this.imagenDelanteCargada = true;
+      this.imagenCromoDelante = reader.result.toString();
+      this.cambios = true;
+      };
+  }
+
+  ExaminarImagenCromoDetras($event) {
+    this.fileCromoDetras = $event.target.files[0];
+    this.nombreImagenCromoDetras = this.fileCromoDetras.name;
+    const reader = new FileReader();
+    reader.readAsDataURL(this.fileCromoDetras);
+    reader.onload = () => {
+      console.log('ya Cromo');
+      this.imagenDetrasCargada = true;
+      this.imagenCromoDetras = reader.result.toString();
       this.cambios = true;
       };
   }

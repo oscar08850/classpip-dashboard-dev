@@ -27,7 +27,8 @@ export class EditarColeccionComponent implements OnInit {
 
   cromo: Cromo;
   imagenCromo: string;
-  imagenesCromos: string[] = [];
+  imagenesCromosDelante: string[] = [];
+  imagenesCromosDetras: string[] = [];
 
   nombreColeccion: string;
   // imagen coleccion
@@ -101,15 +102,33 @@ export class EditarColeccionComponent implements OnInit {
 
       this.cromo = this.cromosColeccion[i];
 
-      if (this.cromo.Imagen !== undefined ) {
+      if (this.cromo.ImagenDelante !== undefined ) {
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.peticionesAPI.DameImagenCromo (this.cromo.Imagen)
+        this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDelante)
         .subscribe(response => {
           const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
           const reader = new FileReader();
           reader.addEventListener('load', () => {
-            this.imagenesCromos[i] = reader.result.toString();
+            this.imagenesCromosDelante[i] = reader.result.toString();
+          }, false);
+
+          if (blob) {
+            reader.readAsDataURL(blob);
+          }
+        });
+      }
+
+
+      if (this.cromo.ImagenDetras !== undefined ) {
+        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+        this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDetras)
+        .subscribe(response => {
+          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+          const reader = new FileReader();
+          reader.addEventListener('load', () => {
+            this.imagenesCromosDetras[i] = reader.result.toString();
           }, false);
 
           if (blob) {
@@ -175,7 +194,6 @@ export class EditarColeccionComponent implements OnInit {
   // TAMBIEN EDITAREMOS EL CROMO EN UN DIALOGO
   AbrirDialogoEditarCromo(cromo: Cromo): void {
 
-    console.log ('Vamos a editar cromo ' + cromo.Imagen);
     const dialogRef = this.dialog.open ( EditarCromoDialogComponent , {
       width: '900px',
       maxHeight: '600px',
@@ -232,25 +250,54 @@ export class EditarColeccionComponent implements OnInit {
 
   // Utilizamos esta función para eliminar un cromo de la base de datos y actualiza la lista de cromos
   BorrarCromo(cromo: Cromo) {
-    this.peticionesAPI.BorrarCromo(cromo.id, this.coleccion.id)
-    .subscribe(() => {
-      // Eliminamos el cromo de la colección
-      console.log ('coleccion:' + this.coleccion);
-      const i = this.cromosColeccion.indexOf(cromo);
-      console.log ('posicion ' + i);
-      this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
-      this.TraeImagenesCromos();
-      // En teoria debería poder ahorrarme traer otra vez los cromos
-      // de la base de datos, eliminando la imagen del vector de imagenes
-      // con la sentencia siguiente:
-      // this.imagenesCromos = this.imagenesCromos.slice(i, 1);
-      // Sin embargo, no funciona.
+    const posicion = this.cromosColeccion.indexOf (cromo);
+    console.log ('voy a borrar el cromo ' + cromo.id +  ' de la posición ' + posicion);
 
-    });
-    this.peticionesAPI.BorrarImagenCromo(cromo.Imagen).subscribe(() => {
-      this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
-      this.TraeImagenesCromos();
-    });
+    this.peticionesAPI.BorrarCromo (cromo.id).subscribe( () => {
+        const nueva = this.cromosColeccion.slice(0, posicion).concat(this.cromosColeccion.slice(posicion + 1, this.cromosColeccion.length))
+        this.cromosColeccion = nueva;
+        console.log ('ya esta borrado');
+        console.log (this.cromosColeccion);
+      }
+    );
+    console.log (this.cromosColeccion);
+    this.peticionesAPI.BorrarImagenCromo(cromo.ImagenDelante).subscribe( () => {
+        // tslint:disable-next-line:max-line-length
+        const nueva = this.imagenesCromosDelante.slice(0, posicion).concat(this.imagenesCromosDelante.slice(posicion + 1, this.imagenesCromosDelante.length))
+        this.imagenesCromosDelante = nueva;
+      }
+    );
+    if (cromo.ImagenDetras !== undefined) {
+      this.peticionesAPI.BorrarImagenCromo(cromo.ImagenDelante).subscribe( () => {
+        // tslint:disable-next-line:max-line-length
+        const nueva = this.imagenesCromosDetras.slice(0, posicion).concat(this.imagenesCromosDetras.slice(posicion + 1, this.imagenesCromosDetras.length))
+        this.imagenesCromosDelante = nueva;
+      }
+      );
+    }
+
+
+
+
+    // this.peticionesAPI.BorrarCromo(cromo.id)
+    // .subscribe(() => {
+    //   // Eliminamos el cromo de la colección
+    //   console.log ('coleccion:' + this.coleccion);
+    //   const i = this.cromosColeccion.indexOf(cromo);
+    //   console.log ('posicion ' + i);
+    //   this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
+    //   this.TraeImagenesCromos();
+    //   // En teoria debería poder ahorrarme traer otra vez los cromos
+    //   // de la base de datos, eliminando la imagen del vector de imagenes
+    //   // con la sentencia siguiente:
+    //   // this.imagenesCromos = this.imagenesCromos.slice(i, 1);
+    //   // Sin embargo, no funciona.
+
+    // });
+    // this.peticionesAPI.BorrarImagenCromo(cromo.).subscribe(() => {
+    //   this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
+    //   this.TraeImagenesCromos();
+    // });
   }
 
 
