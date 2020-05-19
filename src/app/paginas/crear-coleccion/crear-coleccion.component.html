@@ -33,10 +33,38 @@
 
 
           <div class="btnCambiarStep">
-            <button *ngIf="coleccionYaCreada === false" class="btn Next"matStepperNext (click)= CrearColeccion()>Siguiente</button>
+            <button *ngIf="coleccionYaCreada === false" class="btn Next"matStepperNext>Siguiente</button>
             <button *ngIf="coleccionYaCreada === true"  class="btn Next" matStepperNext (click)= EditarColeccion() >Siguiente</button>
           </div>
         </form>
+        </mat-step>
+
+        <!-- En el siguiente paso decidimos si los cromos de esta colección son de una cara o de dos caras -->
+        <mat-step>
+          <ng-template matStepLabel><div>Caras de los cromos</div></ng-template>
+          <div>
+            <label class = "LabelStepper">Indica si los cromos de esta colección tienen una o dos caras:</label>
+
+            <form action="">
+              <input type="radio" name="caras" checked > Cromos con una cara<br>
+              <input type="radio" name="caras" > Cromos con dos caras
+            </form>
+<!--
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
+                <mat-radio-button (click)="DosCaras=false" class="radio-button">
+                  <label style="color: black;">Cromos con una cara</label>
+                </mat-radio-button>
+                <mat-radio-button (click)="DosCaras=true" class="radio-button">
+                  <label style="color: black;">Cromos con dos caras</label>
+                </mat-radio-button>
+            </mat-radio-group> -->
+            <!-- <span style ="font-weight: bold;color:green;"> Has elegido ... {{ModoPresentacionFavorito}}</span> -->
+
+          </div>
+          <div class="btnCambiarStep">
+            <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+            <button  (click)="RegistraNumeroDeCaras()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+          </div>
         </mat-step>
 
 
@@ -82,17 +110,20 @@
 
 
           <div class="enFila" style="width: 70%">
+            <div>
               <input #file id = "inputCromoDelante" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromoDelante($event)" style="display:none">
-              <img class="imagen" *ngIf="imagenCromoDelante" mat-card-image [src]="imagenCromoDelante">
+              <img class="imagenCromo" *ngIf="imagenCromoDelante" mat-card-image [src]="imagenCromoDelante">
               <button (click) = "ActivarInputCromoDelante()" type="button" class="btn Agregar">
-               Agregar imagen de delante <i class="material-icons">add_photo_alternate</i>
+               Imagen de delante <i class="material-icons">add_photo_alternate</i>
               </button>
-
+            </div>
+            <div *ngIf ="dosCaras" >
               <input #file id = "inputCromoDetras" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromoDetras($event)" style="display:none">
-              <img class="imagen" *ngIf="imagenCromoDetras"  mat-card-image [src]="imagenCromoDetras">
+              <img class="imagenCromo" *ngIf="imagenCromoDetras"  mat-card-image [src]="imagenCromoDetras">
               <button (click) = "ActivarInputCromoDetras()" type="button" class="btn Agregar">
-               Agregar imagen de detras <i class="material-icons">add_photo_alternate</i>
+               Imagen de detras <i class="material-icons">add_photo_alternate</i>
               </button>
+            </div>
           </div>
 
           <mat-card-actions align="end">

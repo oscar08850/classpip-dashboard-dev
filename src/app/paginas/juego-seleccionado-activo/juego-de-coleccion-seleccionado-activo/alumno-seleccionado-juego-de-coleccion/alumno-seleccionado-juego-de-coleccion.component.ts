@@ -36,6 +36,7 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   imagenPerfil: string;
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Confirma que quieres eliminar el cromo: ';
+  coleccion: Coleccion;
 
   constructor(
                private sesion: SesionService,
@@ -49,6 +50,7 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
+    this.coleccion = this.sesion.DameColeccion();
 
     this.inscripcionAlumno = this.sesion.DameInscripcionAlumno();
     this.alumno = this.sesion.DameAlumno();

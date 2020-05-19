@@ -75,6 +75,8 @@ export class CrearColeccionComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   finalizar: Boolean = false;
 
+  dosCaras;
+
     // Opciones para mostrar en la lista desplegable para seleccionar el tipo de probabilidad que listar
     opcionesProbabilidad: OpcionSeleccionada[] = [
       {nombre: 'Muy Baja', id: 'Muy Baja'},
@@ -141,7 +143,7 @@ export class CrearColeccionComponent implements OnInit {
     console.log(this.nombreImagen);
 
     // Hace el POST del equipo
-    this.peticionesAPI.CreaColeccion (new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
+    this.peticionesAPI.CreaColeccion (new Coleccion(nombreColeccion, this.nombreImagen, this.dosCaras), this.profesorId)
     // this.peticionesAPI.CreaColeccion(new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
     .subscribe((res) => {
       if (res != null) {
@@ -158,6 +160,7 @@ export class CrearColeccionComponent implements OnInit {
           this.peticionesAPI.PonImagenColeccion(formData)
           .subscribe(() => console.log('Imagen cargado'));
         }
+        console.log ('He creado la colección ' + this.coleccionCreada.id);
 
       } else {
         console.log('Fallo en la creación');
@@ -404,6 +407,7 @@ export class CrearColeccionComponent implements OnInit {
       this.imagenCromoDelante = undefined;
       this.imagenCromoDetras = undefined;
       this.coleccionCreada = undefined;
+      this.dosCaras = undefined;
       this.cromosAgregados = [];
       this.finalizar = true;
       Swal.fire('Coleccion creada con éxito', '', 'success');
@@ -461,5 +465,15 @@ export class CrearColeccionComponent implements OnInit {
     });
         // this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
     return eliminaObservable;
+  }
+
+  RegistraNumeroDeCaras() {
+    const radio = document.getElementsByName('caras')[0] as HTMLInputElement;
+    if (radio.checked ) {
+      this.dosCaras = false;
+    } else {
+      this.dosCaras = true;
+    }
+    this.CrearColeccion();
   }
 }

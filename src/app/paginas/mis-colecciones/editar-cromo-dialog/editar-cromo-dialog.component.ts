@@ -86,6 +86,7 @@ export class EditarCromoDialogComponent implements OnInit {
 
   ngOnInit() {
     this.cromo = this.data.cr;
+    this.coleccion = this.data.coleccion;
 
     this.nombreCromo = this.cromo.Nombre;
     this.nivelCromo = this.cromo.Nivel;

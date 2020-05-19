@@ -47,6 +47,8 @@ export class AgregarCromoDialogComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   imagenDetrasCargada: Boolean = false;
 
+  dosCaras;
+
 
     // Opciones para mostrar en la lista desplegable para seleccionar el tipo de juego que listar
     opcionesProbabilidad: OpcionSeleccionada[] = [
@@ -83,7 +85,8 @@ export class AgregarCromoDialogComponent implements OnInit {
 
   ngOnInit() {
     // Recogemos los datos que le pasamos del otro componente
-    this.coleccionId = this.data.coleccionId;
+    this.coleccionId = this.data.coleccion.id;
+    this.dosCaras = this.data.coleccion.DosCaras;
   }
 
   // Creamos una cromo y lo añadimos a la coleccion dandole un nombre, una probabilidad, un nivel y una imagen

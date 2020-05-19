@@ -30,7 +30,43 @@
           'Oro' : cromoSeleccionado.Nivel === 'Oro',
           'Plata' : cromoSeleccionado.Nivel === 'Plata',
           'Bronce' : cromoSeleccionado.Nivel === 'Bronce'}">
-          <mat-card-header>
+
+          <div class= "enColumna">
+            <mat-card-header style = "margin-top: 20%;">
+              <!-- <div style="display: flex; justify-content:space-between; width: 250px "> -->
+                <mat-card-title align = "center">{{cromoSeleccionado.Nombre}}</mat-card-title>
+                <mat-card-subtitle align = "center">{{cromoSeleccionado.Probabilidad}}</mat-card-subtitle>
+
+            </mat-card-header>
+            <!-- <mat-card-content style="display: flex; align-items: center;justify-content: center;"> -->
+            <mat-card-content>
+
+                <div *ngIf = "!coleccion.DosCaras" class="posicionImagen">
+                  <img class ="imagenCromo" *ngIf="imagenDelanteCromoSeleccionado"  mat-card-image [src]="imagenDelanteCromoSeleccionado" >
+                </div>
+
+                <div  *ngIf = "coleccion.DosCaras"  class="flip-box">
+                    <div class="flip-box-inner">
+                      <div class="flip-box-front">
+                        <div class="posicionImagen" >
+                          <img class ="imagenCromo" *ngIf="imagenDelanteCromoSeleccionado"  mat-card-image [src]="imagenDelanteCromoSeleccionado" >
+                        </div>
+                      </div>
+                      <div class="flip-box-back">
+                        <div class="posicionImagen" >
+                          <img class ="imagenCromo" *ngIf="imagenDetrasCromoSeleccionado"  mat-card-image [src]="imagenDetrasCromoSeleccionado" >
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+
+
+            </mat-card-content>
+            </div>
+
+
+          <!-- <mat-card-header>
             <div style="display: flex; justify-content:space-between; width: 250px ">
             <div  >
             <mat-card-title>{{cromoSeleccionado.Nombre}}</mat-card-title>
@@ -42,7 +78,7 @@
           <div class="posicionImagen" >
           <img class ="imagenCromo" *ngIf="imagenDelanteCromoSeleccionado" mat-card-image [src]="imagenDelanteCromoSeleccionado" >
         </div>
-      </mat-card-content>
+          </mat-card-content> -->
         </mat-card>
       </div>
       <div style="margin-top: 10px">

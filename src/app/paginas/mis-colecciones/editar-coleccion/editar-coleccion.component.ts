@@ -174,7 +174,7 @@ export class EditarColeccionComponent implements OnInit {
       maxHeight: '600px',
       // Le pasamos solo los id del grupo y profesor ya que es lo único que hace falta para vincular los alumnos
       data: {
-        coleccionId: this.coleccion.id,
+        coleccion: this.coleccion,
       }
     });
 
@@ -199,7 +199,7 @@ export class EditarColeccionComponent implements OnInit {
       maxHeight: '600px',
       data: {
         cr : cromo,
-        coleccionId: this.coleccion.id,
+        coleccion: this.coleccion,
       }
     });
 
@@ -263,14 +263,14 @@ export class EditarColeccionComponent implements OnInit {
     console.log (this.cromosColeccion);
     this.peticionesAPI.BorrarImagenCromo(cromo.ImagenDelante).subscribe( () => {
         // tslint:disable-next-line:max-line-length
-        const nueva = this.imagenesCromosDelante.slice(0, posicion).concat(this.imagenesCromosDelante.slice(posicion + 1, this.imagenesCromosDelante.length))
+        const nueva = this.imagenesCromosDelante.slice(0, posicion).concat(this.imagenesCromosDelante.slice(posicion + 1, this.imagenesCromosDelante.length));
         this.imagenesCromosDelante = nueva;
       }
     );
     if (cromo.ImagenDetras !== undefined) {
       this.peticionesAPI.BorrarImagenCromo(cromo.ImagenDelante).subscribe( () => {
         // tslint:disable-next-line:max-line-length
-        const nueva = this.imagenesCromosDetras.slice(0, posicion).concat(this.imagenesCromosDetras.slice(posicion + 1, this.imagenesCromosDetras.length))
+        const nueva = this.imagenesCromosDetras.slice(0, posicion).concat(this.imagenesCromosDetras.slice(posicion + 1, this.imagenesCromosDetras.length));
         this.imagenesCromosDelante = nueva;
       }
       );

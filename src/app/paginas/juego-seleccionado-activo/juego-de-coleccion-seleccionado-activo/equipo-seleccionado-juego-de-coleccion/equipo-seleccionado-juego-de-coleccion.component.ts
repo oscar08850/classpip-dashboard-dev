@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ResponseContentType, Http, Response } from '@angular/http';
 
-import { Alumno, Equipo, Juego, EquipoJuegoDeColeccion, Cromo } from '../../../../clases/index';
+import { Alumno, Equipo, Juego, EquipoJuegoDeColeccion, Cromo, Coleccion } from '../../../../clases/index';
 
 
 // Services
@@ -39,6 +39,7 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   imagenCromoDetras: string[] = [];
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Confirma que quieres eliminar el cromo: ';
+  coleccion: Coleccion;
 
   constructor( private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
@@ -50,6 +51,7 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
 
   ngOnInit() {
     this.equipo = this.sesion.DameEquipo();
+    this.coleccion = this.sesion.DameColeccion();
     this.juegoSeleccionado = this.sesion.DameJuego();
     this.inscripcionEquipo = this.sesion.DameInscripcionEquipo();
     this.CromosDelEquipo();
