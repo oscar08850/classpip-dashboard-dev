@@ -53,26 +53,4 @@ export class AppComponent  {
     );
   }
 
-
-  HandleFileSelect(evt) {
-      const files = evt.target.files; // FileList object
-      const f = files[0];
-      const reader = new FileReader();
-      // Closure to capture the file information.
-      // tslint:disable-next-line:only-arrow-functions
-      reader.onload = (function(theFile) {
-          // tslint:disable-next-line:only-arrow-functions
-          return function(e) {
-            // Render thumbnail.
-           const JsonObj = JSON.parse(e.target.result);
-           console.log ('fichero leido');
-           console.log(JsonObj);
-          };
-       })(f);
-        // Read in the image file as a data URL.
-      reader.readAsText(f);
-  }
-
-
-
 }

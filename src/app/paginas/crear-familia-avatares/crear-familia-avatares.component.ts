@@ -6,6 +6,8 @@ import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
 import { SesionService, PeticionesAPIService, CalculosService } from '../../servicios/index';
+import { Router, ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-crear-familia-avatares',
@@ -56,9 +58,15 @@ export class CrearFamiliaAvataresComponent implements OnInit {
   ancho = '150';
   alto = '162';
 
+  infoFamilia;
+  ficherosFamilia;
+  advertencia = true;
+
+
 
   constructor(
     private formBuilder: FormBuilder,
+    private router: Router,
     private peticionesAPI: PeticionesAPIService,
     private sesion: SesionService,
     private location: Location,
@@ -355,6 +363,114 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     this.muestraSeleccionarComplemento4 = false;
   }
 
+
+  // Activa la función SeleccionarInfoFamilia
+  ActivarInputInfo() {
+      console.log('Activar input');
+      document.getElementById('inputInfo').click();
+  }
+
+  // Par abuscar el fichero JSON que contiene la info de la familia que se va
+  // a cargar desde ficheros
+  SeleccionarInfoFamilia($event) {
+      const fileInfo = $event.target.files[0];
+      const reader = new FileReader();
+      reader.readAsText(fileInfo);
+      reader.onload = () => {
+        this.infoFamilia = JSON.parse(reader.result.toString());
+        Swal.fire({
+          title: 'Selecciona ahora las imagenes de la familia',
+          text: 'Selecciona todos los ficheros de la carpeta de imagenes',
+          icon: 'success',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Selecciona'
+        }).then((result) => {
+          if (result.value) {
+            // Activamos la función SeleccionarFicherosFamilia
+            document.getElementById('inputFamilia').click();
+          }
+        });
+      };
+    }
+
+  SeleccionarFicherosFamilia($event) {
+      this.ficherosFamilia = Array.from($event.target.files);
+    }
+
+  RegistrarFamilia() {
+
+      // Creo la fammilia de avatare
+      // const familia = new FamiliaAvatares (this.infoFamilia.NombreFamilia);
+      // familia.NombreComplemento1 = this.infoFamilia.NombreComplemento1;
+      // familia.NombreComplemento2 = this.infoFamilia.NombreComplemento2;
+      // familia.NombreComplemento3 = this.infoFamilia.NombreComplemento3;
+      // familia.NombreComplemento4 = this.infoFamilia.NombreComplemento4;
+      // familia.Silueta = this.infoFamilia.Silueta;
+      // familia.Complemento1 = this.infoFamilia.Complemento1;
+      // familia.Complemento2 = this.infoFamilia.Complemento2;
+      // familia.Complemento3 = this.infoFamilia.Complemento3;
+      // familia.Complemento4 = this.infoFamilia.Complemento4;
+      const familia = new FamiliaAvatares ();
+      Object.assign (familia, this.infoFamilia);
+
+      this.peticionesAPI.CreaFamiliaAvatares (familia, this.sesion.DameProfesor().id)
+      .subscribe((res) => {
+        if (res != null) {
+          this.familiaAvatares = res;
+          // guardamos la imagen de la silueta
+          const imagenColeccion = this.ficherosFamilia.filter (f => f.name === this.familiaAvatares.Silueta)[0];
+          const formDataSilueta = new FormData();
+          formDataSilueta.append(this.familiaAvatares.Silueta, imagenColeccion);
+          this.peticionesAPI.PonImagenAvatar (formDataSilueta)
+          .subscribe(() => console.log('Imagen cargado'));
+
+          // guadamos la imagen de cada una de las opciones de compkementos
+          this.familiaAvatares.Complemento1.forEach (opcion => {
+              const formDataOpcion = new FormData();
+              const fileOpcion = this.ficherosFamilia.filter (f => f.name === opcion)[0];
+              formDataOpcion.append(opcion, fileOpcion);
+              this.peticionesAPI.PonImagenAvatar(formDataOpcion)
+              .subscribe(() => console.log('Imagen cargado'));
+          });
+
+          this.familiaAvatares.Complemento2.forEach (opcion => {
+            const formDataOpcion = new FormData();
+            const fileOpcion = this.ficherosFamilia.filter (f => f.name === opcion)[0];
+            formDataOpcion.append(opcion, fileOpcion);
+            this.peticionesAPI.PonImagenAvatar(formDataOpcion)
+            .subscribe(() => console.log('Imagen cargado'));
+          });
+
+          this.familiaAvatares.Complemento3.forEach (opcion => {
+            const formDataOpcion = new FormData();
+            const fileOpcion = this.ficherosFamilia.filter (f => f.name === opcion)[0];
+            formDataOpcion.append(opcion, fileOpcion);
+            this.peticionesAPI.PonImagenAvatar(formDataOpcion)
+            .subscribe(() => console.log('Imagen cargado'));
+          });
+
+          this.familiaAvatares.Complemento4.forEach (opcion => {
+            const formDataOpcion = new FormData();
+            const fileOpcion = this.ficherosFamilia.filter (f => f.name === opcion)[0];
+            formDataOpcion.append(opcion, fileOpcion);
+            this.peticionesAPI.PonImagenAvatar(formDataOpcion)
+            .subscribe(() => console.log('Imagen cargado'));
+          });
+
+          Swal.fire('Familia creada con éxito', '', 'success');
+          this.router.navigate(['/inicio/' + this.sesion.DameProfesor().id + '/misFamiliasAvatares']);
+        } else {
+          console.log('fallo al crear la familia');
+        }
+      });
+
+  }
+
+  Cancelar() {
+      this.router.navigate(['/inicio/' + this.sesion.DameProfesor().id]);
+  }
 
 
 
