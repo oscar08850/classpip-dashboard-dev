@@ -34,7 +34,7 @@
             <div class="enFila" style="width: 70%">
               <div>
                   <input #file id = "inputCromoDelante" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromoDelante($event)" style="display:none">
-                  <img class="imagen" *ngIf="imagenCromoDelante" mat-card-image [src]="imagenCromoDelante">
+                  <img class="imagenCromo" *ngIf="imagenCromoDelante" mat-card-image [src]="imagenCromoDelante">
                   <button (click) = "ActivarInputCromoDelante()" type="button" class="btn Agregar">
                    Agregar imagen de delante <i class="material-icons">add_photo_alternate</i>
                   </button>
@@ -42,7 +42,7 @@
                 <div *ngIf = "coleccion.DosCaras">
 
                   <input #file id = "inputCromoDetras" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromoDetras($event)" style="display:none">
-                  <img class="imagen" *ngIf="imagenCromoDetras" mat-card-image [src]="imagenCromoDetras">
+                  <img class="imagenCromo" *ngIf="imagenCromoDetras" mat-card-image [src]="imagenCromoDetras">
                   <button (click) = "ActivarInputCromoDetras()" type="button" class="btn Agregar">
                    Agregar imagen de detras <i class="material-icons">add_photo_alternate</i>
                   </button>

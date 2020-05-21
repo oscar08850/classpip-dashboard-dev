@@ -40,7 +40,7 @@ export class CrearColeccionComponent implements OnInit {
 
 
   // CREAR COLECCION
-  imagen: string;
+  imagenColeccion: string;
   coleccionCreada: Coleccion;
   nombreColeccion: string;
 
@@ -76,6 +76,10 @@ export class CrearColeccionComponent implements OnInit {
   finalizar: Boolean = false;
 
   dosCaras;
+  infoColeccion;
+  ficherosColeccion;
+  coleccion;
+  advertencia = true;
 
     // Opciones para mostrar en la lista desplegable para seleccionar el tipo de probabilidad que listar
     opcionesProbabilidad: OpcionSeleccionada[] = [
@@ -276,10 +280,10 @@ export class CrearColeccionComponent implements OnInit {
   }
 
     // Activa la función ExaminarImagenCromoDetras
-    ActivarInputCromoDetras() {
+  ActivarInputCromoDetras() {
       console.log('Activar input');
       document.getElementById('inputCromoDetras').click();
-    }
+  }
 
 
   // Buscaremos la imagen en nuestro ordenador y después se mostrará en el form con la variable "imagen" y guarda el
@@ -296,7 +300,7 @@ export class CrearColeccionComponent implements OnInit {
 
       console.log('ya');
       this.imagenCargado = true;
-      this.imagen = reader.result.toString();
+      this.imagenColeccion = reader.result.toString();
     };
   }
 
@@ -402,7 +406,7 @@ export class CrearColeccionComponent implements OnInit {
       // Tambien limpiamos las variables utilizadas para crear el nueva coleccion, por si queremos crear otra.
       this.coleccionYaCreada = false;
       this.imagenCargado = false;
-      this.imagen = undefined;
+      this.imagenColeccion = undefined;
       this.imagenCargadoCromo = false;
       this.imagenCromoDelante = undefined;
       this.imagenCromoDetras = undefined;
@@ -463,7 +467,6 @@ export class CrearColeccionComponent implements OnInit {
                             obs.next();
         });
     });
-        // this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
     return eliminaObservable;
   }
 
@@ -476,4 +479,102 @@ export class CrearColeccionComponent implements OnInit {
     }
     this.CrearColeccion();
   }
+
+   // Activa la función SeleccionarInfoColeccion
+  ActivarInputInfo() {
+    console.log('Activar input');
+    document.getElementById('inputInfo').click();
+  }
+
+  // Par abuscar el fichero JSON que contiene la info de la colección que se va
+  // a cargar desde ficheros
+  SeleccionarInfoColeccion($event) {
+    const fileInfo = $event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsText(fileInfo);
+    reader.onload = () => {
+      this.infoColeccion = JSON.parse(reader.result.toString());
+      Swal.fire({
+        title: 'Selecciona ahora las imagenes de los cromos',
+        text: 'Selecciona todos los ficheros de la carpeta imagenes',
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Selecciona'
+      }).then((result) => {
+        if (result.value) {
+          // Activamos la función SeleccionarFicherosCromos
+          document.getElementById('inputCromos').click();
+        }
+      });
+    };
+  }
+
+  SeleccionarFicherosCromos($event) {
+    this.ficherosColeccion = Array.from($event.target.files);
+    // Ya tenemos todos los ficheros de las imagenes
+    // Cogemos la imagen de la colección para que se muestre
+    const fileImagenColeccion = this.ficherosColeccion.filter (f => f.name === this.infoColeccion.ImagenColeccion)[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(fileImagenColeccion);
+    reader.onload = () => {
+      this.imagenColeccion = reader.result.toString();
+    };
+  }
+
+  RegistrarColeccion() {
+
+    // tslint:disable-next-line:max-line-length
+    this.peticionesAPI.CreaColeccion (new Coleccion (this.infoColeccion.Nombre, this.infoColeccion.ImagenColeccion, this.infoColeccion.DosCaras), this.profesorId)
+    .subscribe((res) => {
+      if (res != null) {
+        this.coleccion = res;
+        // guardamos la imagen de la colección (si la hay)
+        if (this.infoColeccion.ImagenColeccion === '') {
+          const imagenColeccion = this.ficherosColeccion.filter (f => f.name === this.coleccion.ImagenColeccion)[0];
+          const formDataImagen = new FormData();
+          formDataImagen.append(this.coleccion.ImagenColeccion, imagenColeccion);
+          this.peticionesAPI.PonImagenColeccion (formDataImagen)
+          .subscribe(() => console.log('Imagen cargado'));
+        }
+
+        // Creamos cada uno de los cromos y guardamos las imagenes delantera (y trasera si la hay)
+        this.infoColeccion.cromos.forEach (cromo => {
+          this.peticionesAPI.PonCromoColeccion(
+            // tslint:disable-next-line:max-line-length
+            new Cromo(cromo.nombreCromo , cromo.probabilidadCromo, cromo.nivelCromo, cromo.nombreImagenCromoDelante, cromo.nombreImagenCromoDetras), this.coleccion.id)
+            .subscribe((res2) => {
+              if (res2 != null) {
+                  // Hacemos el POST de la imagen delantera del cromo
+                  const formDataDelante: FormData = new FormData();
+                  const fileCromoDelante = this.ficherosColeccion.filter (f => f.name === cromo.nombreImagenCromoDelante)[0];
+                  formDataDelante.append(cromo.nombreImagenCromoDelante, fileCromoDelante);
+                  this.peticionesAPI.PonImagenCromo(formDataDelante)
+                  .subscribe(() => console.log('Imagen cargado'));
+                 // Hacemos el POST de la imagen trasera del cromo (si la hay)
+                  if (this.coleccion.DosCaras) {
+                    const formDataDetras = new FormData();
+                    const fileCromoDetras = this.ficherosColeccion.filter (f => f.name === cromo.nombreImagenCromoDetras)[0];
+                    formDataDetras.append(cromo.nombreImagenCromoDetras, fileCromoDetras);
+                    this.peticionesAPI.PonImagenCromo(formDataDetras)
+                    .subscribe(() => console.log('Imagen cargado'));
+                  }
+                  Swal.fire('Coleccion creada con éxito', '', 'success');
+                  this.router.navigate(['/inicio/' + this.profesorId + '/misColecciones']);
+              } else {
+                console.log('fallo en la asignación');
+              }
+            });
+
+        });
+      }
+    });
+  }
+  Cancelar() {
+    this.router.navigate(['/inicio/' + this.profesorId]);
+  }
+
+
 }

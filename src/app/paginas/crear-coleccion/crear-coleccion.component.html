@@ -1,205 +1,274 @@
 
 <div class="titulo"><h2>Crear Coleccion</h2></div>
 <mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
-
 <div class="contenedor">
-  <!-- STEPPER -->
+  <mat-tab-group>
+          <mat-tab label="Crear colección">
 
-    <mat-card class="panel" style= "width: 70%">
+              <!-- STEPPER -->
 
-      <mat-card-content>
+                <mat-card class="panel" style= "width: 70%">
 
-      <mat-horizontal-stepper #linearHorizontalStepper="matHorizontalStepper" [linear]="true" #stepper>
+                  <mat-card-content>
 
-
-        <!-- PRIMER PASO -->
-        <mat-step [stepControl]="myForm">
-
-         <form [formGroup]="myForm">
-          <ng-template matStepLabel>Nombre e imagen</ng-template>
-          <mat-form-field>
-            <mat-label>Nombre</mat-label>
-            <input matInput formControlName="nombreColeccion" required>
-            <mat-error>Este campo es obligatorio</mat-error>
-          </mat-form-field>
-
-          <div>
-              <input #file id = "inputColeccion" type="file" accept= 'image/*' (change)="ExaminarImagenColeccion($event)" style="display:none">
-              <img class="imagen" *ngIf="imagen" hight = "150" width = "150" mat-card-image [src]="imagen" style="margin: 5px">
-              <button (click) = "ActivarInputColeccion()" type="button" class="btn Agregar">
-                Agregar Imagen<i class="material-icons">add_photo_alternate</i>
-              </button>
-          </div>
+                  <mat-horizontal-stepper #linearHorizontalStepper="matHorizontalStepper" [linear]="true" #stepper>
 
 
-          <div class="btnCambiarStep">
-            <button *ngIf="coleccionYaCreada === false" class="btn Next"matStepperNext>Siguiente</button>
-            <button *ngIf="coleccionYaCreada === true"  class="btn Next" matStepperNext (click)= EditarColeccion() >Siguiente</button>
-          </div>
-        </form>
-        </mat-step>
+                    <!-- PRIMER PASO -->
+                    <mat-step [stepControl]="myForm">
 
-        <!-- En el siguiente paso decidimos si los cromos de esta colección son de una cara o de dos caras -->
-        <mat-step>
-          <ng-template matStepLabel><div>Caras de los cromos</div></ng-template>
-          <div>
-            <label class = "LabelStepper">Indica si los cromos de esta colección tienen una o dos caras:</label>
+                    <form [formGroup]="myForm">
+                      <ng-template matStepLabel>Nombre e imagen</ng-template>
+                      <mat-form-field>
+                        <mat-label>Nombre</mat-label>
+                        <input matInput formControlName="nombreColeccion" required>
+                        <mat-error>Este campo es obligatorio</mat-error>
+                      </mat-form-field>
 
-            <form action="">
-              <input type="radio" name="caras" checked > Cromos con una cara<br>
-              <input type="radio" name="caras" > Cromos con dos caras
-            </form>
-<!--
-            <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
-                <mat-radio-button (click)="DosCaras=false" class="radio-button">
-                  <label style="color: black;">Cromos con una cara</label>
-                </mat-radio-button>
-                <mat-radio-button (click)="DosCaras=true" class="radio-button">
-                  <label style="color: black;">Cromos con dos caras</label>
-                </mat-radio-button>
-            </mat-radio-group> -->
-            <!-- <span style ="font-weight: bold;color:green;"> Has elegido ... {{ModoPresentacionFavorito}}</span> -->
-
-          </div>
-          <div class="btnCambiarStep">
-            <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-            <button  (click)="RegistraNumeroDeCaras()" type="button" class="btn Next" matStepperNext>Siguiente</button>
-          </div>
-        </mat-step>
+                      <div>
+                          <input #file id = "inputColeccion" type="file" accept= 'image/*' (change)="ExaminarImagenColeccion($event)" style="display:none">
+                          <img class="imagenCromo" *ngIf="imagenColeccion" mat-card-image [src]="imagenColeccion">
+                          <button (click) = "ActivarInputColeccion()" type="button" class="btn Agregar">
+                            Agregar Imagen<i class="material-icons">add_photo_alternate</i>
+                          </button>
+                      </div>
 
 
+                      <div class="btnCambiarStep">
+                        <button *ngIf="coleccionYaCreada === false" class="btn Next"matStepperNext>Siguiente</button>
+                        <button *ngIf="coleccionYaCreada === true"  class="btn Next" matStepperNext (click)= EditarColeccion() >Siguiente</button>
+                      </div>
+                    </form>
+                    </mat-step>
 
-        <!-- PASO AÑADIR CROMOS -->
-         <mat-step [stepControl]="myForm2">
-          <ng-template matStepLabel>Cromos</ng-template>
+                    <!-- En el siguiente paso decidimos si los cromos de esta colección son de una cara o de dos caras -->
+                    <mat-step>
+                      <ng-template matStepLabel><div>Caras de los cromos</div></ng-template>
+                      <div>
+                        <label class = "LabelStepper">Indica si los cromos de esta colección tienen una o dos caras:</label>
 
-            <mat-card class="panel" >
-            <mat-card-header>
-              <mat-card-title>Crear nuevo cromo</mat-card-title>
-              <mat-card-subtitle>Introduce los parámetros</mat-card-subtitle>
-           </mat-card-header>
-           <mat-card-content>
+                        <form action="">
+                          <input type="radio" name="caras" checked > Cromos con una cara<br>
+                          <input type="radio" name="caras" > Cromos con dos caras
+                        </form>
+            <!--
+                        <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
+                            <mat-radio-button (click)="DosCaras=false" class="radio-button">
+                              <label style="color: black;">Cromos con una cara</label>
+                            </mat-radio-button>
+                            <mat-radio-button (click)="DosCaras=true" class="radio-button">
+                              <label style="color: black;">Cromos con dos caras</label>
+                            </mat-radio-button>
+                        </mat-radio-group> -->
+                        <!-- <span style ="font-weight: bold;color:green;"> Has elegido ... {{ModoPresentacionFavorito}}</span> -->
 
-              <div class="form-group" style="margin: 15px;">
-                  <label for="inputNombreCromo">Nombre</label>
-                  <input  type="text" id="inputNombreNivel" class="form-control" requiered [(ngModel)]="nombreCromo" placeholder="Escribe el nombre del cromo">
-              </div>
-
-              <mat-form-field style="margin: 15px;">
-                <mat-label style="color: white;">Nivel </mat-label>
-                  <select matNativeControl style="color: yellow;" [(ngModel)]="opcionSeleccionadaNivel" name="opcion" (change) = "OpcionNivelSeleccionado()">
-                    <option style="color: black"  *ngFor="let opcion of opcionesNivel" [value]="opcion.id">
-                        {{opcion.nombre}}
-                    </option>
-                  </select>
-              </mat-form-field>
-
-              <mat-form-field style="margin: 15px; ">
-                <mat-label  style="color: white;">Probabilidad </mat-label>
-                  <select matNativeControl style="color: yellow;" [(ngModel)]="probabilidadCromo" name="opcion">
-                    <option style="color: black" *ngFor="let opcion of opcionesProbabilidad" [value]="opcion.id">
-                        {{opcion.nombre}}
-                    </option>
-                  </select>
-              </mat-form-field>
-
-          </mat-card-content>
+                      </div>
+                      <div class="btnCambiarStep">
+                        <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                        <button  (click)="RegistraNumeroDeCaras()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                      </div>
+                    </mat-step>
 
 
 
+                    <!-- PASO AÑADIR CROMOS -->
+                    <mat-step [stepControl]="myForm2">
+                      <ng-template matStepLabel>Cromos</ng-template>
+
+                        <mat-card class="panel" >
+                        <mat-card-header>
+                          <mat-card-title>Crear nuevo cromo</mat-card-title>
+                          <mat-card-subtitle>Introduce los parámetros</mat-card-subtitle>
+                      </mat-card-header>
+                      <mat-card-content>
+
+                          <div class="form-group" style="margin: 15px;">
+                              <label for="inputNombreCromo">Nombre</label>
+                              <input  type="text" id="inputNombreNivel" class="form-control" requiered [(ngModel)]="nombreCromo" placeholder="Escribe el nombre del cromo">
+                          </div>
+
+                          <mat-form-field style="margin: 15px;">
+                            <mat-label style="color: white;">Nivel </mat-label>
+                              <select matNativeControl style="color: yellow;" [(ngModel)]="opcionSeleccionadaNivel" name="opcion" (change) = "OpcionNivelSeleccionado()">
+                                <option style="color: black"  *ngFor="let opcion of opcionesNivel" [value]="opcion.id">
+                                    {{opcion.nombre}}
+                                </option>
+                              </select>
+                          </mat-form-field>
+
+                          <mat-form-field style="margin: 15px; ">
+                            <mat-label  style="color: white;">Probabilidad </mat-label>
+                              <select matNativeControl style="color: yellow;" [(ngModel)]="probabilidadCromo" name="opcion">
+                                <option style="color: black" *ngFor="let opcion of opcionesProbabilidad" [value]="opcion.id">
+                                    {{opcion.nombre}}
+                                </option>
+                              </select>
+                          </mat-form-field>
+
+                      </mat-card-content>
 
 
-          <div class="enFila" style="width: 70%">
-            <div>
-              <input #file id = "inputCromoDelante" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromoDelante($event)" style="display:none">
-              <img class="imagenCromo" *ngIf="imagenCromoDelante" mat-card-image [src]="imagenCromoDelante">
-              <button (click) = "ActivarInputCromoDelante()" type="button" class="btn Agregar">
-               Imagen de delante <i class="material-icons">add_photo_alternate</i>
-              </button>
-            </div>
-            <div *ngIf ="dosCaras" >
-              <input #file id = "inputCromoDetras" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromoDetras($event)" style="display:none">
-              <img class="imagenCromo" *ngIf="imagenCromoDetras"  mat-card-image [src]="imagenCromoDetras">
-              <button (click) = "ActivarInputCromoDetras()" type="button" class="btn Agregar">
-               Imagen de detras <i class="material-icons">add_photo_alternate</i>
-              </button>
-            </div>
-          </div>
 
-          <mat-card-actions align="end">
-            <button  (click) = "LimpiarCampos()" type="button" class="btn Back">Limpiar Campos</button>
-            <button  (click) = "AgregarCromoColeccion()"  class="btn Aceptar">Agregar Cromo</button>
-          </mat-card-actions>
 
+
+                      <div class="enFila" style="width: 70%">
+                        <div>
+                          <input #file id = "inputCromoDelante" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromoDelante($event)" style="display:none">
+                          <img class="imagenCromo" *ngIf="imagenCromoDelante" mat-card-image [src]="imagenCromoDelante">
+                          <button (click) = "ActivarInputCromoDelante()" type="button" class="btn Agregar">
+                          Imagen de delante <i class="material-icons">add_photo_alternate</i>
+                          </button>
+                        </div>
+                        <div *ngIf ="dosCaras" >
+                          <input #file id = "inputCromoDetras" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromoDetras($event)" style="display:none">
+                          <img class="imagenCromo" *ngIf="imagenCromoDetras"  mat-card-image [src]="imagenCromoDetras">
+                          <button (click) = "ActivarInputCromoDetras()" type="button" class="btn Agregar">
+                          Imagen de detras <i class="material-icons">add_photo_alternate</i>
+                          </button>
+                        </div>
+                      </div>
+
+                      <mat-card-actions align="end">
+                        <button  (click) = "LimpiarCampos()" type="button" class="btn Back">Limpiar Campos</button>
+                        <button  (click) = "AgregarCromoColeccion()"  class="btn Aceptar">Agregar Cromo</button>
+                      </mat-card-actions>
+
+                          </mat-card>
+
+                      <div>
+                          <form *ngIf="cromosAgregados[0]">
+
+                            <div>
+                              <p style="margin: 10px">
+                                <span style="font-weight: bold;">Cromos creados recientemente</span>
+                              </p>
+                            </div>
+
+                            <table  align="center" mat-table [dataSource]="cromosAgregados" class="example-container mat-elevation-z8">
+
+                              <ng-container matColumnDef="nombreCromo">
+                                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Nombre </th>
+                                <td mat-cell *matCellDef="let cromo"> {{cromo.Nombre}} </td>
+                              </ng-container>
+
+                              <ng-container matColumnDef="probabilidadCromo">
+                                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Probabilidad </th>
+                                <td mat-cell *matCellDef="let cromo"> {{cromo.Probabilidad}} </td>
+                              </ng-container>
+
+                              <ng-container matColumnDef="nivelCromo">
+                                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Nivel </th>
+                                <td mat-cell *matCellDef="let cromo"> {{cromo.Nivel}} </td>
+                              </ng-container>
+
+                              <!-- Delete Column -->
+                              <ng-container matColumnDef=" ">
+                                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                                <td mat-cell *matCellDef="let cromo">
+                                  <button (click) = "BorrarCromo(cromo)" mat-icon-button matTooltip="Borrar el cromo {{cromo.Nombre}}">
+                                    <i class="material-icons red md-36">delete</i>
+                                  </button>
+                                </td>
+                              </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                            </table>
+                          </form>
+                        </div>
+
+                      <div class="btnCambiarStep" style="margin-top:10px;">
+                          <button type="button" class="btn Back"   matStepperPrevious>Atrás</button>
+                          <button type="button" class="btn Next" matStepperNext (click) = "Finalizar()">Finalizar</button>
+                      </div>
+
+                    </mat-step>
+
+                    <!-- PASO FINALIZAR -->
+                    <mat-step>
+                      <ng-template matStepLabel>Finalizar</ng-template>
+                    <div>
+                      <p> Coleccion creada correctamente. </p>
+                      <p> Haga click en "Finalizar" para guardar los cambios.</p>
+                    </div>
+
+                      <div class="btnCambiarStep">
+                        <button  type="button" class="btn Back"  matStepperPrevious>Atrás</button>
+                        <button  type="button" class="btn Aceptar" (click) = "Finalizar()">Finalizar</button>
+                      </div>
+                    </mat-step>
+
+
+                  </mat-horizontal-stepper>
+                </mat-card-content>
               </mat-card>
 
-          <div>
-              <form *ngIf="cromosAgregados[0]">
 
-                <div>
-                  <p style="margin: 10px">
-                    <span style="font-weight: bold;">Cromos creados recientemente</span>
-                  </p>
-                </div>
+          </mat-tab>
+          <mat-tab label="Cargar colección desde ficheros">
+            <div class= "enColumna" *ngIf ="advertencia" style = "border-color: red;">
+              <!-- para preservar los espacios y los tabs del texto -->
+              <pre>
+              <br>
+              La relación de aspecto de las imagenes debe ser <strong>312 X 450</strong>
+              La carpeta con los ficheros de la colección debe contener un fichero <strong>JSON</strong>
+              con el contenido mostrado en el siguiente ejemplo. En este ejemplo los cromos son de dos
+              caras. Si fuesen de una cara no tendrían el campo "nombreImagenCromoDetras".
+              Si no hay imagen de la colección entonces escribir "ImagenColeccion": "".
+              {{'{'}}
+                "Nombre": "Comandos Linux",
+                "ImagenColeccion": "linux.jpg",
+                "DosCaras": "true",
+                "cromos": [
+                  {{'{'}}
+                    "nombreCromo":"factor",
+                    "nivelCromo": "Diamante",
+                    "probabilidadCromo":"Muy Baja",
+                    "nombreImagenCromoDelante": "factor_a.png",
+                    "nombreImagenCromoDetras": "factor_b.png"
+                  {{'}'}},
+                  ... otros cromos ...
+                ]
+              {{'}'}}
+              </pre>
 
-                <table  align="center" mat-table [dataSource]="cromosAgregados" class="example-container mat-elevation-z8">
-
-                  <ng-container matColumnDef="nombreCromo">
-                    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Nombre </th>
-                    <td mat-cell *matCellDef="let cromo"> {{cromo.Nombre}} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="probabilidadCromo">
-                    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Probabilidad </th>
-                    <td mat-cell *matCellDef="let cromo"> {{cromo.Probabilidad}} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="nivelCromo">
-                    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Nivel </th>
-                    <td mat-cell *matCellDef="let cromo"> {{cromo.Nivel}} </td>
-                  </ng-container>
-
-                  <!-- Delete Column -->
-                  <ng-container matColumnDef=" ">
-                    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
-                    <td mat-cell *matCellDef="let cromo">
-                      <button (click) = "BorrarCromo(cromo)" mat-icon-button matTooltip="Borrar el cromo {{cromo.Nombre}}">
-                        <i class="material-icons red md-36">delete</i>
-                      </button>
-                    </td>
-                  </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-                </table>
-              </form>
+              <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
+                Ocultar advertencia
+              </button>
             </div>
-
-          <div class="btnCambiarStep" style="margin-top:10px;">
-              <button type="button" class="btn Back"   matStepperPrevious>Atrás</button>
-              <button type="button" class="btn Next" matStepperNext (click) = "Finalizar()">Finalizar</button>
-          </div>
-
-        </mat-step>
-
-        <!-- PASO FINALIZAR -->
-        <mat-step>
-          <ng-template matStepLabel>Finalizar</ng-template>
-         <div>
-          <p> Coleccion creada correctamente. </p>
-          <p> Haga click en "Finalizar" para guardar los cambios.</p>
-         </div>
-
-          <div class="btnCambiarStep">
-            <button  type="button" class="btn Back"  matStepperPrevious>Atrás</button>
-            <button  type="button" class="btn Aceptar" (click) = "Finalizar()">Finalizar</button>
-          </div>
-        </mat-step>
-
-
-      </mat-horizontal-stepper>
-    </mat-card-content>
-  </mat-card>
+            <div class = "enFila">
+              <div style = "width: 40%">
+                <input #file id = "inputCromos" type="file" accept= 'image/*' (change)="SeleccionarFicherosCromos($event)" style="display:none" multiple>
+                <input #file id = "inputInfo" type="file" accept= 'application/JSON' (change)="SeleccionarInfoColeccion($event)" style="display:none">
+                <button style = "height:100px; width:80%" (click) = "ActivarInputInfo()" type="button" class="btn Agregar">
+                  Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
+                </button>
+              </div>
+              <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "ficherosColeccion">
+                <h3>Datos de la colección</h3>
+                <div class = "enFila" style = "width: 90%">
+                  <div>
+                    <p> Nombre de la colección: <strong>{{infoColeccion.Nombre}}</strong></p>
+                    <p *ngIf = "!infoColeccion.DosCaras"> Cromos: <strong>Una cara</strong></p>
+                    <p *ngIf = "infoColeccion.DosCaras"> Cromos: <strong>Dos caras</strong></p>
+                    <p> Número de cromos: <strong>{{infoColeccion.cromos.length}}</strong></p>
+                  </div>
+                  <img class="imagenCromo" *ngIf="imagenColeccion" mat-card-image [src]="imagenColeccion">
+                  <p *ngIf="!imagenColeccion"> <strong> No hay imagen de colección</strong></p>
+                </div>
+                <div class = "enFila" style = "width:50%">
+                  <button (click) = "RegistrarColeccion()" type="button" class="btn Agregar">
+                    Registrar
+                  </button>
+                  <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+  </mat-tab-group>
 </div>
+
 
