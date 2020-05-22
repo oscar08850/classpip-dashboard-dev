@@ -108,6 +108,7 @@ import { DeactivateGuardCrearEscenario } from './guardas/canExitCrearEscenario.g
 import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenario.component';
 import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escenario/editar-escenario.component';
 import { MisEscenariosComponent } from './paginas/mis-escenarios/mis-escenarios.component';
+import {MenuRecursosComponent} from './paginas/menu-recursos/menu-recursos.component';
 
 const routes: Routes = [
 
@@ -128,6 +129,8 @@ const routes: Routes = [
 
   { path: 'inicio/:id/desarrolladores', component: DesarrolladoresComponent },
   { path: 'inicio/:id/estilos', component: EstilosComponent },
+
+  { path: 'inicio/:id/recursos', component: MenuRecursosComponent },
 
   // GRUPOS
   //  La página de crear grupos tiene una guarda para que no pueda abandonarse

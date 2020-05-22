@@ -1,0 +1,82 @@
+<div class="titulo">Recursos</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class = "contenedor">
+
+<mat-grid-list cols="3" rowHeight="2:1">
+  <mat-grid-tile style = "background: rgb(224, 180, 84);">
+  <div  class= "enColumna">
+    <h3>Preguntas</h3>
+    <div>
+      <img src="../assets/pregunta.png" class = "imagenPanelRecursos" />
+    </div>
+    <div class ="enFila" style = "width:40%;">
+
+      <button type="button"  (click) = "NavegarA('/misPreguntas')" class="btn Eliminar" >Ver</button>
+      <button type="button" (click) = "NavegarA('/crearPregunta')" class="btn Aceptar">Crear</button>
+    </div>
+  </div>
+
+  </mat-grid-tile>
+  <mat-grid-tile style = "background:khaki">
+    <div  class= "enColumna">
+      <h3>Cuestionarios</h3>
+      <div>
+        <img src="../assets/cuestionario.png" class = "imagenPanelRecursos" />
+      </div>
+      <div class ="enFila" style = "width:40%;">
+        <button type="button" (click) = "NavegarA('/misCuestionarios')" class="btn Eliminar" >Ver</button>
+        <button type="button" (click) = "NavegarA('/crearCuestionario')" class="btn Aceptar">Crear</button>
+      </div>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile style = "background: rgb(144, 233, 141);">
+    <div class= "enColumna">
+      <h3>Colecciones</h3>
+      <div>
+        <img src="../assets/coleccion.png" class = "imagenPanelRecursos" />
+      </div>
+      <div class ="enFila" style = "width:40%;">
+        <button type="button" (click) = "NavegarA('/misColecciones')" class="btn Eliminar" >Ver</button>
+        <button type="button" (click) = "NavegarA('/crearColeccion')" class="btn Aceptar">Crear</button>
+      </div>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile style = "background: rgb(123, 184, 219);">
+    <div class= "enColumna">
+      <h3>Puntos e Insignias</h3>
+      <div>
+        <img src="../assets/punto.png" class = "imagenPanelRecursos" />
+      </div>
+      <div class ="enFila" style = "width:40%;">
+        <button type="button" (click) = "NavegarA('/misPuntos')" class="btn Eliminar" >Ver</button>
+        <button type="button"  (click) = "NavegarA('/crearPuntos')" class="btn Aceptar">Crear</button>
+      </div>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile style = "background: rgb(228, 137, 175);">
+    <div class= "enColumna">
+      <h3 >Escenarios</h3>
+      <div>
+        <img src="../assets/ruta.png" class = "imagenPanelRecursos" />
+      </div>
+      <div class ="enFila" style = "width:40%;">
+        <button type="button" (click) = "NavegarA('/misEscenarios')" class="btn Eliminar" >Ver</button>
+        <button type="button" (click) = "NavegarA('/crearEscenario')" class="btn Aceptar">Crear</button>
+      </div>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile style = "background: rgb(129, 125, 126);">
+    <div class= "enColumna">
+      <h3>Familias de avatares</h3>
+      <div>
+        <img src="../assets/avatar.png" class = "imagenPanelRecursos" />
+      </div>
+      <div class ="enFila" style = "width:40%;">
+        <button type="button" (click) = "NavegarA('/misFamiliasAvatares')" class="btn Eliminar" >Ver</button>
+        <button type="button" (click) = "NavegarA('/crearFamiliaAvatares')" class="btn Aceptar">Crear</button>
+      </div>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
+</div>
+
