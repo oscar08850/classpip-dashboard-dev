@@ -80,7 +80,4 @@ export class MisGruposComponent implements OnInit {
     this.location.back();
   }
 
-  A() {
-    console.log ('$$$$$$$$');
-  }
 }
