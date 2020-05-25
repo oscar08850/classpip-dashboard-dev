@@ -45,6 +45,8 @@ export class EditarColeccionComponent implements OnInit {
 
   // tslint:disable-next-line:ban-types
   cambios: Boolean = false;
+  // tslint:disable-next-line:ban-types
+  voltear: Boolean = false;
 
   constructor(
               public dialog: MatDialog,
@@ -355,5 +357,8 @@ export class EditarColeccionComponent implements OnInit {
     } else {
       this.location.back();
     }
+  }
+  Voltear() {
+    this.voltear = !this.voltear;
   }
 }

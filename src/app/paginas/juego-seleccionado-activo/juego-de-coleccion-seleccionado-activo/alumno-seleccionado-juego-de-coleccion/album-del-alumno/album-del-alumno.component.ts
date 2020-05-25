@@ -29,6 +29,7 @@ export class AlbumDelAlumnoComponent implements OnInit {
 
   AlbumDelAlumno: ParaAlbum[] = [];
   alumno: Alumno;
+  voltear = false;
 
   constructor(
                 private sesion: SesionService,
@@ -69,6 +70,8 @@ export class AlbumDelAlumnoComponent implements OnInit {
   // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
   GET_ImagenesCromos() {
 
+    console.log ('Vamos a por las imagenes');
+    console.log (this.cromosColeccion);
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.cromosColeccion.length; i++) {
 
@@ -79,10 +82,12 @@ export class AlbumDelAlumnoComponent implements OnInit {
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
         this.peticionesAPI.DameImagenCromo (cromo.ImagenDelante)
         .subscribe(response => {
+          console.log ('Tengo imagen');
           const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
           const reader = new FileReader();
           reader.addEventListener('load', () => {
+            console.log ('imagen leida');
             this.imagenCromoDelante[i] = reader.result.toString();
           }, false);
 
@@ -93,6 +98,7 @@ export class AlbumDelAlumnoComponent implements OnInit {
       }
 
       if (cromo.ImagenDetras !== undefined ) {
+        console.log ('vamos a por las imagenes de detras');
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
         this.peticionesAPI.DameImagenCromo (cromo.ImagenDetras)
         .subscribe(response => {
@@ -132,6 +138,10 @@ export class AlbumDelAlumnoComponent implements OnInit {
           this.cromosColeccion[i].Probabilidad, this.cromosColeccion[i].Nivel, false, this.cromosColeccion[i].ImagenDelante, this.cromosColeccion[i].ImagenDetras);
       }
     }
+  }
+
+  Voltear() {
+    this.voltear = !this.voltear;
   }
   goBack() {
     this.location.back();

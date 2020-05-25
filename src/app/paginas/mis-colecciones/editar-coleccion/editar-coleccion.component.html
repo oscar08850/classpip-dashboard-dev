@@ -31,9 +31,19 @@
     <br>
     <br>
     <mat-divider class="lineaDivisoria"></mat-divider>
-    <button type="button" class="btn Agregar" (click) = AbrirDialogoAgregarCromoColeccion()>
-        Agregar Cromo <i class="material-icons">library_add</i>
-    </button>
+    <div *ngIf = "coleccion.DosCaras" class = 'enFila' style = 'width: 60%'>
+      <button style = 'width: 30%' type="button" class="btn Agregar" (click) = AbrirDialogoAgregarCromoColeccion()>
+          Agregar Cromo <i class="material-icons">library_add</i>
+      </button>
+      <button style = 'width: 70%' type="button" class="btn Info" (click) = "Voltear ()">
+        Dar la vuelta a todos los cromos <i class="material-icons">library_add</i>
+      </button>
+    </div>
+    <div *ngIf = "!coleccion.DosCaras" class = 'enColumna' >
+      <button style = 'width: 30%' type="button" class="btn Agregar" (click) = AbrirDialogoAgregarCromoColeccion()>
+          Agregar Cromo <i class="material-icons">library_add</i>
+      </button>
+    </div>
     <mat-grid-list cols="3" rowHeight="100px" style="width: 100%;" >
       <mat-grid-tile
           *ngFor="let cromo of cromosColeccion; let i = index"
@@ -74,12 +84,14 @@
                     <div class="flip-box-inner">
                       <div class="flip-box-front">
                         <div class="posicionImagen" >
-                          <img class ="imagenCromo" *ngIf="imagenesCromosDelante[i]"  mat-card-image [src]="imagenesCromosDelante[i]" >
+                          <img *ngIf= '!voltear' class ="imagenCromo"  mat-card-image [src]="imagenesCromosDelante[i]" >
+                          <img *ngIf= 'voltear' class ="imagenCromo"  mat-card-image [src]="imagenesCromosDetras[i]" >
                         </div>
                       </div>
                       <div class="flip-box-back">
                         <div class="posicionImagen" >
-                          <img class ="imagenCromo" *ngIf="imagenesCromosDetras[i]"  mat-card-image [src]="imagenesCromosDetras[i]" >
+                          <img *ngIf= '!voltear' class ="imagenCromo"   mat-card-image [src]="imagenesCromosDetras[i]" >
+                          <img *ngIf= 'voltear' class ="imagenCromo"   mat-card-image [src]="imagenesCromosDelante[i]" >
                         </div>
                       </div>
                     </div>
