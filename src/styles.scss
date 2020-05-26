@@ -413,6 +413,12 @@ table {
   --anchoCromo:250px;
   --altoCromo:500px;
 }
+
+// Para mostrar los cromos del album en tres columnas
+span.album {
+  display: inline-block;
+  width: 33%;
+}
 // Los siguientes son para el flip del cromo
 
 /* The flip box container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
@@ -468,7 +474,7 @@ table {
   max-width: var(--anchoImagenCromo);
   max-height: var(--altoImagenCromo);
   margin-top: 0px !important;
-  margin: 5px;
+  margin: 0px;
 }
 .cromo {
   max-width: var(--anchoCromo);

@@ -29,6 +29,8 @@ export class AlbumEquipoComponent implements OnInit {
   AlbumDelEquipo: ParaAlbum[] = [];
   equipo: any;
 
+  voltear = false;
+
   constructor(  private sesion: SesionService,
                 private peticionesAPI: PeticionesAPIService,
                 public location: Location,
@@ -131,6 +133,11 @@ export class AlbumEquipoComponent implements OnInit {
       }
     }
   }
+
+  Voltear() {
+    this.voltear = !this.voltear;
+  }
+
   goBack() {
     this.location.back();
   }
