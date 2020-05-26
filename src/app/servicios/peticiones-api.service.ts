@@ -30,6 +30,7 @@ export class PeticionesAPIService {
   private APIUrlMatriculas = this.host + ':3000/api/Matriculas';
   private APIUrlEquipos = this.host + ':3000/api/Equipos';
   private APIUrlColecciones = this.host + ':3000/api/Colecciones';
+  private APIUrlCromos = this.host + ':3000/api/Cromos';
   private APIUrlPreguntas = this.host + ':3000/api/Preguntas';
   private APIUrlCuestionarios = this.host + ':3000/api/Cuestionarios';
   private APIUrlPreguntaDelCuestionario = this.host + ':3000/api/PreguntasDelCuestionario';
@@ -338,8 +339,8 @@ export class PeticionesAPIService {
   public ModificaCromoColeccion(cromo: Cromo, coleccionId: number, cromoId: number): Observable<Cromo> {
     return this.http.put<Cromo>(this.APIUrlColecciones + '/' + coleccionId + '/cromos/' + cromoId, cromo);
   }
-  public BorrarCromo(cromoId: number, coleccionId: number): Observable<any> {
-    return this.http.delete<any>(this.APIUrlColecciones + '/' + coleccionId + '/cromos/' + cromoId);
+  public BorrarCromo(cromoId: number): Observable<any> {
+    return this.http.delete<any>(this.APIUrlCromos + '/' + cromoId);
   }
   public DameCromosColeccion(coleccionId: number): Observable<Cromo[]> {
     return this.http.get<Cromo[]>(this.APIUrlColecciones + '/' + coleccionId + '/cromos');

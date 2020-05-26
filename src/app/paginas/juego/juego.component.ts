@@ -862,7 +862,7 @@ ActualizarBotonPasoPuntuacion() {
 
   // MIRO SI LAS CASILLAS DE LAS PUNTUACIONES ESTAN RELLENADAS
 DisabledPuntos() {
-    if (this.myFormPuntuacion.value.PuntuacionCorrecta === '' || this.myFormPuntuacion.value.PuntuacionIncorrecta === ''){
+    if (this.myFormPuntuacion.value.PuntuacionCorrecta === '' || this.myFormPuntuacion.value.PuntuacionIncorrecta === '') {
       this.DisabledPuntuacion = true;
     } else {
       this.DisabledPuntuacion = false;

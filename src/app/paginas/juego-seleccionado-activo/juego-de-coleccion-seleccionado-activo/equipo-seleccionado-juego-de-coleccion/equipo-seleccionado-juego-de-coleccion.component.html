@@ -33,6 +33,50 @@
         'Oro' : elem.cromo.Nivel === 'Oro',
         'Plata' : elem.cromo.Nivel === 'Plata',
         'Bronce' : elem.cromo.Nivel === 'Bronce'}">
+
+        <div class= "enColumna">
+          <mat-card-header style = "margin-top: 20%;">
+            <!-- <div style="display: flex; justify-content:space-between; width: 250px "> -->
+              <mat-card-title align = "center">{{elem.cromo.Nombre}}</mat-card-title>
+              <mat-card-subtitle align = "center">{{elem.cromo.Probabilidad}}</mat-card-subtitle>
+
+          </mat-card-header>
+          <!-- <mat-card-content style="display: flex; align-items: center;justify-content: center;"> -->
+          <mat-card-content>
+
+            <div class = "enFila" style = "width: 60%">
+              <p align = "center">Repeticiones: <strong style= "font-size: 1.5rem">{{elem.rep}} </strong></p>
+              <button type="button" style="width: 50px !important;" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrarCromo(elem.cromo)">
+                <i  class="material-icons">delete </i>
+              </button>
+            </div>
+              <div *ngIf = "!coleccion.DosCaras" class="posicionImagen">
+                <img class ="imagenCromo" *ngIf="imagenesCromosDelante[i]"  mat-card-image [src]="imagenesCromosDelante[i]" >
+              </div>
+
+              <div  *ngIf = "coleccion.DosCaras"  class="flip-box">
+                  <div class="flip-box-inner">
+                    <div class="flip-box-front">
+                      <div class="posicionImagen" >
+                        <img class ="imagenCromo" *ngIf="imagenCromoDelante[i]"  mat-card-image [src]="imagenCromoDelante[i]" >
+                      </div>
+                    </div>
+                    <div class="flip-box-back">
+                      <div class="posicionImagen" >
+                        <img class ="imagenCromo" *ngIf="imagenCromoDetras[i]"  mat-card-image [src]="imagenCromoDetras[i]" >
+                      </div>
+                    </div>
+                  </div>
+              </div>
+
+
+
+          </mat-card-content>
+          </div>
+
+
+
+<!--
         <mat-card-header>
           <div style="display: flex; justify-content:space-between; width: 250px ">
           <div  >
@@ -49,9 +93,9 @@
         </mat-card-header>
         <mat-card-content style="display: flex; align-items: center;justify-content: center;">
         <div class="posicionImagen" >
-        <img class ="imagenCromo" *ngIf="imagenCromoArray[i]" mat-card-image [src]="imagenCromoArray[i]" >
+        <img class ="imagenCromo" *ngIf="imagenCromoDelante[i]" mat-card-image [src]="imagenCromoDelante[i]" >
       </div>
-    </mat-card-content>
+        </mat-card-content> -->
       </mat-card>
   </mat-grid-tile>
 </mat-grid-list>
