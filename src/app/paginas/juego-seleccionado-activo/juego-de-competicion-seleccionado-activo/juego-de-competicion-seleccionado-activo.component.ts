@@ -65,6 +65,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
+    console.log ('juego de liga que estamos probando');
     console.log(this.juegoSeleccionado);
     this.DameJornadasDelJuegoDeCompeticionSeleccionado();
     this.DameJuegosDePuntos();
@@ -73,6 +74,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
 
 
   DameJornadasDelJuegoDeCompeticionSeleccionado() {
+    console.log ('voy a por las jornadas');
     this.peticionesAPI.DameJornadasDeCompeticionLiga(this.juegoSeleccionado.id)
       .subscribe(inscripciones => {
         this.jornadas = inscripciones;
@@ -89,6 +91,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     this.enfrentamientosDelJuego = [];
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.jornadas.length; i++) {
+      console.log ('siguiente jornada');
       this.enfrentamientosDelJuego[i] = [];
       this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga(this.jornadas[i].id)
       .subscribe((enfrentamientosDeLaJornada: Array<EnfrentamientoLiga>) => {

@@ -57,8 +57,6 @@ export class AsignarFamiliasJuegoAvataresComponent implements OnInit {
 
     this.profesorId = this.sesion.DameProfesor().id;
     this.TraeFamilias();
-
-    this.grupoId = this.juego.grupoId;
   }
 
 

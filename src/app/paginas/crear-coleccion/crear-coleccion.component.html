@@ -254,7 +254,7 @@
                     <p *ngIf = "infoColeccion.DosCaras"> Cromos: <strong>Dos caras</strong></p>
                     <p> Número de cromos: <strong>{{infoColeccion.cromos.length}}</strong></p>
                   </div>
-                  <img class="imagenCromo" *ngIf="imagenColeccion" mat-card-image [src]="imagenColeccion">
+                  <img  *ngIf="imagenColeccion" mat-card-image [src]="imagenColeccion">
                   <p *ngIf="!imagenColeccion"> <strong> No hay imagen de colección</strong></p>
                 </div>
                 <div class = "enFila" style = "width:50%">
