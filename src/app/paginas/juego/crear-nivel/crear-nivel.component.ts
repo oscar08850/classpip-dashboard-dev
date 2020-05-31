@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output,  EventEmitter } from '@angular/core';
 import Swal from 'sweetalert2';
 
 
@@ -15,6 +15,7 @@ import { Nivel, Insignia, Juego } from '../../../clases/index';
   styleUrls: ['./crear-nivel.component.scss']
 })
 export class CrearNivelComponent implements OnInit {
+  @Output() emisorNiveles = new EventEmitter <any>();
 
 
   displayedColumns: string[] = ['nombre', 'puntosAlcanzar', 'privilegiosDelNivel', ' '];
@@ -41,6 +42,8 @@ export class CrearNivelComponent implements OnInit {
   logoCargado: Boolean = false;
 
 
+  niveles: Nivel[] = [];
+  logos: FormData[] = [];
 
   constructor(
                private sesion: SesionService,
@@ -66,16 +69,16 @@ export class CrearNivelComponent implements OnInit {
   ExaminarImagen($event) {
 
     this.file = $event.target.files[0];
-    console.log('fichero ' + this.file.name);
-    this.nombreLogo = this.file.name;
-
-    const reader = new FileReader();
-    reader.readAsDataURL(this.file);
-    reader.onload = () => {
-      console.log('ya');
-      this.logoCargado = true;
-      this.logo = reader.result.toString();
-    };
+    if (this.file !== undefined) {
+      const reader = new FileReader();
+      reader.readAsDataURL(this.file);
+      reader.onload = () => {
+        console.log('ya');
+        this.logoCargado = true;
+        this.logo = reader.result.toString();
+        this.nombreLogo = this.file.name;
+      };
+    }
   }
 
   Disabled() {
@@ -104,32 +107,55 @@ export class CrearNivelComponent implements OnInit {
     //     duration: 2000,
     //   });
     // } else {
-      this.juegoDePuntosId = this.juego.id;
 
-      this.peticionesAPI.CreaNivel(new Nivel (this.nombreNivel, this.puntosAlcanzar, this.privilegiosDelNivel,
-        this.nombreLogo), this.juegoDePuntosId).subscribe(nivel => {
-          if (nivel !== undefined) {
-            console.log('Nivel añadido correctamente');
-            console.log(nivel);
-            Swal.fire('Nivel creado', 'Nivel ' + nivel.Nombre + ' creado correctamente', 'success');
+      const nivel = new Nivel (this.nombreNivel, this.puntosAlcanzar, this.privilegiosDelNivel,
+        this.nombreLogo);
+      let logo;
+      if (this.nombreLogo !== undefined) {
+        logo = new FormData();
+        logo.append(this.nombreLogo, this.file);
+      }
+      this.emisorNiveles.emit (
+        { n: nivel,
+          l: logo
+        }
+      );
+      this.LimpiarCampos();
 
-            // Hago el POST de la imagen SOLO si hay algo cargado. Ese boolean se cambiará en la función ExaminarImagen
-            if (this.logoCargado === true) {
 
-              // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagen
-              const formData: FormData = new FormData();
-              formData.append(this.nombreLogo, this.file);
-              this.peticionesAPI.PonImagenNivel(formData)
-              .subscribe(() => console.log('Logo cargado'));
-            }
+      // this.peticionesAPI.CreaNivel(new Nivel (this.nombreNivel, this.puntosAlcanzar, this.privilegiosDelNivel,
+      //   this.nombreLogo), this.juegoDePuntosId).subscribe(nivel => {
+      //     if (nivel !== undefined) {
+      //       console.log('Nivel añadido correctamente');
+      //       console.log(nivel);
+      //       Swal.fire('Nivel creado', 'Nivel ' + nivel.Nombre + ' creado correctamente', 'success');
 
-            this.LimpiarCampos(); // Limpiamos todos los campos
-          } else {
-              console.log('Fallo añadiendo');
-          }
-        });
+      //       // Hago el POST de la imagen SOLO si hay algo cargado. Ese boolean se cambiará en la función ExaminarImagen
+      //       if (this.logoCargado === true) {
+
+      //         // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagen
+      //         const formData: FormData = new FormData();
+      //         formData.append(this.nombreLogo, this.file);
+      //         this.peticionesAPI.PonImagenNivel(formData)
+      //         .subscribe(() => console.log('Logo cargado'));
+      //       }
+
+      //       this.LimpiarCampos(); // Limpiamos todos los campos
+      //     } else {
+      //         console.log('Fallo añadiendo');
+      //     }
+      //   });
     // }
   }
+
+  // GuardarNiveles() {
+  //   this.emisorNiveles.emit (
+  //     { niveles: this.niveles,
+  //       logos: this.logos
+  //     }
+  //   );
+  // }
+
 
 
 

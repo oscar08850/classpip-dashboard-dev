@@ -55,7 +55,8 @@ export class MisFamiliasAvataresComponent implements OnInit {
      imagen.id = numeroComplemento * 10 + (opcion + 1); // coloco el identificador
      // La posición es relativa dentro del bloque
      imagen.style.position = 'alsolute';
-     imagen.style.zIndex = '1';
+     // Las imagenes se apilan según el orden indicado por el número de complemento
+     imagen.style.zIndex = numeroComplemento;
 
      // Coloco el nombre del fichero en el que está la imagen
      imagen.src =  stringImagen;

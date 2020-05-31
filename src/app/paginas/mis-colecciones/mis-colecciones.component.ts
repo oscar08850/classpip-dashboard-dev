@@ -81,6 +81,7 @@ export class MisColeccionesComponent implements OnInit {
  // Le pasamos la coleccion y buscamos la imagen que tiene y sus cromos
  DameCromosEImagenDeLaColeccion(coleccion: Coleccion) {
 
+  this.imagenColeccion = undefined;
   console.log('entro a buscar cromos y foto');
   console.log(coleccion.ImagenColeccion);
   // Si la coleccion tiene una foto (recordemos que la foto no es obligatoria)

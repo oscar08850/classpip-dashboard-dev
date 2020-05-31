@@ -146,7 +146,7 @@ export class CrearColeccionComponent implements OnInit {
     console.log('Entro a crear la coleccion ' + nombreColeccion);
     console.log(this.nombreImagen);
 
-    // Hace el POST del equipo
+
     this.peticionesAPI.CreaColeccion (new Coleccion(nombreColeccion, this.nombreImagen, this.dosCaras), this.profesorId)
     // this.peticionesAPI.CreaColeccion(new Coleccion(nombreColeccion, this.nombreImagen), this.profesorId)
     .subscribe((res) => {
@@ -298,7 +298,7 @@ export class CrearColeccionComponent implements OnInit {
     reader.readAsDataURL(this.file);
     reader.onload = () => {
 
-      console.log('ya');
+      console.log('ya he cargado la imagen de la coleccion');
       this.imagenCargado = true;
       this.imagenColeccion = reader.result.toString();
     };
@@ -521,6 +521,7 @@ export class CrearColeccionComponent implements OnInit {
     reader.readAsDataURL(fileImagenColeccion);
     reader.onload = () => {
       this.imagenColeccion = reader.result.toString();
+      this.imagenCargado = true;
     };
   }
 
@@ -532,7 +533,9 @@ export class CrearColeccionComponent implements OnInit {
       if (res != null) {
         this.coleccion = res;
         // guardamos la imagen de la colección (si la hay)
-        if (this.infoColeccion.ImagenColeccion === '') {
+        console.log ('miro si registrar imagen colección ' + this.infoColeccion.ImagenColeccion);
+        if (this.infoColeccion.ImagenColeccion !== '') {
+          console.log ('Si que registro');
           const imagenColeccion = this.ficherosColeccion.filter (f => f.name === this.coleccion.ImagenColeccion)[0];
           const formDataImagen = new FormData();
           formDataImagen.append(this.coleccion.ImagenColeccion, imagenColeccion);
