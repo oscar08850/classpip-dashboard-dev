@@ -20,8 +20,8 @@ import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
 export class PeticionesAPIService {
 
 
-  private host = 'http://localhost';
-  // private host = 'http://147.83.118.92';
+  //private host = 'http://localhost';
+  private host = 'http://147.83.118.92';
 
 
   private APIUrlProfesores = this.host + ':3000/api/Profesores';

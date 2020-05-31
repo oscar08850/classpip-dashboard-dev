@@ -20,28 +20,20 @@
       <div class="flip-box">
       <div class="flip-box-inner">
         <div class="flip-box-front">
-          <div class="posicionImagen" >
-            <img class ="imagenCromo" *ngIf="cromo.Tengi"  mat-card-image [src]="imagenCromoDelante[i]" >
-            <img class ="imagenCromo" *ngIf="!cromo.Tengi" style = "opacity: 0.5 !important;" mat-card-image [src]="imagenCromoDelante[i]" >
-          </div>
+            <img class ="imagenCromo"  *ngIf="cromo.Tengi" mat-card-image  [src]="imagenCromoDelante[i]" >
+            <img class ="imagenCromo"  *ngIf="!cromo.Tengi" mat-card-image style = "opacity: 0.5 !important;"  [src]="imagenCromoDelante[i]" >
         </div>
+        <!-- mat-card-image -->
         <div class="flip-box-back">
-          <div class="posicionImagen" >
-            <img class ="imagenCromo" *ngIf="cromo.Tengi" mat-card-image [src]="imagenCromoDetras[i]" >
-          </div>
+            <img class ="imagenCromo"   *ngIf="cromo.Tengi"  mat-card-image [src]="imagenCromoDetras[i]" >
         </div>
       </div>
       </div>
     </div>
-
-
-    <div *ngIf = "coleccion.DosCaras && voltear">
+    <div *ngIf = "coleccion.DosCaras && voltear" style = "margin-top:-17px;" >
           <img class ="imagenCromo"  mat-card-image [src]="imagenCromoDetras[i]" >
     </div>
-
-
   </span>
-
 </span>
 </div>
 <button type="button" class="btn Back" (click)="goBack()">Volver </button>

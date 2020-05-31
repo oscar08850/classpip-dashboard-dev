@@ -51,7 +51,7 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
             const reader = new FileReader();
             reader.addEventListener('load', () => {
               // Creo la imagen que incorporaré al avatar
-              const imagen = this.CreaImagen (reader.result.toString());
+              const imagen = this.CreaImagen (1, reader.result.toString());
               document.getElementById('imagenAvatar').appendChild(imagen);
             }, false);
             if (blob) {
@@ -63,7 +63,7 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
             const blob = new Blob([response.blob()], { type: 'image/jpg'});
             const reader = new FileReader();
             reader.addEventListener('load', () => {
-              const imagen = this.CreaImagen (reader.result.toString());
+              const imagen = this.CreaImagen (2, reader.result.toString());
               document.getElementById('imagenAvatar').appendChild(imagen);
             }, false);
             if (blob) {
@@ -75,7 +75,7 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
             const blob = new Blob([response.blob()], { type: 'image/jpg'});
             const reader = new FileReader();
             reader.addEventListener('load', () => {
-              const imagen = this.CreaImagen (reader.result.toString());
+              const imagen = this.CreaImagen (3, reader.result.toString());
               document.getElementById('imagenAvatar').appendChild(imagen);
             }, false);
             if (blob) {
@@ -87,7 +87,7 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
             const blob = new Blob([response.blob()], { type: 'image/jpg'});
             const reader = new FileReader();
             reader.addEventListener('load', () => {
-              const imagen = this.CreaImagen (reader.result.toString());
+              const imagen = this.CreaImagen (4, reader.result.toString());
               document.getElementById('imagenAvatar').appendChild(imagen);
             }, false);
             if (blob) {
@@ -101,17 +101,15 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
       }
     });
   }
-  CreaImagen(imagenString: string): any {
+  CreaImagen(numeroComplemento: number, imagenString: string): any {
     const imagen = document.createElement('img');
     imagen.style.left = '0px';
     imagen.style.top = '0px';
     imagen.style.position = 'absolute';
-    imagen.style.zIndex = '1';
+    // los complementos se apilan según el orden indicado por el numero de complemento.
+    imagen.style.zIndex = numeroComplemento.toString();
     imagen.style.width = '450px';
     imagen.style.height = '486px';
-    // // muestro la imagen grande
-    // imagen.setAttribute ('width', this.anchogrande);
-    // imagen.setAttribute ('height', this.altogrande );
     // Coloco el nombre del fichero en el que está la imagen
     imagen.src =  imagenString;
     return imagen;
