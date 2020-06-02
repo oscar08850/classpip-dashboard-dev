@@ -8,8 +8,6 @@ import Swal from 'sweetalert2';
 import { MatDialog, MatTabGroup } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
-// Servicios
-import { EscenarioService } from 'src/app/servicios/escenario.service';
 
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../servicios/index';
@@ -40,7 +38,6 @@ export class MisEscenariosComponent implements OnInit {
   mensaje: string = 'Estás seguro/a de que quieres eliminar el escenario llamado: ';
 
   constructor(
-    private escenarioService: EscenarioService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
     public sesion: SesionService,
@@ -86,7 +83,7 @@ export class MisEscenariosComponent implements OnInit {
       console.log(res);
       this.numeroDePuntosGeolocalizables = this.puntosgeolocalizablesEscenario.length;
     } else {
-      console.log('No hay cromos en esta coleccion');
+      console.log('No hay puntosgeolocalizables en el escenario');
       this.puntosgeolocalizablesEscenario = undefined;
       this.numeroDePuntosGeolocalizables = 0;
     }

@@ -28,5 +28,9 @@
     <app-juego-de-cuestionario-seleccionado-activo></app-juego-de-cuestionario-seleccionado-activo>
 </div>
 
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Geocaching'">
+  <app-juego-de-geocaching-seleccionado-activo></app-juego-de-geocaching-seleccionado-activo>
+</div>
+
 <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver</button>
 </div>

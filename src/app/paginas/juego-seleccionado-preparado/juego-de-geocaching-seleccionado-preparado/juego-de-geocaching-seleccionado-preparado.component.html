@@ -1,0 +1,57 @@
+<div class="contenedor">
+  <div class="enColumna">
+    <div class="enFila" style="width:40%">
+      <button type="button" class="btn Info" (click) = "AbrirDialogoInformacionJuego()">Información<i class="material-icons">info</i></button>
+      <button type="button" class="btn Aceptar" (click) = "AbrirDialogoConfirmacionActivar()">Activar<i class="material-icons">check_circle_outline</i></button>
+      <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionEliminar()"> Eliminar<i class="material-icons">delete</i></button>
+    </div>
+
+    <!-- ////////////////////////////////////// CLASIFICACIÓN ////////////////////////////////////////////////////-->
+    <form style="width: 100%">
+      <div class="filter">
+        <mat-form-field style = "width: 100%;">
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumnos...">
+          <i class="material-icons" matSuffix>search</i>
+      </mat-form-field>
+      </div>
+
+      <table align="center"  mat-table [dataSource]="dataSourceAlumno" class="example-container mat-elevation-z8">
+        <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+          <!-- Nombre Alumno Column -->
+          <ng-container matColumnDef="nombreAlumno">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  align="center">Nombre</th>
+            <td mat-cell *matCellDef="let alumno"> {{alumno.nombre}} </td>
+          </ng-container>
+
+          <!-- Primer Apellido Column -->
+          <ng-container matColumnDef="primerApellido">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Primer Apellido</th>
+              <td mat-cell *matCellDef="let alumno"> {{alumno.primerApellido}} </td>
+          </ng-container>
+
+          <!-- Segundo Apellido Column -->
+          <ng-container matColumnDef="segundoApellido">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Segundo Apellido</th>
+              <td mat-cell *matCellDef="let alumno"> {{alumno.segundoApellido}} </td>
+          </ng-container>
+
+          <!-- Puntos Column -->
+          <ng-container matColumnDef="puntuacion">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Puntuacion</th>
+              <td mat-cell *matCellDef="let alumno"> {{alumno.puntuacion}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="etapas">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Etapas</th>
+            <td mat-cell *matCellDef="let alumno"> {{alumno.etapa}} </td>
+        </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnos; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnos;"></tr>
+      </table>
+    </form>
+  </div>
+</div>
+

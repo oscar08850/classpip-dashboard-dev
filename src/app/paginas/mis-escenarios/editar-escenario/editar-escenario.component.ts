@@ -11,7 +11,6 @@ import Swal from 'sweetalert2';
 import { SesionService, PeticionesAPIService } from '../../../servicios/index';
 import { Escenario } from 'src/app/clases/Escenario';
 import { PuntoGeolocalizable } from 'src/app/clases/PuntoGeolocalizable';
-import { EscenarioService } from 'src/app/servicios/escenario.service';
 import { EditarPuntoGeolocalizableDialogComponent } from '../editar-puntogeolocalizable-dialog/editar-puntogeolocalizable-dialog.component';
 import { AgregarPuntoGeolocalizableDialogComponent } from '../agregar-puntogeolocalizable-dialog/agregar-puntogeolocalizable-dialog.component';
 
@@ -40,7 +39,6 @@ export class EditarEscenarioComponent implements OnInit {
   cambios: Boolean = false;
 
   constructor(
-              private escenarioService: EscenarioService,
               public dialog: MatDialog,
               private location: Location,
               private http: Http,

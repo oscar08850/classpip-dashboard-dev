@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 // Servicios
 import { PeticionesAPIService } from '../../../servicios/index';
 import { PuntoGeolocalizable } from 'src/app/clases/PuntoGeolocalizable';
-import { EscenarioService } from 'src/app/servicios/escenario.service';
+
 
 
 export interface OpcionSeleccionada {
@@ -36,8 +36,7 @@ export class AgregarPuntoGeolocalizableDialogComponent implements OnInit {
   displayedColumns: string[] = ['nombrePuntoGeolocalizable', 'latitudPuntoGeolocalizable', 'longitudPuntoGeolocalizable', 'pistafacilPuntoGeolocalizable', 'pistadificilPuntoGeolocalizable', ' '];
 
 
-  constructor(  private escenarioService: EscenarioService,
-                private formBuilder: FormBuilder,
+  constructor(  private formBuilder: FormBuilder,
                 public dialogRef: MatDialogRef<AgregarPuntoGeolocalizableDialogComponent>,
                 private peticionesAPI: PeticionesAPIService,
                 @Inject(MAT_DIALOG_DATA) public data: any) { }

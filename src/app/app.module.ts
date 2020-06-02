@@ -165,7 +165,7 @@ import { JuegoDeCuestionarioSeleccionadoPreparadoComponent } from './paginas/jue
 // para el uso de graficos
 import { NgxEchartsModule } from 'ngx-echarts';
 
-
+//escenarios
 import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenario.component';
 import { MisEscenariosComponent } from './paginas/mis-escenarios/mis-escenarios.component';
 // tslint:disable-next-line:max-line-length
@@ -173,6 +173,13 @@ import { EditarPuntoGeolocalizableDialogComponent } from './paginas/mis-escenari
 // tslint:disable-next-line:max-line-length
 import { AgregarPuntoGeolocalizableDialogComponent } from './paginas/mis-escenarios/agregar-puntogeolocalizable-dialog/agregar-puntogeolocalizable-dialog.component';
 import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escenario/editar-escenario.component';
+import { AsignaEscenarioComponent } from './paginas/juego/asigna-escenario/asigna-escenario.component';
+import { AsignaPreguntasComponent } from './paginas/juego/asigna-preguntas/asigna-preguntas.component';
+
+import { InformacionJuegoDeGeocachingDialogComponent } from './paginas/juego-seleccionado-activo/juego-de-geocaching-seleccionado-activo/informacion-juego-de-geocaching-dialog/informacion-juego-de-geocaching-dialog.component';
+import { JuegoDeGeocachingSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-geocaching-seleccionado-activo/juego-de-geocaching-seleccionado-activo.component';
+import { JuegoDeGeocachingSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-geocaching-seleccionado-inactivo/juego-de-geocaching-seleccionado-inactivo.component';
+import { JuegoDeGeocachingSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-de-geocaching-seleccionado-preparado/juego-de-geocaching-seleccionado-preparado.component';
 
 // avatares
 import { MisFamiliasAvataresComponent } from './paginas/mis-familias-avatares/mis-familias-avatares.component';
@@ -276,6 +283,9 @@ import { MenuRecursosComponent } from './paginas/menu-recursos/menu-recursos.com
     EditarPuntoGeolocalizableDialogComponent,
     AgregarPuntoGeolocalizableDialogComponent,
     EditarEscenarioComponent,
+    AsignaEscenarioComponent,
+    AsignaPreguntasComponent,
+    
     MisFamiliasAvataresComponent,
     CrearFamiliaAvataresComponent,
     AsignarFamiliasJuegoAvataresComponent,
@@ -287,6 +297,10 @@ import { MenuRecursosComponent } from './paginas/menu-recursos/menu-recursos.com
     InformacionJuegoDeCuestionarioDialogComponent,
     JuegoSeleccionadoPreparadoComponent,
     JuegoDeCuestionarioSeleccionadoPreparadoComponent,
+    JuegoDeGeocachingSeleccionadoPreparadoComponent,
+    InformacionJuegoDeGeocachingDialogComponent,
+    JuegoDeGeocachingSeleccionadoActivoComponent,
+    JuegoDeGeocachingSeleccionadoInactivoComponent,
     MenuRecursosComponent
 
 
@@ -336,7 +350,7 @@ import { MenuRecursosComponent } from './paginas/menu-recursos/menu-recursos.com
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
     // tslint:disable-next-line:max-line-length
     EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AgregarPuntoGeolocalizableDialogComponent, EditarPuntoGeolocalizableDialogComponent, AsignaCuestionarioComponent,
-    InformacionJuegoDeCuestionarioDialogComponent],
+    InformacionJuegoDeCuestionarioDialogComponent, AsignaEscenarioComponent, AsignaPreguntasComponent, InformacionJuegoDeGeocachingDialogComponent],
   bootstrap: [AppComponent],
   providers: [
     {
