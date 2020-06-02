@@ -21,7 +21,7 @@ import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion
 import { Observable} from 'rxjs';
 import { Escenario } from 'src/app/clases/Escenario';
 import { PuntoGeolocalizable } from 'src/app/clases/PuntoGeolocalizable';
-import { EscenarioService } from 'src/app/servicios/escenario.service';
+
 
 
 export interface OpcionSeleccionada {
@@ -79,7 +79,6 @@ export class CrearEscenarioComponent implements OnInit {
 
 
   constructor(
-    private escenarioService: EscenarioService,
     private router: Router,
     public dialog: MatDialog,
     public sesion: SesionService,

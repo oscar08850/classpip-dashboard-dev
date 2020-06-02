@@ -15,6 +15,8 @@ import Swal from 'sweetalert2';
 import { isNullOrUndefined } from 'util';
 import { AlumnoJuegoDeCuestionario } from '../clases/AlumnoJuegoDeCuestionario';
 import { TablaAlumnoJuegoDeCuestionario } from '../clases/TablaAlumnoJuegoDeCuestionario';
+import { AlumnoJuegoDeGeocaching } from '../clases/AlumnoJuegoDeGeocaching';
+import { TablaAlumnoJuegoDeGeocaching } from '../clases/TablaAlumnoJuegoDeGeocaching';
 
 
 @Injectable({
@@ -453,8 +455,29 @@ export class CalculosService {
                       juegosInactivos.push(juegosCuestionario[i]);
                     }
                   }
+
+                  console.log ('vamos a por los juegos de geocaching del grupo: ' + grupoID);
+                  this.peticionesAPI.DameJuegoDeGeocaching(grupoID)
+                  .subscribe(juegosGeocaching => {
+                    console.log('He recibido los juegos de geocaching');
+                    console.log(juegosGeocaching);
+                    // tslint:disable-next-line:prefer-for-of
+                    for (let i = 0; i < juegosGeocaching.length; i++) {
+                      if (juegosGeocaching[i].JuegoActivo === true) {
+                        juegosGeocaching[i].Tipo = 'Juego De Geocaching';
+                        juegosActivos.push(juegosGeocaching[i]);
+                      } else if (juegosGeocaching[i].JuegoTerminado === false && juegosGeocaching[i].JuegoActivo === false) {
+                        juegosGeocaching[i].Tipo = 'Juego De Geocaching';
+                        juegosPreparados.push(juegosGeocaching[i]);
+                      } else if (juegosGeocaching[i].JuegoTerminado === true) {
+                        juegosGeocaching[i].Tipo = 'Juego De Geocaching';
+                        juegosInactivos.push(juegosGeocaching[i]);
+                      }
+                    }
+                    
                   const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
                   obs.next (resultado);
+                  });
                 });
               });
             });
@@ -1322,7 +1345,6 @@ public BorraJuegoCompeticionFormulaUno(juegoDeCompeticion: Juego) {
 }
 
 public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
-
   const jornadasObservables = new Observable ( obs => {
     const jornadasNuevas = [];
     let cont = 0;
@@ -1362,7 +1384,6 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
     });
     return jornadasObservables;
   }
-
   public ObtenerNombreGanadoresFormulaUno(juegoSeleccionado: Juego, jornada, alumnoJuegoDeCompeticionFormulaUno,
                                           equipoJuegoDeCompeticionFormulaUno) {
     console.log('Estoy en ObtenerNombreGanadoresFormulaUno()');
@@ -3257,5 +3278,57 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
     });
   }
 
+
+
+
+//juego geocaching
+
+
+  public PrepararTablaRankingGeocaching(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeGeocaching[],
+    alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeGeocaching[] {
+const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeGeocaching [] = [];
+// tslint:disable-next-line:prefer-for-oF
+for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+let alumno: Alumno;
+const AlumnoId = listaAlumnosOrdenadaPorPuntos[i].AlumnoId;
+alumno = alumnosDelJuego.filter(res => res.id === AlumnoId)[0];
+rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeGeocaching(alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+listaAlumnosOrdenadaPorPuntos[i].Puntuacion, listaAlumnosOrdenadaPorPuntos[i].Etapa, AlumnoId);
+}
+return rankingJuegoDeCompeticion;
+}
+
+public EliminarJuegoDeGeocaching(): any {
+  const eliminaObservable = new Observable ( obs => {
+        this.peticionesAPI.BorrarJuegoDeGeocaching(
+                  this.sesion.DameJuego().id)
+        .subscribe(() => {
+          this.EliminarAlumnosJuegoDeGeocaching();
+          obs.next ();
+        });
+  });
+  return eliminaObservable;
+}
+
+private EliminarAlumnosJuegoDeGeocaching() {
+  // Pido los alumnos correspondientes al juego que voy a borrar
+  this.peticionesAPI.DameAlumnosDelJuegoDeGeocaching(this.sesion.DameJuego().id)
+  .subscribe( AlumnosDelJuego => {
+    if (AlumnosDelJuego[0] !== undefined) {
+
+      // Una vez recibo las inscripciones, las voy borrando una a una
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < AlumnosDelJuego.length; i++) {
+        this.peticionesAPI.BorraAlumnoDelJuegoDeGeocaching(AlumnosDelJuego[i].id)
+        .subscribe(() => {
+            console.log('Inscripcion al juego borrada correctamente');
+        });
+      }
+    } else {
+      console.log('No hay alumnos en el juego de geocaching');
+    }
+
+  });
+}
 
 }

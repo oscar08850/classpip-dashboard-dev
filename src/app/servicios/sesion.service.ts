@@ -61,6 +61,8 @@ export class SesionService {
   puntogeolocalizable: PuntoGeolocalizable;
   listaEscenarios: any;
   puntosgeolocalizables: PuntoGeolocalizable[];
+  IdMisPreguntasBasicas: number[];
+  IdMisPreguntasBonus: number[];
 
   inscripcionAlumnoJuegoAvatar: AlumnoJuegoDeAvatar;
 
@@ -419,6 +421,22 @@ public DameListaEscenarios(): any {
 
 public TomaListaEscenarios(listaEscenarios: any){
   this.listaEscenarios = listaEscenarios;
+}
+
+public TomaIdPreguntasBasicas(IdMisPreguntasBasicas: number[]) {
+  this.IdMisPreguntasBasicas = IdMisPreguntasBasicas;
+}
+
+public  DameIdPreguntasBasicas(): any {
+  return this.IdMisPreguntasBasicas;
+}
+
+public TomaIdPreguntasBonus(IdMisPreguntasBonus: number[]) {
+  this.IdMisPreguntasBonus = IdMisPreguntasBonus;
+}
+
+public  DameIdPreguntasBonus(): any {
+  return this.IdMisPreguntasBonus;
 }
 
 
