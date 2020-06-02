@@ -13,6 +13,8 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         AlumnoJuegoDeAvatar, JuegoDeCuestionario, AlumnoJuegoDeCuestionario} from '../clases/index';
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
+import { JuegoDeGeocaching } from '../clases/JuegoDeGeocaching';
+import { AlumnoJuegoDeGeocaching } from '../clases/AlumnoJuegoDeGeocaching';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +22,8 @@ import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
 export class PeticionesAPIService {
 
 
-  // private host = 'http://localhost';
-  private host = 'http://147.83.118.92';
+  private host = 'http://localhost';
+  // private host = 'http://147.83.118.92';
 
 
   private APIUrlProfesores = this.host + ':3000/api/Profesores';
@@ -56,11 +58,13 @@ export class PeticionesAPIService {
   private APIUrlAlumnoJuegoDeCompeticionFormulaUno = this.host + ':3000/api/AlumnosJuegoDeCompeticionFormulaUno';
   private APIUrlEquipoJuegoDeCompeticionFormulaUno = this.host + ':3000/api/EquiposJuegoDeCompeticionFormulaUno';
   private APIUrlJornadasJuegoDeCompeticionFormulaUno = this.host + ':3000/api/JornadasDeCompeticionFormulaUno';
+  private APIUrlJuegoDeGeocaching = this.host + ':3000/api/JuegosDeGeocaching';
 
   private APIUrlAsistenciasClase = this.host + ':3000/api/AsistenciasClase';
   private APIUrlSesionesClase = this.host + ':3000/api/SesionesClase';
 
   private APIUrlFamiliarAvatares = this.host + ':3000/api/familiasAvatares';
+  private APIUrlAlumnoJuegoDeGeocaching = this.host + ':3000/api/AlumnosJuegoDeGeocaching';
 
 
   // Para cargar y descargar imagenes
@@ -921,7 +925,9 @@ export class PeticionesAPIService {
   public BorrarPuntoGeolocalizable(idpuntogeolocalizable: number, idescenario: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlEscenarios + '/' + idescenario + '/puntosgeolocalizables/' + idpuntogeolocalizable);
   }
-
+  public DameEscenario(idescenario: number): Observable<Escenario> {
+    return this.http.get<Escenario>(this.APIUrlEscenarios + '/' + idescenario);
+  }
 
   //mis escenarios
 
@@ -940,9 +946,50 @@ export class PeticionesAPIService {
   }
 
 
-  public CreaJuegoDeGeocaching(juego: Juego, grupoId: number): Observable<Juego> {
-    return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeGeocaching', juego);
+  public CreaJuegoDeGeocaching(juegoDeGeocaching: JuegoDeGeocaching, grupoId: number): Observable<JuegoDeGeocaching> {
+    return this.http.post<JuegoDeGeocaching>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeGeocaching', juegoDeGeocaching);
   }
+  public InscribeAlumnoJuegoDeGeocaching(alumnoJuegoDeGeocaching: AlumnoJuegoDeGeocaching) {
+    return this.http.post<AlumnoJuegoDeGeocaching>(this.APIUrlAlumnoJuegoDeGeocaching, alumnoJuegoDeGeocaching);
+  }
+
+
+
+
+  public DameAlumnosJuegoDeGeocaching(juegoDeGeocaching: number): Observable<Alumno[]> {
+    return this.http.get<Alumno[]>(this.APIUrlJuegoDeGeocaching + '/' + juegoDeGeocaching + '/alumnos');
+  }
+  public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Observable<AlumnoJuegoDeGeocaching[]> {
+    return this.http.get<AlumnoJuegoDeGeocaching[]>(this.APIUrlAlumnoJuegoDeGeocaching
+                                                      + '?filter[where][juegoDeGeocachingId]=' + juegoDeGeocachingId);
+  }
+  public ModificaJuegoDeGeocaching(JuegosDeGeocaching: JuegoDeGeocaching,
+    juegoDeGeocachingId: number, grupoId: number): Observable<JuegoDeGeocaching> {
+return this.http.put<JuegoDeGeocaching>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeGeocaching/' + juegoDeGeocachingId,
+JuegosDeGeocaching);
+}
+public BorrarJuegoDeGeocaching(juegoDeGeocachingId: number): Observable<any> {
+  return this.http.delete<any>(this.APIUrlJuegoDeGeocaching + '/' + juegoDeGeocachingId);
+}
+public DameAlumnosDelJuegoDeGeocaching(juegoDeGeocachingId: number): Observable<AlumnoJuegoDeGeocaching[]> {
+  // tslint:disable-next-line:max-line-length
+  return this.http.get<AlumnoJuegoDeGeocaching[]>(this.APIUrlAlumnoJuegoDeGeocaching + '?filter[where][juegoDeGeocachingId]=' + juegoDeGeocachingId);
+}
+public BorraAlumnoDelJuegoDeGeocaching(alumnoJuegoDeGeocachingId: number): Observable<any> {
+  return this.http.delete<any>(this.APIUrlAlumnoJuegoDeGeocaching + '/' + alumnoJuegoDeGeocachingId);
+}
+
+public DameJuegoDeGeocaching(grupoId: number): Observable<Juego[]> {
+  return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeGeocaching');
+}
+
+
+
+
+
+
+
+
 
 
   ////////////////////////////// GESTION FAMILIAS DE AVATARES ////////////////////////////////////

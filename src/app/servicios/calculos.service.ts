@@ -15,6 +15,8 @@ import Swal from 'sweetalert2';
 import { isNullOrUndefined } from 'util';
 import { AlumnoJuegoDeCuestionario } from '../clases/AlumnoJuegoDeCuestionario';
 import { TablaAlumnoJuegoDeCuestionario } from '../clases/TablaAlumnoJuegoDeCuestionario';
+import { AlumnoJuegoDeGeocaching } from '../clases/AlumnoJuegoDeGeocaching';
+import { TablaAlumnoJuegoDeGeocaching } from '../clases/TablaAlumnoJuegoDeGeocaching';
 
 
 @Injectable({
@@ -453,8 +455,29 @@ export class CalculosService {
                       juegosInactivos.push(juegosCuestionario[i]);
                     }
                   }
+
+                  console.log ('vamos a por los juegos de geocaching del grupo: ' + grupoID);
+                  this.peticionesAPI.DameJuegoDeGeocaching(grupoID)
+                  .subscribe(juegosGeocaching => {
+                    console.log('He recibido los juegos de geocaching');
+                    console.log(juegosGeocaching);
+                    // tslint:disable-next-line:prefer-for-of
+                    for (let i = 0; i < juegosGeocaching.length; i++) {
+                      if (juegosGeocaching[i].JuegoActivo === true) {
+                        juegosGeocaching[i].Tipo = 'Juego De Geocaching';
+                        juegosActivos.push(juegosGeocaching[i]);
+                      } else if (juegosGeocaching[i].JuegoTerminado === false && juegosGeocaching[i].JuegoActivo === false) {
+                        juegosGeocaching[i].Tipo = 'Juego De Geocaching';
+                        juegosPreparados.push(juegosGeocaching[i]);
+                      } else if (juegosGeocaching[i].JuegoTerminado === true) {
+                        juegosGeocaching[i].Tipo = 'Juego De Geocaching';
+                        juegosInactivos.push(juegosGeocaching[i]);
+                      }
+                    }
+                    
                   const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
                   obs.next (resultado);
+                  });
                 });
               });
             });
@@ -1321,38 +1344,47 @@ public BorraJuegoCompeticionFormulaUno(juegoDeCompeticion: Juego) {
   this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id).subscribe();
 }
 
-public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any [] {
-    this.jornadasnuevas = [];
+public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
+ 
+  const jornadasObservables = new Observable ( obs => {
+    const jornadasNuevas = [];
+    let cont = 0;
     for (let i = 0; i < NumeroDeJornadas; i++) {
       // tslint:disable-next-line:max-line-length '2000-01-01T01:01:01.000Z'
       const jornada = new Jornada(undefined, 'Pendiente de determinar', juegoDeCompeticionID);
-      console.log(jornada);
       this.peticionesAPI.CrearJornadasLiga(jornada, juegoDeCompeticionID)
       .subscribe(jornadacreada => {
-        console.log('jornada creada');
-        console.log(jornadacreada);
-        this.jornadasnuevas[i] = jornadacreada;
-        });
+        jornadasNuevas.push (jornadacreada);
+        cont = cont + 1;
+        if (cont === Number(NumeroDeJornadas)) {
+          obs.next(jornadasNuevas);
+        }
+      });
     }
-    return this.jornadasnuevas;
-  }
-
-  public CrearJornadasFormulaUno(NumeroDeJornadas, juegoDeCompeticionID): any [] {
-    this.jornadasnuevas = [];
-    for (let i = 0; i < NumeroDeJornadas; i++) {
-      // tslint:disable-next-line:max-line-length '2000-01-01T01:01:01.000Z'
-      const jornada = new Jornada(undefined, 'Pendiente de determinar', juegoDeCompeticionID);
-      console.log(jornada);
-      this.peticionesAPI.CrearJornadasFormulaUno(jornada, juegoDeCompeticionID)
-      .subscribe(jornadacreada => {
-        console.log('jornada creada');
-        console.log(jornadacreada);
-        this.jornadasnuevas[i] = jornadacreada;
+  });
+  return jornadasObservables;
+}
+ 
+  public CrearJornadasFormulaUno(NumeroDeJornadas, juegoDeCompeticionID): any  {
+    const jornadasObservables = new Observable ( obs => {
+      const jornadasNuevas = [];
+      let cont = 0;
+      for (let i = 0; i < NumeroDeJornadas; i++) {
+        // tslint:disable-next-line:max-line-length '2000-01-01T01:01:01.000Z'
+        const jornada = new Jornada(undefined, 'Pendiente de determinar', juegoDeCompeticionID);
+        console.log(jornada);
+        this.peticionesAPI.CrearJornadasFormulaUno(jornada, juegoDeCompeticionID)
+        .subscribe(jornadacreada => {
+          jornadasNuevas.push (jornadacreada);
+          cont = cont + 1;
+          if (cont === Number(NumeroDeJornadas)) {
+            obs.next (jornadasNuevas);
+          }
         });
-    }
-    return this.jornadasnuevas;
+      }
+    });
+    return jornadasObservables;
   }
-
   public ObtenerNombreGanadoresFormulaUno(juegoSeleccionado: Juego, jornada, alumnoJuegoDeCompeticionFormulaUno,
                                           equipoJuegoDeCompeticionFormulaUno) {
     console.log('Estoy en ObtenerNombreGanadoresFormulaUno()');
@@ -3234,5 +3266,57 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any [] {
     });
   }
 
+
+
+
+//juego geocaching
+
+
+  public PrepararTablaRankingGeocaching(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeGeocaching[],
+    alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeGeocaching[] {
+const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeGeocaching [] = [];
+// tslint:disable-next-line:prefer-for-oF
+for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+let alumno: Alumno;
+const AlumnoId = listaAlumnosOrdenadaPorPuntos[i].AlumnoId;
+alumno = alumnosDelJuego.filter(res => res.id === AlumnoId)[0];
+rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeGeocaching(alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+listaAlumnosOrdenadaPorPuntos[i].Puntuacion, listaAlumnosOrdenadaPorPuntos[i].Etapa, AlumnoId);
+}
+return rankingJuegoDeCompeticion;
+}
+
+public EliminarJuegoDeGeocaching(): any {
+  const eliminaObservable = new Observable ( obs => {
+        this.peticionesAPI.BorrarJuegoDeGeocaching(
+                  this.sesion.DameJuego().id)
+        .subscribe(() => {
+          this.EliminarAlumnosJuegoDeGeocaching();
+          obs.next ();
+        });
+  });
+  return eliminaObservable;
+}
+
+private EliminarAlumnosJuegoDeGeocaching() {
+  // Pido los alumnos correspondientes al juego que voy a borrar
+  this.peticionesAPI.DameAlumnosDelJuegoDeGeocaching(this.sesion.DameJuego().id)
+  .subscribe( AlumnosDelJuego => {
+    if (AlumnosDelJuego[0] !== undefined) {
+
+      // Una vez recibo las inscripciones, las voy borrando una a una
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < AlumnosDelJuego.length; i++) {
+        this.peticionesAPI.BorraAlumnoDelJuegoDeGeocaching(AlumnosDelJuego[i].id)
+        .subscribe(() => {
+            console.log('Inscripcion al juego borrada correctamente');
+        });
+      }
+    } else {
+      console.log('No hay alumnos en el juego de geocaching');
+    }
+
+  });
+}
 
 }

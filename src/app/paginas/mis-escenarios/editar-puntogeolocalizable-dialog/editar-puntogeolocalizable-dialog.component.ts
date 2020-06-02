@@ -11,7 +11,7 @@ import { SesionService, PeticionesAPIService } from '../../../servicios/index';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import { PuntoGeolocalizable } from 'src/app/clases/PuntoGeolocalizable';
 import { Escenario } from 'src/app/clases/Escenario';
-import { EscenarioService } from 'src/app/servicios/escenario.service';
+
 
 export interface OpcionSeleccionada {
   nombre: string;
@@ -44,7 +44,6 @@ export class EditarPuntoGeolocalizableDialogComponent implements OnInit {
 
 
   constructor(
-              private escenarioService: EscenarioService,
               public dialog: MatDialog,
               private sesion: SesionService,
               private peticionesAPI: PeticionesAPIService,
