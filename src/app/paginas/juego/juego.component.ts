@@ -7,7 +7,16 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // Clases
 // tslint:disable-next-line:max-line-length
+// import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
+//           AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
+//           EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
+//           EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
+//           AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
+//           EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching} from '../../clases/index';
+
+          // tslint:disable-next-line:max-line-length
 import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
+
           AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
           EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
           EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
@@ -29,8 +38,10 @@ import { AsignaCuestionarioComponent } from './asigna-cuestionario/asigna-cuesti
 import { JuegoDeCuestionario } from 'src/app/clases/JuegoDeCuestionario';
 import { AlumnoJuegoDeCuestionario } from 'src/app/clases/AlumnoJuegoDeCuestionario';
 import { Router } from '@angular/router';
+
 import { AsignaEscenarioComponent } from './asigna-escenario/asigna-escenario.component';
 import { AsignaPreguntasComponent } from './asigna-preguntas/asigna-preguntas.component';
+
 
 
 
@@ -95,8 +106,6 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Avatar', color: 'primary'},
     {nombre: 'Juego De Cuestionario', color: 'accent'},
     {nombre: 'Juego De Geocaching', color: 'warn'}
-
-
   ];
   seleccionModoJuego: ChipColor[] = [
     {nombre: 'Individual', color: 'primary'},
@@ -152,6 +161,22 @@ export class JuegoComponent implements OnInit {
   TablaPuntuacion: TablaPuntosFormulaUno[];
   displayedColumnsTablaPuntuacion: string[] = ['select', 'Posicion', 'Puntos'];
 
+  // Informacion para juego de geocatching
+
+ // escenario: Escenario;
+  tengoEscenario = false;
+ // puntosgeolocalizablesEscenario: PuntoGeolocalizable[];
+  numeroDePuntosGeolocalizables: number;
+
+  idescenario: number;
+  PreguntasBasicas: number[];
+  PreguntasBonus: number[];
+  tengoPreguntas = false;
+
+  puntuacionCorrectaGeo: number;
+  puntuacionIncorrectaGeo: number;
+  puntuacionCorrectaGeoBonus: number;
+  puntuacionIncorrectaGeoBonus: number;
 
   // Informacion para juego de geocatching
 
@@ -341,7 +366,6 @@ export class JuegoComponent implements OnInit {
       PuntuacionIncorrectaGeo : ['', Validators.required],
       PuntuacionCorrectaGeoBonus: ['', Validators.required],
       PuntuacionIncorrectaGeoBonus: ['', Validators.required]
-
     });
 
     this.TablaPuntuacion = [];
@@ -1015,6 +1039,7 @@ export class JuegoComponent implements OnInit {
 
 
 
+
 goBack() {
     this.location.back();
   }
@@ -1112,6 +1137,7 @@ Limpiar() {
     this.PreguntasBasicas = undefined;
     this.PreguntasBonus = undefined;
     this.tengoPreguntas = false;
+
 
 }
 
