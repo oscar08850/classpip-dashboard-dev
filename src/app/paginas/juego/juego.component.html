@@ -612,6 +612,77 @@
           </mat-step>
           </div>
 
+            <!-- ////////////////////// SI ESCOGEMOS JUEGO DE GEOCACHING ////////////////////////////////-->
+            <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Geocaching' && tengoModo">
+              <!--Escogemos el escenario-->
+              <mat-step>
+                <ng-template matStepLabel><div>Escenario</div></ng-template>
+                <div>
+                  <button type="button" class="btn Agregar" (click)= "AbrirDialogoAgregarEscenario()" style="width: auto;">Añadir escenario<i class="material-icons">
+                      post_add </i></button>
+                </div>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!tengoEscenario" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+
+              <!--Añadir preguntas-->
+              <mat-step>
+                <ng-template matStepLabel><div>Preguntas</div></ng-template>
+                <div>
+                  <button type="button" class="btn Agregar" (click)= "AbrirDialogoAgregarPreguntas()" style="width: auto;">Añadir preguntas<i class="material-icons">
+                      post_add </i></button>
+                </div>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!tengoPreguntas" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+
+
+
+              <!--Tercer paso, establecemos la puntuacion-->
+              <mat-step>
+                <ng-template matStepLabel><div>Puntuación</div></ng-template>
+
+                  <mat-form-field>
+                    <mat-label>Introduzca la puntuacion por respuesta correcta</mat-label>
+                    <input  matInput formControlName="PuntuacionCorrectaGeo" placeholder="Escriba la puntuacion" requiered>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <mat-label>Introduzca la puntuacion por respuesta incorrecta (si no quiere restar ponga 0)</mat-label>
+                    <input  matInput formControlName="PuntuacionIncorrectaGeo" placeholder="Escriba la puntuacion" requiered>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <mat-label>Introduzca el porcentaje a sumar por respuesta bonus correcta </mat-label>
+                    <input  matInput formControlName="PuntuacionCorrectaGeoBonus" placeholder="Escriba el porcentaje" requiered>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <mat-label>Introduzca el porcentaje a restar por respuesta bonus incorrecta </mat-label>
+                    <input  matInput formControlName="PuntuacionIncorrectaGeoBonus" placeholder="Escriba el porcentaje" requiered>
+                  </mat-form-field>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!TengoPuntuacionesGeocatching()" (click) = "GuardarPuntuacionGeocaching()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+                <!--Cuarto paso, finalizamos-->
+
+                <mat-step>
+                  <ng-template matStepLabel><div>Finalizar</div></ng-template>
+
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button style= "width: 60%" type="button" class="btn Aceptar" (click) = "CrearJuegoDeGeocaching()">Crear juego de cuestionario</button>
+                  </div>
+                </mat-step>
+
+            </div>
+
 
 
           <!-- //////////////////////////////// -->

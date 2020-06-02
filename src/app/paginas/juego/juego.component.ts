@@ -7,12 +7,20 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // Clases
 // tslint:disable-next-line:max-line-length
+// import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
+//           AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
+//           EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
+//           EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
+//           AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
+//           EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching} from '../../clases/index';
+
+          // tslint:disable-next-line:max-line-length
 import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
-          AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
-          EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
-          EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
-          AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-          EquipoJuegoDeColeccion} from '../../clases/index';
+  AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
+  EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
+  EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
+  AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
+  EquipoJuegoDeColeccion} from '../../clases/index';
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
@@ -28,6 +36,8 @@ import { AsignaCuestionarioComponent } from './asigna-cuestionario/asigna-cuesti
 import { JuegoDeCuestionario } from 'src/app/clases/JuegoDeCuestionario';
 import { AlumnoJuegoDeCuestionario } from 'src/app/clases/AlumnoJuegoDeCuestionario';
 import { Router } from '@angular/router';
+// import { AsignaEscenarioComponent } from './asigna-escenario/asigna-escenario.component';
+// import { AsignaPreguntasComponent } from './asigna-preguntas/asigna-preguntas.component';
 
 
 
@@ -88,7 +98,8 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Colección', color: 'accent'},
     {nombre: 'Juego De Competición', color: 'warn'},
     {nombre: 'Juego De Avatar', color: 'primary'},
-    {nombre: 'Juego De Cuestionario', color: 'accent'}
+    {nombre: 'Juego De Cuestionario', color: 'accent'},
+    {nombre: 'Juego De Geocaching', color: 'warn'}
   ];
   seleccionModoJuego: ChipColor[] = [
     {nombre: 'Individual', color: 'primary'},
@@ -144,6 +155,22 @@ export class JuegoComponent implements OnInit {
   TablaPuntuacion: TablaPuntosFormulaUno[];
   displayedColumnsTablaPuntuacion: string[] = ['select', 'Posicion', 'Puntos'];
 
+  // Informacion para juego de geocatching
+
+ // escenario: Escenario;
+  tengoEscenario = false;
+ // puntosgeolocalizablesEscenario: PuntoGeolocalizable[];
+  numeroDePuntosGeolocalizables: number;
+
+  idescenario: number;
+  PreguntasBasicas: number[];
+  PreguntasBonus: number[];
+  tengoPreguntas = false;
+
+  puntuacionCorrectaGeo: number;
+  puntuacionIncorrectaGeo: number;
+  puntuacionCorrectaGeoBonus: number;
+  puntuacionIncorrectaGeoBonus: number;
 
   final = false;
 
@@ -312,6 +339,10 @@ export class JuegoComponent implements OnInit {
       criterioPrivilegioVoz: ['', Validators.required],
       criterioPrivilegioVerTodos: ['', Validators.required],
       NuevaPuntuacion: ['', Validators.required],
+      PuntuacionCorrectaGeo: ['', Validators.required],
+      PuntuacionIncorrectaGeo : ['', Validators.required],
+      PuntuacionCorrectaGeoBonus: ['', Validators.required],
+      PuntuacionIncorrectaGeoBonus: ['', Validators.required]
     });
 
     this.TablaPuntuacion = [];
@@ -865,6 +896,128 @@ export class JuegoComponent implements OnInit {
   }
 
 
+
+  // /// Funciones para craar juego de Geocatching
+  // // Geocaching
+  // AbrirDialogoAgregarEscenario(): void {
+  //   const dialogRef = this.dialog.open(AsignaEscenarioComponent, {
+  //     width: '70%',
+  //     height: '80%',
+  //     position: {
+  //       top: '0%'
+  //     },
+  //     // Pasamos los parametros necesarios
+  //     data: {
+  //       profesorId: this.profesorId
+  //     }
+  //   });
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.escenario = this.sesion.DameEscenario();
+
+  //     console.log('ESCENARIO SELECCIONADO --->' + this.escenario.Mapa);
+  //     this.DamePuntosGeolocalizablesDelEscenario(this.escenario);
+  //     console.log(this.numeroDePuntosGeolocalizables);
+  //     console.log(this.puntosgeolocalizablesEscenario);
+  //   });
+  // }
+
+  // DamePuntosGeolocalizablesDelEscenario(escenario: Escenario) {
+
+  //   console.log('voy a mostrar los puntosgeolocalizables del escenario ' + escenario.id);
+  //   this.peticionesAPI.DamePuntosGeolocalizablesEscenario(escenario.id)
+  //   .subscribe(res => {
+  //     if (res[0] !== undefined) {
+  //       this.puntosgeolocalizablesEscenario = res;
+  //       console.log(res);
+  //       this.numeroDePuntosGeolocalizables = this.puntosgeolocalizablesEscenario.length;
+  //       console.log(this.numeroDePuntosGeolocalizables);
+  //       this.tengoEscenario = true;
+  //     } else {
+  //       console.log('No hay puntosgeolocalizables en el escenario');
+  //       this.puntosgeolocalizablesEscenario = undefined;
+  //       this.numeroDePuntosGeolocalizables = 0;
+  //     }
+  //   });
+  // }
+
+  // AbrirDialogoAgregarPreguntas(): void {
+  //   const dialogRef = this.dialog.open(AsignaPreguntasComponent, {
+  //     width: '70%',
+  //     height: '80%',
+  //     position: {
+  //       top: '0%'
+  //     },
+  //     // Pasamos los parametros necesarios
+  //     data: {
+  //       profesorId: this.profesorId,
+  //       numeroDePuntosGeolocalizables: this.numeroDePuntosGeolocalizables
+
+  //     }
+  //   });
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.PreguntasBasicas = this.sesion.DameIdPreguntasBasicas();
+  //     this.PreguntasBonus = this.sesion.DameIdPreguntasBonus();
+  //     this.tengoPreguntas = true;
+  //     console.log ('comprobacion de que se reciben los id de las preguntas');
+  //     console.log (this.PreguntasBasicas);
+  //     console.log (this.PreguntasBonus);
+
+  //   })
+  // }
+
+
+  // // Para habilitar el boton de guardar puntuaciones
+  // TengoPuntuacionesGeocatching() {
+  //   if (this.myForm.value.PuntuacionCorrectaGeo === '' ||
+  //       this.myForm.value.PuntuacionIncorrectaGeo === '' ||
+  //       this.myForm.value.PuntuacionCorrectaGeoBonus === '' ||
+  //       this.myForm.value.PuntuacionIncorrectaGeoBonus === '') {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // }
+  // GuardarPuntuacionGeocaching() {
+  //   this.puntuacionCorrectaGeo = this.myForm.value.PuntuacionCorrectaGeo;
+  //   this.puntuacionIncorrectaGeo = this.myForm.value.PuntuacionIncorrectaGeo;
+  //   this.puntuacionCorrectaGeoBonus = this.myForm.value.PuntuacionCorrectaGeoBonus;
+  //   this.puntuacionIncorrectaGeoBonus = this.myForm.value.PuntuacionIncorrectaGeoBonus;
+  // }
+
+  // CrearJuegoDeGeocaching() {
+  //   // tslint:disable-next-line:max-line-length
+  //   this.peticionesAPI.CreaJuegoDeGeocaching(new JuegoDeGeocaching(this.nombreDelJuego, this.puntuacionCorrectaGeo, this.puntuacionIncorrectaGeo, this.puntuacionCorrectaGeoBonus, this.puntuacionIncorrectaGeoBonus, this.PreguntasBasicas, this.PreguntasBonus,
+  //     false, false, this.profesorId, this.grupo.id, this.escenario.id), this.grupo.id)
+  //   .subscribe(juegoCreado => {
+  //     this.juego = juegoCreado;
+  //     this.sesion.TomaJuego(this.juego);
+  //     this.juegoCreado = true;
+
+  //     // Inscribimos a los alumnos en el juego
+  //     // tslint:disable-next-line:prefer-for-of
+  //     for (let i = 0; i < this.alumnosGrupo.length; i++) {
+  //       // tslint:disable-next-line:max-line-length
+  //       this.peticionesAPI.InscribeAlumnoJuegoDeGeocaching(new AlumnoJuegoDeGeocaching(0, 0, this.alumnosGrupo[i].id, this.juego.id ))
+  //       .subscribe();
+  //     }
+  //     Swal.fire('Juego de geocatching creado correctamente', ' ', 'success');
+
+  //     // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+  //     if (this.juegosActivos === undefined) {
+  //       // Si la lista aun no se ha creado no podre hacer el push
+  //           this.juegosActivos = [];
+  //       }
+  //     this.juegosActivos.push (this.juego);
+  //       // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
+  //     this.Limpiar();
+  //      // Regresamos a la lista de equipos (mat-tab con índice 0)
+  //     this.tabGroup.selectedIndex = 0;
+  //   });
+  // }
+
+
+
+
 goBack() {
     this.location.back();
   }
@@ -915,9 +1068,10 @@ MasterToggle() {
     }
   }
 
-Limpiar () {
+Limpiar() {
     // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
     this.stepper.reset();
+    this.myForm.reset();
     this.tengoNombre = false;
     this.tengoTipo = false;
     this.tengoModo = false;
@@ -948,6 +1102,19 @@ Limpiar () {
     this.tengoNumeroDeJornadas = false;
     this.tengoTipoDeCompeticion = false;
     this.tengoNuevaPuntuacion = false;
+
+
+    // this.puntuacionCorrectaGeo = undefined;
+    // this.puntuacionIncorrectaGeo = undefined;
+    // this.puntuacionCorrectaGeoBonus = undefined;
+    // this.puntuacionIncorrectaGeoBonus = undefined;
+    // this.escenario = undefined;
+    // this.tengoEscenario = false;
+
+    // this.puntosgeolocalizablesEscenario = undefined;
+    // this.PreguntasBasicas = undefined;
+    // this.PreguntasBonus = undefined;
+    // this.tengoPreguntas = false;
 
 }
 
