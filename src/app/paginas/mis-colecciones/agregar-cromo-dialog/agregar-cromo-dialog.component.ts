@@ -27,17 +27,28 @@ export class AgregarCromoDialogComponent implements OnInit {
   nombreCromo: string;
   probabilidadCromo: string;
   nivelCromo: string;
-  imagenCromo: string;
+  imagenCromoDelante: string;
+  imagenCromoDetras: string;
   cromosAgregados: Cromo [] = [];
   // tslint:disable-next-line:ban-types
   isDisabledCromo: Boolean = true;
 
-  nombreImagenCromo: string;
-  fileCromo: File;
+  nombreImagenCromoDelante: string;
+  fileCromoDelante: File;
 
   // Al principio cromo no creado y imagen no cargada
   // tslint:disable-next-line:ban-types
-  imagenCargadoCromo: Boolean = false;
+  imagenDelanteCargada: Boolean = false;
+
+  nombreImagenCromoDetras: string;
+  fileCromoDetras: File;
+
+  // Al principio cromo no creado y imagen no cargada
+  // tslint:disable-next-line:ban-types
+  imagenDetrasCargada: Boolean = false;
+
+  dosCaras;
+
 
     // Opciones para mostrar en la lista desplegable para seleccionar el tipo de juego que listar
     opcionesProbabilidad: OpcionSeleccionada[] = [
@@ -74,29 +85,35 @@ export class AgregarCromoDialogComponent implements OnInit {
 
   ngOnInit() {
     // Recogemos los datos que le pasamos del otro componente
-    this.coleccionId = this.data.coleccionId;
+    this.coleccionId = this.data.coleccion.id;
+    this.dosCaras = this.data.coleccion.DosCaras;
   }
 
   // Creamos una cromo y lo añadimos a la coleccion dandole un nombre, una probabilidad, un nivel y una imagen
   AgregarCromoColeccion() {
 
-    console.log('Entro a asignar el cromo ' + this.nombreCromo);
-    console.log('Entro a asignar el cromo a la coleccionID' + this.coleccionId);
-    console.log('Probabilidad' + this.probabilidadCromo);
-    console.log('Nivel' + this.opcionSeleccionadaNivel);
-    console.log('Imagen' + this.nombreImagenCromo );
     this.peticionesAPI.PonCromoColeccion(
-      new Cromo(this.nombreCromo, this.nombreImagenCromo , this.probabilidadCromo, this.opcionSeleccionadaNivel), this.coleccionId)
+      // tslint:disable-next-line:max-line-length
+      new Cromo(this.nombreCromo, this.probabilidadCromo, this.opcionSeleccionadaNivel, this.nombreImagenCromoDelante, this.nombreImagenCromoDetras), this.coleccionId)
     .subscribe((res) => {
       if (res != null) {
         this.cromosAgregados.push(res);
         this.cromosAgregados = this.cromosAgregados.filter(cromo => cromo.Nombre !== '');
          // Hago el POST de la imagen SOLO si hay algo cargado. Ese boolean se cambiará en la función ExaminarImagenCromo
-        if (this.imagenCargadoCromo === true) {
+        if (this.imagenDelanteCargada === true) {
 
           // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagenCromo
           const formData: FormData = new FormData();
-          formData.append(this.nombreImagenCromo, this.fileCromo);
+          formData.append(this.nombreImagenCromoDelante, this.fileCromoDelante);
+          this.peticionesAPI.PonImagenCromo(formData)
+          .subscribe(() => console.log('Imagen cargado'));
+        }
+
+        if (this.imagenDetrasCargada === true) {
+
+          // Hacemos el POST de la nueva imagen en la base de datos recogida de la función ExaminarImagenCromo
+          const formData: FormData = new FormData();
+          formData.append(this.nombreImagenCromoDetras, this.fileCromoDetras);
           this.peticionesAPI.PonImagenCromo(formData)
           .subscribe(() => console.log('Imagen cargado'));
         }
@@ -111,7 +128,7 @@ export class AgregarCromoDialogComponent implements OnInit {
   // Utilizamos esta función para eliminar un cromo de la base de datos y de la lista de añadidos recientemente
   BorrarCromo(cromo: Cromo) {
     console.log('Id cromo ' + this.coleccionId);
-    this.peticionesAPI.BorrarCromo(cromo.id, this.coleccionId)
+    this.peticionesAPI.BorrarCromo(cromo.id)
     .subscribe(() => {
       this.cromosAgregados = this.cromosAgregados.filter(res => res.id !== cromo.id);
       console.log('Cromo borrado correctamente');
@@ -121,25 +138,41 @@ export class AgregarCromoDialogComponent implements OnInit {
 
 
    // Activa la función ExaminarImagenCromo
-   ActivarInputCromo() {
-    console.log('Activar input');
-    document.getElementById('inputCromo').click();
+   ActivarInputCromoDelante() {
+    document.getElementById('inputCromoDelante').click();
+  }
+
+  ActivarInputCromoDetras() {
+    document.getElementById('inputCromoDetras').click();
   }
 
   // Buscaremos la imagen en nuestro ordenador y después se mostrará en el form con la variable "imagen" y guarda el
   // nombre de la foto en la variable nombreImagen
-  ExaminarImagenCromo($event) {
-    this.fileCromo = $event.target.files[0];
+  ExaminarImagenCromoDelante($event) {
+    this.fileCromoDelante = $event.target.files[0];
 
-    console.log('fichero ' + this.fileCromo.name);
-    this.nombreImagenCromo = this.fileCromo.name;
+    this.nombreImagenCromoDelante = this.fileCromoDelante.name;
 
     const reader = new FileReader();
-    reader.readAsDataURL(this.fileCromo);
+    reader.readAsDataURL(this.fileCromoDelante);
     reader.onload = () => {
       console.log('ya Cromo');
-      this.imagenCargadoCromo = true;
-      this.imagenCromo = reader.result.toString();
+      this.imagenDelanteCargada = true;
+      this.imagenCromoDelante = reader.result.toString();
+    };
+  }
+
+  ExaminarImagenCromoDetras($event) {
+    this.fileCromoDetras = $event.target.files[0];
+
+    this.nombreImagenCromoDetras = this.fileCromoDetras.name;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.fileCromoDetras);
+    reader.onload = () => {
+      console.log('ya Cromo');
+      this.imagenDetrasCargada = true;
+      this.imagenCromoDetras = reader.result.toString();
     };
   }
   OpcionNivelSeleccionado() {
@@ -177,9 +210,12 @@ export class AgregarCromoDialogComponent implements OnInit {
       this.probabilidadCromo = undefined;
       this.nivelCromo = null;
       this.isDisabledCromo = true;
-      this.imagenCargadoCromo = false;
-      this.imagenCromo = undefined;
-      this.nombreImagenCromo = undefined;
+      this.imagenDelanteCargada = false;
+      this.imagenDetrasCargada = false;
+      this.imagenCromoDelante = undefined;
+      this.imagenCromoDetras = undefined;
+      this.nombreImagenCromoDelante = undefined;
+      this.nombreImagenCromoDetras = undefined;
       this.opcionSeleccionadaNivel = null;
   }
 

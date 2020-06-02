@@ -14,6 +14,7 @@ import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFo
           AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
           EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable } from '../../clases/index';
 
+
 // Services
 import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
 
@@ -78,6 +79,7 @@ export class JuegoComponent implements OnInit {
   juegoDeCompeticion: JuegoDeCompeticion;
   juegoDeAvatar: JuegoDeAvatar;
   juegoDeGeocaching: JuegoDeGeocaching;
+
   // Informacion para todos los juegos
   myForm: FormGroup;
   nombreDelJuego: string;
@@ -93,6 +95,8 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Avatar', color: 'primary'},
     {nombre: 'Juego De Cuestionario', color: 'accent'},
     {nombre: 'Juego De Geocaching', color: 'warn'}
+
+
   ];
   seleccionModoJuego: ChipColor[] = [
     {nombre: 'Individual', color: 'primary'},
@@ -147,6 +151,7 @@ export class JuegoComponent implements OnInit {
   dataSource: any;
   TablaPuntuacion: TablaPuntosFormulaUno[];
   displayedColumnsTablaPuntuacion: string[] = ['select', 'Posicion', 'Puntos'];
+
 
   // Informacion para juego de geocatching
 
@@ -336,6 +341,7 @@ export class JuegoComponent implements OnInit {
       PuntuacionIncorrectaGeo : ['', Validators.required],
       PuntuacionCorrectaGeoBonus: ['', Validators.required],
       PuntuacionIncorrectaGeoBonus: ['', Validators.required]
+
     });
 
     this.TablaPuntuacion = [];
@@ -707,6 +713,7 @@ export class JuegoComponent implements OnInit {
     this.nuevaPuntuacion = this.myForm.value.NuevaPuntuacion;
     console.log ('tengo nueva puntuacion ' + this.nuevaPuntuacion );
     this.tengoNuevaPuntuacion = true;
+
   }
 
   Preparado() {
@@ -823,7 +830,6 @@ export class JuegoComponent implements OnInit {
           }
         }
         Swal.fire('Juego de competición tipo liga creado correctamente', ' ', 'success');
-
       // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
         if (this.juegosActivos === undefined) {
         // Si la lista aun no se ha creado no podre hacer el push
@@ -870,7 +876,6 @@ export class JuegoComponent implements OnInit {
             .subscribe();
           }
         }
-
         Swal.fire('Juego de competición tipo fórmula uno creado correctamente', ' ', 'success');
 
         // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
@@ -1007,7 +1012,6 @@ export class JuegoComponent implements OnInit {
       this.tabGroup.selectedIndex = 0;
     });
   }
-
 
 
 

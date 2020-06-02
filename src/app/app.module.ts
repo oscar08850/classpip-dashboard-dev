@@ -192,6 +192,7 @@ import { JuegoDeAvatarSeleccionadoActivoComponent } from './paginas/juego-selecc
 import { MostrarAvatarAlumnoComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/mostrar-avatar-alumno/mostrar-avatar-alumno.component';
 // tslint:disable-next-line:max-line-length
 import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/informacion-juego-avatar/informacion-juego-avatar.component';
+import { MenuRecursosComponent } from './paginas/menu-recursos/menu-recursos.component';
 
 
 @NgModule({
@@ -299,7 +300,8 @@ import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-ac
     JuegoDeGeocachingSeleccionadoPreparadoComponent,
     InformacionJuegoDeGeocachingDialogComponent,
     JuegoDeGeocachingSeleccionadoActivoComponent,
-    JuegoDeGeocachingSeleccionadoInactivoComponent
+    JuegoDeGeocachingSeleccionadoInactivoComponent,
+    MenuRecursosComponent
 
 
 

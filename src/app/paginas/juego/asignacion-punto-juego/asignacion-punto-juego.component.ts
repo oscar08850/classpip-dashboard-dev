@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+
+import { Component, OnInit, Output,  EventEmitter } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
 import Swal from 'sweetalert2';
@@ -17,6 +18,8 @@ import { SesionService, PeticionesAPIService } from '../../../servicios/index';
   styleUrls: ['./asignacion-punto-juego.component.scss']
 })
 export class AsignacionPuntoJuegoComponent implements OnInit {
+  @Output() emisorTiposDePuntos = new EventEmitter <any[]>();
+
 
   grupoId: number;
   profesorId: number;
@@ -36,7 +39,7 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
 
   puntosSeleccionados: Punto[] = [];
   botonTablaDesactivado = false;
-  puntoAleatorioId: number;
+  puntoAleatorio: Punto;
 
   constructor(
                private sesion: SesionService,
@@ -54,14 +57,14 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
     // traigo los tipos de puntos entre los que se puede seleccionar
     this.peticionesAPI.DameTiposDePuntos(this.profesorId)
     .subscribe(puntos => {
-      this.puntoAleatorioId = puntos.filter (p => p.Nombre === 'Aleatorio')[0].id;
+
+      // ME guardo el tipo de punto aleatorio para añadirlo al final
+      this.puntoAleatorio = puntos.filter (p => p.Nombre === 'Aleatorio')[0];
 
       // Elimino el tipo de punto aleatorio para que no salga entre los asignables
       // porque ese tipo de punto se asigna al juego de forma automática
       this.tiposPuntos = puntos.filter (p => p.Nombre !== 'Aleatorio');
-      // asigno el tipo de punto aleatorio
-      this.peticionesAPI.AsignaPuntoJuego(new AsignacionPuntosJuego(this.puntoAleatorioId, this.juego.id))
-      .subscribe();
+
 
       this.seleccionados = Array(this.tiposPuntos.length).fill(false);
       console.log(this.seleccionados);
@@ -87,30 +90,32 @@ export class AsignacionPuntoJuegoComponent implements OnInit {
       this.dataSource.data.forEach(row => this.selection.select(row));
     }
   }
-  /* Esta función decide si el boton debe estar activo (si hay al menos
-  una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
-  ActualizarBotonTabla() {
+  // Esta función decide si el boton de aceptar los tipos de puntos
+  // debe estar activo (si hay al menosuna fila seleccionada)
+
+  HaSeleccionado() {
     if (this.selection.selected.length === 0) {
-      this.botonTablaDesactivado = true;
+     return false;
     } else {
-      this.botonTablaDesactivado = false;
+      return true;
     }
   }
 
   AgregarTiposPuntosAlJuego() {
-    this.dataSource.data.forEach
-    (row => {
-              if (this.selection.isSelected(row))  {
-                const punto = row;
-                this.peticionesAPI.AsignaPuntoJuego(new AsignacionPuntosJuego(punto.id, this.juego.id))
-                .subscribe();
-              }
-          }
-    );
+    console.log ('Vamos a agregar LOS PUNTOS');
+    const tiposDePuntosSeleccionados = [];
+    this.dataSource.data.forEach ( row => {
+      if (this.selection.isSelected(row)) {
+        tiposDePuntosSeleccionados.push (row);
+      }
+    });
+    // Añadimos el punto de tipo aleatorio que siempre ha de estar
+    tiposDePuntosSeleccionados.push (this.puntoAleatorio);
+    console.log (tiposDePuntosSeleccionados);
+    this.emisorTiposDePuntos.emit (tiposDePuntosSeleccionados);
+
 
     this.selection.clear();
-
-    Swal.fire('Puntos añadidos', 'Puntos añadidos correctamente', 'success');
 
   }
 

@@ -29,12 +29,14 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   listaCromosSinRepetidos: any[];
   cromo: Cromo;
 
-  imagenCromoArray: string[] = [];
+  imagenCromoDelante: string[] = [];
+  imagenCromoDetras: string[] = [];
 
   // imagen
   imagenPerfil: string;
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Confirma que quieres eliminar el cromo: ';
+  coleccion: Coleccion;
 
   constructor(
                private sesion: SesionService,
@@ -48,6 +50,7 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
+    this.coleccion = this.sesion.DameColeccion();
 
     this.inscripcionAlumno = this.sesion.DameInscripcionAlumno();
     this.alumno = this.sesion.DameAlumno();
@@ -85,47 +88,99 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
     this.peticionesAPI.DameCromosAlumno(this.inscripcionAlumno.id)
     .subscribe(cromos => {
       this.listaCromos = cromos;
+      console.log ('temgo los cromos del alumno');
+      console.log (this.listaCromos);
 
       // esta es la lista que se mostrará al usuario, sin cromos repetidos y con una
       // indicación de cuantas veces se repite cada cromo
       this.listaCromosSinRepetidos = this.calculos.GeneraListaSinRepetidos(this.listaCromos);
       this.listaCromosSinRepetidos.sort((a, b) => a.cromo.Nombre.localeCompare(b.cromo.Nombre));
+      console.log ('temgo los cromos sin repeticiones');
+      console.log (this.listaCromosSinRepetidos);
       this.sesion.TomaCromos(this.listaCromos);
       this.listaCromos.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
       this.GET_ImagenesCromos();
     });
   }
 
-
   GET_ImagenesCromos() {
+    console.log ('Voy a por las imagenes de los cromos');
 
-    // Me traigo la lista de imagenes de los cromos sin repetición
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.listaCromosSinRepetidos.length; i++) {
 
-      this.cromo = this.listaCromosSinRepetidos[i].cromo;
-
-      if (this.cromo.Imagen !== undefined ) {
-
+      const elem  = this.listaCromosSinRepetidos[i];
+      console.log ('Voy a pedir imagen cromo');
+      if (elem.cromo.ImagenDelante !== undefined ) {
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.http.get('http://localhost:3000/api/imagenes/ImagenCromo/download/' + this.cromo.Imagen,
-        { responseType: ResponseContentType.Blob })
+
+        this.peticionesAPI.DameImagenCromo (elem.cromo.ImagenDelante)
         .subscribe(response => {
           const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
           const reader = new FileReader();
           reader.addEventListener('load', () => {
-            this.imagenCromoArray[i] = reader.result.toString();
+            console.log ('tengo imagen');
+            this.imagenCromoDelante[i] = reader.result.toString();
+            console.log (this.imagenCromoDelante);
           }, false);
 
           if (blob) {
             reader.readAsDataURL(blob);
           }
+        });
+      }
 
+      if (elem.cromo.ImagenDetras !== undefined ) {
+
+        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+        this.peticionesAPI.DameImagenCromo (elem.cromo.ImagenDetras)
+        .subscribe(response => {
+          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+          const reader = new FileReader();
+          reader.addEventListener('load', () => {
+            this.imagenCromoDetras[i] = reader.result.toString();
+          }, false);
+
+          if (blob) {
+            reader.readAsDataURL(blob);
+          }
         });
       }
     }
   }
+
+
+  // GET_ImagenesCromos() {
+
+  //   // Me traigo la lista de imagenes de los cromos sin repetición
+  //   // tslint:disable-next-line:prefer-for-of
+  //   for (let i = 0; i < this.listaCromosSinRepetidos.length; i++) {
+
+  //     this.cromo = this.listaCromosSinRepetidos[i].cromo;
+
+  //     if (this.cromo.Imagen !== undefined ) {
+
+  //       // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+  //       this.http.get('http://localhost:3000/api/imagenes/ImagenCromo/download/' + this.cromo.Imagen,
+  //       { responseType: ResponseContentType.Blob })
+  //       .subscribe(response => {
+  //         const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+  //         const reader = new FileReader();
+  //         reader.addEventListener('load', () => {
+  //           this.imagenCromoArray[i] = reader.result.toString();
+  //         }, false);
+
+  //         if (blob) {
+  //           reader.readAsDataURL(blob);
+  //         }
+
+  //       });
+  //     }
+  //   }
+  // }
 
   AbrirDialogoConfirmacionBorrarCromo(cromo: Cromo): void {
 
@@ -160,6 +215,8 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
 
 
   goBack() {
+    console.log ('***************');
+    console.log (this.imagenCromoDelante);
     this.location.back();
   }
 

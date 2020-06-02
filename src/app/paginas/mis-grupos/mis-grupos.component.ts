@@ -79,4 +79,5 @@ export class MisGruposComponent implements OnInit {
   goBack() {
     this.location.back();
   }
+
 }

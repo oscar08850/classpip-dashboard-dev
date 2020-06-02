@@ -1345,7 +1345,6 @@ public BorraJuegoCompeticionFormulaUno(juegoDeCompeticion: Juego) {
 }
 
 public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
- 
   const jornadasObservables = new Observable ( obs => {
     const jornadasNuevas = [];
     let cont = 0;
@@ -1364,7 +1363,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
   });
   return jornadasObservables;
 }
- 
+
   public CrearJornadasFormulaUno(NumeroDeJornadas, juegoDeCompeticionID): any  {
     const jornadasObservables = new Observable ( obs => {
       const jornadasNuevas = [];
@@ -1561,6 +1560,8 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
       jornada = jornadas.filter(res => res.id === jornadaId)[0];
       const enfrentamientosJornada: EnfrentamientoLiga[] = [];
       enfrentamientosJuego[i].forEach(enfrentamientoDeLaJornada => {
+        console.log ('%%%%%%%%%%');
+        console.log (enfrentamientoDeLaJornada);
         if (enfrentamientoDeLaJornada.JornadaDeCompeticionLigaId === jornadaId) {
           enfrentamientosJornada.push(enfrentamientoDeLaJornada);
         }
@@ -1751,7 +1752,13 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
   }
 
   public calcularLiga(numEquipos: number, NumeroDeJornadas: number, participantes: any, ID: number, Jornadas: Jornada[]) {
-          console.log('Voy a por los enrentamientos');
+          console.log('Voy a calcular liga');
+          console.log ('Numero de jornadas ' + NumeroDeJornadas);
+          console.log ('Participantes ');
+          console.log ( participantes);
+          console.log ('Jornadas ');
+          console.log ( Jornadas);
+          console.log ('Numero de Jornadas' + Jornadas.length);
           this.rondas = this.calcularLigaNumEquipos(participantes.length, NumeroDeJornadas);
           console.log('rondas');
           console.log(this.rondas);
@@ -1762,13 +1769,18 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
   public guardarenfrentamientos(rondas: Array<Array<EnfrentamientoLiga>>, NumeroDeJornadas: number,
                                 participantes: any[], jornadas: Jornada[]) {
 
+    console.log('Entro en guardar enfrentamientos');
     const numPartidosPorRonda = participantes.length / 2;
     console.log(participantes.length);
-    console.log('Muestro las jornadas');
+    console.log('Muestro lassss jornadas');
     console.log(jornadas);
-    console.log(jornadas[0].id);
-    for (let i = 0; i < NumeroDeJornadas ; i ++) {
+    console.log ("numero de jornadas");
+    console.log (jornadas.length);
+    console.log ("NumeroPartidosRonda");
+    console.log (numPartidosPorRonda);
 
+    for (let i = 0; i < jornadas.length ; i ++) {
+      console.log ('jornada' + i);
 
       for (let j = 0; j < numPartidosPorRonda; j ++) {
         // tslint:disable-next-line:prefer-const

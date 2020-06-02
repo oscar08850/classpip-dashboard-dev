@@ -81,6 +81,7 @@ export class MisColeccionesComponent implements OnInit {
  // Le pasamos la coleccion y buscamos la imagen que tiene y sus cromos
  DameCromosEImagenDeLaColeccion(coleccion: Coleccion) {
 
+  this.imagenColeccion = undefined;
   console.log('entro a buscar cromos y foto');
   console.log(coleccion.ImagenColeccion);
   // Si la coleccion tiene una foto (recordemos que la foto no es obligatoria)
@@ -132,35 +133,10 @@ export class MisColeccionesComponent implements OnInit {
     this.sesion.TomaCromos (this.cromosColeccion);
   }
 
-  // // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
-  // BorrarColeccion(coleccion: Coleccion) {
-  //   const formData: FormData = new FormData();
-  //   formData.append(coleccion.ImagenColeccion, this.file);
-  //   console.log(formData);
-  //   this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
-  //   .subscribe(() => {
-  //     this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
-  //     // this.ColeccionesEliminadas(coleccion);
-  //     console.log('Coleccion borrada correctamente');
-  //     console.log(this.coleccionesProfesor);
-  //   });
-  //   console.log(coleccion.ImagenColeccion);
-  //   this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe(() => {
-  //     this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
-  //     console.log('he quitado la foto????');
-  //   });
-  //   this.peticionesAPI.DameCromosColeccion(coleccion.id).subscribe( listaCromos => {
-  //     for (let i = 0; i < (listaCromos.length); i++) {
-  //       this.peticionesAPI.BorrarImagenCromo(listaCromos[i].Imagen).subscribe(() => {
-  //         this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
-  //       });
-  //     }
-  //   });
-  // }
-
 
    // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
    BorrarColeccion(coleccion: Coleccion) {
+
 
     console.log ('Vamos a eliminar la colección');
     this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
@@ -169,7 +145,11 @@ export class MisColeccionesComponent implements OnInit {
     this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe();
     if (this.cromosColeccion !==  undefined) {
       for (let i = 0; i < (this.cromosColeccion.length); i++) {
-          this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].Imagen).subscribe();
+        this.peticionesAPI.BorrarCromo (this.cromosColeccion[i].id).subscribe();
+        this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].ImagenDelante).subscribe();
+        if (this.cromosColeccion[i].ImagenDetras !== undefined) {
+          this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].ImagenDetras).subscribe();
+        }
       }
     }
     console.log ('La saco de la lista');

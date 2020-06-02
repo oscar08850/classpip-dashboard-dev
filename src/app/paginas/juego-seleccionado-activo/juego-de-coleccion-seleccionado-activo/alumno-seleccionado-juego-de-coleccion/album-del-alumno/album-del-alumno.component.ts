@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ResponseContentType, Http, Response } from '@angular/http';
 
 // Clases
-import { Cromo, Coleccion, AlbumDelAlumno, Alumno } from '../../../../../clases/index';
+import { Cromo, Coleccion, AlbumDelAlumno, Alumno, ParaAlbum } from '../../../../../clases/index';
 
 
 import { Location } from '@angular/common';
@@ -20,14 +20,16 @@ export class AlbumDelAlumnoComponent implements OnInit {
   coleccion: Coleccion;
   cromosColeccion: Cromo[];
 
-  imagenCromoArray: string[] = [];
+  imagenCromoDelante: string[] = [];
+  imagenCromoDetras: string[] = [];
 
   cromo: Cromo;
 
   cromosAlumno: Cromo[];
 
-  AlbumDelAlumno: AlbumDelAlumno[] = [];
+  AlbumDelAlumno: ParaAlbum[] = [];
   alumno: Alumno;
+  voltear = false;
 
   constructor(
                 private sesion: SesionService,
@@ -68,21 +70,43 @@ export class AlbumDelAlumnoComponent implements OnInit {
   // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
   GET_ImagenesCromos() {
 
+    console.log ('Vamos a por las imagenes');
+    console.log (this.cromosColeccion);
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.cromosColeccion.length; i++) {
 
       let cromo: Cromo;
       cromo = this.cromosColeccion[i];
 
-      if (cromo.Imagen !== undefined ) {
+      if (cromo.ImagenDelante !== undefined ) {
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.peticionesAPI.DameImagenCromo (cromo.Imagen)
+        this.peticionesAPI.DameImagenCromo (cromo.ImagenDelante)
+        .subscribe(response => {
+          console.log ('Tengo imagen');
+          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+          const reader = new FileReader();
+          reader.addEventListener('load', () => {
+            console.log ('imagen leida');
+            this.imagenCromoDelante[i] = reader.result.toString();
+          }, false);
+
+          if (blob) {
+            reader.readAsDataURL(blob);
+          }
+        });
+      }
+
+      if (cromo.ImagenDetras !== undefined ) {
+        console.log ('vamos a por las imagenes de detras');
+        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+        this.peticionesAPI.DameImagenCromo (cromo.ImagenDetras)
         .subscribe(response => {
           const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
           const reader = new FileReader();
           reader.addEventListener('load', () => {
-            this.imagenCromoArray[i] = reader.result.toString();
+            this.imagenCromoDetras[i] = reader.result.toString();
           }, false);
 
           if (blob) {
@@ -103,15 +127,21 @@ export class AlbumDelAlumnoComponent implements OnInit {
 
       if (this.cromo !== undefined) {
         console.log('Tengo ' + this.cromo.Nombre);
-        this.AlbumDelAlumno[i] = new AlbumDelAlumno(this.cromosColeccion[i].Nombre, this.cromosColeccion[i].Imagen,
-          this.cromosColeccion[i].Probabilidad, this.cromosColeccion[i].Nivel, true);
+        this.AlbumDelAlumno[i] = new ParaAlbum(this.cromosColeccion[i].Nombre,
+          // tslint:disable-next-line:max-line-length
+          this.cromosColeccion[i].Probabilidad, this.cromosColeccion[i].Nivel, true, this.cromosColeccion[i].ImagenDelante, this.cromosColeccion[i].ImagenDetras);
 
       } else {
         console.log('No tengo ' + this.cromosColeccion[i].Nombre);
-        this.AlbumDelAlumno[i] = new AlbumDelAlumno(this.cromosColeccion[i].Nombre, this.cromosColeccion[i].Imagen,
-          this.cromosColeccion[i].Probabilidad, this.cromosColeccion[i].Nivel, false);
+        this.AlbumDelAlumno[i] = new ParaAlbum(this.cromosColeccion[i].Nombre,
+          // tslint:disable-next-line:max-line-length
+          this.cromosColeccion[i].Probabilidad, this.cromosColeccion[i].Nivel, false, this.cromosColeccion[i].ImagenDelante, this.cromosColeccion[i].ImagenDetras);
       }
     }
+  }
+
+  Voltear() {
+    this.voltear = !this.voltear;
   }
   goBack() {
     this.location.back();
