@@ -41,7 +41,7 @@ se han elaborado una serie de vídeos donde se muestran sus utilidades.
             <ng-container matColumnDef=" ">
               <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
               <td mat-cell style= "text-align: right" *matCellDef="let juego">
-                <button (click) = "MostrarJuegoSeleccionado(juego)" routerLink = "juegos/juegoSeleccionadoActivo" mat-icon-button matTooltip="Entrar en {{juego.Nombre}}">
+                <button (click) = "MostrarJuegoSeleccionado(juego)"  mat-icon-button matTooltip="Entrar en {{juego.nombre}}">
                   <i class="material-icons green md-36">visibility</i>
                 </button>
               </td>

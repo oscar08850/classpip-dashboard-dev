@@ -79,7 +79,7 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
   DesactivarJuego() {
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.PuntuacionCorrecta,
+    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.PuntuacionCorrecta,
       this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, false, this.juegoSeleccionado.JuegoTerminado,
       // tslint:disable-next-line:max-line-length
       this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
@@ -108,7 +108,7 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
   FinalizarJuego() {
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.PuntuacionCorrecta,
+    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.PuntuacionCorrecta,
       this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, false, true,
       // tslint:disable-next-line:max-line-length
       this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)

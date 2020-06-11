@@ -3,6 +3,68 @@
 <mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
 <div class="contenedor">
   <mat-tab-group>
+          <mat-tab label="Cargar colección desde ficheros">
+            <div class= "enColumna" *ngIf ="advertencia" style = "border-color: red;">
+              <!-- para preservar los espacios y los tabs del texto -->
+              <pre>
+              <br>
+              La relación de aspecto de las imagenes debe ser <strong>312 X 450</strong>
+              La carpeta con los ficheros de la colección debe contener un fichero <strong>JSON</strong>
+              con el contenido mostrado en el siguiente ejemplo. En este ejemplo los cromos son de dos
+              caras. Si fuesen de una cara no tendrían el campo "nombreImagenCromoDetras".
+              Si no hay imagen de la colección entonces escribir "ImagenColeccion": "".
+              {{'{'}}
+                "Nombre": "Comandos Linux",
+                "ImagenColeccion": "linux.jpg",
+                "DosCaras": "true",
+                "cromos": [
+                  {{'{'}}
+                    "nombreCromo":"factor",
+                    "nivelCromo": "Diamante",
+                    "probabilidadCromo":"Muy Baja",
+                    "nombreImagenCromoDelante": "factor_a.png",
+                    "nombreImagenCromoDetras": "factor_b.png"
+                  {{'}'}},
+                  ... otros cromos ...
+                ]
+              {{'}'}}
+              </pre>
+
+              <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
+                Ocultar advertencia
+              </button>
+            </div>
+            <div class = "enFila">
+              <div style = "width: 40%">
+                <input #file id = "inputCromos" type="file" accept= 'image/*' (change)="SeleccionarFicherosCromos($event)" style="display:none" multiple>
+                <input #file id = "inputInfo" type="file" accept= 'application/JSON' (change)="SeleccionarInfoColeccion($event)" style="display:none">
+                <button style = "height:100px; width:80%" (click) = "ActivarInputInfo()" type="button" class="btn Agregar">
+                  Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
+                </button>
+              </div>
+              <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "ficherosColeccion">
+                <h3>Datos de la colección</h3>
+                <div class = "enFila" style = "width: 90%">
+                  <div>
+                    <p> Nombre de la colección: <strong>{{infoColeccion.Nombre}}</strong></p>
+                    <p *ngIf = "!infoColeccion.DosCaras"> Cromos: <strong>Una cara</strong></p>
+                    <p *ngIf = "infoColeccion.DosCaras"> Cromos: <strong>Dos caras</strong></p>
+                    <p> Número de cromos: <strong>{{infoColeccion.cromos.length}}</strong></p>
+                  </div>
+                  <img  *ngIf="imagenColeccion" mat-card-image  [src]="imagenColeccion">
+                  <p *ngIf="!imagenColeccion"> <strong> No hay imagen de colección</strong></p>
+                </div>
+                <div class = "enFila" style = "width:50%">
+                  <button (click) = "RegistrarColeccion()" type="button" class="btn Agregar">
+                    Registrar
+                  </button>
+                  <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
           <mat-tab label="Crear colección">
 
               <!-- STEPPER -->
@@ -206,68 +268,7 @@
 
 
           </mat-tab>
-          <mat-tab label="Cargar colección desde ficheros">
-            <div class= "enColumna" *ngIf ="advertencia" style = "border-color: red;">
-              <!-- para preservar los espacios y los tabs del texto -->
-              <pre>
-              <br>
-              La relación de aspecto de las imagenes debe ser <strong>312 X 450</strong>
-              La carpeta con los ficheros de la colección debe contener un fichero <strong>JSON</strong>
-              con el contenido mostrado en el siguiente ejemplo. En este ejemplo los cromos son de dos
-              caras. Si fuesen de una cara no tendrían el campo "nombreImagenCromoDetras".
-              Si no hay imagen de la colección entonces escribir "ImagenColeccion": "".
-              {{'{'}}
-                "Nombre": "Comandos Linux",
-                "ImagenColeccion": "linux.jpg",
-                "DosCaras": "true",
-                "cromos": [
-                  {{'{'}}
-                    "nombreCromo":"factor",
-                    "nivelCromo": "Diamante",
-                    "probabilidadCromo":"Muy Baja",
-                    "nombreImagenCromoDelante": "factor_a.png",
-                    "nombreImagenCromoDetras": "factor_b.png"
-                  {{'}'}},
-                  ... otros cromos ...
-                ]
-              {{'}'}}
-              </pre>
 
-              <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
-                Ocultar advertencia
-              </button>
-            </div>
-            <div class = "enFila">
-              <div style = "width: 40%">
-                <input #file id = "inputCromos" type="file" accept= 'image/*' (change)="SeleccionarFicherosCromos($event)" style="display:none" multiple>
-                <input #file id = "inputInfo" type="file" accept= 'application/JSON' (change)="SeleccionarInfoColeccion($event)" style="display:none">
-                <button style = "height:100px; width:80%" (click) = "ActivarInputInfo()" type="button" class="btn Agregar">
-                  Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
-                </button>
-              </div>
-              <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "ficherosColeccion">
-                <h3>Datos de la colección</h3>
-                <div class = "enFila" style = "width: 90%">
-                  <div>
-                    <p> Nombre de la colección: <strong>{{infoColeccion.Nombre}}</strong></p>
-                    <p *ngIf = "!infoColeccion.DosCaras"> Cromos: <strong>Una cara</strong></p>
-                    <p *ngIf = "infoColeccion.DosCaras"> Cromos: <strong>Dos caras</strong></p>
-                    <p> Número de cromos: <strong>{{infoColeccion.cromos.length}}</strong></p>
-                  </div>
-                  <img  *ngIf="imagenColeccion" mat-card-image [src]="imagenColeccion">
-                  <p *ngIf="!imagenColeccion"> <strong> No hay imagen de colección</strong></p>
-                </div>
-                <div class = "enFila" style = "width:50%">
-                  <button (click) = "RegistrarColeccion()" type="button" class="btn Agregar">
-                    Registrar
-                  </button>
-                  <button (click) = "Cancelar()" type="button" class="btn Eliminar">
-                    Cancelar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </mat-tab>
   </mat-tab-group>
 </div>
 

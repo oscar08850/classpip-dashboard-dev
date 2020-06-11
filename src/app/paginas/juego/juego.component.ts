@@ -161,22 +161,7 @@ export class JuegoComponent implements OnInit {
   TablaPuntuacion: TablaPuntosFormulaUno[];
   displayedColumnsTablaPuntuacion: string[] = ['select', 'Posicion', 'Puntos'];
 
-  // Informacion para juego de geocatching
 
- // escenario: Escenario;
-  tengoEscenario = false;
- // puntosgeolocalizablesEscenario: PuntoGeolocalizable[];
-  numeroDePuntosGeolocalizables: number;
-
-  idescenario: number;
-  PreguntasBasicas: number[];
-  PreguntasBonus: number[];
-  tengoPreguntas = false;
-
-  puntuacionCorrectaGeo: number;
-  puntuacionIncorrectaGeo: number;
-  puntuacionCorrectaGeoBonus: number;
-  puntuacionIncorrectaGeoBonus: number;
 
   // Informacion para juego de geocatching
 
@@ -197,9 +182,6 @@ export class JuegoComponent implements OnInit {
 
   final = false;
 
-  // myForm1: FormGroup;
-  // myForm2: FormGroup;
-  // myFormPrivilegiosAvatar: FormGroup;
 
 
   // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS, INACTIVOS Y PREPARADOS
@@ -385,6 +367,9 @@ export class JuegoComponent implements OnInit {
     console.log ('**************guardo juego en la sesion');
     console.log (juego);
     this.sesion.TomaJuego(juego);
+    // if (juego.Tipo === 'Juego De Geocaching') {
+    //   this.router.navigateByUrl ('juegoSeleccionadoPreparado');
+    // }
   }
 
 
@@ -635,7 +620,7 @@ export class JuegoComponent implements OnInit {
 
 
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (this.nombreDelJuego, this.puntuacionCorrecta,
+    this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.puntuacionCorrecta,
       this.puntuacionIncorrecta, this.modoPresentacion,
       false, false, this.profesorId, this.grupo.id, this.cuestionario.id), this.grupo.id)
     .subscribe(juegoCreado => {
@@ -650,11 +635,11 @@ export class JuegoComponent implements OnInit {
       Swal.fire('Juego de cuestionario creado correctamente', ' ', 'success');
 
       // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
-      if (this.juegosActivos === undefined) {
+      if (this.juegosPreparados === undefined) {
         // Si la lista aun no se ha creado no podre hacer el push
-            this.juegosActivos = [];
+            this.juegosPreparados = [];
         }
-      this.juegosActivos.push (this.juegoDeCuestionario);
+      this.juegosPreparados.push (this.juegoDeCuestionario);
       this.Limpiar();
         // Regresamos a la lista de equipos (mat-tab con índice 0)
       this.tabGroup.selectedIndex = 0;
@@ -1008,13 +993,11 @@ export class JuegoComponent implements OnInit {
 
   CrearJuegoDeGeocaching() {
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CreaJuegoDeGeocaching(new JuegoDeGeocaching(this.nombreDelJuego, this.puntuacionCorrectaGeo, this.puntuacionIncorrectaGeo, this.puntuacionCorrectaGeoBonus, this.puntuacionIncorrectaGeoBonus, this.PreguntasBasicas, this.PreguntasBonus,
+    this.peticionesAPI.CreaJuegoDeGeocaching(new JuegoDeGeocaching(this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.puntuacionCorrectaGeo, this.puntuacionIncorrectaGeo, this.puntuacionCorrectaGeoBonus, this.puntuacionIncorrectaGeoBonus, this.PreguntasBasicas, this.PreguntasBonus,
       false, false, this.profesorId, this.grupo.id, this.escenario.id), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juegoDeGeocaching = juegoCreado;
-      // this.sesion.TomaJuego(this.juegoDeGeocaching);
       this.juegoCreado = true;
-
       // Inscribimos a los alumnos en el juego
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.alumnosGrupo.length; i++) {
@@ -1025,11 +1008,11 @@ export class JuegoComponent implements OnInit {
       Swal.fire('Juego de geocatching creado correctamente', ' ', 'success');
 
       // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
-      if (this.juegosActivos === undefined) {
+      if (this.juegosPreparados === undefined) {
         // Si la lista aun no se ha creado no podre hacer el push
-            this.juegosActivos = [];
+            this.juegosPreparados = [];
         }
-      this.juegosActivos.push (this.juegoDeGeocaching);
+      this.juegosPreparados.push (this.juegoDeGeocaching);
         // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
       this.Limpiar();
        // Regresamos a la lista de equipos (mat-tab con índice 0)

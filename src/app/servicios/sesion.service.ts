@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga,
          // tslint:disable-next-line:max-line-length
-         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta, JuegoDeAvatar, AlumnoJuegoDeAvatar} from '../clases';
+         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeCuestionario,
+         TablaAlumnoJuegoDeCuestionario} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
@@ -65,6 +66,9 @@ export class SesionService {
   IdMisPreguntasBonus: number[];
 
   inscripcionAlumnoJuegoAvatar: AlumnoJuegoDeAvatar;
+
+  inscripcionAlumnoJuegoDeCuestionario: AlumnoJuegoDeCuestionario;
+  alumnoJuegoDeCuestionario: TablaAlumnoJuegoDeCuestionario;
 
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
@@ -502,5 +506,22 @@ public DameTablaeditarPuntos(): TablaPuntosFormulaUno[] {
   const TablaeditarPuntos = this.TablaeditarPuntos ;
   return TablaeditarPuntos;
 }
+
+public TomaInscripcionAlumnoJuegoDeCuestionario(inscripcion: AlumnoJuegoDeCuestionario) {
+  this.inscripcionAlumnoJuegoDeCuestionario = inscripcion;
+}
+
+public TomaAlumnoJuegoDeCuestionario(alumno: TablaAlumnoJuegoDeCuestionario) {
+  this.alumnoJuegoDeCuestionario = alumno;
+}
+
+public DameAlumnoJuegoDeCuestionario(): TablaAlumnoJuegoDeCuestionario {
+  return this.alumnoJuegoDeCuestionario;
+}
+
+public DameInscripcionAlumnoJuegoDeCuestionario(): AlumnoJuegoDeCuestionario {
+  return this.inscripcionAlumnoJuegoDeCuestionario;
+}
+
 
 }

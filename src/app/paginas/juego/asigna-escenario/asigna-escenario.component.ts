@@ -33,7 +33,7 @@ export class AsignaEscenarioComponent implements OnInit {
   }
 
   DameTodosMisEscenarios() {
-    this.peticionesAPI.DameTodosMisEscenarios(this.profesorId)
+    this.peticionesAPI.DameEscenariosDelProfesor(this.profesorId)
     .subscribe ( res => {
       if (res[0] !== undefined) {
         this.misEscenarios = res;

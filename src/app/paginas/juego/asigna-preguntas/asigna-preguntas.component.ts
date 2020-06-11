@@ -17,18 +17,18 @@ export class AsignaPreguntasComponent implements OnInit {
   emisorIdPreguntasBasicas = new EventEmitter <number[]>();
   emisorIdPreguntasBonus = new EventEmitter <number[]>();
 
-  //COLUMNAS DE LA TABLA Y LA LISTA CON LA INFORMACION NECESARIA
+  // COLUMNAS DE LA TABLA Y LA LISTA CON LA INFORMACION NECESARIA
   displayedColumnsMisPreguntas: string[] = ['titulo', 'pregunta', 'tematica', 'basicas', 'bonus'];
   dataSourceMisPreguntas;
-  misPreguntas: Pregunta[] = []
+  misPreguntas: Pregunta[] = [];
   dataSourceMisPreguntasBasicas;
-  misPreguntasBasicas: Pregunta[] = []
-  IDmisPreguntasBasicas: number[] = []
+  misPreguntasBasicas: Pregunta[] = [];
+  IDmisPreguntasBasicas: number[] = [];
   IDmisPreguntasBonus: number[] = []
   dataSourceMisPreguntasBonus;
-  misPreguntasBonus: Pregunta[] = []
+  misPreguntasBonus: Pregunta[] = [];
 
-  //COLUMNAS DE LA TABLA Y LA LISTA CON LA INFORMACION NECESARIA
+  // COLUMNAS DE LA TABLA Y LA LISTA CON LA INFORMACION NECESARIA
   displayedColumnsPreguntasSeleccionadas: string[] = ['titulo', 'pregunta', 'tematica', ' '];
 
   pregunta: Pregunta;
@@ -50,11 +50,10 @@ export class AsignaPreguntasComponent implements OnInit {
 
   ngOnInit() {
 
-    //GUARDAMOS LOS VALORES NECESARIOS QUE TENEMOS DEL COMPONENTE ANTERIOR
+    // GUARDAMOS LOS VALORES NECESARIOS QUE TENEMOS DEL COMPONENTE ANTERIOR
     this.numeroDePuntosGeolocalizables = this.data.numeroDePuntosGeolocalizables;
     console.log(this.numeroDePuntosGeolocalizables);
     this.profesorId = this.data.profesorId;
-  
 
     this.peticionesAPI.DameTodasMisPreguntas (this.profesorId)
     .subscribe (res => {
@@ -103,41 +102,39 @@ export class AsignaPreguntasComponent implements OnInit {
 
   AsignarPreguntaBasica(pregunta: Pregunta) {
     const found = this.misPreguntasBasicas.find (a => a.Titulo === pregunta.Titulo && a.Pregunta === pregunta.Pregunta);
-    if (found === undefined){ 
-      //Añadimos las preguntas a la lista
+    if (found === undefined) {
+      // Añadimos las preguntas a la lista
       this.misPreguntasBasicas.push (pregunta);
       this.IDmisPreguntasBasicas.push (pregunta.id);
       console.log(this.IDmisPreguntasBasicas);
       this.misPreguntasBasicas.sort((a, b) => a.Tematica.localeCompare(b.Tematica));
       this.dataSourceMisPreguntasBasicas = new MatTableDataSource (this.misPreguntasBasicas);
-  
       this.misPreguntas = this.misPreguntas.filter (a => a.Titulo !== pregunta.Titulo && a.Pregunta !== pregunta.Pregunta);
       this.dataSourceMisPreguntas = new MatTableDataSource (this.misPreguntas);
-    }else {
+    } else {
       Swal.fire('Cuidado', 'Esta pregunta ya esta en el juego', 'error');
-    }  
-  } 
+    }
+  }
 
   AsignarPreguntaBonus(pregunta: Pregunta) {
     const found = this.misPreguntasBonus.find (a => a.Titulo === pregunta.Titulo && a.Pregunta === pregunta.Pregunta);
-    if (found === undefined){ 
-      //Añadimos las preguntas a la lista
+    if (found === undefined) {
+      // Añadimos las preguntas a la lista
       this.misPreguntasBonus.push (pregunta);
       this.IDmisPreguntasBonus.push (pregunta.id);
       console.log(this.IDmisPreguntasBonus);
       this.misPreguntasBonus.sort((a, b) => a.Tematica.localeCompare(b.Tematica));
       this.dataSourceMisPreguntasBonus = new MatTableDataSource (this.misPreguntasBonus);
-  
       this.misPreguntas = this.misPreguntas.filter (a => a.Titulo !== pregunta.Titulo && a.Pregunta !== pregunta.Pregunta);
       this.dataSourceMisPreguntas = new MatTableDataSource (this.misPreguntas);
-    }else {
+    } else {
       Swal.fire('Cuidado', 'Esta pregunta ya esta en el juego', 'error');
-    }  
+    }
   }
 
 
   EliminarDePreguntasBasicas(pregunta: Pregunta){
-
+        // tslint:disable-next-line:max-line-length
         this.misPreguntasBasicas = this.misPreguntasBasicas.filter(a => a.Titulo !== pregunta.Titulo && a.Pregunta !== pregunta.Pregunta && a.Tematica !== pregunta.Tematica);
         this.IDmisPreguntasBasicas = this.IDmisPreguntasBasicas.filter(a => a !== pregunta.id);
         this.dataSourceMisPreguntasBasicas = new MatTableDataSource (this.misPreguntasBasicas);
@@ -146,8 +143,9 @@ export class AsignaPreguntasComponent implements OnInit {
         this.dataSourceMisPreguntas = new MatTableDataSource (this.misPreguntas);
   }
 
-  EliminarDePreguntasBonus(pregunta: Pregunta){
+  EliminarDePreguntasBonus(pregunta: Pregunta) {
 
+    // tslint:disable-next-line:max-line-length
     this.misPreguntasBonus = this.misPreguntasBonus.filter(a => a.Titulo !== pregunta.Titulo && a.Pregunta !== pregunta.Pregunta && a.Tematica !== pregunta.Tematica);
     this.IDmisPreguntasBonus = this.IDmisPreguntasBonus.filter(a => a !== pregunta.id);
     this.dataSourceMisPreguntasBonus = new MatTableDataSource (this.misPreguntasBonus);

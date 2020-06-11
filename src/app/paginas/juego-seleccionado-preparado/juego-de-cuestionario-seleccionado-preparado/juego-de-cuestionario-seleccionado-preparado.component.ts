@@ -79,7 +79,7 @@ export class JuegoDeCuestionarioSeleccionadoPreparadoComponent implements OnInit
 
   ActivarJuego() {
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.PuntuacionCorrecta,
+    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.PuntuacionCorrecta,
       this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, true, this.juegoSeleccionado.JuegoTerminado,
       // tslint:disable-next-line:max-line-length
       this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)

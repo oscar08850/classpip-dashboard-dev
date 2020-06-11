@@ -474,10 +474,10 @@ export class CalculosService {
                         juegosInactivos.push(juegosGeocaching[i]);
                       }
                     }
-                    
-                  const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-                  obs.next (resultado);
-                  });
+
+                    const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+                    obs.next (resultado);
+                    });
                 });
               });
             });
@@ -1771,13 +1771,6 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
 
     console.log('Entro en guardar enfrentamientos');
     const numPartidosPorRonda = participantes.length / 2;
-    console.log(participantes.length);
-    console.log('Muestro lassss jornadas');
-    console.log(jornadas);
-    console.log ("numero de jornadas");
-    console.log (jornadas.length);
-    console.log ("NumeroPartidosRonda");
-    console.log (numPartidosPorRonda);
 
     for (let i = 0; i < jornadas.length ; i ++) {
       console.log ('jornada' + i);
@@ -1807,7 +1800,6 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
           });
         }
       }
-
     }
   }
 
@@ -3248,6 +3240,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
                     this.sesion.DameJuego().id)
           .subscribe(() => {
             this.EliminarAlumnosJuegoDeCuestionario();
+            this.EliminaRespuestasJuegoDeCuestionario();
             obs.next ();
           });
     });
@@ -3256,10 +3249,10 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
 
   // tslint:disable-next-line:max-line-length
   // Esta funcion recupera todos los alumnos que estaban inscritos en el juego de cuestionario y los borra. Esto lo hacemos para no dejar matriculas que no
-  // nos sirven dentro de la vase de datos
+  // nos sirven dentro de la base de datos
   private EliminarAlumnosJuegoDeCuestionario() {
     // Pido los alumnos correspondientes al juego que voy a borrar
-    this.peticionesAPI.DameAlumnosDelJuegoDeCuestionario(this.sesion.DameJuego().id)
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionario(this.sesion.DameJuego().id)
     .subscribe( AlumnosDelJuego => {
       if (AlumnosDelJuego[0] !== undefined) {
 
@@ -3278,6 +3271,26 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
     });
   }
 
+  private EliminaRespuestasJuegoDeCuestionario() {
+    // Pido los alumnos correspondientes al juego que voy a borrar
+    this.peticionesAPI.DameRespuestasAlumnoJuegoDeCuestionario(this.sesion.DameJuego().id)
+    .subscribe( respuestas => {
+      if (respuestas[0] !== undefined) {
+
+        // Una vez recibo las inscripciones, las voy borrando una a una
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < respuestas.length; i++) {
+          this.peticionesAPI.BorraRespuestaAlumnoDelJuegoDeCuestionario(respuestas[i].id)
+          .subscribe(() => {
+              console.log('Respuesta borrada correctamente');
+          });
+        }
+      } else {
+        console.log('No hay respuestas en el juego de cuestionario');
+      }
+
+    });
+  }
 
 
 

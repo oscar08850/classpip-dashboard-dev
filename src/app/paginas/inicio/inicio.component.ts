@@ -69,13 +69,15 @@ ObtenJuegosActivosDelProfesor() {
   });
 }
 PreparaTabla() {
+  console.log ('voy a preparar tabla. Esta es la lista de juegos activos');
+  console.log (this.juegosActivos);
   this.juegosActivos.forEach ( juego => {
     this.tabla.push ({
                               nombre : juego.NombreJuego,
                               grupo : this.listaGrupos.filter (g => g.id === juego.grupoId)[0].Nombre,
                               tipo : juego.Tipo,
                               modo : juego.Modo,
-                              id: juego.id
+                              todoElJuego: juego
                     });
   });
   this.dataSource = new MatTableDataSource(this.tabla);
@@ -83,7 +85,8 @@ PreparaTabla() {
 }
 
 MostrarJuegoSeleccionado(juego: Juego) {
-  const juegoSeleccionado = this.juegosActivos.filter (j => j.id === juego.id)[0];
+  console.log (juego);
+  const juegoSeleccionado = juego.todoElJuego;;
   this.sesion.TomaJuego(juegoSeleccionado);
   this.router.navigate(['/grupo/' + juegoSeleccionado.grupoId + '/juegos/juegoSeleccionadoActivo']);
 }

@@ -31,6 +31,9 @@ export class AlbumDelAlumnoComponent implements OnInit {
   alumno: Alumno;
   voltear = false;
 
+  // Numero de columnas para mostrar el album del alumno
+  ncol = 3;
+
   constructor(
                 private sesion: SesionService,
                 private peticionesAPI: PeticionesAPIService,
