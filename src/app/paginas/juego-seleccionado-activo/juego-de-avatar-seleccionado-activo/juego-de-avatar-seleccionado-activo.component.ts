@@ -13,6 +13,7 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
 
 
+
 @Component({
   selector: 'app-juego-de-avatar-seleccionado-activo',
   templateUrl: './juego-de-avatar-seleccionado-activo.component.html',
