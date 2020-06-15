@@ -629,7 +629,7 @@ export class JuegoComponent implements OnInit {
        // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.alumnosGrupo.length; i++) {
         // tslint:disable-next-line:max-line-length
-        this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, this.juegoDeCuestionario.id, this.alumnosGrupo[i].id ))
+        this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, false, this.juegoDeCuestionario.id, this.alumnosGrupo[i].id ))
         .subscribe();
       }
       Swal.fire('Juego de cuestionario creado correctamente', ' ', 'success');

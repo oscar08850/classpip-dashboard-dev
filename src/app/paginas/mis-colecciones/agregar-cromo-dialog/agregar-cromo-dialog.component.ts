@@ -9,6 +9,7 @@ import { Cromo, Coleccion } from '../../../clases/index';
 import { PeticionesAPIService } from '../../../servicios/index';
 
 
+
 export interface OpcionSeleccionada {
   nombre: string;
   id: string;

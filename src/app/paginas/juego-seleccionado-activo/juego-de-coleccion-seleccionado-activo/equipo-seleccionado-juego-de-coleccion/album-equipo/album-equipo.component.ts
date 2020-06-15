@@ -9,6 +9,8 @@ import { SesionService, PeticionesAPIService } from '../../../../../servicios/in
 
 import { Location } from '@angular/common';
 
+import * as URL from '../../../../../URLs/urls';
+
 @Component({
   selector: 'app-album-equipo',
   templateUrl: './album-equipo.component.html',
@@ -76,37 +78,39 @@ export class AlbumEquipoComponent implements OnInit {
       cromo = this.cromosColeccion[i];
 
       if (cromo.ImagenDelante !== undefined ) {
+        this.imagenCromoDelante[i] = URL.ImagenesCromo + cromo.ImagenDelante;
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.peticionesAPI.DameImagenCromo (cromo.ImagenDelante)
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+        // this.peticionesAPI.DameImagenCromo (cromo.ImagenDelante)
+        // .subscribe(response => {
+        //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenCromoDelante[i] = reader.result.toString();
-          }, false);
+        //   const reader = new FileReader();
+        //   reader.addEventListener('load', () => {
+        //     this.imagenCromoDelante[i] = reader.result.toString();
+        //   }, false);
 
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-        });
+        //   if (blob) {
+        //     reader.readAsDataURL(blob);
+        //   }
+        // });
       }
 
       if (cromo.ImagenDetras !== undefined ) {
+        this.imagenCromoDetras[i] = URL.ImagenesCromo + cromo.ImagenDetras;
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.peticionesAPI.DameImagenCromo (cromo.ImagenDetras)
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+        // this.peticionesAPI.DameImagenCromo (cromo.ImagenDetras)
+        // .subscribe(response => {
+        //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenCromoDetras[i] = reader.result.toString();
-          }, false);
+        //   const reader = new FileReader();
+        //   reader.addEventListener('load', () => {
+        //     this.imagenCromoDetras[i] = reader.result.toString();
+        //   }, false);
 
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-        });
+        //   if (blob) {
+        //     reader.readAsDataURL(blob);
+        //   }
+        // });
       }
     }
   }

@@ -11,6 +11,8 @@ import { DialogoConfirmacionComponent } from '../../../COMPARTIDO/dialogo-confir
 import { MatDialog } from '@angular/material';
 import Swal from 'sweetalert2';
 
+import * as URL from '../../../../URLs/urls';
+
 
 @Component({
   selector: 'app-alumno-seleccionado-juego-de-coleccion',
@@ -113,40 +115,41 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
       console.log ('Voy a pedir imagen cromo');
       if (elem.cromo.ImagenDelante !== undefined ) {
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+        this.imagenCromoDelante[i] = URL.ImagenesCromo + elem.cromo.ImagenDelante;
+        // this.peticionesAPI.DameImagenCromo (elem.cromo.ImagenDelante)
+        // .subscribe(response => {
+        //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-        this.peticionesAPI.DameImagenCromo (elem.cromo.ImagenDelante)
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+        //   const reader = new FileReader();
+        //   reader.addEventListener('load', () => {
+        //     console.log ('tengo imagen');
+        //     this.imagenCromoDelante[i] = reader.result.toString();
+        //     console.log (this.imagenCromoDelante);
+        //   }, false);
 
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            console.log ('tengo imagen');
-            this.imagenCromoDelante[i] = reader.result.toString();
-            console.log (this.imagenCromoDelante);
-          }, false);
-
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-        });
+        //   if (blob) {
+        //     reader.readAsDataURL(blob);
+        //   }
+        // });
       }
 
       if (elem.cromo.ImagenDetras !== undefined ) {
+        this.imagenCromoDetras[i] = URL.ImagenesCromo + elem.cromo.ImagenDetras;
 
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.peticionesAPI.DameImagenCromo (elem.cromo.ImagenDetras)
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+        // this.peticionesAPI.DameImagenCromo (elem.cromo.ImagenDetras)
+        // .subscribe(response => {
+        //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenCromoDetras[i] = reader.result.toString();
-          }, false);
+        //   const reader = new FileReader();
+        //   reader.addEventListener('load', () => {
+        //     this.imagenCromoDetras[i] = reader.result.toString();
+        //   }, false);
 
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-        });
+        //   if (blob) {
+        //     reader.readAsDataURL(blob);
+        //   }
+        // });
       }
     }
   }

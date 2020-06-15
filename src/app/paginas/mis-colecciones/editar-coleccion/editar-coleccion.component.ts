@@ -14,6 +14,7 @@ import { Cromo, Coleccion } from '../../../clases/index';
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../../servicios/index';
 
+import * as URL from '../../../URLs/urls';
 
 @Component({
   selector: 'app-editar-coleccion',
@@ -47,6 +48,7 @@ export class EditarColeccionComponent implements OnInit {
   cambios: Boolean = false;
   // tslint:disable-next-line:ban-types
   voltear: Boolean = false;
+
 
   constructor(
               public dialog: MatDialog,
@@ -103,41 +105,43 @@ export class EditarColeccionComponent implements OnInit {
     for (let i = 0; i < this.cromosColeccion.length; i++) {
 
       this.cromo = this.cromosColeccion[i];
+      this.imagenesCromosDelante[i] = URL.ImagenesCromo + this.cromo.ImagenDelante;
+      this.imagenesCromosDetras[i] = URL.ImagenesCromo + this.cromo.ImagenDetras;
 
-      if (this.cromo.ImagenDelante !== undefined ) {
-        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDelante)
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+      // if (this.cromo.ImagenDelante !== undefined ) {
+      //   // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+      //   this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDelante)
+      //   .subscribe(response => {
+      //     const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenesCromosDelante[i] = reader.result.toString();
-          }, false);
+      //     const reader = new FileReader();
+      //     reader.addEventListener('load', () => {
+      //       this.imagenesCromosDelante[i] = reader.result.toString();
+      //     }, false);
 
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-        });
-      }
+      //     if (blob) {
+      //       reader.readAsDataURL(blob);
+      //     }
+      //   });
+      // }
 
 
-      if (this.cromo.ImagenDetras !== undefined ) {
-        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDetras)
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+      // if (this.cromo.ImagenDetras !== undefined ) {
+      //   // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+      //   this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDetras)
+      //   .subscribe(response => {
+      //     const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenesCromosDetras[i] = reader.result.toString();
-          }, false);
+      //     const reader = new FileReader();
+      //     reader.addEventListener('load', () => {
+      //       this.imagenesCromosDetras[i] = reader.result.toString();
+      //     }, false);
 
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-        });
-      }
+      //     if (blob) {
+      //       reader.readAsDataURL(blob);
+      //     }
+      //   });
+      // }
     }
   }
 
@@ -312,19 +316,21 @@ export class EditarColeccionComponent implements OnInit {
   if (coleccion.ImagenColeccion !== undefined) {
 
     // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-    this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
-    .subscribe(response => {
-      const blob = new Blob([response.blob()], { type: 'image/jpg'});
+    // this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
+    // .subscribe(response => {
+    //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        this.imagenColeccion = reader.result.toString();
-      }, false);
+    //   const reader = new FileReader();
+    //   reader.addEventListener('load', () => {
+    //     this.imagenColeccion = reader.result.toString();
+    //   }, false);
 
-      if (blob) {
-        reader.readAsDataURL(blob);
-      }
-    });
+    //   if (blob) {
+    //     reader.readAsDataURL(blob);
+    //   }
+    // });
+
+    this.imagenColeccion = URL.ImagenesColeccion + coleccion.ImagenColeccion ;
 
     // Sino la imagenColeccion será undefined para que no nos pinte la foto de otro equipo préviamente seleccionado
   } else {

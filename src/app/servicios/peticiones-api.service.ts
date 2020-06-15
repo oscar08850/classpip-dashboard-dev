@@ -25,8 +25,8 @@ export class PeticionesAPIService {
 
 
 
- private host = 'http://localhost';
-  // private host = 'http://147.83.118.92';
+ //private host = 'http://localhost';
+ private host = 'http://147.83.118.92';
 
 
 

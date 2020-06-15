@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Profesor } from './clases';
 import { SesionService} from './servicios/sesion.service';
-import { PeticionesAPIService, CalculosService} from './servicios/index';
+import { PeticionesAPIService, CalculosService, ComServerService} from './servicios/index';
 import { MatDialog, MatTabGroup } from '@angular/material';
 
 
@@ -23,6 +23,7 @@ export class AppComponent  {
               private route: Router,
               private peticionesAPI: PeticionesAPIService,
               private sesion: SesionService,
+              private comServer: ComServerService,
               private calculos: CalculosService) { }
 
   Autentificar() {
@@ -34,6 +35,7 @@ export class AppComponent  {
 
           // Envio el profesor a la sesión
           this.sesion.TomaProfesor(this.profesor);
+          this.comServer.Conectar();
 
           // En principio, no seria necesario enviar el id del profesor porque ya
           // tengo el profesor en la sesión y puedo recuperarlo cuando quiera.

@@ -70,6 +70,8 @@ export class SesionService {
   inscripcionAlumnoJuegoDeCuestionario: AlumnoJuegoDeCuestionario;
   alumnoJuegoDeCuestionario: TablaAlumnoJuegoDeCuestionario;
 
+
+
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
     this.profesor = profesor;
@@ -423,7 +425,7 @@ public DameListaEscenarios(): any {
   return this.listaEscenarios;
 }
 
-public TomaListaEscenarios(listaEscenarios: any){
+public TomaListaEscenarios(listaEscenarios: any) {
   this.listaEscenarios = listaEscenarios;
 }
 
@@ -522,6 +524,5 @@ public DameAlumnoJuegoDeCuestionario(): TablaAlumnoJuegoDeCuestionario {
 public DameInscripcionAlumnoJuegoDeCuestionario(): AlumnoJuegoDeCuestionario {
   return this.inscripcionAlumnoJuegoDeCuestionario;
 }
-
 
 }
