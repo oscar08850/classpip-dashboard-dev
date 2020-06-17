@@ -1,6 +1,6 @@
 # Classpip Dashboard
 
-# ¿Qué es Classpip?
+## ¿Qué es Classpip?
 
 [![Classpip Badge](https://img.shields.io/badge/classpip-dashboard-brightgreen.svg)](https://github.com/rocmeseguer/classpip-dashboard)
 [![Classpip Badge](https://img.shields.io/badge/classpip-mobile--profe-brightgreen)](https://github.com/rocmeseguer/classpip-mobile-profe)
@@ -34,11 +34,11 @@ En la actualidad Classpip tiene 5 módulos:
   
     
     
-# Dashboard
+## Dashboard
 
 Este repositorio contiene el código del módulo Dashboard, que es el cuadro de mandos desde el que el profesor gestiona alumnos, grupos, juegos y recursos para organizar juegos. Para poder ejecutar el Dashboard es necesario tener en marcha el módulo Services (que proporcionará al Dashboard los datos que necesite) y el módulo Server (que gestionará notificaciones y registros de actividad).
 
-## NodeJS
+### NodeJS
 
 Necesitas instalar NodeJS v10.13.0. Esta instalación incluye la instalación del gestor de paquetes npm.
 Para verificar que has instalado la versión correcta:
@@ -55,32 +55,32 @@ https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 https://github.com/
 
 
-### Instala native addons en Linux (Ubuntu)
+### Native addons en Linux (Ubuntu)
 
 ```
 sudo apt-get install gcc g++ make
 ```
 
-### Instala native addons en Windows
+### Native addons en Windows
 Deben instalarse en con permiso de administrador
 ```
 npm install -g windows-build-tools@5.1.0
 ```
 
-## Cliente angular
+### Cliente angular
 Instalar también con permisos de administrador
 ```
 npm install -g @angular/cli@7.0.6
 ```
 
-## Dependencias locales
+### Dependencias locales
 
 Después de clonar el repositorio hay que instalar las dependencias locales
 ```
 npm install
 ```
 
-## Puesta en marcha
+### Puesta en marcha
 
 ```
 npm install
