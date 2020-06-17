@@ -1,5 +1,7 @@
 # Classpip Dashboard
 
+# ¿Qué es Classpip?
+
 [![Classpip Badge](https://img.shields.io/badge/classpip-dashboard-brightgreen.svg)](https://github.com/rocmeseguer/classpip-dashboard)
 [![Classpip Badge](https://img.shields.io/badge/classpip-mobile--profe-brightgreen)](https://github.com/rocmeseguer/classpip-mobile-profe)
 [![Classpip Badge](https://img.shields.io/badge/classpip-mobile--student-brightgreen)](https://github.com/rocmeseguer/classpip-mobile-student)
@@ -29,7 +31,9 @@ En la actualidad Classpip tiene 5 módulos:
  * *Server*: Es un servidor que realizar tareas de notificación entre los usuarios. Por ejemplo, recibe la notificación de que un alumno ha completado un cuestionario y remite esa notificación al Dash para que refleje esa circunstancia en el listado de alumnos que participan en el juego. También realiza tareas de registro de actividad (por ejemplo, registrar la creación de grupos o de juegos).
  [![Classpip Badge](https://img.shields.io/badge/classpip-server-brightgreen.svg)](https://github.com/rocmeseguer/classpip-server)
 
-
+  
+    
+    
 # Dashboard
 
 Este repositorio contiene el código del módulo Dashboard, que es el cuadro de mandos desde el que el profesor gestiona alumnos, grupos, juegos y recursos para organizar juegos. Para poder ejecutar el Dashboard es necesario tener en marcha el módulo Services (que proporcionará al Dashboard los datos que necesite) y el módulo Server (que gestionará notificaciones y registros de actividad).
