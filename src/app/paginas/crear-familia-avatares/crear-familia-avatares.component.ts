@@ -9,6 +9,8 @@ import { SesionService, PeticionesAPIService, CalculosService } from '../../serv
 import { Router, ActivatedRoute } from '@angular/router';
 
 
+
+
 @Component({
   selector: 'app-crear-familia-avatares',
   templateUrl: './crear-familia-avatares.component.html',

@@ -16,6 +16,8 @@ import {SesionService, PeticionesAPIService, CalculosService} from '../../../../
 
 import { Location } from '@angular/common';
 
+import * as URL from '../../../../URLs/urls';
+
 @Component({
   selector: 'app-asignar-cromos',
   templateUrl: './asignar-cromos.component.html',
@@ -564,37 +566,39 @@ export class AsignarCromosComponent implements OnInit {
     GET_ImagenCromo() {
 
       if (this.cromoSeleccionado.ImagenDelante !== undefined ) {
+        this.imagenDelanteCromoSeleccionado = URL.ImagenesCromo + this.cromoSeleccionado.ImagenDelante;
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.peticionesAPI.DameImagenCromo (this.cromoSeleccionado.ImagenDelante)
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+        // this.peticionesAPI.DameImagenCromo (this.cromoSeleccionado.ImagenDelante)
+        // .subscribe(response => {
+        //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenDelanteCromoSeleccionado = reader.result.toString();
-          }, false);
+        //   const reader = new FileReader();
+        //   reader.addEventListener('load', () => {
+        //     this.imagenDelanteCromoSeleccionado = reader.result.toString();
+        //   }, false);
 
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-      });
+        //   if (blob) {
+        //     reader.readAsDataURL(blob);
+        //   }
+        // });
       }
 
       if (this.cromoSeleccionado.ImagenDetras !== undefined ) {
+        this.imagenDetrasCromoSeleccionado = URL.ImagenesCromo + this.cromoSeleccionado.ImagenDetras;
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.peticionesAPI.DameImagenCromo (this.cromoSeleccionado.ImagenDetras)
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+        // this.peticionesAPI.DameImagenCromo (this.cromoSeleccionado.ImagenDetras)
+        // .subscribe(response => {
+        //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenDetrasCromoSeleccionado = reader.result.toString();
-          }, false);
+        //   const reader = new FileReader();
+        //   reader.addEventListener('load', () => {
+        //     this.imagenDetrasCromoSeleccionado = reader.result.toString();
+        //   }, false);
 
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-      });
+        //   if (blob) {
+        //     reader.readAsDataURL(blob);
+        //   }
+        // });
       }
   }
   goBack() {

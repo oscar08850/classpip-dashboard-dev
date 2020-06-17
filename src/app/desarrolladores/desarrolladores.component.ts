@@ -210,6 +210,7 @@ export class DesarrolladoresComponent implements OnInit {
   };
 
   donut = {
+
     tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b}: {c} ({d}%)'

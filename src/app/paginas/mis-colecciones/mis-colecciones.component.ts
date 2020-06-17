@@ -17,6 +17,8 @@ import { SesionService, PeticionesAPIService } from '../../servicios/index';
 // Clases
 import { Coleccion, Cromo } from '../../clases/index';
 
+import * as URL from '../../URLs/urls';
+
 @Component({
   selector: 'app-mis-colecciones',
   templateUrl: './mis-colecciones.component.html',
@@ -86,20 +88,21 @@ export class MisColeccionesComponent implements OnInit {
   console.log(coleccion.ImagenColeccion);
   // Si la coleccion tiene una foto (recordemos que la foto no es obligatoria)
   if (coleccion.ImagenColeccion !== undefined) {
+    this.imagenColeccion = URL.ImagenesColeccion + coleccion.ImagenColeccion;
 
-    this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
-    .subscribe(response => {
-      const blob = new Blob([response.blob()], { type: 'image/jpg'});
+    // this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
+    // .subscribe(response => {
+    //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        this.imagenColeccion = reader.result.toString();
-      }, false);
+    //   const reader = new FileReader();
+    //   reader.addEventListener('load', () => {
+    //     this.imagenColeccion = reader.result.toString();
+    //   }, false);
 
-      if (blob) {
-        reader.readAsDataURL(blob);
-      }
-    });
+    //   if (blob) {
+    //     reader.readAsDataURL(blob);
+    //   }
+    // });
 
     // Sino la imagenColeccion será undefined para que no nos pinte la foto de otro equipo préviamente seleccionado
   } else {

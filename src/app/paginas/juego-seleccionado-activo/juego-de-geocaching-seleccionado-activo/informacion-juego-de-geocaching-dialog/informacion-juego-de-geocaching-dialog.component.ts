@@ -29,6 +29,7 @@ export class InformacionJuegoDeGeocachingDialogComponent implements OnInit {
   JuegoTerminado: boolean;
   idescenario: number;
   profesorId: number;
+  Tipo: string;
 
 
   TituloEscenario: string;
@@ -62,6 +63,7 @@ export class InformacionJuegoDeGeocachingDialogComponent implements OnInit {
     this.JuegoTerminado = this.juegoSeleccionado.JuegoTerminado;
     this.idescenario = this.juegoSeleccionado.idescenario;
     this.profesorId = this.juegoSeleccionado.profesorId;
+    this.Tipo = this.juegoSeleccionado.Tipo;
 
     this.myForm = this._formBuilder.group({
       NombreJuego: ['', Validators.required],
@@ -79,7 +81,8 @@ export class InformacionJuegoDeGeocachingDialogComponent implements OnInit {
 
   // COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN EL JUEGO
   GuardarCambios() {
-    this.peticionesAPI.ModificaJuegoDeGeocaching(new JuegoDeGeocaching(this.NombreJuego, this.PuntuacionCorrecta,
+    this.peticionesAPI.ModificaJuegoDeGeocaching(new JuegoDeGeocaching(this.NombreJuego, this.Tipo, this.PuntuacionCorrecta,
+      // tslint:disable-next-line:max-line-length
       this.PuntuacionIncorrecta, this.PuntuacionCorrectaBonus, this.PuntuacionIncorrectaBonus, this.PreguntasBasicas, this.PreguntasBonus, this.JuegoActivo, this.JuegoTerminado,
       this.profesorId, this.juegoSeleccionado.grupoId, this.idescenario), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
       .subscribe(() => {
@@ -99,11 +102,11 @@ export class InformacionJuegoDeGeocachingDialogComponent implements OnInit {
     // tslint:disable-next-line:max-line-length
     (this.myForm.value.NombreJuego === this.juegoSeleccionado.NombreJuego &&
       // tslint:disable-next-line:max-line-length
-this.myForm.value.PuntuacionCorrecta.toString() === this.juegoSeleccionado.PuntuacionCorrecta.toString() && this.myForm.value.PuntuacionIncorrecta.toString() === this.juegoSeleccionado.PuntuacionIncorrecta.toString() && 
+      this.myForm.value.PuntuacionCorrecta.toString() === this.juegoSeleccionado.PuntuacionCorrecta.toString() && this.myForm.value.PuntuacionIncorrecta.toString() === this.juegoSeleccionado.PuntuacionIncorrecta.toString() &&
       // tslint:disable-next-line:max-line-length
-this.myForm.value.PuntuacionIncorrecta.toString() === this.juegoSeleccionado.PuntuacionIncorrecta.toString() && this.myForm.value.PuntuacionCorrectaBonus.toString() === this.juegoSeleccionado.PuntuacionCorrectaBonus.toString() && 
+      this.myForm.value.PuntuacionIncorrecta.toString() === this.juegoSeleccionado.PuntuacionIncorrecta.toString() && this.myForm.value.PuntuacionCorrectaBonus.toString() === this.juegoSeleccionado.PuntuacionCorrectaBonus.toString() &&
       // tslint:disable-next-line:max-line-length
-this.myForm.value.PuntuacionIncorrectaBonus.toString() === this.juegoSeleccionado.PuntuacionIncorrectaBonus.toString())) {
+      this.myForm.value.PuntuacionIncorrectaBonus.toString() === this.juegoSeleccionado.PuntuacionIncorrectaBonus.toString())) {
       // Si alguno de los valores es igual a nada, entonces estará desactivado
       this.isDisabled = true;
     } else {

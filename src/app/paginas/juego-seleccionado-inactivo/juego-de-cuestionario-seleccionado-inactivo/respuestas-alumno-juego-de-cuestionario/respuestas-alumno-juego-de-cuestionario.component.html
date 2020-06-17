@@ -1,0 +1,16 @@
+<div *ngIf = cuestionario class="titulo">Respuestas de:</div>
+<div class="subtitulo">{{alumno.nombre}} {{alumno.primerApellido}} {{alumno.segundoApellido}}</div>
+<mat-divider *ngIf = alumno class="lineaDivisoria"> </mat-divider>
+<br>
+<br>
+<div class ="enColumna">
+  <div style= "display: table; width: 60%">
+    <div class="col" style="width: 15%; display: table-cell;vertical-align: middle;"><h1 style="color:red">Mal</h1></div>
+    <div class="col" style="width: 50%; display: table-cell;vertical-align: middle;">
+        <div style = "width : 100%;" echarts [options]="info"  theme="macarons" class="demo-chart"></div>
+    </div>
+    <div class="col" style="width: 15%; display: table-cell;vertical-align: middle;" ><h1 style="color:green">Bien</h1></div>
+  </div>
+  </div>
+<div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+</div>

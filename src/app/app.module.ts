@@ -176,9 +176,13 @@ import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escena
 import { AsignaEscenarioComponent } from './paginas/juego/asigna-escenario/asigna-escenario.component';
 import { AsignaPreguntasComponent } from './paginas/juego/asigna-preguntas/asigna-preguntas.component';
 
+// tslint:disable-next-line:max-line-length
 import { InformacionJuegoDeGeocachingDialogComponent } from './paginas/juego-seleccionado-activo/juego-de-geocaching-seleccionado-activo/informacion-juego-de-geocaching-dialog/informacion-juego-de-geocaching-dialog.component';
+// tslint:disable-next-line:max-line-length
 import { JuegoDeGeocachingSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-geocaching-seleccionado-activo/juego-de-geocaching-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
 import { JuegoDeGeocachingSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-geocaching-seleccionado-inactivo/juego-de-geocaching-seleccionado-inactivo.component';
+// tslint:disable-next-line:max-line-length
 import { JuegoDeGeocachingSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-de-geocaching-seleccionado-preparado/juego-de-geocaching-seleccionado-preparado.component';
 
 // avatares
@@ -193,6 +197,10 @@ import { MostrarAvatarAlumnoComponent } from './paginas/juego-seleccionado-activ
 // tslint:disable-next-line:max-line-length
 import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/informacion-juego-avatar/informacion-juego-avatar.component';
 import { MenuRecursosComponent } from './paginas/menu-recursos/menu-recursos.component';
+// tslint:disable-next-line:max-line-length
+import { InformacionRespuestasJuegoDeCuestionarioDialogComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/informacion-respuestas-juego-de-cuestionario-dialog/informacion-respuestas-juego-de-cuestionario-dialog.component';
+// tslint:disable-next-line:max-line-length
+import { RespuestasAlumnoJuegoDeCuestionarioComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/respuestas-alumno-juego-de-cuestionario/respuestas-alumno-juego-de-cuestionario.component';
 
 
 @NgModule({
@@ -285,7 +293,7 @@ import { MenuRecursosComponent } from './paginas/menu-recursos/menu-recursos.com
     EditarEscenarioComponent,
     AsignaEscenarioComponent,
     AsignaPreguntasComponent,
-    
+
     MisFamiliasAvataresComponent,
     CrearFamiliaAvataresComponent,
     AsignarFamiliasJuegoAvataresComponent,
@@ -301,7 +309,9 @@ import { MenuRecursosComponent } from './paginas/menu-recursos/menu-recursos.com
     InformacionJuegoDeGeocachingDialogComponent,
     JuegoDeGeocachingSeleccionadoActivoComponent,
     JuegoDeGeocachingSeleccionadoInactivoComponent,
-    MenuRecursosComponent
+    MenuRecursosComponent,
+    InformacionRespuestasJuegoDeCuestionarioDialogComponent,
+    RespuestasAlumnoJuegoDeCuestionarioComponent
 
 
 
@@ -350,7 +360,11 @@ import { MenuRecursosComponent } from './paginas/menu-recursos/menu-recursos.com
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
     // tslint:disable-next-line:max-line-length
     EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AgregarPuntoGeolocalizableDialogComponent, EditarPuntoGeolocalizableDialogComponent, AsignaCuestionarioComponent,
-    InformacionJuegoDeCuestionarioDialogComponent, AsignaEscenarioComponent, AsignaPreguntasComponent, InformacionJuegoDeGeocachingDialogComponent],
+    // tslint:disable-next-line:max-line-length
+    InformacionJuegoDeCuestionarioDialogComponent, AsignaEscenarioComponent, AsignaPreguntasComponent, InformacionJuegoDeGeocachingDialogComponent,
+    InformacionRespuestasJuegoDeCuestionarioDialogComponent,
+    RespuestasAlumnoJuegoDeCuestionarioComponent
+  ],
   bootstrap: [AppComponent],
   providers: [
     {

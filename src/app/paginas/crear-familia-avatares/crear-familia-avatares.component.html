@@ -4,6 +4,65 @@
 <div class = "contenedor">
   <mat-tab-group>
 
+    <mat-tab label="Cargar familia desde ficheros">
+      <div class= "enColumna" *ngIf ="advertencia" style = "border-color: red;">
+        <!-- para preservar los espacios y los tabs del texto -->
+        <pre>
+        <br>
+
+        La relación de aspecto de las imagenes debe ser <strong>300 X 324</strong>
+        La carpeta con los ficheros de la colección debe contener un fichero <strong>JSON</strong>
+        con el contenido mostrado en el siguiente ejemplo.
+
+        {{'{'}}
+          "NombreFamilia": "Chica",
+          "Silueta": "chica1_silueta.png",
+          "NombreComplemento1": "caras",
+          "Complemento1": ["chica1_cara1.png","chica1_cara2.png","chica1_cara3.png","chica1_cara4.png"],
+
+          ... otros 3 complementos ...
+
+        {{'}'}}
+
+        Los complementos se muestran unos encima de otros según el orden en que se definan. El complemento 2 (por ejemplo,
+        un sombrero) se muestra encima del complemento 1 (por ejemplo, el pelo).
+        </pre>
+
+        <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
+          Ocultar advertencia
+        </button>
+      </div>
+      <div class = "enFila">
+        <div style = "width: 40%">
+          <input #file id = "inputFamilia" type="file" accept= 'image/*' (change)="SeleccionarFicherosFamilia($event)" style="display:none" multiple>
+          <input #file id = "inputInfo" type="file" accept= 'application/JSON' (change)="SeleccionarInfoFamilia($event)" style="display:none">
+          <button style = "height:100px; width:80%" (click) = "ActivarInputInfo()" type="button" class="btn Agregar">
+            Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
+          </button>
+        </div>
+        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "ficherosFamilia">
+          <h3>Datos de la familia</h3>
+          <div class = "enFila" style = "width: 90%">
+            <div>
+              <p> Nombre de la familia: <strong>{{infoFamilia.NombreFamilia}}</strong></p>
+              <br>
+              <p> {{infoFamilia.NombreComplemento1}} <strong>{{infoFamilia.Complemento1.length}}</strong> opciones</p>
+              <p> {{infoFamilia.NombreComplemento2}} <strong>{{infoFamilia.Complemento2.length}}</strong> opciones</p>
+              <p> {{infoFamilia.NombreComplemento3}} <strong>{{infoFamilia.Complemento3.length}}</strong> opciones</p>
+              <p> {{infoFamilia.NombreComplemento4}} <strong>{{infoFamilia.Complemento4.length}}</strong> opciones</p>
+            </div>
+          </div>
+          <div class = "enFila" style = "width:50%">
+            <button (click) = "RegistrarFamilia()" type="button" class="btn Agregar">
+              Registrar
+            </button>
+            <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
     <mat-tab label="Introducir nueva familia">
 
       <mat-horizontal-stepper [linear]="true"  #stepper>
@@ -277,64 +336,6 @@
       </mat-horizontal-stepper>
     </mat-tab>
 
-    <mat-tab label="Cargar familia desde ficheros">
-      <div class= "enColumna" *ngIf ="advertencia" style = "border-color: red;">
-        <!-- para preservar los espacios y los tabs del texto -->
-        <pre>
-        <br>
 
-        La relación de aspecto de las imagenes debe ser <strong>300 X 324</strong>
-        La carpeta con los ficheros de la colección debe contener un fichero <strong>JSON</strong>
-        con el contenido mostrado en el siguiente ejemplo.
-
-        {{'{'}}
-          "NombreFamilia": "Chica",
-          "Silueta": "chica1_silueta.png",
-          "NombreComplemento1": "caras",
-          "Complemento1": ["chica1_cara1.png","chica1_cara2.png","chica1_cara3.png","chica1_cara4.png"],
-
-          ... otros 3 complementos ...
-
-        {{'}'}}
-
-        Los complementos se muestran unos encima de otros según el orden en que se definan. El complemento 2 (por ejemplo,
-        un sombrero) se muestra encima del complemento 1 (por ejemplo, el pelo).
-        </pre>
-
-        <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
-          Ocultar advertencia
-        </button>
-      </div>
-      <div class = "enFila">
-        <div style = "width: 40%">
-          <input #file id = "inputFamilia" type="file" accept= 'image/*' (change)="SeleccionarFicherosFamilia($event)" style="display:none" multiple>
-          <input #file id = "inputInfo" type="file" accept= 'application/JSON' (change)="SeleccionarInfoFamilia($event)" style="display:none">
-          <button style = "height:100px; width:80%" (click) = "ActivarInputInfo()" type="button" class="btn Agregar">
-            Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
-          </button>
-        </div>
-        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "ficherosFamilia">
-          <h3>Datos de la familia</h3>
-          <div class = "enFila" style = "width: 90%">
-            <div>
-              <p> Nombre de la familia: <strong>{{infoFamilia.NombreFamilia}}</strong></p>
-              <br>
-              <p> {{infoFamilia.NombreComplemento1}} <strong>{{infoFamilia.Complemento1.length}}</strong> opciones</p>
-              <p> {{infoFamilia.NombreComplemento2}} <strong>{{infoFamilia.Complemento2.length}}</strong> opciones</p>
-              <p> {{infoFamilia.NombreComplemento3}} <strong>{{infoFamilia.Complemento3.length}}</strong> opciones</p>
-              <p> {{infoFamilia.NombreComplemento4}} <strong>{{infoFamilia.Complemento4.length}}</strong> opciones</p>
-            </div>
-          </div>
-          <div class = "enFila" style = "width:50%">
-            <button (click) = "RegistrarFamilia()" type="button" class="btn Agregar">
-              Registrar
-            </button>
-            <button (click) = "Cancelar()" type="button" class="btn Eliminar">
-              Cancelar
-            </button>
-          </div>
-        </div>
-      </div>
-    </mat-tab>
   </mat-tab-group>
 </div>

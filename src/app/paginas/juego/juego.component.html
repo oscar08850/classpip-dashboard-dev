@@ -622,6 +622,7 @@
                   <button type="button" class="btn Agregar" (click)= "AbrirDialogoAgregarEscenario()" style="width: auto;">Añadir escenario<i class="material-icons">
                       post_add </i></button>
                 </div>
+                <span *ngIf = "tengoEscenario" style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}... {{tipoJuegoCompeticionSeleccionado}} ... {{modoDeJuegoSeleccionado}} ... {{escenario.Mapa}} </span>
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                   <button [disabled]="!tengoEscenario" type="button" class="btn Next" matStepperNext>Siguiente</button>
