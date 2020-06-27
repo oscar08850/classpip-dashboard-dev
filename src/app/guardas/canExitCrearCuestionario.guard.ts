@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router/src/utils/preactivation';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
-import { CrearGrupoComponent } from '../paginas/crear-grupo/crear-grupo.component';
+import { CrearCuestionarioComponent } from '../paginas/crear-cuestionario/crear-cuestionario.component';
 
 // Esta es la guarda para impedir que se abandone una página a menos que se confirme
 @Injectable()
@@ -13,7 +13,7 @@ export class DeactivateGuardCrearCuestionario implements CanDeactivate {
    constructor() {
    }
 
-   canDeactivate( component: CrearGrupoComponent,
+   canDeactivate( component: CrearCuestionarioComponent,
                   route: ActivatedRouteSnapshot,
                   state: RouterStateSnapshot,
                   nextState: RouterStateSnapshot): Observable <boolean> {

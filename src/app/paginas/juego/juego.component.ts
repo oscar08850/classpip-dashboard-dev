@@ -857,7 +857,8 @@ export class JuegoComponent implements OnInit {
 
   //MIRO SI LAS CASILLAS DE LAS PUNTUACIONES ESTAN RELLENADAS
   DisabledPuntos() {
-    if (this.myFormPuntuacion.value.PuntuacionCorrecta === '' || this.myFormPuntuacion.value.PuntuacionIncorrecta === ''){
+    if (this.myFormPuntuacion.value.PuntuacionCorrecta === '' || this.myFormPuntuacion.value.PuntuacionIncorrecta === '' || 
+    isNaN(this.myFormPuntuacion.value.PuntuacionCorrecta) ||  isNaN(this.myFormPuntuacion.value.PuntuacionIncorrecta) ) {
       this.DisabledPuntuacion = true;
     } else {
       this.DisabledPuntuacion = false;
@@ -895,10 +896,9 @@ export class JuegoComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, this.juegoDeCuestionarioId, this.alumnosGrupo[i].id ))
       .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
-      // this.router.navigate(['/grupo/' + this.grupo.id]);
-      Swal.fire('Juego de cuestionrio creado con éxito');
-      this.location.back();
-      // this.goBack();
+      Swal.fire('Juego de cuestionario creado con éxito', 'Todo correcto', 'success');
+      this.router.navigate(['/grupo/' + this.grupo.id]);
+      
   }
 }
 
