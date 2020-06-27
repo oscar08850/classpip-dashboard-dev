@@ -3,8 +3,13 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { FamiliaAvatares } from 'src/app/clases';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 import { SesionService, PeticionesAPIService, CalculosService } from '../../servicios/index';
+import { Router, ActivatedRoute } from '@angular/router';
+
+
+
 
 @Component({
   selector: 'app-crear-familia-avatares',
@@ -50,17 +55,24 @@ export class CrearFamiliaAvataresComponent implements OnInit {
   imagen;
   file;
 
-  dobleancho: string;
-  doblealto: string;
-  ancho: string;
-  alto: string;
+  dobleancho: '300';
+  doblealto: '324';
+  ancho = '150';
+  alto = '162';
+
+  infoFamilia;
+  ficherosFamilia;
+  advertencia = true;
+
 
 
   constructor(
     private formBuilder: FormBuilder,
+    private router: Router,
     private peticionesAPI: PeticionesAPIService,
     private sesion: SesionService,
-    private location: Location
+    private location: Location,
+    private http: HttpClient
   ) { }
 
   ngOnInit() {
@@ -155,33 +167,16 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsDataURL(this.fileSilueta);
     reader.onload = () => {
-
-      // lo que se hace a continuación es para obtener el ancho y alto de la imagen
-      // de la silueta
-      const imagen = new Image();
-      imagen.src = reader.result.toString();
-      imagen.onload = () => {
-        // Necesitaré el ancho y alto y el doble del ancho y del alto
-        this.ancho = imagen.width.toString();
-        this.alto = imagen.height.toString();
-        this.dobleancho = (imagen.width * 2).toString();
-        this.doblealto = (imagen.height * 2).toString();
-      };
       this.imagenSiluetaCargada = true;
       this.imagenSilueta = reader.result.toString();
 
     };
 }
 
-  // Cuando se carge la imagen se activará esta función para hacer que esa imagen
-  // se muestre en tamaño grande
-  PonDoble(img) {
-        img.setAttribute ('width', this.dobleancho);
-        img.setAttribute ('height', this.doblealto );
-  }
-
 
   CargarImagenComplemento(n, $event) {
+    console.log ('Cargo');
+    console.log (this.cont[n]);
     if (this.cont[n] === 5) {
       Swal.fire('No puedes elegir más de 5 opciones para un complemento', ' ', 'error');
 
@@ -191,6 +186,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       const reader = new FileReader();
       reader.readAsDataURL(this.file);
       reader.onload = () => {
+        console.log ('tengo complemento');
         this.imagenComplemento[n] = (reader.result.toString());
         this.MostrarComplemento(n);
       };
@@ -215,6 +211,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
 
 
   MostrarComplemento(n) {
+      console.log ('voy a mostrar complemento ' + (n + 1));
       // Coloco una nueva opcion para el complemento (n+1)
 
       this.imagen = document.createElement('img'); // creo una imagen
@@ -227,8 +224,8 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       this.imagen.style.position = 'absolute';
       this.imagen.style.zIndex = '1';
       // al coloar la imagen sobre la silueta debe verse con tamaño doble
-      this.imagen.width = this.dobleancho;
-      this.imagen.height = this.doblealto;
+      this.imagen.width = '300';
+      this.imagen.height = '324';
 
       // Coloco el nombre del fichero en el que está la imagen
       this.imagen.src =  this.imagenComplemento[n];
@@ -259,8 +256,8 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     this.imagen.style.position = 'relative';
 
     // La mostraremos con tamaño normal
-    this.imagen.width = this.ancho;
-    this.imagen.height = this.alto;
+    this.imagen.width = '150';
+    this.imagen.height = '162';
     if (n === 0) {
       document.getElementById('complementos1').appendChild(this.imagen);
       this.familiaAvatares.Complemento1.push (this.file.name);
@@ -279,6 +276,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       this.familiaAvatares.Complemento4.push (this.file.name);
       this.muestraSeleccionarComplemento4 = true;
    }
+    this.cont[n]++;
 
   }
 
@@ -366,6 +364,117 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     this.muestraSeleccionarComplemento3 = false;
     this.muestraSeleccionarComplemento4 = false;
   }
+
+
+  // Activa la función SeleccionarInfoFamilia
+  ActivarInputInfo() {
+      console.log('Activar input');
+      document.getElementById('inputInfo').click();
+  }
+
+  // Par abuscar el fichero JSON que contiene la info de la familia que se va
+  // a cargar desde ficheros
+  SeleccionarInfoFamilia($event) {
+      const fileInfo = $event.target.files[0];
+      const reader = new FileReader();
+      reader.readAsText(fileInfo);
+      reader.onload = () => {
+        this.infoFamilia = JSON.parse(reader.result.toString());
+        Swal.fire({
+          title: 'Selecciona ahora las imagenes de la familia',
+          text: 'Selecciona todos los ficheros de la carpeta de imagenes',
+          icon: 'success',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Selecciona'
+        }).then((result) => {
+          if (result.value) {
+            // Activamos la función SeleccionarFicherosFamilia
+            document.getElementById('inputFamilia').click();
+          }
+        });
+      };
+    }
+
+  SeleccionarFicherosFamilia($event) {
+      this.ficherosFamilia = Array.from($event.target.files);
+    }
+
+  RegistrarFamilia() {
+
+      // Creo la fammilia de avatare
+      // const familia = new FamiliaAvatares (this.infoFamilia.NombreFamilia);
+      // familia.NombreComplemento1 = this.infoFamilia.NombreComplemento1;
+      // familia.NombreComplemento2 = this.infoFamilia.NombreComplemento2;
+      // familia.NombreComplemento3 = this.infoFamilia.NombreComplemento3;
+      // familia.NombreComplemento4 = this.infoFamilia.NombreComplemento4;
+      // familia.Silueta = this.infoFamilia.Silueta;
+      // familia.Complemento1 = this.infoFamilia.Complemento1;
+      // familia.Complemento2 = this.infoFamilia.Complemento2;
+      // familia.Complemento3 = this.infoFamilia.Complemento3;
+      // familia.Complemento4 = this.infoFamilia.Complemento4;
+      const familia = new FamiliaAvatares ();
+      Object.assign (familia, this.infoFamilia);
+
+      this.peticionesAPI.CreaFamiliaAvatares (familia, this.sesion.DameProfesor().id)
+      .subscribe((res) => {
+        if (res != null) {
+          this.familiaAvatares = res;
+          // guardamos la imagen de la silueta
+          const imagenColeccion = this.ficherosFamilia.filter (f => f.name === this.familiaAvatares.Silueta)[0];
+          const formDataSilueta = new FormData();
+          formDataSilueta.append(this.familiaAvatares.Silueta, imagenColeccion);
+          this.peticionesAPI.PonImagenAvatar (formDataSilueta)
+          .subscribe(() => console.log('Imagen cargado'));
+
+          // guadamos la imagen de cada una de las opciones de compkementos
+          this.familiaAvatares.Complemento1.forEach (opcion => {
+              const formDataOpcion = new FormData();
+              const fileOpcion = this.ficherosFamilia.filter (f => f.name === opcion)[0];
+              formDataOpcion.append(opcion, fileOpcion);
+              this.peticionesAPI.PonImagenAvatar(formDataOpcion)
+              .subscribe(() => console.log('Imagen cargado'));
+          });
+
+          this.familiaAvatares.Complemento2.forEach (opcion => {
+            const formDataOpcion = new FormData();
+            const fileOpcion = this.ficherosFamilia.filter (f => f.name === opcion)[0];
+            formDataOpcion.append(opcion, fileOpcion);
+            this.peticionesAPI.PonImagenAvatar(formDataOpcion)
+            .subscribe(() => console.log('Imagen cargado'));
+          });
+
+          this.familiaAvatares.Complemento3.forEach (opcion => {
+            const formDataOpcion = new FormData();
+            const fileOpcion = this.ficherosFamilia.filter (f => f.name === opcion)[0];
+            formDataOpcion.append(opcion, fileOpcion);
+            this.peticionesAPI.PonImagenAvatar(formDataOpcion)
+            .subscribe(() => console.log('Imagen cargado'));
+          });
+
+          this.familiaAvatares.Complemento4.forEach (opcion => {
+            const formDataOpcion = new FormData();
+            const fileOpcion = this.ficherosFamilia.filter (f => f.name === opcion)[0];
+            formDataOpcion.append(opcion, fileOpcion);
+            this.peticionesAPI.PonImagenAvatar(formDataOpcion)
+            .subscribe(() => console.log('Imagen cargado'));
+          });
+
+          Swal.fire('Familia creada con éxito', '', 'success');
+          this.router.navigate(['/inicio/' + this.sesion.DameProfesor().id + '/misFamiliasAvatares']);
+        } else {
+          console.log('fallo al crear la familia');
+        }
+      });
+
+  }
+
+  Cancelar() {
+      this.router.navigate(['/inicio/' + this.sesion.DameProfesor().id]);
+  }
+
+
 
 }
 

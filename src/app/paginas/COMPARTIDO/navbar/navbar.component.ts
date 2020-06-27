@@ -39,8 +39,12 @@ export class NavbarComponent implements OnInit {
   URLCrearPregunta: string;
   URLMisCuestionarios: string;
   URLCrearCuestionario: string;
+  URLCrearEscenario: string;
+  URLMisEscenarios: string;
   URLMisFamiliasAvatares: string;
   URLCrearFamiliaAvatares: string;
+  URLRecursos: string;
+
 
   constructor( private sesion: SesionService,
                private router: Router) { }
@@ -64,8 +68,11 @@ export class NavbarComponent implements OnInit {
     this.URLCrearPregunta = this.URLInicio + '/crearPregunta';
     this.URLMisCuestionarios = this.URLInicio + '/misCuestionarios';
     this.URLCrearCuestionario = this.URLInicio + '/crearCuestionario';
+    this.URLCrearEscenario = this.URLInicio + '/crearEscenario';
+    this.URLMisEscenarios = this.URLInicio + '/misEscenarios';
     this.URLMisFamiliasAvatares = this.URLInicio + '/misFamiliasAvatares';
     this.URLCrearFamiliaAvatares = this.URLInicio + '/crearFamiliaAvatares';
+    this.URLRecursos = this.URLInicio + '/recursos';
 
 
     // Recupero al profesor porque se muestra en la barra de navegación

@@ -50,3 +50,13 @@ export * from './AlumnoJuegoDeAvatar';
 export * from './Cuestionario';
 export * from './AlumnoJuegoDeCuestionario';
 export * from './JuegoDeCuestionario';
+export * from './Escenario';
+export * from './PuntoGeolocalizable';
+export * from './JuegoDeGeocaching';
+export * from './JuegoDeGeocachingPregunta';
+export * from './TablaAlumnoJuegoDeGeocaching';
+export * from './AlumnoJuegoDeGeocaching';
+export * from './ParaAlbum';
+export * from './RespuestaJuegoDeCuestionario';
+export * from './TablaAlumnoJuegoDeCuestionario';
+

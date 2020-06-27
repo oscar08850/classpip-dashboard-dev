@@ -1,6 +1,7 @@
 export class JuegoDeCuestionario {
 
     NombreJuego: string;
+    Tipo: string;
     PuntuacionCorrecta: number;
     PuntuacionIncorrecta: number;
     Presentacion: string;
@@ -12,8 +13,9 @@ export class JuegoDeCuestionario {
     cuestionarioId: number;
 
     // tslint:disable-next-line:max-line-length
-    constructor(NombreJuego?: string, PuntuacionCorrecta?: number, PuntuacionIncorrecta?: number, Presentacion?: string, JuegoActivo?: boolean, JuegoTerminado?: boolean, profesorId?: number, grupoId?: number, cuestionarioId?: number) {
+    constructor(NombreJuego?: string, Tipo?: string, PuntuacionCorrecta?: number, PuntuacionIncorrecta?: number, Presentacion?: string, JuegoActivo?: boolean, JuegoTerminado?: boolean, profesorId?: number, grupoId?: number, cuestionarioId?: number) {
         this.NombreJuego = NombreJuego;
+        this.Tipo = Tipo;
         this.PuntuacionCorrecta = PuntuacionCorrecta;
         this.PuntuacionIncorrecta = PuntuacionIncorrecta;
         this.Presentacion = Presentacion;

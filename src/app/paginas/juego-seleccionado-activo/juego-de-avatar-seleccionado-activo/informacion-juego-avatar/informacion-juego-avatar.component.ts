@@ -6,6 +6,8 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
+import * as URL from '../../../../URLs/urls';
+
 @Component({
   selector: 'app-informacion-juego-avatar',
   templateUrl: './informacion-juego-avatar.component.html',
@@ -21,10 +23,7 @@ export class InformacionJuegoAvatarComponent implements OnInit {
   familiaElegida;
   imagenSilueta;
   imagenComp1;
-  dobleancho;
-  doblealto;
-  ancho;
-  alto;
+
   familiaCargada = false;
   criterioCambiado = false;
 
@@ -68,31 +67,22 @@ export class InformacionJuegoAvatarComponent implements OnInit {
   TraeImagenesFamilia(familia: FamiliaAvatares) {
     this.familiaCargada = false;
     this.familiaElegida = familia;
+    this.imagenSilueta = URL.ImagenesAvatares + this.familiaElegida.Silueta;
+    this.TraerImagenesComplementos();
 
-    this.peticionesAPI.DameImagenAvatar (this.familiaElegida.Silueta)
-    .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+    // this.peticionesAPI.DameImagenAvatar (this.familiaElegida.Silueta)
+    // .subscribe(response => {
+    //       const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenSilueta = reader.result.toString();
-            // Lo siguiente es para conseguir el tamaño de la silueta
-            const imagen = new Image();
-            imagen.src = reader.result.toString();
-            console.log ('ya he cargado la silueta');
-            imagen.onload = () => {
-              this.ancho = imagen.width.toString();
-              this.alto = imagen.height.toString();
-              this.dobleancho = (imagen.width * 2).toString();
-              this.doblealto = (imagen.height * 2).toString();
-              this.TraerImagenesComplementos();
-
-          };
-          }, false);
-          if (blob) {
-            reader.readAsDataURL(blob);
-      }
-    });
+    //       const reader = new FileReader();
+    //       reader.addEventListener('load', () => {
+    //         this.imagenSilueta = reader.result.toString();
+    //         this.TraerImagenesComplementos();
+    //       }, false);
+    //       if (blob) {
+    //         reader.readAsDataURL(blob);
+    //   }
+    // });
   }
 
   TraerImagenesComplementos() {
@@ -103,70 +93,70 @@ export class InformacionJuegoAvatarComponent implements OnInit {
     console.log (this.familiaElegida);
     this.c1 = [];
     this.familiaElegida.Complemento1.forEach (imagenComplemento => {
-      this.peticionesAPI.DameImagenAvatar (imagenComplemento)
-      .subscribe(response => {
-        const blob = new Blob([response.blob()], { type: 'image/jpg'});
-        const reader = new FileReader();
-        reader.addEventListener('load', () => {
-            this.c1.push (reader.result.toString());
-        }, false);
+      this.c1.push (URL.ImagenesAvatares + imagenComplemento);
+      // this.peticionesAPI.DameImagenAvatar (imagenComplemento)
+      // .subscribe(response => {
+      //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
+      //   const reader = new FileReader();
+      //   reader.addEventListener('load', () => {
+      //       this.c1.push (reader.result.toString());
+      //   }, false);
 
-        if (blob) {
-          reader.readAsDataURL(blob);
-        }
-      });
+      //   if (blob) {
+      //     reader.readAsDataURL(blob);
+      //   }
+      // });
     });
 
     this.c2 = [];
     this.familiaElegida.Complemento2.forEach (imagenComplemento => {
-       this.peticionesAPI.DameImagenAvatar (imagenComplemento)
-       .subscribe(response => {
-         const blob = new Blob([response.blob()], { type: 'image/jpg'});
-         const reader = new FileReader();
-         reader.addEventListener('load', () => {
-            this.c2.push (reader.result.toString());
-         }, false);
-         if (blob) {
-           reader.readAsDataURL(blob);
-         }
-       });
+      this.c2.push (URL.ImagenesAvatares + imagenComplemento);
+      //  this.peticionesAPI.DameImagenAvatar (imagenComplemento)
+      //  .subscribe(response => {
+      //    const blob = new Blob([response.blob()], { type: 'image/jpg'});
+      //    const reader = new FileReader();
+      //    reader.addEventListener('load', () => {
+      //       this.c2.push (reader.result.toString());
+      //    }, false);
+      //    if (blob) {
+      //      reader.readAsDataURL(blob);
+      //    }
+      //  });
     });
     this.c3 = [];
     this.familiaElegida.Complemento3.forEach (imagenComplemento => {
-        this.peticionesAPI.DameImagenAvatar (imagenComplemento)
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-              this.c3.push (reader.result.toString());
-          }, false);
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-        });
+      this.c3.push (URL.ImagenesAvatares + imagenComplemento);
+        // this.peticionesAPI.DameImagenAvatar (imagenComplemento)
+        // .subscribe(response => {
+        //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
+        //   const reader = new FileReader();
+        //   reader.addEventListener('load', () => {
+        //       this.c3.push (reader.result.toString());
+        //   }, false);
+        //   if (blob) {
+        //     reader.readAsDataURL(blob);
+        //   }
+        // });
     });
     this.c4 = [];
     this.familiaElegida.Complemento4.forEach (imagenComplemento => {
-         this.peticionesAPI.DameImagenAvatar (imagenComplemento)
-         .subscribe(response => {
-           const blob = new Blob([response.blob()], { type: 'image/jpg'});
-           const reader = new FileReader();
-           reader.addEventListener('load', () => {
-              this.c4.push (reader.result.toString());
-           }, false);
-           if (blob) {
-             reader.readAsDataURL(blob);
-           }
-         });
+      this.c4.push (URL.ImagenesAvatares + imagenComplemento);
+        //  this.peticionesAPI.DameImagenAvatar (imagenComplemento)
+        //  .subscribe(response => {
+        //    const blob = new Blob([response.blob()], { type: 'image/jpg'});
+        //    const reader = new FileReader();
+        //    reader.addEventListener('load', () => {
+        //       this.c4.push (reader.result.toString());
+        //    }, false);
+        //    if (blob) {
+        //      reader.readAsDataURL(blob);
+        //    }
+        //  });
     });
 
     this.familiaCargada = true;
   }
 
-  PonDoble(img) {
-    img.setAttribute ('width', this.dobleancho);
-    img.setAttribute ('height', this.doblealto );
-  }
 
   goBack() {
     if (this.criterioCambiado) {

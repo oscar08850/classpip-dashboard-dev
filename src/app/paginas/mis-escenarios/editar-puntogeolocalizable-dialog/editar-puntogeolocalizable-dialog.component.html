@@ -1,0 +1,50 @@
+
+<div class="titulo">Editar puntogeolocalizable</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+  <div class= "enColumna">
+  <mat-card class="panel">
+    <mat-card-content>
+
+
+            <div class="texto" style=" text-align: left;">
+              <mat-form-field style="margin: 15px;">
+                <mat-label style="color: white;">Nombre </mat-label>
+                <input matInput type="text" style="color: yellow;" placeholder="Nombre" required [(ngModel)]="nombrePuntoGeolocalizable" (change) = "cambios=true">
+            </mat-form-field>
+
+                <mat-form-field style="margin: 15px;">
+                    <mat-label style="color: white;">Latitud </mat-label>
+                    <input matInput type="text" style="color: yellow;" placeholder="Latitud" required [(ngModel)]="latitudPuntoGeolocalizable" (change) = "cambios=true">
+                </mat-form-field>
+            </div>
+            <mat-form-field style="margin: 15px;">
+              <mat-label style="color: white;">Longitud </mat-label>
+              <input matInput type="text" style="color: yellow;" placeholder="Longitud" required [(ngModel)]="longitudPuntoGeolocalizable" (change) = "cambios=true">
+          </mat-form-field>
+
+          <mat-form-field style="margin: 15px;">
+            <mat-label style="color: white;">Pista Facil </mat-label>
+            <input matInput type="text" style="color: yellow;" placeholder="PistaFacil" required [(ngModel)]="pistafacilPuntoGeolocalizable" (change) = "cambios=true">
+        </mat-form-field>
+        <mat-form-field style="margin: 15px;">
+          <mat-label style="color: white;">Pista Dificil </mat-label>
+          <input matInput type="text" style="color: yellow;" placeholder="PistaDificil" required [(ngModel)]="pistadificilPuntoGeolocalizable" (change) = "cambios=true">
+      </mat-form-field>
+
+            <button *ngIf="cambios" type="button" class="btn Aceptar"  (click)= "EditarPuntoGeolocalizable()">Aceptar Cambios <i class="material-icons">
+                    check </i></button>
+
+
+
+    </mat-card-content>
+  </mat-card>
+
+  <mat-dialog-actions align= "end">
+  <!-- <button mat-button [mat-dialog-close] class="btn Cerrar">Cerrar</button> -->
+    <button mat-button routerLink= "editarEscenario" (click)= "Cerrar();" class="btn Cerrar">Cerrar</button>
+  </mat-dialog-actions>
+</div>
+</div>
+

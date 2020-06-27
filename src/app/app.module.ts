@@ -152,8 +152,11 @@ import { MisCuestionariosComponent } from './paginas/mis-cuestionarios/mis-cuest
 import { EditarPreguntaDialogComponent } from './paginas/mis-preguntas/editar-pregunta-dialog/editar-pregunta-dialog.component';
 import { EditarCuestionarioComponent } from './paginas/editar-cuestionario/editar-cuestionario.component';
 import { AsignaCuestionarioComponent } from './paginas/juego/asigna-cuestionario/asigna-cuestionario.component';
+// tslint:disable-next-line:max-line-length
 import { JuegoDeCuestionarioSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo.component';
+// tslint:disable-next-line:max-line-length
 import { JuegoDeCuestionarioSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/juego-de-cuestionario-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
 import { InformacionJuegoDeCuestionarioDialogComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/informacion-juego-de-cuestionario-dialog/informacion-juego-de-cuestionario-dialog.component';
 import { JuegoSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-seleccionado-preparado.component';
 // tslint:disable-next-line:max-line-length
@@ -161,6 +164,26 @@ import { JuegoDeCuestionarioSeleccionadoPreparadoComponent } from './paginas/jue
 
 // para el uso de graficos
 import { NgxEchartsModule } from 'ngx-echarts';
+
+//escenarios
+import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenario.component';
+import { MisEscenariosComponent } from './paginas/mis-escenarios/mis-escenarios.component';
+// tslint:disable-next-line:max-line-length
+import { EditarPuntoGeolocalizableDialogComponent } from './paginas/mis-escenarios/editar-puntogeolocalizable-dialog/editar-puntogeolocalizable-dialog.component';
+// tslint:disable-next-line:max-line-length
+import { AgregarPuntoGeolocalizableDialogComponent } from './paginas/mis-escenarios/agregar-puntogeolocalizable-dialog/agregar-puntogeolocalizable-dialog.component';
+import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escenario/editar-escenario.component';
+import { AsignaEscenarioComponent } from './paginas/juego/asigna-escenario/asigna-escenario.component';
+import { AsignaPreguntasComponent } from './paginas/juego/asigna-preguntas/asigna-preguntas.component';
+
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeGeocachingDialogComponent } from './paginas/juego-seleccionado-activo/juego-de-geocaching-seleccionado-activo/informacion-juego-de-geocaching-dialog/informacion-juego-de-geocaching-dialog.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeGeocachingSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-geocaching-seleccionado-activo/juego-de-geocaching-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeGeocachingSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-geocaching-seleccionado-inactivo/juego-de-geocaching-seleccionado-inactivo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeGeocachingSeleccionadoPreparadoComponent } from './paginas/juego-seleccionado-preparado/juego-de-geocaching-seleccionado-preparado/juego-de-geocaching-seleccionado-preparado.component';
 
 // avatares
 import { MisFamiliasAvataresComponent } from './paginas/mis-familias-avatares/mis-familias-avatares.component';
@@ -173,6 +196,12 @@ import { JuegoDeAvatarSeleccionadoActivoComponent } from './paginas/juego-selecc
 import { MostrarAvatarAlumnoComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/mostrar-avatar-alumno/mostrar-avatar-alumno.component';
 // tslint:disable-next-line:max-line-length
 import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/informacion-juego-avatar/informacion-juego-avatar.component';
+import { MenuRecursosComponent } from './paginas/menu-recursos/menu-recursos.component';
+// tslint:disable-next-line:max-line-length
+import { InformacionRespuestasJuegoDeCuestionarioDialogComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/informacion-respuestas-juego-de-cuestionario-dialog/informacion-respuestas-juego-de-cuestionario-dialog.component';
+// tslint:disable-next-line:max-line-length
+import { RespuestasAlumnoJuegoDeCuestionarioComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/respuestas-alumno-juego-de-cuestionario/respuestas-alumno-juego-de-cuestionario.component';
+
 
 @NgModule({
   declarations: [
@@ -257,6 +286,14 @@ import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-ac
     InformacionJuegoDeCompeticionFormulaUnoInactivoComponent,
     JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent,
 
+    CrearEscenarioComponent,
+    MisEscenariosComponent,
+    EditarPuntoGeolocalizableDialogComponent,
+    AgregarPuntoGeolocalizableDialogComponent,
+    EditarEscenarioComponent,
+    AsignaEscenarioComponent,
+    AsignaPreguntasComponent,
+
     MisFamiliasAvataresComponent,
     CrearFamiliaAvataresComponent,
     AsignarFamiliasJuegoAvataresComponent,
@@ -267,7 +304,15 @@ import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-ac
     JuegoDeCuestionarioSeleccionadoActivoComponent,
     InformacionJuegoDeCuestionarioDialogComponent,
     JuegoSeleccionadoPreparadoComponent,
-    JuegoDeCuestionarioSeleccionadoPreparadoComponent
+    JuegoDeCuestionarioSeleccionadoPreparadoComponent,
+    JuegoDeGeocachingSeleccionadoPreparadoComponent,
+    InformacionJuegoDeGeocachingDialogComponent,
+    JuegoDeGeocachingSeleccionadoActivoComponent,
+    JuegoDeGeocachingSeleccionadoInactivoComponent,
+    MenuRecursosComponent,
+    InformacionRespuestasJuegoDeCuestionarioDialogComponent,
+    RespuestasAlumnoJuegoDeCuestionarioComponent
+
 
 
   ],
@@ -313,8 +358,13 @@ import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-ac
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
-    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AsignaCuestionarioComponent,
-    InformacionJuegoDeCuestionarioDialogComponent],
+    // tslint:disable-next-line:max-line-length
+    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AgregarPuntoGeolocalizableDialogComponent, EditarPuntoGeolocalizableDialogComponent, AsignaCuestionarioComponent,
+    // tslint:disable-next-line:max-line-length
+    InformacionJuegoDeCuestionarioDialogComponent, AsignaEscenarioComponent, AsignaPreguntasComponent, InformacionJuegoDeGeocachingDialogComponent,
+    InformacionRespuestasJuegoDeCuestionarioDialogComponent,
+    RespuestasAlumnoJuegoDeCuestionarioComponent
+  ],
   bootstrap: [AppComponent],
   providers: [
     {

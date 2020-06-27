@@ -7,6 +7,7 @@ import { Cromo, Coleccion } from '../../../../clases/index';
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../../../servicios/index';
 import { Location } from '@angular/common';
+import * as URL from '../../../../URLs/urls';
 
 
 @Component({
@@ -20,7 +21,8 @@ export class InformacionJuegoColeccionComponent implements OnInit {
   cromosColeccion: Cromo[];
 
   cromo: Cromo;
-  imagenCromoArray: string[] = [];
+  imagenCromoDelante: string[] = [];
+  imagenCromoDetras: string[] = [];
 
   nombreColeccion: string;
   // imagen coleccion
@@ -48,30 +50,31 @@ export class InformacionJuegoColeccionComponent implements OnInit {
 
     this.CromosEImagenDeLaColeccion(this.coleccion);
     // Cargo el imagen de la coleccion
-    this.GET_Imagen();
+    // this.GET_Imagen();
   }
 
   // Busca la imagen que tiene el nombre del coleccion.ImagenColeccion y lo carga en imagenColeccion
-  GET_Imagen() {
+  // GET_Imagen() {
 
-    if (this.coleccion.ImagenColeccion !== undefined ) {
-      // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-      this.peticionesAPI.DameImagenColeccion (this.coleccion.ImagenColeccion)
-      .subscribe(response => {
-        const blob = new Blob([response.blob()], { type: 'image/jpg'});
+  //   if (this.coleccion.ImagenColeccion !== undefined ) {
+  //     this.imagenColeccion = URL.ImagenesColeccion + this.coleccion.ImagenColeccion;
+  //     // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+  //     // this.peticionesAPI.DameImagenColeccion (this.coleccion.ImagenColeccion)
+  //     // .subscribe(response => {
+  //     //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-        const reader = new FileReader();
-        reader.addEventListener('load', () => {
-          this.imagenColeccion = reader.result.toString();
-        }, false);
+  //     //   const reader = new FileReader();
+  //     //   reader.addEventListener('load', () => {
+  //     //     this.imagenColeccion = reader.result.toString();
+  //     //   }, false);
 
-        if (blob) {
-          reader.readAsDataURL(blob);
-        }
-    });
+  //     //   if (blob) {
+  //     //     reader.readAsDataURL(blob);
+  //     //   }
+  //     // });
 
-    }
-  }
+  //   }
+  // }
 
   // Le pasamos la coleccion y buscamos la imagen que tiene y sus cromos
  CromosEImagenDeLaColeccion(coleccion: Coleccion) {
@@ -80,21 +83,22 @@ export class InformacionJuegoColeccionComponent implements OnInit {
   console.log(coleccion.ImagenColeccion);
   // Si la coleccion tiene una foto (recordemos que la foto no es obligatoria)
   if (coleccion.ImagenColeccion !== undefined) {
+    this.imagenColeccion = URL.ImagenesColeccion + this.coleccion.ImagenColeccion;
 
-    // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-    this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
-    .subscribe(response => {
-      const blob = new Blob([response.blob()], { type: 'image/jpg'});
+    // // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+    // this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
+    // .subscribe(response => {
+    //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        this.imagenColeccion = reader.result.toString();
-      }, false);
+    //   const reader = new FileReader();
+    //   reader.addEventListener('load', () => {
+    //     this.imagenColeccion = reader.result.toString();
+    //   }, false);
 
-      if (blob) {
-        reader.readAsDataURL(blob);
-      }
-    });
+    //   if (blob) {
+    //     reader.readAsDataURL(blob);
+    //   }
+    // });
 
     // Sino la imagenColeccion será undefined para que no nos pinte la foto de otro equipo préviamente seleccionado
   } else {
@@ -127,21 +131,40 @@ for (let i = 0; i < this.cromosColeccion.length; i++) {
 
   this.cromo = this.cromosColeccion[i];
 
-  if (this.cromo.Imagen !== undefined ) {
+  if (this.cromo.ImagenDelante !== undefined ) {
+    this.imagenCromoDelante[i] = URL.ImagenesCromo + this.cromo.ImagenDelante;
     // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-    this.peticionesAPI.DameImagenCromo (this.cromo.Imagen)
-    .subscribe(response => {
-      const blob = new Blob([response.blob()], { type: 'image/jpg'});
+    // this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDelante)
+    // .subscribe(response => {
+    //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        this.imagenCromoArray[i] = reader.result.toString();
-      }, false);
+    //   const reader = new FileReader();
+    //   reader.addEventListener('load', () => {
+    //     this.imagenCromoDelante[i] = reader.result.toString();
+    //   }, false);
 
-      if (blob) {
-        reader.readAsDataURL(blob);
-      }
-  });
+    //   if (blob) {
+    //     reader.readAsDataURL(blob);
+    //   }
+    // });
+  }
+
+  if (this.cromo.ImagenDetras !== undefined ) {
+    this.imagenCromoDetras[i] = URL.ImagenesCromo + this.cromo.ImagenDetras;
+    // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+    // this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDetras)
+    // .subscribe(response => {
+    //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+    //   const reader = new FileReader();
+    //   reader.addEventListener('load', () => {
+    //     this.imagenCromoDetras[i] = reader.result.toString();
+    //   }, false);
+
+    //   if (blob) {
+    //     reader.readAsDataURL(blob);
+    //   }
+    // });
   }
 }
 }

@@ -10,6 +10,11 @@ import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmac
 import { TablaAlumnoJuegoDeCuestionario } from 'src/app/clases/TablaAlumnoJuegoDeCuestionario';
 // tslint:disable-next-line:max-line-length
 import { InformacionJuegoDeCuestionarioDialogComponent } from '../../juego-seleccionado-activo/juego-de-cuestionario-seleccionado-activo/informacion-juego-de-cuestionario-dialog/informacion-juego-de-cuestionario-dialog.component';
+// tslint:disable-next-line:max-line-length
+import {InformacionRespuestasJuegoDeCuestionarioDialogComponent } from './informacion-respuestas-juego-de-cuestionario-dialog/informacion-respuestas-juego-de-cuestionario-dialog.component';
+// tslint:disable-next-line:max-line-length
+import {RespuestasAlumnoJuegoDeCuestionarioComponent} from './respuestas-alumno-juego-de-cuestionario/respuestas-alumno-juego-de-cuestionario.component';
+
 
 @Component({
   selector: 'app-juego-de-cuestionario-seleccionado-inactivo',
@@ -32,7 +37,7 @@ export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit 
   mensajeEliminar: string = 'Estas segura/o de que quieres eliminar: ';
 
   // Orden conlumnas de la tabla
-  displayedColumnsAlumnos: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'nota'];
+  displayedColumnsAlumnos: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'nota', ' '];
 
   dataSourceAlumno;
 
@@ -83,18 +88,14 @@ export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit 
 
   AbrirDialogoConfirmacionEliminar(): void {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensajeEliminar,
-        nombre: this.juegoSeleccionado.Tipo,
-      }
-    });
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    Swal.fire({
+      title: 'Confirma que quieres eliminar el juego <b>' + this.juegoSeleccionado.NombreJuego + '</b>',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+    }).then((result) => {
+      if (result.value) {
         this.EliminarJuego();
-        Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
+        Swal.fire('Juego eliminado correctamente', ' ', 'success');
       }
     });
   }
@@ -109,8 +110,37 @@ export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit 
     });
   }
 
+  AbrirDialogoAnalisisRespuestas(): void {
+    const dialogRef = this.dialog.open(InformacionRespuestasJuegoDeCuestionarioDialogComponent, {
+      width: '60%',
+      height: '80%',
+      position: {
+        top: '0%'
+      }
+    });
+  }
+
+  MostrarRespuestasAlumno(alumno: TablaAlumnoJuegoDeCuestionario): void {
+    this.sesion.TomaJuego (this.juegoSeleccionado);
+    console.log ('voy a guardar alumno');
+    console.log (alumno);
+    this.sesion.TomaAlumnoJuegoDeCuestionario (alumno);
+    const inscripcion = this.listaAlumnosOrdenadaPorNota.filter (al => al.alumnoId === alumno.id)[0];
+    this.sesion.TomaInscripcionAlumnoJuegoDeCuestionario (inscripcion);
+    const dialogRef = this.dialog.open(RespuestasAlumnoJuegoDeCuestionarioComponent, {
+      width: '60%',
+      height: '80%',
+      position: {
+        top: '0%'
+      }
+    });
+  }
+
+
   applyFilter(filterValue: string) {
     this.dataSourceAlumno.filter = filterValue.trim().toLowerCase();
   }
+
+
 
 }

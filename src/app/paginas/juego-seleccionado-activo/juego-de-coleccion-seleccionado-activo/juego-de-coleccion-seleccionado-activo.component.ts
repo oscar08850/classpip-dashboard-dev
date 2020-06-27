@@ -58,6 +58,7 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
     if (this.juegoSeleccionado.Modo === 'Individual') {
       this.AlumnosDelJuego();
     } else {
+      console.log ('Voy a por los equipos del juego ' + this.juegoSeleccionado.id);
       this.EquiposDelJuego();
     }
 
@@ -103,6 +104,7 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
     this.peticionesAPI.DameEquiposJuegoDeColeccion(this.juegoSeleccionado.id)
     .subscribe(equiposJuego => {
       this.equiposDelJuego = equiposJuego;
+      console.log (' Equipos del juego');
       console.log(equiposJuego);
       this.RecuperarInscripcionesEquiposJuego();
       this.ColeccionDelJuego();

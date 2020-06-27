@@ -5,7 +5,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Juego, Jornada, TablaJornadas, EnfrentamientoLiga, TablaAlumnoJuegoDeCompeticion,
   TablaEquipoJuegoDeCompeticion,
   AlumnoJuegoDeCompeticionLiga,
-  EquipoJuegoDeCompeticionLiga, Alumno, Equipo, AlumnoJuegoDePuntos, EquipoJuegoDePuntos} from '../../../../clases/index';
+  EquipoJuegoDeCompeticionLiga, Alumno, Equipo, AlumnoJuegoDePuntos,
+  EquipoJuegoDePuntos, AlumnoJuegoDeCuestionario} from '../../../../clases/index';
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService } from '../../../../servicios/index';
@@ -23,7 +24,7 @@ export interface Asignacion {
 const ModoAsignacion: Asignacion[] = [
   {modo: 'Manualmente', id: 1},
   {modo: 'Aleatoriamente', id: 2},
-  {modo: 'Juego de Puntos', id: 3},
+  {modo: 'Según resultados de un juego', id: 3}
 ];
 
 @Component({
@@ -61,7 +62,8 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   jornadasDelJuego: Jornada[];
   JornadasCompeticion: TablaJornadas[] = [];
   jornadaId: number;
-  juegodePuntosSeleccionadoID: number;
+  juegoDisponibleSeleccionadoID: number;
+  juegoDisponibleSeleccionado: Juego;
   modoAsignacionId: number;
 
 
@@ -80,9 +82,10 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   // alumnosDelJuego: Alumno[];
   // equiposDelJuego: Equipo[];
 
-  listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDePuntos[];
-  listaEquiposOrdenadaPorPuntos: EquipoJuegoDePuntos[];
-  juegosActivosPuntos: Juego[];
+  listaAlumnosJuegoDePuntos: AlumnoJuegoDePuntos[];
+  listaEquiposJuegoDePuntos: EquipoJuegoDePuntos[];
+  listaAlumnosJuegoDeCuestionario: AlumnoJuegoDeCuestionario[];
+  juegosDisponibles: Juego[];
   juegosActivosPuntosModo: Juego[];
   NumeroDeJuegoDePuntos: number;
   // AlumnoJuegoDeCompeticionLigaId: number;
@@ -106,13 +109,17 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     this.numeroTotalJornadas = this.juegoSeleccionado.NumeroTotalJornadas;
     const datos = this.sesion.DameDatosJornadas();
     this.JornadasCompeticion = datos.JornadasCompeticion;
-    this.listaAlumnosClasificacion = this.sesion.DameTablaAlumnoJuegoDeCompeticion();
-    this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
-    // this.alumnosJuegoDeCompeticionLiga = this.sesion.DameInscripcionAlumno();
-    // this.equiposJuegoDeCompeticionLiga = this.sesion.DameInscripcionEquipo();
-    this.juegosActivosPuntos = this.sesion.DameJuegosDePuntosActivos();
-    // Me quedo solo con los juegos de puntos que tengan el mismo (individual o equipo) modo que la competición
-    this.juegosActivosPuntosModo = this.juegosActivosPuntos.filter (juego => juego.Modo === this.juegoSeleccionado.Modo);
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      this.listaAlumnosClasificacion = this.sesion.DameTablaAlumnoJuegoDeCompeticion();
+    } else {
+      this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
+    } // Selecciono los juegos entre los que puedo elegir para decidir resultados
+    // Son los juegos de puntos (tanto activos como acabados) y los juegos de cuestionario acabados
+    this.juegosDisponibles = this.sesion.DameJuegosDePuntos().filter (juego => juego.Modo === this.juegoSeleccionado.Modo);
+    // tslint:disable-next-line:max-line-length
+    this.juegosDisponibles = this.juegosDisponibles.concat (this.sesion.DameJuegosDeCuestionariosAcabados());
+    console.log ('Juegos para elegir ganadores ');
+    console.log (this.juegosDisponibles);
     this.asignados = false;
   }
 
@@ -126,23 +133,30 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   }
 
   // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
-  RecuperarInscripcionesAlumnoJuego() {
-    console.log ('voy a por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
-    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(Number(this.juegodePuntosSeleccionadoID))
+  RecuperarInscripcionesAlumnosJuegoPuntos() {
+    console.log ('voy a por las inscripciones ' + Number(this.juegoDisponibleSeleccionadoID));
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(Number(this.juegoDisponibleSeleccionadoID))
     .subscribe(inscripciones => {
-      this.listaAlumnosOrdenadaPorPuntos = inscripciones;
-      console.log (this.listaAlumnosOrdenadaPorPuntos);
+      this.listaAlumnosJuegoDePuntos = inscripciones;
+      console.log (this.listaAlumnosJuegoDePuntos);
     });
   }
 
   // Recupera las inscripciones de los alumnos en el juego y los puntos que tienen
-  RecuperarInscripcionesEquiposJuego() {
-    console.log ('vamos por las inscripciones ' + Number(this.juegodePuntosSeleccionadoID));
-    this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(Number(this.juegodePuntosSeleccionadoID))
+  RecuperarInscripcionesEquiposJuegoPuntos() {
+    console.log ('vamos por las inscripciones ' + Number(this.juegoDisponibleSeleccionadoID));
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(Number(this.juegoDisponibleSeleccionadoID))
     .subscribe(inscripciones => {
-      this.listaEquiposOrdenadaPorPuntos = inscripciones;
-      console.log(this.listaEquiposOrdenadaPorPuntos);
+      this.listaEquiposJuegoDePuntos = inscripciones;
+      console.log(this.listaEquiposJuegoDePuntos);
       console.log ('ya tengo las inscripciones');
+    });
+  }
+
+  RecuperarInscripcionesAlumnosJuegoCuestionario() {
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionario(this.juegoDisponibleSeleccionadoID)
+    .subscribe(inscripciones => {
+      this.listaAlumnosJuegoDeCuestionario = inscripciones;
     });
   }
 
@@ -231,9 +245,60 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
   //////// FUNCIONES PARA CONTROLAR LOS BOTONES Y LOS CHECKBOX ////////////////////////////
 
+
+  // Esta función se ejecuta al seleccionar el modo de asignación
+  SeleccionaModo() {
+    console.log ('SeleccionaModo' + this.modoAsignacionId);
+    // activamos el boton correspondiente si se eligió manual ao aleatorio
+    if (Number(this.modoAsignacionId) === 1) { // Manual
+        this.botonAsignarAleatorioDesactivado = true;
+        this.botonAsignarManualDesactivado = false;
+        this.botonAsignarJuegoDesactivado = true;
+    } else if (Number(this.modoAsignacionId) === 2) { // Aleatorio
+        this.botonAsignarManualDesactivado = true;
+        this.botonAsignarAleatorioDesactivado = false;
+        this.botonAsignarJuegoDesactivado = true;
+    // Si se elijió asignación por juego de puntos y no hay juego de puntos para elegir se muestra una alarma
+    // Si  hay juego de puntos no se hace nada porque ya aparecerá automáticamente el selector del juego
+      } else if ((Number(this.modoAsignacionId) === 3) && (this.juegosDisponibles.length === 0)) { // JuegoPuntos
+        this.botonAsignarManualDesactivado = true;
+        this.botonAsignarAleatorioDesactivado = true;
+        this.botonAsignarJuegoDesactivado = true;
+        console.log ('Aviso');
+        Swal.fire('Cuidado', 'No hay juegos finalizados disponibles para este grupo', 'warning');
+      } else {
+        console.log ('Salgo');
+        console.log ('juegos disponibles');
+        console.log (this.juegosDisponibles);
+      }
+  }
+
+  // Me traigo el juego elegido para decidir los resultados de la jornada
+  TraerJuegoDisponibleSeleccionado() {
+    this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+    this.botonAsignarManualDesactivado = true;
+    this.botonAsignarAleatorioDesactivado = true;
+    this.botonAsignarJuegoDesactivado = false;
+    console.log ('ID del juego seleccionado ' + this.juegoDisponibleSeleccionadoID);
+    console.log (this.juegosDisponibles);
+    this.juegoDisponibleSeleccionado = this.juegosDisponibles.filter (juego => juego.id === Number (this.juegoDisponibleSeleccionadoID))[0];
+    console.log ('ya he seleccionado el juego');
+    console.log (this.juegoDisponibleSeleccionado);
+    if ( this.juegoDisponibleSeleccionado.Tipo === 'Juego De Puntos') {
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.RecuperarInscripcionesAlumnosJuegoPuntos();
+      } else {
+        this.RecuperarInscripcionesEquiposJuegoPuntos();
+      }
+    } else {
+      // Tiene que ser de cuestionario, y de momento solo hay individual
+      this.RecuperarInscripcionesAlumnosJuegoCuestionario();
+    }
+  }
+
   /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
      o si debe estar desactivado (si no se ha seleccionado la jornada) */
-  ActualizarBoton() {
+  SeleccionaJornada() {
       console.log('Estoy en actualizar botón');
       // if (this.Disputada (this.jornadaId)) {
       //   this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
@@ -256,49 +321,38 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         this.botonAsignarAleatorioDesactivado = false;
         this.botonAsignarJuegoDesactivado = true;
         this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-      } else if (Number(this.modoAsignacionId) === 3 && this.juegodePuntosSeleccionadoID !== undefined) { // JuegoPuntos
+      } else if (Number(this.modoAsignacionId) === 3 && this.juegosDisponibles.length !== 0) { // JuegoPuntos
         console.log('Modo puntos');
         this.botonAsignarManualDesactivado = true;
         this.botonAsignarAleatorioDesactivado = true;
         this.botonAsignarJuegoDesactivado = false;
         this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
         this.ActualizarBotonJuego();
-      } else if (Number(this.modoAsignacionId) === 3 && this.juegosActivosPuntosModo.length === 0) { // JuegoPuntos
+      } else if (Number(this.modoAsignacionId) === 3 && this.juegosDisponibles.length === 0) { // JuegoPuntos
         this.botonAsignarManualDesactivado = true;
         this.botonAsignarAleatorioDesactivado = true;
         this.botonAsignarJuegoDesactivado = true;
-        Swal.fire('Cuidado', 'No hay juegos de puntos disponibles para este grupo', 'warning');
+        Swal.fire('Cuidado', 'No hay juegos disponibles para este este grupo', 'warning');
       }
   }
 
   ActualizarBotonJuego() {
-    for (let i = 0; i < this.juegosActivosPuntosModo.length; i++) {
-          console.log('Entro en el for');
-          console.log(this.juegosActivosPuntosModo[i].id);
-          console.log(this.juegodePuntosSeleccionadoID);
-          console.log(this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID));
-          if (this.juegosActivosPuntosModo[i].id === Number(this.juegodePuntosSeleccionadoID)) {
-          console.log('Entro en el if');
-          console.log(this.juegosActivosPuntosModo[i].Modo);
-            // Vamos a buscar a los alumnos o equipos con sus repectivos puntos
-          if (this.juegosActivosPuntosModo[i].Modo === 'Individual') {
-              this.NumeroDeJuegoDePuntos = i;
-              this.RecuperarInscripcionesAlumnoJuego();
-              console.log(this.listaAlumnosOrdenadaPorPuntos);
-            } else {
-              this.NumeroDeJuegoDePuntos = i;
-              this.RecuperarInscripcionesEquiposJuego();
-              console.log(this.listaEquiposOrdenadaPorPuntos);
-            }
-          console.log('Alumnos');
-          console.log(this.listaAlumnosOrdenadaPorPuntos);
-          console.log('Equipo');
-          console.log(this.listaEquiposOrdenadaPorPuntos);
-          }
+    this.juegoDisponibleSeleccionado = this.juegosDisponibles.filter (juego => juego.id === Number (this.juegoDisponibleSeleccionadoID))[0];
+    console.log ('ya he seleccionado el juego');
+    console.log (this.juegoDisponibleSeleccionado);
+    if ( this.juegoDisponibleSeleccionado.Tipo === 'Juego De Puntos') {
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.RecuperarInscripcionesAlumnosJuegoPuntos();
+      } else {
+        this.RecuperarInscripcionesEquiposJuegoPuntos();
+      }
+    } else {
+      // Tiene que ser de cuestionario, y de momento solo hay individual
+      this.RecuperarInscripcionesAlumnosJuegoCuestionario();
     }
   }
 
-   // Cuando marco una casilla desmarco las otras casillas de esa fila
+  // Cuando marco una casilla desmarco las otras casillas de esa fila
    Verificar(row, n) {
     if (n === 1) {
       this.selectionDos.deselect(row);
@@ -313,6 +367,30 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       this.selectionDos.deselect(row);
     }
   }
+
+
+  // Me traigo el juego elegido para decidir los resultados de la jornada
+  // TraerJuegoDisponibleSeleccionado() {
+  //   this.botonAsignarManualDesactivado = true;
+  //   this.botonAsignarAleatorioDesactivado = true;
+  //   this.botonAsignarPuntosDesactivado = false;
+  //   console.log ('ID del juego seleccionado ' + this.juegoDisponibleSeleccionadoID);
+  //   console.log (this.juegosDisponibles);
+  // tslint:disable-next-line:max-line-length
+  //   this.juegoDisponibleSeleccionado = this.juegosDisponibles.filter (juego => juego.id === Number (this.juegoDisponibleSeleccionadoID))[0];
+  //   console.log ('ya he seleccionado el juego');
+  //   console.log (this.juegoDisponibleSeleccionado);
+  //   if ( this.juegoDisponibleSeleccionado.Tipo === 'Juego De Puntos') {
+  //     if (this.juegoSeleccionado.Modo === 'Individual') {
+  //       this.RecuperarInscripcionesAlumnosJuegoPuntos();
+  //     } else {
+  //       this.RecuperarInscripcionesEquiposJuegoPuntos();
+  //     }
+  //   } else {
+  //     // Tiene que ser de cuestionario, y de momento solo hay individual
+  //     this.RecuperarInscripcionesAlumnosJuegoCuestionario();
+  //   }
+  // }
 
   ////////////// FUNCIONES PARA ASIGNAR LOS RESULTADOS ///////////////////////////
 
@@ -392,70 +470,85 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
   }
 
-  AsignarGanadorJuegoPuntos() {
+  AsignarGanadoresJuegoDisponibleSeleccionado() {
     const resultados: number [] = [];
 
-    if (this.juegosActivosPuntosModo[this.NumeroDeJuegoDePuntos].Modo === 'Individual') {
-      console.log('Estoy en AsignarGanadorJuegoPuntos()');
-      console.log('La lista de enfrentamientos de esta Jornada es: ');
-      console.log(this.EnfrentamientosJornadaSeleccionada);
+    if (this.juegoDisponibleSeleccionado.Tipo === 'Juego De Puntos') {
 
+      if (this.juegoDisponibleSeleccionado.Modo === 'Individual') {
+
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
+
+          // Saco al jugador uno de la lista de participantes del juego de puntos
+          // tslint:disable-next-line:max-line-length
+
+          // tslint:disable-next-line:max-line-length
+          const JugadorUno = this.listaAlumnosJuegoDePuntos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno))[0];
+          // tslint:disable-next-line:max-line-length
+          const JugadorDos = this.listaAlumnosJuegoDePuntos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos))[0];
+
+          if (JugadorUno.PuntosTotalesAlumno > JugadorDos.PuntosTotalesAlumno) {
+            resultados.push (1);
+            this.selectionUno.select(this.dataSourceTablaGanadorIndividual.data[i]);
+
+          } else  if (JugadorUno.PuntosTotalesAlumno < JugadorDos.PuntosTotalesAlumno) {
+            resultados.push (2);
+            this.selectionDos.select(this.dataSourceTablaGanadorIndividual.data[i]);
+
+          } else {
+            resultados.push (0);
+            this.selectionTres.select(this.dataSourceTablaGanadorIndividual.data[i]);
+          }
+        }
+      } else {
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
+
+          // Saco al jugador uno de la lista de participantes del juego de puntos
+          // tslint:disable-next-line:max-line-length
+          const equipoUno = this.listaEquiposJuegoDePuntos.filter (a => a.equipoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno)[0];
+          // tslint:disable-next-line:max-line-length
+          const equipoDos = this.listaEquiposJuegoDePuntos.filter (a => a.equipoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos)[0];
+
+          if (equipoUno.PuntosTotalesEquipo > equipoDos.PuntosTotalesEquipo) {
+            resultados.push (1);
+            this.selectionUno.select(this.dataSourceTablaGanadorEquipo.data[i]);
+
+          } else  if (equipoUno.PuntosTotalesEquipo < equipoDos.PuntosTotalesEquipo) {
+            resultados.push (2);
+            this.selectionDos.select(this.dataSourceTablaGanadorEquipo.data[i]);
+
+          } else {
+            resultados.push (0);
+            this.selectionTres.select(this.dataSourceTablaGanadorEquipo.data[i]);
+          }
+        }
+      }
+    } else {
+      // El juego elegido es de cuestionario
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
 
         // Saco al jugador uno de la lista de participantes del juego de puntos
         // tslint:disable-next-line:max-line-length
-        console.log ('Clasificacion juego');
-        console.log (this.listaAlumnosOrdenadaPorPuntos);
-        console.log ('Enfrentamiento ');
-        console.log (this.EnfrentamientosJornadaSeleccionada[i]);
 
         // tslint:disable-next-line:max-line-length
-        const JugadorUno = this.listaAlumnosOrdenadaPorPuntos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno))[0];
+        const JugadorUno = this.listaAlumnosJuegoDeCuestionario.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno))[0];
         // tslint:disable-next-line:max-line-length
-        const JugadorDos = this.listaAlumnosOrdenadaPorPuntos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos))[0];
-        console.log ('uno');
-        console.log (JugadorUno);
-        console.log ('dos');
-        console.log (JugadorDos);
-        if (JugadorUno.PuntosTotalesAlumno > JugadorDos.PuntosTotalesAlumno) {
+        const JugadorDos = this.listaAlumnosJuegoDeCuestionario.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos))[0];
+
+        if (JugadorUno.Nota > JugadorDos.Nota) {
           resultados.push (1);
           this.selectionUno.select(this.dataSourceTablaGanadorIndividual.data[i]);
 
-        } else  if (JugadorUno.PuntosTotalesAlumno < JugadorDos.PuntosTotalesAlumno) {
+        } else  if (JugadorUno.Nota < JugadorDos.Nota) {
           resultados.push (2);
           this.selectionDos.select(this.dataSourceTablaGanadorIndividual.data[i]);
 
         } else {
           resultados.push (0);
           this.selectionTres.select(this.dataSourceTablaGanadorIndividual.data[i]);
-        }
-      }
-    } else {
-      console.log('Estoy en AsignarGanadorJuegoPuntos() Equipos');
-      console.log('La lista de enfrentamientos de esta Jornada es: ');
-      console.log(this.EnfrentamientosJornadaSeleccionada);
-
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
-
-        // Saco al jugador uno de la lista de participantes del juego de puntos
-        // tslint:disable-next-line:max-line-length
-        const equipoUno = this.listaEquiposOrdenadaPorPuntos.filter (a => a.equipoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorUno)[0];
-        // tslint:disable-next-line:max-line-length
-        const equipoDos = this.listaEquiposOrdenadaPorPuntos.filter (a => a.equipoId === this.EnfrentamientosJornadaSeleccionada[i].JugadorDos)[0];
-
-        if (equipoUno.PuntosTotalesEquipo > equipoDos.PuntosTotalesEquipo) {
-          resultados.push (1);
-          this.selectionUno.select(this.dataSourceTablaGanadorEquipo.data[i]);
-
-        } else  if (equipoUno.PuntosTotalesEquipo < equipoDos.PuntosTotalesEquipo) {
-          resultados.push (2);
-          this.selectionDos.select(this.dataSourceTablaGanadorEquipo.data[i]);
-
-        } else {
-          resultados.push (0);
-          this.selectionTres.select(this.dataSourceTablaGanadorEquipo.data[i]);
         }
       }
     }

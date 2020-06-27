@@ -127,4 +127,6 @@ export class MisAlumnosComponent implements OnInit {
   goBack() {
     this.location.back();
   }
+
+
 }

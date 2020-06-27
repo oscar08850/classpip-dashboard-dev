@@ -5,7 +5,7 @@ import { Location } from '@angular/common';
 import { Juego, Jornada, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
          TablaEquipoJuegoDeCompeticion, TablaClasificacionJornada, AlumnoJuegoDeCompeticionFormulaUno,
          EquipoJuegoDeCompeticionFormulaUno, AlumnoJuegoDePuntos, EquipoJuegoDePuntos,
-         Alumno} from '../../../../clases/index';
+         Alumno, AlumnoJuegoDeCuestionario} from '../../../../clases/index';
 
 // Servicio
 import { SesionService , CalculosService, PeticionesAPIService } from '../../../../servicios/index';
@@ -24,7 +24,7 @@ export interface Asignacion {
 const ModoAsignacion: Asignacion[] = [
   {modo: 'Manualmente', id: 1},
   {modo: 'Aleatoriamente', id: 2},
-  {modo: 'Juego de Puntos', id: 3},
+  {modo: 'Según resultados de un juego', id: 3},
 ];
 
 @Component({
@@ -65,11 +65,14 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   botonAsignarPuntosDesactivado = true;
 
 
-  juegosActivosPuntos: Juego[];
+  juegosDisponibles: Juego[];
 
-  juegodePuntosSeleccionadoID: number;
+  juegoDisponibleSeleccionadoID: number;
+  juegoDisponibleSeleccionado: Juego;
   listaAlumnosOrdenadaPorPuntosJuegoDePuntos: AlumnoJuegoDePuntos[];
   listaEquiposOrdenadaPorPuntosJuegoDePuntos: EquipoJuegoDePuntos[];
+
+  listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario: AlumnoJuegoDeCuestionario[];
 
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
   listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
@@ -95,17 +98,20 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     } else {
       this.listaEquiposClasificacion = this.sesion.DameTablaEquipoJuegoDeCompeticion();
     }
-    // Selecciono los juegos de puntos activos que sean del mosmo modo que el juego de liga (individual o en equipo)
-    this.juegosActivosPuntos = this.sesion.DameJuegosDePuntosActivos().filter (juego => juego.Modo === this.juegoSeleccionado.Modo);
-    console.log ('Juegos de puntos ');
-    console.log (this.juegosActivosPuntos);
+    // Selecciono los juegos entre los que puedo elegir para decidir resultados
+    // Son los juegos de puntos (tanto activos como acabados) y los juegos de cuestionario acabados
+    this.juegosDisponibles = this.sesion.DameJuegosDePuntos().filter (juego => juego.Modo === this.juegoSeleccionado.Modo);
+    // tslint:disable-next-line:max-line-length
+    this.juegosDisponibles = this.juegosDisponibles.concat (this.sesion.DameJuegosDeCuestionariosAcabados());
+    console.log ('Juegos para elegir ganadores ');
+    console.log (this.juegosDisponibles);
     this.asignados = false;
   }
 
-  //////////////////////////////////////// FUNCIONES PARA RECUPERAR INSCRIPCIONES JUEGO DE PUNTOS //////////////////////////////////
+  /////////////// FUNCIONES PARA RECUPERAR INSCRIPCIONES DE JUEGOS DISPOBIBLES PARA ASIGNAR GANADORES //////////////////////////////////
 
   RecuperarInscripcionesAlumnosJuegoPuntos() {
-    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(this.juegodePuntosSeleccionadoID)
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(this.juegoDisponibleSeleccionadoID)
     .subscribe(inscripciones => {
       this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos = inscripciones;
       // ordena la lista por puntos
@@ -117,7 +123,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
   }
 
   RecuperarInscripcionesEquiposJuegoPuntos() {
-    this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(this.juegodePuntosSeleccionadoID)
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(this.juegoDisponibleSeleccionadoID)
     .subscribe(inscripciones => {
       this.listaEquiposOrdenadaPorPuntosJuegoDePuntos = inscripciones;
       console.log(this.listaEquiposOrdenadaPorPuntosJuegoDePuntos);
@@ -127,6 +133,23 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       });
     });
 
+  }
+
+  RecuperarInscripcionesAlumnosJuegoCuestionario() {
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionario(this.juegoDisponibleSeleccionadoID)
+    .subscribe(inscripciones => {
+      this.listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario = inscripciones;
+      // ordena la lista por puntos
+      // tslint:disable-next-line:only-arrow-functions
+      // tslint:disable-next-line:max-line-length
+      // tslint:disable-next-line:only-arrow-functions
+      // tslint:disable-next-line:max-line-length
+      // tslint:disable-next-line:only-arrow-functions
+      // tslint:disable-next-line:max-line-length
+      this.listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario = this.listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario.sort(function(obj1, obj2) {
+        return obj2.Nota - obj1.Nota;
+      });
+    });
   }
 
   Disputada(jornadaId): boolean {
@@ -199,25 +222,34 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         this.botonAsignarPuntosDesactivado = true;
     // Si se elijió asignación por juego de puntos y no hay juego de puntos para elegir se muestra una alarma
     // Si  hay juego de puntos no se hace nada porque ya aparecerá automáticamente el selector del juego
-      } else if ((Number(this.modoAsignacionId) === 3) && (this.juegosActivosPuntos.length === 0)) { // JuegoPuntos
+      } else if ((Number(this.modoAsignacionId) === 3) && (this.juegosDisponibles.length === 0)) { // JuegoPuntos
         this.botonAsignarManualDesactivado = true;
         this.botonAsignarAleatorioDesactivado = true;
         this.botonAsignarPuntosDesactivado = true;
         console.log ('Aviso');
-        Swal.fire('Cuidado', 'No hay juegos de puntos disponibles para este grupo', 'warning');
+        Swal.fire('Cuidado', 'No hay juegos finalizados disponibles para este grupo', 'warning');
       }
   }
 
-  // Cuando se seleccione el juego de puntos entonces activo el botón correspondiente y me traigo las inscripciones
-  // para ese juego elegido
-  SeleccionarJuegoPuntos() {
+  // Me traigo el juego elegido para decidir los resultados de la jornada
+  TraerJuegoDisponibleSeleccionado() {
     this.botonAsignarManualDesactivado = true;
     this.botonAsignarAleatorioDesactivado = true;
     this.botonAsignarPuntosDesactivado = false;
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      this.RecuperarInscripcionesAlumnosJuegoPuntos();
+    console.log ('ID del juego seleccionado ' + this.juegoDisponibleSeleccionadoID);
+    console.log (this.juegosDisponibles);
+    this.juegoDisponibleSeleccionado = this.juegosDisponibles.filter (juego => juego.id === Number (this.juegoDisponibleSeleccionadoID))[0];
+    console.log ('ya he seleccionado el juego');
+    console.log (this.juegoDisponibleSeleccionado);
+    if ( this.juegoDisponibleSeleccionado.Tipo === 'Juego De Puntos') {
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.RecuperarInscripcionesAlumnosJuegoPuntos();
+      } else {
+        this.RecuperarInscripcionesEquiposJuegoPuntos();
+      }
     } else {
-      this.RecuperarInscripcionesEquiposJuegoPuntos();
+      // Tiene que ser de cuestionario, y de momento solo hay individual
+      this.RecuperarInscripcionesAlumnosJuegoCuestionario();
     }
   }
 
@@ -250,15 +282,23 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     Swal.fire('Enhorabuena', 'Resutados asignados aleatoriamente', 'success');
     this.asignados = true;
   }
-  AsignarGanadoresJuegoPuntos() {
+  AsignarGanadoresJuegoDisponibleSeleccionado() {
     const ganadores: any[] = [];
 
     // Selecciono los ganadores a partir del ranking del juego de puntos
     if (this.juegoSeleccionado.Modo === 'Individual') {
-      let i = 0;
-      while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
-        ganadores.push(this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos[i].alumnoId);
-        i++;
+      if (this.juegoDisponibleSeleccionado.Tipo === 'Juego De Puntos') {
+        let i = 0;
+        while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+          ganadores.push(this.listaAlumnosOrdenadaPorPuntosJuegoDePuntos[i].alumnoId);
+          i++;
+        }
+      } else {
+        let i = 0;
+        while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+          ganadores.push(this.listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario[i].alumnoId);
+          i++;
+        }
       }
     } else {
       let i = 0;

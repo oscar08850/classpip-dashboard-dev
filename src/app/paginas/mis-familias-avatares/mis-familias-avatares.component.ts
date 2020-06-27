@@ -3,6 +3,7 @@ import { SesionService, CalculosService, PeticionesAPIService } from '../../serv
 import { FamiliaAvatares } from 'src/app/clases';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mis-familias-avatares',
@@ -25,15 +26,16 @@ export class MisFamiliasAvataresComponent implements OnInit {
   hayComplementoPuesto: boolean[];
   complementoPuesto: any[];
 
-  ancho;
-  alto;
-  dobleancho;
-  doblealto;
+  ancho = '150px';
+  alto = '162px';
+  dobleancho = '300px';
+  doblealto = '324px';
 
 
 
   constructor( private peticionesAPI: PeticionesAPIService,
-               private sesion: SesionService,   private location: Location
+               private sesion: SesionService,   private location: Location,
+               private router: Router
   ) { }
 
   ngOnInit() {
@@ -53,7 +55,9 @@ export class MisFamiliasAvataresComponent implements OnInit {
      imagen.id = numeroComplemento * 10 + (opcion + 1); // coloco el identificador
      // La posición es relativa dentro del bloque
      imagen.style.position = 'alsolute';
-     imagen.style.zIndex = '1';
+     // Las imagenes se apilan según el orden indicado por el número de complemento
+     imagen.style.zIndex = numeroComplemento;
+
      // Coloco el nombre del fichero en el que está la imagen
      imagen.src =  stringImagen;
 
@@ -76,18 +80,26 @@ export class MisFamiliasAvataresComponent implements OnInit {
          // tslint:disable-next-line:only-arrow-functions
          return function() {
 
+           console.log ('voy a colocar el elemento ' + elementoId);
+
            if (hayComplementoPuesto[numComplemento]) {
              // si ya hay un complemento sobre la silueta del tipo elegido
              // entonces lo tengo que quitar de la silueta y volverlo a la zona de complemento
 
              // obtendo el id de la imagen
              const id = complementoPuesto[numComplemento].id;
+             console.log ('saco el elemento ' + id);
              // tslint:disable-next-line:no-shadowed-variable
              const elemento = document.getElementById(id);
              // La voy a visualizar a tamaño normal
 
+             console.log ('antes ');
+             console.log (elemento);
              elemento.setAttribute('width', ancho);
              elemento.setAttribute('height', alto);
+
+             console.log ('despues ');
+             console.log (elemento);
              elemento.style.position = 'relative';
              // Coloco la imagen en la zona de complementos correspondiente
              document.getElementById('imagenesComplementos' + numComplemento)
@@ -99,7 +111,7 @@ export class MisFamiliasAvataresComponent implements OnInit {
           //  hayComplementoPuesto.forEach (hay => { if (hay) { cont++; }});
            // para colocar el complemento elegido necesito la altura de la silueta
           //  const altura = document.getElementById('silueta').clientHeight;
-
+           console.log ('voy a colocar el elemento ' + elementoId);
            // obtengo el complemento elegido
            const elemento = document.getElementById(elementoId);
            // lo coloco sobre la silueta, ampliando el tamaño
@@ -108,6 +120,7 @@ export class MisFamiliasAvataresComponent implements OnInit {
            elemento.style.position = 'absolute';
            elemento.setAttribute('width', dobleancho);
            elemento.setAttribute('height', doblealto);
+           console.log (elemento);
            document.getElementById('imagenAvatar')
            .appendChild(elemento);
            // guardo el complemento puesto
@@ -142,28 +155,36 @@ export class MisFamiliasAvataresComponent implements OnInit {
 
 
   TraeImagenesFamilia() {
-    this.familiaCargada = false;
-    this.familiaElegida = this.listaFamilias.filter (familia => familia.id === Number(this.familiaId))[0];
+
+   // Borro los complementos que pueda haber sobre la silueta
+   this.hayComplementoPuesto = Array(4).fill(false);
+   const myNode = document.getElementById('imagenAvatar');
+   if (myNode != null) {
+     // Borro todos los hijos menos el primero que es la silueta
+     for ( let i = myNode.children.length; i > 1; i--) {
+      myNode.removeChild(myNode.childNodes[i]);
+    }
+   }
+
+
+  //  const comp = document.getElementsByTagName('complementoSobreSilueta');
+  //  console.log ('voy a borrar');
+  //  console.log (comp.length);
+  //  for (let i = comp.length - 1; i >= 0; --i) {
+  //   comp[i].remove();
+  // }
+
+
+   this.familiaCargada = false;
+   this.familiaElegida = this.listaFamilias.filter (familia => familia.id === Number(this.familiaId))[0];
     // Traigo la imagen de la silueta
-    this.peticionesAPI.DameImagenAvatar (this.familiaElegida.Silueta)
+   this.peticionesAPI.DameImagenAvatar (this.familiaElegida.Silueta)
     .subscribe(response => {
       const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
       const reader = new FileReader();
       reader.addEventListener('load', () => {
         this.imagenSilueta = reader.result.toString();
-        // Lo siguiente es para conseguir el tamaño de la silueta
-        const imagen = new Image();
-        imagen.src = reader.result.toString();
-        console.log ('ya he cargado la silueta');
-        imagen.onload = () => {
-          this.ancho = imagen.width.toString();
-          this.alto = imagen.height.toString();
-          this.dobleancho = (imagen.width * 2).toString();
-          this.doblealto = (imagen.height * 2).toString();
-          this.TraerImagenesComplementos();
-
-        };
       }, false);
 
 
@@ -171,6 +192,9 @@ export class MisFamiliasAvataresComponent implements OnInit {
         reader.readAsDataURL(blob);
       }
     });
+
+
+   this.TraerImagenesComplementos();
   }
 
   TraerImagenesComplementos() {
@@ -207,7 +231,7 @@ export class MisFamiliasAvataresComponent implements OnInit {
     const comp2 = document.getElementById('imagenesComplementos2');
     if (comp2 !== null) {
        while (comp2.firstChild) {
-         comp2.removeChild(comp1.lastChild);
+         comp2.removeChild(comp2.lastChild);
        }
     }
 
@@ -285,10 +309,10 @@ export class MisFamiliasAvataresComponent implements OnInit {
   }
 
 
-  PonDoble(img) {
-    img.setAttribute ('width', this.dobleancho);
-    img.setAttribute ('height', this.doblealto );
-  }
+  // PonDoble(img) {
+  //   img.setAttribute ('width', this.dobleancho);
+  //   img.setAttribute ('height', this.doblealto );
+  // }
 
   BorrarFamilia() {
     this.familiaElegida.Complemento1.forEach (imagenComplemento =>
@@ -325,6 +349,7 @@ export class MisFamiliasAvataresComponent implements OnInit {
         this.peticionesAPI.BorraFamiliaAvatares (this.familiaElegida.id).subscribe(() => {
           this.listaFamilias = this.listaFamilias.filter (familia => familia.id !== Number(this.familiaElegida.id));
           Swal.fire('La familia de avatares se ha eliminado correctamente');
+          // this.router.navigate(['/inicio/']);
           this.location.back();
         });
       }

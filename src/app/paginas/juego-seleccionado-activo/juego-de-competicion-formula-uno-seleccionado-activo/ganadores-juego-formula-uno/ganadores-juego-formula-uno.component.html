@@ -1,6 +1,7 @@
 <div class="titulo">Pantalla para asignar el Ganador</div>
 <div class="subtitulo">{{juegoSeleccionado.NombreJuego}}: {{juegoSeleccionado.Tipo}}  {{juegoSeleccionado.Modo}}</div>
 <mat-divider class="lineaDivisoria"></mat-divider>
+
 <div class="contenedor">
   <div class="enColumna">
     <div class = "enFila" style="width: 60%; align-content: left;"  >
@@ -37,14 +38,14 @@
     </div>
 
     <!-- Si se elige la asignación via juego de puntos desplegamos el selector del juego que debe usarse -->
-    <div *ngIf="((modoAsignacionId == 3) &&  (juegosActivosPuntos.length !== 0)) && !Disputada (jornadaId)"  style="margin-left: 5%;">
+    <div *ngIf="((modoAsignacionId == 3) &&  (juegosDisponibles.length !== 0)) && !Disputada (jornadaId)"  style="margin-left: 5%;">
 
       Seleccione un Juego
       <br>
       <mat-form-field >
         <mat-label>Juegos</mat-label>
-        <select matNativeControl [(ngModel)]="juegodePuntosSeleccionadoID" (change) = "SeleccionarJuegoPuntos()">
-          <option *ngFor="let juego of juegosActivosPuntos" [value]="juego.id">
+        <select matNativeControl [(ngModel)]="juegoDisponibleSeleccionadoID" (change) = "TraerJuegoDisponibleSeleccionado()">
+          <option *ngFor="let juego of juegosDisponibles" [value]="juego.id">
             {{juego.NombreJuego}}
           </option>
         </select>
@@ -59,8 +60,8 @@
     </div> -->
 
     <div *ngIf = "jornadaId != undefined && !Disputada (jornadaId)">
-      <div  *ngIf="(modoAsignacionId == 3) && (juegodePuntosSeleccionadoID !== undefined)" style="margin-top: 10px; margin-right: 10px;">
-        <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadoresJuegoPuntos()"  [disabled]="botonAsignarJuegoDesactivado">Asignar ganadores mediante juego de puntos<i class="material-icons">emoji_events </i></button>
+      <div  *ngIf="(modoAsignacionId == 3) && (juegoDisponibleSeleccionadoID !== undefined)" style="margin-top: 10px; margin-right: 10px;">
+        <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadoresJuegoDisponibleSeleccionado()"  [disabled]="botonAsignarJuegoDesactivado">Asignar ganadores mediante juego seleccionado<i class="material-icons">emoji_events </i></button>
       </div>
 
       <!-- boton para asignar de forma aleatoria -->

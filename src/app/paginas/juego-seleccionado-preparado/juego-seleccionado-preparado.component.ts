@@ -17,7 +17,9 @@ export class JuegoSeleccionadoPreparadoComponent implements OnInit {
 
 
   ngOnInit() {
+    console.log ('saco el juego');
     this.juegoSeleccionado = this.sesion.DameJuego();
+    console.log (this.juegoSeleccionado);
   }
 
   goBack() {

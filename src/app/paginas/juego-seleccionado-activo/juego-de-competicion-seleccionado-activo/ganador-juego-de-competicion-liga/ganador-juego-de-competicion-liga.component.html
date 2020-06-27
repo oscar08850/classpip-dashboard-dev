@@ -10,7 +10,7 @@
         <br>
         <mat-form-field>
           <mat-label>Jornada</mat-label>
-          <select matNativeControl [(ngModel)]="jornadaId"  (change) = "ActualizarBoton()">
+          <select matNativeControl [(ngModel)]="jornadaId"  (change) = "SeleccionaJornada()">
             <option *ngFor="let jornada of JornadasCompeticion" [value]="jornada.id">
 
               <p *ngIf= "!Disputada (jornada.id)">{{jornada.NumeroDeJornada}}</p>
@@ -25,7 +25,7 @@
           <br>
           <mat-form-field style="margin-left: 10%;">
             <mat-label>Modo</mat-label>
-            <select matNativeControl [(ngModel)]="modoAsignacionId" (change) = "ActualizarBoton()">
+            <select matNativeControl [(ngModel)]="modoAsignacionId" (change) = "SeleccionaModo()">
               <option *ngFor="let modo of modoAsignacion" [value]="modo.id">
                 {{modo.modo}}
               </option>
@@ -34,13 +34,14 @@
         </div>
       </div>
 
-      <div *ngIf="(modoAsignacionId == 3) && (juegosActivosPuntosModo.length !== 0)  && !Disputada (jornadaId)"  style="margin-left: 5%;">
+
+      <div *ngIf="(modoAsignacionId == 3) && (juegosDisponibles.length !== 0)  && !Disputada (jornadaId)"  style="margin-left: 5%;">
         Seleccione un Juego
         <br>
         <mat-form-field >
           <mat-label>Juegos</mat-label>
-          <select matNativeControl [(ngModel)]="juegodePuntosSeleccionadoID" (change) = "ActualizarBoton()">
-            <option *ngFor="let juego of juegosActivosPuntosModo" [value]="juego.id">
+          <select matNativeControl [(ngModel)]="juegoDisponibleSeleccionadoID" (change) = "TraerJuegoDisponibleSeleccionado()">
+            <option *ngFor="let juego of juegosDisponibles" [value]="juego.id">
               {{juego.NombreJuego}}
             </option>
           </select>
@@ -51,8 +52,9 @@
 
 
     <div *ngIf = "jornadaId != undefined && !Disputada (jornadaId)">
-    <div  *ngIf="(modoAsignacionId == 3) && (juegodePuntosSeleccionadoID !== undefined)" style="margin-top: 10px; margin-right: 10px;">
-      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadorJuegoPuntos()"  [disabled]="botonAsignarJuegoDesactivado">Asignar ganadores mediante juego de puntos<i class="material-icons">emoji_events </i></button>
+    <div  *ngIf="(modoAsignacionId == 3) && (juegoDisponibleSeleccionadoID !== undefined)" style="margin-top: 10px; margin-right: 10px;">
+      <button style= "width: 100%"  type="button"class="btn Aceptar"  (click)= "AsignarGanadoresJuegoDisponibleSeleccionado()"
+      [disabled]="botonAsignarJuegoDesactivado">Asignar ganadores mediante juego seleccionado<i class="material-icons">emoji_events </i></button>
     </div>
 
     <div  *ngIf="modoAsignacionId == 1" style="margin-top: 10px; margin-right: 10px;">
