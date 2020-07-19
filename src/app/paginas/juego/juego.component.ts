@@ -998,7 +998,7 @@ export class JuegoComponent implements OnInit {
         this.peticionesAPI.InscribeAlumnoJuegoDeGeocaching(new AlumnoJuegoDeGeocaching(0, 0, this.alumnosGrupo[i].id, this.juegoDeGeocaching.id ))
         .subscribe();
       }
-      Swal.fire('Juego de geocatching creado correctamente', ' ', 'success');
+      Swal.fire('Juego de geocaching creado correctamente', ' ', 'success');
 
       // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
       if (this.juegosActivos === undefined) {

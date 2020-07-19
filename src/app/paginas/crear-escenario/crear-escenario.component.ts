@@ -43,40 +43,27 @@ export class CrearEscenarioComponent implements OnInit {
   myForm2: FormGroup;
 
 
-  // CREAR COLECCION
   mapaEscenario: string;
   escenarioCreado: Escenario;
   descripcionEscenario: string;
 
-  // CREAR CROMO
   nombrePuntoGeolocalizable: string;
   latitudPuntoGeolocalizable: string;
   longitudPuntoGeolocalizable: string;
   pistafacilPuntoGeolocalizable: string;
   pistadificilPuntoGeolocalizable: string;
   puntosgeolocalizablesAgregados: PuntoGeolocalizable [] = [];
-  // tslint:disable-next-line:ban-types
   isDisabledPuntoGeolocalizable: Boolean = true;
 
-  // COMPARTIDO
+ 
   profesorId: number;
 
-
-  // Al principio coleccion no creada y imagen no cargada
-  // tslint:disable-next-line:ban-types
   escenarioYaCreado: Boolean = false;
-  // tslint:disable-next-line:ban-types
-  // tslint:disable-next-line:ban-types
-
-  // tslint:disable-next-line:ban-types
   finalizar: Boolean = false;
 
 
-  // PONEMOS LAS COLUMNAS DE LA TABLA Y LA LISTA QUE TENDRÁ LA INFORMACIÓN QUE QUEREMOS MOSTRAR
-  // tslint:disable-next-line:max-line-length
-  displayedColumns: string[] = ['nombrePuntoGeolocalizable', 'latitudPuntoGeolocalizable', 'longitudPuntoGeolocalizable', 'pistafacilPuntoGeolocalizable','pistadificilPuntoGeolocalizable', ' '];
-
-
+  // displayedColumns: string[] = ['nombrePuntoGeolocalizable', 'latitudPuntoGeolocalizable', 'longitudPuntoGeolocalizable', 'pistafacilPuntoGeolocalizable','pistadificilPuntoGeolocalizable', ' '];
+   displayedColumns: string[] = ['nombrePuntoGeolocalizable', 'latitudPuntoGeolocalizable', 'longitudPuntoGeolocalizable', ' '];
 
   constructor(
     private router: Router,
@@ -89,12 +76,9 @@ export class CrearEscenarioComponent implements OnInit {
   ngOnInit() {
 
     console.log(this.sesion.DameProfesor());
-    // REALMENTE LA APP FUNCIONARÁ COGIENDO AL PROFESOR DEL SERVICIO, NO OBSTANTE AHORA LO RECOGEMOS DE LA URL
-    // this.profesorId = this.profesorService.RecibirProfesorIdDelServicio();
     this.profesorId = this.sesion.DameProfesor().id;
 
 
-    // Constructor myForm
     this.myForm = this.formBuilder.group({
      descripcionEscenario: ['', Validators.required],
      mapaEscenario: ['', Validators.required]
