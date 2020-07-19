@@ -415,9 +415,19 @@ table {
 }
 
 // Para mostrar los cromos del album en tres columnas
-span.album {
+span.album3col {
   display: inline-block;
   width: 33%;
+}
+// Para mostrar los cromos del album en cuatro columnas
+span.album4col {
+  display: inline-block;
+  width: 25%;
+}
+// Para mostrar los cromos del album en cinco columnas
+span.album5col {
+  display: inline-block;
+  width: 20%;
 }
 // Los siguientes son para el flip del cromo
 

@@ -50,7 +50,10 @@ export class JuegoDeGeocachingSeleccionadoPreparadoComponent implements OnInit {
                 private location: Location) { }
 
   ngOnInit() {
+    console.log (' Estoy en ngOnInit');
     this.juegoSeleccionado = this.sesion.DameJuego();
+    console.log ('vuelvo a sacar el juego');
+    console.log (this.juegoSeleccionado);
     this.AlumnosDelJuego();
   }
 
@@ -78,12 +81,16 @@ export class JuegoDeGeocachingSeleccionadoPreparadoComponent implements OnInit {
     this.rankingAlumnosPorPuntuacion = this.calculos.PrepararTablaRankingGeocaching(this.listaAlumnosOrdenadaPorPuntuacion,
       this.alumnosDelJuego);
     this.dataSourceAlumno = new MatTableDataSource(this.rankingAlumnosPorPuntuacion);
+    console.log ('ya esta la tabla');
+    console.log (this.dataSourceAlumno);
   }
 
   ActivarJuego() {
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaJuegoDeGeocaching(new JuegoDeGeocaching(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.PuntuacionCorrecta,
+    this.peticionesAPI.ModificaJuegoDeGeocaching(new JuegoDeGeocaching(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.PuntuacionCorrecta,
+      // tslint:disable-next-line:max-line-length
       this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.PuntuacionCorrectaBonus, this.juegoSeleccionado.PuntuacionIncorrectaBonus, this.juegoSeleccionado.PreguntasBasicas, this.juegoSeleccionado.PreguntasBonus, true, this.juegoSeleccionado.JuegoTerminado,
+      // tslint:disable-next-line:max-line-length
       this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.idescenario), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
       .subscribe(res => {
         this.location.back();

@@ -5,9 +5,10 @@ import { MatDialog, MatTabGroup } from '@angular/material';
 import { Location } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-// Clases
+
 // tslint:disable-next-line:max-line-length
 import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
+
           AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
           EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
           EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
@@ -29,8 +30,10 @@ import { AsignaCuestionarioComponent } from './asigna-cuestionario/asigna-cuesti
 import { JuegoDeCuestionario } from 'src/app/clases/JuegoDeCuestionario';
 import { AlumnoJuegoDeCuestionario } from 'src/app/clases/AlumnoJuegoDeCuestionario';
 import { Router } from '@angular/router';
+
 import { AsignaEscenarioComponent } from './asigna-escenario/asigna-escenario.component';
 import { AsignaPreguntasComponent } from './asigna-preguntas/asigna-preguntas.component';
+
 
 
 
@@ -95,8 +98,6 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Avatar', color: 'primary'},
     {nombre: 'Juego De Cuestionario', color: 'accent'},
     {nombre: 'Juego De Geocaching', color: 'warn'}
-
-
   ];
   seleccionModoJuego: ChipColor[] = [
     {nombre: 'Individual', color: 'primary'},
@@ -153,6 +154,7 @@ export class JuegoComponent implements OnInit {
   displayedColumnsTablaPuntuacion: string[] = ['select', 'Posicion', 'Puntos'];
 
 
+
   // Informacion para juego de geocatching
 
   escenario: Escenario;
@@ -172,9 +174,6 @@ export class JuegoComponent implements OnInit {
 
   final = false;
 
-  // myForm1: FormGroup;
-  // myForm2: FormGroup;
-  // myFormPrivilegiosAvatar: FormGroup;
 
 
   // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS, INACTIVOS Y PREPARADOS
@@ -192,73 +191,6 @@ export class JuegoComponent implements OnInit {
   // criterioComplemento1: string;
 
   //////////////////////////////////// PARÁMETROS PARA PÁGINA DE CREAR JUEGO //////////////////////////////////////
-  // para leer el nombre
-  // formNombre: FormGroup;
-
-
-  // En el primer paso mostraremos tres Chips con las diferentes opciones de tipo de juego que podemos crear y su color
-
-
-  // En el segundo paso mostraremos dos Chips con los dos modos de juego que podemos crear y su color
-
-
-    // En el segundo paso mostraremos dos Chips con los dos modos de juego que podemos crear y su color
-
-  // Recogemos la opción que seleccionemos en el primer (tipoDeJuegoSeleccionado) y en el segundo paso (modoDeJuegoSeleccionado)
-
-
-
-  // NumeroDeVueltasValueInd: number;
-  // NumeroDeVueltasValueEqu: number;
-
-  // // Todo lo relacionado con juego de cuestionario
-  // myFormPuntuacion: FormGroup;
-  // PuntuacionCorrecta: number;
-  // PuntuacionIncorrecta: number;
-
-
-  // // tslint:disable-next-line:ban-types
-  // DisabledCuestionario: Boolean = true;
-  //  // tslint:disable-next-line:ban-types
-  // DisabledPuntuacion: Boolean = true;
-  //  // tslint:disable-next-line:ban-types
-  // DisabledPresentacion: Boolean =  true;
-  // juegoDeCuestionarioId: number;
-
-  // // Tipos de presentacion para el juego de cuestionario
-
-  // ModoPresentacionFavorito: string;
-  // myFormPresentacion: FormGroup;
-
-  // // Recogemos el tipo de presentacion para el juego de cuestionario
-  // tipoDePresentacion: string;
-  // //
-  // tipoJuegoCompeticionSeleccionado: string;
-
-  // // No nos permite avanzar si no se ha seleccionado una opción
-  // // tslint:disable-next-line:ban-types
-  // isDisabled: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledNombre: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledModo: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledExtra: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledTipoCompeticion: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledJornadas: Boolean = true;
-
-  // tipoJuegoElegido: string;
-  // nombreColeccionSeleccionada: string;
-  // // tslint:disable-next-line:ban-types
-  // finalizar: Boolean = false;
-
-  // botonTablaDesactivado = true;
-  // seleccionados: boolean[];
-
-  // botonTablaDesactivadoJugadorExtra = true;
-
 
 
   constructor(
@@ -341,7 +273,6 @@ export class JuegoComponent implements OnInit {
       PuntuacionIncorrectaGeo : ['', Validators.required],
       PuntuacionCorrectaGeoBonus: ['', Validators.required],
       PuntuacionIncorrectaGeoBonus: ['', Validators.required]
-
     });
 
     this.TablaPuntuacion = [];
@@ -361,6 +292,9 @@ export class JuegoComponent implements OnInit {
     console.log ('**************guardo juego en la sesion');
     console.log (juego);
     this.sesion.TomaJuego(juego);
+    // if (juego.Tipo === 'Juego De Geocaching') {
+    //   this.router.navigateByUrl ('juegoSeleccionadoPreparado');
+    // }
   }
 
 
@@ -611,7 +545,7 @@ export class JuegoComponent implements OnInit {
 
 
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (this.nombreDelJuego, this.puntuacionCorrecta,
+    this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.puntuacionCorrecta,
       this.puntuacionIncorrecta, this.modoPresentacion,
       false, false, this.profesorId, this.grupo.id, this.cuestionario.id), this.grupo.id)
     .subscribe(juegoCreado => {
@@ -620,17 +554,17 @@ export class JuegoComponent implements OnInit {
        // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.alumnosGrupo.length; i++) {
         // tslint:disable-next-line:max-line-length
-        this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, this.juegoDeCuestionario.id, this.alumnosGrupo[i].id ))
+        this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, false, this.juegoDeCuestionario.id, this.alumnosGrupo[i].id ))
         .subscribe();
       }
       Swal.fire('Juego de cuestionario creado correctamente', ' ', 'success');
 
       // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
-      if (this.juegosActivos === undefined) {
+      if (this.juegosPreparados === undefined) {
         // Si la lista aun no se ha creado no podre hacer el push
-            this.juegosActivos = [];
+            this.juegosPreparados = [];
         }
-      this.juegosActivos.push (this.juegoDeCuestionario);
+      this.juegosPreparados.push (this.juegoDeCuestionario);
       this.Limpiar();
         // Regresamos a la lista de equipos (mat-tab con índice 0)
       this.tabGroup.selectedIndex = 0;
@@ -984,13 +918,11 @@ export class JuegoComponent implements OnInit {
 
   CrearJuegoDeGeocaching() {
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CreaJuegoDeGeocaching(new JuegoDeGeocaching(this.nombreDelJuego, this.puntuacionCorrectaGeo, this.puntuacionIncorrectaGeo, this.puntuacionCorrectaGeoBonus, this.puntuacionIncorrectaGeoBonus, this.PreguntasBasicas, this.PreguntasBonus,
+    this.peticionesAPI.CreaJuegoDeGeocaching(new JuegoDeGeocaching(this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.puntuacionCorrectaGeo, this.puntuacionIncorrectaGeo, this.puntuacionCorrectaGeoBonus, this.puntuacionIncorrectaGeoBonus, this.PreguntasBasicas, this.PreguntasBonus,
       false, false, this.profesorId, this.grupo.id, this.escenario.id), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juegoDeGeocaching = juegoCreado;
-      // this.sesion.TomaJuego(this.juegoDeGeocaching);
       this.juegoCreado = true;
-
       // Inscribimos a los alumnos en el juego
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.alumnosGrupo.length; i++) {
@@ -1001,17 +933,18 @@ export class JuegoComponent implements OnInit {
       Swal.fire('Juego de geocaching creado correctamente', ' ', 'success');
 
       // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
-      if (this.juegosActivos === undefined) {
+      if (this.juegosPreparados === undefined) {
         // Si la lista aun no se ha creado no podre hacer el push
-            this.juegosActivos = [];
+            this.juegosPreparados = [];
         }
-      this.juegosActivos.push (this.juegoDeGeocaching);
+      this.juegosPreparados.push (this.juegoDeGeocaching);
         // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
       this.Limpiar();
        // Regresamos a la lista de equipos (mat-tab con índice 0)
       this.tabGroup.selectedIndex = 0;
     });
   }
+
 
 
 
@@ -1100,7 +1033,6 @@ Limpiar() {
     this.tengoTipoDeCompeticion = false;
     this.tengoNuevaPuntuacion = false;
 
-
     this.puntuacionCorrectaGeo = undefined;
     this.puntuacionIncorrectaGeo = undefined;
     this.puntuacionCorrectaGeoBonus = undefined;
@@ -1112,8 +1044,5 @@ Limpiar() {
     this.PreguntasBasicas = undefined;
     this.PreguntasBonus = undefined;
     this.tengoPreguntas = false;
-
-}
-
-
+  }
 }

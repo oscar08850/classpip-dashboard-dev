@@ -25,6 +25,7 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
   JuegoTerminado: boolean;
   cuestionarioId: number;
   profesorId: number;
+  Tipo: string;
 
   // Se usará para el selector de modo de asignación de ganadores
   Presentaciones: string[] = ['Mismo orden para todos',
@@ -53,6 +54,7 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
     this.NombreJuego = this.juegoSeleccionado.NombreJuego;
+    this.Tipo = this.juegoSeleccionado.Tipo;
     this.PuntuacionCorrecta = this.juegoSeleccionado.PuntuacionCorrecta;
     this.PuntuacionIncorrecta = this.juegoSeleccionado.PuntuacionIncorrecta;
     this.Presentacion = this.juegoSeleccionado.Presentacion;
@@ -76,13 +78,17 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
 
   // COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN EL JUEGO
   GuardarCambios() {
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.NombreJuego, this.PuntuacionCorrecta,
+    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.NombreJuego, this.Tipo, this.PuntuacionCorrecta,
       this.PuntuacionIncorrecta, this.Presentacion, this.JuegoActivo, this.JuegoTerminado,
       this.profesorId, this.juegoSeleccionado.grupoId, this.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
-      .subscribe(() => {
-        this.location.back();
+      .subscribe(res => {
+        this.juegoSeleccionado.NombreJuego = res.NombreJuego;
+        this.juegoSeleccionado.PuntuacionCorrecta = res.PuntuacionCorrecta;
+        this.juegoSeleccionado.PuntuacionIncorrecta = res.PuntuacionIncorrecta;
+        this.juegoSeleccionado.Presentacion = res.Presentacion;
+        this.sesion.TomaJuego(this.juegoSeleccionado);
+        this.goBack();
       });
-
   }
 
   // Cuando pulsamos en el boton volver

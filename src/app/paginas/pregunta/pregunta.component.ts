@@ -40,6 +40,11 @@ export class PreguntaComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   finalizar: Boolean = false;
 
+
+  infoPreguntas: any;
+  advertencia = true;
+  ficheroCargado = false;
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               public dialog: MatDialog,
@@ -150,5 +155,56 @@ export class PreguntaComponent implements OnInit {
       // Si ambos son diferentes a nulo, estará activado.
       this.isDisabled2 = false;
     }
+  }
+
+ // Activa la función SeleccionarFicheroPreguntas
+ ActivarInputInfo() {
+  console.log('Activar input');
+  document.getElementById('inputInfo').click();
+}
+
+
+   // Par abuscar el fichero JSON que contiene la info de la colección que se va
+  // a cargar desde ficheros
+  SeleccionarFicheroPreguntas($event) {
+    const fileInfo = $event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsText(fileInfo);
+    reader.onload = () => {
+      try {
+        this.infoPreguntas = JSON.parse(reader.result.toString());
+        console.log ('Ya tengo las preguntas');
+        console.log (this.infoPreguntas);
+        Swal.fire('Las pregunta se han cargado correctamente', '', 'success');
+        this.ficheroCargado = true;
+      } catch (e) {
+        Swal.fire('Error en el formato del fichero', '', 'error');
+      }
+    };
+  }
+
+
+
+  RegistrarPreguntas() {
+    let cont = 0;
+    this.infoPreguntas.forEach (pregunta => {
+      this.peticionesAPI.CreaPregunta(pregunta, this.profesorId)
+      .subscribe((res) => {
+        if (res != null) {
+          cont++;
+          if (cont === this.infoPreguntas.length) {
+            Swal.fire('Las pregunta se han registrado correctamente', '', 'success');
+            this.finalizar = true;
+            this.goBack();
+          }
+        } else {
+          console.log('Fallo en la creacion de la pregunta');
+        }
+      });
+    });
+  }
+
+  Cancelar() {
+    this.router.navigate(['/inicio/' + this.profesorId]);
   }
 }

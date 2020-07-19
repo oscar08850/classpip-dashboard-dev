@@ -12,6 +12,9 @@ import { SesionService, PeticionesAPIService } from '../../../servicios/index';
 
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
+
+import * as URL from '../../../URLs/urls';
+
 export interface OpcionSeleccionada {
   nombre: string;
   id: string;
@@ -73,6 +76,9 @@ export class EditarCromoDialogComponent implements OnInit {
         {nombre: 'Bronce', id: 'Bronce'},
     ];
     opcionSeleccionadaNivel: string;
+
+
+
   constructor(
               public dialog: MatDialog,
               // private location: Location,
@@ -142,37 +148,42 @@ export class EditarCromoDialogComponent implements OnInit {
   TraeImagenCromo() {
 
     if (this.cromo.ImagenDelante !== undefined ) {
-        // Busca en la base de datos la imágen con el nombre registrado en cromo.Imagen y la recupera
-        this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDelante)
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenCromoDelante = reader.result.toString();
-          }, false);
+      this.imagenCromoDelante = URL.ImagenesCromo + this.cromo.ImagenDelante;
 
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-      });
+      // Busca en la base de datos la imágen con el nombre registrado en cromo.Imagen y la recupera
+
+        // this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDelante)
+        // .subscribe(response => {
+        //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+        //   const reader = new FileReader();
+        //   reader.addEventListener('load', () => {
+        //     this.imagenCromoDelante = reader.result.toString();
+        //   }, false);
+
+        //   if (blob) {
+        //     reader.readAsDataURL(blob);
+        //   }
+        // });
     }
 
     if (this.cromo.ImagenDetras !== undefined ) {
+      this.imagenCromoDetras = URL.ImagenesCromo + this.cromo.ImagenDetras;
       // Busca en la base de datos la imágen con el nombre registrado en cromo.Imagen y la recupera
-      this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDetras)
-      .subscribe(response => {
-        const blob = new Blob([response.blob()], { type: 'image/jpg'});
+      // this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDetras)
+      // .subscribe(response => {
+      //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-        const reader = new FileReader();
-        reader.addEventListener('load', () => {
-          this.imagenCromoDetras = reader.result.toString();
-        }, false);
+      //   const reader = new FileReader();
+      //   reader.addEventListener('load', () => {
+      //     this.imagenCromoDetras = reader.result.toString();
+      //   }, false);
 
-        if (blob) {
-          reader.readAsDataURL(blob);
-        }
-    });
+      //   if (blob) {
+      //     reader.readAsDataURL(blob);
+      //   }
+      // });
   }
   }
     // AL CLICAR EN AGREGAR LOGO NOS ACTIVARÁ LA FUNCIÓN MOSTRAR DE ABAJO

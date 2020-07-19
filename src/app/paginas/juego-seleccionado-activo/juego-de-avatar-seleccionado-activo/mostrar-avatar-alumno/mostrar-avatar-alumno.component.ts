@@ -3,6 +3,8 @@ import {SesionService, PeticionesAPIService, CalculosService} from '../../../../
 import { AlumnoJuegoDeAvatar, Alumno } from 'src/app/clases';
 import { Location } from '@angular/common';
 
+import * as URL from '../../../../URLs/urls';
+
 
 @Component({
   selector: 'app-mostrar-avatar-alumno',
@@ -33,73 +35,88 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
     this.TraerImagenesAvatar ();
   }
   TraerImagenesAvatar() {
+
+    this.imagenSilueta = URL.ImagenesAvatares + this.inscripcionAlumnoJuegoAvatar.Silueta;
+    const imagen1 = this.CreaImagen (1, URL.ImagenesAvatares +  this.inscripcionAlumnoJuegoAvatar.Complemento1);
+    document.getElementById('imagenAvatar').appendChild(imagen1);
+
+    const imagen2 = this.CreaImagen (2, URL.ImagenesAvatares +  this.inscripcionAlumnoJuegoAvatar.Complemento2);
+    document.getElementById('imagenAvatar').appendChild(imagen2);
+
+    const imagen3 = this.CreaImagen (3, URL.ImagenesAvatares +  this.inscripcionAlumnoJuegoAvatar.Complemento3);
+    document.getElementById('imagenAvatar').appendChild(imagen3);
+
+    const imagen4 = this.CreaImagen (4, URL.ImagenesAvatares +  this.inscripcionAlumnoJuegoAvatar.Complemento3);
+    document.getElementById('imagenAvatar').appendChild(imagen4);
+
+
     // voy a traer la imagen de la silueta
-    this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Silueta)
-    .subscribe(res => {
-      const blobSilueta = new Blob([res.blob()], { type: 'image/jpg'});
-      const readerSilueta = new FileReader();
-      readerSilueta.addEventListener('load', () => {
-          // lo que se hace a continuación es para obtener el ancho y alto de la imagen
-        // de la silueta
+    // this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Silueta)
+    // .subscribe(res => {
+    //   const blobSilueta = new Blob([res.blob()], { type: 'image/jpg'});
+    //   const readerSilueta = new FileReader();
+    //   readerSilueta.addEventListener('load', () => {
+    //       // lo que se hace a continuación es para obtener el ancho y alto de la imagen
+    //     // de la silueta
 
-        this.imagenSilueta = readerSilueta.result.toString();
+    //     this.imagenSilueta = readerSilueta.result.toString();
 
-          // Y ahora vamos apor los complementos
-        this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento1)
-          .subscribe(response => {
-            const blob = new Blob([response.blob()], { type: 'image/jpg'});
-            const reader = new FileReader();
-            reader.addEventListener('load', () => {
-              // Creo la imagen que incorporaré al avatar
-              const imagen = this.CreaImagen (1, reader.result.toString());
-              document.getElementById('imagenAvatar').appendChild(imagen);
-            }, false);
-            if (blob) {
-              reader.readAsDataURL(blob);
-            }
-          });
-        this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento2)
-          .subscribe(response => {
-            const blob = new Blob([response.blob()], { type: 'image/jpg'});
-            const reader = new FileReader();
-            reader.addEventListener('load', () => {
-              const imagen = this.CreaImagen (2, reader.result.toString());
-              document.getElementById('imagenAvatar').appendChild(imagen);
-            }, false);
-            if (blob) {
-              reader.readAsDataURL(blob);
-            }
-          });
-        this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento3)
-          .subscribe(response => {
-            const blob = new Blob([response.blob()], { type: 'image/jpg'});
-            const reader = new FileReader();
-            reader.addEventListener('load', () => {
-              const imagen = this.CreaImagen (3, reader.result.toString());
-              document.getElementById('imagenAvatar').appendChild(imagen);
-            }, false);
-            if (blob) {
-              reader.readAsDataURL(blob);
-            }
-          });
-        this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento4)
-          .subscribe(response => {
-            const blob = new Blob([response.blob()], { type: 'image/jpg'});
-            const reader = new FileReader();
-            reader.addEventListener('load', () => {
-              const imagen = this.CreaImagen (4, reader.result.toString());
-              document.getElementById('imagenAvatar').appendChild(imagen);
-            }, false);
-            if (blob) {
-              reader.readAsDataURL(blob);
-            }
-          });
-      }, false);
+    //       // Y ahora vamos apor los complementos
+    //     this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento1)
+    //       .subscribe(response => {
+    //         const blob = new Blob([response.blob()], { type: 'image/jpg'});
+    //         const reader = new FileReader();
+    //         reader.addEventListener('load', () => {
+    //           // Creo la imagen que incorporaré al avatar
+    //           const imagen = this.CreaImagen (1, reader.result.toString());
+    //           document.getElementById('imagenAvatar').appendChild(imagen);
+    //         }, false);
+    //         if (blob) {
+    //           reader.readAsDataURL(blob);
+    //         }
+    //       });
+    //     this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento2)
+    //       .subscribe(response => {
+    //         const blob = new Blob([response.blob()], { type: 'image/jpg'});
+    //         const reader = new FileReader();
+    //         reader.addEventListener('load', () => {
+    //           const imagen = this.CreaImagen (2, reader.result.toString());
+    //           document.getElementById('imagenAvatar').appendChild(imagen);
+    //         }, false);
+    //         if (blob) {
+    //           reader.readAsDataURL(blob);
+    //         }
+    //       });
+    //     this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento3)
+    //       .subscribe(response => {
+    //         const blob = new Blob([response.blob()], { type: 'image/jpg'});
+    //         const reader = new FileReader();
+    //         reader.addEventListener('load', () => {
+    //           const imagen = this.CreaImagen (3, reader.result.toString());
+    //           document.getElementById('imagenAvatar').appendChild(imagen);
+    //         }, false);
+    //         if (blob) {
+    //           reader.readAsDataURL(blob);
+    //         }
+    //       });
+    //     this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento4)
+    //       .subscribe(response => {
+    //         const blob = new Blob([response.blob()], { type: 'image/jpg'});
+    //         const reader = new FileReader();
+    //         reader.addEventListener('load', () => {
+    //           const imagen = this.CreaImagen (4, reader.result.toString());
+    //           document.getElementById('imagenAvatar').appendChild(imagen);
+    //         }, false);
+    //         if (blob) {
+    //           reader.readAsDataURL(blob);
+    //         }
+    //       });
+    //   }, false);
 
-      if (blobSilueta) {
-        readerSilueta.readAsDataURL(blobSilueta);
-      }
-    });
+    //   if (blobSilueta) {
+    //     readerSilueta.readAsDataURL(blobSilueta);
+    //   }
+    // });
   }
   CreaImagen(numeroComplemento: number, imagenString: string): any {
     const imagen = document.createElement('img');

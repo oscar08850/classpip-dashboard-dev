@@ -1,80 +1,90 @@
-# Classpip Administration Dashboard
+# Classpip Dashboard
+
+## ¿Qué es Classpip?
 
 [![Classpip Badge](https://img.shields.io/badge/classpip-dashboard-brightgreen.svg)](https://github.com/rocmeseguer/classpip-dashboard)
 [![Classpip Badge](https://img.shields.io/badge/classpip-mobile--profe-brightgreen)](https://github.com/rocmeseguer/classpip-mobile-profe)
 [![Classpip Badge](https://img.shields.io/badge/classpip-mobile--student-brightgreen)](https://github.com/rocmeseguer/classpip-mobile-student)
+[![Classpip Badge](https://img.shields.io/badge/classpip-server-brightgreen.svg)](https://github.com/rocmeseguer/classpip-server)
 [![Classpip Badge](https://img.shields.io/badge/classpip-services-brightgreen.svg)](https://github.com/rocmeseguer/classpip-services)
 [![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/classpip/classpip/blob/master/LICENSE)
 
-Classpip is a software architecture for teachers and students to perform school gamification activities inside the school environment through different platforms such as mobiles, tablets and computers.
 
-The software architecture is composed by two mobile applications for performing “quick” class activities oriented to teachers and students. For “long” operations such as deep into reports and setup the platform there is an administration dashboard accessible from every computer. These three pieces share the information through a service-oriented architecture that exposes the main methods for data manipulation.
+Classpip es una herramienta para introducir gamificación en el aula. La gamificación consiste en la introducción de las mecánicas típicas de los juegos en escenarios que no son juegos, para motivar a las personas a hacer cosas que quizá no tienen muchas ganas de hacer.
 
 ![classpip-arch](https://github.com/classpip/classpip/raw/master/images/project-architecture.png)
 
-# Dashboard
+En la actualidad Classpip tiene 5 módulos:
+ 
+* *Dashboard*: Es la aplicación web con la que, desde su ordenador, el profesor puede tomar todas las decisiones sobre configuración de los juegos (por ejemplo, crear una colección nueva) e interacción con cada juego (por ejemplo, asignar puntos a los alumnos).
+ [![Classpip Badge](https://img.shields.io/badge/classpip-dashboard-brightgreen.svg)](https://github.com/rocmeseguer/classpip-dashboard)
 
-This repository contains the main dashboard panel administration for the classpip project. With this admin panel you could manage all the classpip opertations and data for the website. The project is created using [angular CLI](https://github.com/angular/angular-cli) and some operations are related to this client.
+* *Mobile-profe*: Es la app mediante la cual el profesor puede hacer algunas funciones que resulta apropiado hacer desde un dispositivo móvil (por ejemplo, asignar cromos a alumnos concretos o consultar el ranking del juego de puntos).
+ [![Classpip Badge](https://img.shields.io/badge/classpip-mobile--profe-brightgreen)](https://github.com/rocmeseguer/classpip-mobile-profe)
 
-## NodeJS
+* *Mobile-student*: Es la app mediante la cual el alumno interacciona con el juego (por ejemplo, consulta los puntos que tiene, intercambia cromos con los compañeros o responde a las preguntas de un juego de preguntas). 
+[![Classpip Badge](https://img.shields.io/badge/classpip-mobile--student-brightgreen)](https://github.com/rocmeseguer/classpip-mobile-student)
+  
+* *Services*: Es la aplicación que ofrece al resto de módulos los servicios de acceso a datos en modo API-REST  (por ejemplo, obtener la lista de juegos de un grupo, o los cromos que tiene un alumno en su álbum).
+ [![Classpip Badge](https://img.shields.io/badge/classpip-services-brightgreen.svg)](https://github.com/rocmeseguer/classpip-services)
+ 
+ * *Server*: Es un servidor que realizar tareas de notificación entre los usuarios. Por ejemplo, recibe la notificación de que un alumno ha completado un cuestionario y remite esa notificación al Dash para que refleje esa circunstancia en el listado de alumnos que participan en el juego. También realiza tareas de registro de actividad (por ejemplo, registrar la creación de grupos o de juegos).
+ [![Classpip Badge](https://img.shields.io/badge/classpip-server-brightgreen.svg)](https://github.com/rocmeseguer/classpip-server)
 
-You need to install NodeJS v10.13.0. This will install also npm (Node Package Manager). 
-Check that you have the correc NodeJS version:
+  
+    
+    
+## Dashboard
+
+Este repositorio contiene el código del módulo Dashboard, que es el cuadro de mandos desde el que el profesor gestiona alumnos, grupos, juegos y recursos para organizar juegos. Para poder ejecutar el Dashboard es necesario tener en marcha el módulo Services (que proporcionará al Dashboard los datos que necesite) y el módulo Server (que gestionará notificaciones y registros de actividad).
+
+### NodeJS
+
+Necesitas instalar NodeJS v10.13.0. Esta instalación incluye la instalación del gestor de paquetes npm.
+Para verificar que has instalado la versión correcta:
 ```
 node -v
 > v10.13.0
 ```
-## Git and GitHub
+## Git y GitHub
 
-You need to install Git and have an account in GitHub:
+Necesitas instalar estas herramientas para gestión de versiones y repositorio en la nube:
  
 https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
  
 https://github.com/
 
 
-### To build native addons on Linux (Ubuntu)
+### Native addons en Linux (Ubuntu)
 
 ```
 sudo apt-get install gcc g++ make
 ```
 
-### To build native addons on Windows
-
+### Native addons en Windows
+Deben instalarse en con permiso de administrador
 ```
 npm install -g windows-build-tools@5.1.0
 ```
 
-## Global dependencies
-
+### Cliente angular
+Instalar también con permisos de administrador
 ```
 npm install -g @angular/cli@7.0.6
 ```
 
-## Local dependencies
+### Dependencias locales
 
-After cloning this repository you must install the local dependencies:
+Después de clonar el repositorio hay que instalar las dependencias locales
 ```
 npm install
 ```
 
-## Development server
+### Puesta en marcha
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+```
+npm install
+```
+A partir de ese momento puede accederse al Dashboard conectandose a http://localhost:4200
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-
-## License
-
-Classpip is released under the [Apache2 License](https://github.com/classpip/classpip-mobile/blob/master/LICENSE).
+IMPORTANTE: Para poner en marcha el Dashboard es necesario tener en marcha el módulo Services y el módulo Server.
