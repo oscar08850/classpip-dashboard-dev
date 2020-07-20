@@ -33,7 +33,8 @@ export class AgregarPuntoGeolocalizableDialogComponent implements OnInit {
   isDisabledPuntoGeolocalizable: Boolean = true;
   fileCromo: File;
 
-  displayedColumns: string[] = ['nombrePuntoGeolocalizable', 'latitudPuntoGeolocalizable', 'longitudPuntoGeolocalizable', 'pistafacilPuntoGeolocalizable', 'pistadificilPuntoGeolocalizable', ' '];
+  // displayedColumns: string[] = ['nombrePuntoGeolocalizable', 'latitudPuntoGeolocalizable', 'longitudPuntoGeolocalizable', 'pistafacilPuntoGeolocalizable', 'pistadificilPuntoGeolocalizable', ' '];
+  displayedColumns: string[] = ['nombrePuntoGeolocalizable', 'latitudPuntoGeolocalizable', 'longitudPuntoGeolocalizable', ' '];
 
 
   constructor(  private formBuilder: FormBuilder,
