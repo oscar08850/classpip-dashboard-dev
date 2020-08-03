@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {SesionService, PeticionesAPIService, CalculosService} from '../../../../servicios/index';
-import { AlumnoJuegoDeAvatar, Alumno } from 'src/app/clases';
+import {SesionService, PeticionesAPIService, CalculosService, ComServerService} from '../../../../servicios/index';
+import { AlumnoJuegoDeAvatar, Alumno, JuegoDeAvatar } from 'src/app/clases';
 import { Location } from '@angular/common';
 
 import * as URL from '../../../../URLs/urls';
+import { Howl } from 'howler';
 
 
 @Component({
@@ -22,121 +23,31 @@ export class MostrarAvatarAlumnoComponent implements OnInit {
   complemento4: string;
   anchogrande: '450px';
   altogrande: '486px';
+  interval;
+  interval1;
+  imagenesAvatares = URL.ImagenesAvatares;
+  juegoSeleccionado: JuegoDeAvatar;
+  inscripcionesAlumnosJuegoDeAvatar: AlumnoJuegoDeAvatar[];
+  alumnosJuegoDeAvatar: Alumno[];
+  listaAvatares: any[] = [];
+
 
   constructor(
     private location: Location,
     private calculos: CalculosService,
     private sesion: SesionService,
-    private peticionesAPI: PeticionesAPIService ) { }
+    private peticionesAPI: PeticionesAPIService,
+    private comServer: ComServerService ) { }
 
   ngOnInit() {
+
     this.alumno = this.sesion.DameAlumno();
     this.inscripcionAlumnoJuegoAvatar = this.sesion.DameAlumnoJuegoAvatar();
-    this.TraerImagenesAvatar ();
+    console.log ('ya tengo inscripcion');
+    console.log (this.inscripcionAlumnoJuegoAvatar);
+    this.juegoSeleccionado = this.sesion.DameJuegoAvatar();
+
   }
-  TraerImagenesAvatar() {
-
-    this.imagenSilueta = URL.ImagenesAvatares + this.inscripcionAlumnoJuegoAvatar.Silueta;
-    const imagen1 = this.CreaImagen (1, URL.ImagenesAvatares +  this.inscripcionAlumnoJuegoAvatar.Complemento1);
-    document.getElementById('imagenAvatar').appendChild(imagen1);
-
-    const imagen2 = this.CreaImagen (2, URL.ImagenesAvatares +  this.inscripcionAlumnoJuegoAvatar.Complemento2);
-    document.getElementById('imagenAvatar').appendChild(imagen2);
-
-    const imagen3 = this.CreaImagen (3, URL.ImagenesAvatares +  this.inscripcionAlumnoJuegoAvatar.Complemento3);
-    document.getElementById('imagenAvatar').appendChild(imagen3);
-
-    const imagen4 = this.CreaImagen (4, URL.ImagenesAvatares +  this.inscripcionAlumnoJuegoAvatar.Complemento3);
-    document.getElementById('imagenAvatar').appendChild(imagen4);
-
-
-    // voy a traer la imagen de la silueta
-    // this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Silueta)
-    // .subscribe(res => {
-    //   const blobSilueta = new Blob([res.blob()], { type: 'image/jpg'});
-    //   const readerSilueta = new FileReader();
-    //   readerSilueta.addEventListener('load', () => {
-    //       // lo que se hace a continuación es para obtener el ancho y alto de la imagen
-    //     // de la silueta
-
-    //     this.imagenSilueta = readerSilueta.result.toString();
-
-    //       // Y ahora vamos apor los complementos
-    //     this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento1)
-    //       .subscribe(response => {
-    //         const blob = new Blob([response.blob()], { type: 'image/jpg'});
-    //         const reader = new FileReader();
-    //         reader.addEventListener('load', () => {
-    //           // Creo la imagen que incorporaré al avatar
-    //           const imagen = this.CreaImagen (1, reader.result.toString());
-    //           document.getElementById('imagenAvatar').appendChild(imagen);
-    //         }, false);
-    //         if (blob) {
-    //           reader.readAsDataURL(blob);
-    //         }
-    //       });
-    //     this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento2)
-    //       .subscribe(response => {
-    //         const blob = new Blob([response.blob()], { type: 'image/jpg'});
-    //         const reader = new FileReader();
-    //         reader.addEventListener('load', () => {
-    //           const imagen = this.CreaImagen (2, reader.result.toString());
-    //           document.getElementById('imagenAvatar').appendChild(imagen);
-    //         }, false);
-    //         if (blob) {
-    //           reader.readAsDataURL(blob);
-    //         }
-    //       });
-    //     this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento3)
-    //       .subscribe(response => {
-    //         const blob = new Blob([response.blob()], { type: 'image/jpg'});
-    //         const reader = new FileReader();
-    //         reader.addEventListener('load', () => {
-    //           const imagen = this.CreaImagen (3, reader.result.toString());
-    //           document.getElementById('imagenAvatar').appendChild(imagen);
-    //         }, false);
-    //         if (blob) {
-    //           reader.readAsDataURL(blob);
-    //         }
-    //       });
-    //     this.peticionesAPI.DameImagenAvatar (this.inscripcionAlumnoJuegoAvatar.Complemento4)
-    //       .subscribe(response => {
-    //         const blob = new Blob([response.blob()], { type: 'image/jpg'});
-    //         const reader = new FileReader();
-    //         reader.addEventListener('load', () => {
-    //           const imagen = this.CreaImagen (4, reader.result.toString());
-    //           document.getElementById('imagenAvatar').appendChild(imagen);
-    //         }, false);
-    //         if (blob) {
-    //           reader.readAsDataURL(blob);
-    //         }
-    //       });
-    //   }, false);
-
-    //   if (blobSilueta) {
-    //     readerSilueta.readAsDataURL(blobSilueta);
-    //   }
-    // });
-  }
-  CreaImagen(numeroComplemento: number, imagenString: string): any {
-    const imagen = document.createElement('img');
-    imagen.style.left = '0px';
-    imagen.style.top = '0px';
-    imagen.style.position = 'absolute';
-    // los complementos se apilan según el orden indicado por el numero de complemento.
-    imagen.style.zIndex = numeroComplemento.toString();
-    imagen.style.width = '450px';
-    imagen.style.height = '486px';
-    // Coloco el nombre del fichero en el que está la imagen
-    imagen.src =  imagenString;
-    return imagen;
-  }
-
-  // // Esta función se ejecuta en cuanto se pone la imagen de la silueta en su sitio
-  // Ajusta(img) {
-  //   img.setAttribute ('width', this.anchogrande);
-  //   img.setAttribute ('height', this.altogrande );
-  // }
 
   goBack() {
     this.location.back();
