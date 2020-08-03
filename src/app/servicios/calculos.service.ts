@@ -576,6 +576,7 @@ export class CalculosService {
     return rankingObservable;
   }
 
+
   public DameRankingPuntoSeleccionadoAlumnos(
                             listaAlumnosOrdenadaPorPuntos: any,
                             alumnosDelJuego: any,

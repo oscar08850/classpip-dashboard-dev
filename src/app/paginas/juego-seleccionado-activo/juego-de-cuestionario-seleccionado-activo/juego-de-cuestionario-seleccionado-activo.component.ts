@@ -65,7 +65,7 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
     // if (this.alumnosQueHanContestado === undefined) {
     //   this.alumnosQueHanContestado = [];
     // }
-    this.comServer.EsperoRespuestasJuegoDeCuestionarip()
+    this.comServer.EsperoRespuestasJuegoDeCuestionario()
     .subscribe((alumno: any) => {
         sound.play();
         console.log ('Ya ha contestado: ' + alumno.id);
