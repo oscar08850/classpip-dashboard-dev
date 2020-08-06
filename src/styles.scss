@@ -619,3 +619,21 @@ span.avatar5col {
   100% { opacity: 1.0; }
 }
 
+//Para que parpade la ultima votación en el juego de votaciones uno a todos
+.blink {
+  color: red;
+  font-size:large;
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+

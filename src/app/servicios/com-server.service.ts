@@ -34,6 +34,14 @@ export class ComServerService {
         });
     });
   }
+  public EsperoVotacion = () => {
+    return Observable.create((observer) => {
+        this.socket.on('notificarVotacion', (votacion) => {
+            console.log ('llega notificacion');
+            observer.next(votacion);
+        });
+    });
+  }
 
 }
 

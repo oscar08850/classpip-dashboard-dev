@@ -202,6 +202,9 @@ import { InformacionRespuestasJuegoDeCuestionarioDialogComponent } from './pagin
 // tslint:disable-next-line:max-line-length
 import { RespuestasAlumnoJuegoDeCuestionarioComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/respuestas-alumno-juego-de-cuestionario/respuestas-alumno-juego-de-cuestionario.component';
 import { VerTodosComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/ver-todos/ver-todos.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeVotacionUnoATodosSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-votacion-uno-atodos-seleccionado-activo/juego-de-votacion-uno-atodos-seleccionado-activo.component';
+import { JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-votacion-uno-atodos-seleccionado-inactivo/juego-de-votacion-uno-atodos-seleccionado-inactivo.component';
 
 
 @NgModule({
@@ -313,7 +316,9 @@ import { VerTodosComponent } from './paginas/juego-seleccionado-activo/juego-de-
     MenuRecursosComponent,
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
     RespuestasAlumnoJuegoDeCuestionarioComponent,
-    VerTodosComponent
+    VerTodosComponent,
+    JuegoDeVotacionUnoATodosSeleccionadoActivoComponent,
+    JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent
 
 
 

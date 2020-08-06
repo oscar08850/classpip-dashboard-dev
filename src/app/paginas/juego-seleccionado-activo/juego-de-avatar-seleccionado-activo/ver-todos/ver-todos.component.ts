@@ -67,7 +67,7 @@ export class VerTodosComponent implements OnInit {
           }, 5000);
           clearInterval(this.interval1);
         }, 0);
-      });
+    });
 
   }
 
@@ -89,7 +89,8 @@ export class VerTodosComponent implements OnInit {
 
           const avatar = {
             insc: inscripcion,
-            al: alumno
+            al: alumno,
+            voz: URL.AudiosAvatares + inscripcion.Voz
           };
           this.listaAvatares.push (avatar);
         });
@@ -101,6 +102,14 @@ export class VerTodosComponent implements OnInit {
 
   goBack() {
     this.location.back();
+  }
+
+
+  Play(voz){
+    const audio = new Audio();
+    audio.src = voz;
+    audio.load();
+    audio.play();
   }
 
 }

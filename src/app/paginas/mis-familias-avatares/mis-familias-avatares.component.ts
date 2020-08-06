@@ -219,6 +219,8 @@ export class MisFamiliasAvataresComponent implements OnInit {
             const imagen = this.CreaImagen (1, cont1, reader.result.toString());
             // Ahora coloco la imagen creada en la zona de complementos que le toca
             document.getElementById('imagenesComplementos1').appendChild(imagen);
+
+
             cont1++;
         }, false);
 

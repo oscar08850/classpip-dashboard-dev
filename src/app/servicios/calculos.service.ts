@@ -5,7 +5,8 @@ import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHis
          AlumnoJuegoDeColeccion, Album, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
          TablaEquipoJuegoDeCompeticion, Jornada, EquipoJuegoDeCompeticionLiga, EnfrentamientoLiga, InformacionPartidosLiga,
          AlumnoJuegoDeCompeticionLiga, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno,
-         TablaClasificacionJornada, TablaPuntosFormulaUno} from '../clases/index';
+         // tslint:disable-next-line:max-line-length
+         TablaClasificacionJornada, TablaPuntosFormulaUno, AlumnoJuegoDeVotacionUnoATodos, TablaAlumnoJuegoDeVotacionUnoATodos} from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -17,6 +18,7 @@ import { AlumnoJuegoDeCuestionario } from '../clases/AlumnoJuegoDeCuestionario';
 import { TablaAlumnoJuegoDeCuestionario } from '../clases/TablaAlumnoJuegoDeCuestionario';
 import { AlumnoJuegoDeGeocaching } from '../clases/AlumnoJuegoDeGeocaching';
 import { TablaAlumnoJuegoDeGeocaching } from '../clases/TablaAlumnoJuegoDeGeocaching';
+
 
 
 @Injectable({
@@ -361,9 +363,9 @@ export class CalculosService {
   public DameListaJuegos(grupoID: number): any {
     const listasObservables = new Observable ( obs => {
 
-      const juegosActivos: Juego[] = [];
-      const juegosInactivos: Juego[] = [];
-      const juegosPreparados: Juego[] = [];
+      const juegosActivos: any[] = [];
+      const juegosInactivos: any[] = [];
+      const juegosPreparados: any[] = [];
 
       console.log ('vamos a por los juegos de puntos del grupo: ' + grupoID);
       this.peticionesAPI.DameJuegoDePuntosGrupo(grupoID)
@@ -474,10 +476,28 @@ export class CalculosService {
                         juegosInactivos.push(juegosGeocaching[i]);
                       }
                     }
+                    console.log ('Vamos a por los juegos de votacion Uno a Todos del grupo: ' + grupoID);
+                    this.peticionesAPI.DameJuegosDeVotacionUnoATodos(grupoID)
+                      .subscribe(juegosVotacionUnoATodos => {
+                      console.log('He recibido los juegos de votacion Uno A Todos');
+                      console.log(juegosVotacionUnoATodos);
+                      // tslint:disable-next-line:prefer-for-of
+                      for (let i = 0; i < juegosVotacionUnoATodos.length; i++) {
+                        if (juegosVotacionUnoATodos[i].JuegoActivo === true) {
+                          juegosVotacionUnoATodos[i].Tipo = 'Juego De Votación Uno A Todos';
+                          juegosActivos.push(juegosVotacionUnoATodos[i]);
+                        } else {
+                          juegosVotacionUnoATodos[i].Tipo = 'Juego De Votación Uno A Todos';
+                          juegosInactivos.push(juegosVotacionUnoATodos[i]);
+                        }
+                      }
 
-                    const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-                    obs.next (resultado);
+
+
+                      const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+                      obs.next (resultado);
                     });
+                  });
                 });
               });
             });
@@ -3055,6 +3075,41 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
     }
   }
 
+  //////////////////////////////////////// JUEGO DE VOTACION UNO A TODOS ///////////////////////////////////
+  public PrepararTablaRankingIndividualVotacionUnoATodos(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[],
+                                                         alumnosDelJuego: Alumno[], puntos: number[]): TablaAlumnoJuegoDeVotacionUnoATodos[] {
+    const rankingJuegoDeVotacion: TablaAlumnoJuegoDeVotacionUnoATodos [] = [];
+    // tslint:disable-next-line:prefer-for-oF
+    for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+      let alumno: Alumno;
+      const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
+      alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+      // tslint:disable-next-line:max-line-length
+
+      const elem = new TablaAlumnoJuegoDeVotacionUnoATodos(i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+        listaAlumnosOrdenadaPorPuntos[i].puntosTotales, alumnoId);
+      rankingJuegoDeVotacion[i] = elem;
+    }
+
+    // Ahora voy a ver qué alumnos ya han votado para acumular sus votos y marcarlos
+    // como que ya han votado
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+      if (listaAlumnosOrdenadaPorPuntos[i].Votos) {
+        // Este alumno ya ha votado
+        const alumno = listaAlumnosOrdenadaPorPuntos[i];
+        // Asigno los puntos a los destinatorios
+        for (let j = 0; j < puntos.length; j++) {
+          const votado = rankingJuegoDeVotacion.filter (al => al.id === alumno.Votos[j])[0];
+          votado.puntos = votado.puntos + puntos[j];
+        }
+        // Marque que el alumno ya ha votado
+        rankingJuegoDeVotacion.filter (al => al.id === alumno.alumnoId)[0].votado = true;
+      }
+    }
+
+    return rankingJuegoDeVotacion;
+}
 
 
   //////////////////////////////////////// JUEGO DE COMPETICIÓN FÓRUMULA UNO ///////////////////////////////////
@@ -3299,7 +3354,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
 
 
   public PrepararTablaRankingGeocaching(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeGeocaching[],
-    alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeGeocaching[] {
+                                        alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeGeocaching[] {
 const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeGeocaching [] = [];
 // tslint:disable-next-line:prefer-for-oF
 for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
