@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Profesor } from './clases';
+import { Profesor, Rubrica, Criterio } from './clases';
 import { SesionService} from './servicios/sesion.service';
 import { PeticionesAPIService, CalculosService, ComServerService} from './servicios/index';
 import { MatDialog, MatTabGroup } from '@angular/material';
@@ -102,6 +102,26 @@ export class AppComponent  {
           // Envio el profesor a la sesión
           this.sesion.TomaProfesor(this.profesor);
           this.comServer.Conectar();
+
+
+          // const rubrica: Rubrica = new Rubrica();
+          // rubrica.Nombre = "Presentacion oral";
+          // rubrica.Descripcion = "Para evaluar presentaciones orales";
+          // rubrica.profesorId = this.profesor.id;
+          // rubrica.Criterios = [];
+          // const c1: Criterio = new Criterio();
+          // c1.Nombre = "Lenguaje corporal";
+          // c1.Opciones = ["Mira a la audiencia", "No se toca la nariz"];
+          // rubrica.Criterios.push(c1);
+          // const c2: Criterio = new Criterio();
+          // c2.Nombre = "Transparencias";
+          // c2.Opciones = ["Se ven bien", "Están numeradas", "No más de tres frases en cada una"];
+          // rubrica.Criterios.push(c2);
+          // this.peticionesAPI.CreaRubrica (rubrica, this.profesor.id).subscribe();
+
+
+
+
 
           // En principio, no seria necesario enviar el id del profesor porque ya
           // tengo el profesor en la sesión y puedo recuperarlo cuando quiera.

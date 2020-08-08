@@ -11,9 +11,10 @@
         <!-- Muestro los avatares en 5 columnas -->
         <span class="avatar5col">
             <div class='enFila'>
-              <h3 style="width:90%" align = center> {{avatar.al.Nombre}} {{avatar.al.PrimerApellido}} {{avatar.al.SegundoApellido}} </h3>
+
               <p  *ngIf = 'avatar.insc.Voz' style="width:10%" ><i class="material-icons" (click) = "Play(avatar.voz)" style="color:rgb(87, 150, 78)">
               hearing</i> </p>
+              <h3 style="width:90%" align = left> {{avatar.al.Nombre}} {{avatar.al.PrimerApellido}} {{avatar.al.SegundoApellido}} </h3>
             </div>
 
             <!-- Cada imagen de avatar la identifico con su indice para luego poder acceder a ella -->

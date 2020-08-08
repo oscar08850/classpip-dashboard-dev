@@ -11,7 +11,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario, Cuestionario, AlumnoJuegoDeCompeticionFormulaUno,
         EquipoJuegoDeCompeticionFormulaUno, SesionClase, AsistenciaClase, FamiliaAvatares, JuegoDeAvatar,
         AlumnoJuegoDeAvatar, JuegoDeCuestionario, AlumnoJuegoDeCuestionario,
-        RespuestaJuegoDeCuestionario, JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos} from '../clases/index';
+        RespuestaJuegoDeCuestionario, JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos, Rubrica} from '../clases/index';
 
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
@@ -90,6 +90,7 @@ export class PeticionesAPIService {
   private APIUrlImagenesAvatares =  this.host + ':3000/api/imagenes/ImagenesAvatares';
   private APIUrlJuegoDeAvatar = this.host + ':3000/api/juegosDeAvatar';
   private APIUrlAlumnoJuegoDeAvatar = this.host + ':3000/api/alumnosJuegoAvatar';
+  private APIUrlAudiosAvatares = this.host + ':3000/api/imagenes/AudiosAvatares';
 
 
   private APIUrlEscenarios = this.host + ':3000/api/Escenarios';
@@ -1105,6 +1106,13 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
     return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeAvatars');
   }
 
+
+  public CambiaEstadoJuegoDeAvatar( juego: Juego): Observable<Juego> {
+    // tslint:disable-next-line:max-line-length
+      return this.http.put<Juego>(this.APIUrlGrupos + '/' + juego.grupoId + '/juegoDeAvatars/' + juego.id, juego);
+  }
+
+
   //////////////////////////////// GESTION DE ALUMNOS EN JUEGO DE AVATAR //////////////
 
   public InscribeAlumnoJuegoDeAvatar(alumnoJuegoDeAvatar: AlumnoJuegoDeAvatar) {
@@ -1125,6 +1133,9 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
   public BorraInscripcionAlumnoJuegoDeAvatar(inscripcionId: number) {
     // tslint:disable-next-line:max-line-length
     return this.http.delete<AlumnoJuegoDeAvatar>(this.APIUrlAlumnoJuegoDeAvatar + '/' + inscripcionId);
+  }
+  public BorraAudioAvatar(audio: string): Observable<any> {
+    return this.http.delete<any>(this.APIUrlAudiosAvatares + '/files/' + audio);
   }
 
   public ModificaInscripcionAlumnoJuegoDeAvatar(inscripcion: AlumnoJuegoDeAvatar): Observable<AlumnoJuegoDeAvatar> {
@@ -1179,6 +1190,15 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
   // tslint:disable-next-line:max-line-length
   public ModificaInscripcionAlumnoJuegoDeVotacionUnoATodos(inscripcion: AlumnoJuegoDeVotacionUnoATodos): Observable<AlumnoJuegoDeVotacionUnoATodos> {
     return this.http.put<AlumnoJuegoDeVotacionUnoATodos>(this.APIUrlAlumnoJuegoDeVotacionUnoATodos + '/' + inscripcion.id, inscripcion);
+  }
+
+  // Gestion de rubricas
+  public CreaRubrica(rubrica: Rubrica, profesorId: number): Observable<Rubrica> {
+    return this.http.post<Rubrica>(this.APIUrlProfesores + '/' + profesorId + '/rubricas', rubrica);
+  }
+
+  public DameRubricasProfesor(profesorId: number): Observable<Rubrica[]> {
+    return this.http.get<Rubrica[]>(this.APIUrlProfesores + '/' + profesorId + '/rubricas');
   }
 
 

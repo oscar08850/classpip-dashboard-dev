@@ -204,7 +204,11 @@ import { RespuestasAlumnoJuegoDeCuestionarioComponent } from './paginas/juego-se
 import { VerTodosComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/ver-todos/ver-todos.component';
 // tslint:disable-next-line:max-line-length
 import { JuegoDeVotacionUnoATodosSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-votacion-uno-atodos-seleccionado-activo/juego-de-votacion-uno-atodos-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
 import { JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-votacion-uno-atodos-seleccionado-inactivo/juego-de-votacion-uno-atodos-seleccionado-inactivo.component';
+import { CrearRubricaComponent } from './paginas/crear-rubrica/crear-rubrica.component';
+import { MisRubricasComponent } from './paginas/mis-rubricas/mis-rubricas.component';
+import { JuegoDeAvatarSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-avatar-seleccionado-inactivo/juego-de-avatar-seleccionado-inactivo.component';
 
 
 @NgModule({
@@ -318,7 +322,10 @@ import { JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent } from './paginas
     RespuestasAlumnoJuegoDeCuestionarioComponent,
     VerTodosComponent,
     JuegoDeVotacionUnoATodosSeleccionadoActivoComponent,
-    JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent
+    JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent,
+    CrearRubricaComponent,
+    MisRubricasComponent,
+    JuegoDeAvatarSeleccionadoInactivoComponent
 
 
 

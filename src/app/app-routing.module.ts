@@ -110,6 +110,8 @@ import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escena
 import { MisEscenariosComponent } from './paginas/mis-escenarios/mis-escenarios.component';
 import {MenuRecursosComponent} from './paginas/menu-recursos/menu-recursos.component';
 
+import {CrearRubricaComponent } from './paginas/crear-rubrica/crear-rubrica.component';
+import { MisRubricasComponent } from './paginas/mis-rubricas/mis-rubricas.component';
 const routes: Routes = [
 
 
@@ -263,6 +265,12 @@ const routes: Routes = [
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/MostrarAvatarAlumno', component: MostrarAvatarAlumnoComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoAvatar', component: InformacionJuegoAvatarComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/verTodos', component: VerTodosComponent },
+
+
+  // Rubricas
+  { path: 'inicio/:id/crearRubrica', component: CrearRubricaComponent},
+  { path: 'inicio/:id/misRubricas', component: MisRubricasComponent},
+
 ];
 
 @NgModule({
