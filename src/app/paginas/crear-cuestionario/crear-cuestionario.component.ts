@@ -145,26 +145,27 @@ export class CrearCuestionarioComponent implements OnInit {
     if (!this.cuestionarioYaCreado || this.finalizar) {
       return of (true);
     } else {
-      const confirmacionObservable = new Observable <boolean>( obs => {
-          const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-            height: '150px',
-            data: {
-              mensaje: 'Confirma que quieres abandonar el proceso de creación de cuestionario',
-            }
-          });
 
-          dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-            if (confirmed) {
-              // Si confirma que quiere salir entonces eliminamos el cuestionario que se ha creado
-              this.sesion.TomaCuestionario (this.cuestionario);
-              this.calculos.EliminarCuestionario().subscribe ( () => obs.next(confirmed));
 
-            } else {
-              obs.next (confirmed);
-            }
-          });
-      });
+      const confirmacionObservable = new Observable <boolean>(obs =>  {Swal.fire({
+        title: 'Abandonar',
+        text: "Confirma que quieres abandonar el proceso de creación de cuestionario",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar'
+  
+      }).then((result) => {
+        if (result.value) {
+          this.sesion.TomaCuestionario (this.cuestionario);
+         this.calculos.EliminarCuestionario().subscribe ( () => obs.next(result.value));
+        }else{obs.next(result.value);}
+      })
+    });
       return confirmacionObservable;
+
     }
   }
 }

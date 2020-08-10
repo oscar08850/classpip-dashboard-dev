@@ -111,6 +111,26 @@ export class AgregarAlumnoDialogComponent implements OnInit {
 
   AbrirDialogoConfirmacionBorrar(alumno: Alumno): void {
 
+    Swal.fire({
+      title: 'Eliminar',
+      text: "Confirma que quieres quitar del grupo a : " + alumno.Nombre,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
+
+    }).then((result) => {
+      if (result.value) {
+        this.EliminarDelGrupo(alumno);
+        Swal.fire('Eliminado','Alumno eliminado correctamente', 'success');
+      }
+    })
+
+
+
+
     const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
       height: '150px',
       data: {

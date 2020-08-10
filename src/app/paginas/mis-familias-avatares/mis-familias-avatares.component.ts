@@ -334,7 +334,8 @@ export class MisFamiliasAvataresComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, estoy seguro'
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
         this.familiaElegida.Complemento1.forEach (imagenComplemento =>

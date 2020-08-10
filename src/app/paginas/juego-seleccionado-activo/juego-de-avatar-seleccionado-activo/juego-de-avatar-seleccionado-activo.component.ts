@@ -241,5 +241,4 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
   }
 
 
-
 }

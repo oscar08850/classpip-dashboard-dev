@@ -86,19 +86,21 @@ export class GrupoComponent implements OnInit {
   // SI QUEREMOS BORRA UN GRUPO, ANTES NOS SALDRÁ UN AVISO PARA CONFIRMAR LA ACCIÓN COMO MEDIDA DE SEGURIDAD. ESTO SE HARÁ
   // MEDIANTE UN DIÁLOGO
   AbrirDialogoConfirmacionBorrar(): void {
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        nombre: this.grupo.Nombre,
-      }
-    });
+    Swal.fire({
+      title: 'Eliminar',
+      text: "Estas segura/o de que quieres eliminar el grupo llamado: " + this.grupo.Nombre,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    }).then((result) => {
+      if (result.value) {
         this.EliminarGrupo();
       }
-    });
+    })
   }
 
   // Guardamos los alumnos del grupo en la sesión porque los necesitaremos si saltamos a

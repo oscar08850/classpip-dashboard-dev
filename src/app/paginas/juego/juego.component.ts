@@ -1109,14 +1109,14 @@ Limpiar() {
     this.tengoNuevaPuntuacion = false;
 
   //MIRO SI LAS CASILLAS DE LAS PUNTUACIONES ESTAN RELLENADAS
-  DisabledPuntos() {
-    if (this.myFormPuntuacion.value.PuntuacionCorrecta === '' || this.myFormPuntuacion.value.PuntuacionIncorrecta === '' || 
-    isNaN(this.myFormPuntuacion.value.PuntuacionCorrecta) ||  isNaN(this.myFormPuntuacion.value.PuntuacionIncorrecta) ) {
-      this.DisabledPuntuacion = true;
-    } else {
-      this.DisabledPuntuacion = false;
-    }
-  }
+  // DisabledPuntos() {
+  //   if (this.myFormPuntuacion.value.PuntuacionCorrecta === '' || this.myFormPuntuacion.value.PuntuacionIncorrecta === '' || 
+  //   isNaN(this.myFormPuntuacion.value.PuntuacionCorrecta) ||  isNaN(this.myFormPuntuacion.value.PuntuacionIncorrecta) ) {
+  //     this.DisabledPuntuacion = true;
+  //   } else {
+  //     this.DisabledPuntuacion = false;
+  //   }
+  // }
 
 
     this.puntuacionCorrectaGeo = undefined;
@@ -1132,16 +1132,16 @@ Limpiar() {
     this.tengoPreguntas = false;
 
 
-  AñadirAlumnosJuegoCuestionario() {
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.alumnosGrupo.length; i++) {
-      // tslint:disable-next-line:max-line-length
-      this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, this.juegoDeCuestionarioId, this.alumnosGrupo[i].id ))
-      .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
-      Swal.fire('Juego de cuestionario creado con éxito', 'Todo correcto', 'success');
-      this.router.navigate(['/grupo/' + this.grupo.id]);
+  // AñadirAlumnosJuegoCuestionario() {
+  //   // tslint:disable-next-line:prefer-for-of
+  //   for (let i = 0; i < this.alumnosGrupo.length; i++) {
+  //     // tslint:disable-next-line:max-line-length
+  //     this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, this.juegoDeCuestionarioId, this.alumnosGrupo[i].id ))
+  //     .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente'));
+  //     Swal.fire('Juego de cuestionario creado con éxito', 'Todo correcto', 'success');
+  //     this.router.navigate(['/grupo/' + this.grupo.id]);
       
-  }
+  // }
 }
 
 

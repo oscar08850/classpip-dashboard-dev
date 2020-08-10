@@ -235,23 +235,26 @@ export class EditarColeccionComponent implements OnInit {
   // hará mediante un diálogo al cual pasaremos el mensaje y el nombre del equipo
   AbrirDialogoConfirmacionBorrarCromo(cromo: Cromo): void {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        nombre: cromo.Nombre,
-      }
-    });
 
-    // Antes de cerrar recogeremos el resultado del diálogo: Borrar (true) o cancelar (false). Si confirmamos, borraremos
-    // el punto (función BorrarPunto) y mostraremos un swal con el mensaje de que se ha eliminado correctamente.
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    
+    Swal.fire({
+      title: 'Eliminar',
+      text: "Estas segura/o de que quieres eliminar el cromo llamado: " +cromo.Nombre,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
+
+    }).then((result) => {
+      if (result.value) {
         this.BorrarCromo(cromo);
-        Swal.fire('Eliminado', cromo.Nombre + ' eliminado correctamente', 'success');
+        Swal.fire('Eliminado', 'Cuestionario: ' + cromo.Nombre + ' eliminado correctamente', 'success');
 
-      }
-    });
+      };
+    })
+
   }
 
   // Utilizamos esta función para eliminar un cromo de la base de datos y actualiza la lista de cromos

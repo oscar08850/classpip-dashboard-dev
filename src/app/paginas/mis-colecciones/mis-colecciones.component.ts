@@ -165,23 +165,24 @@ export class MisColeccionesComponent implements OnInit {
   // Si queremos borrar un equipo, antes nos saldrá un aviso para confirmar la acción como medida de seguridad. Esto se
   // hará mediante un diálogo al cual pasaremos el mensaje y el nombre del equipo
   AbrirDialogoConfirmacionBorrarColeccion(coleccion: Coleccion): void {
+    Swal.fire({
+      title: 'Eliminar',
+      text: "Estas segura/o de que quieres eliminar el equipo llamado: " + coleccion.Nombre,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        nombre: coleccion.Nombre,
-      }
-    });
-
-    // Antes de cerrar recogeremos el resultado del diálogo: Borrar (true) o cancelar (false). Si confirmamos, borraremos
-    // el punto (función BorrarPunto) y mostraremos un swal con el mensaje de que se ha eliminado correctamente.
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    }).then((result) => {
+      if (result.value) {
         this.BorrarColeccion(coleccion);
         Swal.fire('Eliminado', coleccion.Nombre + ' eliminado correctamente', 'success');
+
       }
     });
+  
   }
 
 }

@@ -308,7 +308,8 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, estoy seguro'
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
         // guardamos la imagen de la silueta
