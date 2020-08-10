@@ -576,6 +576,7 @@ export class CalculosService {
     return rankingObservable;
   }
 
+
   public DameRankingPuntoSeleccionadoAlumnos(
                             listaAlumnosOrdenadaPorPuntos: any,
                             alumnosDelJuego: any,
@@ -3303,7 +3304,7 @@ const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeGeocaching [] = [];
 // tslint:disable-next-line:prefer-for-oF
 for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
 let alumno: Alumno;
-const AlumnoId = listaAlumnosOrdenadaPorPuntos[i].AlumnoId;
+const AlumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
 alumno = alumnosDelJuego.filter(res => res.id === AlumnoId)[0];
 rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeGeocaching(alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
 listaAlumnosOrdenadaPorPuntos[i].Puntuacion, listaAlumnosOrdenadaPorPuntos[i].Etapa, AlumnoId);

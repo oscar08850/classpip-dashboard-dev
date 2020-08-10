@@ -7,14 +7,18 @@
         <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionDesactivar()"> Desactivar<i class="material-icons">history</i></button>
   </div>
 
-
   <form style="width: 100%"  *ngIf="juegoSeleccionado.Modo === 'Individual'">
 
-
+    <div class= "enFila" >
       <mat-form-field style="width: 60%">
           <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
           <i class="material-icons" matSuffix>search</i>
-        </mat-form-field>
+      </mat-form-field>
+
+
+      <button type="button" style="width:35%" class="btn Aceptar" routerLink = "verTodos" (click) = "VerTodosLosAvatares()"> Ver todos los avatares</button>
+
+    </div>
 
 
     <table style="width: 100%" align="center" mat-table [dataSource]="datasourceAlumnos" class="example-container mat-elevation-z8">

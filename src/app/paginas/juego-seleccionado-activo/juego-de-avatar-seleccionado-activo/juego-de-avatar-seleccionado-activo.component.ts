@@ -21,7 +21,7 @@ import {MatTableDataSource} from '@angular/material/table';
 })
 export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
 
-  juegoSeleccionado: Juego;
+  juegoSeleccionado: any;
   alumnosDelJuego: Alumno[];
   inscripcionesAlumnosJuegodeAvatar: AlumnoJuegoDeAvatar[];
   selection1 = new SelectionModel<any>(true, []);
@@ -205,7 +205,7 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
         }
       }
       if (n === 6) {
-        if (this.IsAllSelected(1)) {
+        if (this.IsAllSelected(6)) {
           this.selection6.clear(); // Desactivamos todos
           this.inscripcionesAlumnosJuegodeAvatar.forEach (inscripcion => inscripcion.Privilegios[5] = false);
         } else {
@@ -236,9 +236,14 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
   GuardarDatos(alumno: Alumno) {
     // Guardo en la sesión el alumno y su inscripción para que los recoja el componente que mostrará su avatar
     this.sesion.TomaAlumno (alumno);
+    this.sesion.TomaJuegoAvatar (this.juegoSeleccionado);
     // tslint:disable-next-line:max-line-length
     this.sesion.TomaAlumnoJuegoAvatar (this.inscripcionesAlumnosJuegodeAvatar.filter (inscripcion => inscripcion.alumnoId === alumno.id)[0]);
   }
 
+  VerTodosLosAvatares() {
+    this.sesion.TomaJuegoAvatar (this.juegoSeleccionado);
+    console.log ('Vamos a ver todos los avatares');
+  }
 
 }

@@ -493,21 +493,25 @@ export class CrearColeccionComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsText(fileInfo);
     reader.onload = () => {
-      this.infoColeccion = JSON.parse(reader.result.toString());
-      Swal.fire({
-        title: 'Selecciona ahora las imagenes de los cromos',
-        text: 'Selecciona todos los ficheros de la carpeta imagenes',
-        icon: 'success',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Selecciona'
-      }).then((result) => {
-        if (result.value) {
-          // Activamos la función SeleccionarFicherosCromos
-          document.getElementById('inputCromos').click();
-        }
-      });
+      try {
+        this.infoColeccion = JSON.parse(reader.result.toString());
+        Swal.fire({
+          title: 'Selecciona ahora las imagenes de los cromos',
+          text: 'Selecciona todos los ficheros de la carpeta imagenes',
+          icon: 'success',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Selecciona'
+        }).then((result) => {
+          if (result.value) {
+            // Activamos la función SeleccionarFicherosCromos
+            document.getElementById('inputCromos').click();
+          }
+        });
+      } catch (e) {
+        Swal.fire('Error en el formato del fichero', '', 'error');
+      }
     };
   }
 

@@ -380,21 +380,25 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       const reader = new FileReader();
       reader.readAsText(fileInfo);
       reader.onload = () => {
-        this.infoFamilia = JSON.parse(reader.result.toString());
-        Swal.fire({
-          title: 'Selecciona ahora las imagenes de la familia',
-          text: 'Selecciona todos los ficheros de la carpeta de imagenes',
-          icon: 'success',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Selecciona'
-        }).then((result) => {
-          if (result.value) {
-            // Activamos la función SeleccionarFicherosFamilia
-            document.getElementById('inputFamilia').click();
-          }
-        });
+        try {
+          this.infoFamilia = JSON.parse(reader.result.toString());
+          Swal.fire({
+            title: 'Selecciona ahora las imagenes de la familia',
+            text: 'Selecciona todos los ficheros de la carpeta de imagenes',
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Selecciona'
+          }).then((result) => {
+            if (result.value) {
+              // Activamos la función SeleccionarFicherosFamilia
+              document.getElementById('inputFamilia').click();
+            }
+          });
+        } catch (e) {
+          Swal.fire('Error en el formato del fichero', '', 'error');
+        }
       };
     }
 

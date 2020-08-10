@@ -61,23 +61,29 @@
           </div>
 
               <div class="form-group" style="margin: 15px;">
-                  <label for="latitudPuntoGeolocalizable">Latitud</label>
+                  <label for="latitudPuntoGeolocalizable">Latitud (en grados decimales, ej: 41.4036) *</label>
                   <input  type="text" id="latitudPuntoGeolocalizable" class="form-control" required [(ngModel)]="latitudPuntoGeolocalizable" placeholder="Escribe la latitud">
               </div>
 
               <div class="form-group" style="margin: 15px;">
-                <label for="longitudPuntoGeolocalizable">Longitud</label>
+                <label for="longitudPuntoGeolocalizable">Longitud (en grados decimales, ej: 2.1743) *</label>
                 <input  type="text" id="longitudPuntoGeolocalizable" class="form-control" required [(ngModel)]="longitudPuntoGeolocalizable" placeholder="Escribe la longitud">
             </div>
             
             <div class="form-group" style="margin: 15px;">
-              <label for="pistafacilPuntoGeolocalizable">Pista Facil</label>
+              <label for="pistafacilPuntoGeolocalizable">Pista Fácil</label>
               <input  type="text" id="pistafacilPuntoGeolocalizable" class="form-control" required [(ngModel)]="pistafacilPuntoGeolocalizable" placeholder="Escribe la pista facil">
           </div>
 
           <div class="form-group" style="margin: 15px;">
-            <label for="pistadificilPuntoGeolocalizable">Pista Dificil</label>
+            <label for="pistadificilPuntoGeolocalizable">Pista Difícil</label>
             <input  type="text" id="pistadificilPuntoGeolocalizable" class="form-control" required [(ngModel)]="pistadificilPuntoGeolocalizable" placeholder="Escribe la pista dificil">
+          </div>
+
+          <div>
+            <p style="font-size: smaller;">
+              * En caso de no conocer las coordenadas, se podrán capturar mediante la aplicación móvil.
+            </p>
           </div>
  
           </mat-card-content>
@@ -116,7 +122,7 @@
                       <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.Longitud}} </td>
                     </ng-container>
   
-                    <ng-container matColumnDef="pistafacilPuntoGeolocalizable">
+                    <!-- <ng-container matColumnDef="pistafacilPuntoGeolocalizable">
                       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> PistaFacil </th>
                       <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.PistaFacil}} </td>
                     </ng-container>
@@ -124,7 +130,7 @@
                     <ng-container matColumnDef="pistadificilPuntoGeolocalizable">
                       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> PistaDificil </th>
                       <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.PistaDificil}} </td>
-                    </ng-container>
+                    </ng-container> -->
   
                     <!-- Delete Column -->
                     <ng-container matColumnDef=" ">

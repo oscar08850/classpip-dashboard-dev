@@ -5,16 +5,8 @@ import { MatDialog, MatTabGroup } from '@angular/material';
 import { Location } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-// Clases
-// tslint:disable-next-line:max-line-length
-// import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
-//           AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
-//           EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
-//           EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
-//           AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-//           EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching} from '../../clases/index';
 
-          // tslint:disable-next-line:max-line-length
+// tslint:disable-next-line:max-line-length
 import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
 
           AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
@@ -199,73 +191,6 @@ export class JuegoComponent implements OnInit {
   // criterioComplemento1: string;
 
   //////////////////////////////////// PARÁMETROS PARA PÁGINA DE CREAR JUEGO //////////////////////////////////////
-  // para leer el nombre
-  // formNombre: FormGroup;
-
-
-  // En el primer paso mostraremos tres Chips con las diferentes opciones de tipo de juego que podemos crear y su color
-
-
-  // En el segundo paso mostraremos dos Chips con los dos modos de juego que podemos crear y su color
-
-
-    // En el segundo paso mostraremos dos Chips con los dos modos de juego que podemos crear y su color
-
-  // Recogemos la opción que seleccionemos en el primer (tipoDeJuegoSeleccionado) y en el segundo paso (modoDeJuegoSeleccionado)
-
-
-
-  // NumeroDeVueltasValueInd: number;
-  // NumeroDeVueltasValueEqu: number;
-
-  // // Todo lo relacionado con juego de cuestionario
-  // myFormPuntuacion: FormGroup;
-  // PuntuacionCorrecta: number;
-  // PuntuacionIncorrecta: number;
-
-
-  // // tslint:disable-next-line:ban-types
-  // DisabledCuestionario: Boolean = true;
-  //  // tslint:disable-next-line:ban-types
-  // DisabledPuntuacion: Boolean = true;
-  //  // tslint:disable-next-line:ban-types
-  // DisabledPresentacion: Boolean =  true;
-  // juegoDeCuestionarioId: number;
-
-  // // Tipos de presentacion para el juego de cuestionario
-
-  // ModoPresentacionFavorito: string;
-  // myFormPresentacion: FormGroup;
-
-  // // Recogemos el tipo de presentacion para el juego de cuestionario
-  // tipoDePresentacion: string;
-  // //
-  // tipoJuegoCompeticionSeleccionado: string;
-
-  // // No nos permite avanzar si no se ha seleccionado una opción
-  // // tslint:disable-next-line:ban-types
-  // isDisabled: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledNombre: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledModo: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledExtra: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledTipoCompeticion: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledJornadas: Boolean = true;
-
-  // tipoJuegoElegido: string;
-  // nombreColeccionSeleccionada: string;
-  // // tslint:disable-next-line:ban-types
-  // finalizar: Boolean = false;
-
-  // botonTablaDesactivado = true;
-  // seleccionados: boolean[];
-
-  // botonTablaDesactivadoJugadorExtra = true;
-
 
 
   constructor(
@@ -1005,7 +930,7 @@ export class JuegoComponent implements OnInit {
         this.peticionesAPI.InscribeAlumnoJuegoDeGeocaching(new AlumnoJuegoDeGeocaching(0, 0, this.alumnosGrupo[i].id, this.juegoDeGeocaching.id ))
         .subscribe();
       }
-      Swal.fire('Juego de geocatching creado correctamente', ' ', 'success');
+      Swal.fire('Juego de geocaching creado correctamente', ' ', 'success');
 
       // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
       if (this.juegosPreparados === undefined) {
@@ -1108,6 +1033,7 @@ Limpiar() {
     this.tengoTipoDeCompeticion = false;
     this.tengoNuevaPuntuacion = false;
 
+<<<<<<< HEAD
   //MIRO SI LAS CASILLAS DE LAS PUNTUACIONES ESTAN RELLENADAS
   // DisabledPuntos() {
   //   if (this.myFormPuntuacion.value.PuntuacionCorrecta === '' || this.myFormPuntuacion.value.PuntuacionIncorrecta === '' || 
@@ -1119,6 +1045,8 @@ Limpiar() {
   // }
 
 
+=======
+>>>>>>> f0094d08291372290ccdf18fc0be5a9f7c28619b
     this.puntuacionCorrectaGeo = undefined;
     this.puntuacionIncorrectaGeo = undefined;
     this.puntuacionCorrectaGeoBonus = undefined;
@@ -1130,6 +1058,7 @@ Limpiar() {
     this.PreguntasBasicas = undefined;
     this.PreguntasBonus = undefined;
     this.tengoPreguntas = false;
+<<<<<<< HEAD
 
 
   // AñadirAlumnosJuegoCuestionario() {
@@ -1142,7 +1071,7 @@ Limpiar() {
   //     this.router.navigate(['/grupo/' + this.grupo.id]);
       
   // }
-}
-
-
+=======
+  }
+>>>>>>> f0094d08291372290ccdf18fc0be5a9f7c28619b
 }
