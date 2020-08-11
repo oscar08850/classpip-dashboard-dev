@@ -110,6 +110,10 @@ import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escena
 import { MisEscenariosComponent } from './paginas/mis-escenarios/mis-escenarios.component';
 import {MenuRecursosComponent} from './paginas/menu-recursos/menu-recursos.component';
 
+//Componentes Libro:
+
+import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
+
 const routes: Routes = [
 
 
@@ -263,6 +267,10 @@ const routes: Routes = [
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/MostrarAvatarAlumno', component: MostrarAvatarAlumnoComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoAvatar', component: InformacionJuegoAvatarComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/verTodos', component: VerTodosComponent },
+
+
+  //libros
+  {path:'inicio/:id/crearRecursosLibro', component: CrearRecursosLibroComponent}
 ];
 
 @NgModule({

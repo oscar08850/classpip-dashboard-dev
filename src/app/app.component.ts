@@ -35,6 +35,17 @@ export class AppComponent  {
 
 
 
+    ngOnInit()
+    {
+
+      this.nombre ="Miguel";
+      this.apellido = "Valero";
+      this.Autentificar();
+
+      
+    }
+    
+
     DameDatos(): any {
       const datosObservables = new Observable ( obs => {
         const datos: any = {

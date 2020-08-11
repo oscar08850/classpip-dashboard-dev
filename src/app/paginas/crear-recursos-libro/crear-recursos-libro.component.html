@@ -1,0 +1,40 @@
+<div class="container" [hidden]=show>
+  <div class="row">
+      <div class="col-md-6 offset-md-3">
+          <h3>Elije una foto</h3>            
+          <div class="form-group">
+              <input type="file" name="image" (change)="fileProgress($event)" />
+          </div>
+          <div *ngIf="fileUploadProgress">
+              Upload progress: {{ fileUploadProgress }}
+          </div>
+          <div class="image-preview mb-3" *ngIf="previewUrl">
+              <!-- <img [src]="previewUrl" height="300" />                  -->
+          </div>
+
+          <div *ngFor="let image of listadePreviewsFondo">
+            <img src={{image}} height="300"/>                 
+          </div>
+
+          <div class="mb-3" *ngIf="uploadedFilePath">
+              {{uploadedFilePath}}
+          </div>
+           
+          <div class="form-group">
+              <button class="btn btn-primary"  (click)="onSubmit()">Guardar foto</button>
+              
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<h1><code>&lt;input webkitdirectory&gt;</code> demo</h1>
+
+<p>The <code>webkitdirectory</code> attribute allows the user to pick a directory via a file input. All files (including nested files) inside that directory are added to the input’s <code>files</code> list. This attribute is supported in Chrome, Edge, and Firefox.</p>
+
+<p>Pick a directory, and all files in that directory will be listed below, represented by their relative path.</p>
+
+<div class="picker"><input (change)="a($event)" type="file" id="picker" name="fileList" webkitdirectory multiple ></div>
+
+<ul id="listing"></ul>

@@ -202,6 +202,7 @@ import { InformacionRespuestasJuegoDeCuestionarioDialogComponent } from './pagin
 // tslint:disable-next-line:max-line-length
 import { RespuestasAlumnoJuegoDeCuestionarioComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/respuestas-alumno-juego-de-cuestionario/respuestas-alumno-juego-de-cuestionario.component';
 import { VerTodosComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/ver-todos/ver-todos.component';
+import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
 
 
 @NgModule({
@@ -313,7 +314,8 @@ import { VerTodosComponent } from './paginas/juego-seleccionado-activo/juego-de-
     MenuRecursosComponent,
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
     RespuestasAlumnoJuegoDeCuestionarioComponent,
-    VerTodosComponent
+    VerTodosComponent,
+    CrearRecursosLibroComponent
 
 
 
