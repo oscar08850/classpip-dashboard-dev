@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { variable } from '@angular/compiler/src/output/output_ast';
+import { variable, ThrowStmt } from '@angular/compiler/src/output/output_ast';
+import { Imagen } from '../../clases/clasesParaLibros/recursosCargaImagen';
 
 @Component({
   selector: 'app-crear-recursos-libro',
@@ -18,21 +19,26 @@ export class CrearRecursosLibroComponent implements OnInit {
   listadeFileFondo: any = [];
   listadeFilePersonajes: any = [];
   listadeFileObjetos: any = [];
+  listadePreviewsPersonaje: any = [];
   listadePreviewsFondo: any = [];
+  listadePreviewsObjeto: any = [];
 
+  nombreFamila: any;
+  verFotos = false;
+  ver = false;
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  fileProgress(fileInput: any) {
-    this.fileData = fileInput;
-    this.preview();
+  fileProgress(fileInput: any, typefile: string) {
+    this.fileData = fileInput.file;
+    this.preview(typefile, fileInput.nombre);
 
   }
 
-  preview() {
+  preview(typefile: string, nombre: string) {
     // Show preview 
     var mimeType = this.fileData.type;
     if (mimeType.match(/image\/*/) == null) {
@@ -43,9 +49,29 @@ export class CrearRecursosLibroComponent implements OnInit {
     reader.readAsDataURL(this.fileData);
     reader.onload = (_event) => {
       this.previewUrl = reader.result;
-      this.listadePreviewsFondo.push(this.previewUrl);
+
+      if (typefile == "fondo") {
+        var imagen = new Imagen();
+        imagen.file = this.previewUrl;
+        imagen.nombre = nombre;
+        this.listadePreviewsFondo.push(imagen);
+      }
+      else if (typefile == "personaje") {
+        var imagen = new Imagen();
+        imagen.file = this.previewUrl;
+        imagen.nombre = nombre;
+        this.listadePreviewsPersonaje.push(imagen);
+       }
+      else if (typefile == "objeto") { 
+        var imagen = new Imagen();
+        imagen.file = this.previewUrl;
+        imagen.nombre = nombre;
+        this.listadePreviewsObjeto.push(imagen);
+      }
     }
   }
+
+
 
   onSubmit() {
     const formData = new FormData();
@@ -71,32 +97,69 @@ export class CrearRecursosLibroComponent implements OnInit {
     var picker = document.getElementById('picker');
     var listing = document.getElementById('listing');
 
+
     picker.addEventListener('change', e => {
       for (let file of Array.from(e.target.files) as any) {
         let item = document.createElement('li');
         item.textContent = file.webkitRelativePath;
+        var splitPath = item.textContent.split('/');
+        this.nombreFamila = splitPath[0];
+        
+        if(this.verFotos == false){ this.verFotos = true;}
+
         listing.appendChild(item);
-       
+
 
         if (file.webkitRelativePath.includes("fondos")) {
-          this.listadeFileFondo.push(file);
+          var imagen = new Imagen();
+          imagen.file = file;
+          var nameSplitbarra = file.name.split('.');
+          imagen.nombre = nameSplitbarra[0];
+          this.listadeFileFondo.push(imagen);
+
         }
         if (file.webkitRelativePath.includes("personajes")) {
-          this.listadeFilePersonajes.push(file);
+          var imagen = new Imagen();
+          imagen.file = file;
+          var nameSplitbarra = file.name.split('.');
+          imagen.nombre = nameSplitbarra[0];
+          this.listadeFilePersonajes.push(imagen);
         }
         if (file.webkitRelativePath.includes("objetos")) {
-          this.listadeFileObjetos.push(file);
+          var imagen = new Imagen();
+          imagen.file = file;
+          var nameSplitbarra = file.name.split('.');
+          imagen.nombre = nameSplitbarra[0];
+          this.listadeFileObjetos.push(imagen);
         }
 
       };
       this.listadeFileFondo.forEach(element => {
-        this.fileProgress(element)
+        this.fileProgress(element,"fondo");
       });
+      this.listadeFilePersonajes.forEach(element => {
+        this.fileProgress(element,"personaje");
+      });
+      this.listadeFileObjetos.forEach(element => {
+        this.fileProgress(element,"objeto");
+      });
+
+
+
+
     });
 
-    
+
   }
 
+  mostrar() {
+    if (this.ver == true) {
+      this.ver = false;
+    }
+    else {
+      this.ver = true;
+    }
+  }
   // this.picker.addEventListener('change', e => {
   //   for (let file of Array.from(e.target.files) as any) {
   //     let item = document.createElement('li');

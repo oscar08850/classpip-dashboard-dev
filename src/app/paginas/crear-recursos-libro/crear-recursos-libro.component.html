@@ -1,40 +1,63 @@
-<div class="container" [hidden]=show>
-  <div class="row">
-      <div class="col-md-6 offset-md-3">
-          <h3>Elije una foto</h3>            
-          <div class="form-group">
-              <input type="file" name="image" (change)="fileProgress($event)" />
-          </div>
-          <div *ngIf="fileUploadProgress">
-              Upload progress: {{ fileUploadProgress }}
-          </div>
-          <div class="image-preview mb-3" *ngIf="previewUrl">
-              <!-- <img [src]="previewUrl" height="300" />                  -->
-          </div>
+<h1> Cargar los recursos para un libro.</h1>
 
-          <div *ngFor="let image of listadePreviewsFondo">
-            <img src={{image}} height="300"/>                 
-          </div>
+<button (click)="mostrar()" style="width: 30%" type="button" class="btn Info">
+    Mostrar/ocultar guía
+</button>
 
-          <div class="mb-3" *ngIf="uploadedFilePath">
-              {{uploadedFilePath}}
-          </div>
-           
-          <div class="form-group">
-              <button class="btn btn-primary"  (click)="onSubmit()">Guardar foto</button>
-              
-          </div>
-      </div>
-  </div>
+<div class="enColumna" *ngIf="ver" style="border-color: red;">
+
+    <pre> 
+        <p>
+
+    Para cargar todos los recursos que se necesitan, se tendrá que crear de forma local las siguientes carpetas:
+     -La carpeta principal tendrá que llamarse con el nombre que se quiera llamar el pack de recursos.
+     -Tendrá que tener las subcarpetas siguientes con los nombres siguientes:
+        -fondos
+        -personajes
+         -objetos
+     -Las foto tendrán que estar guardadas en su respectiva carpeta.
+     -El nombre de la foto será el que mismo nombre que verá el alumno que esté utilizando este pack de recursos.
+    Ejemplo:
+    packVerano (carpeta principal):
+                                        -fondos (carpeta secundaria):
+                                                                        -fondoPalmeras (archivo)
+                                                                        -fondoPlaya (archivo)
+                                        -personajes (carpeta secundaria):   
+                                                                        -playero (archivo)
+                                        -objetos (carpeta secundaria):      
+                                                                        -cubo (archivo)
+                                                                        -pala (archivo)
+                                                                        -toalla (archivo)                    
+
+    -Se tendrá que pulsar el botón "Elegir archivos" y elegir la carpeta principal, en el caso del ejemplo la carpeta "packVerano"
+
+</p>
+</pre>
 </div>
 
+    <div class="picker"><input (change)="a($event)" type="file" id="picker" name="fileList" webkitdirectory multiple>
+    </div>
 
-<h1><code>&lt;input webkitdirectory&gt;</code> demo</h1>
+    <ul id="listing"></ul>
 
-<p>The <code>webkitdirectory</code> attribute allows the user to pick a directory via a file input. All files (including nested files) inside that directory are added to the input’s <code>files</code> list. This attribute is supported in Chrome, Edge, and Firefox.</p>
 
-<p>Pick a directory, and all files in that directory will be listed below, represented by their relative path.</p>
+    <div class="enColumna" *ngIf="verFotos">
 
-<div class="picker"><input (change)="a($event)" type="file" id="picker" name="fileList" webkitdirectory multiple ></div>
+        <h3>{{nombreFamila}}</h3>
 
-<ul id="listing"></ul>
+        <div *ngFor="let imageF of listadePreviewsPersonaje">
+            <img src = {{imageF.file}}>
+            <h3>{{imageF.nombre}}</h3>
+        </div>
+
+        <div *ngFor="let imageP of listadePreviewsFondo">
+            <img src = {{imageP.file}}>
+            <h3>{{imageP.nombre}}</h3>
+
+        </div>
+        <div *ngFor="let imageO of listadePreviewsObjeto">
+            <img src = {{imageO.file}}>
+            <h3>{{imageO.nombre}}</h3>
+
+        </div>
+    </div>
