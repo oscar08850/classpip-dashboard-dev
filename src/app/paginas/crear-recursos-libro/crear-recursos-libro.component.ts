@@ -169,4 +169,7 @@ export class CrearRecursosLibroComponent implements OnInit {
   // });
 
 
+  setAll(evento)
+  {}
+
 }

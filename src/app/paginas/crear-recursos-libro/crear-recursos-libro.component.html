@@ -6,7 +6,7 @@
 
 <div class="enColumna" *ngIf="ver" style="border-color: red;">
 
-    <pre> 
+    <pre>
         <p>
 
     Para cargar todos los recursos que se necesitan, se tendrá que crear de forma local las siguientes carpetas:
@@ -35,29 +35,61 @@
 </pre>
 </div>
 
-    <div class="picker"><input (change)="a($event)" type="file" id="picker" name="fileList" webkitdirectory multiple>
+<div class="picker"><input (change)="a($event)" type="file" id="picker" name="fileList" webkitdirectory multiple>
+</div>
+
+<ul id="listing"></ul>
+
+<div *ngIf="verFotos">
+    <h2>Este grupo de recursos se llama : {{nombreFamila}}</h2>
+    <h2>Personajes:</h2>
+
+    <div>
+        <mat-grid-list cols="5" rowHeight="1:1">
+            <mat-grid-tile *ngFor='let imageF of listadePreviewsPersonaje'>
+                <mat-card>
+
+                    <img [src]='imageF.file'>
+                    <h3>{{imageF.nombre}}</h3>
+                    <mat-checkbox class="example-margin" (change)="setAll($event.checked)">
+                        Especial
+                    </mat-checkbox>
+                </mat-card>
+
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    <h2>Fondos:</h2>
+
+    <div>
+        <mat-grid-list cols="2" rowHeight="1:1">
+            <mat-grid-tile *ngFor='let imageP of listadePreviewsFondo'>
+                <mat-card>
+
+                    <img [src]='imageP.file' height="700" width="700">
+                    <h3>{{imageP.nombre}}</h3>
+                    <mat-checkbox class="example-margin" (change)="setAll($event.checked)">
+                        Especial
+                    </mat-checkbox>
+                </mat-card>
+
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    <h2>Objetos:</h2>
+
+    <div>
+        <mat-grid-list cols="5" rowHeight="1:1">
+            <mat-grid-tile *ngFor='let imageO of listadePreviewsObjeto'>
+                <mat-card>
+                    <img [src]='imageO.file' height="250" width="250">
+                    <h3>{{imageO.nombre}}</h3>
+                    <mat-checkbox class="example-margin" (change)="setAll($event.checked)">
+                        PORQUE NO ME VEO
+                    </mat-checkbox>
+                </mat-card>
+            </mat-grid-tile>
+        </mat-grid-list>
     </div>
 
-    <ul id="listing"></ul>
-
-
-    <div class="enColumna" *ngIf="verFotos">
-
-        <h3>{{nombreFamila}}</h3>
-
-        <div *ngFor="let imageF of listadePreviewsPersonaje">
-            <img src = {{imageF.file}}>
-            <h3>{{imageF.nombre}}</h3>
-        </div>
-
-        <div *ngFor="let imageP of listadePreviewsFondo">
-            <img src = {{imageP.file}}>
-            <h3>{{imageP.nombre}}</h3>
-
-        </div>
-        <div *ngFor="let imageO of listadePreviewsObjeto">
-            <img src = {{imageO.file}}>
-            <h3>{{imageO.nombre}}</h3>
-
-        </div>
-    </div>
+</div>
