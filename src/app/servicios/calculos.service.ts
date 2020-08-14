@@ -259,6 +259,104 @@ export class CalculosService {
                       }
                     });
 
+                  } else if (juego.Tipo === 'Juego De Cuestionario') {
+                    if (juego.Modo === 'Individual') {
+                      this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionario(juego.id)
+                      .subscribe( AlumnosDelJuego => {
+                        if (AlumnosDelJuego[0] !== undefined) {
+                          // Una vez recibo las inscripciones, las voy borrando una a una
+                          // tslint:disable-next-line:prefer-for-of
+                          for (let i = 0; i < AlumnosDelJuego.length; i++) {
+                            this.peticionesAPI.BorraAlumnoDelJuegoDeCuestionario(AlumnosDelJuego[i].id)
+                            .subscribe(() => {
+                                console.log('Inscripcion al juego borrada correctamente');
+                            });
+                          }
+                        } else {
+                          console.log('No hay alumnos en el juego de cuestionario');
+                        }
+                      });
+                      this.peticionesAPI.DameRespuestasAlumnoJuegoDeCuestionario(juego.id)
+                      .subscribe( respuestas => {
+                        if (respuestas[0] !== undefined) {
+                          // Una vez recibo las inscripciones, las voy borrando una a una
+                          // tslint:disable-next-line:prefer-for-of
+                          for (let i = 0; i < respuestas.length; i++) {
+                            this.peticionesAPI.BorraRespuestaAlumnoDelJuegoDeCuestionario(respuestas[i].id)
+                            .subscribe(() => {
+                                console.log('Respuesta borrada correctamente');
+                            });
+                          }
+                        } else {
+                          console.log('No hay respuestas en el juego de cuestionario');
+                        }
+
+                      });
+
+                    }
+                    this.peticionesAPI.BorrarJuegoDeCuestionario (juego.id)
+                    .subscribe (() => {
+                        // Esto es lo que no hace la funcion que borra el juego de liga
+                        cont++;
+                        if (cont === juegos.length) {
+                          obs.next();
+                        }
+                    });
+
+                  } else if (juego.Tipo === 'Juego De Geocaching') {
+                    if (juego.Modo === 'Individual') {
+                      this.peticionesAPI.DameAlumnosDelJuegoDeGeocaching(juego.id)
+                      .subscribe( AlumnosDelJuego => {
+                        if (AlumnosDelJuego[0] !== undefined) {
+
+                          // Una vez recibo las inscripciones, las voy borrando una a una
+                          // tslint:disable-next-line:prefer-for-of
+                          for (let i = 0; i < AlumnosDelJuego.length; i++) {
+                            this.peticionesAPI.BorraAlumnoDelJuegoDeGeocaching(AlumnosDelJuego[i].id)
+                            .subscribe(() => {
+                                console.log('Inscripcion al juego borrada correctamente');
+                            });
+                          }
+                        } else {
+                          console.log('No hay alumnos en el juego de geocaching');
+                        }
+
+                      });
+                    }
+                    this.peticionesAPI.BorrarJuegoDeGeocaching (juego.id)
+                    .subscribe (() => {
+                        // Esto es lo que no hace la funcion que borra el juego de liga
+                        cont++;
+                        if (cont === juegos.length) {
+                          obs.next();
+                        }
+                    });
+                  } else if (juego.Tipo === 'Juego De Votación Uno A Todos') {
+                    if (juego.Modo === 'Individual') {
+                      this.peticionesAPI.DameAlumnosJuegoDeVotacionUnoATodos(juego.id)
+                      .subscribe( AlumnosDelJuego => {
+                        if (AlumnosDelJuego[0] !== undefined) {
+                          // Una vez recibo las inscripciones, las voy borrando una a una
+                          // tslint:disable-next-line:prefer-for-of
+                          for (let i = 0; i < AlumnosDelJuego.length; i++) {
+                            this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionUnoATodos(AlumnosDelJuego[i].id)
+                            .subscribe(() => {
+                                console.log('Inscripcion al juego borrada correctamente');
+                            });
+                          }
+                        } else {
+                          console.log('No hay alumnos en el juego de votacion');
+                        }
+                      });
+                    }
+                    this.peticionesAPI.BorraJuegoDeVotacionUnoATodos (juego.id)
+                    .subscribe (() => {
+                        // Esto es lo que no hace la funcion que borra el juego de liga
+                        cont++;
+                        if (cont === juegos.length) {
+                          obs.next();
+                        }
+                    });
                   }
                 });
               } else {
@@ -491,8 +589,6 @@ export class CalculosService {
                           juegosInactivos.push(juegosVotacionUnoATodos[i]);
                         }
                       }
-
-
 
                       const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
                       obs.next (resultado);
@@ -3087,7 +3183,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
       // tslint:disable-next-line:max-line-length
 
       const elem = new TablaAlumnoJuegoDeVotacionUnoATodos(i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
-        listaAlumnosOrdenadaPorPuntos[i].puntosTotales, alumnoId);
+        0, alumnoId);
       rankingJuegoDeVotacion[i] = elem;
     }
 
@@ -3110,6 +3206,26 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
 
     return rankingJuegoDeVotacion;
 }
+
+public PrepararTablaRankingIndividualVotacionUnoATodosAcabado(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[],
+                                                              // tslint:disable-next-line:max-line-length
+                                                              alumnosDelJuego: Alumno[], puntos: number[]): TablaAlumnoJuegoDeVotacionUnoATodos[] {
+    const rankingJuegoDeVotacion: TablaAlumnoJuegoDeVotacionUnoATodos [] = [];
+    // tslint:disable-next-line:prefer-for-oF
+    for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+      let alumno: Alumno;
+      const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
+      alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+      // tslint:disable-next-line:max-line-length
+
+      const elem = new TablaAlumnoJuegoDeVotacionUnoATodos(i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+        listaAlumnosOrdenadaPorPuntos[i].puntosTotales, alumnoId);
+      rankingJuegoDeVotacion[i] = elem;
+    }
+
+    return rankingJuegoDeVotacion;
+}
+
 
 
   //////////////////////////////////////// JUEGO DE COMPETICIÓN FÓRUMULA UNO ///////////////////////////////////
@@ -3350,7 +3466,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
 
 
 
-//juego geocaching
+// juego geocaching
 
 
   public PrepararTablaRankingGeocaching(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeGeocaching[],

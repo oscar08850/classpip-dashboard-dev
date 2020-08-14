@@ -66,7 +66,7 @@ export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements On
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
       // tslint:disable-next-line:max-line-length
-      this.rankingIndividualJuegoDeVotacionUnoATodos = this.calculos.PrepararTablaRankingIndividualVotacionUnoATodos (
+      this.rankingIndividualJuegoDeVotacionUnoATodos = this.calculos.PrepararTablaRankingIndividualVotacionUnoATodosAcabado (
         this.listaAlumnosOrdenadaPorPuntos,
         this.alumnosDelJuego,
         this.juegoSeleccionado.Puntos);

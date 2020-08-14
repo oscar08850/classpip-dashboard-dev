@@ -6,7 +6,7 @@ import { Juego, Jornada, TablaJornadas, EnfrentamientoLiga, TablaAlumnoJuegoDeCo
   TablaEquipoJuegoDeCompeticion,
   AlumnoJuegoDeCompeticionLiga,
   EquipoJuegoDeCompeticionLiga, Alumno, Equipo, AlumnoJuegoDePuntos,
-  EquipoJuegoDePuntos, AlumnoJuegoDeCuestionario} from '../../../../clases/index';
+  EquipoJuegoDePuntos, AlumnoJuegoDeCuestionario, AlumnoJuegoDeVotacionUnoATodos} from '../../../../clases/index';
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService } from '../../../../servicios/index';
@@ -85,6 +85,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
   listaAlumnosJuegoDePuntos: AlumnoJuegoDePuntos[];
   listaEquiposJuegoDePuntos: EquipoJuegoDePuntos[];
   listaAlumnosJuegoDeCuestionario: AlumnoJuegoDeCuestionario[];
+  listaAlumnosJuegoDeVotacionUnoATodos: AlumnoJuegoDeVotacionUnoATodos[];
   juegosDisponibles: Juego[];
   juegosActivosPuntosModo: Juego[];
   NumeroDeJuegoDePuntos: number;
@@ -118,6 +119,7 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
     this.juegosDisponibles = this.sesion.DameJuegosDePuntos().filter (juego => juego.Modo === this.juegoSeleccionado.Modo);
     // tslint:disable-next-line:max-line-length
     this.juegosDisponibles = this.juegosDisponibles.concat (this.sesion.DameJuegosDeCuestionariosAcabados());
+    this.juegosDisponibles = this.juegosDisponibles.concat (this.sesion.DameJuegosDeVotacionUnoATodosAcabados());
     console.log ('Juegos para elegir ganadores ');
     console.log (this.juegosDisponibles);
     this.asignados = false;
@@ -159,6 +161,15 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       this.listaAlumnosJuegoDeCuestionario = inscripciones;
     });
   }
+
+  RecuperarInscripcionesAlumnosJuegoDeVotacionUnoATodos() {
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeVotacionUnoATodos(this.juegoDisponibleSeleccionadoID)
+    .subscribe(inscripciones => {
+      this.listaAlumnosJuegoDeVotacionUnoATodos = inscripciones;
+    });
+
+  }
+
 
   Disputada(jornadaId): boolean {
       return this.JornadasCompeticion.filter (jornada => jornada.id === Number(jornadaId))[0].Disputada;
@@ -290,9 +301,12 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
       } else {
         this.RecuperarInscripcionesEquiposJuegoPuntos();
       }
-    } else {
-      // Tiene que ser de cuestionario, y de momento solo hay individual
+    } else if ( this.juegoDisponibleSeleccionado.Tipo === 'Juego De Cuestionario') {
+      // De momento solo hay individual
       this.RecuperarInscripcionesAlumnosJuegoCuestionario();
+    } else if ( this.juegoDisponibleSeleccionado.Tipo === 'Juego De Votación Uno A Todos') {
+      // De momento solo hay individual
+      this.RecuperarInscripcionesAlumnosJuegoDeVotacionUnoATodos();
     }
   }
 
@@ -525,12 +539,12 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
           }
         }
       }
-    } else {
+    } else if (this.juegoDisponibleSeleccionado.Tipo === 'Juego De Cuestionario') {
       // El juego elegido es de cuestionario
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
 
-        // Saco al jugador uno de la lista de participantes del juego de puntos
+        // Saco al jugador uno de la lista de participantes del juego de cuestionario
         // tslint:disable-next-line:max-line-length
 
         // tslint:disable-next-line:max-line-length
@@ -551,6 +565,33 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
           this.selectionTres.select(this.dataSourceTablaGanadorIndividual.data[i]);
         }
       }
+    }  else if (this.juegoDisponibleSeleccionado.Tipo === 'Juego De Votación Uno A Todos') {
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
+
+          // Saco al jugador uno de la lista de participantes del juego de votacion
+          // tslint:disable-next-line:max-line-length
+
+          // tslint:disable-next-line:max-line-length
+          const JugadorUno = this.listaAlumnosJuegoDeVotacionUnoATodos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno))[0];
+          // tslint:disable-next-line:max-line-length
+          const JugadorDos = this.listaAlumnosJuegoDeVotacionUnoATodos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos))[0];
+
+          console.log (JugadorUno.alumnoId + ' versus ' + JugadorDos.alumnoId);
+          console.log (JugadorUno.puntosTotales + ' versus ' + JugadorDos.puntosTotales);
+          if (JugadorUno.puntosTotales > JugadorDos.puntosTotales) {
+            resultados.push (1);
+            this.selectionUno.select(this.dataSourceTablaGanadorIndividual.data[i]);
+
+          } else  if (JugadorUno.puntosTotales < JugadorDos.puntosTotales) {
+            resultados.push (2);
+            this.selectionDos.select(this.dataSourceTablaGanadorIndividual.data[i]);
+
+          } else {
+            resultados.push (0);
+            this.selectionTres.select(this.dataSourceTablaGanadorIndividual.data[i]);
+          }
+        }
     }
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);
     this.ActualizarTablaClasificacion();

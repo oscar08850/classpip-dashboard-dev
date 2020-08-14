@@ -53,6 +53,7 @@ export class SesionService {
   TablaeditarPuntos: TablaPuntosFormulaUno[];
   JuegosDePuntos: Juego[];
   JuegosDeCuestionariosAcabados: Juego[];
+  juegosDeVotacionUnoATodosAcabados: Juego[];
   // listaEquiposGrupo: any;
 
   pregunta: Pregunta;
@@ -499,6 +500,16 @@ public DameJuegosDePuntos(): Juego[] {
 
  public DameJuegosDeCuestionariosAcabados(): Juego[] {
   return this.JuegosDeCuestionariosAcabados;
+}
+
+public TomaJuegosDeVotacionUnoATodos(juegosDeVotacionUnoATodos: Juego[]) {
+  console.log ('guardo juegos de votacion Uno A Todos acabados');
+  console.log (juegosDeVotacionUnoATodos);
+  this.juegosDeVotacionUnoATodosAcabados = juegosDeVotacionUnoATodos;
+}
+
+public DameJuegosDeVotacionUnoATodosAcabados(): Juego[] {
+ return this.juegosDeVotacionUnoATodosAcabados;
 }
 
 public TomaTablaeditarPuntos( TablaeditarPuntos: TablaPuntosFormulaUno[]) {

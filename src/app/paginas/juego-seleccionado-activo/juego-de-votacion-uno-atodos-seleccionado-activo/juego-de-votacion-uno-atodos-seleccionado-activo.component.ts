@@ -73,7 +73,7 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
     });
   }
     // Recupera los alumnos que pertenecen al juego
-    AlumnosDelJuego() {
+  AlumnosDelJuego() {
       console.log ('Vamos a pos los alumnos');
       this.peticionesAPI.DameAlumnosJuegoDeVotacionUnoATodos(this.juegoSeleccionado.id)
       .subscribe(alumnosJuego => {
@@ -82,7 +82,7 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
         this.alumnosDelJuego = alumnosJuego;
         this.RecuperarInscripcionesAlumnoJuego();
       });
-    }
+  }
 
   RecuperarInscripcionesAlumnoJuego() {
     console.log ('vamos por las inscripciones ' + this.juegoSeleccionado.id);
