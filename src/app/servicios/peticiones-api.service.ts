@@ -95,6 +95,10 @@ export class PeticionesAPIService {
   private APIUrlEscenarios = this.host + ':3000/api/Escenarios';
   private APIUrlPuntosGeolocalizables = this.host + ':3000/api/PuntosGeolocalizables';
 
+  //API Libros
+
+  private APIurlImagenesLibros = 'http://localhost' + ':3000/api/imagenes';
+
 
   constructor(
     private http: HttpClient,
@@ -1129,4 +1133,15 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
   }
   //////////////////////////////// GESTION DE EQUIPOS EN JUEGO DE AVATAR /////////////////
 
+
+  /////////////////////////////// GESTION LIBROS //////////////////////////////////
+
+
+  public crearCarpeta(nombre: any):Observable<any>{
+    return this.http.post<any>(this.APIurlImagenesLibros, nombre);
+  }
+
+  public guardarImagenRecursoLibro(nombre: any, file: any):Observable<any>{
+    return this.http.post<any>(this.APIurlImagenesLibros +'/'+ nombre + '/upload', file);
+  }
 }

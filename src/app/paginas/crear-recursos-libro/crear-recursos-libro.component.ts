@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { variable, ThrowStmt } from '@angular/compiler/src/output/output_ast';
 import { Imagen } from '../../clases/clasesParaLibros/recursosCargaImagen';
+import { PeticionesAPIService } from '../../servicios/peticiones-api.service';
 
 @Component({
   selector: 'app-crear-recursos-libro',
@@ -22,12 +23,15 @@ export class CrearRecursosLibroComponent implements OnInit {
   listadePreviewsPersonaje: any = [];
   listadePreviewsFondo: any = [];
   listadePreviewsObjeto: any = [];
+  listaCompletaParaGuardar: any = [];
 
   nombreFamila: any;
   verFotos = false;
   ver = false;
 
-  constructor() { }
+  nameFolder: string = null;
+
+  constructor(public API: PeticionesAPIService) { }
 
   ngOnInit() {
   }
@@ -54,18 +58,27 @@ export class CrearRecursosLibroComponent implements OnInit {
         var imagen = new Imagen();
         imagen.file = this.previewUrl;
         imagen.nombre = nombre;
+        imagen.especial = false;
+        imagen.posicionLista = this.listadePreviewsFondo.length + 1;
+        imagen.tipo = "fondo";
         this.listadePreviewsFondo.push(imagen);
       }
       else if (typefile == "personaje") {
         var imagen = new Imagen();
         imagen.file = this.previewUrl;
         imagen.nombre = nombre;
+        imagen.especial = false;
+        imagen.posicionLista = this.listadePreviewsPersonaje.length + 1;
+        imagen.tipo = "personaje";
         this.listadePreviewsPersonaje.push(imagen);
-       }
-      else if (typefile == "objeto") { 
+      }
+      else if (typefile == "objeto") {
         var imagen = new Imagen();
         imagen.file = this.previewUrl;
         imagen.nombre = nombre;
+        imagen.especial = false;
+        imagen.posicionLista = this.listadePreviewsObjeto.length + 1;
+        imagen.tipo = "objeto";
         this.listadePreviewsObjeto.push(imagen);
       }
     }
@@ -104,8 +117,8 @@ export class CrearRecursosLibroComponent implements OnInit {
         item.textContent = file.webkitRelativePath;
         var splitPath = item.textContent.split('/');
         this.nombreFamila = splitPath[0];
-        
-        if(this.verFotos == false){ this.verFotos = true;}
+
+        if (this.verFotos == false) { this.verFotos = true; }
 
         listing.appendChild(item);
 
@@ -135,13 +148,13 @@ export class CrearRecursosLibroComponent implements OnInit {
 
       };
       this.listadeFileFondo.forEach(element => {
-        this.fileProgress(element,"fondo");
+        this.fileProgress(element, "fondo");
       });
       this.listadeFilePersonajes.forEach(element => {
-        this.fileProgress(element,"personaje");
+        this.fileProgress(element, "personaje");
       });
       this.listadeFileObjetos.forEach(element => {
-        this.fileProgress(element,"objeto");
+        this.fileProgress(element, "objeto");
       });
 
 
@@ -169,7 +182,98 @@ export class CrearRecursosLibroComponent implements OnInit {
   // });
 
 
-  setAll(evento)
-  {}
+  setAll(imagen: Imagen) {
+
+    if (imagen.especial == false) {
+      imagen.especial = true;
+      if (imagen.tipo == "fondo") {
+        this.listadePreviewsFondo[imagen.posicionLista] = imagen;
+      }
+      else if (imagen.tipo == "personaje") {
+        this.listadePreviewsPersonaje[imagen.posicionLista] = imagen;
+      }
+      else if (imagen.tipo == "objeto") {
+        this.listadePreviewsObjeto[imagen.posicionLista] = imagen;
+      }
+    }
+
+    else if (imagen.especial == true) {
+      imagen.especial = false;
+      if (imagen.tipo == "fondo") {
+        this.listadePreviewsFondo[imagen.posicionLista] = imagen;
+      }
+      else if (imagen.tipo == "personaje") {
+        this.listadePreviewsPersonaje[imagen.posicionLista] = imagen;
+      }
+      else if (imagen.tipo == "objeto") {
+        this.listadePreviewsObjeto[imagen.posicionLista] = imagen;
+      }
+    }
+  }
+
+  guardar() {
+
+
+    this.listaCompletaParaGuardar = [];
+
+    this.listadePreviewsObjeto.forEach(element => {
+      this.listaCompletaParaGuardar.push(element);
+    });
+    this.listadePreviewsFondo.forEach(element => {
+      this.listaCompletaParaGuardar.push(element);
+    });
+
+    this.listadePreviewsPersonaje.forEach(element => {
+      this.listaCompletaParaGuardar.push(element);
+    });
+
+ 
+
+    this.nameFolder = "Recursos-" + this.nombreFamila;
+    const postfolder =
+    {
+      'name': this.nameFolder
+    }
+    this.API.crearCarpeta(postfolder).subscribe((res) => {
+
+      this.guardarLasFotos();
+
+     }, (err) => {
+
+      });
+  }
+
+  guardarLasFotos(){
+
+
+    var file = this.listadeFileObjetos[0].file;
+        
+        // var file = this.dataURLtoFile(this.listaCompletaParaGuardar[0].file, this.listaCompletaParaGuardar[0] + '.png');
+
+        const formData: FormData = new FormData();
+
+        formData.append(file.name, file);
+
+
+    this.API.guardarImagenRecursoLibro(this.nameFolder, file).subscribe((res) => {
+
+    console.log("oleee");
+     }, (err) => {
+      console.log(err);
+
+      })
+    
+  }
+
+  
+  dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+       bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while (n--) {
+       u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+ }
+
 
 }
