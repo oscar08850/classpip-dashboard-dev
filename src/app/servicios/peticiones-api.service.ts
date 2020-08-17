@@ -11,7 +11,8 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario, Cuestionario, AlumnoJuegoDeCompeticionFormulaUno,
         EquipoJuegoDeCompeticionFormulaUno, SesionClase, AsistenciaClase, FamiliaAvatares, JuegoDeAvatar,
         AlumnoJuegoDeAvatar, JuegoDeCuestionario, AlumnoJuegoDeCuestionario,
-        RespuestaJuegoDeCuestionario, JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos, Rubrica} from '../clases/index';
+        RespuestaJuegoDeCuestionario, JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos, Rubrica,
+        JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno} from '../clases/index';
 
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
@@ -27,7 +28,7 @@ export class PeticionesAPIService {
 
 
 
- //private host = 'http://localhost';
+ // private host = 'http://localhost';
  private host = 'http://147.83.118.92';
 
 
@@ -99,6 +100,9 @@ export class PeticionesAPIService {
 
   private APIUrlJuegoDeVotacionUnoATodos = this.host + ':3000/api/JuegosDeVotacionUnoATodos';
   private APIUrlAlumnoJuegoDeVotacionUnoATodos = this.host + ':3000/api/alumnosJuegoDeVotacionUnoATodos';
+
+  private APIUrlJuegoDeVotacionTodosAUno = this.host + ':3000/api/JuegosDeVotacionTodosAUno';
+  private APIUrlAlumnoJuegoDeVotacionTodosAUno = this.host + ':3000/api/alumnosJuegoDeVotacionTodosAUno';
 
   constructor(
     private http: HttpClient,
@@ -1191,6 +1195,59 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
   public ModificaInscripcionAlumnoJuegoDeVotacionUnoATodos(inscripcion: AlumnoJuegoDeVotacionUnoATodos): Observable<AlumnoJuegoDeVotacionUnoATodos> {
     return this.http.put<AlumnoJuegoDeVotacionUnoATodos>(this.APIUrlAlumnoJuegoDeVotacionUnoATodos + '/' + inscripcion.id, inscripcion);
   }
+
+
+
+   /////////////////////////////////////// GESTION JUEGOS DE VOTACION: TODOS A UNO  /////////////////////////////////
+
+   public CreaJuegoDeVotacionTodosAUno(juego: JuegoDeVotacionTodosAUno, grupoId: number): Observable<JuegoDeVotacionTodosAUno> {
+    return this.http.post<JuegoDeVotacionTodosAUno>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeVotacionTodosAUno', juego);
+  }
+
+  public DameJuegosDeVotacionTodosAUno(grupoId: number): Observable<JuegoDeVotacionTodosAUno[]> {
+    return this.http.get<JuegoDeVotacionTodosAUno[]>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeVotacionTodosAUno');
+  }
+
+  public BorraJuegoDeVotacionTodosAUno(juegoId: number): Observable<JuegoDeVotacionTodosAUno> {
+    return this.http.delete<JuegoDeVotacionTodosAUno>(this.APIUrlJuegoDeVotacionTodosAUno + '/' + juegoId);
+  }
+
+  public CambiaEstadoJuegoDeVotacionTodosAUno( juego: JuegoDeVotacionTodosAUno): Observable<JuegoDeVotacionTodosAUno> {
+  // tslint:disable-next-line:max-line-length
+    return this.http.put<JuegoDeVotacionTodosAUno>(this.APIUrlGrupos + '/' + juego.grupoId + '/juegoDeVotacionTodosAUno/' + juego.id, juego);
+  }
+
+   ////////////////////////////////// GESTION VOTACION UNO A TODOS INDIVIDUAL /////////////////////////////////////////////////////////
+
+   public DameAlumnosJuegoDeVotacionTodosAUno(juegoId: number): Observable<Alumno[]> {
+    return this.http.get<Alumno[]>(this.APIUrlJuegoDeVotacionTodosAUno + '/' + juegoId + '/alumnos');
+  }
+
+  public InscribeAlumnoJuegoDeVotacionTodosAUno(alumnoJuegoDeVotacionTodosAUno: AlumnoJuegoDeVotacionTodosAUno) {
+    return this.http.post<AlumnoJuegoDeVotacionTodosAUno>(this.APIUrlAlumnoJuegoDeVotacionTodosAUno,
+      alumnoJuegoDeVotacionTodosAUno);
+  }
+
+
+  // tslint:disable-next-line:max-line-length
+  public DameInscripcionesAlumnoJuegoDeVotacionTodosAUno(juegoId: number): Observable<AlumnoJuegoDeVotacionTodosAUno[]> {
+    return this.http.get<AlumnoJuegoDeVotacionTodosAUno[]>(this.APIUrlAlumnoJuegoDeVotacionTodosAUno
+                                                      + '?filter[where][juegoDeVotacionTodosAUnoId]=' + juegoId);
+  }
+
+  public BorraInscripcionAlumnoJuegoDeVotacionTodosAUno(alumnoJuegoDeVotacionTodosAUnoId: number) {
+    // tslint:disable-next-line:max-line-length
+    return this.http.delete<AlumnoJuegoDeVotacionTodosAUno>(this.APIUrlAlumnoJuegoDeVotacionTodosAUno + '/' + alumnoJuegoDeVotacionTodosAUnoId);
+  }
+
+
+  // tslint:disable-next-line:max-line-length
+  public ModificaInscripcionAlumnoJuegoDeVotacionTodosAUno(inscripcion: AlumnoJuegoDeVotacionTodosAUno): Observable<AlumnoJuegoDeVotacionTodosAUno> {
+    return this.http.put<AlumnoJuegoDeVotacionTodosAUno>(this.APIUrlAlumnoJuegoDeVotacionTodosAUno + '/' + inscripcion.id, inscripcion);
+  }
+
+
+
 
   // Gestion de rubricas
   public CreaRubrica(rubrica: Rubrica, profesorId: number): Observable<Rubrica> {

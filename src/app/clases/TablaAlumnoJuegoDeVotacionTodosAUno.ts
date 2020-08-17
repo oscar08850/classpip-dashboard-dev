@@ -1,24 +1,26 @@
-export class TablaAlumnoJuegoDeVotacionUnoATodos {
+export class TablaAlumnoJuegoDeVotacionTodosAUno {
 
   posicion: number;
   nombre: string;
   primerApellido: string;
   segundoApellido: string;
-  puntos: number;
+  nota: number;
   id: number; // AlumnoId
   votado: boolean;
-  incremento: number;
+  votosRecibidos: number;
+  conceptos: number[];
+
 
   constructor(posicion?: number, nombre?: string, primerApellido?: string, segundoApellido?: string,
-              puntos?: number, id?: number) {
+              nota?: number, id?: number) {
 
     this.posicion = posicion;
     this.nombre = nombre;
     this.primerApellido = primerApellido;
     this.segundoApellido = segundoApellido;
-    this.puntos = puntos;
+    this.votosRecibidos = 0;
     this.id = id;
     this.votado = false;
-    this.incremento = 0;
+    this.nota = 0;
   }
 }

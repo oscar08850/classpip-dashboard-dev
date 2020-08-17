@@ -33,7 +33,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 
-
+import { ListViewModule } from '@syncfusion/ej2-angular-lists';
 
 
 // IMPORTs COMPONENTES
@@ -208,7 +208,11 @@ import { JuegoDeVotacionUnoATodosSeleccionadoActivoComponent } from './paginas/j
 import { JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-votacion-uno-atodos-seleccionado-inactivo/juego-de-votacion-uno-atodos-seleccionado-inactivo.component';
 import { CrearRubricaComponent } from './paginas/crear-rubrica/crear-rubrica.component';
 import { MisRubricasComponent } from './paginas/mis-rubricas/mis-rubricas.component';
+// tslint:disable-next-line:max-line-length
 import { JuegoDeAvatarSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-avatar-seleccionado-inactivo/juego-de-avatar-seleccionado-inactivo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-votacion-todos-auno-seleccionado-activo/juego-de-votacion-todos-auno-seleccionado-activo.component';
+import { JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-votacion-todos-auno-seleccionado-inactivo/juego-de-votacion-todos-auno-seleccionado-inactivo.component';
 
 
 @NgModule({
@@ -325,7 +329,9 @@ import { JuegoDeAvatarSeleccionadoInactivoComponent } from './paginas/juego-sele
     JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent,
     CrearRubricaComponent,
     MisRubricasComponent,
-    JuegoDeAvatarSeleccionadoInactivoComponent
+    JuegoDeAvatarSeleccionadoInactivoComponent,
+    JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent,
+    JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent
 
 
 
@@ -367,7 +373,8 @@ import { JuegoDeAvatarSeleccionadoInactivoComponent } from './paginas/juego-sele
 
     HttpClientModule,
 
-    NgxEchartsModule
+    NgxEchartsModule,
+    ListViewModule
   ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,

@@ -6,6 +6,9 @@ import { Location } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+
+
+
 // tslint:disable-next-line:max-line-length
 import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
 
@@ -13,7 +16,9 @@ import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFo
           EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
           EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
           AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-          EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable, JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos } from '../../clases/index';
+          EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable,
+          JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
+          JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno } from '../../clases/index';
 
 
 // Services
@@ -59,6 +64,7 @@ export interface ChipColor {
 })
 
 export class JuegoComponent implements OnInit {
+
 
 
   ///////////////////////////////////// VARIABLE GENERALES PARA EL COMPONENTE ///////////////////////////////////
@@ -183,6 +189,17 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Todos A Uno', color: 'warn'}
   ];
   tengoTipoDeVotacion = false;
+  conceptos: string[];
+  listaConceptos: any[] = [];
+  dataSourceConceptos;
+  nombreConcepto;
+  pesoConcepto;
+  pesos: number[];
+  totalPesos: number;
+  conceptosAsignados = false;
+  displayedColumnsConceptos: string[] = ['nombreConcepto', 'pesoConcepto', ' '];
+
+
 
   final = false;
 
@@ -282,13 +299,19 @@ export class JuegoComponent implements OnInit {
       PuntuacionCorrectaGeo: ['', Validators.required],
       PuntuacionIncorrectaGeo : ['', Validators.required],
       PuntuacionCorrectaGeoBonus: ['', Validators.required],
-      PuntuacionIncorrectaGeoBonus: ['', Validators.required]
+      PuntuacionIncorrectaGeoBonus: ['', Validators.required],
+      NombreDelConcepto: ['', Validators.required],
+      PesoDelConcepto: ['', Validators.required],
     });
 
     this.TablaPuntuacion = [];
     this.TablaPuntuacion[0] = new TablaPuntosFormulaUno(1, 10);
     this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
     this.Puntuacion[0] = 10;
+
+    this.listaConceptos = [];
+    this.totalPesos = 0;
+
   }
 
   //////////////////////////////////////// FUNCIONES PARA LISTAR JUEGOS ///////////////////////////////////////////////
@@ -904,7 +927,7 @@ export class JuegoComponent implements OnInit {
       console.log (this.PreguntasBasicas);
       console.log (this.PreguntasBonus);
 
-    })
+    });
   }
 
 
@@ -960,18 +983,12 @@ export class JuegoComponent implements OnInit {
   // de asignación de puntuaciones que ya se usa en la competición de Formula Uno
   // junto con las funciones asociadas, porque lo que hay que hacer es exactamente lo mismo
 
-
   TipoDeVotacionSeleccionado(tipoVotacion: ChipColor) {
     this.tipoDeVotacionSeleccionado = tipoVotacion.nombre;
     this.tengoTipoDeVotacion = true;
   }
 
-  CrearJuegoDeVotacionUnoATodos() {
-    console.log ('Datos del juevo de votación');
-    console.log (this.tipoDeJuegoSeleccionado);
-    console.log (this.tipoDeVotacionSeleccionado);
-    console.log (this.nombreDelJuego);
-    console.log (this.Puntuacion);
+CrearJuegoDeVotacionUnoATodos() {
     const juegoDeVotacion = new JuegoDeVotacionUnoATodos (
       this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeVotacionSeleccionado ,
       this.modoDeJuegoSeleccionado,
@@ -991,7 +1008,8 @@ export class JuegoComponent implements OnInit {
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.alumnosGrupo.length; i++) {
           // tslint:disable-next-line:max-line-length
-          this.peticionesAPI.InscribeAlumnoJuegoDeVotacionUnoATodos(new AlumnoJuegoDeVotacionUnoATodos(this.alumnosGrupo[i].id, this.juego.id))
+          this.peticionesAPI.InscribeAlumnoJuegoDeVotacionUnoATodos(
+		          new AlumnoJuegoDeVotacionUnoATodos(this.alumnosGrupo[i].id, this.juego.id))
           .subscribe();
         }
       }
@@ -1010,6 +1028,93 @@ export class JuegoComponent implements OnInit {
       this.tabGroup.selectedIndex = 0;
 
     });
+}
+
+PonConcepto() {
+
+  this.listaConceptos.push ({nombre: this.myForm.value.NombreDelConcepto, peso: this.myForm.value.PesoDelConcepto});
+  this.dataSourceConceptos = new MatTableDataSource (this.listaConceptos);
+  let peso: number;
+  peso = Number (this.myForm.value.PesoDelConcepto);
+  this.totalPesos = this.totalPesos + peso;
+  console.log ('total ' + this.totalPesos);
+
+  this.myForm.reset();
+
+}
+
+
+BorraConcepto(nombre) {
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < this.listaConceptos.length; i++) {
+    if (this.listaConceptos[i]['nombre'] === nombre) {
+      this.totalPesos = this.totalPesos - this.listaConceptos[i]['peso'];
+      this.listaConceptos.splice ( i, 1);
+    }
+  }
+  this.dataSourceConceptos = new MatTableDataSource (this.listaConceptos);
+
+}
+
+AsignarConceptos() {
+  this.conceptos = [];
+  this.pesos = [];
+
+
+  if (this.totalPesos !== 100) {
+    Swal.fire('Los pesos no suman el 100%', ' ', 'error');
+  } else {
+    this.listaConceptos.forEach (concepto => {
+      this.conceptos.push (concepto['nombre']);
+      this.pesos.push (concepto['peso']);
+    });
+    this.conceptosAsignados = true;
+  }
+}
+
+CrearJuegoDeVotacionTodosAUno() {
+  const juegoDeVotacion = new JuegoDeVotacionTodosAUno (
+    this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeVotacionSeleccionado ,
+    this.modoDeJuegoSeleccionado,
+    true,
+    this.conceptos,
+    this.pesos,
+    this.nombreDelJuego,
+    false,
+    this.grupo.id);
+  console.log ('voy a crear juego');
+  console.log (juegoDeVotacion);
+  this.peticionesAPI.CreaJuegoDeVotacionTodosAUno (juegoDeVotacion, this.grupo.id)
+  .subscribe (juegoCreado => {
+    this.juego = juegoCreado;
+    this.sesion.TomaJuego(this.juego);
+    this.juegoCreado = true;
+
+    if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.alumnosGrupo.length; i++) {
+        // tslint:disable-next-line:max-line-length
+        this.peticionesAPI.InscribeAlumnoJuegoDeVotacionTodosAUno(
+            new AlumnoJuegoDeVotacionTodosAUno(this.alumnosGrupo[i].id, this.juego.id))
+        .subscribe();
+      }
+    }
+
+    Swal.fire('Juego de votación tipo Todos A Uno creado correctamente', ' ', 'success');
+
+    // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+    if (this.juegosActivos === undefined) {
+    // Si la lista aun no se ha creado no podre hacer el push
+            this.juegosActivos = [];
+    }
+    this.juegosActivos.push (this.juego);
+    // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
+    this.Limpiar();
+    // Regresamos a la lista de equipos (mat-tab con índice 0)
+    this.tabGroup.selectedIndex = 0;
+
+  });
 }
 
 
@@ -1109,5 +1214,9 @@ Limpiar() {
     this.PreguntasBasicas = undefined;
     this.PreguntasBonus = undefined;
     this.tengoPreguntas = false;
+
+    this.conceptosAsignados = false;
+    this.listaConceptos = [];
+    this.totalPesos = 0;
   }
 }

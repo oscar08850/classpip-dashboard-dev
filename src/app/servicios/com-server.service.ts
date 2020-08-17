@@ -34,9 +34,22 @@ export class ComServerService {
         });
     });
   }
+
+  // Votación de un juego Uno A Todos
   public EsperoVotacion = () => {
     return Observable.create((observer) => {
         this.socket.on('notificarVotacion', (votacion) => {
+            console.log ('llega notificacion');
+            observer.next(votacion);
+        });
+    });
+  }
+
+  // votaciones de un juego Todos A Uno
+  // El parámetro votación NO tienen ninguna información relevante
+  public EsperoVotaciones = () => {
+    return Observable.create((observer) => {
+        this.socket.on('notificarVotaciones', (votacion) => {
             console.log ('llega notificacion');
             observer.next(votacion);
         });

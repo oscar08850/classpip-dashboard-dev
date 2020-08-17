@@ -36,6 +36,9 @@
   <app-juego-de-votacion-uno-atodos-seleccionado-activo></app-juego-de-votacion-uno-atodos-seleccionado-activo>
 </div>
 
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Votación Todos A Uno'">
+  <app-juego-de-votacion-todos-auno-seleccionado-activo></app-juego-de-votacion-todos-auno-seleccionado-activo>
+</div>
 
 <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver</button>
 </div>

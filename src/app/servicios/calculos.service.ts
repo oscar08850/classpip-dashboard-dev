@@ -6,7 +6,8 @@ import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHis
          TablaEquipoJuegoDeCompeticion, Jornada, EquipoJuegoDeCompeticionLiga, EnfrentamientoLiga, InformacionPartidosLiga,
          AlumnoJuegoDeCompeticionLiga, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno,
          // tslint:disable-next-line:max-line-length
-         TablaClasificacionJornada, TablaPuntosFormulaUno, AlumnoJuegoDeVotacionUnoATodos, TablaAlumnoJuegoDeVotacionUnoATodos} from '../clases/index';
+         TablaClasificacionJornada, TablaPuntosFormulaUno, AlumnoJuegoDeVotacionUnoATodos, TablaAlumnoJuegoDeVotacionUnoATodos,
+         AlumnoJuegoDeVotacionTodosAUno,TablaAlumnoJuegoDeVotacionTodosAUno, JuegoDeVotacionTodosAUno} from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -357,6 +358,32 @@ export class CalculosService {
                           obs.next();
                         }
                     });
+                  } else if (juego.Tipo === 'Juego De Votación Todos A Uno') {
+                    if (juego.Modo === 'Individual') {
+                      this.peticionesAPI.DameAlumnosJuegoDeVotacionTodosAUno(juego.id)
+                      .subscribe( AlumnosDelJuego => {
+                        if (AlumnosDelJuego[0] !== undefined) {
+                          // Una vez recibo las inscripciones, las voy borrando una a una
+                          // tslint:disable-next-line:prefer-for-of
+                          for (let i = 0; i < AlumnosDelJuego.length; i++) {
+                            this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionTodosAUno(AlumnosDelJuego[i].id)
+                            .subscribe(() => {
+                                console.log('Inscripcion al juego borrada correctamente');
+                            });
+                          }
+                        } else {
+                          console.log('No hay alumnos en el juego de votacion');
+                        }
+                      });
+                    }
+                    this.peticionesAPI.BorraJuegoDeVotacionTodosAUno (juego.id)
+                    .subscribe (() => {
+                        // Esto es lo que no hace la funcion que borra el juego de liga
+                        cont++;
+                        if (cont === juegos.length) {
+                          obs.next();
+                        }
+                    });
                   }
                 });
               } else {
@@ -589,9 +616,25 @@ export class CalculosService {
                           juegosInactivos.push(juegosVotacionUnoATodos[i]);
                         }
                       }
+                      console.log ('Vamos a por los juegos de votacion Todos A Uno del grupo: ' + grupoID);
+                      this.peticionesAPI.DameJuegosDeVotacionTodosAUno(grupoID)
+                        .subscribe(juegosVotacioTodosAUno => {
+                        console.log('He recibido los juegos de votacion Todos A Uno');
+                        console.log(juegosVotacioTodosAUno);
+                        // tslint:disable-next-line:prefer-for-of
+                        for (let i = 0; i < juegosVotacioTodosAUno.length; i++) {
+                          if (juegosVotacioTodosAUno[i].JuegoActivo === true) {
+                            juegosVotacioTodosAUno[i].Tipo = 'Juego De Votación Todos A Uno';
+                            juegosActivos.push(juegosVotacioTodosAUno[i]);
+                          } else {
+                            juegosVotacioTodosAUno[i].Tipo = 'Juego De Votación Todos A Uno';
+                            juegosInactivos.push(juegosVotacioTodosAUno[i]);
+                          }
+                        }
 
-                      const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-                      obs.next (resultado);
+                        const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+                        obs.next (resultado);
+                      });
                     });
                   });
                 });
@@ -3227,6 +3270,66 @@ public PrepararTablaRankingIndividualVotacionUnoATodosAcabado(listaAlumnosOrdena
 }
 
 
+  //////////////////////////////////////// JUEGO DE VOTACION  TODOS A UNO ///////////////////////////////////
+public PrepararTablaRankingIndividualVotacionTodosAUno(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionTodosAUno[],
+                                                       // tslint:disable-next-line:max-line-length
+                                                       alumnosDelJuego: Alumno[], juego: JuegoDeVotacionTodosAUno): TablaAlumnoJuegoDeVotacionTodosAUno[] {
+  const rankingJuegoDeVotacion: TablaAlumnoJuegoDeVotacionTodosAUno [] = [];
+  // tslint:disable-next-line:prefer-for-oF
+  for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+    let alumno: Alumno;
+    const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
+    alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+    // tslint:disable-next-line:max-line-length
+
+    const elem = new TablaAlumnoJuegoDeVotacionTodosAUno(i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+    0, alumnoId);
+    if (listaAlumnosOrdenadaPorPuntos[i].VotosEmitidos.length === listaAlumnosOrdenadaPorPuntos.length - 1) {
+      elem.votado = true;
+    } else {
+      elem.votado = false;
+    }
+    elem.conceptos = Array(juego.Conceptos.length).fill (0);
+    rankingJuegoDeVotacion[i] = elem;
+  }
+
+  // Ahora para cada alumno voy a calcular los votos recibidos y la nota en cada uno de los conceptos, asi como su nota temporal
+
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+    if (listaAlumnosOrdenadaPorPuntos[i].VotosEmitidos) {
+      // Este alumno ha emitido algunos votos
+      listaAlumnosOrdenadaPorPuntos[i].VotosEmitidos.forEach (votoEmitido => {
+        // busco al alumno que ha recibido estos votos
+        // tslint:disable-next-line:no-shadowed-variable
+        const alumnoVotado = rankingJuegoDeVotacion.filter (alumno => alumno.id === votoEmitido.alumnoId)[0];
+        alumnoVotado.votosRecibidos++;
+        // le asigno los votos que ha recibido para cada concepto
+        for (let j = 0; j < votoEmitido.votos.length; j++) {
+          alumnoVotado.conceptos[j] = alumnoVotado.conceptos[j] + votoEmitido.votos[j];
+        }
+
+      });
+    }
+  }
+
+  // Para acabar calculo la nota parcial total  para cada alumno
+  rankingJuegoDeVotacion.forEach (alumno => {
+
+    if (alumno.votosRecibidos === 0) {
+      alumno.nota = 0;
+    } else {
+      let nota = 0;
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < alumno.conceptos.length; i++) {
+        nota = nota + (alumno.conceptos[i] * juego.Pesos[i]) / 100;
+      }
+      alumno.nota = nota / alumno.votosRecibidos;
+    }
+  });
+
+  return rankingJuegoDeVotacion;
+}
 
   //////////////////////////////////////// JUEGO DE COMPETICIÓN FÓRUMULA UNO ///////////////////////////////////
   public PrepararTablaRankingIndividualFormulaUno(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionFormulaUno[],
