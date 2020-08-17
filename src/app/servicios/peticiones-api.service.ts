@@ -27,8 +27,8 @@ export class PeticionesAPIService {
 
 
 
- //private host = 'http://localhost';
- private host = 'http://147.83.118.92';
+ private host = 'http://localhost';
+//  private host = 'http://147.83.118.92';
 
 
 
@@ -98,6 +98,8 @@ export class PeticionesAPIService {
   //API Libros
 
   private APIurlImagenesLibros = 'http://localhost' + ':3000/api/imagenes';
+  private APIurlRecursosLibros = 'http://localhost' + ':3000/api/recursosLibros';
+
 
 
   constructor(
@@ -1141,7 +1143,13 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
     return this.http.post<any>(this.APIurlImagenesLibros, nombre);
   }
 
-  public guardarImagenRecursoLibro(nombre: any, file: any):Observable<any>{
+  public guardarImagenRecursoLibro(nombre: any, file: FormData):Observable<any>{
     return this.http.post<any>(this.APIurlImagenesLibros +'/'+ nombre + '/upload', file);
   }
+  public guardarRecursoLibro(recurso: any):Observable<any>{
+    return this.http.post<any>(this.APIurlRecursosLibros, recurso);
+  }
+
+  
+
 }

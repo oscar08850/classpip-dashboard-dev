@@ -3,6 +3,11 @@ import { variable, ThrowStmt } from '@angular/compiler/src/output/output_ast';
 import { Imagen } from '../../clases/clasesParaLibros/recursosCargaImagen';
 import { PeticionesAPIService } from '../../servicios/peticiones-api.service';
 
+import { ImagenToBackend } from '../../clases/clasesParaLibros/imagenGuardada';
+import { TablaHistorialPuntosAlumno } from 'src/app/clases';
+
+
+
 @Component({
   selector: 'app-crear-recursos-libro',
   templateUrl: './crear-recursos-libro.component.html',
@@ -24,6 +29,8 @@ export class CrearRecursosLibroComponent implements OnInit {
   listadePreviewsFondo: any = [];
   listadePreviewsObjeto: any = [];
   listaCompletaParaGuardar: any = [];
+
+  listaGuardarUrl: any = [];
 
   nombreFamila: any;
   verFotos = false;
@@ -227,7 +234,7 @@ export class CrearRecursosLibroComponent implements OnInit {
       this.listaCompletaParaGuardar.push(element);
     });
 
- 
+
 
     this.nameFolder = "Recursos-" + this.nombreFamila;
     const postfolder =
@@ -238,42 +245,77 @@ export class CrearRecursosLibroComponent implements OnInit {
 
       this.guardarLasFotos();
 
-     }, (err) => {
+    }, (err) => {
+
+    });
+  }
+
+  guardarLasFotos() {
+
+    var i = 0;
+
+    this.listaCompletaParaGuardar.forEach(file => {
+
+      const formData: FormData = new FormData();
+
+      var fileNew = this.dataURLtoFile(file.file, file.nombre + '.png');
+
+
+      formData.append(fileNew.name, fileNew);
+
+
+      this.API.guardarImagenRecursoLibro(this.nameFolder, formData).subscribe((res) => {
+
+        i = i + 1;
+        var imageToBackend = new ImagenToBackend();
+
+        imageToBackend.nombre = fileNew.name;
+        imageToBackend.tipo = file.tipo;
+        imageToBackend.url = fileNew.name;
+        imageToBackend.especial = file.especial;
+
+        this.listaGuardarUrl.push(imageToBackend);
+
+        if (i == this.listaCompletaParaGuardar.length) {
+          //llamada a la api
+          console.log(this.listaGuardarUrl);
+
+
+
+          const recursoSave = 
+          {
+            "nombre": this.nombreFamila,
+            "carpeta": this.nameFolder,
+            "imagenes": this.listaGuardarUrl
+          }
+
+          this.API.guardarRecursoLibro(recursoSave)
+          .subscribe((res)=>{
+            console.log(res);
+          }, (err)=>{
+            console.log(err);
+          })
+
+        }
+
+
+      }, (err) => {
+        console.log(err);
 
       });
+    });
+
   }
 
-  guardarLasFotos(){
 
-
-    var file = this.listadeFileObjetos[0].file;
-        
-        // var file = this.dataURLtoFile(this.listaCompletaParaGuardar[0].file, this.listaCompletaParaGuardar[0] + '.png');
-
-        const formData: FormData = new FormData();
-
-        formData.append(file.name, file);
-
-
-    this.API.guardarImagenRecursoLibro(this.nameFolder, file).subscribe((res) => {
-
-    console.log("oleee");
-     }, (err) => {
-      console.log(err);
-
-      })
-    
-  }
-
-  
   dataURLtoFile(dataurl, filename) {
     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-       bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
     while (n--) {
-       u8arr[n] = bstr.charCodeAt(n);
+      u8arr[n] = bstr.charCodeAt(n);
     }
     return new File([u8arr], filename, { type: mime });
- }
+  }
 
 
 }

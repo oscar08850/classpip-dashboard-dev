@@ -316,7 +316,11 @@ export class CrearFamiliaAvataresComponent implements OnInit {
         const siluetaData: FormData = new FormData();
         siluetaData.append(this.fileSilueta.name, this.fileSilueta);
         this.peticionesAPI.PonImagenAvatar(siluetaData)
-          .subscribe();
+          .subscribe((res)=>{
+            console.log(res);
+          }, (err)=>{
+            console.log(err);
+          });
 
         // ahora guardamos las imagenes de los complementos
         for (let i = 0; i < 4 ; i++) {
