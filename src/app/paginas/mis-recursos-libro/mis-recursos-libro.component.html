@@ -1,0 +1,21 @@
+<div class="titulo">Mis recursos de libros</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+  <div class="enFila" style="width: 60%; align-content: left;">
+    <div>
+      Seleccione un pack
+      <br>
+      <mat-form-field>
+        <mat-label>Pack de recursos</mat-label>
+        <select matNativeControl [(ngModel)]="recursoId" (change)="TraeImagenesRecursoLibro()">
+          <option *ngFor="let recurso of listaRecursos" [value]="recurso.id">
+            <p>{{recurso.nombre}}</p>
+          </option>
+        </select>
+      </mat-form-field>
+    </div>
+  </div>
+
+
+</div>

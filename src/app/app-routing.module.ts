@@ -113,6 +113,7 @@ import {MenuRecursosComponent} from './paginas/menu-recursos/menu-recursos.compo
 //Componentes Libro:
 
 import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
+import { MisRecursosLibroComponent }  from './paginas/mis-recursos-libro/mis-recursos-libro.component';
 
 const routes: Routes = [
 
@@ -270,7 +271,10 @@ const routes: Routes = [
 
 
   //libros
-  {path:'inicio/:id/crearRecursosLibro', component: CrearRecursosLibroComponent}
+  {path:'inicio/:id/crearRecursosLibro', component: CrearRecursosLibroComponent},
+  
+  {path:'inicio/:id/verRecursosLibro', component: MisRecursosLibroComponent}
+
 ];
 
 @NgModule({

@@ -11,7 +11,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario, Cuestionario, AlumnoJuegoDeCompeticionFormulaUno,
         EquipoJuegoDeCompeticionFormulaUno, SesionClase, AsistenciaClase, FamiliaAvatares, JuegoDeAvatar,
         AlumnoJuegoDeAvatar, JuegoDeCuestionario, AlumnoJuegoDeCuestionario,
-        RespuestaJuegoDeCuestionario} from '../clases/index';
+        RespuestaJuegoDeCuestionario, RecursoLibro} from '../clases/index';
 
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
@@ -1146,10 +1146,19 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
   public guardarImagenRecursoLibro(nombre: any, file: FormData):Observable<any>{
     return this.http.post<any>(this.APIurlImagenesLibros +'/'+ nombre + '/upload', file);
   }
-  public guardarRecursoLibro(recurso: any):Observable<any>{
-    return this.http.post<any>(this.APIurlRecursosLibros, recurso);
+  // public guardarRecursoLibro(recurso: any):Observable<any>{
+  //   return this.http.post<any>(this.APIurlRecursosLibros, recurso);
+  // }
+
+  public guardarRecursoLibro(recurso: any, profesorId):Observable<any>{
+    return this.http.post<any>(  this.APIUrlProfesores +'/'+ profesorId + '/recursosLibros', recurso);
   }
 
-  
+
+
+  public recuperarListaRecursos( profesorId):Observable<RecursoLibro[]>{
+    return this.http.get<RecursoLibro[]>(this.APIUrlProfesores  +'/'+profesorId + '/recursosLibros');
+  }
+
 
 }

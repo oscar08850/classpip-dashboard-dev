@@ -59,4 +59,6 @@ export * from './AlumnoJuegoDeGeocaching';
 export * from './ParaAlbum';
 export * from './RespuestaJuegoDeCuestionario';
 export * from './TablaAlumnoJuegoDeCuestionario';
+export * from './clasesParaLibros/recursoLibro';
+
 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { variable, ThrowStmt } from '@angular/compiler/src/output/output_ast';
 import { Imagen } from '../../clases/clasesParaLibros/recursosCargaImagen';
 import { PeticionesAPIService } from '../../servicios/peticiones-api.service';
+import { SesionService } from '../../servicios/sesion.service';
+
 
 import { ImagenToBackend } from '../../clases/clasesParaLibros/imagenGuardada';
 import { TablaHistorialPuntosAlumno } from 'src/app/clases';
@@ -38,7 +40,7 @@ export class CrearRecursosLibroComponent implements OnInit {
 
   nameFolder: string = null;
 
-  constructor(public API: PeticionesAPIService) { }
+  constructor(public API: PeticionesAPIService, public sesion: SesionService) { }
 
   ngOnInit() {
   }
@@ -119,6 +121,7 @@ export class CrearRecursosLibroComponent implements OnInit {
 
 
     picker.addEventListener('change', e => {
+
       for (let file of Array.from(e.target.files) as any) {
         let item = document.createElement('li');
         item.textContent = file.webkitRelativePath;
@@ -194,26 +197,26 @@ export class CrearRecursosLibroComponent implements OnInit {
     if (imagen.especial == false) {
       imagen.especial = true;
       if (imagen.tipo == "fondo") {
-        this.listadePreviewsFondo[imagen.posicionLista] = imagen;
+        this.listadePreviewsFondo[imagen.posicionLista -1 ] = imagen;
       }
       else if (imagen.tipo == "personaje") {
-        this.listadePreviewsPersonaje[imagen.posicionLista] = imagen;
+        this.listadePreviewsPersonaje[imagen.posicionLista -1] = imagen;
       }
       else if (imagen.tipo == "objeto") {
-        this.listadePreviewsObjeto[imagen.posicionLista] = imagen;
+        this.listadePreviewsObjeto[imagen.posicionLista -1] = imagen;
       }
     }
 
     else if (imagen.especial == true) {
       imagen.especial = false;
       if (imagen.tipo == "fondo") {
-        this.listadePreviewsFondo[imagen.posicionLista] = imagen;
+        this.listadePreviewsFondo[imagen.posicionLista-1] = imagen;
       }
       else if (imagen.tipo == "personaje") {
-        this.listadePreviewsPersonaje[imagen.posicionLista] = imagen;
+        this.listadePreviewsPersonaje[imagen.posicionLista-1] = imagen;
       }
       else if (imagen.tipo == "objeto") {
-        this.listadePreviewsObjeto[imagen.posicionLista] = imagen;
+        this.listadePreviewsObjeto[imagen.posicionLista-1] = imagen;
       }
     }
   }
@@ -289,7 +292,7 @@ export class CrearRecursosLibroComponent implements OnInit {
             "imagenes": this.listaGuardarUrl
           }
 
-          this.API.guardarRecursoLibro(recursoSave)
+          this.API.guardarRecursoLibro(recursoSave, this.sesion.DameProfesor().id)
           .subscribe((res)=>{
             console.log(res);
           }, (err)=>{
