@@ -16,7 +16,11 @@ export class JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent implements On
   alumnosDelJuego: Alumno[];
   listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionTodosAUno[];
   rankingIndividualJuegoDeVotacionTodosAUno: TablaAlumnoJuegoDeVotacionTodosAUno[] = [];
-  datasourceAlumno;
+  dataSourceAlumno;
+
+  // tslint:disable-next-line:max-line-length
+  displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'votos',  'nota'];
+
   constructor(
     public sesion: SesionService,
     public peticionesAPI: PeticionesAPIService,
@@ -28,6 +32,7 @@ export class JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent implements On
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
     console.log(this.juegoSeleccionado);
+    this.juegoSeleccionado.Conceptos.forEach (concepto => this.displayedColumnsAlumnos.push (concepto));
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
       this.AlumnosDelJuego();
@@ -53,14 +58,39 @@ export class JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent implements On
     this.peticionesAPI.DameInscripcionesAlumnoJuegoDeVotacionTodosAUno(this.juegoSeleccionado.id)
     .subscribe(inscripciones => {
       this.listaAlumnosOrdenadaPorPuntos = inscripciones;
+      console.log ('inscripciones');
+      console.log (this.listaAlumnosOrdenadaPorPuntos);
       // ordena la lista por puntos
       // tslint:disable-next-line:only-arrow-functions
       // this.listaAlumnosOrdenadaPorPuntos = this.listaAlumnosOrdenadaPorPuntos.sort(function(obj1, obj2) {
       //   return obj2.puntosTotales - obj1.puntosTotales;
       // });
-      // this.TablaClasificacionTotal();
+      this.TablaClasificacionTotal();
     });
   }
+
+
+
+  TablaClasificacionTotal() {
+
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      // tslint:disable-next-line:max-line-length
+      this.rankingIndividualJuegoDeVotacionTodosAUno = this.calculos.PrepararTablaRankingIndividualVotacionTodosAUnoAcabado (
+        this.listaAlumnosOrdenadaPorPuntos,
+        this.alumnosDelJuego,
+        this.juegoSeleccionado);
+      // tslint:disable-next-line:only-arrow-functions
+      this.rankingIndividualJuegoDeVotacionTodosAUno = this.rankingIndividualJuegoDeVotacionTodosAUno.sort(function(obj1, obj2) {
+        return obj2.nota - obj1.nota;
+      });
+      this.dataSourceAlumno = new MatTableDataSource(this.rankingIndividualJuegoDeVotacionTodosAUno);
+
+    } else {
+      console.log ('la modalidad en equipo aun no está operativa');
+
+    }
+  }
+
   Eliminar() {
     Swal.fire({
       title: '¿Seguro que quieres eliminar el juego de votación?',
@@ -113,6 +143,11 @@ export class JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent implements On
         });
       }
     });
+  }
+
+
+  applyFilter(filterValue: string) {
+    this.dataSourceAlumno.filter = filterValue.trim().toLowerCase();
   }
 
 

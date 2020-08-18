@@ -21,6 +21,6 @@ export class TablaAlumnoJuegoDeVotacionTodosAUno {
     this.votosRecibidos = 0;
     this.id = id;
     this.votado = false;
-    this.nota = 0;
+    this.nota = nota;
   }
 }

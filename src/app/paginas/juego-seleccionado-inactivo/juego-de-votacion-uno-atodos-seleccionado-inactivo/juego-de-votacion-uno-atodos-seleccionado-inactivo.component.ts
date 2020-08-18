@@ -15,7 +15,7 @@ export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements On
   alumnosDelJuego: Alumno[];
   listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[];
   rankingIndividualJuegoDeVotacionUnoATodos: TablaAlumnoJuegoDeVotacionUnoATodos[] = [];
-  datasourceAlumno;
+  dataSourceAlumno;
 
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos'];
   constructor(
@@ -74,7 +74,7 @@ export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements On
       this.rankingIndividualJuegoDeVotacionUnoATodos = this.rankingIndividualJuegoDeVotacionUnoATodos.sort(function(obj1, obj2) {
         return obj2.puntos - obj1.puntos;
       });
-      this.datasourceAlumno = new MatTableDataSource(this.rankingIndividualJuegoDeVotacionUnoATodos);
+      this.dataSourceAlumno = new MatTableDataSource(this.rankingIndividualJuegoDeVotacionUnoATodos);
 
     } else {
       console.log ('la modalidad en equipo aun no está operativa');
@@ -135,5 +135,12 @@ export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements On
       }
     });
   }
+
+
+  applyFilter(filterValue: string) {
+    this.dataSourceAlumno.filter = filterValue.trim().toLowerCase();
+  }
+
+
 
 }

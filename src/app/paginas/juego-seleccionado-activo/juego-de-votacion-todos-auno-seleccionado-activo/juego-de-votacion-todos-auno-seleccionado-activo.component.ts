@@ -136,6 +136,8 @@ export class JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent implements OnIn
         // Primero registro las puntuaciones definitivas de cada alumno
         this.listaAlumnosOrdenadaPorPuntos.forEach (alumno => {
           alumno.PuntosTotales = this.rankingIndividualJuegoDeVotacionTodosAUno.filter (al => al.id === alumno.alumnoId)[0].nota;
+          console.log ('actualizo');
+          console.log (alumno);
           this.peticionesAPI.ModificaInscripcionAlumnoJuegoDeVotacionTodosAUno (alumno).subscribe();
         });
 

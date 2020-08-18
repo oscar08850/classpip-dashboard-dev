@@ -4,8 +4,85 @@
       <button type="button" class="btn Aceptar" (click) = "Reactivar()">Reactivar<i class="material-icons">check_circle_outline</i></button>
       <button type="button" class="btn Eliminar" (click) = "Eliminar()"> Eliminar<i class="material-icons">delete</i></button>
     </div>
+   <!-- ////////////////////////////////////// CLASIFICACIÓN INDIVIDUAL ////////////////////////////////////////////////////-->
+   <form style="width: 100%"  *ngIf="juegoSeleccionado.Modo === 'Individual'">
+    <div class="filter"  style="width: 60%">
+      <mat-form-field style="width: 95% !Important;">
+        <input matInput (keyup)="applyFilter($event.target.value)"  placeholder="Filtro para buscar alumno...">
+        <i class="material-icons" matSuffix>search</i>
+      </mat-form-field>
+    </div>
 
-  EN OBRAS
+    <table style="width: 120%"  align="center"  mat-table [dataSource]="dataSourceAlumno" class="example-container mat-elevation-z8">
+
+
+
+        <ng-container matColumnDef="posicion">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Posición Global</th>
+          <td mat-cell *matCellDef="let alumno; let i = index">
+            <div>{{i+1}}</div>
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="nombreAlumno">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Nombre</th>
+          <td mat-cell *matCellDef="let alumno; let i = index">
+            <div>{{alumno.nombre}}</div>
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="primerApellido">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">Primer Apellido</th>
+            <td mat-cell *matCellDef="let alumno; let i = index">
+              <div>{{alumno.primerApellido}}</div>
+            </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="segundoApellido">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 15%"  align="center">Segundo Apellido</th>
+            <td mat-cell *matCellDef="let alumno; let i = index">
+              <div>{{alumno.segundoApellido}}</div>
+            </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="votos">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 15%"  align="center">Votos recibidos</th>
+          <td mat-cell *matCellDef="let alumno; let i = index">
+            <div>{{alumno.votosRecibidos}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nota">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 15%"  align="center">Nota</th>
+            <td mat-cell *matCellDef="let alumno; let i = index">
+              <div>{{(alumno.nota).toFixed(2)}}</div>
+            </td>
+        </ng-container>
+
+
+        <ng-container *ngFor = 'let concepto of juegoSeleccionado.Conceptos; let j=index' matColumnDef={{concepto}}>
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 10%"  align="center">{{concepto}}</th>
+          <td mat-cell *matCellDef="let alumno; let i = index">
+            <div *ngIf = "alumno.votosRecibidos !== 0">
+              <div>{{(alumno.conceptos[j]/ alumno.votosRecibidos).toFixed(2)}}</div>
+            </div>
+            <div *ngIf = "alumno.votosRecibidos === 0">
+              <div>0</div>
+            </div>
+          </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnos; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnos;"></tr>
+
+    </table>
+
+  </form>
   </div>
 </div>
 
