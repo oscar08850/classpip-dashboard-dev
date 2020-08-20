@@ -97,8 +97,8 @@ export class PeticionesAPIService {
 
   //API Libros
 
-  private APIurlImagenesLibros = 'http://localhost' + ':3000/api/imagenes';
-  private APIurlRecursosLibros = 'http://localhost' + ':3000/api/recursosLibros';
+  private APIurlImagenesLibros = this.host + ':3000/api/imagenes';
+  private APIurlRecursosLibros = this.host + ':3000/api/recursosLibros';
 
 
 
@@ -1156,9 +1156,15 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
 
 
 
-  public recuperarListaRecursos( profesorId):Observable<RecursoLibro[]>{
+  public recuperarListaRecursos(profesorId):Observable<RecursoLibro[]>{
     return this.http.get<RecursoLibro[]>(this.APIUrlProfesores  +'/'+profesorId + '/recursosLibros');
   }
+
+
+  public getImagenesRecurso(containerName, fileName):Observable<any>{
+    return this.httpImagenes.get(this.APIurlImagenesLibros  + '/' + containerName + '/download/' + fileName, { responseType: ResponseContentType.Blob });
+  }
+
 
 
 }

@@ -13,6 +13,15 @@ export class MisRecursosLibroComponent implements OnInit {
 
 
   listaRecursos: any[] = [];
+  recursoId: Number;
+  recursoCargadoPregunta: any = false;
+  recursoCargado: any;
+
+  listaFotosPersonajes: any[] = [];
+  listaFotosFondos: any[] = [];
+  listaFotosObjetos: any[] = [];
+
+
 
 
   constructor(public API: PeticionesAPIService, public sesion: SesionService) { }
@@ -35,6 +44,59 @@ export class MisRecursosLibroComponent implements OnInit {
       }, (err) => {
 
       })
+  }
+
+
+
+
+
+  traeImagenesRecursoLibro(){
+
+    this.recursoCargadoPregunta = true;
+    this.recursoCargado = this.listaRecursos.filter (recuro => recuro.id === Number(this.recursoId))[0];
+
+    this.recursoCargado.imagenes.forEach(element => {
+      
+      this.API.getImagenesRecurso(this.recursoCargado.carpeta, element.nombre)
+      .subscribe((res)=>{
+
+        const blob = new Blob([res.blob()], { type: 'image/png' });
+        const reader = new FileReader();
+
+        reader.addEventListener('load', () => {
+
+          var foto = null;
+          foto = reader.result.toString();
+
+          if (element.tipo == "fondo")
+          {
+            this.listaFotosFondos.push(foto);
+          }
+          else if (element.tipo == "personaje")
+          {
+            this.listaFotosPersonajes.push(foto);
+
+          }
+          else if (element.tipo == "objeto")
+          {
+            this.listaFotosObjetos.push(foto);
+
+          }
+
+        }, false);
+
+        if (blob) {
+          reader.readAsDataURL(blob);
+        }
+
+
+      }, (err)=>{
+
+        console.log(err);
+      })
+
+    });
+    
   }
 
 }
