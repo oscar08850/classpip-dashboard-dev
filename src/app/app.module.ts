@@ -206,6 +206,7 @@ import { VerTodosComponent } from './paginas/juego-seleccionado-activo/juego-de-
 
 import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
 import { MisRecursosLibroComponent } from './paginas/mis-recursos-libro/mis-recursos-libro.component';
+import { JuegoDeCuentoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-seleccionado-activo.component';
 
 
 @NgModule({
@@ -319,7 +320,8 @@ import { MisRecursosLibroComponent } from './paginas/mis-recursos-libro/mis-recu
     RespuestasAlumnoJuegoDeCuestionarioComponent,
     VerTodosComponent,
     CrearRecursosLibroComponent,
-    MisRecursosLibroComponent
+    MisRecursosLibroComponent,
+    JuegoDeCuentoSeleccionadoActivoComponent
 
 
 
