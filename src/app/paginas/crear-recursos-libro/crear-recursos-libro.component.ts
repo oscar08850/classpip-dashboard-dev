@@ -201,7 +201,11 @@ export class CrearRecursosLibroComponent implements OnInit {
       }
       else if (imagen.tipo == "personaje") {
         this.listadePreviewsPersonaje[imagen.posicionLista -1] = imagen;
-      }
+      }     
+
+
+
+      
       else if (imagen.tipo == "objeto") {
         this.listadePreviewsObjeto[imagen.posicionLista -1] = imagen;
       }
