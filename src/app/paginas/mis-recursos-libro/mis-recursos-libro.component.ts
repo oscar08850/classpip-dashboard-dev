@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PeticionesAPIService } from '../../servicios/peticiones-api.service';
 import { SesionService } from '../../servicios/sesion.service';
+import { ImagenToBackend } from '../../clases/clasesParaLibros/imagenGuardada';
 
 
 
@@ -20,6 +21,7 @@ export class MisRecursosLibroComponent implements OnInit {
   listaFotosPersonajes: any[] = [];
   listaFotosFondos: any[] = [];
   listaFotosObjetos: any[] = [];
+
 
 
 
@@ -52,6 +54,11 @@ export class MisRecursosLibroComponent implements OnInit {
 
   traeImagenesRecursoLibro(){
 
+
+    this.listaFotosPersonajes = [];
+    this.listaFotosFondos  = [];
+    this.listaFotosObjetos = [];
+
     this.recursoCargadoPregunta = true;
     this.recursoCargado = this.listaRecursos.filter (recuro => recuro.id === Number(this.recursoId))[0];
 
@@ -67,19 +74,32 @@ export class MisRecursosLibroComponent implements OnInit {
 
           var foto = null;
           foto = reader.result.toString();
+          var fotoProps = new ImagenToBackend();
+          fotoProps.url = foto;
+          if(element.especial == true)
+          {
+            fotoProps.especial = "Especial"
+          }
+          else
+          {
+            fotoProps.especial == ""
+          }
+
+          fotoProps.nombre = element.nombre
+
 
           if (element.tipo == "fondo")
           {
-            this.listaFotosFondos.push(foto);
+            this.listaFotosFondos.push(fotoProps);
           }
           else if (element.tipo == "personaje")
           {
-            this.listaFotosPersonajes.push(foto);
+            this.listaFotosPersonajes.push(fotoProps);
 
           }
           else if (element.tipo == "objeto")
           {
-            this.listaFotosObjetos.push(foto);
+            this.listaFotosObjetos.push(fotoProps);
 
           }
 

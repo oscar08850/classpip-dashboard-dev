@@ -122,7 +122,7 @@ export class CrearRecursosLibroComponent implements OnInit {
 
     picker.addEventListener('change', e => {
 
-      for (let file of Array.from(e.target.files) as any) {
+      for (let file of Array.from(e.target.files) as any) { 
         let item = document.createElement('li');
         item.textContent = file.webkitRelativePath;
         var splitPath = item.textContent.split('/');
@@ -201,7 +201,11 @@ export class CrearRecursosLibroComponent implements OnInit {
       }
       else if (imagen.tipo == "personaje") {
         this.listadePreviewsPersonaje[imagen.posicionLista -1] = imagen;
-      }
+      }     
+
+
+
+      
       else if (imagen.tipo == "objeto") {
         this.listadePreviewsObjeto[imagen.posicionLista -1] = imagen;
       }

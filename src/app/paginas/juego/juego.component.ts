@@ -137,6 +137,12 @@ export class JuegoComponent implements OnInit {
   tengoFamilias = false;
 
 
+  //info para juego de libros
+
+  recursoElegido: number[];
+  tengoRecurso = false;
+
+
   // Información para crear juego de competicion
 
   tipoDeCompeticionSeleccionado: string;
@@ -652,15 +658,10 @@ export class JuegoComponent implements OnInit {
   }
 
 
-
-
-
-
-
-
-
-
-
+  RecibeRecursos($event){
+    this.recursoElegido = $event;
+    this.tengoRecurso = true;
+  }
 
 
   //// FUNCIONES PARA LA CREACION DE UN JUEGO DE AVATARES
@@ -1118,7 +1119,7 @@ Limpiar() {
     this.familiasElegidas = undefined;
     this.tengoFamilias = false;
 
-
+  
 
     this.tengoNumeroDeJornadas = false;
     this.tengoTipoDeCompeticion = false;
@@ -1135,5 +1136,9 @@ Limpiar() {
     this.PreguntasBasicas = undefined;
     this.PreguntasBonus = undefined;
     this.tengoPreguntas = false;
+
+
+    this.recursoElegido = undefined;
+    this.tengoRecurso = false;
   }
 }

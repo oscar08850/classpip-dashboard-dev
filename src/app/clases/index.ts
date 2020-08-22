@@ -62,4 +62,6 @@ export * from './TablaAlumnoJuegoDeCuestionario';
 export * from './clasesParaLibros/recursoLibro';
 export * from './AlumnoJuegoDeLibro';
 export * from './JuegoDeLibros';
+export * from './clasesParaLibros/imagenGuardada';
+
 
