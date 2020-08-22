@@ -282,11 +282,11 @@
 
       <label class="LabelStepper">Selecciona las carpetas de imagenes  para el juego</label>
       <!-- Nos vamos al componente para asignar la colección -->
-      <app-asignar-familias-juego-avatares (emisorFamiliasElegidas)="RecibeFamiliasElegidas ($event)">
-      </app-asignar-familias-juego-avatares>
+      <app-asignar-recursos-juego-libros (emisorRecursosElegidos)="RecibeRecursos($event)">
+      </app-asignar-recursos-juego-libros>
       <div class="btnCambiarStep">
         <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-        <button *ngIf="tengoFamilias" type="button" class="btn Next" matStepperNext>Siguiente</button>
+        <button *ngIf="tengoRecurso" type="button" class="btn Next" matStepperNext>Siguiente</button>
       </div>
 
     </mat-step>
