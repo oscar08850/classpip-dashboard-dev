@@ -18,16 +18,16 @@
   </div>
 
   <div *ngIf="recursoCargadoPregunta">
-    <h2>Este grupo de recursos se llama : {{nombreFamila}}</h2>
     <h2>Personajes:</h2>
 
     <div>
-      <mat-grid-list cols="5" rowHeight="1:1">
+      <mat-grid-list cols="4" rowHeight="1:1">
         <mat-grid-tile *ngFor='let imageF of listaFotosPersonajes'>
           <mat-card>
 
-            <img [src]='imageF'>
-
+            <img [src]='imageF.url' height="175" width="175">
+            <p>{{imageF.nombre}}</p>
+            <p>{{imageF.especial}}</p>
           </mat-card>
 
         </mat-grid-tile>
@@ -40,7 +40,9 @@
         <mat-grid-tile *ngFor='let imageP of listaFotosFondos'>
           <mat-card>
 
-            <img [src]='imageP' height="700" width="700">
+            <img [src]='imageP.url' height="450" width="450">
+            <p>{{imageP.nombre}}</p>
+            <p>{{imageP.especial}}</p>
           </mat-card>
 
 
@@ -50,11 +52,12 @@
     <h2>Objetos:</h2>
 
     <div>
-      <mat-grid-list cols="5" rowHeight="1:1">
+      <mat-grid-list cols="4" rowHeight="1:1">
         <mat-grid-tile *ngFor='let imageO of listaFotosObjetos'>
           <mat-card>
-            <img [src]='imageO' height="250" width="250">
-
+            <img [src]='imageO.url' height="175" width="175">
+            <p>{{imageO.nombre}}</p>
+            <p>{{imageO.especial}}</p>
           </mat-card>
         </mat-grid-tile>
       </mat-grid-list>
