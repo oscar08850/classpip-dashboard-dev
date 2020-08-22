@@ -7,13 +7,16 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // tslint:disable-next-line:max-line-length
-import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
+import {
+  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
 
-          AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
-          EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
-          EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
-          AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-          EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable } from '../../clases/index';
+  AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
+  EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
+  EquipoJuegoDeCompeticionFormulaUno, Cuestionario, AlumnoJuegoDeLibro, JuegoDeAvatar, JuegoDeLibros, FamiliaAvatares,
+  AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion, 
+  EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable
+} from '../../clases/index';
+
 
 
 // Services
@@ -76,12 +79,14 @@ export class JuegoComponent implements OnInit {
   // Usaré esta variable para determinar si debo advertir al usuario de
   // que está abandonando el proceso de creación del juego
   creandoJuego = false;
+  inscribirtemporada;
 
   juego: Juego;
   juegoDeCuestionario: JuegoDeCuestionario;
   juegoDeCompeticion: JuegoDeCompeticion;
   juegoDeAvatar: JuegoDeAvatar;
   juegoDeGeocaching: JuegoDeGeocaching;
+  juegoDeLibro: JuegoDeLibros;
 
   // Informacion para todos los juegos
   myForm: FormGroup;
@@ -97,7 +102,8 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Competición', color: 'warn'},
     {nombre: 'Juego De Avatar', color: 'primary'},
     {nombre: 'Juego De Cuestionario', color: 'accent'},
-    {nombre: 'Juego De Geocaching', color: 'warn'}
+    {nombre: 'Juego De Geocaching', color: 'warn'},
+    {nombre: 'Juego De Cuentos', color: 'primary'}
   ];
   seleccionModoJuego: ChipColor[] = [
     {nombre: 'Individual', color: 'primary'},
@@ -272,7 +278,8 @@ export class JuegoComponent implements OnInit {
       PuntuacionCorrectaGeo: ['', Validators.required],
       PuntuacionIncorrectaGeo : ['', Validators.required],
       PuntuacionCorrectaGeoBonus: ['', Validators.required],
-      PuntuacionIncorrectaGeoBonus: ['', Validators.required]
+      PuntuacionIncorrectaGeoBonus: ['', Validators.required],
+      descripcionlibro: ['', Validators.required]
     });
 
     this.TablaPuntuacion = [];
@@ -350,7 +357,16 @@ export class JuegoComponent implements OnInit {
       Swal.fire('Alerta', 'Aún no es posible el juego de cuestionario en equipo', 'warning');
     } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Avatares') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de avatares en equipo', 'warning');
-    } else {
+    }
+    
+    
+    else if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuentos') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+      Swal.fire('Alerta', 'Aún no es posible el juego de libros en equipo', 'warning');
+
+    }
+    
+    
+    else {
       if (this.modoDeJuegoSeleccionado === 'Individual') {
         if (this.alumnosGrupo === undefined) {
           Swal.fire('Alerta', 'No hay ningún alumno en este grupo', 'warning');
@@ -360,7 +376,11 @@ export class JuegoComponent implements OnInit {
           this.tengoModo = true;
         }
 
-      } else {
+      } 
+      
+      
+      
+      else {
         if (this.equiposGrupo === undefined) {
           Swal.fire('Alerta', 'No hay ningún equipo en este grupo', 'warning');
           console.log('No se puede crear juego pq no hay equipos');
@@ -571,6 +591,77 @@ export class JuegoComponent implements OnInit {
 
     });
   }
+
+
+  CrearJuegoLibro() {
+
+    const juego = new JuegoDeLibros(this.nombreDelJuego,
+      this.tipoDeJuegoSeleccionado,
+      this.modoDeJuegoSeleccionado,
+      true);
+    juego.descripción = this.myForm.value.descripcionlibro;
+    juego.Temporada = 'SI';
+    if (this.inscribirtemporada == '1') {
+
+    }
+    if (this.inscribirtemporada == '2') {
+
+    }
+
+    this.peticionesAPI.crearjuegolibro(juego, this.grupo.id)
+      .subscribe(juego => {
+        this.juegoDeLibro = juego;
+        
+        if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+         console.log('Voy a inscribir a los alumnos del grupo');
+          // tslint:disable-next-line:max-line-length
+          if (this.modoDeJuegoSeleccionado === 'Individual') {
+            console.log('Voy a inscribir a los alumnos del grupo');
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < this.alumnosGrupo.length; i++) {
+              // tslint:disable-next-line:max-line-length
+              console.log('inscribo');
+              this.peticionesAPI.InscribeAlumnojuegoDelibro(new AlumnoJuegoDeLibro(this.alumnosGrupo[i].id, this.juegoDeLibro.id))
+                .subscribe();
+            }
+          } else {
+           
+          }
+          Swal.fire('Juego de libro creado correctamente', ' ', 'success');
+
+      
+          if (this.juegosActivos === undefined) {
+           
+            this.juegosActivos = [];
+          }
+          this.juegosActivos.push(this.juegoDeLibro);
+          this.Limpiar();
+          
+          this.tabGroup.selectedIndex = 0;
+        }
+      });
+  }
+
+
+
+
+  inscribir(inscribirt) {
+    console.log(inscribirt);
+    this.inscribirtemporada = inscribirt;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 
   //// FUNCIONES PARA LA CREACION DE UN JUEGO DE AVATARES
   RecibeFamiliasElegidas($event) {
