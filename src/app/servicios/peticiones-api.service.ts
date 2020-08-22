@@ -10,7 +10,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
         Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario, Cuestionario, AlumnoJuegoDeCompeticionFormulaUno,
         EquipoJuegoDeCompeticionFormulaUno, SesionClase, AsistenciaClase, FamiliaAvatares, JuegoDeAvatar,
-        AlumnoJuegoDeAvatar, JuegoDeCuestionario, AlumnoJuegoDeCuestionario,
+        AlumnoJuegoDeAvatar, AlumnoJuegoDeLibro,JuegoDeLibros, JuegoDeCuestionario, AlumnoJuegoDeCuestionario,
         RespuestaJuegoDeCuestionario, RecursoLibro} from '../clases/index';
 
 import { Escenario } from '../clases/Escenario';
@@ -46,7 +46,7 @@ export class PeticionesAPIService {
   private APIUrlAlumnoJuegoDeCuestionario = this.host + ':3000/api/AlumnosJuegoDeCuestionario';
   private APIUrlJuegoDeCuestionario = this.host + ':3000/api/JuegosDeCuestionario';
   private APIUrlRespuestasJuegoDeCuestionario = this.host + ':3000/api/respuestasJuegoDeCuestionario';
-
+  private APIUrlAlumnoJuegoDeLibro = this.host + ':3000/api/alumnojuegodecuento';
 
 
   private APIUrlJuegoDePuntos = this.host + ':3000/api/JuegosDePuntos';
@@ -333,6 +333,35 @@ export class PeticionesAPIService {
     return this.httpImagenes.get(this.APIUrlImagenInsignia + '/download/' + imagen,
       { responseType: ResponseContentType.Blob });
   }
+
+
+
+
+  public InscribeAlumnojuegoDelibro(alumnoJuegoDeLibro: AlumnoJuegoDeLibro){
+    return this.http.post<AlumnoJuegoDeLibro>(this.APIUrlAlumnoJuegoDeLibro,
+      alumnoJuegoDeLibro);
+    
+  }
+  public crearjuegolibro(juego: JuegoDeLibros, grupoId: number) {
+  
+    return this.http.post<JuegoDeLibros>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro', juego);
+  }
+  
+  
+   public DamejuegosdeCuento (grupoId: number): Observable<Juego[]> {
+    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro');
+  }
+  
+  
+  
+
+
+
+
+
+
+
+
 
 
   /////////////////////////////////////// GESTION DE COLECCIONES ////////////////////////////////////////////////////

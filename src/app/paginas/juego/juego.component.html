@@ -244,6 +244,99 @@
 
           </div>
 
+
+
+ <!-- ////////////////////////////SI ESCOGEMOS EL JUEGO DE TIPO DE  CREAR LIBRO  ////////////////////////////////-->
+
+ <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Cuentos' && tengoModo">
+             
+             
+  <mat-step>
+    <ng-template matStepLabel>
+      <div> Descripción </div>
+    </ng-template>
+
+
+        
+  <div>
+      <label class="LabelStepper">Añadir alguna indicación para los alumnos   </label>
+      <mat-form-field>
+        <input matInput formControlName="descripcionlibro" placeholder="Escriba aqui" requiered>
+      </mat-form-field>
+    </div>
+
+    <div class="btnCambiarStep">
+      <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+      <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+    </div>
+  </mat-step>
+
+  <!-- //////////////////////////////////// -->
+
+<!-- ///////////////////////////////////////// -->
+
+    <mat-step>
+      <ng-template matStepLabel>
+        <div>Familias</div>
+      </ng-template>
+
+      <label class="LabelStepper">Selecciona las carpetas de imagenes  para el juego</label>
+      <!-- Nos vamos al componente para asignar la colección -->
+      <app-asignar-familias-juego-avatares (emisorFamiliasElegidas)="RecibeFamiliasElegidas ($event)">
+      </app-asignar-familias-juego-avatares>
+      <div class="btnCambiarStep">
+        <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+        <button *ngIf="tengoFamilias" type="button" class="btn Next" matStepperNext>Siguiente</button>
+      </div>
+
+    </mat-step>
+
+   
+
+    <mat-step>
+      <ng-template matStepLabel>
+        <div> Temporada </div>
+      </ng-template>
+
+      <div>
+
+        <label class="LabelStepper">Inscribir el juego en la temporada actual</label>
+   
+          <button type="button" class="btn Next" (click)="inscribir(1)">SI </button>
+          <button type="button" class="btn Back" (click)="inscribir(2)"> NO</button>
+       
+      </div>
+
+      <div class="btnCambiarStep">
+        <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+        <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+      </div>
+    </mat-step>
+
+          
+
+
+    <mat-step>
+      <ng-template matStepLabel>Finalizar</ng-template>
+
+      <span style="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}...
+        {{tipoJuegoCompeticionSeleccionado}} ... {{modoDeJuegoSeleccionado}} </span>
+      <div class="btnCambiarStep">
+        <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+        <button style="width: 60%" type="button" class="btn Aceptar" (click)="CrearJuegoLibro()">Crear
+          juego de Libros</button>
+      </div>
+    </mat-step>
+  </div>
+
+
+
+
+
+
+
+
+
           <!--/////////////////////// SI ESCOGEMOS EL JUEGO DE TIPO CUESTIONARIO //////////////////////////////////-->
           <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Cuestionario' && tengoModo">
 
