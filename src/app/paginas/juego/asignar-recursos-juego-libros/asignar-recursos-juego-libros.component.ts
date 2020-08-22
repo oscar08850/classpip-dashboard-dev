@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
-// Imports para abrir diálogo mostrar cromos
 import { MatDialog, MatTabGroup } from '@angular/material';
 import {  Alumno, Equipo} from 'src/app/clases/index';
 
@@ -9,7 +8,6 @@ import { RecursoLibro } from '../../../clases/clasesParaLibros/recursoLibro';
 import { JuegoDeLibros } from '../../../clases/JuegoDeLibros';
 
 
- /* Necesario para controlar qué filas están seleccionadas */
 import {SelectionModel} from '@angular/cdk/collections';
 // Services
 
@@ -22,7 +20,6 @@ import { element } from 'protractor';
   styleUrls: ['./asignar-recursos-juego-libros.component.scss']
 })
 export class AsignarRecursosJuegoLibrosComponent implements OnInit {
- // Para comunicar el nombre de la colección seleccionada a componente padre
  @Output() emisorRecursosElegidos = new EventEmitter <number []>();
  grupoId: number;
  profesorId: number;
@@ -35,7 +32,6 @@ export class AsignarRecursosJuegoLibrosComponent implements OnInit {
 
  datasource;
 
- // tslint:disable-next-line:ban-types
  isDisabled: Boolean = true;
 
  displayedColumns: string[] = ['select', 'nombreRecurso'];
@@ -43,10 +39,8 @@ export class AsignarRecursosJuegoLibrosComponent implements OnInit {
 
  juego: JuegoDeLibros;
 
- // Para que al hacer click se quede la fila marcada
  selectedRowIndex = -1;
 
- /* Estructura necesaria para determinar que filas son las que se han seleccionado */
  selection = new SelectionModel<any>(true, []);
 
  constructor(
@@ -61,7 +55,6 @@ export class AsignarRecursosJuegoLibrosComponent implements OnInit {
  }
 
 
- // Para que al hacer click se quede la fila marcada
  highlight(row) {
    this.selectedRowIndex = row.id;
  }
@@ -79,9 +72,7 @@ export class AsignarRecursosJuegoLibrosComponent implements OnInit {
    });
  }
 
- // AgregaFamilia(familia: FamiliaAvatares) {
- //   this.familiasElegidas.push (familia);
- // }
+
  AcabarSeleccion() {
      this.datasource.data.forEach
        (row => {
@@ -94,22 +85,17 @@ export class AsignarRecursosJuegoLibrosComponent implements OnInit {
  }
 
 
- /* Para averiguar si todas las filas están seleccionadas */
  IsAllSelected() {
    const numSelected = this.selection.selected.length;
    const numRows = this.datasource.data.length;
    return numSelected === numRows;
  }
 
- /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-   * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-   * desactivado, en cuyo caso se activan todos */
 
  MasterToggle() {
    if (this.IsAllSelected()) {
-     this.selection.clear(); // Desactivamos todos
+     this.selection.clear(); 
    } else {
-     // activamos todos
      this.datasource.data.forEach(row => this.selection.select(row));
    }
  }
