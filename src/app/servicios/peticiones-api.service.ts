@@ -47,7 +47,7 @@ export class PeticionesAPIService {
   private APIUrlJuegoDeCuestionario = this.host + ':3000/api/JuegosDeCuestionario';
   private APIUrlRespuestasJuegoDeCuestionario = this.host + ':3000/api/respuestasJuegoDeCuestionario';
   private APIUrlAlumnoJuegoDeLibro = this.host + ':3000/api/alumnojuegodecuento';
-
+  private APIUrlJuegodeLibro = this.host + ':3000/api/juegodelibro';
 
   private APIUrlJuegoDePuntos = this.host + ':3000/api/JuegosDePuntos';
   private APIUrlAlumnoJuegoDePuntos = this.host + ':3000/api/AlumnoJuegosDePuntos';
@@ -352,8 +352,10 @@ export class PeticionesAPIService {
     return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro');
   }
   
+  public DameAlumnosJuegoLibro(id): Observable<any>  {
+  return this.http.get<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id + '/alumnosjuegolibro');
   
-  
+ }
 
 
 
@@ -1166,6 +1168,8 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
 
 
   /////////////////////////////// GESTION LIBROS //////////////////////////////////
+
+  
 
 
   public crearCarpeta(nombre: any):Observable<any>{

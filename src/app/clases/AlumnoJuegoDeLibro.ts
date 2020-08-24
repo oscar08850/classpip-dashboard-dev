@@ -3,8 +3,8 @@ export class AlumnoJuegoDeLibro {
     nivel1: boolean;
     nivel2: boolean;
     nivel3: boolean;
-    permisoparaver: string;
-    permisoparavotar: string;
+    permisoparaver:boolean ;
+    permisoparavotar: boolean;
    
     id: number;
     alumnoId: number;

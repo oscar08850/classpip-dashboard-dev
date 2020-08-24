@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
 
 // Clases
-import { Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, EquipoJuegoDePuntos,
+import { Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, AlumnoJuegoDeLibro, EquipoJuegoDePuntos,
   TablaAlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, JuegoDeAvatar, AlumnoJuegoDeAvatar } from '../../../clases/index';
 import { MatDialog } from '@angular/material';
 /* Necesario para controlar qué filas están seleccionadas */

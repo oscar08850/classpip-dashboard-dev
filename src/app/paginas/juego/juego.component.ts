@@ -69,6 +69,7 @@ export class JuegoComponent implements OnInit {
   profesorId: number;
   grupo: Grupo;
   alumnosGrupo: Alumno[];
+  alumno;
   equiposGrupo: Equipo[];
   @ViewChild('stepper') stepper;
   @ViewChild('tabs') tabGroup: MatTabGroup;
@@ -80,7 +81,11 @@ export class JuegoComponent implements OnInit {
   // que está abandonando el proceso de creación del juego
   creandoJuego = false;
   inscribirtemporada;
-
+  nivel1 = false;
+  nivel2 = false;
+  nivel3 = false;
+  permisoparaver = false;
+  permisoparavotar = false;
   juego: Juego;
   juegoDeCuestionario: JuegoDeCuestionario;
   juegoDeCompeticion: JuegoDeCompeticion;
@@ -648,7 +653,6 @@ export class JuegoComponent implements OnInit {
         }
       });
   }
-
 
 
 
