@@ -9,11 +9,12 @@ export class AlumnoJuegoDeLibro {
     id: number;
     alumnoId: number;
     juegoDeLibroId: number;
+    alumnojuegodecuentoId: any;
   
-    constructor(alumnoId?: number, juegoDeLibroId?: number) {
+    constructor(alumnoId?: number, juegoDeLibroId?: number,   alumnojuegodecuentoId?: any)  {
       this.alumnoId = alumnoId;
       this.juegoDeLibroId = juegoDeLibroId;
-     
+     this.alumnojuegodecuentoId = alumnojuegodecuentoId;
     }
   }
   

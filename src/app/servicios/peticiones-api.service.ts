@@ -337,8 +337,8 @@ export class PeticionesAPIService {
 
 
 
-  public InscribeAlumnojuegoDelibro(alumnoJuegoDeLibro: AlumnoJuegoDeLibro){
-    return this.http.post<AlumnoJuegoDeLibro>(this.APIUrlAlumnoJuegoDeLibro,
+  public InscribeAlumnojuegoDelibro(alumnoJuegoDeLibro: AlumnoJuegoDeLibro, id){
+    return this.http.post<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id  + '/alumnojuegodecuento',
       alumnoJuegoDeLibro);
     
   }
