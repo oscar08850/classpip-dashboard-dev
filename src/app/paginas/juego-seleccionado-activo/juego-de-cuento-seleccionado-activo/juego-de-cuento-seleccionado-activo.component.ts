@@ -188,20 +188,54 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
 
 
   HaCambiado(n ,i) {
-
-    // this.inscripcionesAlumnosJuegodeAvatar[i].Privilegios[n - 1] = !this.inscripcionesAlumnosJuegodeAvatar[i].Privilegios[n - 1];
+    if(n==1)
+    {
+    this.alumnosDelJuego[i].nivel1 = !this.alumnosDelJuego[i].nivel1;
     this.haCambiado[i] = true;
     this.hayCambios = true;
+    }
+
+    if(n==2)
+    {
+    this.alumnosDelJuego[i].nivel2 = !this.alumnosDelJuego[i].nivel2;
+    this.haCambiado[i] = true;
+    this.hayCambios = true;
+    }
+
+    if(n==3)
+    {
+    this.alumnosDelJuego[i].nivel3 = !this.alumnosDelJuego[i].nivel3;
+    this.haCambiado[i] = true;
+    this.hayCambios = true;
+    }
+
+    if(n==4)
+    {
+    this.alumnosDelJuego[i].permisoparaver = !this.alumnosDelJuego[i].permisoparaver;
+    this.haCambiado[i] = true;
+    this.hayCambios = true;
+    }
+
+    if(n==5)
+    {
+    this.alumnosDelJuego[i].permisoparavotar = !this.alumnosDelJuego[i].permisoparavotar;
+    this.haCambiado[i] = true;
+    this.hayCambios = true;
+    }
+   
   }
 
+
+
   RegistrarCambios() {
-    // for (let i = 0; i < this.alumnosDelJuego.length; i++) {
+
+    for (let i = 0; i < this.alumnosDelJuego.length; i++) {
       
-    //   if (this.haCambiado[i]) {
-    //     this.peticionesAPI.ModificaInscripcionAlumnoJuegoDeAvatar (this.alumnosDelJuego[i]).subscribe();
-    //   }
-    // }
-    // Swal.fire('Cambios registrados correctamente', ' ', 'success');
+      if (this.haCambiado[i]) {
+        this.peticionesAPI.ModificarPermidosJuegoLibro(this.alumnosDelJuego[i]).subscribe();
+      }
+    }
+    Swal.fire('Cambios registrados correctamente', ' ', 'success');
   }
 
   // GuardarDatos(alumno: Alumno) {

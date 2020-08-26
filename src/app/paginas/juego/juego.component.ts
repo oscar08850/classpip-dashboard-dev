@@ -640,7 +640,6 @@ export class JuegoComponent implements OnInit {
               alumno.nivel3 = this.nivel3;
               alumno.permisoparaver = this.permisoparaver;
               alumno.permisoparavotar = this.permisoparavotar;
-              alumno.alumnojuegodecuentoId = id;
               alumno.alumnoId = this.alumnosGrupo[i].id;
               var id = this.juegoDeLibro.id;
               alumno.juegoDeLibroId = id;

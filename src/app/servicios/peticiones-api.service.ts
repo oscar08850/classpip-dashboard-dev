@@ -337,28 +337,6 @@ export class PeticionesAPIService {
 
 
 
-  public InscribeAlumnojuegoDelibro(alumnoJuegoDeLibro: AlumnoJuegoDeLibro, id){
-    return this.http.post<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id  + '/alumnojuegodecuento',
-      alumnoJuegoDeLibro);
-    
-  }
-  public crearjuegolibro(juego: JuegoDeLibros, grupoId: number) {
-  
-    return this.http.post<JuegoDeLibros>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro', juego);
-  }
-  
-  
-   public DamejuegosdeCuento (grupoId: number): Observable<Juego[]> {
-    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro');
-  }
-  
-  public DameAlumnosJuegoLibro(id): Observable<any>  {
-  return this.http.get<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento');
-  
- }
-
-
-
 
 
 
@@ -1170,6 +1148,31 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
   /////////////////////////////// GESTION LIBROS //////////////////////////////////
 
   
+
+  public InscribeAlumnojuegoDelibro(alumnoJuegoDeLibro: AlumnoJuegoDeLibro, id){
+    return this.http.post<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id  + '/alumnojuegodecuento',
+      alumnoJuegoDeLibro);
+    
+  }
+  public crearjuegolibro(juego: JuegoDeLibros, grupoId: number) {
+  
+    return this.http.post<JuegoDeLibros>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro', juego);
+  }
+  
+  
+   public DamejuegosdeCuento (grupoId: number): Observable<Juego[]> {
+    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro');
+  }
+  
+  public DameAlumnosJuegoLibro(id): Observable<any>  {
+  return this.http.get<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento');
+  
+ }
+
+
+ public ModificarPermidosJuegoLibro(alumno: AlumnoJuegoDeLibro): Observable<AlumnoJuegoDeLibro> {
+  return this.http.put<AlumnoJuegoDeLibro>(this.APIUrlAlumnoJuegoDeLibro + '/' , alumno);
+}
 
 
   public crearCarpeta(nombre: any):Observable<any>{
