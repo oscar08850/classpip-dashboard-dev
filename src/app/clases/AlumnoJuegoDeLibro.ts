@@ -7,14 +7,15 @@ export class AlumnoJuegoDeLibro {
     permisoparavotar: boolean;
    
     id: number;
-    alumnoId: number;
-    juegoDeLibroId: number;
-    alumnojuegodecuentoId: any;
+    alumnoID: number;
+    alumnojuegodecuentoId: number;
   
-    constructor(alumnoId?: number, juegoDeLibroId?: number,   alumnojuegodecuentoId?: any)  {
-      this.alumnoId = alumnoId;
-      this.juegoDeLibroId = juegoDeLibroId;
-     this.alumnojuegodecuentoId = alumnojuegodecuentoId;
+    constructor(nivel1?: boolean, nivel2?: boolean, nivel3?: boolean, permisoparaver?: boolean, permisoparavotar?: boolean,)  {
+   
+      this.nivel1 = nivel1;
+      this.nivel2 = nivel2;
+      this.nivel3 = nivel3;
+      this.permisoparaver = permisoparaver;
+      this.permisoparavotar = permisoparavotar;
     }
   }
-  
