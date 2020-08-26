@@ -72,7 +72,7 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
 
     this.datasourceAlumno.data.forEach(row => {
 
-      const inscripcion = this.alumnosDelJuego.filter(ins => ins.alumnoId === row.id)[0];
+      const inscripcion = this.alumnosDelJuego.filter(ins => ins.alumnoID === row.alumnoID)[0];
       // Ahora activo o desactivo el selector de cada privilegio según tenga el alumno ese privilegio o no
       if (inscripcion.nivel1) {
         this.selection1.select(row);

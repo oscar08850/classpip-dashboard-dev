@@ -146,6 +146,7 @@ export class JuegoComponent implements OnInit {
 
   recursoElegido: number[];
   tengoRecurso = false;
+  showConcurso: any = false;
 
 
   // Información para crear juego de competicion
@@ -640,16 +641,19 @@ export class JuegoComponent implements OnInit {
               alumno.nivel3 = this.nivel3;
               alumno.permisoparaver = this.permisoparaver;
               alumno.permisoparavotar = this.permisoparavotar;
-              alumno.alumnoId = this.alumnosGrupo[i].id;
+              alumno.alumnoID = this.alumnosGrupo[i].id;
+
+
+
               var id = this.juegoDeLibro.id;
-              alumno.juegoDeLibroId = id;
 
               this.peticionesAPI.InscribeAlumnojuegoDelibro(alumno, id)
                 .subscribe((res) => {
-        
+        console.log(res);
                 }
                    , (err) => {
-             
+                    console.log(err);
+
                    });
             }
           } else {
@@ -1161,5 +1165,12 @@ export class JuegoComponent implements OnInit {
 
     this.recursoElegido = undefined;
     this.tengoRecurso = false;
+  }
+
+
+  verConcurso(){
+
+      this.showConcurso = true;
+
   }
 }
