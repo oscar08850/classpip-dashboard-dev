@@ -5,226 +5,134 @@
 
 <h2>HOLAAA BON DIAAA</h2>
 
-<div class ="contenedor" >
-  <div class= "enColumna" >
 
 
-  <div class="enFila" style = "width: 50%">
-        <button type="button" class="btn Info" routerLink = "informacionJuegoAvatar">Información<i class="material-icons">info</i></button>
-        <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionDesactivar()"> Desactivar<i class="material-icons">history</i></button>
-  </div>
-
-  <form style="width: 100%"  *ngIf="juegoSeleccionado.Modo === 'Individual'">
-
-    <div class= "enFila" >
-      <mat-form-field style="width: 60%">
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
-          <i class="material-icons" matSuffix>search</i>
-      </mat-form-field>
-
-    </div>
-    <table style="width: 100%" align="center" mat-table [dataSource]="datasourceAlumnos" class="example-container mat-elevation-z8">
-
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
 
 
-    <!-- Nombre Alumno Column -->
-    <ng-container matColumnDef="nombre">
+
+
+<form style="width: 100%" *ngIf="juegoSeleccionado.Modo === 'Individual'">
+
+  <table style="width: 100%" align="center" mat-table [dataSource]="datasourceAlumno"
+    class="example-container mat-elevation-z8">
+
+
+    <ng-container matColumnDef="alumnoID">
       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Nombre </th>
-      <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+      <td mat-cell *matCellDef="let alumno"> {{alumno.alumnoId}} </td>
     </ng-container>
 
-    <!-- Primer Apellido Column -->
-    <ng-container matColumnDef="primerApellido">
-      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Primer Apellido </th>
-      <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
-    </ng-container>
-
-    <!-- Segundo Apellido Column -->
-    <ng-container matColumnDef="segundoApellido">
-      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Segundo Apellido </th>
-      <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
-    </ng-container>
 
     <ng-container matColumnDef="nivel1">
-      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> C1 <br>
-<!--            Si cambia el checkbox header (change) hay que actualizar los seleccionados y el
-          estado del botón
-          Sl estado del checkbox header será [checked] si todas las filas están
-          seleccionadas
-          y será [indeterminate] si hay alguna seleccionada pero no todas
-          La función selection.hasValue() esta predefinida
--->
-        <mat-checkbox
-                      (change)="$event ? MasterToggle(1) : null; "
-                      [checked]="selection1.hasValue() && IsAllSelected(1)"
-                      [indeterminate]="selection1.hasValue() && !IsAllSelected(1)">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> NIVEL 1 <br>
+
+        <mat-checkbox (change)="$event ? MasterToggle(1) : null; " [checked]="selection1.hasValue() && IsAllSelected(1)"
+          [indeterminate]="selection1.hasValue() && !IsAllSelected(1)">
         </mat-checkbox>
       </th>
 
-      <td mat-cell  style= "text-align: left" *matCellDef="let row; let i = index">
-     <!--    Para cada uno de los check box de la columna
-        En el caso de que haya un cambio entonces pasa de seleccionada a no seleccionada
-        o viceversa. Además hay que actualizar el estado del boton
-        El checkbox estará [checked] si la fila está seleccionada
-        Las funciones selection.isSelected(row) y selection.toggle(row) estan predefinidas
-        Lo que se pone en (click) no lo entiendo muy bien pero si no se pone a veces falla
-        (no se queda marcado el checkbox)
--->
-        <mat-checkbox
-                      (click)="$event.stopPropagation()"
-                      (change)="$event ? selection1.toggle(row) : null; HaCambiado (1,i) "
-                      [checked]="selection1.isSelected(row)">
+      <td mat-cell style="text-align: left" *matCellDef="let row; let i = index">
+
+
+        <mat-checkbox (click)="$event.stopPropagation()"
+          (change)="$event ? selection1.toggle(row) : null; HaCambiado (1,i) " [checked]="selection1.isSelected(row)">
         </mat-checkbox>
       </td>
-  </ng-container>
-
-
-  <ng-container matColumnDef="nivel2">
-    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> C2 <br>
-<!--            Si cambia el checkbox header (change) hay que actualizar los seleccionados y el
-        estado del botón
-        Sl estado del checkbox header será [checked] si todas las filas están
-        seleccionadas
-        y será [indeterminate] si hay alguna seleccionada pero no todas
-        La función selection.hasValue() esta predefinida.
--->
-      <mat-checkbox
-                    (change)="$event ? MasterToggle(2) : null;"
-                    [checked]="selection2.hasValue() && IsAllSelected(2)"
-                    [indeterminate]="selection2.hasValue() && !IsAllSelected(2)">
-      </mat-checkbox>
-    </th>
-
-    <td mat-cell  style= "text-align: left" *matCellDef="let row; let i = index">
-   <!--    Para cada uno de los check box de la columna
-      En el caso de que haya un cambio entonces pasa de seleccionada a no seleccionada
-      o viceversa. Además hay que actualizar el estado del boton
-      El checkbox estará [checked] si la fila está seleccionada
-      Las funciones selection.isSelected(row) y selection.toggle(row) estan predefinidas
-      Lo que se pone en (click) no lo entiendo muy bien pero si no se pone a veces falla
-      (no se queda marcado el checkbox)
--->
-      <mat-checkbox
-                    (click)="$event.stopPropagation()"
-                    (change)="$event ? selection2.toggle(row) : null; HaCambiado(2,i)"
-                    [checked]="selection2.isSelected(row)">
-      </mat-checkbox>
-    </td>
-</ng-container>
-
-
-<ng-container matColumnDef="nivel3">
-  <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> C3 <br>
-<!--            Si cambia el checkbox header (change) hay que actualizar los seleccionados y el
-      estado del botón
-      Sl estado del checkbox header será [checked] si todas las filas están
-      seleccionadas
-      y será [indeterminate] si hay alguna seleccionada pero no todas
-      La función selection.hasValue() esta predefinida.
--->
-    <mat-checkbox
-                  (change)="$event ? MasterToggle(3) : null; "
-                  [checked]="selection3.hasValue() && IsAllSelected(3)"
-                  [indeterminate]="selection3.hasValue() && !IsAllSelected(3)">
-    </mat-checkbox>
-  </th>
-
-  <td mat-cell  style= "text-align: left" *matCellDef="let row; let i = index">
- <!--    Para cada uno de los check box de la columna
-    En el caso de que haya un cambio entonces pasa de seleccionada a no seleccionada
-    o viceversa. Además hay que actualizar el estado del boton
-    El checkbox estará [checked] si la fila está seleccionada
-    Las funciones selection.isSelected(row) y selection.toggle(row) estan predefinidas
-    Lo que se pone en (click) no lo entiendo muy bien pero si no se pone a veces falla
-    (no se queda marcado el checkbox)
--->
-    <mat-checkbox
-                  (click)="$event.stopPropagation()"
-                  (change)="$event ? selection3.toggle(row) : null; HaCambiado(3,i)"
-                  [checked]="selection3.isSelected(row)">
-    </mat-checkbox>
-  </td>
-</ng-container>
-
-
-<ng-container matColumnDef="permisoparaver">
-<th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> C4 <br>
-<!--            Si cambia el checkbox header (change) hay que actualizar los seleccionados y el
-    estado del botón
-    Sl estado del checkbox header será [checked] si todas las filas están
-    seleccionadas
-    y será [indeterminate] si hay alguna seleccionada pero no todas
-    La función selection.hasValue() esta predefinida.
--->
-  <mat-checkbox
-                (change)="$event ? MasterToggle(4) : null; "
-                [checked]="selection4.hasValue() && IsAllSelected(4)"
-                [indeterminate]="selection4.hasValue() && !IsAllSelected(4)">
-  </mat-checkbox>
-</th>
-
-<td mat-cell  style= "text-align: left" *matCellDef="let row; let i = index">
-<!--    Para cada uno de los check box de la columna
-  En el caso de que haya un cambio entonces pasa de seleccionada a no seleccionada
-  o viceversa. Además hay que actualizar el estado del boton
-  El checkbox estará [checked] si la fila está seleccionada
-  Las funciones selection.isSelected(row) y selection.toggle(row) estan predefinidas
-  Lo que se pone en (click) no lo entiendo muy bien pero si no se pone a veces falla
-  (no se queda marcado el checkbox)
--->
-  <mat-checkbox
-                (click)="$event.stopPropagation()"
-                (change)="$event ? selection4.toggle(row) : null; HaCambiado(4,i)"
-                [checked]="selection4.isSelected(row)">
-  </mat-checkbox>
-</td>
-</ng-container>
-
-
-<ng-container matColumnDef="permisoparavotar">
-<th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> Voz <br>
-<!--            Si cambia el checkbox header (change) hay que actualizar los seleccionados y el
-    estado del botón
-    Sl estado del checkbox header será [checked] si todas las filas están
-    seleccionadas
-    y será [indeterminate] si hay alguna seleccionada pero no todas
-    La función selection.hasValue() esta predefinida.
--->
-  <mat-checkbox
-                (change)="$event ? MasterToggle(5) : null;"
-                [checked]="selection5.hasValue() && IsAllSelected(5)"
-                [indeterminate]="selection5.hasValue() && !IsAllSelected(5)">
-  </mat-checkbox>
-</th>
-
-<td mat-cell  style= "text-align: left" *matCellDef="let row; let i = index">
-<!--    Para cada uno de los check box de la columna
-  En el caso de que haya un cambio entonces pasa de seleccionada a no seleccionada
-  o viceversa. Además hay que actualizar el estado del boton
-  El checkbox estará [checked] si la fila está seleccionada
-  Las funciones selection.isSelected(row) y selection.toggle(row) estan predefinidas
-  Lo que se pone en (click) no lo entiendo muy bien pero si no se pone a veces falla
-  (no se queda marcado el checkbox)
--->
-  <mat-checkbox
-                (click)="$event.stopPropagation()"
-                (change)="$event ? selection5.toggle(row) : null; HaCambiado (5,i);"
-                [checked]="selection5.isSelected(row)">
-  </mat-checkbox>
-</td>
-</ng-container>
-
-
-
-    <ng-container matColumnDef=" ">
-      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"></th>
-     
     </ng-container>
+    <!-- ///////////////////////////////////////////////// -->
+
+    <ng-container matColumnDef="nivel2">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> NIVEL 2 <br>
+
+
+        <mat-checkbox (change)="$event ? MasterToggle(2) : null;" [checked]="selection2.hasValue() && IsAllSelected(2)"
+          [indeterminate]="selection2.hasValue() && !IsAllSelected(2)">
+        </mat-checkbox>
+      </th>
+
+      <td mat-cell style="text-align: left" *matCellDef="let row; let i = index">
+
+
+
+        <mat-checkbox (click)="$event.stopPropagation()"
+          (change)="$event ? selection2.toggle(row) : null; HaCambiado(2,i)" [checked]="selection2.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+
+    <!-- ///////////////////////////////////////////////// -->
+
+    <ng-container matColumnDef="nivel3">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> NIVEL 3 <br>
+
+
+
+        <mat-checkbox (change)="$event ? MasterToggle(3) : null; " [checked]="selection3.hasValue() && IsAllSelected(3)"
+          [indeterminate]="selection3.hasValue() && !IsAllSelected(3)">
+        </mat-checkbox>
+      </th>
+
+      <td mat-cell style="text-align: left" *matCellDef="let row; let i = index">
+
+
+        <mat-checkbox (click)="$event.stopPropagation()"
+          (change)="$event ? selection3.toggle(row) : null; HaCambiado(3,i)" [checked]="selection3.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- ///////////////////////////////////////////////// -->
+
+    <ng-container matColumnDef="permisoparaver">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> PERMISO PARA VER <br>
+
+
+        <mat-checkbox (change)="$event ? MasterToggle(4) : null; " [checked]="selection4.hasValue() && IsAllSelected(4)"
+          [indeterminate]="selection4.hasValue() && !IsAllSelected(4)">
+        </mat-checkbox>
+      </th>
+
+      <td mat-cell style="text-align: left" *matCellDef="let row; let i = index">
+
+
+        <mat-checkbox (click)="$event.stopPropagation()"
+          (change)="$event ? selection4.toggle(row) : null; HaCambiado(4,i)" [checked]="selection4.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- ///////////////////////////////////////////////// -->
+
+    <ng-container matColumnDef="permisoparavotar">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> PERMISO PARA VOTAR <br>
+
+
+        <mat-checkbox (change)="$event ? MasterToggle(5) : null;" [checked]="selection5.hasValue() && IsAllSelected(5)"
+          [indeterminate]="selection5.hasValue() && !IsAllSelected(5)">
+        </mat-checkbox>
+      </th>
+
+      <td mat-cell style="text-align: left" *matCellDef="let row; let i = index">
+
+
+
+        <mat-checkbox (click)="$event.stopPropagation()"
+          (change)="$event ? selection5.toggle(row) : null; HaCambiado (5,i);" [checked]="selection5.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+
+
+
+
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
   </table>
-  </form>
+
+
+
+</form>

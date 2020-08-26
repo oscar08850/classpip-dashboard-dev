@@ -8,7 +8,7 @@ import {
   TablaAlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeLibro
 } from '../../../clases/index';
 import { MatDialog } from '@angular/material';
-
+import { MatTableModule } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { MatTableDataSource } from '@angular/material/table';
@@ -21,9 +21,9 @@ import { MatTableDataSource } from '@angular/material/table';
 export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
 
 
-  displayedColumns: string[] = ['nombre', 'primerApellido', 'segundoApellido', 'Nivel1', 'Nivel2', 'Nivel3', 'Permisoparaver', 'permisoparavotar', ' '];
+  displayedColumns: string[] = ['alumnoID', 'nivel1', 'nivel2', 'nivel3', 'permisoparaver', 'permisoparavotar'];
 
-  datasourceAlumnos;
+  datasourceAlumno;
   juegoSeleccionado: any;
   grupoid: any;
   alumnosDelJuego: AlumnoJuegoDeLibro[];
@@ -61,19 +61,16 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
 
         console.log(alumnosJuego);
         this.alumnosDelJuego = alumnosJuego;
-        
+        this.PrepararTabla();
 
       });
+
   }
 
-
-
-
-
   PrepararTabla() {
-    this.datasourceAlumnos = new MatTableDataSource(this.alumnosDelJuego);
+    this.datasourceAlumno = new MatTableDataSource(this.alumnosDelJuego);
 
-    this.datasourceAlumnos.data.forEach(row => {
+    this.datasourceAlumno.data.forEach(row => {
 
       const inscripcion = this.alumnosDelJuego.filter(ins => ins.alumnoId === row.id)[0];
       // Ahora activo o desactivo el selector de cada privilegio según tenga el alumno ese privilegio o no
@@ -102,11 +99,121 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
       } else {
         this.selection5.deselect(row);
       }
-     
+
+
     });
 
-
   }
+
+
+  IsAllSelected(n) {
+    let numSelected;
+    if (n === 1) {
+      numSelected = this.selection1.selected.length;
+    }
+    if (n === 2) {
+      numSelected = this.selection2.selected.length;
+    }
+    if (n === 3) {
+      numSelected = this.selection3.selected.length;
+    }
+    if (n === 4) {
+      numSelected = this.selection4.selected.length;
+    }
+    if (n === 5) {
+      numSelected = this.selection5.selected.length;
+    }
+
+    const numRows = this.datasourceAlumno.data.length;
+    return numSelected === numRows;
+  }
+
+
+
+  MasterToggle(n) {
+
+    if (n === 1) {
+      if (this.IsAllSelected(1)) {
+
+
+        this.selection1.clear();
+        this.alumnosDelJuego.forEach(inscripcion => inscripcion.nivel1 = false);
+      } else {
+        // Tengo que activar todos los elementos del selector
+        this.datasourceAlumno.data.forEach(row => this.selection1.select(row));
+        // y conceder el privilegio correspondiente a todos los alumnos
+        this.alumnosDelJuego.forEach(inscripcion => inscripcion.nivel1 = true);
+      }
+    }
+    if (n === 2) {
+      if (this.IsAllSelected(2)) {
+        this.selection2.clear(); // Desactivamos todos
+        this.alumnosDelJuego.forEach(inscripcion => inscripcion.nivel2 = false);
+      } else {
+        this.datasourceAlumno.data.forEach(row => this.selection2.select(row));
+        this.alumnosDelJuego.forEach(inscripcion => inscripcion.nivel2 = true);
+      }
+    }
+    if (n === 3) {
+      if (this.IsAllSelected(3)) {
+        this.selection3.clear(); // Desactivamos todos
+        this.alumnosDelJuego.forEach(inscripcion => inscripcion.nivel3 = false);
+      } else {
+        this.datasourceAlumno.data.forEach(row => this.selection3.select(row));
+        this.alumnosDelJuego.forEach(inscripcion => inscripcion.nivel3 = true);
+      }
+    }
+    if (n === 4) {
+      if (this.IsAllSelected(4)) {
+        this.selection4.clear(); // Desactivamos todos
+        this.alumnosDelJuego.forEach(inscripcion => inscripcion.permisoparaver = false);
+      } else {
+        this.datasourceAlumno.data.forEach(row => this.selection4.select(row));
+        this.alumnosDelJuego.forEach(inscripcion => inscripcion.permisoparaver = true);
+      }
+    }
+    if (n === 5) {
+      if (this.IsAllSelected(5)) {
+        this.selection5.clear(); // Desactivamos todos
+        this.alumnosDelJuego.forEach(inscripcion => inscripcion.permisoparavotar = false);
+      } else {
+        this.datasourceAlumno.data.forEach(row => this.selection5.select(row));
+        this.alumnosDelJuego.forEach(inscripcion => inscripcion.permisoparavotar = true);
+      }
+    }
+  
+    this.hayCambios = true;
+    this.haCambiado.forEach(valor => valor = true);
+  }
+
+
+  HaCambiado(n ,i) {
+
+    // this.inscripcionesAlumnosJuegodeAvatar[i].Privilegios[n - 1] = !this.inscripcionesAlumnosJuegodeAvatar[i].Privilegios[n - 1];
+    this.haCambiado[i] = true;
+    this.hayCambios = true;
+  }
+
+  RegistrarCambios() {
+    // for (let i = 0; i < this.alumnosDelJuego.length; i++) {
+      
+    //   if (this.haCambiado[i]) {
+    //     this.peticionesAPI.ModificaInscripcionAlumnoJuegoDeAvatar (this.alumnosDelJuego[i]).subscribe();
+    //   }
+    // }
+    // Swal.fire('Cambios registrados correctamente', ' ', 'success');
+  }
+
+  // GuardarDatos(alumno: Alumno) {
+  //   // Guardo en la sesión el alumno y su inscripción para que los recoja el componente que mostrará su avatar
+  //   this.sesion.TomaAlumno (alumno);
+  //   this.sesion.TomaJuegoAvatar (this.juegoSeleccionado);
+  //   // tslint:disable-next-line:max-line-length
+  //   this.sesion.TomaAlumnoJuegoAvatar (this.inscripcionesAlumnosJuegodeAvatar.filter (inscripcion => inscripcion.alumnoId === alumno.id)[0]);
+  // }
+
+
+
 
 }
 

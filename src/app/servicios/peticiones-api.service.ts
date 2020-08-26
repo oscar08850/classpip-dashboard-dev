@@ -353,7 +353,7 @@ export class PeticionesAPIService {
   }
   
   public DameAlumnosJuegoLibro(id): Observable<any>  {
-  return this.http.get<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id + '/alumnosjuegolibro');
+  return this.http.get<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento');
   
  }
 
