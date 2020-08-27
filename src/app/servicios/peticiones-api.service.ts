@@ -99,6 +99,7 @@ export class PeticionesAPIService {
 
   private APIurlImagenesLibros = this.host + ':3000/api/imagenes';
   private APIurlRecursosLibros = this.host + ':3000/api/recursosLibros';
+  private APIUrlConcursoLibros = this.host + '3000/api/juegodelibro';    
 
 
 
@@ -1202,5 +1203,8 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
   }
 
 
+  public crearConcurso(idLibro: any, concurso: any):Observable<any>{
+    return this.http.post<any>(this.APIUrlJuegodeLibro + '/' + idLibro + '/' + 'juegoLibroConcurso', concurso);
+  }
 
 }

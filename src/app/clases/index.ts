@@ -63,5 +63,6 @@ export * from './clasesParaLibros/recursoLibro';
 export * from './AlumnoJuegoDeLibro';
 export * from './JuegoDeLibros';
 export * from './clasesParaLibros/imagenGuardada';
+export * from './clasesParaLibros/concursoLibro';
 
 

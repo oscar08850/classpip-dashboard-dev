@@ -318,28 +318,6 @@
 
                 </mat-step>
 
-
-
-                <mat-step>
-                  <ng-template matStepLabel>
-                    <div> Temporada </div>
-                  </ng-template>
-
-                  <div>
-
-                    <label class="LabelStepper">Inscribir el juego en la temporada actual</label>
-
-                    <button type="button" class="btn Next" (click)="inscribir(1)">SI </button>
-                    <button type="button" class="btn Back" (click)="inscribir(2)"> NO</button>
-
-                  </div>
-
-                  <div class="btnCambiarStep">
-                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                    <button type="button" class="btn Next" matStepperNext>Siguiente</button>
-                  </div>
-                </mat-step>
-
                 <mat-step>
                   <ng-template matStepLabel>
                     <div> Concurso </div>
@@ -347,7 +325,7 @@
 
                   <div *ngIf="!showConcurso">
 
-                    <label class="LabelStepper">Inscribir el juego en la temporada actual</label>
+                    <label class="LabelStepper">Crear un juego para el concurso</label>
 
                     <button type="button" class="btn Next" (click)="verConcurso()">Click aquí para que este juego tenga
                       un concurso </button>
@@ -357,20 +335,43 @@
                   <div *ngIf="showConcurso">
 
                     <mat-form-field>
-                      <mat-label>Introduzca los puntos a sumar por respuesta correcta</mat-label>
-                      <input matInput formControlName="concursoTematica" placeholder="Escriba puntos a sumar"
-                        requiered>
+                      <mat-label>Introduzca la tematica del concurso</mat-label>
+                      <input matInput formControlName="concursoTematica" placeholder="" requiered>
                     </mat-form-field>
-                    <!-- casilla para introducir puntuacion que restamos -->
+
                     <mat-form-field>
-                      <mat-label>Introduzca los puntos a restar por respuesta incorrecta</mat-label>
-                      <input matInput formControlName="PuntuacionIncorrecta" placeholder="Escriba puntos a restar"
-                        requiered>
+                      <input matInput [matDatepicker]="startatpicker" placeholder="Elige fecha de finalización de incripciones / Comienzo de votaciones" formControlName="dateFinInscripcion">
+                      <mat-datepicker-toggle [for]="startatpicker">
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #startatpicker startView="year" [startAt]="startDate"></mat-datepicker>
                     </mat-form-field>
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="stopatpicker" placeholder="Elige fecha de finalización de votaciones / Fin del concurso" formControlName="dateFinVotacion">
+                      <mat-datepicker-toggle [for]="stopatpicker">
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #stopatpicker startView="year" [startAt]="startDate"></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Introduzca los requisitos del concurso:</mat-label>
+                      <input matInput formControlName="concursoRequisitos" placeholder="" requiered>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Introduzca el primero criterio de votación</mat-label>
+                      <input matInput formControlName="concursoPrimerCriterio" placeholder="" requiered>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Introduzca el segundo criterio de votación:</mat-label>
+                      <input matInput formControlName="concursoSegundoCriterio" placeholder="" requiered>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Introduzca el tercer criterio de votación:</mat-label>
+                      <input matInput formControlName="concursoTercerCriterio" placeholder="" requiered>
+                    </mat-form-field>
+
+
                     <div class="btnCambiarStep">
-                      <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                      <button [disabled]="!TengoPuntuaciones()" (click)="GuardarPuntuacion()" type="button"
-                        class="btn Next" matStepperNext>Siguiente</button>
+                     
+                      <button type="button" class="btn Back" (click)="guardarConcurso()">Crear el concurso</button>
                     </div>
 
                   </div>

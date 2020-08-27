@@ -5,6 +5,8 @@ import { MatDialog, MatTabGroup } from '@angular/material';
 import { Location } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
 
 // tslint:disable-next-line:max-line-length
 import {
@@ -14,7 +16,7 @@ import {
   EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
   EquipoJuegoDeCompeticionFormulaUno, Cuestionario, AlumnoJuegoDeLibro, JuegoDeAvatar, JuegoDeLibros, FamiliaAvatares,
   AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-  EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable
+  EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable, concursoLibro
 } from '../../clases/index';
 
 
@@ -70,6 +72,8 @@ export class JuegoComponent implements OnInit {
   grupo: Grupo;
   alumnosGrupo: Alumno[];
 
+  rangePicker: any;
+
   equiposGrupo: Equipo[];
   @ViewChild('stepper') stepper;
   @ViewChild('tabs') tabGroup: MatTabGroup;
@@ -124,8 +128,8 @@ export class JuegoComponent implements OnInit {
   // información para crear un juego de colección
   coleccionSeleccionada: Coleccion;
   tengoColeccion = false;
-
-
+  startDate = new Date(2019, 0, 1);
+  startatpicker;
   // información para crear un juego de cuestionario
   cuestionario: Cuestionario;
   tengoCuestionario = false;
@@ -147,7 +151,8 @@ export class JuegoComponent implements OnInit {
   recursoElegido: number[];
   tengoRecurso = false;
   showConcurso: any = false;
-
+  concursoLibro: concursoLibro;
+  siConcurso: any = false;
 
   // Información para crear juego de competicion
 
@@ -209,6 +214,8 @@ export class JuegoComponent implements OnInit {
   // criterioComplemento1: string;
 
   //////////////////////////////////// PARÁMETROS PARA PÁGINA DE CREAR JUEGO //////////////////////////////////////
+
+
 
 
   constructor(
@@ -291,13 +298,26 @@ export class JuegoComponent implements OnInit {
       PuntuacionIncorrectaGeo: ['', Validators.required],
       PuntuacionCorrectaGeoBonus: ['', Validators.required],
       PuntuacionIncorrectaGeoBonus: ['', Validators.required],
-      descripcionlibro: ['', Validators.required]
+      descripcionlibro: ['', Validators.required],
+      concursoTematica: ['', Validators.required],
+      dateFinInscripcion: ['', Validators.required],
+      dateFinVotacion: ['', Validators.required],
+      concursoRequisitos: ['', Validators.required],
+      concursoPrimerCriterio: ['', Validators.required],
+      concursoSegundoCriterio: ['', Validators.required],
+      concursoTercerCriterio: ['', Validators.required]
     });
+
+
 
     this.TablaPuntuacion = [];
     this.TablaPuntuacion[0] = new TablaPuntosFormulaUno(1, 10);
     this.dataSource = new MatTableDataSource(this.TablaPuntuacion);
     this.Puntuacion[0] = 10;
+
+
+
+    this.siConcurso = false;
   }
 
   //////////////////////////////////////// FUNCIONES PARA LISTAR JUEGOS ///////////////////////////////////////////////
@@ -622,6 +642,10 @@ export class JuegoComponent implements OnInit {
 
     this.peticionesAPI.crearjuegolibro(juego, this.grupo.id)
       .subscribe(juego => {
+
+        if (this.siConcurso == true) {
+          this.crearConcurso(juego.id);
+        }
         this.juegoDeLibro = juego;
 
         if (this.modoDeJuegoSeleccionado === 'Individual') {
@@ -649,12 +673,12 @@ export class JuegoComponent implements OnInit {
 
               this.peticionesAPI.InscribeAlumnojuegoDelibro(alumno, id)
                 .subscribe((res) => {
-        console.log(res);
+                  console.log(res);
                 }
-                   , (err) => {
+                  , (err) => {
                     console.log(err);
 
-                   });
+                  });
             }
           } else {
 
@@ -674,6 +698,40 @@ export class JuegoComponent implements OnInit {
       });
   }
 
+  public onDate(event): void {
+    var e = event;
+    console.log(event);
+  }
+
+  crearConcurso(idLibro: any) {
+
+    this.peticionesAPI.crearConcurso(idLibro, this.concursoLibro)
+      .subscribe((res) => {
+        this.siConcurso = false;
+
+      }, (err) => {
+        console.log(err);
+      })
+
+
+
+  }
+
+  guardarConcurso() {
+    this.concursoLibro = new concursoLibro();
+
+    this.concursoLibro.concursoTematica = this.myForm.value.concursoTematica;
+    this.concursoLibro.dateFinInscripcion = this.myForm.value.dateFinInscripcion;
+    this.concursoLibro.dateFinVotacion = this.myForm.value.dateFinVotacion;
+    this.concursoLibro.concursoRequisitos = this.myForm.value.concursoRequisitos;
+    this.concursoLibro.concursoPrimerCriterio = this.myForm.value.concursoPrimerCriterio;
+    this.concursoLibro.concursoSegundoCriterio = this.myForm.value.concursoSegundoCriterio;
+    this.concursoLibro.concursoTercerCriterio = this.myForm.value.concursoTercerCriterio;
+    this.concursoLibro.listaLibrosParticipantes = [];
+
+    this.siConcurso = true;
+
+  }
 
 
   inscribir(inscribirt) {
@@ -1168,9 +1226,9 @@ export class JuegoComponent implements OnInit {
   }
 
 
-  verConcurso(){
+  verConcurso() {
 
-      this.showConcurso = true;
+    this.showConcurso = true;
 
   }
 }
