@@ -46,6 +46,7 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
   ngOnInit() {
 
     this.juegoSeleccionado = this.sesion.DameJuego();
+
     this.grupoid = this.sesion.DameGrupo();
     this.obteneralumnosdelJuego();
 
@@ -61,6 +62,7 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
 
         console.log(alumnosJuego);
         this.alumnosDelJuego = alumnosJuego;
+        this.haCambiado = Array(this.alumnosDelJuego.length).fill(false);
         this.PrepararTabla();
 
       });
@@ -182,8 +184,7 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
       }
     }
   
-    this.hayCambios = true;
-    this.haCambiado.forEach(valor => valor = true);
+  
   }
 
 
@@ -191,38 +192,33 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
     if(n==1)
     {
     this.alumnosDelJuego[i].nivel1 = !this.alumnosDelJuego[i].nivel1;
-    this.haCambiado[i] = true;
-    this.hayCambios = true;
+
     }
 
     if(n==2)
     {
     this.alumnosDelJuego[i].nivel2 = !this.alumnosDelJuego[i].nivel2;
-    this.haCambiado[i] = true;
-    this.hayCambios = true;
+ 
     }
 
     if(n==3)
     {
     this.alumnosDelJuego[i].nivel3 = !this.alumnosDelJuego[i].nivel3;
-    this.haCambiado[i] = true;
-    this.hayCambios = true;
+   
     }
 
     if(n==4)
     {
     this.alumnosDelJuego[i].permisoparaver = !this.alumnosDelJuego[i].permisoparaver;
-    this.haCambiado[i] = true;
-    this.hayCambios = true;
+
     }
 
     if(n==5)
     {
     this.alumnosDelJuego[i].permisoparavotar = !this.alumnosDelJuego[i].permisoparavotar;
-    this.haCambiado[i] = true;
-    this.hayCambios = true;
+    
     }
-   
+ 
   }
 
 
@@ -231,20 +227,14 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
 
     for (let i = 0; i < this.alumnosDelJuego.length; i++) {
       
-      if (this.haCambiado[i]) {
-        this.peticionesAPI.ModificarPermidosJuegoLibro(this.alumnosDelJuego[i]).subscribe();
-      }
+  
+        this.peticionesAPI.ModificarPermidosJuegoLibro(this.alumnosDelJuego[i], this.juegoSeleccionado.id).subscribe();
+      
     }
     Swal.fire('Cambios registrados correctamente', ' ', 'success');
   }
 
-  // GuardarDatos(alumno: Alumno) {
-  //   // Guardo en la sesión el alumno y su inscripción para que los recoja el componente que mostrará su avatar
-  //   this.sesion.TomaAlumno (alumno);
-  //   this.sesion.TomaJuegoAvatar (this.juegoSeleccionado);
-  //   // tslint:disable-next-line:max-line-length
-  //   this.sesion.TomaAlumnoJuegoAvatar (this.inscripcionesAlumnosJuegodeAvatar.filter (inscripcion => inscripcion.alumnoId === alumno.id)[0]);
-  // }
+  
 
 
 

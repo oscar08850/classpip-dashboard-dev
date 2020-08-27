@@ -1170,8 +1170,8 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
  }
 
 
- public ModificarPermidosJuegoLibro(alumno: AlumnoJuegoDeLibro): Observable<AlumnoJuegoDeLibro> {
-  return this.http.put<AlumnoJuegoDeLibro>(this.APIUrlAlumnoJuegoDeLibro + '/' , alumno);
+ public ModificarPermidosJuegoLibro(alumno: AlumnoJuegoDeLibro, id): Observable<AlumnoJuegoDeLibro> {
+  return this.http.put<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento/' + alumno.id, alumno);
 }
 
 
