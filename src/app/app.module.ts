@@ -208,6 +208,7 @@ import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crea
 import { MisRecursosLibroComponent } from './paginas/mis-recursos-libro/mis-recursos-libro.component';
 import { JuegoDeCuentoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-seleccionado-activo.component';
 import { AsignarRecursosJuegoLibrosComponent } from './paginas/juego/asignar-recursos-juego-libros/asignar-recursos-juego-libros.component';
+import { AsignaEspecialJuegoLibrosComponent } from './paginas/juego/asigna-especial-juego-libros/asigna-especial-juego-libros.component';
 
 
 @NgModule({
@@ -323,7 +324,8 @@ import { AsignarRecursosJuegoLibrosComponent } from './paginas/juego/asignar-rec
     CrearRecursosLibroComponent,
     MisRecursosLibroComponent,
     JuegoDeCuentoSeleccionadoActivoComponent,
-    AsignarRecursosJuegoLibrosComponent
+    AsignarRecursosJuegoLibrosComponent,
+    AsignaEspecialJuegoLibrosComponent
 
 
 

@@ -5,6 +5,7 @@ export class Imagen {
     posicionLista: any;
     especial: any;
     tipo;
+    
     constructor(file?: any, nombre?: any, posicionLista?: any, especial?:any, tipo?:any) {
   
       this.file = file;

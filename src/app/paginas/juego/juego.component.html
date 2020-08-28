@@ -304,16 +304,32 @@
 
                 <mat-step>
                   <ng-template matStepLabel>
-                    <div>Familias</div>
+                    <div>Elegir recurso</div>
                   </ng-template>
 
-                  <label class="LabelStepper">Selecciona las carpetas de imagenes para el juego</label>
+                  <label class="LabelStepper">Selecciona la carpeta de imagenes para el juego</label>
                   <!-- Nos vamos al componente para asignar la colección -->
                   <app-asignar-recursos-juego-libros (emisorRecursosElegidos)="RecibeRecursos($event)">
                   </app-asignar-recursos-juego-libros>
                   <div class="btnCambiarStep">
                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                     <button *ngIf="tengoRecurso" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+
+                </mat-step>
+
+                <mat-step>
+                  <ng-template matStepLabel>
+                    <div>Elegir especiales</div>
+                  </ng-template>
+
+                  <label class="LabelStepper">Selecciona los elementos que serán especiales en el juego</label>
+                  <!-- Nos vamos al componente para asignar la colección -->
+                  <app-asigna-especial-juego-libros (emisorRecursoCargado)="cargaRecursos($event)">
+                  </app-asigna-especial-juego-libros>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button *ngIf="tengoRecursoCargadoParaGuardar" type="button" class="btn Next" matStepperNext>Siguiente</button>
                   </div>
 
                 </mat-step>
