@@ -23,7 +23,7 @@ export class JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent implements OnIn
 
   // tslint:disable-next-line:max-line-length
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'votos',  'nota'];
-
+  columnasListas = false;
 
   //  /** Table columns */
   //  columns = [
@@ -55,8 +55,18 @@ export class JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent implements OnIn
     });
     this.juegoSeleccionado = this.sesion.DameJuego();
     console.log(this.juegoSeleccionado);
-    this.juegoSeleccionado.Conceptos.forEach (concepto => this.displayedColumnsAlumnos.push (concepto));
+    if (this.juegoSeleccionado.Conceptos.length > 1) {
+      // Si solo hay un concepto entonces no añado nuevas columnas porque en la tabla solo se mostrará
+      // la nota final y no la nota del concepto, que es la misma que la nota final.
+      this.juegoSeleccionado.Conceptos.forEach (concepto => this.displayedColumnsAlumnos.push (concepto));
+    }
     this.displayedColumnsAlumnos.push (' ');
+    this.columnasListas = true;
+    console.log ('columnas');
+    console.log (this.displayedColumnsAlumnos);
+    console.log ('conceptos');
+    console.log (this.juegoSeleccionado.Conceptos);
+
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
       this.AlumnosDelJuego();

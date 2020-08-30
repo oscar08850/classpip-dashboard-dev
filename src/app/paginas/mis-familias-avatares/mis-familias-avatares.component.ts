@@ -357,4 +357,10 @@ export class MisFamiliasAvataresComponent implements OnInit {
       }
     });
   }
+
+  GuardarFamilia() {
+    this.sesion.TomaFamilia (this.familiaElegida);
+
+
+  }
 }

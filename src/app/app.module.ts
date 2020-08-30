@@ -213,6 +213,7 @@ import { JuegoDeAvatarSeleccionadoInactivoComponent } from './paginas/juego-sele
 // tslint:disable-next-line:max-line-length
 import { JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-votacion-todos-auno-seleccionado-activo/juego-de-votacion-todos-auno-seleccionado-activo.component';
 import { JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-votacion-todos-auno-seleccionado-inactivo/juego-de-votacion-todos-auno-seleccionado-inactivo.component';
+import { GuardarFamiliaComponent } from './paginas/mis-familias-avatares/guardar-familia/guardar-familia.component';
 
 
 @NgModule({
@@ -331,7 +332,8 @@ import { JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent } from './paginas
     MisRubricasComponent,
     JuegoDeAvatarSeleccionadoInactivoComponent,
     JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent,
-    JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent
+    JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent,
+    GuardarFamiliaComponent
 
 
 

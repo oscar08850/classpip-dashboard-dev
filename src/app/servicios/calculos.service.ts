@@ -3546,7 +3546,8 @@ public PrepararTablaRankingIndividualVotacionTodosAUnoAcabado(listaAlumnosOrdena
     const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
     alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
     rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeCuestionario(alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
-    listaAlumnosOrdenadaPorPuntos[i].Nota, listaAlumnosOrdenadaPorPuntos[i].Contestado, alumnoId);
+    // tslint:disable-next-line:max-line-length
+    listaAlumnosOrdenadaPorPuntos[i].Nota, listaAlumnosOrdenadaPorPuntos[i].Contestado, alumnoId, listaAlumnosOrdenadaPorPuntos[i].TiempoEmpleado);
     }
     return rankingJuegoDeCompeticion;
   }

@@ -375,6 +375,24 @@ export class CrearFamiliaAvataresComponent implements OnInit {
   // Par abuscar el fichero JSON que contiene la info de la familia que se va
   // a cargar desde ficheros
   SeleccionarInfoFamilia($event) {
+    //   let theData = {
+    //     foo: "bar"
+    //   };
+    //   let theJSON = JSON.stringify(theData);
+    //   let uri = "data:application/json;charset=UTF-8," + encodeURIComponent(theJSON);
+
+    //   let a = document.createElement('a');
+    //   a.href = uri;
+    //   // a.href = 'http://147.83.118.92:3000/api/imagenes/imagenesAvatares/download/cute_silueta11.png';
+    //   //a.download = 'nombre.png';
+    //   document.body.appendChild(a);
+    //   //a.setAttribute ('style',  'display: none');
+    //   // a.style = 'display: none';
+    //   //a.click();
+    //   // a.remove();
+    //   a.innerHTML = "Right-click and choose 'save as...'";
+    //  // document.body.appendChild(a);
+
       const fileInfo = $event.target.files[0];
       const reader = new FileReader();
       reader.readAsText(fileInfo);

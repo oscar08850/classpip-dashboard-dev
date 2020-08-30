@@ -132,6 +132,7 @@ export class JuegoComponent implements OnInit {
   seleccionModoPresentacion: string[] = ['Mismo orden para todos',
   'Preguntas desordenadas',
   'Preguntas y respuestas desordenadas'];
+  tiempoLimite: number;
 
   // información para crear juego de avatares
   familiasElegidas: number[];
@@ -302,6 +303,7 @@ export class JuegoComponent implements OnInit {
       PuntuacionIncorrectaGeoBonus: ['', Validators.required],
       NombreDelConcepto: ['', Validators.required],
       PesoDelConcepto: ['', Validators.required],
+      TiempoLimite: ['', Validators.required]
     });
 
     this.TablaPuntuacion = [];
@@ -570,6 +572,14 @@ export class JuegoComponent implements OnInit {
     this.tengoModoPresentacion = true;
   }
 
+  GuardarTiempoLimite() {
+    this.tiempoLimite = this.myForm.value.TiempoLimite;
+    if (this.tiempoLimite === undefined) {
+      this.tiempoLimite = 0;
+    }
+  }
+
+
   CrearJuegoDeCuestionario() {
 
     // Tengo que crear un juego de tipo JuegoDeCuestionario y no uno de tipo Juego, como en los casos
@@ -580,7 +590,7 @@ export class JuegoComponent implements OnInit {
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.puntuacionCorrecta,
       this.puntuacionIncorrecta, this.modoPresentacion,
-      false, false, this.profesorId, this.grupo.id, this.cuestionario.id), this.grupo.id)
+      false, false, this.profesorId, this.grupo.id, this.cuestionario.id, this.tiempoLimite), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juegoDeCuestionario = juegoCreado;
       // Inscribimos a los alumnos (de momento no hay juego de cuestionario por equipos)

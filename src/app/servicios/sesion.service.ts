@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga,
          // tslint:disable-next-line:max-line-length
          TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeCuestionario,
-         TablaAlumnoJuegoDeCuestionario} from '../clases';
+         TablaAlumnoJuegoDeCuestionario,
+         FamiliaAvatares} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
+import { FieldsMapping } from '@syncfusion/ej2-angular-lists';
 
 @Injectable({
   providedIn: 'root'
@@ -71,7 +73,7 @@ export class SesionService {
   inscripcionAlumnoJuegoDeCuestionario: AlumnoJuegoDeCuestionario;
   alumnoJuegoDeCuestionario: TablaAlumnoJuegoDeCuestionario;
 
-
+  familia: FamiliaAvatares;
 
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
@@ -535,5 +537,10 @@ public DameAlumnoJuegoDeCuestionario(): TablaAlumnoJuegoDeCuestionario {
 public DameInscripcionAlumnoJuegoDeCuestionario(): AlumnoJuegoDeCuestionario {
   return this.inscripcionAlumnoJuegoDeCuestionario;
 }
-
+public TomaFamilia(familia: FamiliaAvatares) {
+  this.familia = familia;
+}
+public DameFamilia (): FamiliaAvatares {
+  return this.familia;
+}
 }

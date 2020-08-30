@@ -21,12 +21,21 @@
       <div  id = "imagenAvatar"  style = "width: 30%; margin-top: 15%; position: relative;">
         <!-- Cuando se cargue la imagen se activa la función para que se muestra a tamaño doble -->
         <!-- <img  #img id ="silueta"  *ngIf="imagenSilueta"  (load)="PonDoble(img)"  [src]="imagenSilueta"> -->
-        <img  #img id ="silueta" widht = '300' height= '324' *ngIf="imagenSilueta"   [src]="imagenSilueta">
+        <a [href]="imagenSilueta" download = 'aaa.png'>
+        <img #img id ="silueta" widht = '300' height= '324' *ngIf="imagenSilueta"   [src]="imagenSilueta">
+        </a>
       </div>
       <div class = "enColumna" style = "width: 70%">
-        <button type="button" align = "left" class="btn Eliminar" (click) = "BorrarFamilia();" >Eliminar familia <i class="material-icons">
-          delete
-        </i></button>
+        <div class = "enFila" style = "width: 40%">
+          <button type="button"  class="btn Eliminar" (click) = "BorrarFamilia();" >Eliminar familia <i class="material-icons">
+            delete
+          </i></button>
+
+          <button type="button" class="btn Aceptar" (click) = "GuardarFamilia();" routerLink = "guardarFamilia" >Guardar familia <i class="material-icons">
+            check
+          </i></button>
+        </div>
+
         <br>
         <h4> Haz click sobre el complemento que quieres colocar en la silueta</h4>
         <br>

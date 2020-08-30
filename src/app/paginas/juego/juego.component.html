@@ -300,6 +300,21 @@
               </div>
             </mat-step>
 
+             <!--Sexto paso, decidimos si hay un tiempo limite para responder-->
+             <mat-step>
+              <ng-template matStepLabel><div>Tiempo</div></ng-template>
+
+              <mat-form-field>
+                <mat-label>Introduzca el tiempo límite para responder al cuestionario (en segundos)</mat-label>
+                <input  matInput formControlName="TiempoLimite" placeholder="Introduzca el tiempo limite" requiered>
+              </mat-form-field>
+
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button  type="button" (click) = "GuardarTiempoLimite()" class="btn Next" matStepperNext>Siguiente</button>
+              </div>
+            </mat-step>
+
             <!--Ultimo paso, finalizamos-->
             <mat-step>
               <ng-template matStepLabel><div>Finalizar</div></ng-template>

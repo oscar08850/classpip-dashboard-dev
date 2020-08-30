@@ -22,6 +22,7 @@ export class ComServerService {
   public EsperoRespuestasJuegoDeCuestionario = () => {
     return Observable.create((observer) => {
         this.socket.on('respuestaJuegoDeCuestionario', (alumnoId) => {
+            console.log ('Respuesta cuestionaro ' + alumnoId);
             observer.next(alumnoId);
         });
     });
