@@ -375,23 +375,6 @@ export class CrearFamiliaAvataresComponent implements OnInit {
   // Par abuscar el fichero JSON que contiene la info de la familia que se va
   // a cargar desde ficheros
   SeleccionarInfoFamilia($event) {
-    //   let theData = {
-    //     foo: "bar"
-    //   };
-    //   let theJSON = JSON.stringify(theData);
-    //   let uri = "data:application/json;charset=UTF-8," + encodeURIComponent(theJSON);
-
-    //   let a = document.createElement('a');
-    //   a.href = uri;
-    //   // a.href = 'http://147.83.118.92:3000/api/imagenes/imagenesAvatares/download/cute_silueta11.png';
-    //   //a.download = 'nombre.png';
-    //   document.body.appendChild(a);
-    //   //a.setAttribute ('style',  'display: none');
-    //   // a.style = 'display: none';
-    //   //a.click();
-    //   // a.remove();
-    //   a.innerHTML = "Right-click and choose 'save as...'";
-    //  // document.body.appendChild(a);
 
       const fileInfo = $event.target.files[0];
       const reader = new FileReader();
@@ -425,17 +408,6 @@ export class CrearFamiliaAvataresComponent implements OnInit {
 
   RegistrarFamilia() {
 
-      // Creo la fammilia de avatare
-      // const familia = new FamiliaAvatares (this.infoFamilia.NombreFamilia);
-      // familia.NombreComplemento1 = this.infoFamilia.NombreComplemento1;
-      // familia.NombreComplemento2 = this.infoFamilia.NombreComplemento2;
-      // familia.NombreComplemento3 = this.infoFamilia.NombreComplemento3;
-      // familia.NombreComplemento4 = this.infoFamilia.NombreComplemento4;
-      // familia.Silueta = this.infoFamilia.Silueta;
-      // familia.Complemento1 = this.infoFamilia.Complemento1;
-      // familia.Complemento2 = this.infoFamilia.Complemento2;
-      // familia.Complemento3 = this.infoFamilia.Complemento3;
-      // familia.Complemento4 = this.infoFamilia.Complemento4;
       const familia = new FamiliaAvatares ();
       Object.assign (familia, this.infoFamilia);
 

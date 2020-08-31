@@ -33,6 +33,7 @@ export class GuardarFamiliaComponent implements OnInit {
     console.log (this.familiaElegida);
     this.PreparaImagenes();
     console.log ('Voy a guardar');
+    // Ni el identificador de la familia ni el del profesor van en el fichero JSON
     delete this.familiaElegida.id;
     delete this.familiaElegida.profesorId;
 
@@ -43,18 +44,8 @@ export class GuardarFamiliaComponent implements OnInit {
 
     const a = document.getElementById('generarJSON');
     a.setAttribute ('href', uri);
-    // a.href = 'http://147.83.118.92:3000/api/imagenes/imagenesAvatares/download/cute_silueta11.png';
     a.setAttribute ('download', this.familiaElegida.NombreFamilia);
-    // document.body.appendChild(a);
-    //a.setAttribute ('style',  'display: none');
-    // a.style = 'display: none';
-    //a.click();
-    // a.remove();
     a.innerHTML = "Botón derecho y selecciona 'deja el enlace como...'";
-   // document.body.appendChild(a);
-
-
-
   }
 
 
@@ -85,28 +76,6 @@ export class GuardarFamiliaComponent implements OnInit {
   goBack() {
     this.location.back();
   }
-
-  goBack2() {
-    if (true) {
-      Swal.fire({
-        title: '¿Estas seguro que quieres salir?',
-        text: 'No has registrado los cambios que has hecho en los criterios',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, quiero salir'
-      }).then((result) => {
-        if (result.value) {
-          this.location.back();
-        }
-      });
-
-    } else {
-      this.location.back();
-    }
-  }
-
 
 
 }

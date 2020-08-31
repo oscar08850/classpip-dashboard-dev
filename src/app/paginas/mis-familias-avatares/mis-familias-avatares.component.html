@@ -19,11 +19,8 @@
 
     <div *ngIf = "familiaCargada" class = "enFila">
       <div  id = "imagenAvatar"  style = "width: 30%; margin-top: 15%; position: relative;">
-        <!-- Cuando se cargue la imagen se activa la función para que se muestra a tamaño doble -->
-        <!-- <img  #img id ="silueta"  *ngIf="imagenSilueta"  (load)="PonDoble(img)"  [src]="imagenSilueta"> -->
-        <a [href]="imagenSilueta" download = 'aaa.png'>
+
         <img #img id ="silueta" widht = '300' height= '324' *ngIf="imagenSilueta"   [src]="imagenSilueta">
-        </a>
       </div>
       <div class = "enColumna" style = "width: 70%">
         <div class = "enFila" style = "width: 40%">
