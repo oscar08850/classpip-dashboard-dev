@@ -1202,7 +1202,7 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
   }
 
   public crearRecursosJuegoLibro(idLibro, recurso):Observable<any>{
-    return this.http.get<any>(this.APIUrlJuegodeLibro  +'/'+ idLibro + '/recursosJuegoLibro' , recurso);
+    return this.http.post<any>(this.APIUrlJuegodeLibro  +'/'+ idLibro + '/recursosJuegoLibro' , recurso);
   }
 
   public getImagenesRecurso(containerName, fileName):Observable<any>{

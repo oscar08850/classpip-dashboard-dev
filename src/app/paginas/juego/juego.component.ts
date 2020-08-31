@@ -710,17 +710,6 @@ export class JuegoComponent implements OnInit {
     console.log(event);
   }
 
-
-  crearRecursoJuegoLibro(idLibro: any){
-    this.peticionesAPI.crearRecursosJuegoLibro(idLibro, this.recursoParaLibro)
-    .subscribe((res) => {
-      this.siConcurso = false;
-
-    }, (err) => {
-      console.log(err);
-    })
-  }
-
   crearConcurso(idLibro: any) {
 
     this.peticionesAPI.crearConcurso(idLibro, this.concursoLibro)
@@ -730,9 +719,16 @@ export class JuegoComponent implements OnInit {
       }, (err) => {
         console.log(err);
       })
+  }
 
+  crearRecursoJuegoLibro(idLibro: any){
+    this.peticionesAPI.crearRecursosJuegoLibro(idLibro, this.recursoParaLibro)
+    .subscribe((res) => {
+      this.siConcurso = false;
 
-
+    }, (err) => {
+      console.log(err);
+    })
   }
 
   guardarConcurso() {
