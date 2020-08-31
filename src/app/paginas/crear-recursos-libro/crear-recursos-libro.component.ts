@@ -122,7 +122,7 @@ export class CrearRecursosLibroComponent implements OnInit {
 
     picker.addEventListener('change', e => {
 
-      for (let file of Array.from(e.target.files) as any) { 
+      for (let file of Array.from(e) as any) { 
 
         // for (let file of Array.from(e.target.files) as any) { 
 
