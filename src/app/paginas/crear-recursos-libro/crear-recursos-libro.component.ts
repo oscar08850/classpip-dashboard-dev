@@ -198,38 +198,7 @@ export class CrearRecursosLibroComponent implements OnInit {
   // });
 
 
-  setAll(imagen: Imagen) {
-
-    if (imagen.especial == false) {
-      imagen.especial = true;
-      if (imagen.tipo == "fondo") {
-        this.listadePreviewsFondo[imagen.posicionLista -1 ] = imagen;
-      }
-      else if (imagen.tipo == "personaje") {
-        this.listadePreviewsPersonaje[imagen.posicionLista -1] = imagen;
-      }     
-
-
-
-      
-      else if (imagen.tipo == "objeto") {
-        this.listadePreviewsObjeto[imagen.posicionLista -1] = imagen;
-      }
-    }
-
-    else if (imagen.especial == true) {
-      imagen.especial = false;
-      if (imagen.tipo == "fondo") {
-        this.listadePreviewsFondo[imagen.posicionLista-1] = imagen;
-      }
-      else if (imagen.tipo == "personaje") {
-        this.listadePreviewsPersonaje[imagen.posicionLista-1] = imagen;
-      }
-      else if (imagen.tipo == "objeto") {
-        this.listadePreviewsObjeto[imagen.posicionLista-1] = imagen;
-      }
-    }
-  }
+ 
 
   guardar() {
 

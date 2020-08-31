@@ -1197,6 +1197,13 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
     return this.http.get<RecursoLibro[]>(this.APIUrlProfesores  +'/'+profesorId + '/recursosLibros');
   }
 
+  public recuperarRecursosLibro(profesorId, recurosId):Observable<RecursoLibro>{
+    return this.http.get<RecursoLibro>(this.APIUrlProfesores  +'/'+profesorId + '/recursosLibros' + '/' + recurosId);
+  }
+
+  public crearRecursosJuegoLibro(idLibro, recurso):Observable<any>{
+    return this.http.get<any>(this.APIUrlJuegodeLibro  +'/'+ idLibro + '/recursosJuegoLibro' , recurso);
+  }
 
   public getImagenesRecurso(containerName, fileName):Observable<any>{
     return this.httpImagenes.get(this.APIurlImagenesLibros  + '/' + containerName + '/download/' + fileName, { responseType: ResponseContentType.Blob });
@@ -1206,5 +1213,7 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
   public crearConcurso(idLibro: any, concurso: any):Observable<any>{
     return this.http.post<any>(this.APIUrlJuegodeLibro + '/' + idLibro + '/' + 'juegoLibroConcurso', concurso);
   }
+
+  
 
 }

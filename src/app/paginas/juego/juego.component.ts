@@ -16,7 +16,7 @@ import {
   EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
   EquipoJuegoDeCompeticionFormulaUno, Cuestionario, AlumnoJuegoDeLibro, JuegoDeAvatar, JuegoDeLibros, FamiliaAvatares,
   AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-  EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable, concursoLibro
+  EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable, concursoLibro, ImagenToBackend, RecursoLibroJuego, RecursoLibro
 } from '../../clases/index';
 
 
@@ -153,6 +153,9 @@ export class JuegoComponent implements OnInit {
   showConcurso: any = false;
   concursoLibro: concursoLibro;
   siConcurso: any = false;
+  tengoRecursoCargadoParaGuardar: any = false;
+  recursoCargadoParaGuardar: RecursoLibro;
+  recursoParaLibro: RecursoLibroJuego;
 
   // Información para crear juego de competicion
 
@@ -226,11 +229,12 @@ export class JuegoComponent implements OnInit {
     private peticionesAPI: PeticionesAPIService,
     // tslint:disable-next-line:variable-name
     private _formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
   ) { }
-
+    
 
   ngOnInit() {
+    
     this.grupo = this.sesion.DameGrupo();
     console.log(' Grupo ' + this.grupo);
     this.alumnosGrupo = this.sesion.DameAlumnosGrupo();
@@ -646,6 +650,9 @@ export class JuegoComponent implements OnInit {
         if (this.siConcurso == true) {
           this.crearConcurso(juego.id);
         }
+
+        this.crearRecursoJuegoLibro(juego.id);
+
         this.juegoDeLibro = juego;
 
         if (this.modoDeJuegoSeleccionado === 'Individual') {
@@ -703,6 +710,17 @@ export class JuegoComponent implements OnInit {
     console.log(event);
   }
 
+
+  crearRecursoJuegoLibro(idLibro: any){
+    this.peticionesAPI.crearRecursosJuegoLibro(idLibro, this.recursoParaLibro)
+    .subscribe((res) => {
+      this.siConcurso = false;
+
+    }, (err) => {
+      console.log(err);
+    })
+  }
+
   crearConcurso(idLibro: any) {
 
     this.peticionesAPI.crearConcurso(idLibro, this.concursoLibro)
@@ -743,7 +761,23 @@ export class JuegoComponent implements OnInit {
   RecibeRecursos($event) {
     this.recursoElegido = $event;
     this.tengoRecurso = true;
+    localStorage.setItem("idRecursoLibros", this.recursoElegido[0].toString());
   }
+
+  cargaRecursos($event) {
+    this.recursoCargadoParaGuardar = $event;
+
+
+    this.recursoParaLibro = new RecursoLibroJuego;
+    this.recursoParaLibro.nombre =   this.recursoCargadoParaGuardar.nombre;
+    this.recursoParaLibro.carpeta = this.recursoCargadoParaGuardar.carpeta;
+    this.recursoParaLibro.imagenes = this.recursoCargadoParaGuardar.imagenes;
+    this.recursoParaLibro.juegoId = 0;
+   
+
+    this.tengoRecursoCargadoParaGuardar = true;
+  }
+
 
 
   //// FUNCIONES PARA LA CREACION DE UN JUEGO DE AVATARES
