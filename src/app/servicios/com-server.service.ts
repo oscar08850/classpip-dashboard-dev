@@ -19,7 +19,7 @@ export class ComServerService {
     this.socket.emit ('dash');
   }
 
-  public EsperoRespuestasJuegoDeCuestionario = () => {
+  public EsperoRespuestasJuegoDeCuestionario (): any {
     return Observable.create((observer) => {
         this.socket.on('respuestaJuegoDeCuestionario', (alumnoId) => {
             console.log ('Respuesta cuestionaro ' + alumnoId);
@@ -27,7 +27,7 @@ export class ComServerService {
         });
     });
   }
-  public EsperoModificacionAvatar = () => {
+  public EsperoModificacionAvatar(): any {
     return Observable.create((observer) => {
         this.socket.on('modificacionAvatar', (inscripcion) => {
             console.log ('llega notificacion');
@@ -37,7 +37,7 @@ export class ComServerService {
   }
 
   // Votación de un juego Uno A Todos
-  public EsperoVotacion = () => {
+  public EsperoVotacion(): any {
     return Observable.create((observer) => {
         this.socket.on('notificarVotacion', (votacion) => {
             console.log ('llega notificacion');
@@ -48,7 +48,7 @@ export class ComServerService {
 
   // votaciones de un juego Todos A Uno
   // El parámetro votación NO tienen ninguna información relevante
-  public EsperoVotaciones = () => {
+  public EsperoVotaciones(): any  {
     return Observable.create((observer) => {
         this.socket.on('notificarVotaciones', (votacion) => {
             console.log ('llega notificacion');
@@ -56,6 +56,22 @@ export class ComServerService {
         });
     });
   }
+
+  public EnviarNotificacionIndividual(alumnoDestinatarioId: number, mensajeAEnviar: string) {
+    console.log ('dentro del servicio para enviar notificación al alumno');
+    this.socket.emit ('notificacionIndividual' , {alumnoId: alumnoDestinatarioId, mensaje: mensajeAEnviar});
+  }
+
+  public EnviarNotificacionEquipo(equipoDestinatarioId: number, mensajeAEnviar: string) {
+    console.log ('dentro del servicio para enviar notificación al equipo');
+    this.socket.emit ('notificacionEquipo' , {equipoId: equipoDestinatarioId, mensaje: mensajeAEnviar});
+  }
+
+  public EnviarNotificacionGrupo(grupoDestinatarioId: number, mensajeAEnviar: string) {
+    console.log ('dentro del servicio para enviar notificación al grupo');
+    this.socket.emit ('notificacionGrupo' , {grupoId: grupoDestinatarioId, mensaje: mensajeAEnviar});
+  }
+
 
 }
 

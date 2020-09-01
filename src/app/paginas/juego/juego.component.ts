@@ -22,7 +22,7 @@ import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFo
 
 
 // Services
-import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
+import { SesionService, CalculosService, PeticionesAPIService, ComServerService } from '../../servicios/index';
 
 import { Observable} from 'rxjs';
 import { of } from 'rxjs';
@@ -225,6 +225,7 @@ export class JuegoComponent implements OnInit {
                public dialog: MatDialog,
                private calculos: CalculosService,
                private sesion: SesionService,
+               private comService: ComServerService,
                private location: Location,
                private peticionesAPI: PeticionesAPIService,
                // tslint:disable-next-line:variable-name
@@ -530,6 +531,17 @@ export class JuegoComponent implements OnInit {
       this.Limpiar();
         // Regresamos a la lista de equipos (mat-tab con índice 0)
       this.tabGroup.selectedIndex = 0;
+      // Notificación para los miembros del grupo
+      // console.log ('envio notificación los miembros del grupo');
+      // this.comService.EnviarNotificacionGrupo (
+      //      this.grupo.id,
+      //      'Nuevo juego de colección para el grupo ' + this.grupo.Nombre
+      // );
+      console.log ('envio notificación los miembros del grupo');
+      this.comService.EnviarNotificacionGrupo (
+          this.grupo.id,
+          'Nuevo juego de colección para el grupo ' + this.grupo.Nombre
+      );
 
     });
   }

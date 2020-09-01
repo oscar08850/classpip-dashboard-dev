@@ -407,7 +407,6 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     }
 
   RegistrarFamilia() {
-
       const familia = new FamiliaAvatares ();
       Object.assign (familia, this.infoFamilia);
 
