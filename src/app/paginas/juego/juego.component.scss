@@ -1,3 +1,18 @@
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+td {
+  padding-right: 8px;
+}
+
+
 // /* Colores de iconos */
 // .material-icons.red { color: rgb(212, 57, 52); }
 // .material-icons.green { color: rgb(92, 184, 92); }
@@ -108,7 +123,7 @@
     flex-direction: column;
     margin: 15px 0;
   }
-  
+
   .radio-button {
     margin: 5px;
     color: black;

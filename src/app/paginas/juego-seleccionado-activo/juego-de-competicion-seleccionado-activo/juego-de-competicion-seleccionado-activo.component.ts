@@ -56,6 +56,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>;
   juegosPuntos: Juego[] = [];
   juegosCuestionariosTerminados: Juego[] = [];
+  juegosDeVotacionUnoATodosTerminados: any[] = [];
 
   constructor(  public dialog: MatDialog,
                 public sesion: SesionService,
@@ -70,6 +71,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     this.DameJornadasDelJuegoDeCompeticionSeleccionado();
     this.DameJuegosDePuntos();
     this.DameJuegosDeCuestionariosAcabados();
+    this.DameJuegosdeVotacionUnoATodosAcabados();
   }
 
 
@@ -316,6 +318,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
     this.sesion.TomaJuegosDePuntos(this.juegosPuntos);
     this.sesion.TomaJuegosDeCuestionario (this.juegosCuestionariosTerminados);
+    this.sesion.TomaJuegosDeVotacionUnoATodos (this.juegosDeVotacionUnoATodosTerminados);
   }
 
 
@@ -347,6 +350,24 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     });
   }
 
+  DameJuegosdeVotacionUnoATodosAcabados() {
+    console.log ('vamos a por los juegos de votacion Uno A Todos ' + this.juegoSeleccionado.grupoId);
+    this.peticionesAPI.DameJuegosDeVotacionUnoATodos(this.juegoSeleccionado.grupoId)
+    .subscribe(juegos => {
+      console.log ('Ya tengo los juegos de votacion Uno A Todos');
+      console.log (juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === false) {
+          this.juegosDeVotacionUnoATodosTerminados.push(juegos[i]);
+        }
+      }
+      console.log('Juegos de  votacion Uno A Todos disponibles');
+      console.log(this.juegosDeVotacionUnoATodosTerminados);
+    });
+
+
+  }
 
   // const jornadaFinalizada = this.calculos.JornadaFinalizada(this.juegoSeleccionado, jornadaSeleccionada);
 // La uso para señalar en la clasificacion general al ganador cuando la competición ha finalizado

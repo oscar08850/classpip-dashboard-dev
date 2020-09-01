@@ -12,7 +12,7 @@ import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion,
  Album, AlbumEquipo, Coleccion, Cromo, AlumnoJuegoDePuntos } from '../../../../clases/index';
 
 
-import {SesionService, PeticionesAPIService, CalculosService} from '../../../../servicios/index';
+import {SesionService, PeticionesAPIService, CalculosService, ComServerService} from '../../../../servicios/index';
 
 import { Location } from '@angular/common';
 
@@ -110,6 +110,7 @@ export class AsignarCromosComponent implements OnInit {
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
                private calculos: CalculosService,
+               private comService: ComServerService,
                public dialog: MatDialog,
                private http: Http,
                public location: Location) { }
@@ -319,7 +320,11 @@ export class AsignarCromosComponent implements OnInit {
                         console.log(res);
 
                       });
-
+                      // Notificación para el alumno
+                      console.log ('envio notificación al alumno')
+                      this.comService.EnviarNotificacionIndividual (
+                        alumnoJuegoDeColeccion.alumnoId,
+                        'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
                     }
             }
     );
@@ -345,6 +350,12 @@ export class AsignarCromosComponent implements OnInit {
 
                           console.log(res);
                         });
+                        // Notificación para los miembros del equipo
+                        console.log ('envio notificación los miembros del equipo');
+                        this.comService.EnviarNotificacionEquipo (
+                            equipo.id,
+                            'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
+                        );
                 }
             }
     );

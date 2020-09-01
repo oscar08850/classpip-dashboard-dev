@@ -167,13 +167,6 @@ export class MisFamiliasAvataresComponent implements OnInit {
    }
 
 
-  //  const comp = document.getElementsByTagName('complementoSobreSilueta');
-  //  console.log ('voy a borrar');
-  //  console.log (comp.length);
-  //  for (let i = comp.length - 1; i >= 0; --i) {
-  //   comp[i].remove();
-  // }
-
 
    this.familiaCargada = false;
    this.familiaElegida = this.listaFamilias.filter (familia => familia.id === Number(this.familiaId))[0];
@@ -219,6 +212,8 @@ export class MisFamiliasAvataresComponent implements OnInit {
             const imagen = this.CreaImagen (1, cont1, reader.result.toString());
             // Ahora coloco la imagen creada en la zona de complementos que le toca
             document.getElementById('imagenesComplementos1').appendChild(imagen);
+
+
             cont1++;
         }, false);
 
@@ -308,12 +303,6 @@ export class MisFamiliasAvataresComponent implements OnInit {
     this.familiaCargada = true;
   }
 
-
-  // PonDoble(img) {
-  //   img.setAttribute ('width', this.dobleancho);
-  //   img.setAttribute ('height', this.doblealto );
-  // }
-
   BorrarFamilia() {
     this.familiaElegida.Complemento1.forEach (imagenComplemento =>
       this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
@@ -354,5 +343,9 @@ export class MisFamiliasAvataresComponent implements OnInit {
         });
       }
     });
+  }
+
+  GuardarFamilia() {
+    this.sesion.TomaFamilia (this.familiaElegida);
   }
 }

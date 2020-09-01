@@ -33,7 +33,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 
-
+import { ListViewModule } from '@syncfusion/ej2-angular-lists';
 
 
 // IMPORTs COMPONENTES
@@ -202,6 +202,18 @@ import { InformacionRespuestasJuegoDeCuestionarioDialogComponent } from './pagin
 // tslint:disable-next-line:max-line-length
 import { RespuestasAlumnoJuegoDeCuestionarioComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/respuestas-alumno-juego-de-cuestionario/respuestas-alumno-juego-de-cuestionario.component';
 import { VerTodosComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/ver-todos/ver-todos.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeVotacionUnoATodosSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-votacion-uno-atodos-seleccionado-activo/juego-de-votacion-uno-atodos-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-votacion-uno-atodos-seleccionado-inactivo/juego-de-votacion-uno-atodos-seleccionado-inactivo.component';
+import { CrearRubricaComponent } from './paginas/crear-rubrica/crear-rubrica.component';
+import { MisRubricasComponent } from './paginas/mis-rubricas/mis-rubricas.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeAvatarSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-avatar-seleccionado-inactivo/juego-de-avatar-seleccionado-inactivo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-votacion-todos-auno-seleccionado-activo/juego-de-votacion-todos-auno-seleccionado-activo.component';
+import { JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-votacion-todos-auno-seleccionado-inactivo/juego-de-votacion-todos-auno-seleccionado-inactivo.component';
+import { GuardarFamiliaComponent } from './paginas/mis-familias-avatares/guardar-familia/guardar-familia.component';
 
 
 @NgModule({
@@ -313,7 +325,15 @@ import { VerTodosComponent } from './paginas/juego-seleccionado-activo/juego-de-
     MenuRecursosComponent,
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
     RespuestasAlumnoJuegoDeCuestionarioComponent,
-    VerTodosComponent
+    VerTodosComponent,
+    JuegoDeVotacionUnoATodosSeleccionadoActivoComponent,
+    JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent,
+    CrearRubricaComponent,
+    MisRubricasComponent,
+    JuegoDeAvatarSeleccionadoInactivoComponent,
+    JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent,
+    JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent,
+    GuardarFamiliaComponent
 
 
 
@@ -355,7 +375,8 @@ import { VerTodosComponent } from './paginas/juego-seleccionado-activo/juego-de-
 
     HttpClientModule,
 
-    NgxEchartsModule
+    NgxEchartsModule,
+    ListViewModule
   ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,

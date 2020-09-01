@@ -375,6 +375,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
   // Par abuscar el fichero JSON que contiene la info de la familia que se va
   // a cargar desde ficheros
   SeleccionarInfoFamilia($event) {
+
       const fileInfo = $event.target.files[0];
       const reader = new FileReader();
       reader.readAsText(fileInfo);
@@ -406,18 +407,6 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     }
 
   RegistrarFamilia() {
-
-      // Creo la fammilia de avatare
-      // const familia = new FamiliaAvatares (this.infoFamilia.NombreFamilia);
-      // familia.NombreComplemento1 = this.infoFamilia.NombreComplemento1;
-      // familia.NombreComplemento2 = this.infoFamilia.NombreComplemento2;
-      // familia.NombreComplemento3 = this.infoFamilia.NombreComplemento3;
-      // familia.NombreComplemento4 = this.infoFamilia.NombreComplemento4;
-      // familia.Silueta = this.infoFamilia.Silueta;
-      // familia.Complemento1 = this.infoFamilia.Complemento1;
-      // familia.Complemento2 = this.infoFamilia.Complemento2;
-      // familia.Complemento3 = this.infoFamilia.Complemento3;
-      // familia.Complemento4 = this.infoFamilia.Complemento4;
       const familia = new FamiliaAvatares ();
       Object.assign (familia, this.infoFamilia);
 

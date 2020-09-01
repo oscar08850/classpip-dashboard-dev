@@ -103,6 +103,7 @@ import {VerTodosComponent} from './paginas/juego-seleccionado-activo/juego-de-av
 // tslint:disable-next-line:max-line-length
 import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/informacion-juego-avatar/informacion-juego-avatar.component';
 
+import {GuardarFamiliaComponent} from './paginas/mis-familias-avatares/guardar-familia/guardar-familia.component';
 
 import { DeactivateGuardCrearEscenario } from './guardas/canExitCrearEscenario.guard';
 import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenario.component';
@@ -110,6 +111,8 @@ import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escena
 import { MisEscenariosComponent } from './paginas/mis-escenarios/mis-escenarios.component';
 import {MenuRecursosComponent} from './paginas/menu-recursos/menu-recursos.component';
 
+import {CrearRubricaComponent } from './paginas/crear-rubrica/crear-rubrica.component';
+import { MisRubricasComponent } from './paginas/mis-rubricas/mis-rubricas.component';
 const routes: Routes = [
 
 
@@ -259,10 +262,17 @@ const routes: Routes = [
 
   // AVATARES
   { path: 'inicio/:id/misFamiliasAvatares', component: MisFamiliasAvataresComponent},
+  { path: 'inicio/:id/misFamiliasAvatares/guardarFamilia', component: GuardarFamiliaComponent},
   { path: 'inicio/:id/crearFamiliaAvatares', component: CrearFamiliaAvataresComponent},
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/MostrarAvatarAlumno', component: MostrarAvatarAlumnoComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoAvatar', component: InformacionJuegoAvatarComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/verTodos', component: VerTodosComponent },
+
+
+  // Rubricas
+  { path: 'inicio/:id/crearRubrica', component: CrearRubricaComponent},
+  { path: 'inicio/:id/misRubricas', component: MisRubricasComponent},
+
 ];
 
 @NgModule({

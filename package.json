@@ -24,6 +24,8 @@
     "@angular/router": "~7.2.0",
     "@material-extended/mde": "^2.2.2",
     "@ng-bootstrap/ng-bootstrap": "^4.1.2",
+    "@syncfusion/ej2-angular-lists": "^18.2.48",
+    "@syncfusion/ej2-grids": "^18.2.48",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
     "core-js": "^2.5.4",
