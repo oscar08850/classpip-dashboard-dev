@@ -148,6 +148,10 @@ export class PeticionesAPIService {
     return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][Nombre]=' + nombre + '&filter[where][Apellido]=' + apellido);
   }
 
+  public RegistraProfesor(profesor: Profesor): Observable<Profesor> {
+    return this.http.post<Profesor>(this.APIUrlProfesores, profesor);
+  }
+
   public DameTodosMisAlumnos(profesorId: number): Observable<Alumno[]> {
     return this.http.get<Alumno[]>(this.APIUrlProfesores + '/' + profesorId + '/alumnos');
   }

@@ -24,6 +24,15 @@ export class AppComponent  {
 
   misAlumnos: Alumno[];
 
+  primerApellido: string;
+  segundoApellido: string;
+  username: string;
+  email: string;
+  contrasena: string;
+  contrasenaRepetida: string;
+
+  mostrarLogin = true;
+
   constructor(
               private route: Router,
               private peticionesAPI: PeticionesAPIService,
@@ -35,93 +44,15 @@ export class AppComponent  {
 
 
 
-    DameDatos(): any {
-      const datosObservables = new Observable ( obs => {
-        const datos: any = {
-          alumnos: undefined,
-          grupos: undefined,
-          colecciones: undefined
-        };
-
-        let cont = 0;
-        let alumnosProcesados: Alumno[];
-        this.peticionesAPI.DameTodosMisAlumnos (this.profesor.id)
-        .subscribe (alumnos => {
-          alumnosProcesados = alumnos;
-          console.log ('Mis Alumnos (AHORA SI):');
-          console.log (alumnosProcesados);
-          alumnosProcesados = alumnosProcesados.filter (alumno => alumno.Nombre[0] !== 'A');
-          console.log ('Alumnos cuyo nombre no empieza por A');
-          console.log (alumnosProcesados);
-          datos.alumnos = alumnosProcesados;
-          cont = cont + 1;
-          if (cont === 3) {
-            obs.next (datos);
-          }
-        });
-        this.peticionesAPI.DameGruposProfesor (this.profesor.id)
-          .subscribe (grupos => {
-              datos.grupos = grupos;
-              cont = cont + 1;
-              if (cont === 3) {
-                obs.next (datos);
-              }
-        });
-        this.peticionesAPI.DameColeccionesDelProfesor (this.profesor.id)
-        .subscribe (colecciones => {
-                datos.colecciones = colecciones;
-                cont = cont + 1;
-                if (cont === 3) {
-                  obs.next (datos);
-                }
-        });
-
-      });
-      return datosObservables;
-    }
-
-
-
-
-  PruebaObservables() {
-      this.DameDatos()
-      .subscribe ( datos => {
-
-        console.log ('Ua tengo los datos');
-        console.log (datos);
-      } );
-  }
-
   Autentificar() {
 
     this.peticionesAPI.DameProfesor(this.nombre, this.apellido).subscribe(
       (res) => {
         if (res[0] !== undefined) {
           this.profesor = res[0]; // Si es diferente de null, el profesor existe y lo meto dentro de profesor
-          this.PruebaObservables();
           // Envio el profesor a la sesión
           this.sesion.TomaProfesor(this.profesor);
           this.comServer.Conectar();
-
-
-          // const rubrica: Rubrica = new Rubrica();
-          // rubrica.Nombre = "Presentacion oral";
-          // rubrica.Descripcion = "Para evaluar presentaciones orales";
-          // rubrica.profesorId = this.profesor.id;
-          // rubrica.Criterios = [];
-          // const c1: Criterio = new Criterio();
-          // c1.Nombre = "Lenguaje corporal";
-          // c1.Opciones = ["Mira a la audiencia", "No se toca la nariz"];
-          // rubrica.Criterios.push(c1);
-          // const c2: Criterio = new Criterio();
-          // c2.Nombre = "Transparencias";
-          // c2.Opciones = ["Se ven bien", "Están numeradas", "No más de tres frases en cada una"];
-          // rubrica.Criterios.push(c2);
-          // this.peticionesAPI.CreaRubrica (rubrica, this.profesor.id).subscribe();
-
-
-
-
 
           // En principio, no seria necesario enviar el id del profesor porque ya
           // tengo el profesor en la sesión y puedo recuperarlo cuando quiera.
@@ -139,6 +70,35 @@ export class AppComponent  {
         Swal.fire('Error', 'Fallo en la conexion con la base de datos', 'error');
       }
     );
+  }
+  ValidaEmail(email) {
+        const re = /\S+@\S+\.\S+/;
+        return re.test(email);
+  }
+
+  Registrar() {
+    console.log ('datos para el registro');
+    console.log (this.nombre);
+    console.log (this.primerApellido);
+    console.log (this.segundoApellido);
+    console.log (this.username);
+    console.log (this.email);
+    console.log (this.contrasena);
+    console.log (this.contrasenaRepetida);
+    if (this.contrasena !== this.contrasenaRepetida) {
+      Swal.fire('Error', 'No coincide la contraseña con la contraseña repetida', 'error');
+    } else if (!this.ValidaEmail (this.email)) {
+      Swal.fire('Error', 'El email no es correcto', 'error');
+    } else {
+      this.peticionesAPI.RegistraProfesor (new Profesor (this.nombre, this.primerApellido))
+      .subscribe (  (res) => Swal.fire('OK', 'Registro completado con éxito', 'success'),
+                    (err) => {
+                      Swal.fire('Error', 'Fallo en la conexion con la base de datos', 'error');
+      });
+    }
+
+
+
   }
 
 }
