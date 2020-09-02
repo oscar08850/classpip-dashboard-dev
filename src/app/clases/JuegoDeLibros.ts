@@ -7,9 +7,9 @@ export class JuegoDeLibros {
     Temporada: string;
     id: number;
     grupoId: number;
-    descripción: string;
+    descripcion: string;
 
-    constructor( NombreJuego?: string, Tipo?: string, Modo?: string, JuegoActivo?: boolean,  Temporada?: string,  descripción?: string) {
+    constructor( NombreJuego?: string, Tipo?: string, Modo?: string, JuegoActivo?: boolean,  Temporada?: string,  descripcion?: string) {
 
       this.Tipo = Tipo;
       this.Modo = Modo;

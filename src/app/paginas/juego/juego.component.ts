@@ -635,7 +635,7 @@ export class JuegoComponent implements OnInit {
       this.tipoDeJuegoSeleccionado,
       this.modoDeJuegoSeleccionado,
       true);
-    juego.descripción = this.myForm.value.descripcionlibro;
+    juego.descripcion = this.myForm.value.descripcionlibro;
     juego.Temporada = 'SI';
     if (this.inscribirtemporada == '1') {
 
