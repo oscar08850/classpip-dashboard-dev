@@ -72,6 +72,15 @@ export class ComServerService {
     this.socket.emit ('notificacionGrupo' , {grupoId: grupoDestinatarioId, mensaje: mensajeAEnviar});
   }
 
+  public RecordarContrasena(emailRec: string, nombreRec: string, contrasenaRec: string) {
+    console.log ('dentro del servicio para recordar contraseña');
+    // Me conecto momentaneamente para enviarle al servidor la contraseña que debe enviar por email
+    this.socket = io(URL.Servidor);
+    this.socket.emit ('recordarContraseña' , {email: emailRec, nombre: nombreRec, contrasena: contrasenaRec});
+    // Me desconecto
+    this.socket.emit('forceDisconnect');
+  }
+
 
 }
 

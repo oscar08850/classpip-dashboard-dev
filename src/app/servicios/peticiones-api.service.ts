@@ -148,6 +148,14 @@ export class PeticionesAPIService {
     return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][Nombre]=' + nombre + '&filter[where][Apellido]=' + apellido);
   }
 
+  // Esta consulta es para cuando se ha olvidado la contraseña y solo puede darnos
+  // su nombre de usuario (de momento el nombre)
+
+  public DameContrasena(nombre: string): Observable<Profesor> {
+    return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][Nombre]=' + nombre );
+  }
+
+
   public RegistraProfesor(profesor: Profesor): Observable<Profesor> {
     return this.http.post<Profesor>(this.APIUrlProfesores, profesor);
   }
@@ -254,6 +262,10 @@ export class PeticionesAPIService {
   }
   public DameAlumnosEquipo(equipoId: number): Observable<Alumno[]> {
     return this.http.get<Alumno[]>(this.APIUrlEquipos + '/' + equipoId + '/alumnos');
+  }
+
+  public DameEquiposDelAlumno(alumnoId: number): Observable<Equipo[]> {
+    return this.http.get<Equipo[]>(this.APIUrlAlumnos + '/' + alumnoId + '/equipos');
   }
   public DameAsignacionesDelEquipo(equipo: Equipo): Observable<AsignacionEquipo[]> {
     // Da las asignaciones de los alumnos del equipo

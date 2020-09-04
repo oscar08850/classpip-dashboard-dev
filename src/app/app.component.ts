@@ -97,7 +97,27 @@ export class AppComponent  {
       });
     }
 
-
+  }
+  EnviarContrasena() {
+    if (this.nombre === undefined) {
+      Swal.fire('Cuidado', 'Introduce tu nombre en el formulario de login', 'warning');
+    } else {
+      console.log ('voy a pedir contraseña');
+      this.peticionesAPI.DameContrasena (this.nombre)
+      .subscribe ((res) => {
+          if (res[0] !== undefined) {
+            const profesor = res[0]; // Si es diferente de null, el profesor existe
+            console.log ('existe');
+            console.log (profesor);
+            // le enviamos la contraseña
+            this.comServer.RecordarContrasena ("miguel.valero@upc.edu", profesor.Nombre, profesor.Apellido);
+            Swal.fire('OK', 'En breve recibirás un email con tu contraseña', 'success');
+          } else {
+            // Este profesor no está registrado en la base de datos
+            Swal.fire('Error', 'No hay ningun profesor con este nombre de usuario', 'error');
+          }
+      });
+    }
 
   }
 

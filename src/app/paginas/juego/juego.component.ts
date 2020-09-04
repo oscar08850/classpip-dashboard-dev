@@ -120,6 +120,7 @@ export class JuegoComponent implements OnInit {
   // información para crear un juego de colección
   coleccionSeleccionada: Coleccion;
   tengoColeccion = false;
+  modoAsignacion;
 
 
   // información para crear un juego de cuestionario
@@ -431,7 +432,7 @@ export class JuegoComponent implements OnInit {
   CrearJuegoDePuntos() {
     // primero creamos el juego
     this.peticionesAPI.CreaJuegoDePuntos(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado,
-      undefined, undefined, undefined, undefined, undefined, undefined, this.nombreDelJuego), this.grupo.id)
+      undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       this.sesion.TomaJuego(this.juego);
@@ -498,7 +499,7 @@ export class JuegoComponent implements OnInit {
   }
 
   CrearJuegoDeColeccion() {
-    this.peticionesAPI.CreaJuegoDeColeccion(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado,
+    this.peticionesAPI.CreaJuegoDeColeccion(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.modoAsignacion,
       this.coleccionSeleccionada.id, undefined, undefined, undefined, undefined, undefined, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
@@ -781,7 +782,7 @@ export class JuegoComponent implements OnInit {
 
     // tslint:disable-next-line:max-line-lengtholean)
     this.peticionesAPI.CreaJuegoDeCompeticionLiga(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeCompeticionSeleccionado,
-                                                    this.modoDeJuegoSeleccionado, undefined, true, this.numeroDeJornadas,
+                                                    this.modoDeJuegoSeleccionado, undefined, undefined, true, this.numeroDeJornadas,
                                                     this.tipoDeCompeticionSeleccionado,
                                                     undefined, undefined, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
@@ -836,7 +837,7 @@ export class JuegoComponent implements OnInit {
   CrearJuegoDeCompeticionFormulaUno() {
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.CreaJuegoDeCompeticionFormulaUno(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeCompeticionSeleccionado,
-                                                    this.modoDeJuegoSeleccionado, undefined, true, this.numeroDeJornadas,
+                                                    this.modoDeJuegoSeleccionado, undefined, undefined, true, this.numeroDeJornadas,
                                                     undefined, this.Puntuacion.length,
                                                     this.Puntuacion, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {

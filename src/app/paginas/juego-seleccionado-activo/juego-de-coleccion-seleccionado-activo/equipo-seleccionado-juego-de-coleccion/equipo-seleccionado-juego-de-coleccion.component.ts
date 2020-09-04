@@ -56,6 +56,10 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
     this.coleccion = this.sesion.DameColeccion();
     this.juegoSeleccionado = this.sesion.DameJuego();
     this.inscripcionEquipo = this.sesion.DameInscripcionEquipo();
+    console.log ('equipo');
+    console.log (this.equipo);
+    console.log ('inscripcion');
+    console.log (this.inscripcionEquipo);
     this.CromosDelEquipo();
     this.GET_ImagenPerfil();
   }

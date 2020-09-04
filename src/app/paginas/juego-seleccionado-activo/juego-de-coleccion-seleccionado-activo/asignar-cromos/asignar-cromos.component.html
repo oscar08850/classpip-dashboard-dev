@@ -152,7 +152,7 @@
 
 
 
-<form *ngIf="alumnosDelJuego && mostrarLista" style="width: 100%">
+<form *ngIf="HayQueMostrarAlumnos()" style="width: 100%">
 
 
     <mat-form-field style = "width: 60%; margin-left: 20%; ">
@@ -270,7 +270,7 @@
 </form>
 
 <!-- /////////////////////////////////////////// TABLA PARA ASIGNAR CROMOS EQUIPOS //////////////////////////////////////////////////// -->
-<form *ngIf="equiposDelJuego" style="width: 100%" >
+<form *ngIf="HayQueMostrarEquipos()" style="width: 100%" >
 
     <mat-form-field style = "width: 60%; margin-left: 20%; ">
         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">

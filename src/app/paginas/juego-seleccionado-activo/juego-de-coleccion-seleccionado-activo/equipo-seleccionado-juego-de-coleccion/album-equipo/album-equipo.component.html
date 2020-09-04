@@ -3,12 +3,20 @@
 <br>
 <br>
 <div class = "enColumna">
-<button *ngIf = "coleccion.DosCaras" style = 'width: 40%' type="button" class="btn Info" (click) = "Voltear ()">
-  Dar la vuelta a todos los cromos <i class="material-icons">library_add</i>
-</button>
+  <button *ngIf = "coleccion.DosCaras" style = 'width: 40%' type="button" class="btn Info" (click) = "Voltear ()">
+    Dar la vuelta a todos los cromos <i class="material-icons">library_add</i>
+  </button>
+  <br>
+  Columnas
+  <div class = "enFila" style = 'width: 10%'>
+    <button style = 'width: 30%' type="button" class="btn Info" (click) = "ncol=3">3</button>
+    <button style = 'width: 30%' type="button" class="btn Info" (click) = "ncol=4">4</button>
+    <button style = 'width: 30%' type="button" class="btn Info" (click) = "ncol=5">5</button>
+  </div>
 </div>
+
 <br>
-<div class = "enColumna">
+<!-- <div class = "enColumna">
 <div  style = "width: 468px" >
 <span  *ngFor="let cromo of AlbumDelEquipo; let i = index">
   <span class="album">
@@ -46,85 +54,92 @@
 </div>
 <button type="button" class="btn Back" (click)="goBack()">Volver </button>
 </div>
+ -->
 
-
-<!-- <mat-grid-list cols="3" rowHeight="100px" style="width: 70%; margin-left : 15%" >
-  <mat-grid-tile
-      *ngFor="let cromo of AlbumDelEquipo; let i = index"
-      [colspan]="1"
-      [rowspan]="4"
-      [style.background]="white">
-      <mat-card class="cromo" [ngClass]="{
-        'Falti' : cromo.Tengi === false,
-        'Diamante' : cromo.Nivel === 'Diamante',
-        'Platino' : cromo.Nivel === 'Platino',
-        'Oro' : cromo.Nivel === 'Oro',
-        'Plata' : cromo.Nivel === 'Plata',
-        'Bronce' : cromo.Nivel === 'Bronce'}">
-
-        <div class= "enColumna">
-          <mat-card-header style = "margin-top: 20%;"> -->
-            <!-- <div style="display: flex; justify-content:space-between; width: 250px "> -->
-              <!-- <mat-card-title align = "center">{{cromo.Nombre}}</mat-card-title>
-              <mat-card-subtitle align = "center">{{cromo.Probabilidad}}</mat-card-subtitle>
-
-          </mat-card-header> -->
-          <!-- <mat-card-content style="display: flex; align-items: center;justify-content: center;"> -->
-          <!-- <mat-card-content>
-
-            <div class = "enFila" style = "width: 30%">
-
-              <button type="button" style="width: 50px !important;" class="btn Editar" (click) = "AbrirDialogoEditarCromo(cromo)">
-                <i  class="material-icons">edit </i>
-              </button>
-
-              <button type="button" style="width: 50px !important;" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrarCromo(cromo)">
-                <i  class="material-icons">delete </i>
-              </button> -->
-            <!-- </div>
-              <div *ngIf = "!coleccion.DosCaras" class="posicionImagen">
-                <img class ="imagenCromo" *ngIf="imagenesCromosDelante[i]"  mat-card-image [src]="imagenesCromosDelante[i]" >
-              </div>
-
-              <div  *ngIf = "coleccion.DosCaras"  class="flip-box">
-                  <div class="flip-box-inner">
-                    <div class="flip-box-front">
-                      <div class="posicionImagen" >
-                        <img class ="imagenCromo" *ngIf="imagenCromoDelante[i]"  mat-card-image [src]="imagenCromoDelante[i]" >
-                      </div>
-                    </div>
-                    <div class="flip-box-back">
-                      <div class="posicionImagen" >
-                        <img class ="imagenCromo" *ngIf="imagenCromoDetras[i]"  mat-card-image [src]="imagenCromoDetras[i]" >
-                      </div>
-                    </div>
-                  </div>
-              </div>
-
-
-
-          </mat-card-content>
-        </div> -->
-
-        <!-- <mat-card-header>
-          <div style="display: flex; justify-content:space-between; width: 250px ">
-          <div  >
-          <mat-card-title>{{cromo.Nombre}}</mat-card-title>
-          <mat-card-subtitle><p style="margin-bottom: -2px;">Nivel: {{cromo.Nivel}} </p><p style="margin-bottom: -2px;">Probabilidad: {{cromo.Probabilidad}} </p></mat-card-subtitle>
+<div class = "enColumna">
+<!-- Mostrar en 3 columnas -->
+<div  *ngIf = "ncol===3" style = "width: 468px" >
+<span  *ngFor="let cromo of AlbumDelEquipo; let i = index">
+  <span class="album3col">
+    <div  *ngIf = "!coleccion.DosCaras">
+      <img class ="imagenCromo" *ngIf="cromo.Tengi" mat-card-image [src]="imagenCromoDelante[i]" >
+      <img class ="imagenCromo" *ngIf="!cromo.Tengi" style = "opacity: 0.5 !important;" mat-card-image [src]="imagenCromoDelante[i]" >
+    </div>
+    <div  *ngIf = "coleccion.DosCaras && !voltear"  >
+      <div class="flip-box">
+      <div class="flip-box-inner">
+        <div class="flip-box-front">
+            <img class ="imagenCromo"  *ngIf="cromo.Tengi" mat-card-image  [src]="imagenCromoDelante[i]" >
+            <img class ="imagenCromo"  *ngIf="!cromo.Tengi" mat-card-image style = "opacity: 0.5 !important;"  [src]="imagenCromoDelante[i]" >
         </div>
-          <div class="elementoCromo">
+        <!-- mat-card-image -->
+        <div class="flip-box-back">
+            <img class ="imagenCromo"   *ngIf="cromo.Tengi"  mat-card-image [src]="imagenCromoDetras[i]" >
+        </div>
+      </div>
+      </div>
+    </div>
+    <div *ngIf = "coleccion.DosCaras && voltear" style = "margin-top:-17px;" >
+          <img class ="imagenCromo"  mat-card-image [src]="imagenCromoDetras[i]" >
+    </div>
+  </span>
+</span>
+</div>
+<!-- Mostrar en 4 columnas -->
+<div *ngIf = "ncol===4" style = "width: 624px" >
+  <span  *ngFor="let cromo of AlbumDelEquipo; let i = index">
+    <span class="album4col">
+      <div  *ngIf = "!coleccion.DosCaras">
+        <img class ="imagenCromo" *ngIf="cromo.Tengi" mat-card-image [src]="imagenCromoDelante[i]" >
+        <img class ="imagenCromo" *ngIf="!cromo.Tengi" style = "opacity: 0.5 !important;" mat-card-image [src]="imagenCromoDelante[i]" >
+      </div>
+      <div  *ngIf = "coleccion.DosCaras && !voltear"  >
+        <div class="flip-box">
+        <div class="flip-box-inner">
+          <div class="flip-box-front">
+              <img class ="imagenCromo"  *ngIf="cromo.Tengi" mat-card-image  [src]="imagenCromoDelante[i]" >
+              <img class ="imagenCromo"  *ngIf="!cromo.Tengi" mat-card-image style = "opacity: 0.5 !important;"  [src]="imagenCromoDelante[i]" >
+          </div>
+          <!-- mat-card-image -->
+          <div class="flip-box-back">
+              <img class ="imagenCromo"   *ngIf="cromo.Tengi"  mat-card-image [src]="imagenCromoDetras[i]" >
           </div>
         </div>
-        </mat-card-header>
-        <mat-card-content style="display: flex; align-items: center;justify-content: center;">
-        <div class="posicionImagen" >
-        <img class ="imagenCromo" *ngIf="imagenCromoDelante[i]" mat-card-image [src]="imagenCromoDelante[i]" >
+        </div>
       </div>
-        </mat-card-content> -->
-      <!-- </mat-card>
-  </mat-grid-tile>
-</mat-grid-list>
-<div class = "enColumna">
+      <div *ngIf = "coleccion.DosCaras && voltear" style = "margin-top:-17px;" >
+            <img class ="imagenCromo"  mat-card-image [src]="imagenCromoDetras[i]" >
+      </div>
+    </span>
+  </span>
+  </div>
+  <!-- Mostrar en 5 columnas -->
+  <div *ngIf = "ncol===5" style = "width: 780px" >
+    <span  *ngFor="let cromo of AlbumDelEquipo; let i = index">
+      <span class="album5col">
+        <div  *ngIf = "!coleccion.DosCaras">
+          <img class ="imagenCromo" *ngIf="cromo.Tengi" mat-card-image [src]="imagenCromoDelante[i]" >
+          <img class ="imagenCromo" *ngIf="!cromo.Tengi" style = "opacity: 0.5 !important;" mat-card-image [src]="imagenCromoDelante[i]" >
+        </div>
+        <div  *ngIf = "coleccion.DosCaras && !voltear"  >
+          <div class="flip-box">
+          <div class="flip-box-inner">
+            <div class="flip-box-front">
+                <img class ="imagenCromo"  *ngIf="cromo.Tengi" mat-card-image  [src]="imagenCromoDelante[i]" >
+                <img class ="imagenCromo"  *ngIf="!cromo.Tengi" mat-card-image style = "opacity: 0.5 !important;"  [src]="imagenCromoDelante[i]" >
+            </div>
+            <!-- mat-card-image -->
+            <div class="flip-box-back">
+                <img class ="imagenCromo"   *ngIf="cromo.Tengi"  mat-card-image [src]="imagenCromoDetras[i]" >
+            </div>
+          </div>
+          </div>
+        </div>
+        <div *ngIf = "coleccion.DosCaras && voltear" style = "margin-top:-17px;" >
+              <img class ="imagenCromo"  mat-card-image [src]="imagenCromoDetras[i]" >
+        </div>
+      </span>
+    </span>
+    </div>
 <button type="button" class="btn Back" (click)="goBack()">Volver </button>
-</div> -->
-
+</div>
