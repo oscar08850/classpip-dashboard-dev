@@ -8,7 +8,9 @@ import { SesionService } from '../../servicios/sesion.service';
 import { ImagenToBackend } from '../../clases/clasesParaLibros/imagenGuardada';
 import { TablaHistorialPuntosAlumno } from 'src/app/clases';
 
-
+interface HTMLInputEvent extends Event {
+  target: HTMLInputElement & EventTarget;
+}
 
 @Component({
   selector: 'app-crear-recursos-libro',
@@ -120,7 +122,7 @@ export class CrearRecursosLibroComponent implements OnInit {
     var listing = document.getElementById('listing');
 
 
-    picker.addEventListener('change', e => {
+    picker.addEventListener('change', (e?: HTMLInputEvent) => {
 
       for (let file of Array.from(e.target.files) as any) { 
 
