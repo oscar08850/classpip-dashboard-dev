@@ -10,7 +10,9 @@ export class concursoLibro {
     id: any;
     juegoId: any;
     listaLibrosParticipantes: any;
-
+    peso1: any;
+    peso2: any;
+    peso3: any;
 
     constructor(concursoTematica?: any, dateFinInscripcion?: any, tipo?:any, dateFinVotacion?:any,  concursoRequisitos?:any,  concursoPrimerCriterio?:any, concursoSegundoCriterio?: any,
         concursoTercerCriterio?: any ) {
