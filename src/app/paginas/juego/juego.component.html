@@ -329,7 +329,8 @@
                   </app-asigna-especial-juego-libros>
                   <div class="btnCambiarStep">
                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                    <button *ngIf="tengoRecursoCargadoParaGuardar" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                    <button *ngIf="tengoRecursoCargadoParaGuardar" type="button" class="btn Next"
+                      matStepperNext>Siguiente</button>
                   </div>
 
                 </mat-step>
@@ -356,13 +357,17 @@
                     </mat-form-field>
 
                     <mat-form-field>
-                      <input matInput [matDatepicker]="startatpicker" placeholder="Elige fecha de finalización de incripciones / Comienzo de votaciones" formControlName="dateFinInscripcion">
+                      <input matInput [matDatepicker]="startatpicker"
+                        placeholder="Elige fecha de finalización de incripciones / Comienzo de votaciones"
+                        formControlName="dateFinInscripcion">
                       <mat-datepicker-toggle [for]="startatpicker">
                       </mat-datepicker-toggle>
                       <mat-datepicker #startatpicker startView="year" [startAt]="startDate"></mat-datepicker>
                     </mat-form-field>
                     <mat-form-field>
-                      <input matInput [matDatepicker]="stopatpicker" placeholder="Elige fecha de finalización de votaciones / Fin del concurso" formControlName="dateFinVotacion">
+                      <input matInput [matDatepicker]="stopatpicker"
+                        placeholder="Elige fecha de finalización de votaciones / Fin del concurso"
+                        formControlName="dateFinVotacion">
                       <mat-datepicker-toggle [for]="stopatpicker">
                       </mat-datepicker-toggle>
                       <mat-datepicker #stopatpicker startView="year" [startAt]="startDate"></mat-datepicker>
@@ -386,7 +391,7 @@
 
 
                     <div class="btnCambiarStep">
-                     
+
                       <button type="button" class="btn Back" (click)="guardarConcurso()">Crear el concurso</button>
                     </div>
 
@@ -399,7 +404,30 @@
                   </div>
                 </mat-step>
 
+                <mat-step>
 
+
+                  <mat-form-field>
+                    <mat-label>Introduzca si lo desea el criterio para obtener el primer nivel de privilegios
+                    </mat-label>
+                    <input matInput formControlName="criterioprivilegio1" placeholder="" requiered>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Introduzca si lo desea el criterio para obtener el segundo nivel de privilegios
+                    </mat-label>
+                    <input matInput formControlName="criterioprivilegio2" placeholder="" requiered>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Introduzca si lo desea el criterio para obtener el tercer nivel de privilegios
+                    </mat-label>
+                    <input matInput formControlName="criterioprivilegio3" placeholder="" requiered>
+                  </mat-form-field>
+
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>
 
                 <mat-step>
                   <ng-template matStepLabel>Finalizar</ng-template>

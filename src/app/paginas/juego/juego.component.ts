@@ -309,7 +309,10 @@ export class JuegoComponent implements OnInit {
       concursoRequisitos: ['', Validators.required],
       concursoPrimerCriterio: ['', Validators.required],
       concursoSegundoCriterio: ['', Validators.required],
-      concursoTercerCriterio: ['', Validators.required]
+      concursoTercerCriterio: ['', Validators.required],
+      criterioprivilegio1: ['', Validators.required],
+      criterioprivilegio2: ['', Validators.required],
+      criterioprivilegio3: ['', Validators.required]
     });
 
 
@@ -637,6 +640,9 @@ export class JuegoComponent implements OnInit {
       true);
     juego.descripcion = this.myForm.value.descripcionlibro;
     juego.Temporada = 'SI';
+    juego.criterioprivilegio1 = this.myForm.value.criterioprivilegio1;
+    juego.criterioprivilegio2 = this.myForm.value.criterioprivilegio2;
+    juego.criterioprivilegio3 = this.myForm.value.criterioprivilegio3;
     if (this.inscribirtemporada == '1') {
 
     }
