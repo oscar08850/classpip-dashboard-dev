@@ -4,4 +4,5 @@ export const ImagenesColeccion = host + '3000/api/imagenes/imagenColeccion/downl
 export const ImagenesCromo = host + '3000/api/imagenes/imagenCromo/download/';
 export const ImagenesAvatares = host + '3000/api/imagenes/imagenesAvatares/download/';
 export const AudiosAvatares = host + '3000/api/imagenes/AudiosAvatares/download/';
+export const ImagenesAlumno = host + '3000/api/imagenes/imagenAlumno/download/';
 export const Servidor = host + '8080';

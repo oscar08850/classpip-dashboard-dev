@@ -224,6 +224,7 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
       this.juegoSeleccionado.NumeroParticipantesPuntuan, this.juegoSeleccionado.Puntos, this.juegoSeleccionado.NombreJuego),
       this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
         if (res !== undefined) {
+          console.log('juego desactivado');
           console.log(res);
           console.log('juego desactivado');
           this.location.back();

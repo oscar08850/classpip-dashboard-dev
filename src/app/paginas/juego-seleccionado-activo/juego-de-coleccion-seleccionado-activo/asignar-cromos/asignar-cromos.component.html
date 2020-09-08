@@ -118,7 +118,7 @@
               <mat-label>Selecciona el juego de puntos</mat-label>
               <select matNativeControl [(ngModel)]="juegoPuntosSeleccionadoId" name="juego" (change) = "botonAsignacionDesactivado=false;">
                 <option *ngFor="let juego of juegosPuntos" [value]="juego.id">
-                  {{juego.Tipo}}
+                  {{juego.NombreJuego}}
                 </option>
               </select>
             </mat-form-field>

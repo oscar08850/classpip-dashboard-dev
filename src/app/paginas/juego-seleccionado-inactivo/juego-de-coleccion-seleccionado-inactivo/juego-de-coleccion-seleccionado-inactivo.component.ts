@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 // Clases
-import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion } from '../../../clases/index';
+import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion, Coleccion } from '../../../clases/index';
 
 // Services
 
@@ -45,23 +46,34 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
 
   inscripcionesAlumnos: AlumnoJuegoDeColeccion[];
   inscripcionesEquipos: EquipoJuegoDeColeccion[];
+  coleccion: Coleccion;
 
   constructor(
               private sesion: SesionService,
               private peticionesAPI: PeticionesAPIService,
               private calculos: CalculosService,
               public dialog: MatDialog,
+              private router: Router,
               private location: Location) { }
 
   ngOnInit() {
+
+
     this.juegoSeleccionado = this.sesion.DameJuego();
-    console.log(this.juegoSeleccionado);
+    console.log ('juego de coleccion ');
+    console.log (this.juegoSeleccionado);
+
+    this.ColeccionDelJuego();
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
-      this.AlumnosDelJuego();
+      this.PrepararInformacionJuegoIndividual();
+    } else if (this.juegoSeleccionado.Asignacion === 'Individual') {
+      this.PrepararInformacionJuegoEquipoAsignacionIndividual();
     } else {
-      this.EquiposDelJuego();
+      this.PrepararInformacionJuegoEquipoAsignacionEquipo();
     }
+
+
   }
 
   applyFilter(filterValue: string) {
@@ -71,6 +83,73 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
   applyFilterEquipo(filterValue: string) {
     this.datasourceEquipo.filter = filterValue.trim().toLowerCase();
   }
+
+
+  HayQueMostrarAlumnos(): boolean {
+    // tslint:disable-next-line:max-line-length
+    const res = ((this.juegoSeleccionado.Modo === 'Individual') || (this.juegoSeleccionado.Asignacion === 'Individual')) && (this.alumnosDelJuego !== undefined);
+    return res;
+  }
+  HayQueMostrarEquipos(): boolean {
+    const res = (this.juegoSeleccionado.Asignacion === 'Equipo') && this.equiposDelJuego !== undefined;
+    return res;
+  }
+
+
+  // Recupera los alumnos que pertenecen al juego y sus inscripciones
+  // Prepara el data source
+  PrepararInformacionJuegoIndividual() {
+    // traemos las inscripciones
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeColeccion(this.juegoSeleccionado.id)
+    .subscribe(inscripciones => {
+      this.inscripcionesAlumnos = inscripciones;
+    });
+
+    // traemos los alumnos del juego para mostrar sus datos en la lista
+    this.peticionesAPI.DameAlumnosJuegoDeColeccion(this.juegoSeleccionado.id)
+    .subscribe(alumnosJuego => {
+      this.alumnosDelJuego = alumnosJuego;
+      this.datasourceAlumno = new MatTableDataSource(this.alumnosDelJuego);
+    });
+  }
+
+  PrepararInformacionJuegoEquipoAsignacionIndividual() {
+    // Traigo los equipos del juego
+    this.peticionesAPI.DameEquiposJuegoDeColeccion(this.juegoSeleccionado.id)
+    .subscribe(equiposJuego => {
+      this.equiposDelJuego = equiposJuego;
+    });
+    // Traigo las inscripciones de los equipos
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDeColeccion(this.juegoSeleccionado.id)
+    .subscribe(inscripciones => {
+      this.inscripcionesEquipos = inscripciones;
+    });
+
+    // necesito los alumnos del grupo, para poder hacer asignacion individual
+    this.peticionesAPI.DameAlumnosGrupo(this.juegoSeleccionado.grupoId)
+    .subscribe(alumnosJuego => {
+      this.alumnosDelJuego = alumnosJuego;
+      this.datasourceAlumno = new MatTableDataSource(this.alumnosDelJuego);
+    });
+
+  }
+
+
+  PrepararInformacionJuegoEquipoAsignacionEquipo() {
+    // Traigo los equipos del juego
+    this.peticionesAPI.DameEquiposJuegoDeColeccion(this.juegoSeleccionado.id)
+    .subscribe(equiposJuego => {
+      this.equiposDelJuego = equiposJuego;
+      this.datasourceEquipo = new MatTableDataSource(this.equiposDelJuego);
+    });
+    // Traigo las inscripciones de los equipos
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDeColeccion(this.juegoSeleccionado.id)
+    .subscribe(inscripciones => {
+      this.inscripcionesEquipos = inscripciones;
+    });
+  }
+
+
 
   // Recupera los alumnos que pertenecen al juego
   AlumnosDelJuego() {
@@ -135,32 +214,49 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
     });
   }
 
-
   AccederAlumno(alumno: Alumno) {
+    if ((this.juegoSeleccionado.Modo === 'Equipos') && (this.juegoSeleccionado.Asignacion === 'Individual')) {
+      // Hay que mostrar el album del equipo al que pertenece el alumno
+      // por tanto primero busco el equipo del alumno
+      this.peticionesAPI.DameEquiposDelAlumno (alumno.id)
+      .subscribe (equiposDelAlumno => {
+        // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso del
+        // alumno
+        const equipo = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
+        this.AccederEquipo (equipo);
+      });
+    } else {
+      this.sesion.TomaColeccion(this.coleccion);
+      this.sesion.TomaJuego(this.juegoSeleccionado);
+      this.sesion.TomaAlumno (alumno);
+      this.sesion.TomaInscripcionAlumno (this.inscripcionesAlumnos.filter(res => res.alumnoId === alumno.id)[0]);
+      // tslint:disable-next-line:max-line-length
+      this.router.navigate (['/grupo/' + this.juegoSeleccionado.grupoId + '/juegos/juegoSeleccionadoActivo/informacionAlumnoJuegoColeccion']);
 
-    this.sesion.TomaAlumno (alumno);
-    this.sesion.TomaInscripcionAlumno (this.inscripcionesAlumnos.filter(res => res.alumnoId === alumno.id)[0]);
-
-
+    }
   }
 
 
   AccederEquipo(equipo: Equipo) {
+
     this.sesion.TomaEquipo(equipo);
     this.sesion.TomaInscripcionEquipo(this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0]);
+    this.sesion.TomaColeccion(this.coleccion);
+    this.sesion.TomaJuego(this.juegoSeleccionado);
+    this.router.navigate (['/grupo/' + this.juegoSeleccionado.grupoId + '/juegos/juegoSeleccionadoActivo/informacionEquipoJuegoColeccion']);
 
   }
-
 
   ColeccionDelJuego() {
     this.peticionesAPI.DameColeccion(this.juegoSeleccionado.coleccionId)
     .subscribe(coleccion => {
       console.log('voy a enviar la coleccion');
-      this.sesion.TomaColeccion(coleccion);
+      this.coleccion = coleccion;
     });
   }
 
   ReactivarJuego() {
+    console.log ('voy a reactivar');
     console.log(this.juegoSeleccionado);
     this.peticionesAPI.CambiaEstadoJuegoDeColeccion(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
       this.juegoSeleccionado.Asignacion,
@@ -218,6 +314,13 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
       }
     });
   }
+
+
+  MostrarInformacion() {
+    this.sesion.TomaColeccion (this.coleccion);
+    this.router.navigate (['/grupo/' + this.juegoSeleccionado.grupoId + '/juegos/juegoSeleccionadoActivo/informacionJuegoColeccion']);
+  }
+
   goBack() {
     this.location.back();
   }
