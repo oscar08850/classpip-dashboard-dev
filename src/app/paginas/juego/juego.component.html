@@ -390,6 +390,37 @@
                     </mat-form-field>
 
 
+                    <mat-form-field c1="fill">
+                      <mat-label>Peso del primer criterio</mat-label>
+                      <select matNativeControl required  formControlName="c1">
+                        <option value="1">1</option>
+                        <option value="1.5">1.5</option>
+                        <option value="2">2</option>
+                      </select>
+                    </mat-form-field>
+
+                    <mat-form-field c2="fill">
+                      <mat-label>Peso del segundo criterio</mat-label>
+                      <select matNativeControl required  formControlName="c2">
+                        <option value="1">1</option>
+                        <option value="1.5">1.5</option>
+                        <option value="2">2</option>
+                      </select>
+                    </mat-form-field>
+
+                    <mat-form-field c3="fill">
+                      <mat-label>Peso del tercer criterio</mat-label>
+                      <select matNativeControl required  formControlName="c3">
+                        <option value="1">1</option>
+                        <option value="1.5">1.5</option>
+                        <option value="2">2</option>
+                      </select>
+                    </mat-form-field>
+
+
+
+
+
                     <div class="btnCambiarStep">
 
                       <button type="button" class="btn Back" (click)="guardarConcurso()">Crear el concurso</button>
@@ -703,14 +734,12 @@
 
                 <!-- <mat-step>
                     <ng-template matStepLabel>Finalizar</ng-template>
-
                     <span *ngIf="tipoDeJuegoSeleccionado === 'Juego De Competición'" style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}}... {{tipoJuegoCompeticionSeleccionado}} ... {{modoDeJuegoSeleccionado}} </span>
                           <div class="btnCambiarStep">
                             <div *ngIf="tipoJuegoCompeticionSeleccionado === 'Liga'">
                               <button type="button" class="btn Aceptar" (click) = "Finalizar();">Finalizar</button>
                               <button type="button" class="btn Aceptar" (click) = Finalizar();  routerLink = "juegoSeleccionadoActivo">Finalizar y Editar</button>
                             </div>
-
                             <div *ngIf="tipoJuegoCompeticionSeleccionado !== 'Liga'">
                               <button type="button" class="btn Aceptar" (click) = "Finalizar();">Finalizar</button>
                             </div>
@@ -986,10 +1015,8 @@
 
               <!--
           <div *ngIf="tipoDeJuegoSeleccionado !== 'Juego De Competición' && tipoDeJuegoSeleccionado !== 'Juego De Cuestionario'">
-
             <mat-step>
               <ng-template matStepLabel>Finalizar</ng-template>
-
                 <span *ngIf="tipoDeJuegoSeleccionado === 'Juego De Colección'" style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}}: {{nombreColeccionSeleccionada}} ... {{modoDeJuegoSeleccionado}} </span>
                 <span *ngIf="tipoDeJuegoSeleccionado === 'Juego De Puntos'" style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}} ... {{modoDeJuegoSeleccionado}} </span>
                     <div class="btnCambiarStep">

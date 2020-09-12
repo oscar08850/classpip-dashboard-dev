@@ -88,6 +88,9 @@ export class JuegoComponent implements OnInit {
   nivel1 = false;
   nivel2 = false;
   nivel3 = false;
+  pesoc1;
+  pesoc2;
+  pesoc3;
   permisoparaver = false;
   permisoparavotar = false;
   juego: Juego;
@@ -231,10 +234,10 @@ export class JuegoComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private router: Router,
   ) { }
-    
+
 
   ngOnInit() {
-    
+
     this.grupo = this.sesion.DameGrupo();
     console.log(' Grupo ' + this.grupo);
     this.alumnosGrupo = this.sesion.DameAlumnosGrupo();
@@ -312,7 +315,10 @@ export class JuegoComponent implements OnInit {
       concursoTercerCriterio: ['', Validators.required],
       criterioprivilegio1: ['', Validators.required],
       criterioprivilegio2: ['', Validators.required],
-      criterioprivilegio3: ['', Validators.required]
+      criterioprivilegio3: ['', Validators.required],
+      c1:['', Validators.required],
+      c2:['', Validators.required],
+      c3:['', Validators.required]
     });
 
 
@@ -727,14 +733,14 @@ export class JuegoComponent implements OnInit {
       })
   }
 
-  crearRecursoJuegoLibro(idLibro: any){
+  crearRecursoJuegoLibro(idLibro: any) {
     this.peticionesAPI.crearRecursosJuegoLibro(idLibro, this.recursoParaLibro)
-    .subscribe((res) => {
-      this.siConcurso = false;
+      .subscribe((res) => {
+        this.siConcurso = false;
 
-    }, (err) => {
-      console.log(err);
-    })
+      }, (err) => {
+        console.log(err);
+      })
   }
 
   guardarConcurso() {
@@ -748,10 +754,14 @@ export class JuegoComponent implements OnInit {
     this.concursoLibro.concursoSegundoCriterio = this.myForm.value.concursoSegundoCriterio;
     this.concursoLibro.concursoTercerCriterio = this.myForm.value.concursoTercerCriterio;
     this.concursoLibro.listaLibrosParticipantes = [];
-
     this.siConcurso = true;
+    this.concursoLibro.peso1 = this.myForm.value.c1;
+    this.concursoLibro.peso2 = this.myForm.value.c2;
+    this.concursoLibro.peso3 = this.myForm.value.c3;
 
   }
+
+  
 
 
   inscribir(inscribirt) {
@@ -771,11 +781,11 @@ export class JuegoComponent implements OnInit {
 
 
     this.recursoParaLibro = new RecursoLibroJuego;
-    this.recursoParaLibro.nombre =   this.recursoCargadoParaGuardar.nombre;
+    this.recursoParaLibro.nombre = this.recursoCargadoParaGuardar.nombre;
     this.recursoParaLibro.carpeta = this.recursoCargadoParaGuardar.carpeta;
     this.recursoParaLibro.imagenes = this.recursoCargadoParaGuardar.imagenes;
     this.recursoParaLibro.juegoId = 0;
-   
+
 
     this.tengoRecursoCargadoParaGuardar = true;
   }
@@ -802,6 +812,7 @@ export class JuegoComponent implements OnInit {
     juego.CriteriosPrivilegioComplemento4 = this.myForm.value.criterioPrivilegioComplemento4;
     juego.CriteriosPrivilegioVoz = this.myForm.value.criterioPrivilegioVoz;
     juego.CriteriosPrivilegioVerTodos = this.myForm.value.criterioPrivilegioVerTodos;
+
     this.peticionesAPI.CreaJuegoDeAvatar(juego, this.grupo.id)
       .subscribe(nuevoJuego => {
         this.juegoDeAvatar = nuevoJuego;
