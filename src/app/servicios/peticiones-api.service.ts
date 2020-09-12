@@ -100,6 +100,7 @@ export class PeticionesAPIService {
   private APIurlImagenesLibros = this.host + ':3000/api/imagenes';
   private APIurlRecursosLibros = this.host + ':3000/api/recursosLibros';
   private APIUrlConcursoLibros = this.host + '3000/api/juegodelibro';    
+  private urlalumnojuego = this.host + ':3000/api/alumnojuegodecuento';
 
 
 
@@ -1214,6 +1215,9 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
     return this.http.post<any>(this.APIUrlJuegodeLibro + '/' + idLibro + '/' + 'juegoLibroConcurso', concurso);
   }
 
-  
+  public dameLibro(idJuegoAlumnoLibro):Observable<any>{
+    return this.http.get<any>(this.urlalumnojuego+ '/' + idJuegoAlumnoLibro + '/Libro');
+
+  }
 
 }

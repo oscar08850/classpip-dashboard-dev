@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 import {
   Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, JuegoDeLibros, EquipoJuegoDePuntos,
@@ -41,7 +42,8 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
     private calculos: CalculosService,
     private sesion: SesionService,
     private peticionesAPI: PeticionesAPIService,
-    private location: Location) { }
+    private location: Location,
+    private router: Router) { }
 
   ngOnInit() {
 
@@ -234,6 +236,12 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
     Swal.fire('Cambios registrados correctamente', ' ', 'success');
   }
 
+
+  irAlListado(){
+
+    this.router.navigate(['/grupo/' + this.grupoid + '/juego/juegoSeleccionadoActivo/listadoCuentos']);
+
+  }
   
 
 
