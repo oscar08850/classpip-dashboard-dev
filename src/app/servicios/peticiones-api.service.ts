@@ -1220,4 +1220,9 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
 
   }
 
+  public dameConcurso(idjuegoLibro):Observable<any>{
+    return this.http.get<any>(this.APIUrlJuegodeLibro + '/' + idjuegoLibro + '/juegoLibroConcurso');
+
+}
+
 }

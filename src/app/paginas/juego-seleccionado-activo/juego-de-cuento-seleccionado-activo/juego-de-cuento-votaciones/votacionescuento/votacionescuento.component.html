@@ -1,3 +1,18 @@
 <p>
   votacionescuento works!
 </p>
+
+<form style="width: 100%" *ngIf="juegoSeleccionado.Modo === 'Individual'">
+
+  <table style="width: 100%" align="center" mat-table [dataSource]="datasourceAlumno"
+    class="example-container mat-elevation-z8">
+
+
+    <ng-container matColumnDef="alumnoID">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Nombre </th>
+      <td mat-cell *matCellDef="let alumno"> {{alumno.alumnoID}} </td>
+    </ng-container>
+  
+
+    </table>
+</form>
