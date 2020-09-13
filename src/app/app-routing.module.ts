@@ -114,6 +114,7 @@ import {MenuRecursosComponent} from './paginas/menu-recursos/menu-recursos.compo
 
 import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
 import { MisRecursosLibroComponent }  from './paginas/mis-recursos-libro/mis-recursos-libro.component';
+import { ListadoCuentosComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
 
 const routes: Routes = [
 
@@ -273,7 +274,10 @@ const routes: Routes = [
   //libros
   {path:'inicio/:id/crearRecursosLibro', component: CrearRecursosLibroComponent},
   
-  {path:'inicio/:id/verRecursosLibro', component: MisRecursosLibroComponent}
+  {path:'inicio/:id/verRecursosLibro', component: MisRecursosLibroComponent},
+
+  {path:'grupo/:id/juego/juegoSeleccionadoActivo/listadoCuentos', component: ListadoCuentosComponent}
+
 
 ];
 
