@@ -244,8 +244,11 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
   }
   
 
+  irAVotaciones(){
 
+    this.router.navigate(['/grupo/' + this.grupoid + '/juego/juegoSeleccionadoActivo/votacionescuento']);
 
+  }
 
 }
 
