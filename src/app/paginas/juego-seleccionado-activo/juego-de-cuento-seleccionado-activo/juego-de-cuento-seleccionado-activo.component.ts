@@ -239,7 +239,7 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
 
   irAlListado(){
 
-    this.router.navigate(['/grupo/' + this.grupoid + '/juego/juegoSeleccionadoActivo/listadoCuentos']);
+    this.router.navigate(['/grupo/' + this.grupoid.id + '/juego/juegoSeleccionadoActivo/listadoCuentos']);
 
   }
   
