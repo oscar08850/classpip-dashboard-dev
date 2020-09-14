@@ -11,7 +11,7 @@
         <mat-grid-tile *ngFor='let libro of listaLibros'>
           <mat-card>
 
-            <img src='../../../../../assets/libro.jpg' height="175" width="175">
+            <img src='../../../../../assets/libro.jpg' height="175" width="175" (click)="irAlReproductor(libro.id)">
             <p>{{libro.titulo}}</p>
             <p>{{libro.inscrito}}</p>
           </mat-card>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SesionClase } from 'src/app/clases';
 import { PeticionesAPIService, SesionService } from 'src/app/servicios';
+import { Router } from '@angular/router';
 
 
 
@@ -20,7 +21,7 @@ export class ListadoCuentosComponent implements OnInit {
   listaLibros: any = [];
 
 
-  constructor(private sesion: SesionService, private peticionesAPI: PeticionesAPIService) { }
+  constructor(private sesion: SesionService, private peticionesAPI: PeticionesAPIService, private router: Router) { }
 
   ngOnInit() {
 
@@ -58,5 +59,15 @@ export class ListadoCuentosComponent implements OnInit {
       }, (err) => {
 
       })
+  }
+
+
+  irAlReproductor(id)
+  {
+
+    this.sesion.setIdLibro(id);
+
+    this.router.navigate(['/grupo/' + this.grupoid.id + '/juego/juegoSeleccionadoActivo/reproductorCuento']);
+
   }
 }

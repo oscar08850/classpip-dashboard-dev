@@ -101,6 +101,9 @@ export class PeticionesAPIService {
   private APIurlRecursosLibros = this.host + ':3000/api/recursosLibros';
   private APIUrlConcursoLibros = this.host + '3000/api/juegodelibro';    
   private urlalumnojuego = this.host + ':3000/api/alumnojuegodecuento';
+  private urllibro = this.host + ':3000/api/libro';
+  private urlParaEscena = this.host + ':3000/api/escenas';
+  private urlimagenes = this.host + ':3000/api/imagenes';
 
 
 
@@ -1219,5 +1222,24 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
     return this.http.get<any>(this.urlalumnojuego+ '/' + idJuegoAlumnoLibro + '/Libro');
 
   }
+
+  public dameunlibro(id): Observable<any> {
+    return this.http.get<any>(this.urllibro + '/' + id);
+  }
+
+
+  public dameEscenasLibro(idlibro: string): Observable<any> {
+    return this.http.get<any>(this.urllibro + '/' + idlibro + '/escenas');
+  }
+
+  
+  public getFramesByEscenaId(id): Observable<any> {
+    return this.http.get<any>(this.urlParaEscena + '/' + id + '/frames');
+  }
+  public getImagen(nameFile: string, contenedor: string): Observable<any> {
+    return this.httpImagenes.get(this.urlimagenes + '/' + contenedor + '/download/' + nameFile,
+      { responseType: ResponseContentType.Blob });
+  }
+
 
 }

@@ -115,6 +115,7 @@ import {MenuRecursosComponent} from './paginas/menu-recursos/menu-recursos.compo
 import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
 import { MisRecursosLibroComponent }  from './paginas/mis-recursos-libro/mis-recursos-libro.component';
 import { ListadoCuentosComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
+import { ReproductorCuentoComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
 
 const routes: Routes = [
 
@@ -276,7 +277,9 @@ const routes: Routes = [
   
   {path:'inicio/:id/verRecursosLibro', component: MisRecursosLibroComponent},
 
-  {path:'grupo/:id/juego/juegoSeleccionadoActivo/listadoCuentos', component: ListadoCuentosComponent}
+  {path:'grupo/:id/juego/juegoSeleccionadoActivo/listadoCuentos', component: ListadoCuentosComponent},
+  {path:'grupo/:id/juego/juegoSeleccionadoActivo/reproductorCuento', component:   ReproductorCuentoComponent}
+
 
 
 ];

@@ -71,6 +71,8 @@ export class SesionService {
   alumnoJuegoDeCuestionario: TablaAlumnoJuegoDeCuestionario;
 
 
+  idLibro: any;
+
 
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
@@ -525,4 +527,15 @@ public DameInscripcionAlumnoJuegoDeCuestionario(): AlumnoJuegoDeCuestionario {
   return this.inscripcionAlumnoJuegoDeCuestionario;
 }
 
+//cuentos
+
+public setIdLibro(id)
+{
+  this.idLibro = id;
+}
+
+public getIdLibro()
+{
+  return this.idLibro;
+}
 }
