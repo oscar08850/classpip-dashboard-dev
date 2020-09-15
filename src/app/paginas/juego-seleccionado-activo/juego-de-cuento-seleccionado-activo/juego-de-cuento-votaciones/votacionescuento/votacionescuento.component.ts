@@ -24,10 +24,12 @@ export class VotacionescuentoComponent implements OnInit {
   juegoSeleccionado: any;
   grupoid;
   listainscritos: any = [];
-  listaLibros:any = [];
+  listaLibros: any = [];
+  displayedColumns: string[] = ['titulo', 'autor'];
+  datasourcelibros;
 
   constructor(public dialog: MatDialog,
-       private sesion: SesionService,
+    private sesion: SesionService,
     private peticionesAPI: PeticionesAPIService,
     private location: Location,
     private router: Router) { }
@@ -43,38 +45,56 @@ export class VotacionescuentoComponent implements OnInit {
 
   }
 
-    obtenerlibrosconcurso() {
+  obtenerlibrosconcurso() {
 
 
     this.peticionesAPI.dameConcurso(this.juegoSeleccionado.id)
-    .subscribe(res => {
+      .subscribe(res => {
+        this.listainscritos = [];
 
-      this.listainscritos = res.listaLibrosParticipantes;
-      var i = 0;
+        res.forEach(element => {
 
-      this.listainscritos.forEach(element => {
+          this.listainscritos = element.listaLibrosParticipantes;
+          
+          this.listainscritos.forEach(element => {
 
-        this.getLibro(element);
+            this.getLibro(element);
+          });
 
-      });
-    });        // var datasourceAlumno = new MatTableDataSource(alumnosDelJuego);
+
+          this.pintartabla();    
+        });
+
+        this.pintartabla();    
+      });  
+    
   }
 
   getLibro(element) {
-    this.peticionesAPI.dameLibro(element.id)
+    this.peticionesAPI.dameLibro(element)
       .subscribe((res) => {
+
         if (res.length != 0) {
           this.listaLibros.push(res[0]);
         }
       }, (err) => {
-
+        this.pintartabla();    
       })
   }
+
+
+
+  pintartabla(){
+
+    var datasourcelibros = new MatTableDataSource(this.listaLibros);
+  }
+
+
+
+
 }
 
 
 
 
 
-
-  
