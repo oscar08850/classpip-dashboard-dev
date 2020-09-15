@@ -3,7 +3,7 @@
   <!-- CABECERA -->
   <form  *ngIf="profesor === undefined" class="contenedorInicioSesion">
       <button  routerLink = aboutClasspip mat-button [matMenuTriggerFor]="Classpip" >
-          <h1><img width="40" src="./assets/Icono Classpip.png"></h1>
+          <img width="40" src="./assets/Icono Classpip.png">
           <h1 class="class">class</h1>
           <h1 class="pip">pip</h1>
       </button>
@@ -36,7 +36,7 @@
 
           <mat-card-actions>
             <button class="btn IncioSesion" (click)= Autentificar()>Entrar</button>
-            <button class="btnContraseña" >¿Olvidaste tu contraseña?</button>
+            <button class="btnContraseña" (click)= EnviarContrasena() >¿Olvidaste tu contraseña?</button>
           </mat-card-actions>
      </mat-card-content>
   </mat-card>

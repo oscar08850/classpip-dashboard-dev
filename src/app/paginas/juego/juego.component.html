@@ -216,6 +216,27 @@
 
           <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Colección' && tengoModo">
 
+            <mat-step *ngIf="modoDeJuegoSeleccionado  === 'Equipos'">
+              <ng-template matStepLabel><div>Asignación</div></ng-template>
+              <div>
+                <label class = "LabelStepper">Selecciona el modo de asignación:</label>
+                <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
+                    <mat-radio-button (click)="modoAsignacion = 'Equipo'" class="radio-button" [value]="'Equipo'" >
+                      <label style="color: black;">Asignacion al equipo</label>
+                    </mat-radio-button>
+                    <mat-radio-button (click)="modoAsignacion = 'Individual'" class="radio-button" [value]="'Individual'">
+                      <label style="color: black;">Asignación individual (los alumnos comparten album con sus compañeros de equipo) </label>
+                    </mat-radio-button>
+                </mat-radio-group>
+
+                <span *ngIf = "modoAsignacion" style ="font-weight: bold;color:green;"> Has elegido ... {{modoAsignacion}}</span>
+
+              </div>
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button [disabled]="!modoAsignacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
+              </div>
+            </mat-step>
 
             <!-- TERCER PASO: ASIGNACIÓN DE COLECCIÓN AL JUEGO -->
             <mat-step>

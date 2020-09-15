@@ -278,6 +278,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   DesactivarJuego() {
     console.log(this.juegoSeleccionado);
     this.peticionesAPI.CambiaEstadoJuegoDeCompeticionFormulaUno(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
+      this.juegoSeleccionado.Asignacion,
       undefined, false), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
         if (res !== undefined) {
           console.log(res);

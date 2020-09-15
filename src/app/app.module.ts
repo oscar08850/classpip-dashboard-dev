@@ -212,8 +212,12 @@ import { MisRubricasComponent } from './paginas/mis-rubricas/mis-rubricas.compon
 import { JuegoDeAvatarSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-avatar-seleccionado-inactivo/juego-de-avatar-seleccionado-inactivo.component';
 // tslint:disable-next-line:max-line-length
 import { JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-votacion-todos-auno-seleccionado-activo/juego-de-votacion-todos-auno-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
 import { JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-votacion-todos-auno-seleccionado-inactivo/juego-de-votacion-todos-auno-seleccionado-inactivo.component';
 import { GuardarFamiliaComponent } from './paginas/mis-familias-avatares/guardar-familia/guardar-familia.component';
+import { CrearFamiliaImagenesPerfilComponent } from './paginas/crear-familia-imagenes-perfil/crear-familia-imagenes-perfil.component';
+import { AsignarFamiliaImagenesPerfilComponent } from './paginas/mis-alumnos/asignar-familia-imagenes-perfil/asignar-familia-imagenes-perfil.component';
+import { MisFamiliasImagenesPerfilComponent } from './paginas/mis-familias-imagenes-perfil/mis-familias-imagenes-perfil.component';
 
 
 @NgModule({
@@ -333,7 +337,10 @@ import { GuardarFamiliaComponent } from './paginas/mis-familias-avatares/guardar
     JuegoDeAvatarSeleccionadoInactivoComponent,
     JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent,
     JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent,
-    GuardarFamiliaComponent
+    GuardarFamiliaComponent,
+    CrearFamiliaImagenesPerfilComponent,
+    AsignarFamiliaImagenesPerfilComponent,
+    MisFamiliasImagenesPerfilComponent
 
 
 
@@ -386,7 +393,8 @@ import { GuardarFamiliaComponent } from './paginas/mis-familias-avatares/guardar
     // tslint:disable-next-line:max-line-length
     InformacionJuegoDeCuestionarioDialogComponent, AsignaEscenarioComponent, AsignaPreguntasComponent, InformacionJuegoDeGeocachingDialogComponent,
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
-    RespuestasAlumnoJuegoDeCuestionarioComponent
+    RespuestasAlumnoJuegoDeCuestionarioComponent,
+    AsignarFamiliaImagenesPerfilComponent
   ],
   bootstrap: [AppComponent],
   providers: [

@@ -1,99 +1,125 @@
 <div class="titulo">Mis Alumnos</div>
 <mat-divider class="lineaDivisoria"></mat-divider>
 
-<div class ='enColumna'>
-<form style='width: 80%' *ngIf="misAlumnos;else Aviso_no_alumnos">
+  <div class ='enColumna'>
+    <br>
+    <br>
+    <div class ="enFila" style='width: 50%'>
+      <button type="button"   class="btn Aceptar" [disabled]="BotonesDesactivados()" (click) = "AsignarFamilia()"> Asignar imagenes
+      </button>
+      <button type="button"   class="btn Eliminar" [disabled]="BotonesDesactivados()"  (click) = "QuitarImagen()"> Quitar imagenes
+      </button>
+      <button type="button"   class="btn Aceptar" [disabled]="BotonesDesactivados()"  (click) = "CambiarPermisoCambioImagen()"> Cambiar permiso cambio imagen
+      </button>
+      <button type="button"  class="btn Agregar" [disabled]="BotonesDesactivados()"  (click) = ProcesarSeleccionados()>Enviar email</button>
+      </div>
+    <form style='width: 100%' *ngIf="misAlumnos;else Aviso_no_alumnos">
 
-  <div class = "filter">
-    <mat-form-field>
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
-      <i class="material-icons" matSuffix>search</i>
-    </mat-form-field>
+      <div class = "filter">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
+          <i class="material-icons" matSuffix>search</i>
+        </mat-form-field>
+      </div>
+
+
+      <table align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+            <mat-checkbox
+                          (change)="$event ? MasterToggle() : null; ActualizarBotonTabla ();"
+                          [checked]="selection.hasValue() && IsAllSelected()"
+                          >
+            </mat-checkbox>
+
+          </th>
+          <td style= "width: 10%" mat-cell *matCellDef="let row">
+
+            <mat-checkbox
+                          (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null; ActualizarBotonTabla ();"
+                          [checked]="selection.isSelected(row)"
+          >
+          </mat-checkbox>
+
+
+
+          </td>
+        </ng-container>
+
+        <!-- Nombre Alumno Column -->
+        <ng-container matColumnDef="nombreAlumno">
+          <th style= "width: 10%" mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+          <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+
+        </ng-container>
+
+        <!-- Primer Apellido Column -->
+        <ng-container matColumnDef="primerApellido">
+          <th style= "width: 10%" mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Primer Apellido </th>
+          <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+
+        </ng-container>
+
+        <!-- Segundo Apellido Column -->
+        <ng-container  matColumnDef="segundoApellido">
+          <th style= "width: 15%" mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Segundo Apellido </th>
+          <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+
+        </ng-container>
+
+        <!-- alumnoId Column -->
+        <ng-container matColumnDef="alumnoId">
+          <th style= "width: 5%" mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> ID </th>
+          <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
+
+        </ng-container>
+
+        <ng-container matColumnDef="imagen">
+          <th style= "width: 10%" mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Imagen de Perfil</th>
+          <td mat-cell *matCellDef="let alumno">
+            <img  *ngIf = "alumno.ImagenPerfil" style = "width:50px; height: 50px;" [src]="alumno.ImagenPerfil">
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="permisoCambio">
+          <th style= "width: 10%" mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Permiso cambio imagen</th>
+          <td mat-cell *matCellDef="let alumno">
+            <i  *ngIf = "alumno.PermisoCambioImagenPerfil" class="material-icons green md-36">thumb_up_alt</i>
+            <i  *ngIf = "!alumno.PermisoCambioImagenPerfil" class="material-icons red md-36">not_interested</i>
+            <!-- <p  *ngIf = "alumno.PermisoCambioImagenPerfil">Sí</p>
+            <p  *ngIf = "!alumno.PermisoCambioImagenPerfil">No</p> -->
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef=" ">
+            <th style= "width: 10%" mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+            <td mat-cell *matCellDef="let alumno">
+              <button (click) = "AbrirDialogoConfirmacionEliminarAlumno (alumno)" mat-icon-button matTooltip="Eliminar al alumno {{alumno.Nombre}}">
+                <i class="material-icons red md-36">delete</i>
+              </button>
+            </td>
+          </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+      </table>
+    </form>
+
+    <div class="contenedor">
+        <ng-template  #Aviso_no_alumnos><div class="texto">No tienes alumnos</div></ng-template>
+    </div>
+
+    <br>
+    <br>
+
+    <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+
+
   </div>
 
-<!--
-  <div class="enColumna">
-      <button type="button" class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = ProcesarSeleccionados()>Procesar elegidos</button>
-      {{mensaje}}
-  </div> -->
-
-
-  <table align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-    <!-- Checkbox Column -->
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
-        <mat-checkbox
-                      (change)="$event ? MasterToggle() : null; ActualizarBotonTabla ();"
-                      [checked]="selection.hasValue() && IsAllSelected()"
-                      >
-        </mat-checkbox>
-
-      </th>
-      <td mat-cell *matCellDef="let row">
-
-        <mat-checkbox
-                      (click)="$event.stopPropagation()"
-                      (change)="$event ? selection.toggle(row) : null; ActualizarBotonTabla ();"
-                      [checked]="selection.isSelected(row)"
-       >
-      </mat-checkbox>
-
-
-
-      </td>
-    </ng-container>
-
-    <!-- Nombre Alumno Column -->
-    <ng-container matColumnDef="nombreAlumno">
-      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
-      <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
-
-    </ng-container>
-
-    <!-- Primer Apellido Column -->
-    <ng-container matColumnDef="primerApellido">
-      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Primer Apellido </th>
-      <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
-
-    </ng-container>
-
-    <!-- Segundo Apellido Column -->
-    <ng-container matColumnDef="segundoApellido">
-      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Segundo Apellido </th>
-      <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
-
-    </ng-container>
-
-    <!-- alumnoId Column -->
-    <ng-container matColumnDef="alumnoId">
-      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Identificador Alumno </th>
-      <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
-
-    </ng-container>
-
-    <ng-container matColumnDef=" ">
-        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
-        <td mat-cell *matCellDef="let alumno">
-          <button (click) = "AbrirDialogoConfirmacionEliminarAlumno (alumno)" mat-icon-button matTooltip="Eliminar al alumno {{alumno.Nombre}}">
-            <i class="material-icons red md-36">delete</i>
-          </button>
-        </td>
-      </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-    </tr>
-  </table>
-</form>
-
-<div class="contenedor">
-    <ng-template  #Aviso_no_alumnos><div class="texto">No tienes alumnos</div></ng-template>
-</div>
-
-  <button style = 'width: 40%' type="button" class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = ProcesarSeleccionados()>Enviar email a seleccionados</button>
-  <br>
-  <br>
-
-</div>
 
