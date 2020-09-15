@@ -1,0 +1,57 @@
+<div class="titulo"><h2>Crear familia de imagenes de perfil</h2></div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+<div class="contenedor">
+
+            <div class= "enColumna" *ngIf ="advertencia" style = "border-color: red;">
+              <!-- para preservar los espacios y los tabs del texto -->
+              <pre>
+              <br>
+              Instrucciones para crear los ficheros
+              </pre>
+
+              <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
+                Ocultar advertencia
+              </button>
+            </div>
+            <div class = "enFila">
+              <div class = "enFila" style = "width: 60%">
+                <mat-form-field>
+                  <mat-label>Nombre de la familia</mat-label>
+                  <input  matInput placeholder="Escribe el nombre de la familia" [(ngModel)] = "nombreFamilia"required>
+
+                </mat-form-field>
+                <button [disabled] = "!nombreFamilia" (click) = "CrearFamilia ()" type="button" class="btn Aceptar">
+                  Crear familia
+                </button>
+
+<!--
+                  Nombre de la familia:
+                  <input type="text" [(ngModel)] = "nombreFamilia" >
+                  <button [disabled] = "!nombreFamilia" (click) = "CrearFamilia ()" type="button" class="btn Aceptar">
+                    Crear familia
+                  </button> -->
+                  <input #file id = "inputImagenes" type="file" accept= 'image/*' (change)="SeleccionarFicherosFamilia($event)" style="display:none" multiple>
+
+
+              </div>
+              <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "imagenesCargadas">
+                <h3>Datos de la familia</h3>
+                <div class = "enFila" style = "width: 90%">
+                  <div>
+                    <p> Nombre de la familia: <strong>{{nombreFamilia}}</strong></p>
+                    <p> Número de imagenes: <strong>{{ficherosFamilia.length}}</strong></p>
+                  </div>
+                  <img  *ngIf="imagenFamilia"  style = "width:200px; height: 200px;" [src]="imagenFamilia">
+                </div>
+                <div class = "enFila" style = "width:50%">
+                  <button (click) = "RegistrarFamilia()" type="button" class="btn Agregar">
+                    Registrar
+                  </button>
+                  <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
+
+</div>

@@ -113,6 +113,10 @@ import {MenuRecursosComponent} from './paginas/menu-recursos/menu-recursos.compo
 
 import {CrearRubricaComponent } from './paginas/crear-rubrica/crear-rubrica.component';
 import { MisRubricasComponent } from './paginas/mis-rubricas/mis-rubricas.component';
+
+
+import {CrearFamiliaImagenesPerfilComponent} from './paginas/crear-familia-imagenes-perfil/crear-familia-imagenes-perfil.component';
+import {MisFamiliasImagenesPerfilComponent} from './paginas/mis-familias-imagenes-perfil/mis-familias-imagenes-perfil.component';
 const routes: Routes = [
 
 
@@ -272,6 +276,10 @@ const routes: Routes = [
   // Rubricas
   { path: 'inicio/:id/crearRubrica', component: CrearRubricaComponent},
   { path: 'inicio/:id/misRubricas', component: MisRubricasComponent},
+
+  // Familias de imagenes de perfil
+  { path: 'inicio/:id/crearFamiliaDeImagenesDePerfil', component: CrearFamiliaImagenesPerfilComponent},
+  { path: 'inicio/:id/misFamiliasDeImagenesDePerfil', component: MisFamiliasImagenesPerfilComponent},
 
 ];
 

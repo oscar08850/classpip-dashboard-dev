@@ -12,7 +12,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         EquipoJuegoDeCompeticionFormulaUno, SesionClase, AsistenciaClase, FamiliaAvatares, JuegoDeAvatar,
         AlumnoJuegoDeAvatar, JuegoDeCuestionario, AlumnoJuegoDeCuestionario,
         RespuestaJuegoDeCuestionario, JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos, Rubrica,
-        JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno} from '../clases/index';
+        JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, FamiliaDeImagenesDePerfil} from '../clases/index';
 
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
@@ -104,6 +104,10 @@ export class PeticionesAPIService {
   private APIUrlJuegoDeVotacionTodosAUno = this.host + ':3000/api/JuegosDeVotacionTodosAUno';
   private APIUrlAlumnoJuegoDeVotacionTodosAUno = this.host + ':3000/api/alumnosJuegoDeVotacionTodosAUno';
 
+  private APIUrlFamiliasDeImagenesDePerfil = this.host + ':3000/api/familiasImagenesPerfil';
+
+  private APIUrlImagenesPerfil = this.host + ':3000/api/imagenes/ImagenesPerfil';
+
   constructor(
     private http: HttpClient,
     private httpImagenes: Http
@@ -190,6 +194,10 @@ export class PeticionesAPIService {
 
   public BorraAlumno(alumnoId: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlAlumnos + '/' + alumnoId);
+  }
+
+  public ModificaAlumno(alumno: Alumno): Observable<Alumno> {
+    return this.http.put<Alumno>(this.APIUrlAlumnos + '/' + alumno.id, alumno);
   }
 
   public AsignaAlumnoAlProfesor(alumno: Alumno, profesorId: number): Observable<Alumno> {
@@ -1274,5 +1282,34 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
     return this.http.get<Rubrica[]>(this.APIUrlProfesores + '/' + profesorId + '/rubricas');
   }
 
+
+
+  // Imagenes de perfil
+
+  public PonImagenPerfil(formData: FormData): Observable<any> {
+    return this.http.post<any>(this.APIUrlImagenesPerfil + '/upload', formData);
+  }
+
+
+
+  public BorraImagenPerfil(ImagenPerfil: string): Observable<any> {
+    console.log('Voy a quitar la foto');
+    return this.http.delete<any>(this.APIUrlImagenesPerfil + '/files/' + ImagenPerfil);
+  }
+
+
+  public DameFamiliasDeImagenesDePerfilProfesor(profesorId: number): Observable<FamiliaDeImagenesDePerfil[]> {
+    return this.http.get<FamiliaDeImagenesDePerfil[]>(this.APIUrlProfesores + '/' + profesorId + '/familiasImagenesDePerfil');
+  }
+
+  public CreaFamiliaDeImagenesDePerfil(familia: FamiliaDeImagenesDePerfil, profesorId: number): Observable<FamiliaDeImagenesDePerfil> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.post<FamiliaDeImagenesDePerfil>(this.APIUrlProfesores + '/' + profesorId + '/familiasImagenesDePerfil', familia);
+  }
+
+  public BorrarFamiliaDeImagenesDePerfil(familiaId: number) {
+    // tslint:disable-next-line:max-line-length
+    return this.http.delete(this.APIUrlFamiliasDeImagenesDePerfil + '/' + familiaId);
+  }
 
 }

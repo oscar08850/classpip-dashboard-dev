@@ -95,13 +95,13 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
 
       this.sesion.TomaCromos(this.listaCromos);
       this.listaCromos.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
-      this.GET_ImagenesCromos();
+      this.DameImagenesCromos();
 
     });
   }
 
 
-  GET_ImagenesCromos() {
+  DameImagenesCromos() {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.listaCromosSinRepetidos.length; i++) {
