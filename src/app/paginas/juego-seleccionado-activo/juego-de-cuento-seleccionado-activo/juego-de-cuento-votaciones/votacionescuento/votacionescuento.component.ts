@@ -7,9 +7,14 @@ import { MatDialog } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PeticionesAPIService, SesionService } from 'src/app/servicios';
+import {
+  Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, JuegoDeLibros, EquipoJuegoDePuntos,
+  TablaAlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeLibro
+} from '../../../../../clases/index';
 
 
 import { MatTableDataSource } from '@angular/material/table';
+import { Libro } from 'src/app/clases/Libro';
 
 
 
@@ -24,7 +29,7 @@ export class VotacionescuentoComponent implements OnInit {
   juegoSeleccionado: any;
   grupoid;
   listainscritos: any = [];
-  listaLibros: any = [];
+  listaLibros: Libro[] = [];
   displayedColumns: string[] = ['titulo', 'autor'];
   datasourcelibros;
 
@@ -55,38 +60,61 @@ export class VotacionescuentoComponent implements OnInit {
         res.forEach(element => {
 
           this.listainscritos = element.listaLibrosParticipantes;
-          
-          this.listainscritos.forEach(element => {
-
-            this.getLibro(element);
-          });
 
 
-          this.pintartabla();    
         });
+        this.getLibro();
 
-        this.pintartabla();    
-      });  
-    
+
+      });
+
+
+
   }
 
-  getLibro(element) {
-    this.peticionesAPI.dameLibro(element)
-      .subscribe((res) => {
+  getLibro() {
 
-        if (res.length != 0) {
-          this.listaLibros.push(res[0]);
-        }
-      }, (err) => {
-        this.pintartabla();    
-      })
+
+    var i = 0;
+
+    this.listainscritos.forEach(element => {
+
+
+      this.peticionesAPI.dameLibro(element)
+        .subscribe((res) => {
+
+          if (res.length != 0) {
+
+            var libro = res[0] as Libro;
+
+            this.listaLibros.push(libro);
+            console.log(this.listaLibros);
+           
+          }
+
+          i = i+ 1;
+
+          if(i == this.listainscritos.length)
+          {
+            this.pintartabla();
+          }
+
+
+        }, (err) => {
+
+        })
+
+    });
+
+
   }
 
 
 
-  pintartabla(){
+  pintartabla() {
 
-    var datasourcelibros = new MatTableDataSource(this.listaLibros);
+    this.datasourcelibros = new MatTableDataSource(this.listaLibros);
+    console.log(this.datasourcelibros);
   }
 
 
