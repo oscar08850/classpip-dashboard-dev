@@ -30,7 +30,7 @@ export class VotacionescuentoComponent implements OnInit {
   grupoid;
   listainscritos: any = [];
   listaLibros: Libro[] = [];
-  displayedColumns: string[] = ['titulo', 'autor'];
+  displayedColumns: string[] = ['titulo', 'autor', 'criterio1','criterio2', 'criterio3', 'criteriototal'];
   datasourcelibros;
 
   constructor(public dialog: MatDialog,
@@ -80,17 +80,17 @@ export class VotacionescuentoComponent implements OnInit {
     this.listainscritos.forEach(element => {
 
 
-      this.peticionesAPI.dameLibro(element)
+      this.peticionesAPI.dameunlibro(element)
         .subscribe((res) => {
 
-          if (res.length != 0) {
+     
 
-            var libro = res[0] as Libro;
+            var libro = res as Libro;
 
             this.listaLibros.push(libro);
             console.log(this.listaLibros);
            
-          }
+          
 
           i = i+ 1;
 
@@ -113,6 +113,16 @@ export class VotacionescuentoComponent implements OnInit {
 
   pintartabla() {
 
+
+      // this.listaLibros.sort((a, b) =>
+      //  a.criterio1===b.criterio1?-1:0); 
+      this.listaLibros.sort((a, b) =>
+       a.criteriototal===b.criteriototal?-1:0); 
+   
+
+
+  console.log(this.listaLibros);
+   
     this.datasourcelibros = new MatTableDataSource(this.listaLibros);
     console.log(this.datasourcelibros);
   }
