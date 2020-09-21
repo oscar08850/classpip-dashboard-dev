@@ -35,23 +35,32 @@
 </pre>
 </div>
 
-<div class="picker"><input (change)="a($event)" type="file" id="picker" name="fileList" webkitdirectory multiple>
-</div>
+<div class="picker"><input (click)="a($event)" type="file" id="picker" name="fileList" webkitdirectory multiple>
 
-<ul id="listing"></ul>
+   
+</div>
+<div  *ngIf="cargaFiles">
+    <button (click)="b()" style="width: 10%" type="button" class="btn Info">
+        Cargar y mostrar imagenes
+    </button>
+ </div>
+
+<!-- <div class="button"><input (change)="a($event)" type="file" id="picker" name="fileList" webkitdirectory multiple>
+</div> -->
+
 
 <div *ngIf="verFotos">
     <h2>Este grupo de recursos se llama : {{nombreFamila}}</h2>
     <h2>Personajes:</h2>
 
     <div>
-        <mat-grid-list cols="5" rowHeight="1:1"> 
+        <mat-grid-list cols="5" rowHeight="1:1">
             <mat-grid-tile *ngFor='let imageF of listadePreviewsPersonaje'>
                 <mat-card>
 
                     <img [src]='imageF.file'>
                     <h3>{{imageF.nombre}}</h3>
-             
+
                 </mat-card>
 
             </mat-grid-tile>
@@ -66,7 +75,7 @@
 
                     <img [src]='imageP.file' height="700" width="700">
                     <h3>{{imageP.nombre}}</h3>
-                   
+
                 </mat-card>
 
             </mat-grid-tile>
@@ -80,7 +89,7 @@
                 <mat-card>
                     <img [src]='imageO.file' height="250" width="250">
                     <h3>{{imageO.nombre}}</h3>
-                   
+
                 </mat-card>
             </mat-grid-tile>
         </mat-grid-list>

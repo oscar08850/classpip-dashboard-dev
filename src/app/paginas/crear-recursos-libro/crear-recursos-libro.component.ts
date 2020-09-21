@@ -40,11 +40,20 @@ export class CrearRecursosLibroComponent implements OnInit {
   verFotos = false;
   ver = false;
 
+  hacer = 0;
+
+  files: any;
+
   nameFolder: string = null;
+  cargaFiles: any = false;
+
 
   constructor(public API: PeticionesAPIService, public sesion: SesionService) { }
 
   ngOnInit() {
+
+    var picker = document.getElementById('picker') as any;
+    picker.filename = "Ey Vegeta"
   }
 
   fileProgress(fileInput: any, typefile: string) {
@@ -118,18 +127,100 @@ export class CrearRecursosLibroComponent implements OnInit {
 
   a(fileInput: any) {
 
+
+    this.files = fileInput;
+    console.log(fileInput);
+
     var picker = document.getElementById('picker');
     var listing = document.getElementById('listing');
 
+    this.cargaFiles = true;
+    this.verFotos = false
 
-    picker.addEventListener('change', (e?: HTMLInputEvent) => {
+    this.listadeFileFondo = [];
+    this.listadeFileObjetos = [];
+    this.listadeFilePersonajes = [];
+    this.listadePreviewsFondo = [];
+    this.listadePreviewsPersonaje = [];
+    this.listadePreviewsObjeto = [];
+//HTMLInputEvent
+    // picker.addEventListener('click', () => {
 
-      for (let file of Array.from(e.target.files) as any) { 
+    //   for (let file of Array.from(fileInput.target.files) as any) { 
+
+    //     // for (let file of Array.from(e.target.files) as any) { 
+
+
+    //     let item = document.createElement('li');
+
+
+    //     item.textContent = file.webkitRelativePath;
+    //     var splitPath = item.textContent.split('/');
+    //     this.nombreFamila = splitPath[0];
+
+    //     if (this.verFotos == false) { this.verFotos = true; }
+
+    //     listing.appendChild(item);
+
+
+    //     if (file.webkitRelativePath.includes("fondos")) {
+    //       var imagen = new Imagen();
+    //       imagen.file = file;
+    //       var nameSplitbarra = file.name.split('.');
+    //       imagen.nombre = nameSplitbarra[0];
+    //       this.listadeFileFondo.push(imagen);
+
+    //     }
+    //     if (file.webkitRelativePath.includes("personajes")) {
+    //       var imagen = new Imagen();
+    //       imagen.file = file;
+    //       var nameSplitbarra = file.name.split('.');
+    //       imagen.nombre = nameSplitbarra[0];
+    //       this.listadeFilePersonajes.push(imagen);
+    //     }
+    //     if (file.webkitRelativePath.includes("objetos")) {
+    //       var imagen = new Imagen();
+    //       imagen.file = file;
+    //       var nameSplitbarra = file.name.split('.');
+    //       imagen.nombre = nameSplitbarra[0];
+    //       this.listadeFileObjetos.push(imagen);
+    //     }
+
+    //   };
+    //   this.listadeFileFondo.forEach(element => {
+    //     this.fileProgress(element, "fondo");
+    //   });
+    //   this.listadeFilePersonajes.forEach(element => {
+    //     this.fileProgress(element, "personaje");
+    //   });
+    //   this.listadeFileObjetos.forEach(element => {
+    //     this.fileProgress(element, "objeto");
+    //   });
+
+
+
+
+    // });
+
+ 
+
+  }
+
+
+  b() {
+
+    var picker = document.getElementById('picker');
+
+
+    this.cargaFiles = false;
+
+      for (let file of Array.from(this.files.target.files) as any) { 
 
         // for (let file of Array.from(e.target.files) as any) { 
 
 
         let item = document.createElement('li');
+
 
 
         item.textContent = file.webkitRelativePath;
@@ -138,7 +229,6 @@ export class CrearRecursosLibroComponent implements OnInit {
 
         if (this.verFotos == false) { this.verFotos = true; }
 
-        listing.appendChild(item);
 
 
         if (file.webkitRelativePath.includes("fondos")) {
@@ -178,7 +268,7 @@ export class CrearRecursosLibroComponent implements OnInit {
 
 
 
-    });
+    
 
 
   }
