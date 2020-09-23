@@ -1,0 +1,178 @@
+<div class="titulo">Crear tipos de  puntos e insignias</div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+<mat-tab-group [color]="primary" [backgroundColor]="primary" #tabs>
+    <!-- CREAR PUNTOS -->
+    <mat-tab index = "0" label="Crear tipos de puntos">
+        <div class = "contenedor">
+            <div class = "enFila">
+              <div>
+                  <mat-card class="panel">
+
+                      <mat-card-header>
+                        <mat-card-title>Crear nuevo punto</mat-card-title>
+                        <mat-card-subtitle style = "color:white">Introduce los parámetros</mat-card-subtitle>
+                      </mat-card-header>
+
+                      <mat-card-content>
+                        <div class="form-group">
+                            <label for="inputNombrePunto">Nombre</label>
+                            <input (keyup)="Disabled()" type="text" id="inputNombrePunto" class="form-control" requiered [(ngModel)]="nombrePunto" placeholder="Escribe el nombre del tipo de punto">
+                        </div>
+
+                        <div class="form-group">
+                          <label for="textareaDescripcionPunto">Descripción</label>
+                          <textarea (keyup)="Disabled()" class="form-control" id="textareaDescripcionPunto" requiered [(ngModel)]="descripcionPunto" placeholder="Escribe la descripción del tipo punto" rows="4"></textarea>
+                        </div>
+                      </mat-card-content>
+
+                      <mat-card-actions  align="end">
+
+                        <button style="margin: 5px" (click) = "LimpiarCampos()" type="button" class="btn Back" >Limpiar Campos</button>
+                        <button  style="margin: 5px" (click) = "CrearPunto();" [disabled]="isDisabledPuntos"type="button" class="btn Aceptar" >Crear Punto</button>
+
+                      </mat-card-actions>
+
+                      </mat-card>
+
+              </div>
+              <div>
+                <form *ngIf="puntosAgregados[0]">
+                <div>
+                <p>
+                  <span style="font-weight: bold;">Puntos creados recientemente</span>
+                </p>
+                </div>
+                  <table mat-table style="width: 600px" [dataSource]="puntosAgregados">
+
+                  <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+                    <!-- Nombre Punto Column -->
+                    <ng-container matColumnDef="nombre">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 45%"> Nombre </th>
+                      <td mat-cell *matCellDef="let punto"> {{punto.Nombre}} </td>
+                    </ng-container>
+
+                    <!-- Descripcion Punto Column -->
+                    <ng-container matColumnDef="descripcion">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 45%"> Descripción </th>
+                      <td mat-cell *matCellDef="let punto"> {{punto.Descripcion}} </td>
+                    </ng-container>
+
+                    <!-- Delete Column -->
+                    <ng-container matColumnDef=" ">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                      <td mat-cell *matCellDef="let punto">
+                        <button (click) = "BorrarPunto(punto)" mat-icon-button matTooltip="Borrar el punto {{punto.Nombre}}">
+                          <i class="material-icons red md-36">delete</i>
+                        </button>
+                      </td>
+                    </ng-container>
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                  </table>
+                </form>
+              </div>
+
+            </div>
+        </div>
+    </mat-tab>
+
+
+
+    <!-- CREAR INSIGNIAS-->
+
+
+    <mat-tab label="Crear Insignias">
+        <div class = "contenedor">
+            <div class = "enFila">
+              <div>
+                <mat-card class="panel">
+
+                  <mat-card-header>
+                    <mat-card-title>Crear nueva insignia</mat-card-title>
+                    <mat-card-subtitle style = "color:white">Introduce los parámetros</mat-card-subtitle>
+                  </mat-card-header>
+
+                  <mat-card-content>
+                    <div class="form-group">
+                      <label for="inputNombreInsignia">Nombre</label>
+                      <input (keyup)="DisabledInsignia()" type="text" id="inputNombreInsignia" class="form-control" requiered [(ngModel)]="nombreInsignia" placeholder="Escribe el nombre de la insignia">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="textareaDescripcionInsignia">Descripción</label>
+                      <textarea (keyup)="DisabledInsignia()" class="form-control" id="textareaDescripcionInsignia" requiered [(ngModel)]="descripcionInsignia" placeholder="Escribe la descripción de la insignia" rows="4"></textarea>
+                    </div>
+                </mat-card-content>
+
+                <mat-card-actions >
+                  <div>
+                      <input #file id = "input" type="file" accept= 'image/*' (change)="ExaminarImagen($event)" style="display:none">
+                      <img class = "foto" *ngIf="logo" hight = "100" width = "100" mat-card-image [src]="logo"  style="margin: 5px">
+                      <button style="margin: 5px" (click) = "ActivarInput()" type="button" class="btn Agregar" >
+                        <i class="material-icons">add_photo_alternate</i>
+                        Agregar foto
+                      </button>
+                  </div>
+
+                  <div align="end">
+                    <button style="margin: 5px" (click) = "LimpiarCamposInsignia()" type="button" class="btn Back" >Limpiar Campos</button>
+                    <button style="margin: 5px" (click) = "CrearInsignia();" [disabled]="isDisabledInsignias" type="button"class="btn Aceptar" >Crear Insignia</button>
+
+                  </div>
+
+                </mat-card-actions>
+
+                </mat-card>
+              </div>
+              <div>
+                <!-- TABLA DE INSIGNIAS CREADAS -->
+                <form *ngIf="insigniasAgregadas[0]">
+
+                  <div>
+                    <p>
+                      <span style="font-weight: bold;">Insignias creadas recientemente</span>
+                    </p>
+                  </div>
+
+                  <table  mat-table style="width: 600px" [dataSource]="insigniasAgregadas" class="example-container mat-elevation-z8">
+
+                  <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+                    <!-- Nombre Punto Column -->
+                    <ng-container matColumnDef="nombre">
+                      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 45%"> Nombre </th>
+                      <td mat-cell *matCellDef="let insignia"> {{insignia.Nombre}} </td>
+                    </ng-container>
+
+                    <!-- Descripcion Punto Column -->
+                    <ng-container matColumnDef="descripcion">
+                      <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 45%"> Descripción </th>
+                      <td mat-cell *matCellDef="let insignia"> {{insignia.Descripcion}} </td>
+                    </ng-container>
+
+                    <!-- Delete Column -->
+                    <ng-container matColumnDef=" ">
+                      <th mat-header-cell *matHeaderCellDef class="letraCabecera"></th>
+                      <td mat-cell *matCellDef="let insignia">
+                        <button (click) = "BorrarInsignia(insignia)" mat-icon-button matTooltip="Borrar la insignia {{insignia.Nombre}}">
+                          <i class="material-icons red md-36">delete</i>
+                        </button>
+                      </td>
+                    </ng-container>
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div>
+
+    </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,254 @@
+<div class="titulo">Pantalla para asignar Puntos</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+<div class="enColumna">
+  <div class = "enFila" style="width: 100%">
+    <div>
+      Seleccione
+      <br>
+      <mat-form-field >
+        <mat-label>Tipo de punto</mat-label>
+        <select matNativeControl [(ngModel)]="puntoSeleccionadoId" (change) = "ActualizarBoton()">
+          <option *ngFor="let punto of tiposPuntosDelJuego" [value]="punto.id">
+            {{punto.Nombre}}
+          </option>
+        </select>
+      </mat-form-field>
+    </div>
+
+
+    <div style="margin-top: 15px;">
+      <span>Número de puntos: </span>
+      <input style="width: 40%" (keyup)="ActualizarBoton()" type="number" name="valorPunto" placeholder="Escribe su valor" requiered [(ngModel)]="valorPunto">
+    </div>
+    <div style="margin-top: 10px">
+      <button style= "width: 100%" type="button"class="btn Aceptar" [disabled]="botonAsignarDesactivado" (click) = AsignarPuntos()>Asignar a alumnos seleccionados</button>
+    </div>
+    <div style="margin-top: 10px">
+        <button style= "width: 100%"  type="button"class="btn Aceptar" (click) = AsignarAleatorio()>Asignar aleatoriamente</button>
+    </div>
+  </div>
+
+<form style="width: 100%">
+  <table style="width: 100%" align="center" *ngIf="juegoSeleccionado.Modo === 'Individual'" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+        <mat-checkbox
+                      (change)="$event ? MasterToggle() : null; ActualizarBoton ();"
+                      [checked]="selection.hasValue() && IsAllSelected()"
+                      [indeterminate]="selection.hasValue() && !IsAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox
+                      (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null; ActualizarBoton ();"
+                      [checked]="selection.isSelected(row)">
+
+        </mat-checkbox>
+
+      </td>
+    </ng-container>
+
+    <!-- Posición Column -->
+    <ng-container matColumnDef="posicion">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Posicion </th>
+      <td mat-cell style= "text-align: center" *matCellDef="let alumno">
+
+            <div *ngIf = "alumnoElegido &&
+                          alumno.nombre === alumnoElegido.nombre &&
+                          alumno.primerApellido === alumnoElegido.primerApellido &&
+                          alumno.segundoApellido === alumnoElegido.segundoApellido"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{alumno.posicion}} </div>
+            <div *ngIf = "alumnoElegido === undefined ||
+                          alumno.nombre !== alumnoElegido.nombre ||
+                          alumno.primerApellido !== alumnoElegido.primerApellido ||
+                          alumno.segundoApellido !== alumnoElegido.segundoApellido"
+                          style = "color:black">{{alumno.posicion}} </div>
+      </td>
+    </ng-container>
+
+    <!-- Nombre Alumno Column -->
+    <ng-container matColumnDef="nombreAlumno">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+      <td  mat-cell *matCellDef="let alumno; ">
+            <div *ngIf = "alumnoElegido &&
+                          alumno.nombre === alumnoElegido.nombre &&
+                          alumno.primerApellido === alumnoElegido.primerApellido &&
+                          alumno.segundoApellido === alumnoElegido.segundoApellido"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{alumno.nombre}}</div>
+            <div *ngIf = "alumnoElegido === undefined ||
+                          alumno.nombre !== alumnoElegido.nombre ||
+                          alumno.primerApellido !== alumnoElegido.primerApellido ||
+                          alumno.segundoApellido !== alumnoElegido.segundoApellido"
+                          style = "color:black">{{alumno.nombre}}</div>
+      </td>
+    </ng-container>
+
+    <!-- Primer Apellido Column -->
+    <ng-container matColumnDef="primerApellido">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Primer Apellido </th>
+      <td mat-cell *matCellDef="let alumno;">
+            <div *ngIf = "alumnoElegido &&
+                          alumno.nombre === alumnoElegido.nombre &&
+                          alumno.primerApellido === alumnoElegido.primerApellido &&
+                          alumno.segundoApellido === alumnoElegido.segundoApellido"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{alumno.primerApellido}}</div>
+            <div *ngIf = "alumnoElegido === undefined ||
+                          alumno.nombre !== alumnoElegido.nombre ||
+                          alumno.primerApellido !== alumnoElegido.primerApellido ||
+                          alumno.segundoApellido !== alumnoElegido.segundoApellido"
+                          style = "color:black">{{alumno.primerApellido}}</div>
+      </td>
+    </ng-container>
+
+    <!-- Segundo Apellido Column -->
+    <ng-container matColumnDef="segundoApellido">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Segundo Apellido </th>
+      <td mat-cell *matCellDef="let alumno; ">
+            <div *ngIf = "alumnoElegido &&
+                          alumno.nombre === alumnoElegido.nombre &&
+                          alumno.primerApellido === alumnoElegido.primerApellido &&
+                          alumno.segundoApellido === alumnoElegido.segundoApellido"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{alumno.segundoApellido}} </div>
+            <div *ngIf = "alumnoElegido === undefined ||
+                          alumno.nombre !== alumnoElegido.nombre ||
+                          alumno.primerApellido !== alumnoElegido.primerApellido ||
+                          alumno.segundoApellido !== alumnoElegido.segundoApellido"
+                          style = "color:black">{{alumno.segundoApellido}} </div>
+      </td>
+    </ng-container>
+
+    <!-- Puntos Column -->
+    <ng-container matColumnDef="puntos">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Puntos </th>
+      <td mat-cell style= "text-align: center" *matCellDef="let alumno;">
+            <div *ngIf = "alumnoElegido &&
+                          alumno.nombre === alumnoElegido.nombre &&
+                          alumno.primerApellido === alumnoElegido.primerApellido &&
+                          alumno.segundoApellido === alumnoElegido.segundoApellido"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{alumno.puntos}}  </div>
+            <div *ngIf = "alumnoElegido === undefined ||
+                          alumno.nombre !== alumnoElegido.nombre ||
+                          alumno.primerApellido !== alumnoElegido.primerApellido ||
+                          alumno.segundoApellido !== alumnoElegido.segundoApellido"
+                          style = "color:black">{{alumno.puntos}}  </div>
+      </td>
+    </ng-container>
+
+    <!-- Nivel Column -->
+    <ng-container matColumnDef="nivel">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nivel </th>
+      <td mat-cell *matCellDef="let alumno;">
+            <div *ngIf = "alumnoElegido &&
+                          alumno.nombre === alumnoElegido.nombre &&
+                          alumno.primerApellido === alumnoElegido.primerApellido &&
+                          alumno.segundoApellido === alumnoElegido.segundoApellido"
+                          style = "color:green;font-weight: bold; font-size: 150%;"> {{alumno.nivel}}  </div>
+            <div *ngIf = "alumnoElegido === undefined ||
+                          alumno.nombre !== alumnoElegido.nombre ||
+                          alumno.primerApellido !== alumnoElegido.primerApellido ||
+                          alumno.segundoApellido !== alumnoElegido.segundoApellido"
+                          style = "color:black"> {{alumno.nivel}}  </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumno"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumno;"></tr>
+
+  </table>
+
+
+  <table style="width: 100%" align="center" *ngIf="juegoSeleccionado.Modo != 'Individual'" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+        <mat-checkbox
+                    (change)="$event ? MasterToggle() : null; ActualizarBoton ();"
+                    [checked]="selection.hasValue() && IsAllSelected()"
+                    [indeterminate]="selection.hasValue() && !IsAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox
+                    (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.toggle(row) : null; ActualizarBoton ();"
+                    [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+
+      </td>
+    </ng-container>
+
+    <!-- Posición Column -->
+    <ng-container matColumnDef="posicion">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Posicion </th>
+      <td mat-cell *matCellDef="let equipo">
+        <div *ngIf = "equipoElegido && equipo.nombre === equipoElegido.nombre" style = "color:green;font-weight: bold; font-size: 150%;">{{equipo.posicion}}  </div>
+        <div *ngIf = "equipoElegido === undefined || (equipo.nombre !== equipoElegido.nombre)" style = "color:black">{{equipo.posicion}}   </div>
+      </td>
+    </ng-container>
+
+    <!-- Nombre Alumno Column -->
+    <ng-container matColumnDef="nombreEquipo">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+      <td mat-cell *matCellDef="let equipo">
+        <div *ngIf = "equipoElegido && equipo.nombre === equipoElegido.nombre" style = "color:green;font-weight: bold; font-size: 150%;">{{equipo.nombre}}  </div>
+        <div *ngIf = "equipoElegido === undefined || (equipo.nombre !== equipoElegido.nombre)" style = "color:black">{{equipo.nombre}}   </div>
+      </td>
+    </ng-container>
+
+    <!-- Miembros Column -->
+    <ng-container matColumnDef="miembros">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Miembros </th>
+      <td mat-cell *matCellDef="let equipo"><button mat-icon-button matTooltip="Ver miembros de {{equipo.nombre}}" color="primary"
+        [mdePopoverTriggerFor]="appPopover" (click) = "AlumnosDelEquipo(equipo)"
+        mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+        <i class="material-icons">group</i>
+      </button>
+
+      <mde-popover #appPopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+          <mat-card style="max-width: 300px">
+            <mat-card-content>
+              <mat-list>
+                <mat-list-item *ngFor="let alumno of alumnosEquipo">
+                  <p class="md-body-1" mat-line>{{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</p>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-content>
+          </mat-card>
+      </mde-popover>
+    </td>
+    </ng-container>
+
+    <!-- Puntos Column -->
+    <ng-container matColumnDef="puntos">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Puntos </th>
+      <td mat-cell *matCellDef="let equipo;">
+        <div *ngIf = "equipoElegido && equipo.nombre === equipoElegido.nombre" style = "color:green;font-weight: bold; font-size: 150%;">{{equipo.puntos}}  </div>
+        <div *ngIf = "equipoElegido === undefined || (equipo.nombre !== equipoElegido.nombre)" style = "color:black">{{equipo.puntos}}   </div>
+      </td>
+    </ng-container>
+
+    <!-- Nivel Column -->
+    <ng-container matColumnDef="nivel">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nivel </th>
+      <td mat-cell *matCellDef="let equipo">
+        <div *ngIf = "equipoElegido && equipo.nombre === equipoElegido.nombre" style = "color:green;font-weight: bold; font-size: 150%;">{{equipo.nivel}}  </div>
+        <div *ngIf = "equipoElegido === undefined || (equipo.nombre !== equipoElegido.nombre)" style = "color:black">{{equipo.nivel}}   </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsEquipos"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsEquipos;"
+        (click)="selectionEquipos.toggle(row)">
+    </tr>
+  </table>
+  </form>
+  <br>
+  <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+</div>
+</div>
+
+

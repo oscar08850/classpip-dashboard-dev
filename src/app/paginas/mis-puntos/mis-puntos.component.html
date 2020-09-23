@@ -1,0 +1,95 @@
+<div class="titulo">Tipos de Puntos e Insignias</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+
+<div class="contenedor">
+<mat-tab-group [color]="primary" [backgroundColor]="primary" #tabs>
+
+ <!-- ////////////////////////////////////////////// PARA PUNTOS //////////////////////////////////////////////// -->
+
+ <mat-tab index = "0" label="Mis tipos de Puntos">
+    <form>
+        <mat-accordion *ngIf="tiposPuntos;else Aviso_no_puntos">
+          <mat-expansion-panel *ngFor="let punto of tiposPuntos">
+            <mat-expansion-panel-header>
+
+              <mat-panel-title>
+                {{punto.Nombre}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+              <div class="enColumna">
+                  <div style="margin-left: 1%">
+                  <span style="font-weight: bold;">Descripción del tipo de punto</span>
+                  <br>
+                  <br>
+                  <p style="font-size: 1.5em;">
+                    {{punto.Descripcion}}
+                  </p>
+                  </div>
+                  <div class="enColumna" style="margin-right: 2% ">
+
+                      <button type="button" class="btn Editar" routerLink= "editarPunto" (click) = "EnviarTipoPuntoEditar(punto)">Editar<i class="material-icons">
+                        edit </i>  </button>
+
+                      <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrarPunto(punto)">Eliminar <i class="material-icons">
+                        delete
+                        </i></button>
+
+
+                  </div>
+              </div>
+
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <ng-template #Aviso_no_puntos>Todavía no hay puntos creados.</ng-template>
+
+      </form>
+
+  </mat-tab>
+
+      <!-- ////////////////////////////////////////////// PARA INSIGNIAS //////////////////////////////////////////////// -->
+  <mat-tab label="Mis Insignias">
+      <form>
+          <mat-accordion *ngIf="insignias;else Aviso_no_insignias">
+            <mat-expansion-panel *ngFor="let insignia of insignias" (click) = "ImagenDelaInsignia(insignia)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{insignia.Nombre}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+                <div class="enColumna">
+                    <div>
+                        <img class ="logo" *ngIf="imagenInsignia" mat-card-image [src]="imagenInsignia" >
+                    </div>
+                    <div style="margin-right: 20%">
+                    <span style="font-weight: bold; ">Descripción de la insignia</span>
+                    <br>
+                    <br>
+                    <p style="font-size: 1.5em;">
+                      {{insignia.Descripcion}}
+                    </p>
+                    </div>
+                    <div class="enColumna" style="margin-right: 2% ">
+                      <div class="elemento">
+                        <button type="button" class="btn Editar" routerLink= "editarInsignia" (click) = "EnviarInsigniaEditar(insignia)">Editar Insignia <i class="material-icons">
+                          edit </i>  </button>
+                      </div>
+                      <div class="elemento">
+                        <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrarInsignia(insignia)">Eliminar Insignia <i class="material-icons">
+                          delete
+                          </i></button>
+                      </div>
+
+                    </div>
+                </div>
+
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <ng-template #Aviso_no_insignias>Todavía no hay insignias creadas.</ng-template>
+
+        </form>
+  </mat-tab>
+</mat-tab-group>
+</div>

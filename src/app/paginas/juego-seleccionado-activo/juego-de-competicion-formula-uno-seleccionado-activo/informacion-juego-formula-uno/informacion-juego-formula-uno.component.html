@@ -1,0 +1,64 @@
+<div  class="titulo">Información del Juego</div>
+<div class="subtitulo">Jornadas de {{juegoSeleccionado.NombreJuego}}: {{juegoSeleccionado.Tipo}}  {{juegoSeleccionado.Modo}}</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div  class="enColumna">
+  <div  class="contenedor"  style="margin-left: 5px; width: 60%">
+    <!-- JORNADAS DEL JUEGO -->
+      <!-- <mat-tab  label="Jornadas del Juego"> -->
+        <form>
+          <mat-accordion  style="align-items: center;  width: 30%;"  *ngIf="numeroTotalJornadas!==0;else Aviso_no_jornadas">
+              <mat-expansion-panel *ngFor="let jornada of JornadasCompeticion" (click) = "ObtenerEnfrentamientosDeCadaJornada(jornada)">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <mat-icon *ngIf="JornadaFinalizada(jornada) === true" mat-list-icon><i class="material-icons green">check_circle_outline</i></mat-icon>
+                    <mat-icon *ngIf="JornadaFinalizada(jornada) === false" mat-list-icon><i class="material-icons red">history</i></mat-icon>
+                    &nbsp;&nbsp;&nbsp;
+                    Jornada {{jornada.NumeroDeJornada}}:    {{jornada.Fecha | date: 'dd-MM-yyyy'}}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="enFila">
+                  <!-- <div style="margin-right: 15%; border: 15px; width: 60%;"> -->
+                  <div style="margin-left: 110px; font-size: 130%; width: 40%;">
+                      <br>
+                      <span style="font-size: 80%;"><strong>Criterio: </strong> {{jornada.CriterioGanador}}</span>
+                      <br>
+                      <br>
+                      <br>
+                      <!-- (click)="AñadirResultados()" -->
+                      <!-- ///////////////////////////////////// TABLA CLASIFICACIÓN JORNADA ////////////////////////////////////// -->
+                      <table style="width: 180%"  align="center"  mat-table [dataSource]="dataSourceClasificacionJornada" class="example-container mat-elevation-z8">
+                        <!--- Note that these columns can be defined in any order.
+                                The actual rendered columns are set as a property on the row definition" -->
+
+                          <!-- Posición Column -->
+                          <ng-container matColumnDef="posicion">
+                            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 40%"  align="center">Posición</th>
+                            <td mat-cell *matCellDef="let participante"> {{participante.posicion}} </td>
+                          </ng-container>
+
+                          <!-- Nombre Alumno Column -->
+                          <ng-container matColumnDef="participante">
+                            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 60%"  align="center">Nombre</th>
+                            <td mat-cell *matCellDef="let participante"> {{participante.participante}} </td>
+                          </ng-container>
+
+                          <!-- Puntos Column -->
+                          <ng-container matColumnDef="puntos">
+                              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Puntos</th>
+                              <td mat-cell *matCellDef="let participante"> {{participante.puntos}} </td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                      </table>
+
+                  </div>
+                </div>
+              </mat-expansion-panel>
+          </mat-accordion>
+        </form>
+  </div>
+  <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+</div>

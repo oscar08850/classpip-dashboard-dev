@@ -1,0 +1,51 @@
+
+<form>
+
+    <table align="center" *ngIf="tiposPuntos;else Aviso_no_puntos" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+          <mat-checkbox
+                  (change)="$event ? MasterToggle() : null;"
+                  [checked]="selection.hasValue() && IsAllSelected()"
+                  [indeterminate]="selection.hasValue() && !IsAllSelected()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row;">
+          <mat-checkbox
+                  (click)="$event.stopPropagation()"
+                  (change)="$event ? selection.toggle(row) : null; "
+                  [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <!-- Nombre Punto Column -->
+      <ng-container matColumnDef="nombrePunto">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 35%"> Nombre </th>
+        <td mat-cell *matCellDef="let punto;"> {{punto.Nombre}} </td>
+      </ng-container>
+
+      <!-- Descripción Punto Column -->
+      <ng-container matColumnDef="descripcionPunto" >
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 55%"> Descripción </th>
+        <td mat-cell *matCellDef="let punto;"> {{punto.Descripcion}} </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          (click)="selection.toggle(row)">
+      </tr>
+    </table>
+
+    <div class="contenedor">
+      <ng-template #Aviso_no_puntos> <div class="texto">Todavía no tienes puntos creados.</div></ng-template>
+    </div>
+  </form>
+
+  <div class = "enColumna">
+    <button style = "width: 60%" (click)="AgregarTiposPuntosAlJuego()" [disabled]="!HaSeleccionado()" type="button" class="btn Aceptar">Añadir tipos de puntos</button>
+  </div>
+

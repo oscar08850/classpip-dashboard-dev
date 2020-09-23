@@ -1,0 +1,336 @@
+
+<div class="titulo">Plantillas</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class="subtitulo">Plantillas para los elementos más habituales usados en el diseño del Dash.</div>
+<br>
+<div class="contenedor">
+
+    Ejemplo de tab
+
+    <mat-tab-group>
+<!--     Este grupo tiene cuatro tabs. En el primero se muestra un selector.-->
+      <mat-tab label="Ejemplo de selector">
+        <br>
+        <br>
+        Selector
+        <br>
+        <mat-form-field style = "width: 50%">
+          <mat-label>Elemento</mat-label>
+       <!--    El elemento seleccionado se guardara en la variable elementoSeleccionado
+          En cuanto lo hayamos seleccionado se ejecutará la función AccionConSeleccionado
+          en la que haremos lo que queramos hacer con el elemento seleccionado
+          Los elementos entre los que seleccionar deben estar en la listaElementos -->
+          <select  matNativeControl [(ngModel)]="elementoSeleccionado" (change) = "AccionConSeleccionado();">
+            <option *ngFor="let elemento of listaElementos" >
+              {{elemento}}
+            </option>
+          </select>
+        </mat-form-field>
+   <!--      En este ejemplo, la accion que se hace al seleccionar es simplemente preparar en
+        la variable resultado una frase que se muestra en la pantalla. -->
+        {{resultadoSelector}}
+
+      </mat-tab>
+
+    <!--   En el segundo tab hay un ejemplo de tabla con diferentes características:
+      Hay un filtrado de elementos de la tabla.
+      La tabla se puede ordenar segun el valor de la columna Name o el valor de la
+      columna Weight.
+      La tabla tiene checkbox para seleccionar filas.
+      Hay un botón para hacer cosas con los seleccionados. El botón solo está activo
+      si hay alguna fila seleccionada.
+      Hay un paginador para ver los elementos de la tabla de 5 en 5 o de 10 en 10
+      o de 20 en 20 -->
+
+
+      <mat-tab label="Ejemplo de tabla">
+      <br>
+      <br>
+      Tabla con filtro, checkbox, ordenación, boton para hacer cosas con seleccionados y paginación
+ <!--    Este es el filtro que activa la función AplicarFiltro  -->
+      <br>
+      <mat-form-field  style= "width: 40%">
+        <input matInput (keyup)="AplicarFiltro($event.target.value)" placeholder="Filtro">
+      </mat-form-field>
+
+<!--    Este es el boton para procesar los elementos de la tabla que se han seleccionado.
+        Estará activo o desactivo según el valor de la variable botonTablaDesactivado-->
+
+      <div style="margin-top: 10px">
+        <button type="button" class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = ProcesarSeleccionados()>Procesar elegidos</button>
+      </div>
+      {{elegidosTabla}}
+
+<!--    Esta es la tabla. Se identifica dónde están los datos y se indica que habrá ordenación-->
+      <table mat-table [dataSource]="dataSource" matSort  class="mat-elevation-z8">
+
+<!--    La primera columna será un checkbox -->
+        <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+<!--            Si cambia el checkbox header (change) hay que actualizar los seleccionados y el
+                estado del botón
+                Sl estado del checkbox header será [checked] si todas las filas están
+                seleccionadas
+                y será [indeterminate] si hay alguna seleccionada pero no todas
+                La función selection.hasValue() esta predefinida.
+ -->
+              <mat-checkbox
+                            (change)="$event ? MasterToggle() : null; ActualizarBotonTabla ();"
+                            [checked]="selection.hasValue() && IsAllSelected()"
+                            [indeterminate]="selection.hasValue() && !IsAllSelected()">
+              </mat-checkbox>
+            </th>
+
+            <td mat-cell  style= "text-align: left" *matCellDef="let row">
+           <!--    Para cada uno de los check box de la columna
+              En el caso de que haya un cambio entonces pasa de seleccionada a no seleccionada
+              o viceversa. Además hay que actualizar el estado del boton
+              El checkbox estará [checked] si la fila está seleccionada
+              Las funciones selection.isSelected(row) y selection.toggle(row) estan predefinidas
+              Lo que se pone en (click) no lo entiendo muy bien pero si no se pone a veces falla
+              (no se queda marcado el checkbox)
+      -->
+              <mat-checkbox
+                            (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null; ActualizarBotonTabla ();"
+                            [checked]="selection.isSelected(row)">
+              </mat-checkbox>
+            </td>
+        </ng-container>
+
+<!--      A continuación mostramos las columnas con los datos correspondientes
+          Indicamos en cuáles de ellas queremos ordenación (en el nombre y en el weight)
+-->
+        <!-- Position Column -->
+        <ng-container matColumnDef="position">
+          <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef> No. </th>
+          <td mat-cell style= "text-align: left" *matCellDef="let element"> {{element.position}} </td>
+        </ng-container>
+
+        <!-- Name Column. Aqui queremos ordenación -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef mat-sort-header> Name </th>
+          <td mat-cell style= "text-align: left" *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+        <!-- Weight Column. Aquí también queremos ordenación-->
+        <ng-container matColumnDef="weight">
+          <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef mat-sort-header> Weight </th>
+          <td mat-cell style= "text-align: left" *matCellDef="let element"> {{element.weight}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="symbol">
+          <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef> Symbol </th>
+          <td mat-cell style= "text-align: left" *matCellDef="let element"> {{element.symbol}} </td>
+        </ng-container>
+
+<!-- Aquí indicamos de donde saca los identificadores de las columnas-->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+
+<!--       Aqui colocamos el paginador, que puede mostrar los datos de 5 en 5, de 10 en 10 o de
+      20 en 20
+ -->
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </mat-tab>
+
+
+<!--     En el tercer tab se muestra un stepper-->
+  <mat-tab label="Ejemplo de stepper">
+  <br>
+  <br>
+  Stepper
+  <mat-horizontal-stepper [linear]="true" #stepper>
+  <!-- PASO 1 -->
+    <mat-step [stepControl]="firstFormGroup">
+      <!-- Usare un primer formulario para introducir nombre y edad -->
+      <form [formGroup]="firstFormGroup">
+        <!-- El nombre introducido se guardará en la variable nombre del formulario -->
+        <ng-template matStepLabel>Nombre</ng-template>
+        <mat-form-field style= "width: 40%">
+          <mat-label>Nombre</mat-label>
+          <!-- En cuanto escriba algo llamo a la función Disabled para decidir si muestro
+          ya el boton de siguiente (que solo se muestra si se ha escrito algo en los dos campos) -->
+          <input  (keyup)="BotonPaso1()" matInput placeholder="Escribe tu nombre" formControlName="nombre" required>
+        </mat-form-field>
+        <!-- Pongo una DIV ahora para que la edad la ponga debajo del nombre, y no al lado -->
+        <div>
+        <ng-template matStepLabel>Edad</ng-template>
+        <mat-form-field style= "width: 40%">
+          <mat-label>Edad</mat-label>
+          <input  (keyup)="BotonPaso1()" matInput placeholder="Escribe tu edad" formControlName="edad" required>
+        </mat-form-field>
+        </div>
+        <!-- Este es el boton para pasar al paso siguiente. Estará activo segun el valor
+        de botonPaso1Desactivado (cuando se haya escrito algo en todos los campos del formulario)
+        Además de pasar al paso siguiente, se llama a la función que crea la persona y guarda la informació
+        introducida por el usuario -->
+        <div class="btnCambiarStep">
+          <button [disabled]="botonPaso1Desactivado"  mat-raised-button class="btn Next"  (click)= CrearPersona() matStepperNext>Siguiente
+              <i class="material-icons">
+                  navigate_next</i>
+          </button>
+        </div>
+
+      </form>
+    </mat-step>
+      <!-- PASO 2 -->
+      <!-- En este segundo paso tengo lo mismo que en el primero. Se introduce la calle y la ciudad
+      La unica diferencia es que en este paso ademas de un boton para avanzar hay uno para retroceder
+       -->
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Calle</ng-template>
+        <mat-form-field style= "width: 40%">
+          <mat-label>Calle</mat-label>
+          <input (keyup)="BotonPaso2()"matInput placeholder="Escribe tu calle" formControlName="calle" required>
+        </mat-form-field>
+        <div>
+        <ng-template matStepLabel>Ciudad</ng-template>
+        <mat-form-field style= "width: 40%">
+          <mat-label>Cudad</mat-label>
+          <input (keyup)="BotonPaso2()"matInput placeholder="Escribe tu ciudad" formControlName="ciudad" required>
+        </mat-form-field>
+        </div>
+
+        <div class="btnCambiarStep">
+            <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+               Atrás <i class="material-icons">
+                  navigate_before</i></button>
+               <!-- Al clicar en el boton para avanzar ejecutamos la función que añade a la persona los nuevos datos -->
+            <button  [disabled]="botonPaso22Desactivado" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext (click)= PonDomicilio()>
+               Siguiente <i class="material-icons">
+                  navigate_next</i>
+            </button>
+        </div>
+
+      </form>
+    </mat-step>
+    <!-- En el ultimo paso simplemente hay tres botones: uno para retroceder, otro para mostrar
+    el resultado y otro para reiniciar el stepper -->
+
+    <mat-step>
+      <ng-template matStepLabel>Listo</ng-template>
+      Has terminado
+      <div class="btnCambiarStep">
+          <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+             Atrás</button>
+             <!-- La función Mostrar simplemente construye en resultadoStepper la frase con los datos de la persona -->
+          <button  mat-raised-button class="btn Next" style="margin: 5px" (click)= Mostrar()>
+             Mostrar resultado
+          </button>
+          <!-- Para reinicar primero reinicializamos las variables (con la función Reinicar) y reiniciamos
+          el stepper con una función predefinida -->
+
+          <button  mat-raised-button class="btn Next" style="margin: 5px" (click)= "Reiniciar(); stepper.reset()">
+              Reiniciar
+           </button>
+      </div>
+        {{resultadoStepper}}
+    </mat-step>
+  </mat-horizontal-stepper>
+</mat-tab>
+<!--     El cuarto tab es un ejemplo de lista con desplegable en forma de acordeon
+y con un dialogo -->
+<mat-tab label="Ejemplo de lista con acorcedon y dialogo">
+    <br>
+    <br>
+    Lista con acordeon
+    <form>
+        <mat-accordion>
+          <mat-expansion-panel *ngFor="let elemento of listaElementosQuimicos; let i = index">
+            <mat-expansion-panel-header>
+
+              <mat-panel-title>
+                {{elemento.name}}
+              </mat-panel-title>
+
+            </mat-expansion-panel-header>
+              <div class="enColumna">
+                  <div>
+                  <span style="font-weight: bold; margin-left: 16px; font-size: 130%;">Datos del elemento</span>
+                  <mat-list role="list">
+                      <mat-list-item role="listitem"> Nombre: {{elemento.name}}</mat-list-item>
+                      <mat-list-item role="listitem"> Weight: {{elemento.weight}}</mat-list-item>
+                      <mat-list-item role="listitem"> Symbol: {{elemento.symbol}}</mat-list-item>
+                      <mat-list-item role="listitem"> Opinión: {{elemento.opinion}}</mat-list-item>
+
+                  </mat-list>
+                  </div>
+                  <button type="button" class="btn Editar" (click) = "DialogoParaCambiarOpinion (elemento.opinion, i)">Cambiar Opinión <i class="material-icons">
+                      edit </i>  </button>
+              </div>
+
+          </mat-expansion-panel>
+        </mat-accordion>
+      </form>
+  </mat-tab>
+
+  <mat-tab label="Ejemplo de card">
+    <br>
+    <br>
+
+
+
+  <mat-card class="panel">
+
+      <mat-card-header>
+        <mat-card-title>Escribe una descripción sobre tu ciudad</mat-card-title>
+        <mat-card-subtitle style = "color:white">Rellena todos los campos</mat-card-subtitle>
+      </mat-card-header>
+
+
+
+      <mat-card-content>
+        <div class="form-group">
+            <label for="inputNombreNivel">Nombre de tu ciudad</label>
+            <input (keyup)="ActivaBoton()" type="text" id="inputNombreCiudad" class="form-control" requiered [(ngModel)]="ciudad" placeholder="Escribe el nombre de tu ciudad">
+        </div>
+
+        <div class="form-group">
+          <label for="textareaDescripcion">Descripción</label>
+          <textarea (keyup)="ActivaBoton()" class="form-control" id="textareaDescripcion" requiered [(ngModel)]="descripcionCiudad" placeholder="Escribe la descripción de tu ciudad" rows="4"></textarea>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button  (click) = "LimpiarCampos()" type="button" class="btn Back">Limpiar Campos</button>
+        <button  (click) = "Registrar()" [disabled]="botonActivo" class="btn Aceptar" >Registrar</button>
+
+      </mat-card-actions>
+
+    </mat-card>
+    {{fraseCard}}
+  </mat-tab>
+
+  <mat-tab label="Ejemplos de graficos">
+    La libreria recomendada es <strong> E-Chart </strong>
+    <br>
+    La información relevante está en los enlaces siguientes:
+    <br>
+    https://www.freakyjolly.com/angular-e-charts-tutorial/
+    <br>
+    https://echarts.apache.org/examples/en/index.html
+    <br>
+    <br>
+    Estos son tres Ejemplos
+    <br>
+    <br>
+    <div class = "enColumna">
+        <div class= "enFila" style = "width : 50%">
+          <button type="button" (click) = "opcion = estratos">Gráfico de estratos </button>
+          <button type="button" (click) = "opcion = barras">Gráfico de barras </button>
+          <button type="button" (click) = "opcion = donut">Gráfico de donut </button>
+        </div>
+        <br>
+        <br>
+        <div style = "width : 50%" echarts [options]="opcion"  theme="macarons" class="demo-chart"></div>
+        <br>
+    </div>
+  </mat-tab>
+  </mat-tab-group>
+</div>
+

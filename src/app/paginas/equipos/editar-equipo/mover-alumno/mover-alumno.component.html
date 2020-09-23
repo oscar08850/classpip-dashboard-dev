@@ -1,0 +1,85 @@
+
+Seleccione el equipo al que desee mover los alumnos
+<mat-divider></mat-divider>
+<br>
+<mat-form-field style="width: 50%; margin: 5px">
+  <mat-label>Equipo</mat-label>
+  <select matNativeControl [(ngModel)]="equipoSeleccionadoId" name="equipo">
+    <option value="" selected></option>
+    <option *ngFor="let equipo of listaEquipos" [value]="equipo.id">
+      {{equipo.Nombre}}
+    </option>
+  </select>
+</mat-form-field>
+
+
+
+
+<div>
+  <form>
+    <table style="width: 100%; table-layout:fixed;" align="center" *ngIf="alumnosEquipo;else Aviso_no_alumnos" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef class="letraCabecera">
+          <mat-checkbox
+                        (change)="$event ? MasterToggle() : null; ActualizarBotonTabla ();"
+                        [checked]="selection.hasValue() && IsAllSelected()"
+                        [indeterminate]="selection.hasValue() && !IsAllSelected()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox
+                        (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null; ActualizarBotonTabla ();"
+                        [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+
+        </td>
+      </ng-container>
+
+      <!-- Nombre Alumno Column -->
+      <ng-container matColumnDef="nombreAlumno">
+        <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Nombre </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+      </ng-container>
+
+      <!-- Primer Apellido Column -->
+      <ng-container matColumnDef="primerApellido">
+        <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Primer Apellido </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+      </ng-container>
+
+      <!-- Segundo Apellido Column -->
+      <ng-container matColumnDef="segundoApellido">
+        <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Segundo Apellido </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+      </ng-container>
+
+      <!-- alumnoId Column -->
+      <ng-container matColumnDef="alumnoId">
+        <th mat-header-cell *matHeaderCellDef class="letraCabecera" style="width: 23%"> Identificador Alumno </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          (click)="selection.toggle(row)">
+      </tr>
+    </table>
+
+    <div>
+      <ng-template #Aviso_no_alumnos>Todavía no hay alumnos en este grupo</ng-template>
+  </div>
+
+  </form>
+</div>
+
+<mat-dialog-actions align= "center">
+
+    <div>
+        <button class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = "AbrirDialogoConfirmacionMoverAlumno()" >Mover Alumnos</button>
+      </div>
+    <button mat-button [mat-dialog-close] class="btn Cerrar">Cerrar</button>
+</mat-dialog-actions>

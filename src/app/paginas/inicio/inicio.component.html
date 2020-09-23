@@ -1,0 +1,57 @@
+R
+<div class="titulo">Juegos activos</div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+<!-- <div class="subtitulo">
+Para ayudar a entender cómo funciona la aplicación y qué funcionalidades tiene,
+se han elaborado una serie de vídeos donde se muestran sus utilidades.
+</div> -->
+
+<div class="contenedor">
+  <!-- <button class="btn" style="background-color: transparent; color:black" onClick="window.open('//youtu.be/aBreMzggPj4')">Grupos</button>
+  <button class="btn" style="background-color: transparent;color:black" onClick="window.open('//youtu.be/d2zrLGrAzk0 ')">Juego de Puntos</button>
+  <button class="btn" style="background-color: transparent;color:black" onClick="window.open('//youtu.be/ipAMFaneFp0	')">Juego de Colección</button>
+  <button class="btn" style="background-color: transparent;color:black" onClick="window.open('//youtu.be/0s9TaeZDTME ')">Colecciones</button>
+  <button class="btn" style="background-color: transparent;color:black" onClick="window.open('//youtu.be/FU1x8wvK83Y ')">Puntos e Insignias</button> -->
+
+
+  <table mat-table [dataSource]="dataSource" matSort  style = 'width: 100%' class="mat-elevation-z8">
+
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef mat-sort-header> Nombre del juego </th>
+              <td mat-cell style= "text-align: left" *matCellDef="let juego"> {{juego.nombre}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="grupo">
+              <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef mat-sort-header> Grupo </th>
+              <td mat-cell style= "text-align: left" *matCellDef="let juego"> {{juego.grupo}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tipo">
+              <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef mat-sort-header> Tipo de juego </th>
+              <td mat-cell style= "text-align: left" *matCellDef="let juego"> {{juego.tipo}} </td>
+            </ng-container>
+
+            <!-- Weight Column. Aquí también queremos ordenación-->
+            <ng-container matColumnDef="modo">
+              <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef mat-sort-header> Modo </th>
+              <td mat-cell style= "text-align: left" *matCellDef="let juego"> {{juego.modo}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef=" ">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+              <td mat-cell style= "text-align: right" *matCellDef="let juego">
+                <button (click) = "MostrarJuegoSeleccionado(juego)"  mat-icon-button matTooltip="Entrar en {{juego.nombre}}">
+                  <i class="material-icons green md-36">visibility</i>
+                </button>
+              </td>
+            </ng-container>
+
+    <!-- Aquí indicamos de donde saca los identificadores de las columnas-->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          </table>
+
+</div>
+

@@ -1,0 +1,90 @@
+
+<div class="titulo">Información Juego De Puntos </div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+
+
+<div class="enColumna">
+  <div class="contenedor" style= "align-items: center" >
+<mat-tab-group  style= "width: 75%;" [backgroundColor] = "primary">
+
+  <!-- LISTA DE EQUIPOS -->
+  <mat-tab  label="Niveles Del Juego">
+    <form>
+      <mat-accordion  *ngIf="nivelesDelJuego;else Aviso_no_niveles">
+        <mat-expansion-panel *ngFor="let nivel of nivelesDelJuego" (click) = "ObtenerNivel(nivel)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{nivel.Nombre}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+            <div class="enFila">
+              <div>
+                <img class ="logo"  style="margin: 15px;" *ngIf="imagenNivel" mat-card-image [src]="imagenNivel" >
+                <p  style="margin: 15px; font-size: 2em" *ngIf="!imagenNivel" > Si imagen </p>
+              </div>
+              <div style="margin-right: 5%; border: 15px; width: 70%;">
+                  <span style="font-weight: bold; font-size: 130%;">Nivel</span>
+                  <p style="font-size: 200%; margin: 5px;">{{nivel.Nombre}}</p>
+                  <br>
+                  <span style="font-weight: bold; font-size: 130%;">Privilegio</span>
+                  <p style="font-size: 150%; margin: 5px;">{{nivel.PrivilegiosDelNivel}}</p>
+              </div>
+              <div>
+                  <span style="font-weight: bold; font-size:150%;">PX</span>
+                  <p style="color: rgb(63, 81, 181); font-size:180%;">{{nivel.PuntosAlcanzar}}</p>
+              </div>
+            </div>
+
+          </mat-expansion-panel>
+      </mat-accordion>
+
+      <ng-template #Aviso_no_niveles>No se han creado niveles en este juego</ng-template>
+
+    </form>
+  </mat-tab>
+
+
+
+  <!-- MIS PUNTOS-->
+  <mat-tab label="Puntos Del Juego">
+
+    <form>
+      <table style="width: 100%" align="center" *ngIf="tiposPuntosDelJuego;else Aviso_no_puntos" mat-table [dataSource]="tiposPuntosDelJuego" class="mat-elevation-z8">
+
+        <!-- Nombre Punto Column -->
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+          <td mat-cell style = "font-weight: bold" *matCellDef="let punto"> {{punto.Nombre}} </td>
+        </ng-container>
+
+        <!-- Descripción Punto Column -->
+        <ng-container matColumnDef="descripcion">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Descripción </th>
+          <td mat-cell *matCellDef="let punto"> {{punto.Descripcion}} </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+
+      <div>
+        <ng-template #Aviso_no_puntos>No se han encontrado puntos</ng-template>
+      </div>
+    </form>
+
+  </mat-tab>
+</mat-tab-group>
+
+
+
+</div>
+<button type="button" class="btn Back" (click)="goBack()">Volver </button>
+</div>
+
+
+
+
+

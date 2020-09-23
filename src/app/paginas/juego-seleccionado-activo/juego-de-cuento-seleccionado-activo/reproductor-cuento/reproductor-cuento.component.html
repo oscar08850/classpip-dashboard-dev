@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+
+
+        <div>
+
+          <table width="100%" height="100%" align="center" valign="center">
+            <tr>
+              <td>
+                <img src={{fotoToShow}} alt="foo" />
+              </td>
+            </tr>
+          </table>
+        </div>
+      
+
+
+
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col" (click)="fotoIzquierda()">
+      <img src='../../../../../assets/reproductor/izquierda.png' />
+    </div>
+    <div class="col"  (click)="stop()">
+      <img src='../../../../../assets/reproductor/stop.png'/>
+    </div>
+    <div class="col"  (click)="play()">
+      <img src='../../../../../assets/reproductor/play.png'/>
+    </div>
+    <div class="col"(click)="pause()"> 
+      <img src='../../../../../assets/reproductor/pause.png' />
+    </div>
+    <div class="col" (click)="fotoDerecha()">
+      <img src='../../../../../assets/reproductor/derecha.png' />
+    </div>
+   
+  </div>
+</div>

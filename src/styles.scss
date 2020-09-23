@@ -1,0 +1,621 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+
+// Imagen del alumno
+.imagen {
+  max-width: 150px;
+  max-height: 162px;
+  margin: 10px;
+}
+// Estilos para la página del Login
+
+.btnContraseña:hover {
+  text-decoration:underline;
+  color: rgb(51, 122, 183) ;
+}
+.btnContraseña{
+  color: rgb(51, 122, 183);
+  width: auto;
+  background-color: transparent;
+  border: solid transparent;
+}
+
+.contenedorInicioSesion{
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border: 10px solid rgb(63, 81, 181);
+  background-color: rgb(63, 81, 181);
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+// Estilos del navbar
+.contenedorNavbar{
+  width: auto;
+  height: 50px;
+  padding: 10px;
+  border: 10px solid rgb(63, 81, 181);
+  background-color: rgb(63, 81, 181);
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+
+
+.class{
+  color:#000;
+  font-size:170%;
+  display: inline-block;
+}
+
+.pip{
+  color:white;
+  font-size:170%;
+  display: inline-block;
+}
+
+.btnNavbar{
+  color:white;
+  background-color: transparent;
+  border: 5px solid transparent;
+}
+.btnNavbarAmarillo{
+  color: rgb(225, 240, 14);
+  background-color: transparent;
+  font-weight: 900;
+  border: 5px solid transparent;
+}
+
+.btnNavbar:hover {
+  color: black !important;
+  background-color: transparent;
+}
+
+
+
+
+
+// para mostrar la imagen de los cromos
+.posicionImagen{
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  align-items: center;
+  justify-content: center;
+  max-width: 250px;
+  max-height: 250px;
+  border: solid transparent;
+}
+
+// Estilos para los paneles
+.panel{
+  background-color: #8765aa;
+  width: 600px;
+}
+.logo {
+  margin-left: 25px;
+  width: 130px;
+  height: 130px;
+  max-width: 130px;
+  max-height: 130px;
+}
+
+
+.foto {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+
+mat-card-title {
+  color: white
+}
+
+mat-card-subtitle {
+  color: white
+}
+
+label{
+  color: white;
+}
+
+
+.mat-chip {
+  max-width: 200px;
+}
+
+.LabelStepper {
+  font-style: oblique;
+  color: rgb(73, 73, 73);
+}
+.ItemsInactivos {
+  font-style: oblique;
+  color: grey;
+}
+
+.mat-list-item:hover {
+  background-color: rgb(204, 197, 197);
+  cursor: pointer;
+  width: 100%;
+}
+
+.AvisoNoJuegosActivo {
+  margin-top: 10px;
+  margin-left: 10px;
+  font-style: oblique;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.CabeceraActivos {
+  background-color: rgb(92, 184, 92);
+  color: white;
+  font-style: bold;
+  width: 100%;
+  font-size: 2em;
+}
+
+.CabeceraInactivos {
+  background-color: rgb(212, 57, 52);
+  color: white;
+  font-style: bold;
+  font-size: 2em;
+  width: 100%;
+}
+
+.CabeceraPreparados {
+  background-color: rgb(197, 197, 37);
+  color: white;
+  font-style: bold;
+  width: 100%;
+  font-size: 2em;
+}
+
+
+// Iconos
+.material-icons{
+  width: 15px;
+  height: 15px;
+}
+ .material-icons.red { color: rgb(228, 8, 8); }
+
+ .material-icons.md-36 { font-size: 36px; }
+
+.material-icons.green { color: rgb(49, 151, 2); }
+.material-icons.margin { margin-top: 10 px; margin-left: 10 px;}
+
+
+input[type=text] {
+  border: none;
+  border-bottom: 1px solid rgb(63, 81, 181);
+}
+
+// TITULOS Y TEXTOS
+.titulo{
+  width: 70%;
+  margin-left: 15%;
+  height: 60px;
+  padding: 10px;
+  color: rgb(63, 81, 181);
+  font-size: 2.5rem !important;
+  font-weight: bold;
+}
+
+.subtitulo{
+  width: 70%;
+  margin-left: 15%;
+  height: 45px;
+  padding: 10px;
+  color: rgb(63, 81, 181);
+  font-size: 1.5rem !important;
+}
+
+.tituloColumnaTabla{
+  color:white;
+  text-align: left !important;
+  font-weight: bold;
+  font-size: 90%;
+}
+.texto{
+  // margin: 5px;
+  width: auto;
+  height: auto;
+  background-color:transparent;
+  text-align: center;
+  font-size: 110%;
+}
+
+.logo {
+  width: 130px;
+  height: 100px;
+  max-width: 130px;
+  max-height: 130px;
+}
+
+// BOTONES
+.btn{
+  margin: 5px;
+  align-items: center;
+  color: white;
+  width: 170px;
+  height: 50px;
+}
+
+.btn:hover {
+  text-decoration:underline !important;
+  color: black !important;
+}
+
+    // Colores de los botones
+.btn.Agregar{
+ background-color: rgb(65, 178, 212);
+}
+.btn.Info{
+  background-color: rgb(240, 173, 78);
+}
+.btn.Back{
+  background-color: rgb(240, 173, 78);
+}
+.btn.Aceptar{
+  background-color: rgb(92, 184, 92);
+}
+
+.btn.Eliminar{
+  background-color: rgb(212, 57, 52);
+}
+.btn.Editar{
+  background-color: rgb(65, 178, 212);
+}
+.btn.Next{
+  background-color: rgb(51, 122, 183);
+}
+.btn.PasarLista{
+  background-color: rgb(240, 173, 78);
+}
+.btn.Juegos{
+  background-color: rgb(51, 122, 183);
+}
+.btn.Equipos{
+  background-color: rgb(92, 184, 92);
+}
+
+.botonCentrado {
+  width: 20%;
+  margin-left: 40%;
+  height: auto;
+  background-color:transparent;
+  text-align: center;
+  align-items: center;
+  }
+
+
+  .btn.Cerrar{
+    background-color: rgb(240, 173, 78);
+  }
+  .btn.IncioSesion{
+    background-color: rgb(51, 122, 183);
+  }
+
+  // Prueba cambiado colores
+
+  .btnCambiarStep{
+  display: flex;
+  justify-content: flex-end;
+  }
+
+
+//CONTENEDORES
+
+.filter {
+  width: 60%;
+  font-size: 14px;
+  margin-left: 20%;
+}
+
+.contenedorFooter{
+  width: 70%;
+  height: 50px;
+  margin-left: 15%;
+  border: 10px solid rgb(63, 81, 181);
+  background-color: rgb(63, 81, 181);
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+
+
+.contenedor{
+
+  width: 70%;
+  margin-left: 15%;
+  height: auto;
+  padding: 10px;
+  border: 10px solid transparent;
+  background-color: transparent;
+
+}
+
+.enFila{
+
+  border: 10px solid transparent;
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  justify-content: space-between;
+  width: 100%;
+}
+.enColumna{
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: left ;
+  flex-direction: column;
+  // align-items: flex-start;
+  border: solid transparent;
+  align-items: center;
+  width: 100%;
+}
+
+
+table {
+  width: 60%;
+}
+
+
+
+.lineaDivisoria{
+  width: 70%;
+  margin-left : 15% !important;
+}
+
+// Opciones gráficas tablas
+.mat-header-row{
+  text-align: center;
+  background-color:rgb(63, 81, 181);
+  // background-color:rgb(63, 181, 79);
+}
+
+.mat-row:hover {
+  background-color: rgb(204, 197, 197);
+}
+
+
+// Opciones gráficas cromos
+:root {
+  --anchoImagenCromo:156px;
+  --altoImagenCromo:225px;
+  --anchoCromo:250px;
+  --altoCromo:500px;
+}
+
+// Para mostrar los cromos del album en tres columnas
+span.album3col {
+  display: inline-block;
+  width: 33%;
+}
+// Para mostrar los cromos del album en cuatro columnas
+span.album4col {
+  display: inline-block;
+  width: 25%;
+}
+// Para mostrar los cromos del album en cinco columnas
+span.album5col {
+  display: inline-block;
+  width: 20%;
+}
+// Los siguientes son para el flip del cromo
+
+/* The flip box container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
+.flip-box {
+  background-color: transparent;
+  width: var(--anchoImagenCromo);
+  height: var(--altoImagenCromo);
+  //border: 1px solid #f1f1f1;
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+}
+
+/* This container is needed to position the front and back side */
+.flip-box-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+/* Do an horizontal flip when you move the mouse over the flip box container */
+.flip-box:hover .flip-box-inner {
+  transform: rotateY(180deg);
+}
+
+/* Position the front and back side */
+.flip-box-front, .flip-box-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+}
+
+/* Style the front side (fallback if image is missing) */
+.flip-box-front {
+  // background-color: #bbb;
+  background-color: transparent;
+  color: black;
+}
+
+/* Style the back side */
+.flip-box-back {
+  //background-color: dodgerblue;
+  background-color: transparent;
+  color: white;
+  transform: rotateY(180deg);
+}
+
+
+.imagenCromo {
+  max-width: var(--anchoImagenCromo);
+  max-height: var(--altoImagenCromo);
+  margin-top: 0px !important;
+  margin: 0px;
+}
+.cromo {
+  max-width: var(--anchoCromo);
+  max-height: var(--altoCromo);
+  width: var(--anchoCromo);
+  height: var(--altoCromo);
+}
+
+.Diamante {
+  background-color: rgb(62, 177, 163);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(50, 150, 138) !important;
+}
+
+.Platino {
+  background-color: rgb(222, 60, 151);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(187, 50, 128) !important;
+}
+
+.Oro {
+  background-color: rgb(222, 193, 89);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(206, 179, 81) !important;
+}
+
+.Plata {
+  background-color: rgb(143, 157, 160);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(126, 138, 141) !important;
+}
+
+.Bronce {
+  background-color: rgb(180, 135, 75);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(133, 103, 64) !important;
+}
+
+// Cromo que se oscurecerá en el componente album-del-alumno, si el alumno no tiene el cromo
+.Falti {
+  opacity: 0.5 !important;
+  background-color: rgb(235, 235, 228) !important;
+  color: rgb(84, 84, 84) !important;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  box-shadow: 0px 3px 6px 0px  rgb(126, 138, 141) !important;
+}
+
+
+// Tabs que ocupen el 50% del espacio total cada uno
+.mat-tab-label {
+  width: 50%;
+}
+
+// Opciones gráficas inicio sesión
+.cartaInicioSesion {
+  margin-top: 100px;
+  margin-bottom: 100px;
+  max-width: 300px;
+  max-height: 370px;
+  width: 300px;
+  height: 370px;
+  background-color: rgb(190, 206, 204);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(154, 167, 165) !important;
+}
+.imagenPanelRecursos {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+}
+// Color de la flecha que indica ordenación en las cabaceras de las tablas
+.mat-sort-header-arrow {
+  color: white;
+}
+
+// Para mostrar todos los avatares
+
+span.avatar5col {
+  display: inline-block;
+  width: 20%;
+}
+.parpadea {
+
+  animation-name: parpadeo;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  -webkit-animation-name:parpadeo;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes parpadeo{
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+
+@-webkit-keyframes parpadeo {
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+   100% { opacity: 1.0; }
+}
+
+@keyframes parpadeo {
+  0% { opacity: 1.0; }
+   50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+

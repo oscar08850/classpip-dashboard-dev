@@ -1,0 +1,67 @@
+
+<div class="titulo">Editar cromo</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+  <div class= "enColumna">
+  <mat-card class="panel">
+    <mat-card-content>
+
+
+            <div class="texto" style=" text-align: left;">
+                <mat-form-field style="margin: 15px;">
+                    <mat-label style="color: white;">Nombre </mat-label>
+                    <input matInput type="text" style="color: yellow;" placeholder="Nombre" required [(ngModel)]="nombreCromo" (change) = "cambios=true">
+                </mat-form-field>
+            </div>
+            <mat-form-field style="margin: 15px;">
+                  <mat-label style="color: white;">Nivel </mat-label>
+                    <select matNativeControl style="color: yellow;" [(ngModel)]="opcionSeleccionadaNivel" name="opcion" (change) = "OpcionNivelSeleccionado()">
+                      <option  style="color: black" *ngFor="let opcion of opcionesNivel" [value]="opcion.id">
+                          {{opcion.nombre}}
+                      </option>
+                    </select>
+            </mat-form-field>
+            <mat-form-field style="margin: 15px; ">
+                  <mat-label  style="color: white;">Probabilidad </mat-label>
+                    <select matNativeControl style="color: yellow;" [(ngModel)]="probabilidadCromo" name="opcion" (change) = "cambios=true">
+                      <option style="color: black" *ngFor="let opcion of opcionesProbabilidad" [value]="opcion.id">
+                          {{opcion.nombre}}
+                      </option>
+                    </select>
+                  </mat-form-field>
+
+            <div class="enFila" style="width: 70%">
+              <div>
+                  <input #file id = "inputCromoDelante" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromoDelante($event)" style="display:none">
+                  <img class="imagenCromo" *ngIf="imagenCromoDelante" mat-card-image [src]="imagenCromoDelante">
+                  <button (click) = "ActivarInputCromoDelante()" type="button" class="btn Agregar">
+                   Agregar imagen de delante <i class="material-icons">add_photo_alternate</i>
+                  </button>
+                </div>
+                <div *ngIf = "coleccion.DosCaras">
+
+                  <input #file id = "inputCromoDetras" type="file" accept= 'imagen/*' (change)="ExaminarImagenCromoDetras($event)" style="display:none">
+                  <img class="imagenCromo" *ngIf="imagenCromoDetras" mat-card-image [src]="imagenCromoDetras">
+                  <button (click) = "ActivarInputCromoDetras()" type="button" class="btn Agregar">
+                   Agregar imagen de detras <i class="material-icons">add_photo_alternate</i>
+                  </button>
+                </div>
+
+            </div>
+
+            <button *ngIf="cambios" type="button" class="btn Aceptar"  (click)= "EditarCromo()">Aceptar Cambios <i class="material-icons">
+                    check </i></button>
+
+
+
+    </mat-card-content>
+  </mat-card>
+
+  <mat-dialog-actions align= "end">
+  <!-- <button mat-button [mat-dialog-close] class="btn Cerrar">Cerrar</button> -->
+    <button mat-button routerLink= "editarColeccion" (click)= "Cerrar();" class="btn Cerrar">Cerrar</button>
+  </mat-dialog-actions>
+</div>
+</div>
+

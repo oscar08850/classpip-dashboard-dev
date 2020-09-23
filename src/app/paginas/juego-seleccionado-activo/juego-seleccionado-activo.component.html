@@ -1,0 +1,39 @@
+
+<div class="titulo">{{juegoSeleccionado.NombreJuego}}</div>
+<div class="subtitulo">{{juegoSeleccionado.Tipo}} {{juegoSeleccionado.Modo}}</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Puntos'">
+  <app-juego-de-puntos-seleccionado-activo></app-juego-de-puntos-seleccionado-activo>
+</div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Colección'">
+  <app-juego-de-coleccion-seleccionado-activo></app-juego-de-coleccion-seleccionado-activo>
+</div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Competición Liga'">
+  <app-juego-de-competicion-seleccionado-activo></app-juego-de-competicion-seleccionado-activo>
+</div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Competición Fórmula Uno'">
+  <app-juego-formula-uno-seleccionado-activo></app-juego-formula-uno-seleccionado-activo>
+</div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuentos'">
+  <app-juego-de-cuento-seleccionado-activo></app-juego-de-cuento-seleccionado-activo>
+</div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Avatar'">
+  <app-juego-de-avatar-seleccionado-activo></app-juego-de-avatar-seleccionado-activo>
+</div>
+<div>
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuestionario'">
+    <app-juego-de-cuestionario-seleccionado-activo></app-juego-de-cuestionario-seleccionado-activo>
+</div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Geocaching'">
+  <app-juego-de-geocaching-seleccionado-activo></app-juego-de-geocaching-seleccionado-activo>
+</div>
+
+<div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver</button>
+</div>

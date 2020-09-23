@@ -1,0 +1,59 @@
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+
+
+<div>
+  <h2>Personajes:</h2>
+
+  <div>
+    <mat-grid-list cols="4" rowHeight="1:1">
+      <mat-grid-tile *ngFor='let imageF of listaFotosPersonajes'>
+        <mat-card>
+
+          <img [src]='imageF.url' height="175" width="175">
+          <p>{{imageF.nombre}}</p>
+          <mat-checkbox class="example-margin" (change)="setAll(imageF)">
+            Especial
+          </mat-checkbox>
+        </mat-card>
+
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+  <h2>Fondos:</h2>
+
+  <div>
+    <mat-grid-list cols="2" rowHeight="1:1">
+      <mat-grid-tile *ngFor='let imageP of listaFotosFondos'>
+        <mat-card>
+
+          <img [src]='imageP.url' height="450" width="450">
+          <p>{{imageP.nombre}}</p>
+          <mat-checkbox class="example-margin" (change)="setAll(imageP)">
+            Especial
+          </mat-checkbox>
+        </mat-card>
+
+
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+  <h2>Objetos:</h2>
+
+  <div>
+    <mat-grid-list cols="4" rowHeight="1:1">
+      <mat-grid-tile *ngFor='let imageO of listaFotosObjetos'>
+        <mat-card>
+          <img [src]='imageO.url' height="175" width="175">
+          <p>{{imageO.nombre}}</p>
+          <mat-checkbox class="example-margin" (change)="setAll(imageO)">
+            Especial
+          </mat-checkbox>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <button type="button" (click)="putRecuros()" > </button>
+
+</div>

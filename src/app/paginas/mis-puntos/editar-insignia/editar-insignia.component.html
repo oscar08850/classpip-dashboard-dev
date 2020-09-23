@@ -1,0 +1,85 @@
+<div class="titulo"><h2>Editar Insigna</h2></div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class="contenedor">
+    <mat-card class="panel">
+      <mat-card-header>
+          <mat-card-title>Información sobre el tipo de insignia</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="form-group">
+            <label for="inputNombreInsignia">Nombre</label>
+            <input type="text" id="inputNombreInsignia" class="form-control" requiered [(ngModel)]="nombreInsignia" placeholder="Escribe el nombre de la insignia">
+        </div>
+
+        <div class="form-group">
+          <label for="textareaInsignia">Descripción</label>
+          <textarea  class="form-control" id="textareaInsignia" requiered [(ngModel)]="descripcionInsignia" placeholder="Descripción" rows="4"></textarea>
+        </div>
+      </mat-card-content>
+
+      <div class="agregarImagen" >
+          <div>
+              <button (click) = "ActivarInput()" type="button" class="btn Agregar">
+                Agregar imagen<i class="material-icons">add_photo_alternate</i>
+              </button>
+            </div>
+        <div>
+            <input #file id = "input" type="file" accept= 'image/*' (change)="Mostrar($event)" style="display:none">
+            <img  class = "logo" style = "margin-left: 20px" *ngIf="imagenInsignia" mat-card-image [src]="imagenInsignia" >
+          </div>
+
+      </div>
+      <mat-card-actions align="center">
+
+        <button type="button" class="btn Aceptar" (click)= "EditarInsignia()">Aceptar Cambios <i class="material-icons">
+            check </i></button>
+      </mat-card-actions>
+
+    </mat-card>
+</div>
+
+<!--
+<div class="contenedor contenedor3">
+    <mat-card class="panel">
+        <mat-card-content>
+          <div class="contenedor2" style=" text-align: left;">
+              <div class="texto" style=" text-align: left;">
+                  <p>
+                    <span style="font-weight: bold;">Nombre: </span>
+                    <mat-form-field style="width: 100%; border: none; ">
+                        <textarea matInput  requiered [(ngModel)]="nombreInsignia">Escribe el nombre</textarea>
+                      </mat-form-field>
+                  </p>
+                </div>
+                <div class="texto" style=" text-align: left;">
+                  <p>
+                      <span  style="font-weight: bold;">Descripción: </span>
+                      <mat-form-field style="width: 100%; border: none; ">
+                        <textarea matInput  requiered [(ngModel)]="descripcionInsignia">Escribe la descripción</textarea>
+                      </mat-form-field>
+                    </p>
+                </div>
+               <div class="agregarImagen" >
+                  <div>
+                      <button (click) = "ActivarInput()" type="button" class="btn Agregar">
+                        Agregar logo<i class="material-icons">add_photo_alternate</i>
+                      </button>
+                    </div>
+                <div>
+                    <input #file id = "input" type="file" accept= 'image/*' (change)="Mostrar($event)" style="display:none">
+                    <img class ="logo" *ngIf="imagenInsignia" hight = "130" width = "130" mat-card-image [src]="imagenInsignia" >
+                  </div>
+
+               </div>
+            <div>
+                <div class="elemento">
+                    <button type="button" class="btn Aceptar"  (click)= "EditarInsignia()">Aceptar Cambios <i class="material-icons">
+                      check </i></button>
+              </div>
+
+            </div>
+          </div>
+  </mat-card-content>
+</mat-card>
+</div> -->

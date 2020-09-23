@@ -1,0 +1,111 @@
+<div class="titulo">Agregar Punto Geolocalizable</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+
+<mat-card class="panel">
+    <mat-card-header>
+      <mat-card-title>Añadir puntogeolocalizable</mat-card-title>
+      <mat-card-subtitle>Introduce los parámetros</mat-card-subtitle>
+   </mat-card-header>
+   <mat-card-content>
+
+    <div class="form-group" style="margin: 15px;">
+      <label for="inputNombrePuntoGeolocalizable">Nombre</label>
+      <input  type="text" id="inputNombrePuntoGeolocalizable" class="form-control" requiered [(ngModel)]="nombrePuntoGeolocalizable" placeholder="Escribe el nombre">
+  </div>
+
+      <div class="form-group" style="margin: 15px;">
+        <label for="inputLatitudPuntoGeolocalizable">Latitud (en grados decimales, ej: 41.3036)*</label>
+        <input  type="text" id="inputLatitudPuntoGeolocalizable" class="form-control" requiered [(ngModel)]="latitudPuntoGeolocalizable" placeholder="Escribe la latitud">
+    </div>
+
+    <div class="form-group" style="margin: 15px;">
+      <label for="inputLongitudPuntoGeolocalizable">Longitud (en grados decimales, ej: 2.1743)*</label>
+      <input  type="text" id="inputLongitudPuntoGeolocalizable" class="form-control" requiered [(ngModel)]="longitudPuntoGeolocalizable" placeholder="Escribe la longitud">
+  </div>
+
+  <div class="form-group" style="margin: 15px;">
+    <label for="inputPistaFacilPuntoGeolocalizable">Pista Fácil</label>
+    <input  type="text" id="inputPistaFacilPuntoGeolocalizable" class="form-control" requiered [(ngModel)]="pistafacilPuntoGeolocalizable" placeholder="Escribe la pista facil">
+</div>
+
+<div class="form-group" style="margin: 15px;">
+  <label for="inputPistaDificilPuntoGeolocalizable">Pista Difícil</label>
+  <input  type="text" id="inputPistaDificilPuntoGeolocalizable" class="form-control" requiered [(ngModel)]="pistadificilPuntoGeolocalizable" placeholder="Escribe la pista dificil">
+</div>
+
+<div>
+  <p style="font-size: smaller;">
+    * En caso de no conocer las coordenadas, se podrán capturar mediante la aplicación móvil.
+  </p>
+</div>
+
+   </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button  (click) = "LimpiarCampos()" type="button" class="btn Back">Limpiar Campos</button>
+    <button  (click) = "AgregarPuntoGeolocalizableEscenario()"  class="btn Aceptar">Agregar PuntoGeolocalizable</button>
+  </mat-card-actions>
+
+  </mat-card>
+
+  <div>
+      <form *ngIf="puntosgeolocalizablesAgregados[0]">
+
+        <div>
+          <p style="margin: 10px">
+            <span style="font-weight: bold;">PuntosGeolocalizables creados recientemente</span>
+          </p>
+        </div>
+
+        <table  align="center" mat-table [dataSource]="puntosgeolocalizablesAgregados" class="example-container mat-elevation-z8">
+
+
+          <ng-container matColumnDef="nombrePuntoGeolocalizable">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Nombre </th>
+            <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.Nombre}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="latitudPuntoGeolocalizable">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Latitud </th>
+            <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.Latitud}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="longitudPuntoGeolocalizable">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Longitud  </th>
+            <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.Longitud}} </td>
+          </ng-container>
+
+          <!-- <ng-container matColumnDef="pistafacilPuntoGeolocalizable">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Pista Fácil </th>
+            <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.PistaFacil}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="pistadificilPuntoGeolocalizable">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Pista Difícil </th>
+            <td mat-cell *matCellDef="let puntogeolocalizable"> {{puntogeolocalizable.PistaDificil}} </td>
+          </ng-container> -->
+
+          <!-- Delete Column -->
+          <ng-container matColumnDef=" ">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+            <td mat-cell *matCellDef="let puntogeolocalizable">
+              <button (click) = "BorrarPuntoGeolocalizable(puntogeolocalizable)" mat-icon-button matTooltip="Borrar el puntogeolocalizable {{puntogeolocalizable.Nombre}}">
+                <i class="material-icons red md-36">delete</i>
+              </button>
+            </td>
+          </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+      </form>
+    </div>
+
+
+
+<mat-dialog-actions align= "end">
+ <!-- <button mat-button [mat-dialog-close] class="btn Cerrar">Cerrar</button> -->
+  <button mat-button (click)= "Cerrar();" class="btn Cerrar">Cerrar</button>
+</mat-dialog-actions>

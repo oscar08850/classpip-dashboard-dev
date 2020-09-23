@@ -1,0 +1,33 @@
+<div class="titulo">Resultados</div>
+<div class="subtitulo">Número de alumnos por cantidad de aciertos</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class = "enColumna">
+  <div style = "width : 100%" echarts [options]="grafico"  theme="macarons" class="demo-chart"></div>
+</div>
+<br>
+<br>
+<div class="subtitulo">Porcentaje de aciertos en cada pregunta</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<br>
+<br>
+  <span *ngFor = "let pregunta of preguntas; index as i">
+  <span style = "display: inline-block; width: 50%;">
+      <div  echarts [options]="donuts[i]"  theme="macarons" class="demo-chart">
+      </div>
+  </span>
+</span>
+
+<br>
+<br>
+
+
+<br>
+
+
+
+<div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+</div>
+
+
+
+

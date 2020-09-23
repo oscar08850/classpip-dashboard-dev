@@ -1,0 +1,178 @@
+<div class="titulo">Introducir Nuevos Alumnos</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class="contenedor">
+
+    <mat-tab-group>
+      <mat-tab label="Introducir alumnos uno a uno">
+
+              <div class = "enFila">
+                <div>
+                    <mat-card style = 'width: 100%' class="panel">
+
+                        <mat-card-header>
+                          <mat-card-title>Nuevo Alumno</mat-card-title>
+                          <mat-card-subtitle style = "color:white">Introduce los datos del nuevo alumno</mat-card-subtitle>
+                        </mat-card-header>
+
+                        <mat-card-content>
+                          <div class="form-group">
+                              <label for="inputNombre">Nombre</label>
+                              <input (keyup)="Disabled()" type="text" id="inputNombre" class="form-control" requiered [(ngModel)]="nombreAlumno" placeholder="Escribe el nombre">
+                          </div>
+                          <div class="form-group">
+                              <label for="inputApellido1">Primer Apellido</label>
+                              <input (keyup)="Disabled()" type="text" id="inputApellido1" class="form-control" requiered [(ngModel)]="apellido1Alumno" placeholder="Escribe el primer apellido">
+                          </div>
+                          <div class="form-group">
+                              <label for="inputApellido2">Segundo Apellido</label>
+                              <input (keyup)="Disabled()" type="text" id="inputApellido2" class="form-control" requiered [(ngModel)]="apellido2Alumno" placeholder="Escribe el segundo apellido">
+                          </div>
+
+
+                        </mat-card-content>
+
+                        <mat-card-actions  align="end">
+
+                          <button style="margin: 5px" (click) = "LimpiarCampos()" type="button" class="btn Back" >Limpiar Campos</button>
+                          <button  style="margin: 5px" (click) = "PonAlumno();" [disabled]="isDisabledAlumno"type="button" class="btn Agregar" >Añade alumno<i class="material-icons">
+                              person_add </i></button>
+
+                        </mat-card-actions>
+
+                        </mat-card>
+
+                </div>
+                <div class = "enColumna" *ngIf="nuevosAlumnos[0]">
+                  <form style = 'width: 50%' >
+
+                    <table mat-table style="width: 600px" [dataSource]="dataSource">
+
+                    <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+
+
+                      <ng-container matColumnDef="nombre">
+                        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" > Nombre </th>
+                        <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+                      </ng-container>
+
+
+                      <ng-container matColumnDef="primerApellido">
+                        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" > Primer Apellido </th>
+                        <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+                      </ng-container>
+
+
+                      <ng-container matColumnDef="segundoApellido">
+                          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" > Segundo Apellido </th>
+                          <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+                        </ng-container>
+
+                      <!-- Delete Column -->
+                      <ng-container matColumnDef=" ">
+                        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                        <td mat-cell *matCellDef="let alumno">
+                          <button (click) = "BorrarAlumno(alumno)" mat-icon-button matTooltip="Borrar alumno {{alumno.Nombre}}">
+                            <i class="material-icons red md-36">delete</i>
+                          </button>
+                        </td>
+                      </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    </table>
+
+                  </form>
+                  <button  style="width: 50%; margin-left: 25%;" (click) = "RegistraAlumnos();" type="button" class="btn Agregar" >Registra a estos alumnos<i class="material-icons">
+                      person_add </i></button>
+                </div>
+
+              </div>
+
+      </mat-tab>
+      <mat-tab label="Introducir alumnos de forma masiva">
+
+          <div class = "enFila">
+              <div>
+                  <mat-card style = 'width: 100%' class="panel">
+
+                      <mat-card-header>
+                        <mat-card-title>Nuevos Alumnos</mat-card-title>
+                      </mat-card-header>
+
+                      <mat-card-content>
+
+                        <div class="form-group">
+                            <label for="inputNombres">Pega aquí linea a linea nombre y apellidos separados por ; (como en el ejemplo)</label>
+                            <textarea rows="5" autofocus (keyup)="DisabledTexto()" matInput class="form-control" placeholder=
+                            "Pedro;García;Aguado
+Andrés;Iniesta;Luján"
+                            requiered [(ngModel)]="textoAlumnosNuevos"></textarea>
+                        </div>
+
+                      </mat-card-content>
+
+                      <mat-card-actions  align="end">
+
+                        <button style="margin: 5px" (click) = "LimpiarCamposTexto()" type="button" class="btn Back" >Limpiar Campos</button>
+                        <button  style="margin: 5px" (click) = "RegistroMasivo();" [disabled]="isDisabledAlumno"type="button" class="btn Agregar" >Añade alumno<i class="material-icons">
+                            person_add </i></button>
+
+                      </mat-card-actions>
+
+                      </mat-card>
+
+              </div>
+              <div class = "enColumna" *ngIf="nuevosAlumnos[0]">
+                <form style = 'width: 50%' >
+
+                  <table mat-table style="width: 600px" [dataSource]="dataSource">
+
+                  <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+
+                    <ng-container matColumnDef="nombre">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" > Nombre </th>
+                      <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="primerApellido">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" > Primer Apellido </th>
+                      <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="segundoApellido">
+                        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" > Segundo Apellido </th>
+                        <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+                      </ng-container>
+
+                    <!-- Delete Column -->
+                    <ng-container matColumnDef=" ">
+                      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                      <td mat-cell *matCellDef="let alumno">
+                        <button (click) = "BorrarAlumno(alumno)" mat-icon-button matTooltip="Borrar alumno {{alumno.Nombre}}">
+                          <i class="material-icons red md-36">delete</i>
+                        </button>
+                      </td>
+                    </ng-container>
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                  </table>
+
+                </form>
+                <button  style="width: 50%; margin-left: 25%;" (click) = "RegistraAlumnos();" type="button" class="btn Agregar" >Registra a estos alumnos<i class="material-icons">
+                    person_add </i></button>
+              </div>
+
+            </div>
+
+      </mat-tab>
+    </mat-tab-group>
+
+</div>

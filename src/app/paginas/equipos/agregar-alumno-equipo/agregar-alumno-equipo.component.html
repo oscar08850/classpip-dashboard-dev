@@ -1,0 +1,117 @@
+
+Seleccione el alumno al que desee añadir al equipo
+<mat-divider></mat-divider>
+
+ <form style="width: 100%">
+    <div>
+        <p>
+            <span style="font-weight: bold;text-align: center;">Alumnos del equipo: {{equipo.Nombre}}</span>
+        </p>
+    </div>
+
+    <table style="width: 100%; table-layout:fixed;"  *ngIf="data.alumnosEquipo" mat-table [dataSource]="data.alumnosEquipo" class="example-container mat-elevation-z8">
+
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Nombre Alumno Column -->
+      <ng-container matColumnDef="nombreAlumno">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Nombre </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+      </ng-container>
+
+      <!-- Primer Apellido Column -->
+      <ng-container matColumnDef="primerApellido">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Primer Apellido </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+      </ng-container>
+
+      <!-- Segundo Apellido Column -->
+      <ng-container matColumnDef="segundoApellido">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Segundo Apellido </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+      </ng-container>
+
+      <!-- alumnoId Column -->
+      <ng-container matColumnDef="alumnoId">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Identificador Alumno </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
+      </ng-container>
+
+      <!-- Delete Column -->
+      <ng-container matColumnDef=" ">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+        <td mat-cell *matCellDef="let alumno">
+            <button (click) = "BorrarAlumnoEquipo(alumno)" mat-icon-button matTooltip="Borrar a {{alumno.Nombre}} del equipo">
+              <i class="material-icons red md-36">delete</i>
+            </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+    <div>
+      <p>
+
+      </p>
+    </div>
+    <div>
+      <p>
+          <span style="font-weight: bold; align-content: center;">Alumnos sin equipo</span>
+      </p>
+    </div>
+    <div>
+        <table style="width: 100%; table-layout:fixed;"  *ngIf="alumnosSinEquipo" mat-table [dataSource]="alumnosSinEquipo" class="example-container mat-elevation-z8">            <!--- Note that these columns can be defined in any order.
+
+      The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Nombre Alumno Column -->
+      <ng-container matColumnDef="nombreAlumno">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Nombre </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+      </ng-container>
+
+      <!-- Primer Apellido Column -->
+      <ng-container matColumnDef="primerApellido">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Primer Apellido </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+      </ng-container>
+
+      <!-- Segundo Apellido Column -->
+      <ng-container matColumnDef="segundoApellido">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Segundo Apellido </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+      </ng-container>
+
+      <!-- alumnoId Column -->
+      <ng-container matColumnDef="alumnoId">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Identificador Alumno </th>
+        <td mat-cell *matCellDef="let alumno"> {{alumno.id}} </td>
+      </ng-container>
+
+      <!-- Add Column -->
+      <ng-container matColumnDef=" " stickyEnd>
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+          <td mat-cell *matCellDef="let alumno">
+              <button (click) = "AgregarAlumnosEquipo(alumno.id)" mat-icon-button matTooltip = "Añadir a {{alumno.Nombre}} al equipo">
+                  <i class="material-icons green md-36">add_circle_outline</i>
+              </button>
+          </td>
+      </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+
+          </table>
+    </div>
+
+    <mat-dialog-actions align= "center">
+
+      <button   type="button" class="btn Aceptar" [mat-dialog-close]="data.alumnosEquipo" cdkFocusInitial>Aceptar</button>
+  </mat-dialog-actions>
+  </form>
+

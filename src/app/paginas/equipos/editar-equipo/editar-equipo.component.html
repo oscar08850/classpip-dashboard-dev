@@ -1,0 +1,89 @@
+R
+<div class="titulo">Editar Equipo</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class = "contenedor">
+  <div class = "enColumna">
+
+      <div class="enFila" style= "width : 60%">
+          <p>
+            <span style="font-weight: bold;">Nombre: </span>
+            <input style="background-color: transparent" type="text" name="nombre" placeholder="Escribe el nombre" requiered [(ngModel)]="nombreEquipo">
+          </p>
+          <div>
+              <input #file id = "input" type="file" accept= 'image/*' (change)="Mostrar($event)" style="display:none">
+              <img class ="logo" *ngIf="imagenLogo" hight = "130" width = "130" mat-card-image [src]="imagenLogo" >
+          </div>
+          <button type="button"  class="btn Aceptar"  (click)= "EditarEquipo()">Aceptar Cambios <i class="material-icons">
+              check </i></button>
+      </div>
+      <div class="enFila" style= "width : 50%">
+          <button (click) = "ActivarInput()" type="button" class="btn Next">
+             Agregar logo<i class="material-icons">add_photo_alternate</i>
+          </button>
+
+          <button type="button" class="btn Agregar" (click) = AbrirDialogoAgregarAlumnosEquipo()>
+             Agregar alumno <i class="material-icons">group_add</i>
+          </button>
+          <button type="button" class="btn Info" (click) = "AbrirDialogoMoverAlumno()">
+            Mover alumno<i class="material-icons">compare_arrows </i>
+          </button>
+      </div>
+
+
+  <form>
+
+    <table style="width: 60%;  table-layout:fixed;" align="center" *ngIf="alumnosEquipo;else Aviso_no_alumnos" mat-table [dataSource]="alumnosEquipo" class="example-container mat-elevation-z8">
+
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Nombre Alumno Column -->
+      <ng-container matColumnDef="nombreAlumno">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 25%"> Nombre </th>
+        <td mat-cell style= "text-align: left" *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+      </ng-container>
+
+      <!-- Primer Apellido Column -->
+      <ng-container matColumnDef="primerApellido">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 25%"> Primer Apellido </th>
+        <td mat-cell style= "text-align: left" *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+      </ng-container>
+
+      <!-- Segundo Apellido Column -->
+      <ng-container matColumnDef="segundoApellido">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 25%"> Segundo Apellido </th>
+        <td mat-cell style= "text-align: left" *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+      </ng-container>
+
+      <!-- alumnoId Column -->
+      <ng-container matColumnDef="alumnoId">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"style="width: 15%"> Identificador Alumno </th>
+        <td mat-cell style= "text-align: left" *matCellDef="let alumno"> {{alumno.id}} </td>
+      </ng-container>
+
+          <!-- Delete Column -->
+      <ng-container matColumnDef=" ">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+        <td mat-cell style= "text-align: left" *matCellDef="let alumno">
+            <button (click) = "BorrarAlumnoEquipo(alumno)" mat-icon-button matTooltip="Borrar a {{alumno.Nombre}} del equipo">
+              <i class="material-icons red md-36">delete</i>
+            </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+    <div class="contenedor">
+      <ng-template #Aviso_no_alumnos><div class="texto">Este equipo no tiene alumnos</div></ng-template>
+  </div>
+
+  </form>
+  <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+</div>
+</div>
+
+
+
+

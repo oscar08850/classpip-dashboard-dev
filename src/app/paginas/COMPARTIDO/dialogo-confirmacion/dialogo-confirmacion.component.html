@@ -1,0 +1,10 @@
+<mat-dialog-content>
+	<p>
+    {{mensaje}}
+    <span style="font-weight: bold;">{{mensajeConfirmacion.nombre}}</span>?
+	</p>
+</mat-dialog-content>
+<mat-dialog-actions align = "center">
+	<button class="btn Eliminar" (click)="onConfirmClick()" tabindex="1">{{TextoBotonBorrar}}</button>
+	<button class="btn Cerrar" mat-dialog-close tabindex="-1">{{TextoBotonCancelar}}</button>
+</mat-dialog-actions>

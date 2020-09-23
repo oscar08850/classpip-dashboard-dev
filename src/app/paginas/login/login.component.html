@@ -1,0 +1,69 @@
+
+<div style="display: flex;  justify-content: center; flex-direction: column;">
+    <!-- CABECERA -->
+    <form  *ngIf="profesor === undefined" class="contenedorInicioSesion">
+        <button routerLink = aboutClasspip mat-button [matMenuTriggerFor]="Classpip" >
+            <h1><img width="40" src="./assets/Icono Classpip.png"></h1>
+              <h1 class="class">class</h1>
+              <h1 class="pip">pip</h1>
+          </button>
+          <button class="btnNavbar"> Iniciar Sesión </button>
+  
+    </form>
+  
+    <!-- LOGIN -->
+    <form *ngIf="profesor === undefined" style="display: flex;  justify-content: center">
+    <mat-card class="cartaInicioSesion">
+  
+      <mat-card-content style="text-align: center; display: flex; align-items: center; flex-direction: column; ">
+          <h4>
+            Iniciar sesión en Classpip
+          </h4>
+  
+            <div>
+              <mat-form-field style="margin: 15px; width: 80%">
+                <input matInput type="text" name="nombre" placeholder="Nombre" required [(ngModel)]="nombre">
+              </mat-form-field>
+  
+              <mat-form-field style="margin: 15px;width: 80%">
+                <input matInput type="password" name="apellido" placeholder="Contraseña" required [(ngModel)]="apellido">
+  
+              </mat-form-field>
+            </div>
+  
+            <mat-card-actions>
+              <button class="btn IncioSesion" (click)= Autentificar()>Entrar</button>
+              <button class="btnContraseña" >¿Olvidaste tu contraseña?</button>
+            </mat-card-actions>
+       </mat-card-content>
+    </mat-card>
+  
+  </form>
+  </div>
+  
+  <div>
+    <!-- SI EL PROFESOR ENTRA CORRECTAMENTE, PODRÁ VER EL NAVBAR -->
+    <div>
+      <form *ngIf="profesor !== undefined">
+          <app-navbar></app-navbar>
+      </form>
+    </div>
+  
+    <!-- CONTENIDO PRINCIPAL  -->
+    <!-- style="height: 668px;" -->
+    <div>
+        <form *ngIf="profesor !== undefined">
+          <router-outlet></router-outlet>
+        </form>
+    </div>
+  
+    <!-- FALTA EL FOOTER -->
+  
+  </div>
+  
+  
+  
+  <div>
+      <app-footer></app-footer>
+  </div>
+  

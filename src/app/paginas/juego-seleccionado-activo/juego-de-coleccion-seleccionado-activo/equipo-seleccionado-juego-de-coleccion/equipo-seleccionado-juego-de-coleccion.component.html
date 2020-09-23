@@ -1,0 +1,107 @@
+<div class="titulo">{{juegoSeleccionado.Tipo}}</div>
+<div class="subtitulo">Información Del Equipo</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+  <div class="enColumna">
+  <div class="enFila" style="width: 70%">
+
+      <img class = "imagen" hight = "200" width = "200" mat-card-image [src]="imagenPerfil" >
+
+      <p style="font-size: 110%">
+        <span style="font-weight: bold;">Cromos de: </span>
+        {{equipo.Nombre}}
+      </p>
+      <button type="button" class="btn Info" routerLink = "AlbumEquipo">Álbum Equipo</button>
+  </div>
+
+
+
+
+
+
+
+<mat-grid-list cols="3" rowHeight="100px" style="width: 70%; margin-left : 15%" >
+  <mat-grid-tile
+      *ngFor="let elem of listaCromosSinRepetidos; let i = index"
+      [colspan]="1"
+      [rowspan]="4"
+      [style.background]="white">
+      <mat-card class="cromo" [ngClass]="{
+        'Diamante' : elem.cromo.Nivel === 'Diamante',
+        'Platino' : elem.cromo.Nivel === 'Platino',
+        'Oro' : elem.cromo.Nivel === 'Oro',
+        'Plata' : elem.cromo.Nivel === 'Plata',
+        'Bronce' : elem.cromo.Nivel === 'Bronce'}">
+
+        <div class= "enColumna">
+          <mat-card-header style = "margin-top: 20%;">
+            <!-- <div style="display: flex; justify-content:space-between; width: 250px "> -->
+              <mat-card-title align = "center">{{elem.cromo.Nombre}}</mat-card-title>
+              <mat-card-subtitle align = "center">{{elem.cromo.Probabilidad}}</mat-card-subtitle>
+
+          </mat-card-header>
+          <!-- <mat-card-content style="display: flex; align-items: center;justify-content: center;"> -->
+          <mat-card-content>
+
+            <div class = "enFila" style = "width: 60%">
+              <p align = "center">Repeticiones: <strong style= "font-size: 1.5rem">{{elem.rep}} </strong></p>
+              <button type="button" style="width: 50px !important;" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrarCromo(elem.cromo)">
+                <i  class="material-icons">delete </i>
+              </button>
+            </div>
+              <div *ngIf = "!coleccion.DosCaras" class="posicionImagen">
+                <img class ="imagenCromo" *ngIf="imagenesCromosDelante[i]"  mat-card-image [src]="imagenesCromosDelante[i]" >
+              </div>
+
+              <div  *ngIf = "coleccion.DosCaras"  class="flip-box">
+                  <div class="flip-box-inner">
+                    <div class="flip-box-front">
+                      <div class="posicionImagen" >
+                        <img class ="imagenCromo" *ngIf="imagenCromoDelante[i]"  mat-card-image [src]="imagenCromoDelante[i]" >
+                      </div>
+                    </div>
+                    <div class="flip-box-back">
+                      <div class="posicionImagen" >
+                        <img class ="imagenCromo" *ngIf="imagenCromoDetras[i]"  mat-card-image [src]="imagenCromoDetras[i]" >
+                      </div>
+                    </div>
+                  </div>
+              </div>
+
+
+
+          </mat-card-content>
+          </div>
+
+
+
+<!--
+        <mat-card-header>
+          <div style="display: flex; justify-content:space-between; width: 250px ">
+          <div  >
+          <mat-card-title>{{elem.cromo.Nombre}}</mat-card-title>
+          <mat-card-subtitle><p style="margin-bottom: -2px;">Nivel: {{elem.cromo.Nivel}} </p><p style="margin-bottom: -2px;">Probabilidad: {{elem.cromo.Probabilidad}} </p><p style="margin-bottom: -2px;">Repeticiones: <strong style= "font-size: 1.5rem">{{elem.rep}} </strong> </p></mat-card-subtitle>
+        </div>
+        <div class="elementoCromo">
+
+            <button type="button" style="width: 50px !important;" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrarCromo(elem.cromo)">
+                <i style="margin-top: 3px; margin-right: 8px;" class="material-icons">delete </i>
+              </button>
+        </div>
+        </div>
+        </mat-card-header>
+        <mat-card-content style="display: flex; align-items: center;justify-content: center;">
+        <div class="posicionImagen" >
+        <img class ="imagenCromo" *ngIf="imagenCromoDelante[i]" mat-card-image [src]="imagenCromoDelante[i]" >
+      </div>
+        </mat-card-content> -->
+      </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
+<br>
+
+ <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+ </div>
+ </div>
+

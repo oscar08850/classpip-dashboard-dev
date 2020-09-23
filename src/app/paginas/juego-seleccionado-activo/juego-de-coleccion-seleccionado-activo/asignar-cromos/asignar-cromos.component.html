@@ -1,0 +1,383 @@
+<div class="titulo">Asignar Cromos</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+  <div class="enColumna">
+<mat-tab-group [color]="primary" [backgroundColor]="primary" #tabs style="margin-top: 10px" (selectedTabChange)="CambioTab($event)">
+
+
+  <!-- ASIGNAR EL CROMO QUE EL PROFESOR ESCOJA-->
+  <mat-tab index = "0" label="Asignación manual">
+
+      <br>
+      <br>
+      <div class="enColumna">
+      <div>
+        <mat-form-field>
+          <mat-label>Cromo que desea asignar</mat-label>
+          <select matNativeControl (change) = "TraeCromo()" [(ngModel)]="cromoSeleccionadoId" name="cromo">
+            <option *ngFor="let cromo of cromosColeccion" [value]="cromo.id">
+              {{cromo.Nombre}}
+            </option>
+          </select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="cromoSeleccionado">
+        <mat-card class="cromo" [ngClass]="{
+          'Diamante' : cromoSeleccionado.Nivel === 'Diamante',
+          'Platino' : cromoSeleccionado.Nivel === 'Platino',
+          'Oro' : cromoSeleccionado.Nivel === 'Oro',
+          'Plata' : cromoSeleccionado.Nivel === 'Plata',
+          'Bronce' : cromoSeleccionado.Nivel === 'Bronce'}">
+
+          <div class= "enColumna">
+            <mat-card-header style = "margin-top: 20%;">
+              <!-- <div style="display: flex; justify-content:space-between; width: 250px "> -->
+                <mat-card-title align = "center">{{cromoSeleccionado.Nombre}}</mat-card-title>
+                <mat-card-subtitle align = "center">{{cromoSeleccionado.Probabilidad}}</mat-card-subtitle>
+
+            </mat-card-header>
+            <!-- <mat-card-content style="display: flex; align-items: center;justify-content: center;"> -->
+            <mat-card-content>
+
+                <div *ngIf = "!coleccion.DosCaras" class="posicionImagen">
+                  <img class ="imagenCromo" *ngIf="imagenDelanteCromoSeleccionado"  mat-card-image [src]="imagenDelanteCromoSeleccionado" >
+                </div>
+
+                <div  *ngIf = "coleccion.DosCaras"  class="flip-box">
+                    <div class="flip-box-inner">
+                      <div class="flip-box-front">
+                        <div class="posicionImagen" >
+                          <img class ="imagenCromo" *ngIf="imagenDelanteCromoSeleccionado"  mat-card-image [src]="imagenDelanteCromoSeleccionado" >
+                        </div>
+                      </div>
+                      <div class="flip-box-back">
+                        <div class="posicionImagen" >
+                          <img class ="imagenCromo" *ngIf="imagenDetrasCromoSeleccionado"  mat-card-image [src]="imagenDetrasCromoSeleccionado" >
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+
+
+            </mat-card-content>
+            </div>
+
+
+          <!-- <mat-card-header>
+            <div style="display: flex; justify-content:space-between; width: 250px ">
+            <div  >
+            <mat-card-title>{{cromoSeleccionado.Nombre}}</mat-card-title>
+            <mat-card-subtitle><p style="margin-bottom: -2px;">Nivel: {{cromoSeleccionado.Nivel}} </p><p style="margin-bottom: -2px;">Probabilidad: {{cromoSeleccionado.Probabilidad}} </p></mat-card-subtitle>
+          </div>
+          </div>
+          </mat-card-header>
+          <mat-card-content style="display: flex; align-items: center;justify-content: center;">
+          <div class="posicionImagen" >
+          <img class ="imagenCromo" *ngIf="imagenDelanteCromoSeleccionado" mat-card-image [src]="imagenDelanteCromoSeleccionado" >
+        </div>
+          </mat-card-content> -->
+        </mat-card>
+      </div>
+      <div style="margin-top: 10px">
+          <button type="button" class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = AbrirDialogoConfirmacionAsignarCromo()>Asignar Cromo</button>
+      </div>
+      </div>
+
+
+
+
+
+  </mat-tab>
+
+
+
+  <!-- REPARTIR PAQUETES DE CROMOS ALEATORIOS -->
+  <mat-tab index = "1" label="Asignación aleatoria">
+
+    <div class="enColumna">
+
+      <div style="margin-top: 15px">
+        <span>Número de cromos a asignar: </span>
+        <input style="width:20%" type="number" name="numeroCromosRandom" placeholder="Escribe el número de cromos" requiered [(ngModel)]="numeroCromosRandom">
+      </div>
+      <button  style= "width:100%" type="button" class="btn Aceptar" [disabled]="botonTablaDesactivado" (click) = AbrirDialogoConfirmacionAsignarCromosAleatorios()>Asignar a los alumnos seleccionados</button>
+      <button style= "width:100%" type="button" class="btn Aceptar" (click) = AbrirDialogoConfirmacionAsignarCromosAlumnoAleatorio()>Asignar a un alumno elegido aleatoriamente</button>
+
+    </div>
+
+  </mat-tab>
+  <!-- REPARTIR PAQUETES DE CROMOS SEGUN PUNTOS -->
+  <mat-tab index = "2"  label="Asignación segun puntos">
+    <br>
+      <div class = "enFila" *ngIf = "juegosPuntos.length !== 0; else Aviso_no_habilitado">
+          <div style="width:90%">
+            <mat-form-field style="width:90%">
+              <mat-label>Selecciona el juego de puntos</mat-label>
+              <select matNativeControl [(ngModel)]="juegoPuntosSeleccionadoId" name="juego" (change) = "botonAsignacionDesactivado=false;">
+                <option *ngFor="let juego of juegosPuntos" [value]="juego.id">
+                  {{juego.Tipo}}
+                </option>
+              </select>
+            </mat-form-field>
+          </div>
+          <div class="enColumna">
+              <div>
+                  <input style="width:15%" type="number"   requiered [(ngModel)]="cromosParaPrimero">
+                  <span>cromos para el primero </span>
+                </div>
+              <div>
+                  <input style="width:15%" type="number"  requiered [(ngModel)]="cromosParaSegundo">
+                  <span>cromos para el segundo </span>
+                </div>
+              <div>
+                  <input style="width:15%" type="number"  requiered [(ngModel)]="cromosParaTercero">
+                  <span>cromos para el tercero </span>
+              </div>
+          </div>
+          <button  style= "width:50%" type="button" class="btn Aceptar" [disabled]="botonAsignacionDesactivado" (click) = AbrirDialogoConfirmacionAsignarCromosMejoresRanking()>Asignar cromos</button>
+
+      </div>
+      <ng-template #Aviso_no_habilitado>Esta opción no está habilitada porque no tienes juegos de puntos en este grupo</ng-template>
+
+
+
+
+  </mat-tab>
+
+
+</mat-tab-group>
+
+
+
+<form *ngIf="alumnosDelJuego && mostrarLista" style="width: 100%">
+
+
+    <mat-form-field style = "width: 60%; margin-left: 20%; ">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
+        <i class="material-icons" matSuffix>search</i>
+      </mat-form-field>
+
+
+  <table align="center" *ngIf="alumnosDelJuego && mostrarLista" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+        <mat-checkbox
+                      (change)="$event ? MasterToggle() : null; ActualizarBotonTabla ();"
+                      [checked]="selection.hasValue() && IsAllSelected()"
+                      [indeterminate]="selection.hasValue() && !IsAllSelected()">
+
+        </mat-checkbox>
+      </th>
+      <td mat-cell  *matCellDef="let row;">
+        <mat-checkbox
+                      (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null; ActualizarBotonTabla ();"
+                      [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+
+      </td>
+    </ng-container>
+
+
+    <!-- Nombre Alumno Column -->
+    <ng-container matColumnDef="nombreAlumno">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+      <td mat-cell   *matCellDef="let alumno; ">
+            <div *ngIf = "alumnoElegido &&
+                          alumno.Nombre === alumnoElegido.Nombre &&
+                          alumno.PrimerApellido === alumnoElegido.PrimerApellido &&
+                          alumno.SegundoApellido === alumnoElegido.SegundoApellido"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{alumno.Nombre}} </div>
+            <div *ngIf = "alumnoElegido === undefined ||
+                          alumno.Nombre !== alumnoElegido.Nombre ||
+                          alumno.PrimerApellido !== alumnoElegido.PrimerApellido ||
+                          alumno.SegundoApellido !== alumnoElegido.SegundoApellido"
+                          style = "color:black">{{alumno.Nombre}} </div>
+      </td>
+    </ng-container>
+
+
+
+    <!-- Primer Apellido Column -->
+    <ng-container matColumnDef="primerApellido">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Primer Apellido </th>
+      <td mat-cell   *matCellDef="let alumno;">
+            <div *ngIf = "alumnoElegido &&
+                          alumno.Nombre === alumnoElegido.Nombre &&
+                          alumno.PrimerApellido === alumnoElegido.PrimerApellido &&
+                          alumno.SegundoApellido === alumnoElegido.SegundoApellido"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{alumno.PrimerApellido}} </div>
+            <div *ngIf = "alumnoElegido === undefined ||
+                          alumno.Nombre !== alumnoElegido.Nombre ||
+                          alumno.PrimerApellido !== alumnoElegido.PrimerApellido ||
+                          alumno.SegundoApellido !== alumnoElegido.SegundoApellido"
+                          style = "color:black">{{alumno.PrimerApellido}} </div>
+
+
+      </td>
+    </ng-container>
+
+    <!-- Segundo Apellido Column -->
+    <ng-container matColumnDef="segundoApellido">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Segundo Apellido </th>
+      <td mat-cell   *matCellDef="let alumno; ">
+            <div *ngIf = "alumnoElegido &&
+                          alumno.Nombre === alumnoElegido.Nombre &&
+                          alumno.PrimerApellido === alumnoElegido.PrimerApellido &&
+                          alumno.SegundoApellido === alumnoElegido.SegundoApellido"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{alumno.SegundoApellido}} </div>
+            <div *ngIf = "alumnoElegido === undefined ||
+                          alumno.Nombre !== alumnoElegido.Nombre ||
+                          alumno.PrimerApellido !== alumnoElegido.PrimerApellido ||
+                          alumno.SegundoApellido !== alumnoElegido.SegundoApellido"
+                          style = "color:black">{{alumno.SegundoApellido}} </div>
+      </td>
+    </ng-container>
+
+     <ng-container matColumnDef=" ">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> </th>
+        <td mat-cell   *matCellDef="let alumno; ">
+              <div *ngIf = "primerAlumno && cromosParaPrimero > 0 &&
+                            alumno.Nombre === primerAlumno.Nombre &&
+                            alumno.PrimerApellido === primerAlumno.PrimerApellido &&
+                            alumno.SegundoApellido === primerAlumno.SegundoApellido"
+                            style = "color:green;font-weight: bold; font-size: 150%;">{{cromosParaPrimero}} cromos más </div>
+                            <div *ngIf = "segundoAlumno && cromosParaSegundo > 0 &&
+                            alumno.Nombre === segundoAlumno.Nombre &&
+                            alumno.PrimerApellido === segundoAlumno.PrimerApellido &&
+                            alumno.SegundoApellido === segundoAlumno.SegundoApellido"
+                            style = "color:green;font-weight: bold; font-size: 150%;">{{cromosParaSegundo}} cromos más </div>
+                            <div *ngIf = "tercerAlumno && cromosParaTercero > 0 &&
+                            alumno.Nombre === tercerAlumno.Nombre &&
+                            alumno.PrimerApellido === tercerAlumno.PrimerApellido &&
+                            alumno.SegundoApellido === tercerAlumno.SegundoApellido"
+                            style = "color:green;font-weight: bold; font-size: 150%;">{{cromosParaTercero}} cromos más </div>
+        </td>
+      </ng-container>
+
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumno"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumno;"
+        (click)="selection.toggle(row)">
+    </tr>
+  </table>
+</form>
+
+<!-- /////////////////////////////////////////// TABLA PARA ASIGNAR CROMOS EQUIPOS //////////////////////////////////////////////////// -->
+<form *ngIf="equiposDelJuego" style="width: 100%" >
+
+    <mat-form-field style = "width: 60%; margin-left: 20%; ">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
+        <i class="material-icons" matSuffix>search</i>
+      </mat-form-field>
+
+
+
+  <table align="center" mat-table [dataSource]="dataSource" class="example-container mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+          <mat-checkbox
+                            (change)="$event ? MasterToggle() : null; ActualizarBotonTabla ();"
+                            [checked]="selection.hasValue() && IsAllSelected()"
+                            [indeterminate]="selection.hasValue() && !IsAllSelected()">
+
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row;">
+          <mat-checkbox
+
+                            (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null; ActualizarBotonTabla ();"
+                            [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+
+        </td>
+      </ng-container>
+
+    <!-- Nombre Alumno Column -->
+    <ng-container matColumnDef="nombreEquipo">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+      <td mat-cell *matCellDef="let equipo">
+
+            <div *ngIf = "equipoElegido &&
+                          equipo.Nombre === equipoElegido.Nombre"
+                          style = "color:green;font-weight: bold; font-size: 150%;">{{equipo.Nombre}} </div>
+            <div *ngIf = "equipoElegido === undefined ||
+                          equipo.Nombre !== equipoElegido.Nombre"
+                          style = "color:black">{{equipo.Nombre}} </div>
+
+      </td>
+    </ng-container>
+
+
+    <!-- Miembros Column -->
+    <ng-container matColumnDef="miembros">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 18%"> Miembros </th>
+      <td mat-cell *matCellDef="let equipo"><button mat-icon-button matTooltip="Ver miembros de {{equipo.nombre}}" color="primary"
+        [mdePopoverTriggerFor]="appPopover" (click) = "AlumnosDelEquipo(equipo)"
+        mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+        <i class="material-icons">group</i>
+      </button>
+
+      <mde-popover #appPopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+          <mat-card style="max-width: 300px">
+            <mat-card-content>
+              <mat-list>
+                <mat-list-item *ngFor="let alumno of alumnosEquipo">
+                  <!-- <mat-icon mat-list-icon>folder</mat-icon> -->
+                  <p class="md-body-1" mat-line>{{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</p>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-content>
+          </mat-card>
+      </mde-popover>
+
+    </td>
+    </ng-container>
+
+    <ng-container matColumnDef="info">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"></th>
+      <td mat-cell *matCellDef="let equipo">
+          <button (click) = "AccederEquipo(equipo)" routerLink = "informacionEquipoJuegoColeccion" mat-icon-button matTooltip="Ver progreso de {{equipo.nombre}} en el juego">
+              <i class="material-icons">more_horiz</i>
+          </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef=" ">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> </th>
+        <td mat-cell   *matCellDef="let equipo; ">
+              <div *ngIf = "primerEquipo && cromosParaPrimero > 0 &&
+                            equipo.Nombre === primerEquipo.Nombre"
+                            style = "color:green;font-weight: bold; font-size: 150%;">{{cromosParaPrimero}} cromos más </div>
+              <div *ngIf = "segundoEquipo && cromosParaSegundo > 0 &&
+                            equipo.Nombre === segundoEquipo.Nombre"
+                            style = "color:green;font-weight: bold; font-size: 150%;">{{cromosParaSegundo}} cromos más </div>
+              <div *ngIf = "tercerEquipo && cromosParaTercero > 0 &&
+                            equipo.Nombre === tercerEquipo.Nombre"
+                            style = "color:green;font-weight: bold; font-size: 150%;">{{cromosParaTercero}} cromos más </div>
+
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsEquipos; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsEquipos;"></tr>
+
+  </table>
+</form>
+<br>
+<button type="button" class="btn Back" (click)="goBack()">Volver </button>
+</div>
+</div>
+
+

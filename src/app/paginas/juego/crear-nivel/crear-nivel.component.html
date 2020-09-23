@@ -1,0 +1,94 @@
+
+<div class="contenedor">
+<mat-card class="panel">
+
+    <mat-card-header>
+      <mat-card-title>Crear nuevo nivel</mat-card-title>
+      <mat-card-subtitle>Introduce los parámetros</mat-card-subtitle>
+    </mat-card-header>
+
+
+
+    <mat-card-content>
+      <div class="form-group">
+          <label for="inputNombreNivel">Nombre</label>
+          <input (keyup)="Disabled()" type="text" id="inputNombreNivel" class="form-control" requiered [(ngModel)]="nombreNivel" placeholder="Escribe el nombre del nivel">
+      </div>
+
+      <div class="form-group">
+          <label for="inputPuntosAlcanzar">Puntos a alcanzar</label>
+          <input (keyup)= "Disabled()" type="number" id="inputPuntosAlcanzar" class="form-control" requiered [(ngModel)]="puntosAlcanzar" placeholder="Escribe los puntos para alcanzar el nivel">
+      </div>
+
+      <div class="form-group">
+        <label for="textareaPrivilegio">Descripción</label>
+        <textarea (keyup)="Disabled()" class="form-control" id="textareaPrivilegio" requiered [(ngModel)]="privilegiosDelNivel" placeholder="Escribe los privilegios del nivel" rows="4"></textarea>
+      </div>
+    </mat-card-content>
+
+    <div>
+        <input #file id = "input" type="file" accept= 'image/*' (change)="ExaminarImagen($event)" style="display:none">
+        <img class = "foto" *ngIf="logo" hight = "100" width = "100" mat-card-image [src]="logo"  style="margin: 5px" >
+        <button (click) = "ActivarInput()" type="button" class="btn Agregar">
+          Agregar foto<i class="material-icons">add_photo_alternate</i>
+
+        </button>
+    </div>
+
+    <mat-card-actions align="end">
+      <button  (click) = "LimpiarCampos()" type="button" class="btn Back">Limpiar Campos</button>
+      <button  (click) = "CrearNivel()" [disabled]="isDisabledNivel" class="btn Aceptar" >Crear Nivel</button>
+      <!-- <button  (click) = "GuardarNiveles()" [disabled]="niveles.length === 0" class="btn Aceptar" >Guardar Niveles</button> -->
+
+    </mat-card-actions>
+
+  </mat-card>
+
+    <!-- TABLA DE INSIGNIAS CREADAS -->
+    <form *ngIf="nivelAgregados[0]">
+
+      <div style="margin: 15px">
+        <p>
+          <span style="font-weight: bold;">Niveles creados:</span>
+        </p>
+      </div>
+
+      <table style=" width: 100%;table-layout:fixed;" align="center" mat-table [dataSource]="nivelAgregados" class="example-container mat-elevation-z8">
+
+      <!--- Note that these columns can be defined in any order.
+      The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Nombre Punto Column -->
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 25%"> Nombre </th>
+          <td mat-cell *matCellDef="let nivel"> {{nivel.Nombre}} </td>
+        </ng-container>
+
+        <!-- Nombre Punto Column -->
+        <ng-container matColumnDef="puntosAlcanzar">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 25%"> Puntos a alcanzar </th>
+          <td mat-cell *matCellDef="let nivel"> {{nivel.PuntosAlcanzar}} </td>
+        </ng-container>
+
+        <!-- Descripcion Punto Column -->
+        <ng-container matColumnDef="privilegiosDelNivel">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 40%"> Privilegios del nivel </th>
+          <td mat-cell *matCellDef="let nivel"> {{nivel.PrivilegiosDelNivel}} </td>
+        </ng-container>
+
+        <!-- Delete Column -->
+        <ng-container matColumnDef=" ">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+          <td mat-cell *matCellDef="let nivel">
+            <button (click) = "BorrarNivel(nivel)" mat-icon-button matTooltip="Borrar el nivel {{nivel.Nombre}}">
+              <i class="material-icons red md-36">delete</i>
+            </button>
+          </td>
+        </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </form>
+</div>
+

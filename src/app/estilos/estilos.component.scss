@@ -1,0 +1,171 @@
+// TITULOS
+.titulo{
+  width: 70%;
+  margin-left: 15%;
+  height: 60px;
+  padding: 10px;
+  color: rgb(63, 81, 181);
+  font-size: 2.5rem !important;
+  font-weight: bold;
+}
+
+.subtitulo{
+  width: 70%;
+  margin-left: 15%;
+  height: 45px;
+  padding: 10px;
+  color: rgb(63, 81, 181);
+  font-size: 1.5rem !important;
+}
+
+.lineaDivisoria{
+  width: 70%;
+  margin-left : 15% !important;
+}
+
+// BOTONES
+.btn{
+  margin: 5px;
+  align-items: center;
+  color: white;
+  width: 170px;
+}
+
+.btn:hover {
+  text-decoration:underline !important;
+  color: black !important;
+}
+
+    // Colores de los botones
+.btn.Agregar{
+ background-color: rgb(65, 178, 212);
+}
+.btn.Info{
+  background-color: rgb(240, 173, 78);
+}
+.btn.Back{
+  background-color: rgb(240, 173, 78);
+}
+.btn.Aceptar{
+  background-color: rgb(92, 184, 92);
+}
+
+.btn.Eliminar{
+  background-color: rgb(212, 57, 52);
+}
+.btn.Editar{
+  background-color: rgb(65, 178, 212);
+}
+.btn.Next{
+  background-color: rgb(51, 122, 183);
+}
+.btn.PasarLista{
+  background-color: rgb(240, 173, 78);
+}
+.btn.Juegos{
+  background-color: rgb(51, 122, 183);
+}
+.btn.Equipos{
+  background-color: rgb(92, 184, 92);
+}
+
+.botonCentrado {
+  width: 20%;
+  margin-left: 40%;
+  height: auto;
+  background-color:transparent;
+  text-align: center;
+  align-items: center;
+  }
+
+.material-icons{
+  width: 15px;
+  height: 15px;
+}
+
+
+//CONTENEDORES
+
+.contenedor{
+
+  width: 70%;
+  margin-left: 15%;
+  height: auto;
+  padding: 10px;
+  border: 10px solid transparent;
+  background-color: transparent;
+
+}
+
+.enFila{
+
+  border: 10px solid transparent;
+
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: space-between;
+}
+.enColumna{
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  justify-content: left ;
+  flex-direction: column;
+  // align-items: flex-start;
+  border: solid transparent;
+
+}
+
+
+table {
+  width: 100%;
+}
+
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+mat-form-field {
+  margin-right: 12px;
+}
+
+.panel{
+
+  background-color: rgb(63, 81, 181);
+  margin: 40px;
+  width: 90%;
+}
+.example-container {
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  table-layout:fixed;
+  text-align: center;
+}
+
+.material-icons.red { color: rgb(228, 8, 8); }
+
+.material-icons.md-36 { font-size: 36px; }
+
+.foto {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.logo {
+  width: 130px;
+  height: 130px;
+  max-width: 130px;
+  max-height: 130px;
+}
