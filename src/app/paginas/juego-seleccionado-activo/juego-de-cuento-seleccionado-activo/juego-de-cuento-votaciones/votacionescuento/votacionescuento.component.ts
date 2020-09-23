@@ -1,5 +1,4 @@
 import { Component, ConstructorSansProvider, OnInit } from '@angular/core';
-
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
