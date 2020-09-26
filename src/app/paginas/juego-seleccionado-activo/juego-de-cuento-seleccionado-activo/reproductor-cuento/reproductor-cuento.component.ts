@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SesionClase } from 'src/app/clases';
+import { SesionClase, TablaHistorialPuntosAlumno } from 'src/app/clases';
 import { PeticionesAPIService, SesionService } from 'src/app/servicios';
 import { Router } from '@angular/router';
 
@@ -25,7 +25,16 @@ fotoPosicion: any = 0;
 fotoToShow: any = '../../../../../assets/reproductor/negro.png';
 intervalId;
 
+listaAudios: any = [];
+tipoAudio: any = "frame";
+audioFrame: any;
 
+listaFondosAudio: any = [];
+
+showButtonAudioFrame: any = false;
+showButtonFondoFrame: any = false;
+
+url = 'http://localhost:3000/api/imagenes/';
   ngOnInit() {
 
     this.idLibro = this.sesion.getIdLibro();
@@ -54,6 +63,25 @@ intervalId;
       .subscribe(res => {
         console.log(res);
 
+        if(res.tipoAudio == "frame")
+     {
+        this.showButtonAudioFrame = true;
+     }
+     else if (res.tipoAudio != "frame")
+     {
+        if(res.urlAudioFondo != "no")
+        {
+          var audio =  this.url + this.libro.titulo + "/download/" + res.urlAudioFondo;
+
+          this.listaFondosAudio.push(audio);
+          this.showButtonFondoFrame = true;
+        }
+        else(res.urlAudioFondo == "no")
+        {
+          this.listaFondosAudio.push("");
+        }
+     }
+
         res.forEach(element => {
           this.listaEscenas.push(element);
           this.tiempo = element.duracionFrame;
@@ -69,13 +97,21 @@ intervalId;
     this.listaEscenas.forEach(element => {
       var id = element.id;
 
+
+     
       this.peticionesAPI.getFramesByEscenaId(id)
         .subscribe(res => {
           var lista = [];
           console.log(res);
-
+     
+  
           res.forEach(element => {
             lista.push(element);
+            if(this.showButtonAudioFrame == true)
+            {
+              var audio =  this.url + this.libro.titulo + "/download/" + element.audioUrl;
+              this.listaAudios.push(audio);
+            }
           });
           this.obtenerFrames(lista);
         });
@@ -122,9 +158,11 @@ play()
   this.intervalId = setInterval(() =>
   {
     this.fotoToShow = this.listaFotos[this.fotoPosicion];
+    this.audioFrame = this.listaAudios[this.fotoPosicion];
     if(this.fotoPosicion < this.listaFotos.length)
     {
     this.fotoPosicion = this.fotoPosicion + 1;
+    
     }
     else {
       this.fotoPosicion = 0;
@@ -153,6 +191,7 @@ fotoIzquierda()
   if(this.fotoPosicion != -1)
   {
     this.fotoToShow = this.listaFotos[this.fotoPosicion];
+    this.audioFrame = this.listaAudios[this.fotoPosicion];
     this.fotoPosicion = this.fotoPosicion - 1;
 
   }
@@ -174,6 +213,8 @@ fotoDerecha()
   if(this.fotoPosicion != this.listaFotos.length)
   {
     this.fotoToShow = this.listaFotos[this.fotoPosicion];
+    this.audioFrame = this.listaAudios[this.fotoPosicion];
+
     this.fotoPosicion = this.fotoPosicion + 1;
 
   }
