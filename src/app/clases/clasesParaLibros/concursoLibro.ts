@@ -12,7 +12,8 @@ export class concursoLibro {
     listaLibrosParticipantes: any;
     peso1: any;
     peso2: any;
-    peso3: any
+    peso3: any;
+    acabado: boolean;
 
     constructor(concursoTematica?: any, dateFinInscripcion?: any, tipo?:any, dateFinVotacion?:any,  concursoRequisitos?:any,  concursoPrimerCriterio?:any, concursoSegundoCriterio?: any,
         concursoTercerCriterio?: any ) {

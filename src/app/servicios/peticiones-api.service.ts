@@ -99,7 +99,7 @@ export class PeticionesAPIService {
 
   private APIurlImagenesLibros = this.host + ':3000/api/imagenes';
   private APIurlRecursosLibros = this.host + ':3000/api/recursosLibros';
-  private APIUrlConcursoLibros = this.host + '3000/api/juegodelibro';    
+  private APIUrlConcursoLibros = this.host + ':3000/api/juegoLibroConcursos';    
   private urlalumnojuego = this.host + ':3000/api/alumnojuegodecuento';
   private urllibro = this.host + ':3000/api/libro';
   private urlParaEscena = this.host + ':3000/api/escenas';
@@ -1245,5 +1245,12 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
     return this.http.get<any>(this.APIUrlJuegodeLibro + '/' + idjuegoLibro + '/juegoLibroConcurso');
 
 }
+
+public modificarConcurso(id, concurso): Observable<any> {
+  return this.http.put<any>(this.APIUrlConcursoLibros+ '/' + id, concurso);
+}
+
+
+
 
 }

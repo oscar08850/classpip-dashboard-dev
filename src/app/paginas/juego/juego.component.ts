@@ -649,12 +649,7 @@ export class JuegoComponent implements OnInit {
     juego.criterioprivilegio1 = this.myForm.value.criterioprivilegio1;
     juego.criterioprivilegio2 = this.myForm.value.criterioprivilegio2;
     juego.criterioprivilegio3 = this.myForm.value.criterioprivilegio3;
-    if (this.inscribirtemporada == '1') {
-
-    }
-    if (this.inscribirtemporada == '2') {
-
-    }
+    
 
     this.peticionesAPI.crearjuegolibro(juego, this.grupo.id)
       .subscribe(juego => {
@@ -723,7 +718,7 @@ export class JuegoComponent implements OnInit {
   }
 
   crearConcurso(idLibro: any) {
-
+    this.concursoLibro.acabado = false;
     this.peticionesAPI.crearConcurso(idLibro, this.concursoLibro)
       .subscribe((res) => {
         this.siConcurso = false;
