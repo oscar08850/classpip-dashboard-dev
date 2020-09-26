@@ -11,9 +11,12 @@ import {
   TablaAlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeLibro
 } from '../../../../../clases/index';
 
-
+import { FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Libro } from 'src/app/clases/Libro';
+import { Console } from 'console';
+
+
 
 
 
@@ -25,6 +28,8 @@ import { Libro } from 'src/app/clases/Libro';
 
 export class VotacionescuentoComponent implements OnInit {
 
+  myform : FormGroup;
+  ganador;
   muestralista:  Libro[] = [];
   juegoSeleccionado: any;
   grupoid;
@@ -33,9 +38,18 @@ export class VotacionescuentoComponent implements OnInit {
   displayedColumns: string[] = ['titulo', 'autor', 'criterio1', 'criterio2', 'criterio3', 'criteriototal'];
   datasourcelibros;
   concurso: concursoLibro;
+  primerpuesto;
+  segundopuesto;
+  tercerpuesto;
 
 
+  ganadorform = new FormGroup({ 
 
+      g1: new FormControl(),
+      g2: new FormControl(),
+      g3: new FormControl()
+
+    });
 
   constructor(public dialog: MatDialog,
     private sesion: SesionService,
@@ -152,11 +166,39 @@ export class VotacionescuentoComponent implements OnInit {
   }
 
 
+  guardar(){
 
+this.primerpuesto = this.ganadorform.value.g1;
+this.segundopuesto = this.ganadorform.value.g2;
+this.tercerpuesto = this.ganadorform.value.g3;
+
+
+if ( this.primerpuesto == this.segundopuesto  ||  this.primerpuesto == this.tercerpuesto ){
+
+ console.log("selecciona un libro diferente para cada puesto");
+ Swal.fire('Alerta', 'Selecciona un libro diferente para cada puesto', 'warning');
+}
+
+
+if  ( this.primerpuesto == this.segundopuesto  ||  this.segundopuesto == this.tercerpuesto ){
+
+  console.log("selecciona un libro diferente para cada puesto");
+  Swal.fire('Alerta', 'Selecciona un libro diferente para cada puesto', 'warning');
+ }
+
+ else  {
+
+  this.acabarconcurso();
+ }
+
+  }
 
 
   acabarconcurso() {
 
+    this.concurso.primerpuesto = this.primerpuesto;
+    this.concurso.segundopuesto = this.segundopuesto;
+    this.concurso.tercerpuesto = this.tercerpuesto;
     this.concurso.acabado = true;
 
     this.peticionesAPI.modificarConcurso(this.concurso.id, this.concurso)
@@ -165,6 +207,9 @@ export class VotacionescuentoComponent implements OnInit {
       console.log(res);
 
       } );
+
+
+
 }
 
 

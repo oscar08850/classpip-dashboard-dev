@@ -14,9 +14,13 @@ export class concursoLibro {
     peso2: any;
     peso3: any;
     acabado: boolean;
+    primerpuesto: any;
+    segundopuesto: any;
+    tercerpuesto: any;
+
 
     constructor(concursoTematica?: any, dateFinInscripcion?: any, tipo?:any, dateFinVotacion?:any,  concursoRequisitos?:any,  concursoPrimerCriterio?:any, concursoSegundoCriterio?: any,
-        concursoTercerCriterio?: any ) {
+        concursoTercerCriterio?: any) {
   
       this.concursoTematica = concursoTematica;
       this.dateFinInscripcion = dateFinInscripcion;
@@ -25,6 +29,7 @@ export class concursoLibro {
       this.concursoPrimerCriterio = concursoPrimerCriterio;
       this.concursoSegundoCriterio = concursoSegundoCriterio;
       this.concursoTercerCriterio = concursoTercerCriterio;
+;
     }
   }
   

@@ -18,7 +18,7 @@ export class Libro {
   resumen:any;
   titulo: any;
   autor: any;
-
+  
   constructor() {
 
   }

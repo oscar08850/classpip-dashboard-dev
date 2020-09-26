@@ -2,7 +2,7 @@
   votacionescuento works!
 </p>
 
-<form style="width: 100%" *ngIf="juegoSeleccionado.Modo === 'Individual'">
+<form [formGroup]="myForm" style="width: 100%" *ngIf="juegoSeleccionado.Modo === 'Individual'">
 
   <table style="width: 50%" align="center" mat-table [dataSource]="datasourcelibros"
     class="example-container mat-elevation-z8">
@@ -60,31 +60,53 @@
 
     <h3 align="center">Elegir ganadores  </h3>
 
-<mat-card align="center">
-    <mat-form-field  style="width: 80%"  margin= "30px" align="center">
+
+
+    <!-- <mat-form-field c1="fill">
       <mat-label>Primer puesto</mat-label>
-      <select matNativeControl [(ngModel)]="ganador"  (change) = "Seleccionaganador()">
+      <select matNativeControl required  formControlName="c1">
+        <option *ngFor="let libro of listaLibros"  [value]="libro.titulo">{{libro.titulo}}</option>
+      </select>
+    </mat-form-field>
+     -->
+
+<!-- 
+  
+<mat-card align="center">
+    <mat-form-field  style="width: 60%"  margin= "30px" align="center">
+      <mat-label>Primer puesto</mat-label>
+      <select matNativeControl [(ngModel)]="ganador"  (selectionChange) = "Seleccionaganador($event)">
         <option *ngFor="let libro of listaLibros; index as i " [value]="libro.titulo">
 
           <p>{{libro.titulo}}</p>
       
         </option>
       </select>
-    </mat-form-field>
+    </mat-form-field> -->
 
-    <mat-form-field  style="width: 80%"  margin= "30px" align="center">
+    <!-- <mat-form-field>
       <mat-label>Segundo puesto</mat-label>
-      <select matNativeControl [(ngModel)]="ganador"  (change) = "Seleccionaganador2()">
-        <option *ngFor="let libro of listaLibros; index as i " [value]="libro.titulo">
-
-          <p>{{libro.titulo}}</p>
-      
-        </option>
-      </select>
+        <mat-select (selectionChange)="selectOpt($event)" required formControlName="country">
+        <mat-option *ngFor="let libro of listaLibros" [value]="libro.titulo" >
+          {{libro.titulo}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
-    <mat-form-field  style="width: 80%"  margin= "30px" align="center">
+ -->
+<!-- 
+ <mat-form-field c1="fill">
+  <mat-label>Peso del primer criterio</mat-label>
+  <select matNativeControl required  formControlName="c1">
+    <option value="1">1</option>
+    <option value="1.5">1.5</option>
+    <option value="2">2</option>
+  </select>
+</mat-form-field> -->
+<!-- 
+
+    <mat-form-field  style="width: 60%"  margin= "30px" align="center">
       <mat-label>Tercer puesto</mat-label>
-      <select matNativeControl [(ngModel)]="ganador"  (change) = "Seleccionaganador3()">
+      <select matNativeControl [(ngModel)]="ganador3"  (selectionChange) = "Seleccionaganador3()">
         <option *ngFor="let libro of listaLibros; index as i " [value]="libro.titulo">
 
           <p>{{libro.titulo}}</p>
@@ -93,10 +115,38 @@
       </select>
     </mat-form-field>
 
-  </mat-card>
+  </mat-card> -->
     
 
-    <button type="button" class="btn Info" (click)="acabarconcurso()">Finalizar concurso<i class="material-icons"></i></button>
-
+   
 
 </form>
+
+<div [formGroup]="ganadorform">
+
+
+   <mat-form-field g1="fill">
+      <mat-label>Primer puesto</mat-label>
+      <select matNativeControl required  formControlName="g1">
+        <option *ngFor="let libro of listaLibros"  [value]="libro.titulo">{{libro.titulo}}</option>
+      </select>
+    </mat-form-field>
+
+    <mat-form-field g2="fill">
+      <mat-label>Segundo puesto</mat-label>
+      <select matNativeControl required  formControlName="g2">
+        <option *ngFor="let libro of listaLibros"  [value]="libro.titulo">{{libro.titulo}}</option>
+      </select>
+    </mat-form-field>
+
+    <mat-form-field g3="fill">
+      <mat-label>Tercer puesto</mat-label>
+      <select matNativeControl required  formControlName="g3">
+        <option *ngFor="let libro of listaLibros"  [value]="libro.titulo">{{libro.titulo}}</option>
+      </select>
+    </mat-form-field>
+
+
+</div>
+
+<button type="button" class="btn Info" (click)="guardar()">Finalizar concurso<i class="material-icons"></i></button>
