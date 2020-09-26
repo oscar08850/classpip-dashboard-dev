@@ -36,6 +36,14 @@
     <div class="col" (click)="fotoDerecha()">
       <img src='../../../../../assets/reproductor/derecha.png' />
     </div>
-   
+
   </div>
+
+  <div>
+    <audio controls autoplay src = {{audioFrame}} *ngIf = 'showButtonAudioFrame' style="margin-bottom: 20%">   </audio>
+  </div>
+  <div>
+    <audio controls autoplay src = {{audioFrame}} *ngIf = 'showButtonFondoFrame' style="margin-bottom: 20%">   </audio>
+  </div>
+
 </div>
