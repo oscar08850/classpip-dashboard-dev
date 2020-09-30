@@ -10,14 +10,22 @@ import * as URL from '../URLs/urls';
 })
 export class ComServerService {
 
+  notificacionconectar = 'dash conectado';
   private socket;
-
+  private url = 'http://localhost:8080';
   constructor() {
   }
+
+  
   public Conectar() {
-    this.socket = io(URL.Servidor);
-    this.socket.emit ('dash');
+    this.socket = io(this.url);
+    this.socket.emit ('dash', this.notificacionconectar);
+
+    // this.socket = io(URL.Servidor);
+    // this.socket.emit ('dash');
   }
+ 
+ 
 
   public EsperoRespuestasJuegoDeCuestionario (): any {
     return Observable.create((observer) => {
@@ -56,16 +64,18 @@ export class ComServerService {
         });
     });
   }
-
+/////////////este es el mio///////////////////
+/////////////este es el mio///////////////////
+/////////////este es el mio///////////////////
   public Esperovotacionconcurso (): any   {
     return Observable.create((observer) => {
-        this.socket.on('notificacionvotar', (notificacionvotar) => {
+        this.socket.on('notificacionvotardash', (notificacionvotardash) => {
             console.log ('ha llegado la notificación de votar llega notificacion');
-            observer.next(notificacionvotar);
+            observer.next(notificacionvotardash);
         });
     });
   }
-
+/////////////este ya no es el mio///////////////////
   public EnviarNotificacionIndividual(alumnoDestinatarioId: number, mensajeAEnviar: string) {
     console.log ('dentro del servicio para enviar notificación al alumno');
     this.socket.emit ('notificacionIndividual' , {alumnoId: alumnoDestinatarioId, mensaje: mensajeAEnviar});

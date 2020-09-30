@@ -38,8 +38,8 @@ export class AppComponent  {
     ngOnInit()
     {
 
-      this.nombre ="Miguel";
-      this.apellido = "Valero";
+      // this.nombre ="Miguel";
+      // this.apellido = "Valero";
       this.Autentificar();
 
       
