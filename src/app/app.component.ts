@@ -112,8 +112,8 @@ export class AppComponent  {
           this.PruebaObservables();
           // Envio el profesor a la sesión
           this.sesion.TomaProfesor(this.profesor);
-          this.comServer.Conectar();
-          console.log("ESTOY CONECTANDOME DESDE EL DASHBOARD")
+          // this.comServer.Conectar();
+          // console.log("ESTOY CONECTANDOME DESDE EL DASHBOARD")
 
           // En principio, no seria necesario enviar el id del profesor porque ya
           // tengo el profesor en la sesión y puedo recuperarlo cuando quiera.

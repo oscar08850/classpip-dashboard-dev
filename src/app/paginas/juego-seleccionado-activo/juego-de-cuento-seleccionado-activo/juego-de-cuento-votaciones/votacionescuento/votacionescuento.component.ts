@@ -66,6 +66,10 @@ export class VotacionescuentoComponent implements OnInit {
     this.grupoid = this.sesion.DameGrupo();
     this.obtenerlibrosconcurso();
 
+
+    this.comServerService.Conectar();
+    console.log("ESTOY CONECTANDOME DESDE EL DASHBOARD");
+
     this.comServerService.Esperovotacionconcurso()
       .subscribe((res: any) => {
 
@@ -77,10 +81,10 @@ export class VotacionescuentoComponent implements OnInit {
   }
   obtenerlibrosconcurso() {
 
-
+    this.listainscritos = [];
     this.peticionesAPI.dameConcurso(this.juegoSeleccionado.id)
       .subscribe(res => {
-        this.listainscritos = [];
+     
 
         res.forEach(element => {
           this.concurso = element;
@@ -104,7 +108,7 @@ export class VotacionescuentoComponent implements OnInit {
 
     this.listainscritos.forEach(element => {
 
-
+      this.listaLibros = [];
       this.peticionesAPI.dameunlibro(element)
         .subscribe((res) => {
 
