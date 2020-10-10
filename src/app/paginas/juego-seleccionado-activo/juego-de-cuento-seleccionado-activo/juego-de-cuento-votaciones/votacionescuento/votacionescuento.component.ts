@@ -11,7 +11,7 @@ import {
   TablaAlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeLibro
 } from '../../../../../clases/index';
 
-import { FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Libro } from 'src/app/clases/Libro';
 import { Console } from 'console';
@@ -28,12 +28,12 @@ import { Console } from 'console';
 
 export class VotacionescuentoComponent implements OnInit {
 
-  myform : FormGroup;
+  myform: FormGroup;
   ganador;
-  muestralista:  Libro[] = [];
+  muestralista: Libro[] = [];
   juegoSeleccionado: any;
   grupoid;
-  listainscritos: any = [];
+  listainscritos: any = [];x
   listaLibros: Libro[] = [];
   displayedColumns: string[] = ['titulo', 'autor', 'criterio1', 'criterio2', 'criterio3', 'criteriototal'];
   datasourcelibros;
@@ -43,13 +43,13 @@ export class VotacionescuentoComponent implements OnInit {
   tercerpuesto;
 
 
-  ganadorform = new FormGroup({ 
+  ganadorform = new FormGroup({
 
-      g1: new FormControl(),
-      g2: new FormControl(),
-      g3: new FormControl()
+    g1: new FormControl(),
+    g2: new FormControl(),
+    g3: new FormControl()
 
-    });
+  });
 
   constructor(public dialog: MatDialog,
     private sesion: SesionService,
@@ -84,7 +84,7 @@ export class VotacionescuentoComponent implements OnInit {
     this.listainscritos = [];
     this.peticionesAPI.dameConcurso(this.juegoSeleccionado.id)
       .subscribe(res => {
-     
+
 
         res.forEach(element => {
           this.concurso = element;
@@ -149,7 +149,7 @@ export class VotacionescuentoComponent implements OnInit {
     this.muestralista = [];
     console.log(this.listaLibros);
 
-    this.muestralista = this.listaLibros; 
+    this.muestralista = this.listaLibros;
 
     this.muestralista.reverse();
     console.log(this.muestralista);
@@ -170,30 +170,30 @@ export class VotacionescuentoComponent implements OnInit {
   }
 
 
-  guardar(){
+  guardar() {
 
-this.primerpuesto = this.ganadorform.value.g1;
-this.segundopuesto = this.ganadorform.value.g2;
-this.tercerpuesto = this.ganadorform.value.g3;
-
-
-if ( this.primerpuesto == this.segundopuesto  ||  this.primerpuesto == this.tercerpuesto ){
-
- console.log("selecciona un libro diferente para cada puesto");
- Swal.fire('Alerta', 'Selecciona un libro diferente para cada puesto', 'warning');
-}
+    this.primerpuesto = this.ganadorform.value.g1;
+    this.segundopuesto = this.ganadorform.value.g2;
+    this.tercerpuesto = this.ganadorform.value.g3;
 
 
-if  ( this.primerpuesto == this.segundopuesto  ||  this.segundopuesto == this.tercerpuesto ){
+    if (this.primerpuesto == this.segundopuesto || this.primerpuesto == this.tercerpuesto) {
 
-  console.log("selecciona un libro diferente para cada puesto");
-  Swal.fire('Alerta', 'Selecciona un libro diferente para cada puesto', 'warning');
- }
+      console.log("selecciona un libro diferente para cada puesto");
+      Swal.fire('Alerta', 'Selecciona un libro diferente para cada puesto', 'warning');
+    }
 
- else  {
 
-  this.acabarconcurso();
- }
+    if (this.primerpuesto == this.segundopuesto || this.segundopuesto == this.tercerpuesto) {
+
+      console.log("selecciona un libro diferente para cada puesto");
+      Swal.fire('Alerta', 'Selecciona un libro diferente para cada puesto', 'warning');
+    }
+
+    else {
+
+      this.acabarconcurso();
+    }
 
   }
 
@@ -207,14 +207,14 @@ if  ( this.primerpuesto == this.segundopuesto  ||  this.segundopuesto == this.te
 
     this.peticionesAPI.modificarConcurso(this.concurso.id, this.concurso)
       .subscribe(res => {
-  
-      console.log(res);
 
-      } );
+        console.log(res);
+
+      });
 
 
 
-}
+  }
 
 
 

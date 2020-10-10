@@ -30,6 +30,9 @@ tipoAudio: any = "frame";
 audioFrame: any;
 
 listaFondosAudio: any = [];
+listaTextos: any[] = [];
+
+textoFrame: any = "";
 
 showButtonAudioFrame: any = false;
 showButtonFondoFrame: any = false;
@@ -138,7 +141,7 @@ url = 'http://localhost:3000/api/imagenes/';
 
             this.fotoimagen = reader.result.toString();
             this.listaFotos.push(this.fotoimagen);
-
+            this.listaTextos.push(element.textos);
 
           }, false);
 
@@ -159,6 +162,7 @@ play()
   {
     this.fotoToShow = this.listaFotos[this.fotoPosicion];
     this.audioFrame = this.listaAudios[this.fotoPosicion];
+    this.textoFrame = this.listaTextos[this.fotoPosicion];
     if(this.fotoPosicion < this.listaFotos.length)
     {
     this.fotoPosicion = this.fotoPosicion + 1;
@@ -167,6 +171,8 @@ play()
     else {
       this.fotoPosicion = 0;
       this.fotoToShow = this.listaFotos[this.fotoPosicion];
+      this.textoFrame = this.listaTextos[this.fotoPosicion];
+
     }
 
   }, 2000);
@@ -192,6 +198,8 @@ fotoIzquierda()
   {
     this.fotoToShow = this.listaFotos[this.fotoPosicion];
     this.audioFrame = this.listaAudios[this.fotoPosicion];
+    this.textoFrame = this.listaTextos[this.fotoPosicion];
+
     this.fotoPosicion = this.fotoPosicion - 1;
 
   }
@@ -214,6 +222,8 @@ fotoDerecha()
   {
     this.fotoToShow = this.listaFotos[this.fotoPosicion];
     this.audioFrame = this.listaAudios[this.fotoPosicion];
+    this.textoFrame = this.listaTextos[this.fotoPosicion];
+
 
     this.fotoPosicion = this.fotoPosicion + 1;
 
