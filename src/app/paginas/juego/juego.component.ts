@@ -18,7 +18,8 @@ import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFo
           AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
           EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable,
           JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
-          JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno } from '../../clases/index';
+          JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, CuestionarioSatisfaccion,
+          JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion } from '../../clases/index';
 
 
 // Services
@@ -105,6 +106,7 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Cuestionario', color: 'accent'},
     {nombre: 'Juego De Geocaching', color: 'warn'},
     {nombre: 'Juego De Votación', color: 'primary'},
+    {nombre: 'Juego De Cuestionario de Satisfacción', color: 'accent'},
   ];
   seleccionModoJuego: ChipColor[] = [
     {nombre: 'Individual', color: 'primary'},
@@ -201,6 +203,11 @@ export class JuegoComponent implements OnInit {
   conceptosAsignados = false;
   displayedColumnsConceptos: string[] = ['nombreConcepto', 'pesoConcepto', ' '];
 
+
+  // Información para el juego de cuestionario de satisfacción
+  cuestionarioSatisfaccion: CuestionarioSatisfaccion;
+  tengoCuestionarioSatisfaccion = false;
+  descripcionCuestionarioSatisfaccion: string;
 
 
   final = false;
@@ -385,8 +392,14 @@ export class JuegoComponent implements OnInit {
     console.log(' tengo tipo ' + this.tipoDeJuegoSeleccionado);
     if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuestionario') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de cuestionario en equipo', 'warning');
-    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Avatares') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Avatar') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de avatares en equipo', 'warning');
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Geocaching') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+      Swal.fire('Alerta', 'Aún no es posible el juego de geocaching en equipo', 'warning');
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Votación') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+      Swal.fire('Alerta', 'Aún no es posible el juego de votación en equipo', 'warning');
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuestionario de Satisfacción') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+      Swal.fire('Alerta', 'No existe el juego de cuestionario de satisfacción en equipo', 'warning');
     } else {
       if (this.modoDeJuegoSeleccionado === 'Individual') {
         if (this.alumnosGrupo === undefined) {
@@ -1140,6 +1153,67 @@ CrearJuegoDeVotacionTodosAUno() {
   });
 }
 
+
+///////////////// FUNCIONES PARA CREAR JUEGO DE CUESTIONARIO DE SATISFACCION /////////////
+
+RecibeCuestionarioSatisfaccionElegido($event) {
+  this.cuestionarioSatisfaccion = $event;
+  this.tengoCuestionarioSatisfaccion = true;
+  console.log ('tengo cuestionario: ' + this.cuestionarioSatisfaccion.Titulo);
+}
+GuardaDescripcionCuestionarioSatisfaccion(ev) {
+  this.cuestionarioSatisfaccion.Descripcion = ev.target.value;
+}
+
+CrearJuegoDeCuestionarioDeSatisfaccion() {
+  console.log ('voy a crear el juego');
+  console.log ('cuestionario: ' + this.cuestionarioSatisfaccion.Titulo);
+  console.log ('Descripcion: ' + this.cuestionarioSatisfaccion.Descripcion);
+  const juegoDeCuestionarioSatisfaccion = new JuegoDeCuestionarioSatisfaccion (
+    this.nombreDelJuego,
+    this.tipoDeJuegoSeleccionado,
+    this.cuestionarioSatisfaccion.Descripcion,
+    true,
+    false,
+    this.profesorId,
+    this.grupo.id,
+    this.cuestionarioSatisfaccion.id);
+
+  console.log ('voy a crear juego');
+  console.log (juegoDeCuestionarioSatisfaccion);
+  this.peticionesAPI.CreaJuegoDeCuestionarioSatisfaccion (juegoDeCuestionarioSatisfaccion, this.grupo.id)
+  .subscribe (juegoCreado => {
+    this.juego = juegoCreado;
+    this.sesion.TomaJuego(this.juego);
+    this.juegoCreado = true;
+
+    if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.alumnosGrupo.length; i++) {
+        // tslint:disable-next-line:max-line-length
+        this.peticionesAPI.InscribeAlumnoJuegoDeCuestionarioSatisfaccion (
+            new AlumnoJuegoDeCuestionarioSatisfaccion(false, this.juego.id, this.alumnosGrupo[i].id))
+        .subscribe();
+      }
+    }
+
+    Swal.fire('Juego de cuestionario de satisfacción creado correctamente', ' ', 'success');
+
+    // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+    if (this.juegosActivos === undefined) {
+    // Si la lista aun no se ha creado no podre hacer el push
+            this.juegosActivos = [];
+    }
+    this.juegosActivos.push (this.juego);
+    // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
+    this.Limpiar();
+    // Regresamos a la lista de equipos (mat-tab con índice 0)
+    this.tabGroup.selectedIndex = 0;
+
+  });
+
+}
 
 goBack() {
     this.location.back();

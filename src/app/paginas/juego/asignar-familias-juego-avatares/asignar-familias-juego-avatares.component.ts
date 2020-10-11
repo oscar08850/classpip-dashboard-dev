@@ -114,17 +114,4 @@ export class AsignarFamiliasJuegoAvataresComponent implements OnInit {
   }
 
 
-  // /* Esta función decide si el boton debe estar activo (si hay al menos
-  // una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
-  // ActualizarBotonTabla() {
-  //   if (this.selection.selected.length === 0) {
-  //     this.botonTablaDesactivado = true;
-  //   } else {
-  //     this.botonTablaDesactivado = false;
-  //   }
-  // }
-
-
-
-
 }

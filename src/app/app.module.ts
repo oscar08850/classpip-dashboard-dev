@@ -134,9 +134,6 @@ import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.comp
 import { DialogoComponent } from './desarrolladores/dialogo/dialogo.component';
 import { EstilosComponent } from './estilos/estilos.component';
 
-// tslint:disable-next-line:max-line-length
-import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/alumnos-seleccionado-juego-de-competicion-liga/alumnos-seleccionado-juego-de-competicion-liga.component';
-
 import { EditarCromoDialogComponent } from './paginas/mis-colecciones/editar-cromo-dialog/editar-cromo-dialog.component';
 import { MisAlumnosComponent } from './paginas/mis-alumnos/mis-alumnos.component';
 import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introducir-alumnos.component';
@@ -216,8 +213,19 @@ import { JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent } from './paginas/j
 import { JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-votacion-todos-auno-seleccionado-inactivo/juego-de-votacion-todos-auno-seleccionado-inactivo.component';
 import { GuardarFamiliaComponent } from './paginas/mis-familias-avatares/guardar-familia/guardar-familia.component';
 import { CrearFamiliaImagenesPerfilComponent } from './paginas/crear-familia-imagenes-perfil/crear-familia-imagenes-perfil.component';
+// tslint:disable-next-line:max-line-length
 import { AsignarFamiliaImagenesPerfilComponent } from './paginas/mis-alumnos/asignar-familia-imagenes-perfil/asignar-familia-imagenes-perfil.component';
 import { MisFamiliasImagenesPerfilComponent } from './paginas/mis-familias-imagenes-perfil/mis-familias-imagenes-perfil.component';
+// tslint:disable-next-line:max-line-length
+import { CrearCuestionarioSatisfaccionComponent } from './paginas/crear-cuestionario-satisfaccion/crear-cuestionario-satisfaccion.component';
+import {MisCuestionariosSatisfaccionComponent} from './paginas/mis-cuestionarios-satisfaccion/mis-cuestionarios-satisfaccion.component';
+import { AsignarCuestionarioSatisfaccionComponent } from './paginas/juego/asignar-cuestionario-satisfaccion/asignar-cuestionario-satisfaccion.component';
+import { JuegoDeCuestionarioSatisfaccionActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-satisfaccion-activo/juego-de-cuestionario-satisfaccion-activo.component';
+import { JuegoDeCuestionarioSatisfaccionInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-satisfaccion-inactivo/juego-de-cuestionario-satisfaccion-inactivo.component';
+import { MisJuegosRapidosComponent } from './paginas/mis-juegos-rapidos/mis-juegos-rapidos.component';
+import { CrearJuegoRapidoComponent } from './paginas/crear-juego-rapido/crear-juego-rapido.component';
+import { JuegoDeEncuestaRapidaComponent } from './paginas/mis-juegos-rapidos/juego-de-encuesta-rapida/juego-de-encuesta-rapida.component';
+import { JuegoDeVotacionRapidaComponent } from './paginas/mis-juegos-rapidos/juego-de-votacion-rapida/juego-de-votacion-rapida.component';
 
 
 @NgModule({
@@ -278,7 +286,7 @@ import { MisFamiliasImagenesPerfilComponent } from './paginas/mis-familias-image
     JuegoDeCompeticionSeleccionadoInactivoComponent,
     InformacionJuegoDeCompeticionComponent,
     EditarJornadasJuegoDeCompeticionComponent,
-    AlumnosSeleccionadoJuegoDeCompeticionLigaComponent,
+
     InformacionJuegoDeCompeticionInactivoComponent,
 
     EditarCromoDialogComponent,
@@ -340,9 +348,16 @@ import { MisFamiliasImagenesPerfilComponent } from './paginas/mis-familias-image
     GuardarFamiliaComponent,
     CrearFamiliaImagenesPerfilComponent,
     AsignarFamiliaImagenesPerfilComponent,
-    MisFamiliasImagenesPerfilComponent
-
-
+    MisFamiliasImagenesPerfilComponent,
+    CrearCuestionarioSatisfaccionComponent,
+    MisCuestionariosSatisfaccionComponent,
+    AsignarCuestionarioSatisfaccionComponent,
+    JuegoDeCuestionarioSatisfaccionActivoComponent,
+    JuegoDeCuestionarioSatisfaccionInactivoComponent,
+    MisJuegosRapidosComponent,
+    CrearJuegoRapidoComponent,
+    JuegoDeEncuestaRapidaComponent,
+    JuegoDeVotacionRapidaComponent
 
   ],
   imports: [

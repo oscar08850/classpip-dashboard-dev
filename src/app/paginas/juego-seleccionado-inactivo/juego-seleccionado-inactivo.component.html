@@ -38,5 +38,9 @@
   <app-juego-de-avatar-seleccionado-inactivo></app-juego-de-avatar-seleccionado-inactivo>
 </div>
 
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuestionario de Satisfacción'">
+  <app-juego-de-cuestionario-satisfaccion-inactivo></app-juego-de-cuestionario-satisfaccion-inactivo>
+</div>
+
 <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
 </div>

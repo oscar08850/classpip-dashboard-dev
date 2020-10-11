@@ -56,8 +56,6 @@ import { InformacionJuegoDeCompeticionInactivoComponent } from './paginas/juego-
 
 // tslint:disable-next-line:max-line-length
 import { EditarJornadasJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/editar-jornadas-juego-de-competicion/editar-jornadas-juego-de-competicion.component';
-// tslint:disable-next-line:max-line-length
-import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/alumnos-seleccionado-juego-de-competicion-liga/alumnos-seleccionado-juego-de-competicion-liga.component';
 
 // tslint:disable-next-line:max-line-length
 import { GanadorJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/ganador-juego-de-competicion-liga/ganador-juego-de-competicion-liga.component';
@@ -117,6 +115,20 @@ import { MisRubricasComponent } from './paginas/mis-rubricas/mis-rubricas.compon
 
 import {CrearFamiliaImagenesPerfilComponent} from './paginas/crear-familia-imagenes-perfil/crear-familia-imagenes-perfil.component';
 import {MisFamiliasImagenesPerfilComponent} from './paginas/mis-familias-imagenes-perfil/mis-familias-imagenes-perfil.component';
+
+// tslint:disable-next-line:max-line-length
+import { CrearCuestionarioSatisfaccionComponent } from './paginas/crear-cuestionario-satisfaccion/crear-cuestionario-satisfaccion.component';
+import {MisCuestionariosSatisfaccionComponent} from './paginas/mis-cuestionarios-satisfaccion/mis-cuestionarios-satisfaccion.component';
+
+import {MisJuegosRapidosComponent} from './paginas/mis-juegos-rapidos/mis-juegos-rapidos.component';
+
+import {CrearJuegoRapidoComponent} from './paginas/crear-juego-rapido/crear-juego-rapido.component';
+
+import {JuegoDeEncuestaRapidaComponent} from './paginas/mis-juegos-rapidos/juego-de-encuesta-rapida/juego-de-encuesta-rapida.component';
+import {JuegoDeVotacionRapidaComponent} from './paginas/mis-juegos-rapidos/juego-de-votacion-rapida/juego-de-votacion-rapida.component';
+
+
+
 const routes: Routes = [
 
 
@@ -219,8 +231,6 @@ const routes: Routes = [
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/editarjornadasJuegoDeCompeticion', component: EditarJornadasJuegoDeCompeticionComponent },
   // tslint:disable-next-line:max-line-length
-  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionAlumnoJuegoCompeticionLiga', component: AlumnosSeleccionadoJuegoDeCompeticionLigaComponent },
-  // tslint:disable-next-line:max-line-length
   {path: 'grupo/:id/juegos/juegoSeleccionadoActivo/seleccionarGanadorJuegoDeCompeticionLiga', component: GanadorJuegoDeCompeticionLigaComponent},
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionJuegoDeCompeticionInactivo', component: InformacionJuegoDeCompeticionInactivoComponent },
@@ -281,6 +291,16 @@ const routes: Routes = [
   { path: 'inicio/:id/crearFamiliaDeImagenesDePerfil', component: CrearFamiliaImagenesPerfilComponent},
   { path: 'inicio/:id/misFamiliasDeImagenesDePerfil', component: MisFamiliasImagenesPerfilComponent},
 
+  // Cuestionarios de satisfacción
+  { path: 'inicio/:id/crearCuestionarioDeSatisfaccion', component: CrearCuestionarioSatisfaccionComponent},
+  { path: 'inicio/:id/misCuestionariosDeSatisfaccion', component: MisCuestionariosSatisfaccionComponent},
+
+  // JUEGOS RAPIDOS
+
+  { path: 'inicio/:id/misJuegosRapidos', component: MisJuegosRapidosComponent},
+  { path: 'inicio/:id/crearJuegoRapido', component: CrearJuegoRapidoComponent},
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeEncuestaRapida', component: JuegoDeEncuestaRapidaComponent},
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeVotacionRapida', component: JuegoDeVotacionRapidaComponent},
 ];
 
 @NgModule({
