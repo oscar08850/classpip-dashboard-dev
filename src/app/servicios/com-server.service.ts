@@ -81,6 +81,44 @@ export class ComServerService {
     this.socket.emit('forceDisconnect');
   }
 
+  public EsperoNickNames(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('nickNameJuegoRapido', (nick) => {
+            console.log ('recibo nick: ' + nick);
+            observer.next(nick);
+        });
+    });
+  }
+
+  public EsperoRespuestasEncuestaRapida(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('respuestaEncuestaRapida', (respuesta) => {
+            observer.next(respuesta);
+        });
+    });
+  }
+
+
+  public EsperoRespuestasVotacionRapida(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('respuestaVotacionRapida', (respuesta) => {
+            console.log ('ya tengo votacion');
+            console.log (respuesta);
+            observer.next(respuesta);
+        });
+    });
+  }
+
+  public EsperoRespuestasCuestionarioRapido(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('respuestaCuestionarioRapido', (respuesta) => {
+            console.log ('ya tengo respuesta');
+            console.log (respuesta);
+            observer.next(respuesta);
+        });
+    });
+  }
+
 
 }
 

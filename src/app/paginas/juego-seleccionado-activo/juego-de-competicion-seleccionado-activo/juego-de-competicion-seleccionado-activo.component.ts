@@ -43,6 +43,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   // displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'partidosTotales',
   //                                      'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'partidosTotales',
+                                       // tslint:disable-next-line:max-line-length
                                        'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
   displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'partidosTotales', 'partidosJugados',
                                        'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];

@@ -52,6 +52,12 @@
       <button mat-menu-item routerLink= "{{URLIntroducirAlumnos}}"> Introducir nuevos alumnos </button>
     </mat-menu>
 
+    <button mat-button [matMenuTriggerFor]="JuegosRapidos" class="btnNavbar">  <p style="font-size:30px">Juegos Rápidos</p>  </button>
+    <mat-menu #JuegosRapidos="matMenu">
+      <button mat-menu-item routerLink= "{{URLMisJuegosRapidos}}"> Mis juegos rápidos </button>
+      <button mat-menu-item routerLink= "{{URLCrearJuegoRapido}}"> Crear un juego rápido </button>
+    </mat-menu>
+
 <!--
     <button mat-button [matMenuTriggerFor]="Escenarios" class="btnNavbar"> Escenarios </button>
     <mat-menu #Escenarios="matMenu" class="mat-menu">

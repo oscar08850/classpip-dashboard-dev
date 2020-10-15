@@ -63,12 +63,12 @@ export class EditarGrupoComponent implements OnInit {
     this.peticionesAPI.DameAlumnosGrupo (this.grupoSeleccionado.id)
     .subscribe (res => {
                           this.alumnosGrupoSeleccionado = res;
-                          this.alumnosGrupoSeleccionado.forEach (alumno => {
-                            if (alumno.ImagenPerfil) {
-                              // añado la url para poder visualizar la imagen de perfil
-                              alumno.ImagenPerfil = URL.ImagenesPerfil + alumno.ImagenPerfil;
-                            }
-                          });
+                          // this.alumnosGrupoSeleccionado.forEach (alumno => {
+                          //   if (alumno.ImagenPerfil) {
+                          //     // añado la url para poder visualizar la imagen de perfil
+                          //     alumno.ImagenPerfil = URL.ImagenesPerfil + alumno.ImagenPerfil;
+                          //   }
+                          // });
 
                           this.dataSource = new MatTableDataSource(this.alumnosGrupoSeleccionado);
                         }

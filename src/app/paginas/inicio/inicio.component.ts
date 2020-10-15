@@ -86,7 +86,7 @@ PreparaTabla() {
 
 MostrarJuegoSeleccionado(juego: Juego) {
   console.log (juego);
-  const juegoSeleccionado = juego.todoElJuego;;
+  const juegoSeleccionado = juego.todoElJuego;
   this.sesion.TomaJuego(juegoSeleccionado);
   this.router.navigate(['/grupo/' + juegoSeleccionado.grupoId + '/juegos/juegoSeleccionadoActivo']);
 }

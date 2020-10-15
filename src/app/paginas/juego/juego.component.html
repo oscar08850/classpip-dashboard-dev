@@ -856,8 +856,8 @@
           </mat-step>
           </div>
 
-            <!-- ////////////////////// SI ESCOGEMOS JUEGO DE GEOCACHING ////////////////////////////////-->
-            <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Geocaching' && tengoModo">
+          <!-- ////////////////////// SI ESCOGEMOS JUEGO DE GEOCACHING ////////////////////////////////-->
+          <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Geocaching' && tengoModo">
               <!--Escogemos el escenario-->
               <mat-step>
                 <ng-template matStepLabel><div>Escenario</div></ng-template>
@@ -926,9 +926,56 @@
                   </div>
                 </mat-step>
 
-            </div>
+          </div>
+
+          <!--/////////////////////// SI ESCOGEMOS EL JUEGO DE TIPO CUESTIONARIO DE SATISFACCION /////////-->
+          <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Cuestionario de Satisfacción' && tengoModo">
+
+            <!-- TERCER PASO: ELEGIR CUESTIONARIO -->
+            <mat-step>
+              <ng-template matStepLabel><div>Cuestionario</div></ng-template>
+
+              <label class = "LabelStepper">Selecciona el cuestionario de satisfacción</label>
+              <app-asignar-cuestionario-satisfaccion
+              (emisorCuestionarioSatisfaccionElegido) = "RecibeCuestionarioSatisfaccionElegido ($event)"
+              ></app-asignar-cuestionario-satisfaccion>
+              <span *ngIf = "tengoCuestionarioSatisfaccion" style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}:  {{cuestionarioSatisfaccion.Titulo}} ... {{modoDeJuegoSeleccionado}} </span>
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button *ngIf = "tengoCuestionarioSatisfaccion" type="button" class="btn Next"  matStepperNext>Siguiente</button>
+              </div>
+            </mat-step>
+
+            <!--cuarto paso, modificamos la descripcion-->
+            <mat-step *ngIf = "tengoCuestionarioSatisfaccion">
+              <ng-template matStepLabel><div>Descripción</div></ng-template>
+                <!-- casilla para introducir puntuacion que sumamos -->
+                <!-- <mat-form-field> -->
+                  <mat-label>Modifica (si es necesario) la descipción</mat-label>
+                  <!-- <textarea type="text" id="form7"  class="md-textarea md-textarea-auto form-control" [(ngModel)] = "cuestionarioSatisfaccion.Descripcion"></textarea> -->
+                  <textarea class="md-textarea md-textarea-auto form-control" (change)="GuardaDescripcionCuestionarioSatisfaccion($event)">{{cuestionarioSatisfaccion.Descripcion}}</textarea>
+                  <!-- <input  matInput formControlName="DescripcionCuestionarioSatisfaccion" placeholder="Escriba puntos a sumar" requiered> -->
+                <!-- </mat-form-field> -->
+
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button  type="button" class="btn Next" matStepperNext>Siguiente</button>
+              </div>
+            </mat-step>
 
 
+
+
+            <!--Ultimo paso, finalizamos-->
+            <mat-step>
+              <ng-template matStepLabel><div>Finalizar</div></ng-template>
+
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button style= "width: 60%" type="button" class="btn Aceptar" (click) = "CrearJuegoDeCuestionarioDeSatisfaccion()">Crear juego de cuestionario de satisfacción</button>
+              </div>
+            </mat-step>
+          </div>
 
           <!-- //////////////////////////////// -->
 
@@ -954,7 +1001,6 @@
 </mat-tab-group>
 
 </div>
-<!-- <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
-</div> -->
+
 
 

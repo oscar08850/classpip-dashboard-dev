@@ -1,0 +1,67 @@
+<div class="titulo">Editar Cuestionario de Satisfacción</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class="contenedor">
+  <div class="enColumna">
+
+    <button style= "width: 50%" type="button"  class="btn Aceptar" (click)= "GenerarFichero()"> Generar JSON con el cuestionario de satisfacción  </button>
+    <a id ="generarJSON"> </a>
+    <br>
+
+    <div class="enColumna">
+      <div class="texto" style=" text-align: left;">
+        <p>
+          <span style="font-weight: bold;">Titulo: </span>
+          <input style="background-color: transparent" type="text" name="nombre" requiered [(ngModel)]="cuestionarioSeleccionado.Titulo">
+        </p>
+      </div>
+      <div class="texto" style=" text-align: left;">
+        <p>
+            <span  style="font-weight: bold;">Descripción: </span>
+            <input style="background-color: transparent; width: 450px;" type="text" name="descripcion"  requiered [(ngModel)]="cuestionarioSeleccionado.Descripcion">
+        </p>
+      </div>
+
+    </div>
+
+    <div class = "enColumna" *ngIf= "cuestionarioSeleccionado">
+      <h4><strong>Afirmaciones</strong> (puedes reordenar arrastrando)</h4>
+      <div cdkDropList class="example-list" (cdkDropListDropped)="dropAfirmacion($event)">
+        <div class="example-box" *ngFor="let afirmacion of cuestionarioSeleccionado.Afirmaciones; let i=index" cdkDrag>
+          {{afirmacion}}
+          <div  style = "display: flex; align-items: right">
+          <button (click)= "EditarAfirmacion(i)" mat-icon-button matTooltip="Editar afirmacion">
+            <i class="material-icons green md-36">edit</i>
+          </button>
+          <button (click) = "EliminarAfirmacion(i)" mat-icon-button matTooltip="Eliminar afirmacion">
+            <i class="material-icons red md-36">delete</i>
+          </button>
+          </div>
+        </div>
+      </div>
+      <button  style = "width: 20%" type="button"  class="btn Agregar" (click)= "NuevaAfirmacion()"> Añadir afirmación </button>
+      <br>
+      <br>
+      <h4><strong>Preguntas abiertas</strong> (puedes reordenar arrastrando)</h4>
+      <div cdkDropList class="example-list" (cdkDropListDropped)="dropPregunta($event)">
+        <div class="example-box" *ngFor="let pregunta of cuestionarioSeleccionado.PreguntasAbiertas; let i=index" cdkDrag>
+          {{pregunta}}
+          <div  style = "display: flex; align-items: right">
+          <button (click)= "EditarPregunta(i)" mat-icon-button matTooltip="Editar pregunta">
+            <i class="material-icons green md-36">edit</i>
+          </button>
+          <button (click) = "EliminarPregunta(i)" mat-icon-button matTooltip="Eliminar Pregunta">
+            <i class="material-icons red md-36">delete</i>
+          </button>
+          </div>
+        </div>
+      </div>
+      <button style = "width: 20%" type="button"  class="btn Agregar" (click)= "NuevaPregunta()"> Añadir pregunta abierta </button>
+
+
+    </div>
+  <br>
+
+  <button *ngIf = "cuestionarioModificado" type="button"  class="btn Aceptar" (click)= "ModificarCuestionario()"> Aceptar Cambios  </button>
+  <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+  </div>
+</div>

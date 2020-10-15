@@ -631,9 +631,23 @@ export class CalculosService {
                             juegosInactivos.push(juegosVotacioTodosAUno[i]);
                           }
                         }
+                        console.log ('Vamos a por los juegos de cuestionario de satisfacción: ' + grupoID);
+                        this.peticionesAPI.DameJuegosDeCuestionarioSatisfaccion(grupoID)
+                          .subscribe(juegosCuestionarioSatisfaccion => {
+                          console.log('He recibido los juegos de cuestionario de satisfacción');
+                          console.log(juegosCuestionarioSatisfaccion);
+                          // tslint:disable-next-line:prefer-for-of
+                          for (let i = 0; i < juegosCuestionarioSatisfaccion.length; i++) {
+                            if (juegosCuestionarioSatisfaccion[i].JuegoActivo === true) {
+                              juegosActivos.push(juegosCuestionarioSatisfaccion[i]);
+                            } else {
+                              juegosInactivos.push(juegosCuestionarioSatisfaccion[i]);
+                            }
+                          }
 
-                        const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-                        obs.next (resultado);
+                          const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+                          obs.next (resultado);
+                        });
                       });
                     });
                   });
@@ -647,6 +661,38 @@ export class CalculosService {
 
     return listasObservables;
   }
+
+  public DameJuegosRapidos(profesorId: number): any {
+    const listasObservables = new Observable ( obs => {
+
+      let juegosRapidos: any[] = [];
+      this.peticionesAPI.DameJuegosDeEncuestaRapida(profesorId)
+      .subscribe(juegos => {
+        console.log ('Ya tengo los juegos de encuesta rápida');
+        console.log (juegos);
+        juegosRapidos = juegosRapidos.concat (juegos);
+        this.peticionesAPI.DameJuegosDeVotacionRapida(profesorId)
+        // tslint:disable-next-line:no-shadowed-variable
+        .subscribe(juegos => {
+          console.log ('Ya tengo los juegos de votación rápida');
+          console.log (juegos);
+          juegosRapidos = juegosRapidos.concat (juegos);
+          this.peticionesAPI.DameJuegosDeCuestionarioRapido(profesorId)
+          // tslint:disable-next-line:no-shadowed-variable
+          .subscribe(juegos => {
+            console.log ('Ya tengo los juegos de cuestionario rapido');
+            console.log (juegos);
+            juegosRapidos = juegosRapidos.concat (juegos);
+            console.log (juegosRapidos);
+            obs.next (juegosRapidos);
+          });
+        });
+      });
+    });
+
+    return listasObservables;
+  }
+
 
   public PrepararTablaRankingIndividual(  listaAlumnosOrdenadaPorPuntos,
                                           alumnosDelJuego,
