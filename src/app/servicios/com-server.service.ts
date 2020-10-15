@@ -109,6 +109,16 @@ export class ComServerService {
     });
   }
 
+  public EsperoRespuestasCuestionarioRapido(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('respuestaCuestionarioRapido', (respuesta) => {
+            console.log ('ya tengo respuesta');
+            console.log (respuesta);
+            observer.next(respuesta);
+        });
+    });
+  }
+
 
 }
 

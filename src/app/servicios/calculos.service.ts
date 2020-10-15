@@ -677,8 +677,15 @@ export class CalculosService {
           console.log ('Ya tengo los juegos de votación rápida');
           console.log (juegos);
           juegosRapidos = juegosRapidos.concat (juegos);
-          console.log (juegosRapidos);
-          obs.next (juegosRapidos);
+          this.peticionesAPI.DameJuegosDeCuestionarioRapido(profesorId)
+          // tslint:disable-next-line:no-shadowed-variable
+          .subscribe(juegos => {
+            console.log ('Ya tengo los juegos de cuestionario rapido');
+            console.log (juegos);
+            juegosRapidos = juegosRapidos.concat (juegos);
+            console.log (juegosRapidos);
+            obs.next (juegosRapidos);
+          });
         });
       });
     });

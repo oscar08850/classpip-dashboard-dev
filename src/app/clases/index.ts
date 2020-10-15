@@ -73,6 +73,6 @@ export * from './JuegoDeCuestionarioSatisfaccion';
 export * from './AlumnoJuegoDeCuestionarioSatisfaccion';
 export * from './JuegoDeEncuestaRapida';
 export * from './JuegoDeVotacionRapida';
-
+export * from './JuegoDeCuestionarioRapido';
 
 

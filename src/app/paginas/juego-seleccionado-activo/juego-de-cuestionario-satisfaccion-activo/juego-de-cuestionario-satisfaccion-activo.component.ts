@@ -165,36 +165,55 @@ export class JuegoDeCuestionarioSatisfaccionActivoComponent implements OnInit {
   }
 
   GenerarInforme() {
-    const pdf = new jsPDF();
-    pdf.text('Hello world!', 10, 10 );
+    const margenIzquierdo = 15;
+    const margenSuperior = 20;
+    const interlineado = 5;
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.setFont('arial', 'normal');
+    doc.setTextColor('blue');
+    doc.text('Resultados del cuestionario de satisfacción', margenIzquierdo, margenSuperior);
+    doc.line(margenIzquierdo, margenSuperior + 5, margenIzquierdo + 150, margenSuperior + 5);
+    const fecha = new Date().toLocaleDateString();
 
-    pdf.text('Hola', 50, 10 );
-    pdf.setFont('courier', 'italic');
-    pdf.setFontSize(40);
-    pdf.setTextColor(255, 0, 0);
+    doc.setTextColor('black');
+    doc.setFontSize(14);
+    doc.text('Titulo del cuestionario: ' + this.juegoSeleccionado.NombreJuego, margenIzquierdo, margenSuperior + 20);
+    doc.text('Fecha: ' + fecha, margenIzquierdo, margenSuperior + 30);
+    doc.text('Número de participantes: ' + this.inscripciones.length, margenIzquierdo,  margenSuperior + 40);
+    const porcentaje = ((this.numeroRespuestas / this.inscripciones.length) * 100 ).toFixed(0);
+    doc.text('Número de respuestas: ' + this.numeroRespuestas + ' (' + porcentaje + '%)', margenIzquierdo, margenSuperior + 50);
 
+    autoTable(doc, { html: '#tabla',  startY:  margenSuperior + 70 });
 
+    let i;
+    for (i = 0; i < this.respuestasPreguntasAbiertas.length; i++) {
+      doc.addPage('a4', 'p');
+      doc.setFontSize(18);
+      doc.setTextColor('blue');
+      doc.text(this.cuestionario.PreguntasAbiertas [i], margenIzquierdo,  margenSuperior);
+      doc.line(margenIzquierdo, margenSuperior + 5, margenIzquierdo + 150, margenSuperior + 5);
+      let cont = interlineado * 4;
+      let j;
+      doc.setFontSize(12);
+      doc.setTextColor('black');
+      for (j = 0; j < this.respuestasPreguntasAbiertas[i].length; j++) {
 
-    pdf.text('tres', 10, 50 );
+        doc.text(this.respuestasPreguntasAbiertas[i][j], margenIzquierdo,  margenSuperior + cont);
+        cont = cont + interlineado;
+      }
+    }
 
+    const pageCount = doc.getNumberOfPages(); // Total Page Number
+    for (i = 0; i < pageCount; i++) {
+      doc.setPage(i);
+      const pageCurrent = doc.getCurrentPageInfo().pageNumber; // Current Page
+      doc.setFontSize(12);
+      doc.text('página: ' + pageCurrent + '/' + pageCount, 180,  margenSuperior);
+    }
 
+    doc.save('informe.pdf');
 
-
-    autoTable(pdf, { html: '#tabla' });
-    autoTable(pdf, { html: '#tabla',  startY: 50 });
-
-    pdf.save('table.pdf');
-
-
-
-
-    // const tabla = window.document.getElementById('tabla');
-    // pdf.fromHTML (tabla, 20, 20);
-    // pdf.addHTML (tabla, 10, 10,);
-    // tslint:disable-next-line:only-arrow-functions
-  //   pdf.addHTML(document.body, function() {
-  //     pdf.save('web.pdf');
-  // });
 
   }
 }

@@ -5,13 +5,19 @@ import { SesionService, CalculosService, PeticionesAPIService, ComServerService 
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog, MatTabGroup } from '@angular/material';
 
 // tslint:disable-next-line:max-line-length
 import { CuestionarioSatisfaccion, JuegoDeEncuestaRapida, TablaPuntosFormulaUno,
-          JuegoDeVotacionRapida } from '../../clases/index';
+          JuegoDeVotacionRapida, Cuestionario, JuegoDeCuestionarioRapido } from '../../clases/index';
 
 import Swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
+
+// import { AsignaCuestionarioComponent } from './juego/asigna-cuestionario/asigna-cuestionario.component';
+
+import { AsignaCuestionarioComponent } from './../juego/asigna-cuestionario/asigna-cuestionario.component';
+
 
 
 export interface OpcionSeleccionada {
@@ -82,8 +88,21 @@ export class CrearJuegoRapidoComponent implements OnInit {
   displayedColumnsTablaPuntuacion: string[] = ['select', 'Posicion', 'Puntos'];
 
 
+  // información para crear un juego de cuestionario
+  cuestionario: Cuestionario;
+  tengoCuestionario = false;
+  puntuacionCorrecta: number;
+  puntuacionIncorrecta: number;
+  modoPresentacion: string;
+  tengoModoPresentacion = false;
+  seleccionModoPresentacion: string[] = ['Mismo orden para todos',
+  'Preguntas desordenadas',
+  'Preguntas y respuestas desordenadas'];
+  tiempoLimite: number;
+
 
   constructor(
+    public dialog: MatDialog,
     private calculos: CalculosService,
     private sesion: SesionService,
     private comService: ComServerService,
@@ -100,7 +119,10 @@ export class CrearJuegoRapidoComponent implements OnInit {
     this.myForm = this._formBuilder.group({
       NombreDelJuego: ['', Validators.required],
       Concepto: ['', Validators.required],
-      NuevaPuntuacion: ['', Validators.required]
+      NuevaPuntuacion: ['', Validators.required],
+      PuntuacionCorrecta: ['', Validators.required],
+      PuntuacionIncorrecta: ['', Validators.required],
+      TiempoLimite:  ['', Validators.required]
     });
 
     this.TablaPuntuacion = [];
@@ -124,12 +146,8 @@ export class CrearJuegoRapidoComponent implements OnInit {
 
 
   TipoDeJuegoSeleccionado(tipo: ChipColor) {
-    if (tipo.nombre === 'Juego De Cuestionario Rápido') {
-      Swal.fire('Alerta', 'Aún no es posible el juego de cuestionario rápido', 'warning');
-    } else {
       this.tipoDeJuegoSeleccionado = tipo.nombre;
       this.tengoTipo = true;
-    }
   }
 
 
@@ -288,6 +306,78 @@ CrearJuegoDeVotacionRapida () {
 
 
 }
+  //// FUNCIONES PARA LA CREACION DE JUEGO DE CUESTIONARIO RAPIDO
+  AbrirDialogoAgregarCuestionarioRapido(): void {
+    const dialogRef = this.dialog.open(AsignaCuestionarioComponent, {
+      width: '70%',
+      height: '80%',
+      position: {
+        top: '0%'
+      },
+      // Pasamos los parametros necesarios
+      data: {
+        profesorId: this.profesorId
+      }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.cuestionario = this.sesion.DameCuestionario();
+      this.tengoCuestionario = true;
+    });
+  }
+
+
+  // Para habilitar el boton de guardar puntuaciones
+  TengoPuntuaciones() {
+    if (this.myForm.value.PuntuacionCorrecta === '' || this.myForm.value.PuntuacionIncorrecta === '') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  GuardarPuntuacion() {
+    this.puntuacionCorrecta = this.myForm.value.PuntuacionCorrecta;
+    this.puntuacionIncorrecta = this.myForm.value.PuntuacionIncorrecta;
+  }
+  GuardarModoPresentacion(modoPresentacion) {
+    this.modoPresentacion = modoPresentacion;
+    this.tengoModoPresentacion = true;
+  }
+
+  GuardarTiempoLimite() {
+    this.tiempoLimite = this.myForm.value.TiempoLimite;
+    if (this.tiempoLimite === undefined) {
+      this.tiempoLimite = 0;
+    }
+  }
+
+
+  CrearJuegoDeCuestionarioRapido() {
+
+    // Tengo que crear un juego de tipo JuegoDeCuestionario y no uno de tipo Juego, como en los casos
+    // anteriores. La razón es que no están bien organizado el tema de que los modelos de los diferentes juegos
+    // tomen como base el modelo Juego genérico. De momento se queda así.
+    const clave = Math.random().toString().substr(2, 8);
+    const juegoDeCuestionarioRapido = new JuegoDeCuestionarioRapido (
+      this.nombreDelJuego, this.tipoDeJuegoSeleccionado,
+      clave,
+      this.puntuacionCorrecta,
+      this.puntuacionIncorrecta, this.modoPresentacion,
+      false, false, this.profesorId, this.cuestionario.id, this.tiempoLimite);
+
+    // tslint:disable-next-line:max-line-length
+    this.peticionesAPI.CreaJuegoDeCuestionarioRapido(juegoDeCuestionarioRapido)
+    .subscribe(juegoCreado => {
+      this.juego = juegoCreado;
+
+      this.juegoCreado = true;
+      Swal.fire('Juego de cuestionario rapido creado correctamente', ' ', 'success');
+      this.goBack();
+
+    });
+  }
+
+
 
   goBack() {
     this.router.navigate(['/inicio/' + this.profesorId]);

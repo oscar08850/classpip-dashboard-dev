@@ -69,7 +69,7 @@
               <ng-template matStepLabel><div>Cuestionario</div></ng-template>
               <div>
                 <span *ngIf = "tengoCuestionario" style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}:  {{cuestionario.Titulo}} ... {{modoDeJuegoSeleccionado}} </span>
-                <button type="button" class="btn Agregar" (click)= "AbrirDialogoAgregarCuestionario()" style="width: auto;">Añadir cuestionario<i class="material-icons">
+                <button type="button" class="btn Agregar" (click)= "AbrirDialogoAgregarCuestionarioRapido()" style="width: auto;">Añadir cuestionario<i class="material-icons">
                     post_add </i></button>
                 </div>
               <div class="btnCambiarStep">
@@ -138,7 +138,7 @@
 
               <div class="btnCambiarStep">
                 <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                <button style= "width: 60%" type="button" class="btn Aceptar" (click) = "CrearJuegoDeCuestionario()">Crear juego de cuestionario</button>
+                <button style= "width: 60%" type="button" class="btn Aceptar" (click) = "CrearJuegoDeCuestionarioRapido()">Crear juego de cuestionario rápido</button>
               </div>
             </mat-step>
           </div>

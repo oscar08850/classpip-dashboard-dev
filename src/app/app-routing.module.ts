@@ -126,8 +126,12 @@ import {CrearJuegoRapidoComponent} from './paginas/crear-juego-rapido/crear-jueg
 
 import {JuegoDeEncuestaRapidaComponent} from './paginas/mis-juegos-rapidos/juego-de-encuesta-rapida/juego-de-encuesta-rapida.component';
 import {JuegoDeVotacionRapidaComponent} from './paginas/mis-juegos-rapidos/juego-de-votacion-rapida/juego-de-votacion-rapida.component';
+// tslint:disable-next-line:max-line-length
+import {JuegoDeCuestionarioRapidoComponent} from './paginas/mis-juegos-rapidos/juego-de-cuestionario-rapido/juego-de-cuestionario-rapido.component';
 
 
+// tslint:disable-next-line:max-line-length
+import { EditarCuestionarioSatisfaccionComponent } from './paginas/editar-cuestionario-satisfaccion/editar-cuestionario-satisfaccion.component';
 
 const routes: Routes = [
 
@@ -294,6 +298,10 @@ const routes: Routes = [
   // Cuestionarios de satisfacción
   { path: 'inicio/:id/crearCuestionarioDeSatisfaccion', component: CrearCuestionarioSatisfaccionComponent},
   { path: 'inicio/:id/misCuestionariosDeSatisfaccion', component: MisCuestionariosSatisfaccionComponent},
+  { path: 'inicio/:id/editarCuestionarioDeSatisfaccion', component: EditarCuestionarioSatisfaccionComponent},
+
+
+
 
   // JUEGOS RAPIDOS
 
@@ -301,6 +309,7 @@ const routes: Routes = [
   { path: 'inicio/:id/crearJuegoRapido', component: CrearJuegoRapidoComponent},
   { path: 'inicio/:id/misJuegosRapidos/juegoDeEncuestaRapida', component: JuegoDeEncuestaRapidaComponent},
   { path: 'inicio/:id/misJuegosRapidos/juegoDeVotacionRapida', component: JuegoDeVotacionRapidaComponent},
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeCuestionarioRapido', component: JuegoDeCuestionarioRapidoComponent},
 ];
 
 @NgModule({

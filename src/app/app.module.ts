@@ -226,6 +226,10 @@ import { MisJuegosRapidosComponent } from './paginas/mis-juegos-rapidos/mis-jueg
 import { CrearJuegoRapidoComponent } from './paginas/crear-juego-rapido/crear-juego-rapido.component';
 import { JuegoDeEncuestaRapidaComponent } from './paginas/mis-juegos-rapidos/juego-de-encuesta-rapida/juego-de-encuesta-rapida.component';
 import { JuegoDeVotacionRapidaComponent } from './paginas/mis-juegos-rapidos/juego-de-votacion-rapida/juego-de-votacion-rapida.component';
+import { EditarCuestionarioSatisfaccionComponent } from './paginas/editar-cuestionario-satisfaccion/editar-cuestionario-satisfaccion.component';
+
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import { JuegoDeCuestionarioRapidoComponent } from './paginas/mis-juegos-rapidos/juego-de-cuestionario-rapido/juego-de-cuestionario-rapido.component';
 
 
 @NgModule({
@@ -357,7 +361,9 @@ import { JuegoDeVotacionRapidaComponent } from './paginas/mis-juegos-rapidos/jue
     MisJuegosRapidosComponent,
     CrearJuegoRapidoComponent,
     JuegoDeEncuestaRapidaComponent,
-    JuegoDeVotacionRapidaComponent
+    JuegoDeVotacionRapidaComponent,
+    EditarCuestionarioSatisfaccionComponent,
+    JuegoDeCuestionarioRapidoComponent
 
   ],
   imports: [
@@ -398,7 +404,9 @@ import { JuegoDeVotacionRapidaComponent } from './paginas/mis-juegos-rapidos/jue
     HttpClientModule,
 
     NgxEchartsModule,
-    ListViewModule
+    ListViewModule,
+    DragDropModule
+
   ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,

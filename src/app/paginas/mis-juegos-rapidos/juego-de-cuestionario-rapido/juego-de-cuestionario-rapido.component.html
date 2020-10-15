@@ -1,4 +1,4 @@
-<div class="titulo">Juego de encuesta rápida</div>
+<div class="titulo">Juego de cuestionario rápido</div>
 <mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
 
 
@@ -9,7 +9,7 @@
   </div>
   <br>
   <mat-tab-group (selectedTabChange)="tabChanged($event)">
-    <mat-tab  *ngIf = "juegoSeleccionado" label="Información para la conexión">
+    <mat-tab *ngIf = "juegoSeleccionado" label="Información para la conexión">
       <div class = "enColumna">
         <br>
         <br>
@@ -36,21 +36,42 @@
         </div>
       <br>
     </mat-tab>
-    <mat-tab label="Resultados">
+    <mat-tab label="Clasificación">
     <div class= "enColumna" >
       <br>
       <br>
-      <h3> Resultados</h3>
-      <br>
-      <button  type="button"  (click) = "GenerarInforme()" class="btn Aceptar" style = "width: 50%">Genera un informe en PDF con los resultados</button>
-      <br>
-      <h4><strong>Número de participantes:  </strong>{{participantes.length}}</h4>
-      <h4><strong>Número de respuestas:  </strong>{{numeroRespuestas}} ({{((numeroRespuestas/participantes.length)*100).toFixed(0)}}%)</h4>
-      <br>
-      <br>
-      <h3><strong>Respuestas a las afirmaciones</strong></h3>
+
+      <h3><strong>Clasificación</strong></h3>
       <br>
 
+      <table align="center"  mat-table [dataSource]="dataSource" class="example-container mat-elevation-z8">
+        <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+          <!-- Nombre Alumno Column -->
+          <ng-container matColumnDef="nick">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  align="center">NickName</th>
+            <td mat-cell  *matCellDef="let participante">
+              <p>{{participante.nick}} </p>
+            </td>
+
+          </ng-container>
+
+          <!-- Primer Apellido Column -->
+          <ng-container matColumnDef="nota">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla header-align-right" align="center">Nota</th>
+              <td mat-cell style = "text-align: right;" *matCellDef="let participante">
+                <p >{{participante.nota}} </p>
+              </td>
+          </ng-container>
+
+
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+<!--
       <div style= 'width: 100%'>
           <table  id = 'tabla' style= "margin-top: 10%" align= "center" mat-table [dataSource]="dataSource" class="example-container mat-elevation-z8">
 
@@ -59,7 +80,7 @@
               <td mat-cell style= "text-align: left"  *matCellDef="let afirmacion"> {{afirmacion.Texto}} </td>
             </ng-container>
 
-            <!-- Descripcion Column -->
+
             <ng-container matColumnDef="media">
               <th mat-header-cell  *matHeaderCellDef class="tituloColumnaTabla"> Media </th>
               <td mat-cell style= "text-align: left"  *matCellDef="let afirmacion"> {{(afirmacion.Media).toFixed(2)}} </td>
@@ -71,18 +92,9 @@
           </table>
       </div>
 
-      <div   id = 'grafico' style= 'width: 100%'>
-        <div  align = "center" echarts [options]="grafico"  theme="macarons" class="demo-chart"></div>
-      </div>
-
-
-
-
-
-      <br>
-      <br>
-
-      <h3><strong>Respuestas a las preguntas abiertas</strong></h3>
+      <div  id = 'grafico' style= 'width: 100%'>
+        <div align = "center" echarts [options]="grafico"  theme="macarons" class="demo-chart"></div>
+      </div> -->
 
 
       <br>
@@ -116,8 +128,42 @@
 
     </div>
     </mat-tab>
+    <mat-tab label="Resultados">
+      <div class= "enColumna" >
+        <br>
+        <br>
+        <h3> Resultados</h3>
+        <br>
+        <button  type="button"  (click) = "GenerarInforme()" class="btn Aceptar" style = "width: 50%">Genera un informe en PDF con los resultados</button>
+        <br>
+        <h4><strong>Número de participantes:  </strong>{{participantes.length}}</h4>
+        <h4><strong>Número de respuestas:  </strong>{{numeroRespuestas}} ({{((numeroRespuestas/participantes.length)*100).toFixed(0)}}%)</h4>
+
+        <br>
+        <br>
+
+
+        <div class="subtitulo">Número de participantes por cantidad de aciertos</div>
+        <mat-divider class="lineaDivisoria"></mat-divider>
+        <div class = "enColumna">
+          <div style = "width : 100%" echarts [options]="grafico"  theme="macarons" class="demo-chart"></div>
+        </div>
+
+
+        <div class="subtitulo">Porcentaje de aciertos en cada pregunta</div>
+        <mat-divider class="lineaDivisoria"></mat-divider>
+
+      </div>
+
+      <br>
+      <br>
+      <span *ngFor = "let pregunta of preguntas; index as i">
+          <span style = "display: inline-block; width: 50%;">
+              <div  echarts [options]="donuts[i]"  theme="macarons" class="demo-chart">
+              </div>
+          </span>
+      </span>
+    </mat-tab>
   </mat-tab-group>
 
 </div>
-
-

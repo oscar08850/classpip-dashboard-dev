@@ -8,6 +8,7 @@ import { CuestionarioSatisfaccion} from '../../../clases/index';
 import { Router, ActivatedRoute } from '@angular/router';
 import {jsPDF} from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import html2canvas from 'html2canvas';
 
 
 
@@ -229,42 +230,38 @@ export class JuegoDeEncuestaRapidaComponent implements OnInit {
       doc.text('página: ' + pageCurrent + '/' + pageCount, 180,  margenSuperior);
     }
 
-    // doc.addPage("a4", "p");
-    // doc.setFontSize(14);
-    // doc.text(this.cuestionario.PreguntasAbiertas [0], 20, 20);
-    // doc.text('Hello world!', 0, 0);
-    // doc.addPage ()
-    // doc.addPage("a4", "p");
-    // doc.text(this.cuestionario.PreguntasAbiertas [1], 20, 20);
-    // doc.text('Hello world!', 50, 50);
+    // Este código es para generar los gráficos en pdf
+    // pero tiene el problema de el tamaño con el que genera el gráfico
+    // depende de los que se vea en ese momento en el navegador
+    // De momento no se cómo hacer que salga con un tamaño fijo siempre igual
+    // con independencia de cómo se vea en ese momento en el navegador
+    // tslint:disable-next-line:only-arrow-functions
+    // html2canvas(document.getElementById ('grafico')).then(function(canvas) {
 
-    // pdf.text('Hola', 50, 10 );
-    // doc.setFont('arial', 'normal');
-    // pdf.setFontSize(40);
-    // pdf.setTextColor(255, 0, 0);
+    //   console.log ('CANVAS');
+    //   console.log (canvas);
+    //   const img = new Image();
+    //   img.src = canvas.toDataURL();
+    //   console.log ('&&&&&&&&&&&&&&&&&');
+    //   console.log (img);
+    //   // console.log (img.);
+    //   // const ratio = img.height / img.width;
+    //   // console.log (ratio);
+    //   // console.log ((ratio * 160).toFixed(0));
+    //   // const alto = Number((ratio * 160).toFixed(0));
+    //   // const ancho = 160;
 
+    //   doc.addPage("a4", "p");
 
+    //   doc.addImage(canvas, 'JPEG', 0, 0, 200, 200);
 
-    // pdf.text('tres', 10, 50 );
+    //   doc.addPage("a4", "p");
+    //   doc.addImage(canvas, 'JPEG', 10, 10, 160, 180);
 
+    //   doc.save('informe.pdf');
 
-
-
-    // autoTable(pdf, { html: '#tabla' });
-    // autoTable(pdf, { html: '#tabla',  startY: 50 });
+    // });
 
     doc.save('informe.pdf');
-
-
-
-
-    // const tabla = window.document.getElementById('tabla');
-    // pdf.fromHTML (tabla, 20, 20);
-    // pdf.addHTML (tabla, 10, 10,);
-    // tslint:disable-next-line:only-arrow-functions
-  //   pdf.addHTML(document.body, function() {
-  //     pdf.save('web.pdf');
-  // });
-
   }
 }
