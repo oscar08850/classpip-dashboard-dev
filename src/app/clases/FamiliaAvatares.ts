@@ -1,6 +1,7 @@
 export class FamiliaAvatares {
 
   NombreFamilia: string;
+  Publica: boolean;
   Silueta: string;
   NombreComplemento1: string;
   Complemento1: string[];
@@ -15,6 +16,7 @@ export class FamiliaAvatares {
   constructor(nombre?: string) {
 
     this.NombreFamilia = nombre;
+    this.Publica = false;
 
   }
 

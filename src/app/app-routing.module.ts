@@ -29,6 +29,11 @@ import { JuegoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado
 import { EditarPuntoComponent } from './paginas/mis-puntos/editar-punto/editar-punto.component';
 import { EditarInsigniaComponent } from './paginas/mis-puntos/editar-insignia/editar-insignia.component';
 import { EditarColeccionComponent } from './paginas/mis-colecciones/editar-coleccion/editar-coleccion.component';
+import { GuardarColeccionComponent } from './paginas/mis-colecciones/guardar-coleccion/guardar-coleccion.component';
+import { MostrarColeccionComponent } from './paginas/mis-colecciones/mostrar-coleccion/mostrar-coleccion.component';
+
+
+
 // tslint:disable-next-line:max-line-length
 import { AsignarCromosComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/asignar-cromos/asignar-cromos.component';
 // tslint:disable-next-line:max-line-length
@@ -102,7 +107,7 @@ import {VerTodosComponent} from './paginas/juego-seleccionado-activo/juego-de-av
 import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/informacion-juego-avatar/informacion-juego-avatar.component';
 
 import {GuardarFamiliaComponent} from './paginas/mis-familias-avatares/guardar-familia/guardar-familia.component';
-
+import { MostrarFamiliaComponent } from './paginas/mis-familias-avatares/mostrar-familia/mostrar-familia.component';
 import { DeactivateGuardCrearEscenario } from './guardas/canExitCrearEscenario.guard';
 import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenario.component';
 import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escenario/editar-escenario.component';
@@ -254,8 +259,8 @@ const routes: Routes = [
 
   // COLECCIÓN
   { path: 'inicio/:id/misColecciones/editarColeccion', component: EditarColeccionComponent },
-
-
+  { path: 'inicio/:id/misColecciones/guardarColeccion', component: GuardarColeccionComponent },
+  { path: 'inicio/:id/misColecciones/mostrarColeccion', component: MostrarColeccionComponent },
 
   // PUNTOS E INSIGNIAS
   { path: 'inicio/:id/misPuntos/editarPunto', component: EditarPuntoComponent },
@@ -281,6 +286,7 @@ const routes: Routes = [
   // AVATARES
   { path: 'inicio/:id/misFamiliasAvatares', component: MisFamiliasAvataresComponent},
   { path: 'inicio/:id/misFamiliasAvatares/guardarFamilia', component: GuardarFamiliaComponent},
+  { path: 'inicio/:id/misFamiliasAvatares/mostrarFamilia', component: MostrarFamiliaComponent},
   { path: 'inicio/:id/crearFamiliaAvatares', component: CrearFamiliaAvataresComponent},
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/MostrarAvatarAlumno', component: MostrarAvatarAlumnoComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoAvatar', component: InformacionJuegoAvatarComponent },

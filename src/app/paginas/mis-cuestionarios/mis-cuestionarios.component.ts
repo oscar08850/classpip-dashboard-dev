@@ -14,10 +14,17 @@ import { Router } from '@angular/router';
 })
 export class MisCuestionariosComponent implements OnInit {
 
-  misCuestionarios: Cuestionario[];
+  misCuestionarios: Cuestionario[] = [];
+  cuestionariosPublicos: Cuestionario[];
   dataSource;
+  dataSourcePublicos;
   profesor: Profesor;
-  displayedColumns: string[] = ['titulo', 'descripcion', 'edit', 'delete', 'copy'];
+  displayedColumns: string[] = ['titulo', 'descripcion', 'iconos'];
+  displayedColumnsPublico: string[] = ['titulo', 'descripcion', 'copy'];
+
+
+  propietarios: string[];
+
 
   mensaje = 'Confirmar que quieres eliminar el cuestionario: ';
 
@@ -31,6 +38,7 @@ export class MisCuestionariosComponent implements OnInit {
   ngOnInit() {
     this.profesor = this.sesion.DameProfesor();
     this.DameTodosMisCuestionarios();
+    this.DameTodosLosCuestionariosPublicos();
   }
 
   //Dame todos los cuestionarios del profesor para rellenar la tabla
@@ -40,11 +48,37 @@ export class MisCuestionariosComponent implements OnInit {
       if (res[0] !== undefined) {
         this.misCuestionarios = res;
         this.dataSource = new MatTableDataSource(this.misCuestionarios);
-      }else{
+      } else {
         Swal.fire('Alerta', 'Aun no tienes ningun cuestionario', 'warning');
       }
     });
   }
+
+  DameTodosLosCuestionariosPublicos() {
+    // traigo todos los publicos excepto los del profesor
+    this.peticionesAPI.DameCuestionariosPublicos()
+    .subscribe ( res => {
+
+      if (res[0] !== undefined) {
+        this.cuestionariosPublicos = res.filter (cuestionario => cuestionario.profesorId !== this.profesor.id);
+        if (this.cuestionariosPublicos.length === 0) {
+          this.cuestionariosPublicos = undefined;
+        } else {
+          this.dataSourcePublicos = new MatTableDataSource(this.cuestionariosPublicos);
+          this.propietarios = [];
+          // Traigo profesores para preparar los nombres de los propietarios
+          this.peticionesAPI.DameProfesores()
+          .subscribe ( profesores => {
+            this.cuestionariosPublicos.forEach (cuestionario => {
+              const propietario = profesores.filter (p => p.id === cuestionario.profesorId)[0];
+              this.propietarios.push (propietario.Nombre + ' ' + propietario.Apellido);
+            });
+          });
+        }
+      }
+    });
+  }
+
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -96,7 +130,58 @@ export class MisCuestionariosComponent implements OnInit {
         // Añado el cuestionario creado a la lista que se muestra
         this.misCuestionarios.push (copia);
         this.dataSource = new MatTableDataSource(this.misCuestionarios);
+        Swal.fire('OK', 'Se ha creado una copia privada del cuestionario', 'success');
       });
     });
   }
+
+  HazPublico(cuestionario: Cuestionario) {
+    cuestionario.Publico = true;
+    this.peticionesAPI.ModificaCuestionario (cuestionario, this.profesor.id, cuestionario.id).subscribe();
+  }
+
+
+  HazPrivado(cuestionario: Cuestionario) {
+    cuestionario.Publico = false;
+    this.peticionesAPI.ModificaCuestionario (cuestionario, this.profesor.id, cuestionario.id).subscribe();
+  }
+
+  CrearCopiaPrivada(cuestionario: Cuestionario) {
+
+    const copia = new Cuestionario (
+      cuestionario.Titulo + '(copia)',
+      cuestionario.Descripcion,
+      this.profesor.id
+    );
+    console.log ('voy a crear copia privada');
+    this.peticionesAPI.CreaCuestionario (copia, this.profesor.id)
+    .subscribe (   nuevo => {
+
+        this.misCuestionarios.push (nuevo);
+        this.dataSource = new MatTableDataSource(this.misCuestionarios);
+        // Ahora tengo que hacer copia tambien de las preguntas de cuestionario
+        this.peticionesAPI.DameAsignacionesPreguntasACuestionario (cuestionario.id)
+        .subscribe ( asignaciones => {
+
+          let cont = 0;
+          asignaciones.forEach (asignacion => {
+            asignacion.cuestionarioId = nuevo.id;
+            asignacion.id = undefined;
+            console.log (asignacion);
+            this.peticionesAPI.PreguntasEnCuestionario (asignacion)
+            .subscribe (() => {
+              cont++;
+              if (cont === asignaciones.length) {
+                Swal.fire('La copia privada se ha creado correctamente');
+              }
+            });
+          });
+
+        });
+    });
+
+
+  }
+
+
 }

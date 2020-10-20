@@ -163,6 +163,10 @@ export class PeticionesAPIService {
     return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][Nombre]=' + nombre + '&filter[where][Apellido]=' + apellido);
   }
 
+  public DameProfesores(): Observable<Profesor[]> {
+    return this.http.get<Profesor[]>(this.APIUrlProfesores);
+  }
+
   // Esta consulta es para cuando se ha olvidado la contraseña y solo puede darnos
   // su nombre de usuario (de momento el nombre)
 
@@ -435,6 +439,14 @@ export class PeticionesAPIService {
     return this.http.put<Coleccion>(this.APIUrlProfesores + '/' + profesorId + '/coleccions/' + coleccionId, coleccion);
   }
 
+  public DameColeccionesDelProfesor(profesorId: number): Observable<Coleccion[]> {
+    return this.http.get<Coleccion[]>(this.APIUrlProfesores + '/' + profesorId + '/coleccions');
+  }
+
+  public DameColeccionesPublicas(): Observable<Coleccion[]> {
+    return this.http.get<Coleccion[]>(this.APIUrlColecciones
+                                 + '?filter[where][Publica]=true');
+  }
 
 
 ///////////////////////////////////////////// GESTION JUEGO DE PUNTOS //////////////////////////////////////////////
@@ -578,9 +590,7 @@ export class PeticionesAPIService {
 
 
 ///////////////////////////////////////// GESTION DE JUEGO DE COLECCION //////////////////////////////////////////////////
-  public DameColeccionesDelProfesor(profesorId: number): Observable<Coleccion[]> {
-    return this.http.get<Coleccion[]>(this.APIUrlProfesores + '/' + profesorId + '/coleccions');
-  }
+
   public CreaJuegoDeColeccion(juego: Juego, grupoId: number): Observable<Juego> {
     return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegoDeColeccions', juego);
   }
@@ -954,6 +964,12 @@ export class PeticionesAPIService {
   public DameTodosMisCuestionarios(profesorId: number): Observable<Cuestionario[]> {
     return this.http.get<Cuestionario[]>(this.APIUrlProfesores + '/' + profesorId + '/cuestionarios');
   }
+
+  public DameCuestionariosPublicos(): Observable<Cuestionario[]> {
+    return this.http.get<Cuestionario[]>(this.APIUrlCuestionarios
+                                 + '?filter[where][Publico]=true');
+  }
+
   public BorraCuestionario(profesorId: number, cuestionarioId: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlProfesores + '/' + profesorId + '/cuestionarios/' + cuestionarioId);
   }
@@ -970,7 +986,7 @@ export class PeticionesAPIService {
   public BorraPreguntaDelCuestionario(preguntaDelCuestionatioId: number): Observable<any> {
     return this.http.delete<any>(this.APIUrlPreguntaDelCuestionario + '/' + preguntaDelCuestionatioId);
   }
-  public DamePreguntasDelCuestionarioCuestionario(cuestionarioId: number): Observable<PreguntaDelCuestionario[]> {
+  public DameAsignacionesPreguntasACuestionario(cuestionarioId: number): Observable<PreguntaDelCuestionario[]> {
     // tslint:disable-next-line:max-line-length
     return this.http.get<PreguntaDelCuestionario[]>(this.APIUrlPreguntaDelCuestionario + '?filter[where][cuestionarioId]=' + cuestionarioId);
   }
@@ -1114,6 +1130,13 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
     return this.http.get<FamiliaAvatares[]>(this.APIUrlProfesores + '/' + profesorId + '/familiaAvatares');
   }
 
+
+  public DameFamiliasAvataresPublicas(): Observable<FamiliaAvatares[]> {
+    return this.http.get<FamiliaAvatares[]>(this.APIUrlFamiliarAvatares
+                                 + '?filter[where][Publica]=true');
+  }
+
+
   public DameFamilia(familiaId: number): Observable<FamiliaAvatares> {
     return this.http.get<FamiliaAvatares>(this.APIUrlFamiliarAvatares + '/' + familiaId);
   }
@@ -1133,6 +1156,7 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
     return this.httpImagenes.get(this.APIUrlImagenesAvatares + '/download/' + imagen,
       { responseType: ResponseContentType.Blob });
   }
+
 
   public BorrarImagenAvatar(imagen: string): Observable<any> {
     return this.http.delete<any>(this.APIUrlImagenesAvatares + '/files/' + imagen);
@@ -1351,6 +1375,11 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
     return this.http.delete<any>(this.APIUrlCuestionariosSatisfaccion + '/' + cuestionarioId);
   }
 
+  public DameCuestionariosSatisfaccionPublicos(): Observable<CuestionarioSatisfaccion[]> {
+    return this.http.get<CuestionarioSatisfaccion[]>(this.APIUrlCuestionariosSatisfaccion
+                                 + '?filter[where][Publico]=true');
+  }
+
 
    /////////////////////////////////////// GESTION JUEGOS DE CUESTIONARIO DE SATISFACCION  /////////////////////////////////
 
@@ -1376,7 +1405,7 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
 
 
 
-   ////////////////////////////////// GESTION JUEGO DE CUESTIONARIO SASTISFACCION INDIVIDUAL /////////////////////////////////////////////////////////
+   ////////////////////////// GESTION JUEGO DE CUESTIONARIO SASTISFACCION INDIVIDUAL ///////////////////////////////
 
    public DameAlumnosJuegoDeCuestionarioSatisfaccion(juegoId: number): Observable<Alumno[]> {
     return this.http.get<Alumno[]>(this.APIUrlJuegoDeCuestionarioSatisfaccion + '/' + juegoId + '/alumnos');

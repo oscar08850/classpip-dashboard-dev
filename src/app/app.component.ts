@@ -17,6 +17,7 @@ import Swal from 'sweetalert2';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent  {
   profesor: Profesor;
   nombre: string;
@@ -33,13 +34,13 @@ export class AppComponent  {
 
   mostrarLogin = true;
 
+
   constructor(
               private route: Router,
               private peticionesAPI: PeticionesAPIService,
               private sesion: SesionService,
               private comServer: ComServerService,
               private calculos: CalculosService) { }
-
 
 
 

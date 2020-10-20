@@ -34,6 +34,14 @@ export class InicioComponent implements OnInit {
   profesor: Profesor;
   tabla: any [] = [];
 
+  date: Date = new Date();
+  settings = {
+      bigBanner: true,
+      timePicker: true,
+      format: 'dd-MM-yyyy-hh:mm',
+      defaultOpen: true
+  }
+
   constructor(  private peticionesAPI: PeticionesAPIService,
                 private sesion: SesionService,
                 private calculos: CalculosService,
@@ -48,6 +56,7 @@ export class InicioComponent implements OnInit {
     this.ObtenJuegosActivosDelProfesor();
 
   }
+
 
 ObtenJuegosActivosDelProfesor() {
   this.peticionesAPI.DameGruposProfesor(this.profesor.id)

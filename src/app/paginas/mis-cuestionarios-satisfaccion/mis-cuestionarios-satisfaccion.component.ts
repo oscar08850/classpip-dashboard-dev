@@ -8,6 +8,8 @@ import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion
 import { Router } from '@angular/router';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 
+
+
 @Component({
   selector: 'app-mis-cuestionarios-satisfaccion',
   templateUrl: './mis-cuestionarios-satisfaccion.component.html',
@@ -16,9 +18,13 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 export class MisCuestionariosSatisfaccionComponent implements OnInit {
 
   misCuestionariosDeSatisfaccion: CuestionarioSatisfaccion[];
+  cuestionariosDeSatisfaccionPublicos: CuestionarioSatisfaccion[];
   dataSource;
+  dataSourcePublicos;
+  propietarios: string[];
   profesor: Profesor;
-  displayedColumns: string[] = ['titulo', 'descripcion', 'edit', 'delete', 'copy'];
+  displayedColumns: string[] = ['titulo', 'descripcion', 'iconos'];
+
 
   constructor(private sesion: SesionService,
               private router: Router,
@@ -30,6 +36,7 @@ export class MisCuestionariosSatisfaccionComponent implements OnInit {
   ngOnInit() {
     this.profesor = this.sesion.DameProfesor();
     this.DameTodosMisCuestionariosDeSatisfaccion();
+    this.DameTodosLosCuestionariosDeSatisfaccionPublicos();
   }
 
   // Dame todos los cuestionarios del profesor para rellenar la tabla
@@ -39,8 +46,32 @@ export class MisCuestionariosSatisfaccionComponent implements OnInit {
       if (res[0] !== undefined) {
         this.misCuestionariosDeSatisfaccion = res;
         this.dataSource = new MatTableDataSource(this.misCuestionariosDeSatisfaccion);
-      } else {
-        Swal.fire('Alerta', 'Aun no tienes ningun cuestionario de satisfaccion', 'warning');
+      }
+    });
+  }
+
+  DameTodosLosCuestionariosDeSatisfaccionPublicos() {
+    // traigo todos los publicos excepto los del profesor
+    this.peticionesAPI.DameCuestionariosSatisfaccionPublicos()
+    .subscribe ( res => {
+      console.log ('Ya tengo los cuestionarios');
+      console.log (res);
+      if (res[0] !== undefined) {
+        this.cuestionariosDeSatisfaccionPublicos = res.filter (cuestionario => cuestionario.profesorId !== this.profesor.id);
+        if (this.cuestionariosDeSatisfaccionPublicos.length === 0) {
+          this.cuestionariosDeSatisfaccionPublicos = undefined;
+        } else {
+          this.dataSourcePublicos = new MatTableDataSource(this.cuestionariosDeSatisfaccionPublicos);
+          this.propietarios = [];
+          // Traigo profesores para preparar los nombres de los propietarios
+          this.peticionesAPI.DameProfesores()
+          .subscribe ( profesores => {
+            this.cuestionariosDeSatisfaccionPublicos.forEach (cuestionario => {
+              const propietario = profesores.filter (p => p.id === cuestionario.profesorId)[0];
+              this.propietarios.push (propietario.Nombre + ' ' + propietario.Apellido);
+            });
+          });
+        }
       }
     });
   }
@@ -49,28 +80,7 @@ export class MisCuestionariosSatisfaccionComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  // AbrirDialogoConfirmacionEliminarCuestionario(cuestionario: Cuestionario): void {
-  //   const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-  //     height: '150px',
-  //     data: {
-  //       mensaje: this.mensaje,
-  //       titulo: cuestionario.Titulo,
-  //     }
-  //   });
-  //   dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-  //     this.EliminarCuestionario(cuestionario);
-  //     Swal.fire('Eliminado', 'Cuestionario: ' + cuestionario.Titulo + ' eliminado correctamente', 'success');
-  //   });
-  // }
 
-  // EliminarCuestionario(cuestionario: Cuestionario) {
-  //   this.sesion.TomaCuestionario (cuestionario);
-  //   this.calculos.EliminarCuestionario()
-  //   .subscribe (() => {
-  //     this.misCuestionarios = this.misCuestionarios.filter (a => a.id !== cuestionario.id);
-  //     this.dataSource = new MatTableDataSource(this.misCuestionarios );
-  //   });
-  // }
 
   EditarCuestionarioSatisfaccion(cuestionario: CuestionarioSatisfaccion) {
     this.sesion.TomaCuestionarioSatisfaccion(cuestionario);
@@ -116,7 +126,40 @@ export class MisCuestionariosSatisfaccionComponent implements OnInit {
         // Añado el cuestionario creado a la lista que se muestra
         this.misCuestionariosDeSatisfaccion.push (nuevo);
         this.dataSource = new MatTableDataSource(this.misCuestionariosDeSatisfaccion);
+        Swal.fire('OK', 'Se ha creado una copia privada del cuestionario', 'success');
       });
   }
+
+  HazPublico(cuestionario: CuestionarioSatisfaccion) {
+    cuestionario.Publico = true;
+    this.peticionesAPI.ModificaCuestionarioSatisfaccion (cuestionario).subscribe();
+  }
+
+
+  HazPrivado(cuestionario: CuestionarioSatisfaccion) {
+    cuestionario.Publico = false;
+    this.peticionesAPI.ModificaCuestionarioSatisfaccion (cuestionario).subscribe();
+  }
+
+  // CrearCopiaPrivada(cuestionario: CuestionarioSatisfaccion) {
+  //   const copia = new CuestionarioSatisfaccion (
+  //     cuestionario.Titulo + '(copia)',
+  //     cuestionario.Descripcion,
+  //     cuestionario.Afirmaciones,
+  //     cuestionario.PreguntasAbiertas,
+  //     this.profesor.id
+  //   );
+  //   this.peticionesAPI.CreaCuestionarioSatisfaccion (copia, this.profesor.id)
+  //   .subscribe (   res => {
+  //       Swal.fire('La copia privada se ha creado correctamente');
+  //       this.misCuestionariosDeSatisfaccion.push (res);
+  //       this.dataSource = new MatTableDataSource(this.misCuestionariosDeSatisfaccion);
+  //   });
+
+
+  // }
+
+
+
 
 }

@@ -1,5 +1,7 @@
 
-<div class="titulo">Editar colección</div>
+<div class="titulo">Mostrar colección</div>
+<div class="subtitulo">{{nombreColeccion}}</div>
+
 <mat-divider class="lineaDivisoria"></mat-divider>
 
 <div class="contenedor">
@@ -7,41 +9,19 @@
    <div class="enFila">
 
           <div class="enColumna">
-              <span style="font-weight: bold;">Nombre: </span>
-              <input style="background-color: transparent" type="text" name="nombre" placeholder="Escribe el nombre" (change) = "cambios=true" requiered [(ngModel)]="nombreColeccion">
-              <br>
-              <br>
-              <input #file id = "input" type="file" accept= 'image/*' (change)="Mostrar($event)" style="display:none">
               <img class ="imagen" *ngIf="imagenColeccion"  mat-card-image [src]="imagenColeccion" >
 
-              <button (click) = "ActivarInput()" type="button"  class="btn Aceptar">
-                    Cambiar Imagen<i class="material-icons">add_photo_alternate</i>
-              </button>
-              <button *ngIf = "cambios" type="button" class="btn Aceptar"  (click)= "EditarColeccion()">Aceptar Cambios <i class="material-icons">
-                  check </i></button>
+              <br>
+              <br>
           </div>
-
-
-
-<!--
-          <button type="button" class="btn Aceptar"  (click)= "EditarColeccion()">Aceptar Cambios <i class="material-icons">
-              check </i></button> -->
 
     </div>
     <br>
     <br>
     <mat-divider class="lineaDivisoria"></mat-divider>
     <div *ngIf = "coleccion.DosCaras" class = 'enFila' style = 'width: 60%'>
-      <button style = 'width: 25%' type="button" class="btn Agregar" (click) = AbrirDialogoAgregarCromoColeccion()>
-          Agregar Cromo <i class="material-icons">library_add</i>
-      </button>
       <button style = 'width: 50%' type="button" class="btn Info" (click) = "Voltear ()">
         Dar la vuelta a todos los cromos <i class="material-icons">library_add</i>
-      </button>
-    </div>
-    <div *ngIf = "!coleccion.DosCaras" class = 'enColumna' >
-      <button style = 'width: 30%' type="button" class="btn Agregar" (click) = AbrirDialogoAgregarCromoColeccion()>
-          Agregar Cromo <i class="material-icons">library_add</i>
       </button>
     </div>
     <mat-grid-list cols="3" rowHeight="100px" style="width: 100%;" >
@@ -67,14 +47,6 @@
             <mat-card-content>
 
               <div class = "enFila" style = "width: 30%">
-
-                <button type="button" style="width: 50px !important;" class="btn Editar" (click) = "AbrirDialogoEditarCromo(cromo)">
-                  <i  class="material-icons">edit </i>
-                </button>
-
-                <button type="button" style="width: 50px !important;" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrarCromo(cromo)">
-                  <i  class="material-icons">delete </i>
-                </button>
               </div>
                 <div *ngIf = "!coleccion.DosCaras" class="posicionImagen">
                   <img class ="imagenCromo" *ngIf="imagenesCromosDelante[i]"  mat-card-image [src]="imagenesCromosDelante[i]" >
