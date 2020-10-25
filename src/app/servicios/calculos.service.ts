@@ -684,7 +684,16 @@ export class CalculosService {
             console.log (juegos);
             juegosRapidos = juegosRapidos.concat (juegos);
             console.log (juegosRapidos);
-            obs.next (juegosRapidos);
+           // obs.next (juegosRapidos);
+            this.peticionesAPI.DameJuegosDeCogerTurnoRapido(profesorId)
+            // tslint:disable-next-line:no-shadowed-variable
+            .subscribe(juegos => {
+              console.log ('Ya tengo los juegos de coger turno rapido');
+              console.log (juegos);
+              juegosRapidos = juegosRapidos.concat (juegos);
+              console.log (juegosRapidos);
+              obs.next (juegosRapidos);
+            });
           });
         });
       });

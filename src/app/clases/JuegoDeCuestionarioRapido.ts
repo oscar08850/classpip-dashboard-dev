@@ -12,6 +12,7 @@ export class JuegoDeCuestionarioRapido {
     id: number;
     profesorId: number;
     cuestionarioId: number;
+    Respuestas: any;
 
     // tslint:disable-next-line:max-line-length
     constructor(NombreJuego?: string, Tipo?: string,  Clave?: string, PuntuacionCorrecta?: number, PuntuacionIncorrecta?: number, Presentacion?: string, JuegoActivo?: boolean, JuegoTerminado?: boolean,
@@ -28,5 +29,6 @@ export class JuegoDeCuestionarioRapido {
         this.profesorId = profesorId;
         this.cuestionarioId = cuestionarioId;
         this.TiempoLimite = TiempoLimite;
+        this.Respuestas = [];
     }
 }

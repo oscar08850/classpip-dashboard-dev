@@ -20,8 +20,8 @@ import Swal from 'sweetalert2';
 
 export class AppComponent  {
   profesor: Profesor;
-  nombre: string;
-  apellido: string;
+  nombre = "Miguel";
+  apellido = "Valero";
 
   misAlumnos: Alumno[];
 

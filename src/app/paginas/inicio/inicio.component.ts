@@ -52,6 +52,8 @@ export class InicioComponent implements OnInit {
 
   ngOnInit() {
 
+
+
     this.profesor = this.sesion.DameProfesor();
     this.ObtenJuegosActivosDelProfesor();
 

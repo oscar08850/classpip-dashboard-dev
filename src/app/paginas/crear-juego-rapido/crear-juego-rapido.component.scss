@@ -8,3 +8,11 @@
   margin: 5px;
   color: black;
 }
+
+.mat-column-iconos {
+  display: flex;
+  justify-content: flex-end;
+}
+mat-chip {
+  max-width: 500px;
+}

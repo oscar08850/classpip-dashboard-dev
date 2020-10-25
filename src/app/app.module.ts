@@ -234,6 +234,7 @@ import { MostrarFamiliaComponent } from './paginas/mis-familias-avatares/mostrar
 import { GuardarColeccionComponent } from './paginas/mis-colecciones/guardar-coleccion/guardar-coleccion.component';
 import { MostrarColeccionComponent } from './paginas/mis-colecciones/mostrar-coleccion/mostrar-coleccion.component';
 import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
+import { JuegoDeCogerTurnoRapidoComponent } from './paginas/mis-juegos-rapidos/juego-de-coger-turno-rapido/juego-de-coger-turno-rapido.component';
 
 
 
@@ -372,7 +373,8 @@ import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
     JuegoDeCuestionarioRapidoComponent,
     MostrarFamiliaComponent,
     GuardarColeccionComponent,
-    MostrarColeccionComponent
+    MostrarColeccionComponent,
+    JuegoDeCogerTurnoRapidoComponent
 
   ],
   imports: [

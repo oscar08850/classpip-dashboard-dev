@@ -4,7 +4,6 @@
 <div class="contenedor">
 
   <mat-tab-group>
-
     <mat-tab label="Mis colecciones">
       <br>
       <div class ='enColumna'>
@@ -50,36 +49,6 @@
                   </div>
               </td>
             </ng-container>
-<!--
-              <ng-container matColumnDef="delete">
-                  <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
-                  <td mat-cell *matCellDef="let coleccion">
-                    <button (click) = "EliminarColeccion(coleccion)" mat-icon-button matTooltip="Eliminar la coleccion">
-                      <i class="material-icons red md-36">delete</i>
-                    </button>
-                  </td>
-              </ng-container>
-
-              <ng-container matColumnDef="copy">
-                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
-                <td mat-cell *matCellDef="let coleccion">
-                  <button (click) = "CrearCopiaPrivada(coleccion)" mat-icon-button matTooltip="Crea una copia de la coleccion">
-                    <i class="material-icons blue md-36">content_copy</i>
-                  </button>
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="publica">
-                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
-                <td mat-cell *matCellDef="let coleccion">
-                  <button *ngIf = "!coleccion.Publica" (click) = "HazPublica(coleccion)" mat-icon-button matTooltip="Haz pública la colección">
-                    <i class="material-icons grey md-36">public_off</i>
-                  </button>
-                  <button *ngIf = "coleccion.Publica" (click) = "HazPrivada(coleccion)" mat-icon-button matTooltip="Haz privada la colección">
-                    <i class="material-icons green md-36">public</i>
-                  </button>
-                </td>
-              </ng-container> -->
-
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;">
@@ -139,39 +108,4 @@
       </div>
     </mat-tab>
   </mat-tab-group>
-    <!-- <mat-card class="panel">
-        <mat-card-content>
-    <form>
-        <mat-accordion *ngIf="coleccionesProfesor;else Aviso_no_colecciones">
-            <mat-expansion-panel *ngFor="let coleccion of coleccionesProfesor" (click) = "DameCromosEImagenDeLaColeccion(coleccion)">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  {{coleccion.Nombre}}
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-                <div class="enFila" style = "width: 100%">
-                    <div class= "enColumna">
-                      <img class ="imagen" *ngIf="imagenColeccion" mat-card-image [src]="imagenColeccion" >
-                      <span style="font-weight: bold; font-size: 130%;"> {{numeroDeCromos}} cromos</span>
-                    </div>
-                    <div class="enColumna">
-                        <button type="button" class="btn Editar" style="width: 180px; "routerLink= "editarColeccion" (click) = "GuardarColeccion(coleccion)">Editar Colección <i class="material-icons">
-                          edit </i>  </button>
-
-                        <button type="button" class="btn Eliminar" style="width: 180px; " (click) = "AbrirDialogoConfirmacionBorrarColeccion(coleccion)">Eliminar Colección <i class="material-icons">
-                          delete
-                          </i></button>
-
-                    </div>
-                </div>
-
-            </mat-expansion-panel>
-          </mat-accordion>
-
-          <ng-template #Aviso_no_colecciones>Todavía no hay colecciones creadas.</ng-template>
-
-
-    </form>
-      </mat-card-content>
-    </mat-card> -->
 </div>

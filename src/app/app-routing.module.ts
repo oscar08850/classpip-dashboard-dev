@@ -83,6 +83,7 @@ import { DeactivateGuardCrearGrupo } from './guardas/canExitCrearGrupo.guard';
 import { DeactivateGuardCrearColeccion } from './guardas/canExitCrearColeccion.guard';
 import { DeactivateGuardCrearJuego } from './guardas/canExitCrearJuego.guard';
 
+
 // Importamos componentes modulo cuestionario
 import { PreguntaComponent } from './paginas/pregunta/pregunta.component';
 import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-cuestionario.component';
@@ -134,9 +135,17 @@ import {JuegoDeVotacionRapidaComponent} from './paginas/mis-juegos-rapidos/juego
 // tslint:disable-next-line:max-line-length
 import {JuegoDeCuestionarioRapidoComponent} from './paginas/mis-juegos-rapidos/juego-de-cuestionario-rapido/juego-de-cuestionario-rapido.component';
 
+// tslint:disable-next-line:max-line-length
+import {JuegoDeCogerTurnoRapidoComponent} from './paginas/mis-juegos-rapidos/juego-de-coger-turno-rapido/juego-de-coger-turno-rapido.component';
+
 
 // tslint:disable-next-line:max-line-length
 import { EditarCuestionarioSatisfaccionComponent } from './paginas/editar-cuestionario-satisfaccion/editar-cuestionario-satisfaccion.component';
+
+import { DeactivateGuardEncuestaRapida } from './guardas/canExitEncuestaRapida.guard';
+import { DeactivateGuardCogerTurnoRapido } from './guardas/canExitCogerTurnoRapido.guard';
+import { DeactivateGuardCuestionarioRapido } from './guardas/canExitCuestionarioRapido.guard';
+import { DeactivateGuardVotacionRapida } from './guardas/canExitVotacionRapida.guard';
 
 const routes: Routes = [
 
@@ -313,15 +322,23 @@ const routes: Routes = [
 
   { path: 'inicio/:id/misJuegosRapidos', component: MisJuegosRapidosComponent},
   { path: 'inicio/:id/crearJuegoRapido', component: CrearJuegoRapidoComponent},
-  { path: 'inicio/:id/misJuegosRapidos/juegoDeEncuestaRapida', component: JuegoDeEncuestaRapidaComponent},
-  { path: 'inicio/:id/misJuegosRapidos/juegoDeVotacionRapida', component: JuegoDeVotacionRapidaComponent},
-  { path: 'inicio/:id/misJuegosRapidos/juegoDeCuestionarioRapido', component: JuegoDeCuestionarioRapidoComponent},
+  // tslint:disable-next-line:max-line-length
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeEncuestaRapida', component: JuegoDeEncuestaRapidaComponent, canDeactivate: [DeactivateGuardEncuestaRapida]},
+  // tslint:disable-next-line:max-line-length
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeVotacionRapida', component: JuegoDeVotacionRapidaComponent, canDeactivate: [DeactivateGuardVotacionRapida]},
+  // tslint:disable-next-line:max-line-length
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeCuestionarioRapido', component: JuegoDeCuestionarioRapidoComponent, canDeactivate: [DeactivateGuardCuestionarioRapido]},
+  // tslint:disable-next-line:max-line-length
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeCogerTurnoRapido', component: JuegoDeCogerTurnoRapidoComponent, canDeactivate: [DeactivateGuardCogerTurnoRapido]}
+  ,
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   // tslint:disable-next-line:max-line-length
-  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego, DeactivateGuardCrearCuestionario, DeactivateGuardCrearEscenario],
+  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego,
+              DeactivateGuardCrearCuestionario, DeactivateGuardCrearEscenario, DeactivateGuardEncuestaRapida,
+              DeactivateGuardCogerTurnoRapido, DeactivateGuardCuestionarioRapido, DeactivateGuardVotacionRapida],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
