@@ -51,6 +51,8 @@ export class MisJuegosRapidosComponent implements OnInit {
       this.router.navigate(['/inicio/' + this.profesor.id + '/misJuegosRapidos/juegoDeVotacionRapida']);
     } else  if (juego.Tipo === 'Juego De Cuestionario Rápido') {
       this.router.navigate(['/inicio/' + this.profesor.id + '/misJuegosRapidos/juegoDeCuestionarioRapido']);
+    } else  if (juego.Tipo === 'Juego De Coger Turno Rápido') {
+      this.router.navigate(['/inicio/' + this.profesor.id + '/misJuegosRapidos/juegoDeCogerTurnoRapido']);
     }
   }
 

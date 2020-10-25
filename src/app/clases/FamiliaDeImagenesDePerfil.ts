@@ -2,6 +2,7 @@ export class FamiliaDeImagenesDePerfil {
   NombreFamilia: string;
   NumeroImagenes: number;
   Imagenes: string[];
+  Publica: boolean;
   profesorId: number;
   id: number;
 
@@ -9,5 +10,6 @@ export class FamiliaDeImagenesDePerfil {
     this.NombreFamilia = nombreFamilia;
     this.NumeroImagenes = numeroImagenes;
     this.Imagenes = imagenes;
+    this.Publica = false;
   }
 }

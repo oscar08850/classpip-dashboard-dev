@@ -7,9 +7,10 @@ import { Location } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog, MatTabGroup } from '@angular/material';
 
+
 // tslint:disable-next-line:max-line-length
 import { CuestionarioSatisfaccion, JuegoDeEncuestaRapida, TablaPuntosFormulaUno,
-          JuegoDeVotacionRapida, Cuestionario, JuegoDeCuestionarioRapido } from '../../clases/index';
+          JuegoDeVotacionRapida, Cuestionario, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido } from '../../clases/index';
 
 import Swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -60,7 +61,9 @@ export class CrearJuegoRapidoComponent implements OnInit {
   seleccionTipoJuego: ChipColor[] = [
     {nombre: 'Juego De Encuesta Rápida', color: 'primary'},
     {nombre: 'Juego De Cuestionario Rápido', color: 'accent'},
-    {nombre: 'Juego De Votación Rápida', color: 'warn'}
+    {nombre: 'Juego De Votación Rápida', color: 'warn'},
+    {nombre: 'Juego De Coger Turno Rápido', color: 'primary'},
+
   ];
 
 
@@ -80,12 +83,21 @@ export class CrearJuegoRapidoComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
   dataSource;
 
-  displayedColumnsConceptos: string[] = ['concepto', ' '];
+  displayedColumnsConceptos: string[] = ['concepto', 'iconos'];
 
   Puntuacion: number[] = [];
 
   TablaPuntuacion: TablaPuntosFormulaUno[];
   displayedColumnsTablaPuntuacion: string[] = ['select', 'Posicion', 'Puntos'];
+
+
+  // Informacion para el juego de coger turno rapido
+  listaTurnos: any [] = [];
+  dataSourceTurnos;
+  turnosAsignados = false;
+  presentacionJuegoCogerTurnoRapido: string;
+
+  displayedColumnsTurnos: string[] = ['dia', 'hora', 'iconos'];
 
 
   // información para crear un juego de cuestionario
@@ -122,7 +134,9 @@ export class CrearJuegoRapidoComponent implements OnInit {
       NuevaPuntuacion: ['', Validators.required],
       PuntuacionCorrecta: ['', Validators.required],
       PuntuacionIncorrecta: ['', Validators.required],
-      TiempoLimite:  ['', Validators.required]
+      TiempoLimite:  ['', Validators.required],
+      Turno: ['', Validators.required],
+      Presentacion: ['', Validators.required]
     });
 
     this.TablaPuntuacion = [];
@@ -282,7 +296,7 @@ MasterToggle() {
     this.dataSource.data.forEach(row => this.selection.select(row));
   }
 }
-CrearJuegoDeVotacionRapida () {
+CrearJuegoDeVotacionRapida() {
   console.log ('voy a crear un juego de votacion rápida');
   const clave = Math.random().toString().substr(2, 8);
   const juegoDeVotacionRapida = new JuegoDeVotacionRapida (
@@ -377,6 +391,65 @@ CrearJuegoDeVotacionRapida () {
     });
   }
 
+  // para juego de coger turno rapido
+
+
+PonTurno() {
+  // {{turno.dia | date: 'dd-MM-yyyy'}}
+  const turno = this.myForm.value.Turno.toString();
+  const diaElegido = turno.split('T')[0];
+  const horaElegida = turno.split('T')[1];
+  // this.setDob = datePipe.transform(this.myForm.value.Turno, 'dd/MM/yyyy');
+  this.listaTurnos.push ({
+    dia: diaElegido,
+    hora: horaElegida,
+    persona: undefined
+  });
+  this.dataSourceTurnos = new MatTableDataSource (this.listaTurnos);
+  this.myForm.reset();
+}
+
+
+BorraTurno(turno) {
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < this.listaTurnos.length; i++) {
+    if ((this.listaTurnos[i].dia === turno.dia) && (this.listaTurnos[i].hora === turno.hora)) {
+      this.listaTurnos.splice ( i, 1);
+    }
+  }
+  this.dataSourceTurnos = new MatTableDataSource (this.listaTurnos);
+}
+
+AsignarTurnos() {
+  this.turnosAsignados = true;
+}
+
+GuardaPresentacionCogerTurnoRapido() {
+  this.presentacionJuegoCogerTurnoRapido = this.myForm.value.Presentacion;
+}
+
+CrearJuegoDeCogerTurnoRapido() {
+
+  // genero una clave aleatoria de 8 digitos en forma de string
+  const clave = Math.random().toString().substr(2, 8);
+  const juegoDeCogerTurnoRapido = new JuegoDeCogerTurnoRapido (
+    this.nombreDelJuego,
+    this.tipoDeJuegoSeleccionado,
+    clave,
+    this.profesorId,
+    this.presentacionJuegoCogerTurnoRapido,
+    this.listaTurnos
+  )
+
+  this.peticionesAPI.CreaJuegoDeCogerTurnoRapido (juegoDeCogerTurnoRapido)
+  .subscribe (juegoCreado => {
+    this.juego = juegoCreado;
+
+    this.juegoCreado = true;
+    Swal.fire('Juego de coger turno rapido creado correctamente', ' ', 'success');
+    this.goBack();
+  });
+}
 
 
   goBack() {

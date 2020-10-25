@@ -119,6 +119,31 @@ export class ComServerService {
     });
   }
 
+  public EsperoTurnos(clave: string): any  {
+    console.log ('voy a esperar turnos en');
+    console.log ('turnoElegido:' + clave);
+    return Observable.create((observer) => {
+        this.socket.on('turnoElegido:' + clave, (info) => {
+            console.log ('ya tengo respuesta');
+            console.log (info);
+            observer.next(info);
+        });
+    });
+  }
+
+  public NotificarTurnoCogido(claveJuego: string, turnoElegido: any) {
+    this.socket.emit ('notificacionTurnoCogido' , {clave: claveJuego, turno: turnoElegido});
+
+  }
+
+  public NotificarTurnoNuevo(claveJuego: string, turnoNuevo: any) {
+    this.socket.emit ('notificacionTurnoNuevo' , {clave: claveJuego, turno: turnoNuevo});
+
+  }
+
+
+
+
 
 }
 

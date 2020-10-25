@@ -1,3 +1,6 @@
+import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
+import { TablaHistorialPuntosAlumno } from './clasesParaTablasJuegoDePuntos/TablaHistorialPuntosAlumno';
+
 export class JuegoDeVotacionRapida {
 
     NombreJuego: string;
@@ -7,6 +10,7 @@ export class JuegoDeVotacionRapida {
     profesorId: number;
     Conceptos: string[];
     Puntos: number[];
+    Respuestas: any;
 
     // tslint:disable-next-line:max-line-length
     constructor(NombreJuego?: string, Tipo?: string, Clave?: string,
@@ -17,5 +21,6 @@ export class JuegoDeVotacionRapida {
         this.Clave = Clave;
         this.Conceptos = Conceptos;
         this.Puntos = Puntos;
+        this.Respuestas = [];
     }
 }

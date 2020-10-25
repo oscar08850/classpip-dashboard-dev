@@ -50,6 +50,10 @@
     (click)="highlight(row)"></tr>
 
   </table>
+  <div class="enColumna">
+    <button style= "width: 50%" *ngIf ="!muestroPublicas" type="button" (click) = "MostrarPublicas()" class="btn Agregar">Mostrar también familias de avatares públicas</button>
+    <button style= "width: 50%" *ngIf ="muestroPublicas" type="button" (click) = "QuitarPublicas()" class="btn Agregar">Quitar familias de avatares públicas</button>
+  </div>
 
 </form>
 <div class="enColumna">

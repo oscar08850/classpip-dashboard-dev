@@ -230,6 +230,13 @@ import { EditarCuestionarioSatisfaccionComponent } from './paginas/editar-cuesti
 
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { JuegoDeCuestionarioRapidoComponent } from './paginas/mis-juegos-rapidos/juego-de-cuestionario-rapido/juego-de-cuestionario-rapido.component';
+import { MostrarFamiliaComponent } from './paginas/mis-familias-avatares/mostrar-familia/mostrar-familia.component';
+import { GuardarColeccionComponent } from './paginas/mis-colecciones/guardar-coleccion/guardar-coleccion.component';
+import { MostrarColeccionComponent } from './paginas/mis-colecciones/mostrar-coleccion/mostrar-coleccion.component';
+import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
+import { JuegoDeCogerTurnoRapidoComponent } from './paginas/mis-juegos-rapidos/juego-de-coger-turno-rapido/juego-de-coger-turno-rapido.component';
+
+
 
 
 @NgModule({
@@ -363,7 +370,11 @@ import { JuegoDeCuestionarioRapidoComponent } from './paginas/mis-juegos-rapidos
     JuegoDeEncuestaRapidaComponent,
     JuegoDeVotacionRapidaComponent,
     EditarCuestionarioSatisfaccionComponent,
-    JuegoDeCuestionarioRapidoComponent
+    JuegoDeCuestionarioRapidoComponent,
+    MostrarFamiliaComponent,
+    GuardarColeccionComponent,
+    MostrarColeccionComponent,
+    JuegoDeCogerTurnoRapidoComponent
 
   ],
   imports: [
@@ -405,7 +416,8 @@ import { JuegoDeCuestionarioRapidoComponent } from './paginas/mis-juegos-rapidos
 
     NgxEchartsModule,
     ListViewModule,
-    DragDropModule
+    DragDropModule,
+    AngularDateTimePickerModule
 
   ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA

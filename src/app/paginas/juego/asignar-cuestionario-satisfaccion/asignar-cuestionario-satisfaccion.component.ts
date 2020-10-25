@@ -15,7 +15,8 @@ export class AsignarCuestionarioSatisfaccionComponent implements OnInit {
   @Output() emisorCuestionarioSatisfaccionElegido = new EventEmitter <number []>();
 
   profesorId: number;
-  cuestionarios: CuestionarioSatisfaccion[];
+  misCuestionarios: CuestionarioSatisfaccion[];
+  cuestionariosPublicos: CuestionarioSatisfaccion[];
   dataSource;
 
 
@@ -23,6 +24,7 @@ export class AsignarCuestionarioSatisfaccionComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
   // Para que al hacer click se quede la fila marcada
   selectedRowIndex = -1;
+  muestroPublicos = false;
 
 
   constructor(
@@ -45,12 +47,27 @@ export class AsignarCuestionarioSatisfaccionComponent implements OnInit {
     this.peticionesAPI.DameTodosMisCuestionariosSatisfaccion(this.profesorId)
     .subscribe(cuestionarios => {
       if (cuestionarios !== undefined) {
-        this.cuestionarios = cuestionarios;
-        this.dataSource = new MatTableDataSource(this.cuestionarios);
-      } else {
-        // Mensaje al usuario
-        console.log('Este profesor no tiene colecciones');
+        this.misCuestionarios = cuestionarios;
+        console.log ('ya tengo mis cuestionarios de satisfaccion');
+        console.log (this.misCuestionarios);
+        this.dataSource = new MatTableDataSource(this.misCuestionarios);
       }
+    });
+    this.peticionesAPI.DameCuestionariosSatisfaccionPublicos()
+    .subscribe (publicos => {
+      // me quedo con los públicos de los demás
+      const publicosDeOtros = publicos.filter (cuestionario => cuestionario.profesorId !== Number(this.profesorId));
+      // traigo los profesores para añadir a los publicos el nombre del propietario
+      this.peticionesAPI.DameProfesores ()
+      .subscribe (profesores => {
+        publicosDeOtros.forEach (publico => {
+          const propietario = profesores.filter (profesor => profesor.id === publico.profesorId)[0];
+          publico.Titulo = publico.Titulo + '(' + propietario.Nombre + ' ' + propietario.Apellido + ')';
+        });
+        this.cuestionariosPublicos = publicosDeOtros;
+        console.log ('ya tengo los cuestionarios de satisfaccion publicos');
+        console.log (this.cuestionariosPublicos);
+      });
     });
   }
 
@@ -85,6 +102,15 @@ export class AsignarCuestionarioSatisfaccionComponent implements OnInit {
     const cuestionario = this.dataSource.data.filter (row => this.selection.isSelected(row))[0];
     console.log (cuestionario);
     this.emisorCuestionarioSatisfaccionElegido.emit (cuestionario);
-}
+  }
+  MostrarPublicos() {
+    this.muestroPublicos = true;
+    this.dataSource = new MatTableDataSource(this.misCuestionarios.concat (this.cuestionariosPublicos));
+  }
+
+  QuitarPublicos() {
+    this.muestroPublicos = false;
+    this.dataSource = new MatTableDataSource(this.misCuestionarios);
+  }
 
 }

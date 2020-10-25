@@ -17,12 +17,16 @@ export class AsignarFamiliaImagenesPerfilComponent implements OnInit {
   mensaje: string;
   familias: FamiliaDeImagenesDePerfil[];
   listaFamilias: any[] = [];
+  listaFamiliasMias: any[] = [];
+  listaFamiliasPublicas: any[] = [];
   profesor: Profesor;
   dataSource;
+  propietarios: string [];
 
   displayedColumns: string[] = ['select', 'ejemplo', 'nombreFamilia', 'numeroImagenes'];
   selection = new SelectionModel<any>(true, []);
 
+  muestroPublicas = false;
 
   constructor(  private peticionesAPI: PeticionesAPIService,
                 private sesion: SesionService,
@@ -44,17 +48,55 @@ export class AsignarFamiliaImagenesPerfilComponent implements OnInit {
       console.log (familias);
       this.familias.forEach (f => {
         const ejemploImagen = URL.ImagenesPerfil + f.Imagenes[0];
-        this.listaFamilias.push ({
+        this.listaFamiliasMias.push ({
           familia: f,
           ejemplo: ejemploImagen
         });
       });
-      console.log ('ya tengo la lista');
-      console.log (this.listaFamilias);
+      this.listaFamilias = this.listaFamiliasMias;
       this.dataSource = new MatTableDataSource(this.listaFamilias);
     });
+    this.DameFamiliasDeImagenesDePerfilPublicas();
 
   }
+
+
+  DameFamiliasDeImagenesDePerfilPublicas() {
+    // traigo todas las familias publicas
+    this.peticionesAPI.DameFamiliasDeImagenesDePerfilPublicas()
+    .subscribe ( res => {
+      console.log ('familias publicas');
+      console.log (res);
+      if (res[0] !== undefined) {
+        // quito las que son del profesor
+        const familiasPublicas = res.filter (familia => familia.profesorId !== this.profesor.id);
+        if (familiasPublicas.length === 0) {
+          this.listaFamiliasPublicas = undefined;
+
+        } else {
+          this.propietarios = [];
+          // Traigo profesores para preparar los nombres de los propietarios
+          this.peticionesAPI.DameProfesores()
+          .subscribe ( profesores => {
+            familiasPublicas.forEach (familia => {
+              const propietario = profesores.filter (p => p.id === familia.profesorId)[0];
+              this.propietarios.push (propietario.Nombre + ' ' + propietario.Apellido);
+            });
+            let i;
+            for (i = 0; i < familiasPublicas.length; i++ ) {
+              const ejemploImagen = URL.ImagenesPerfil + familiasPublicas[i].Imagenes[0];
+              familiasPublicas[i].NombreFamilia = familiasPublicas[i].NombreFamilia + ' (' + this.propietarios[i] + ')';
+              this.listaFamiliasPublicas.push ({
+                familia: familiasPublicas[i],
+                ejemplo: ejemploImagen,
+              });
+            }
+          });
+        }
+      }
+    });
+  }
+
 
 
   Volver(): void {
@@ -83,6 +125,19 @@ export class AsignarFamiliaImagenesPerfilComponent implements OnInit {
     } else {
       this.dialogRef.close(familiaElegida);
     }
+  }
+
+
+  MostrarPublicas() {
+    this.muestroPublicas = true;
+    this.listaFamilias = this.listaFamiliasMias.concat (this.listaFamiliasPublicas);
+    this.dataSource = new MatTableDataSource(this.listaFamilias);
+  }
+
+  QuitarPublicas() {
+    this.muestroPublicas = false;
+    this.listaFamilias = this.listaFamiliasMias;
+    this.dataSource = new MatTableDataSource(this.listaFamilias);
   }
 
 }

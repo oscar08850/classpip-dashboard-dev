@@ -8,6 +8,9 @@ import { Cuestionario, CuestionarioSatisfaccion, Pregunta} from '../../../clases
 import { Router, ActivatedRoute } from '@angular/router';
 import {jsPDF} from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { Observable} from 'rxjs';
+import { of } from 'rxjs';
+import 'rxjs';
 
 
 @Component({
@@ -21,12 +24,13 @@ export class JuegoDeCuestionarioRapidoComponent implements OnInit {
   respuestas: any[];
   cuestionario: Cuestionario;
   preguntas: Pregunta[];
-  histogramaAciertos: number[];
+  histogramaAciertos: number[] = [];
 
   mostrarParticipantes = true;
   informacionPreparada = false;
   profesorId: number;
   numeroRespuestas = 0;
+  numeroParticipantes = 0;
   clasificacion: any [];
   dataSource;
   displayedColumns: string[] = ['nick', 'nota'];
@@ -34,6 +38,8 @@ export class JuegoDeCuestionarioRapidoComponent implements OnInit {
   grafico;
   donuts: any[] = [];
   misDonuts: any[] = [];
+  sonido = true;
+  ficheroGenerado = false;
 
   constructor(
     private calculos: CalculosService,
@@ -53,11 +59,19 @@ export class JuegoDeCuestionarioRapidoComponent implements OnInit {
     console.log ('tengo juego');
     this.profesorId = this.sesion.DameProfesor().id;
     this.juegoSeleccionado = this.sesion.DameJuego();
-    this.TraeInfo();
+    this.PreparaInfo();
+
     console.log ('tengo juego');
+    console.log (this.juegoSeleccionado);
+
+
     this.comServer.EsperoNickNames()
     .subscribe((nick) => {
-        sound.play();
+        this.numeroParticipantes++;
+        if (this.sonido) {
+          sound.volume (0.1);
+          sound.play();
+        }
         console.log ('se ha conectado ' + nick);
         this.participantes.push ({
           nickName: nick,
@@ -67,7 +81,10 @@ export class JuegoDeCuestionarioRapidoComponent implements OnInit {
     this.comServer.EsperoRespuestasCuestionarioRapido()
     .subscribe((respuesta) => {
         this.numeroRespuestas++;
-        sound.play();
+        if (this.sonido) {
+          sound.volume (0.1);
+          sound.play();
+        }
         console.log ('ha contestado ' + respuesta.nick);
         console.log ('respuestas ');
         console.log (respuesta.respuestas);
@@ -120,13 +137,9 @@ export class JuegoDeCuestionarioRapidoComponent implements OnInit {
     });
   }
 
-  tabChanged(event) {
-    if (event.index === 2) {
-    }
-  }
 
 
-  TraeInfo() {
+  PreparaInfo() {
     this.peticionesAPI.DameCuestionario (this.juegoSeleccionado.cuestionarioId)
     .subscribe (cuestionario => {
       this.cuestionario = cuestionario;
@@ -157,6 +170,15 @@ export class JuegoDeCuestionarioRapidoComponent implements OnInit {
         }
         console.log ('ya he preparado los donuts');
         console.log (this.misDonuts);
+        this.respuestas = this.juegoSeleccionado.Respuestas;
+        this.numeroRespuestas = this.respuestas.length;
+        this.numeroParticipantes = this.numeroRespuestas;
+
+        if (this.numeroRespuestas !== 0) {
+          console.log ('hay respuestas');
+          this.PrepararHitogramaInicial();
+          this.PrepararGraficos();
+        }
       });
     });
 
@@ -182,7 +204,60 @@ export class JuegoDeCuestionarioRapidoComponent implements OnInit {
     });
 
   }
+  // Esto es para cuando el juego ya tenia respuestas de otras sesiones
 
+  PrepararHitogramaInicial() {
+
+    console.log ('voy a preparar el histograma');
+    console.log (this.respuestas);
+    console.log ('preguntas');
+    console.log (this.preguntas);
+
+    this.respuestas.forEach (respuesta => {
+
+      let aciertos = 0;
+      let j;
+      for (j = 0; j < respuesta.respuestas.Preguntas.length; j++) {
+        // tslint:disable-next-line:max-line-length
+        const respuestaCorrecta = this.preguntas.filter (pregunta => pregunta.id === respuesta.respuestas.Preguntas[j])[0].RespuestaCorrecta;
+        if (respuestaCorrecta === respuesta.respuestas.Respuestas[j]) {
+            aciertos++;
+        }
+      }
+      this.histogramaAciertos[aciertos]++;
+
+
+      // actualizo los donuts
+
+      for (j = 0; j < respuesta.respuestas.Preguntas.length; j++) {
+        const e = this.misDonuts.filter (elemento => elemento.id === respuesta.respuestas.Preguntas[j]);
+        const donut = e[0].donut;
+        donut.filter (p => p.respuesta === respuesta.respuestas.Respuestas [j])[0].cont++;
+
+      }
+
+
+      this.clasificacion.push ({
+        nick: respuesta.nick,
+        nota: respuesta.respuestas.Nota,
+        tiempo: respuesta.respuestas.Tiempo
+      });
+
+      // tslint:disable-next-line:only-arrow-functions
+      this.clasificacion = this.clasificacion.sort(function(a, b) {
+        if (b.nota !== a.nota) {
+          return b.nota - a.nota;
+        } else {
+          // en caso de empate en la nota, gana el que empleó menos tiempo
+          return a.tiempo - b.tiempo;
+        }
+      });
+    });
+
+    this.dataSource = new MatTableDataSource(this.clasificacion);
+
+
+  }
 
 
   PrepararGraficos() {
@@ -282,5 +357,78 @@ export class JuegoDeCuestionarioRapidoComponent implements OnInit {
     console.log (this.donuts);
 
   }
+
+
+
+canExit(): Observable <boolean> {
+  // esta función se llamará cada vez que quedamos salir de la página
+    const confirmacionObservable = new Observable <boolean>( obs => {
+      let mensaje;
+      if (!this.ficheroGenerado) {
+        mensaje = 'No has generado el fichero PDF.';
+      }
+
+      Swal.fire({
+          title: '¿Seguro que quieres salir?',
+          html: mensaje,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, estoy seguro'
+        }).then((result) => {
+          if (result.value) {
+            this.sonido = false;
+          }
+          obs.next (result.value);
+      });
+    });
+
+    return confirmacionObservable;
+}
+
+
+GenerarInforme() {
+  Swal.fire ('Atención', 'Esta funcionalidad aún no está operativa' , 'error');
+
+  // const margenIzquierdo = 15;
+  // const margenSuperior = 20;
+  // const interlineado = 5;
+  // const doc = new jsPDF();
+
+
+  // doc.setFontSize(20);
+  // doc.setFont('arial', 'normal');
+  // doc.setTextColor("blue");
+  // doc.text('Resultado de la asignación de turnos', margenIzquierdo, margenSuperior);
+  // doc.line(margenIzquierdo, margenSuperior + 5, margenIzquierdo + 150, margenSuperior + 5);
+  // const fecha = new Date().toLocaleDateString();
+
+
+  // doc.setTextColor("black");
+  // doc.setFontSize(14);
+  // const splittedText = doc.splitTextToSize('Presentación: ' + this.juegoSeleccionado.Presentacion,  180);
+  // doc.text (splittedText, margenIzquierdo, margenSuperior + 20);
+  // doc.text('Fecha: ' + fecha, margenIzquierdo, margenSuperior + 40);
+
+  // autoTable(doc, { html: '#tabla',  startY:  margenSuperior + 70 });
+
+
+  // const pageCount = doc.getNumberOfPages(); //Total Page Number
+  // let i;
+  // for (i = 0; i < pageCount; i++) {
+  //   doc.setPage(i);
+  //   const pageCurrent = doc.getCurrentPageInfo().pageNumber; //Current Page
+  //   doc.setFontSize(12);
+  //   doc.text('página: ' + pageCurrent + '/' + pageCount, 180,  margenSuperior);
+  // }
+
+  // doc.save('informe.pdf');
+  // this.ficheroGenerado = true;
+}
+
+
+
+
 
 }

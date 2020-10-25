@@ -4,6 +4,8 @@ import { FamiliaAvatares } from 'src/app/clases';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatDialog, MatTableDataSource } from '@angular/material';
+import { AsignarFamiliasJuegoAvataresComponent } from '../juego/asignar-familias-juego-avatares/asignar-familias-juego-avatares.component';
 
 @Component({
   selector: 'app-mis-familias-avatares',
@@ -13,6 +15,8 @@ import { Router } from '@angular/router';
 export class MisFamiliasAvataresComponent implements OnInit {
 
   listaFamilias: FamiliaAvatares[];
+  familiasPublicas: FamiliaAvatares[];
+  propietarios: string[];
   familiaId: number;
   familiaCargada = false;
   familiaElegida: FamiliaAvatares;
@@ -30,20 +34,60 @@ export class MisFamiliasAvataresComponent implements OnInit {
   alto = '162px';
   dobleancho = '300px';
   doblealto = '324px';
-
+  displayedColumns: string[] = ['nombre', 'iconos'];
+  dataSource;
+  dataSourcePublicas;
+  profesorId: number;
 
 
   constructor( private peticionesAPI: PeticionesAPIService,
-               private sesion: SesionService,   private location: Location,
+               private sesion: SesionService,
+               private location: Location,
                private router: Router
   ) { }
 
   ngOnInit() {
+    this.profesorId = this.sesion.DameProfesor().id;
     this.hayComplementoPuesto = Array(4).fill(false);
     this.complementoPuesto = Array(4);
     this.peticionesAPI.DameFamiliasAvataresProfesor (this.sesion.DameProfesor().id)
-    .subscribe (lista => this.listaFamilias = lista);
+    .subscribe (lista => {
+      if (lista.length === 0) {
+        this.listaFamilias = undefined;
+      } else {
+        this.listaFamilias = lista;
+        this.dataSource = new MatTableDataSource(this.listaFamilias);
+      }
+    });
+    this.DameFamiliasDeAvataresPublicas();
+
   }
+
+
+  DameFamiliasDeAvataresPublicas() {
+    // traigo todos los publicos excepto los del profesor
+    this.peticionesAPI.DameFamiliasAvataresPublicas()
+    .subscribe ( res => {
+      if (res[0] !== undefined) {
+        this.familiasPublicas = res.filter (familia => familia.profesorId !== this.profesorId);
+        if (this.familiasPublicas.length === 0) {
+          this.familiasPublicas = undefined;
+        } else {
+          this.dataSourcePublicas = new MatTableDataSource(this.familiasPublicas);
+          this.propietarios = [];
+          // Traigo profesores para preparar los nombres de los propietarios
+          this.peticionesAPI.DameProfesores()
+          .subscribe ( profesores => {
+            this.familiasPublicas.forEach (familia => {
+              const propietario = profesores.filter (p => p.id === familia.profesorId)[0];
+              this.propietarios.push (propietario.Nombre + ' ' + propietario.Apellido);
+            });
+          });
+        }
+      }
+    });
+  }
+
 
   CreaImagen(numeroComplemento, opcion, stringImagen): any {
     // Crea la imagen que hay que colocar
@@ -303,18 +347,8 @@ export class MisFamiliasAvataresComponent implements OnInit {
     this.familiaCargada = true;
   }
 
-  BorrarFamilia() {
-    this.familiaElegida.Complemento1.forEach (imagenComplemento =>
-      this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
-    this.familiaElegida.Complemento2.forEach (imagenComplemento =>
-      this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
-    this.familiaElegida.Complemento3.forEach (imagenComplemento =>
-      this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
-    this.familiaElegida.Complemento4.forEach (imagenComplemento =>
-      this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
-    this.peticionesAPI.BorrarImagenAvatar (this.familiaElegida.Silueta).subscribe();
-    this.peticionesAPI.BorraFamiliaAvatares (this.familiaElegida.id).subscribe();
-    this.listaFamilias = this.listaFamilias.filter (familia => familia.id !== Number(this.familiaElegida.id));
+  EliminarFamilia(familia: FamiliaAvatares) {
+
 
     Swal.fire({
       title: '¿Seguro que quieres eliminar familia de avatares?',
@@ -326,26 +360,44 @@ export class MisFamiliasAvataresComponent implements OnInit {
       confirmButtonText: 'Si, estoy seguro'
     }).then((result) => {
       if (result.value) {
-        this.familiaElegida.Complemento1.forEach (imagenComplemento =>
+        familia.Complemento1.forEach (imagenComplemento =>
           this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
-        this.familiaElegida.Complemento2.forEach (imagenComplemento =>
+        familia.Complemento2.forEach (imagenComplemento =>
           this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
-        this.familiaElegida.Complemento3.forEach (imagenComplemento =>
+        familia.Complemento3.forEach (imagenComplemento =>
           this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
-        this.familiaElegida.Complemento4.forEach (imagenComplemento =>
+        familia.Complemento4.forEach (imagenComplemento =>
           this.peticionesAPI.BorrarImagenAvatar (imagenComplemento).subscribe());
-        this.peticionesAPI.BorrarImagenAvatar (this.familiaElegida.Silueta).subscribe();
-        this.peticionesAPI.BorraFamiliaAvatares (this.familiaElegida.id).subscribe(() => {
-          this.listaFamilias = this.listaFamilias.filter (familia => familia.id !== Number(this.familiaElegida.id));
+        this.peticionesAPI.BorrarImagenAvatar (familia.Silueta).subscribe();
+        this.peticionesAPI.BorraFamiliaAvatares (familia.id).subscribe(() => {
+          this.listaFamilias = this.listaFamilias.filter (f => f.id !== Number(familia.id));
+          this.dataSource = new MatTableDataSource(this.listaFamilias);
           Swal.fire('La familia de avatares se ha eliminado correctamente');
           // this.router.navigate(['/inicio/']);
-          this.location.back();
         });
       }
     });
   }
 
-  GuardarFamilia() {
-    this.sesion.TomaFamilia (this.familiaElegida);
+  Descargar(familia: FamiliaAvatares) {
+    this.sesion.TomaFamilia (familia);
+    this.router.navigate(['inicio/' + this.profesorId + '/misFamiliasAvatares/guardarFamilia']);
   }
+
+  Mostrar(familia: FamiliaAvatares) {
+    this.sesion.TomaFamilia (familia);
+    this.router.navigate(['inicio/' + this.profesorId + '/misFamiliasAvatares/mostrarFamilia']);
+  }
+
+  HazPublica(familia: FamiliaAvatares) {
+    familia.Publica = true;
+    this.peticionesAPI.ModificaFamiliaAvatares (familia).subscribe();
+  }
+
+
+  HazPrivada(familia: FamiliaAvatares) {
+    familia.Publica = false;
+    this.peticionesAPI.ModificaFamiliaAvatares (familia).subscribe();
+  }
+
 }

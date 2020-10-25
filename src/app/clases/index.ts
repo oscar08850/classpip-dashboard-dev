@@ -67,12 +67,16 @@ export * from './JuegoDeVotacionTodosAUno';
 export * from './TablaAlumnoJuegoDeVotacionTodosAUno';
 export * from './Criterio';
 export * from './Rubrica';
-export * from './FamiliaDeImagenesDePerfil';
 export * from './CuestionarioSatisfaccion';
 export * from './JuegoDeCuestionarioSatisfaccion';
 export * from './AlumnoJuegoDeCuestionarioSatisfaccion';
 export * from './JuegoDeEncuestaRapida';
 export * from './JuegoDeVotacionRapida';
+
+export * from './FamiliaDeImagenesDePerfil';
 export * from './JuegoDeCuestionarioRapido';
+export * from './JuegoDeCogerTurnoRapido';
+
+
 
 

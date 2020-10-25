@@ -1,6 +1,7 @@
 export class CuestionarioSatisfaccion {
     Titulo: string;
     Descripcion: string;
+    Publico: boolean;
     Afirmaciones: string[];
     PreguntasAbiertas: string[];
     profesorId: number;
@@ -12,6 +13,7 @@ export class CuestionarioSatisfaccion {
         this.Afirmaciones = Afirmaciones;
         this.PreguntasAbiertas = PreguntasAbiertas;
         this.profesorId = profesorId;
+        this.Publico = false;
     }
 }
 

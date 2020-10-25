@@ -44,7 +44,7 @@
 
                 <label class = "LabelStepper">Selecciona un tipo de juego:</label>
                 <mat-chip-list class="mat-chip-list-stacked">
-                    <mat-chip *ngFor="let tipo of seleccionTipoJuego; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoJuego[i].selected}}"
+                    <mat-chip  style = 'width: 300px' *ngFor="let tipo of seleccionTipoJuego; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoJuego[i].selected}}"
                     (click)="TipoDeJuegoSeleccionado(seleccionTipoJuego[i])" [value]="tipo.nombre" [selectable]="true">
                       {{tipo.nombre}}
                     </mat-chip>
@@ -197,13 +197,13 @@
 
                   <table style="width: 100%" align="left" mat-table [dataSource]="dataSourceConceptos"  class="mat-elevation-z8">
 
-                    <ng-container matColumnDef="concepto" style= "width: 60%">
+                    <ng-container matColumnDef="concepto" style= "width: 40%">
                       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Concepto </th>
                       <td mat-cell  *matCellDef="let concepto"> {{concepto}} </td>
                       <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
 
-                    <ng-container matColumnDef=" " style= "width: 20%; text-align: right;">
+                    <ng-container matColumnDef="iconos">
                       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
                       <td mat-cell *matCellDef="let concepto">
                         <button (click) = "BorraConcepto(concepto)" mat-icon-button>
@@ -318,6 +318,103 @@
               </mat-step>
 
           </div>
+
+
+          <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Coger Turno Rápido'">
+            <!--/////////////////// INTRODUCIR PRESENTACION //////////////////////////-->
+          <mat-step>
+            <ng-template matStepLabel><div>Presentacion</div></ng-template>
+
+            <div>
+
+                  <mat-form-field>
+                    <mat-label>Escribe la presentacion</mat-label>
+                    <input matInput placeholder="Escriba la presentación" requiered formControlName="Presentacion" (keyup) = "GuardaPresentacionCogerTurnoRapido()">
+                  </mat-form-field>
+
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button type="button" class="btn Next"  matStepperNext>Siguiente</button>
+                </div>
+            </div>
+
+          </mat-step>
+
+            <!--INTRODUCIR TURNOS-->
+            <mat-step>
+                <ng-template matStepLabel><div>Turnos</div></ng-template>
+                <div class="contenedor">
+                  <div class="enColumna">
+                    <div class = "enFila" style="width: 130%">
+                      <mat-form-field style = 'width: 40%; margin-right: 5%;'>
+                        <mat-label>Clica en el icono del calendario para introducir el siguiente turno</mat-label>
+                        <!-- <input matInput required formControlName="Turno"> -->
+                        <input matInput type="datetime-local" placeholder="introduce dia/hora" formControlName="Turno">
+                      </mat-form-field>
+                      <br>
+
+                      <button type="button"class="btn Agregar"  (click) = "PonTurno()">Añade turno</button>
+
+                      <button type="button" class="btn Aceptar" (click) = "AsignarTurnos()"> Asignar turnos </button>
+                    </div>
+                    <p><strong>Nota:</strong> La introducción de turnos no funciona si se usa Firefox, Safari o Internet Explorer 12 (o anteriores).</p>
+
+
+                    <h2>Lista de turnos</h2>
+                    <form style="width: 100%">
+
+                    <table style="width: 100%" align="left" mat-table [dataSource]="dataSourceTurnos"  class="mat-elevation-z8">
+
+                      <ng-container matColumnDef="dia" style= "width: 60%">
+                        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Dia </th>
+                        <td mat-cell  *matCellDef="let turno"> {{turno.dia | date: 'dd-MM-yyyy'}} </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container>
+                      <ng-container matColumnDef="hora" style= "width: 60%">
+                        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Hora </th>
+                        <td mat-cell  *matCellDef="let turno"> {{turno.hora}} </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="iconos" style= "width: 20%; text-align: right;">
+                        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                        <td mat-cell *matCellDef="let turno">
+                          <button (click) = "BorraTurno(turno)" mat-icon-button>
+                            <i class="material-icons red md-36">delete</i>
+                          </button>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container>
+
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumnsTurnos"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumnsTurnos;"></tr>
+
+                    </table>
+                    </form>
+
+
+                  </div>
+                </div>
+
+                <div *ngIf = "turnosAsignados" class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+
+
+            </mat-step>
+            <!-- ULTIMO PASO: CREAR EL JUEGO  -->
+            <mat-step>
+              <ng-template matStepLabel><div>Finalizar</div></ng-template>
+
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button style= "width: 60%" type="button" class="btn Aceptar" (click) = "CrearJuegoDeCogerTurnoRapido()">Crear juego de coger turno rápido</button>
+              </div>
+            </mat-step>
+
+        </div>
 
 
           </mat-horizontal-stepper>

@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { SesionService, PeticionesAPIService} from './index';
 import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos,
          TablaEquipoJuegoDePuntos, HistorialPuntosAlumno, HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo,
-         AlumnoJuegoDeColeccion, Album, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
+         AlumnoJuegoDeColeccion, Album, Coleccion, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
          TablaEquipoJuegoDeCompeticion, Jornada, EquipoJuegoDeCompeticionLiga, EnfrentamientoLiga, InformacionPartidosLiga,
          AlumnoJuegoDeCompeticionLiga, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno,
          // tslint:disable-next-line:max-line-length
          TablaClasificacionJornada, TablaPuntosFormulaUno, AlumnoJuegoDeVotacionUnoATodos, TablaAlumnoJuegoDeVotacionUnoATodos,
-         AlumnoJuegoDeVotacionTodosAUno,TablaAlumnoJuegoDeVotacionTodosAUno, JuegoDeVotacionTodosAUno} from '../clases/index';
+         AlumnoJuegoDeVotacionTodosAUno,TablaAlumnoJuegoDeVotacionTodosAUno, JuegoDeVotacionTodosAUno, FamiliaAvatares} from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -684,7 +684,16 @@ export class CalculosService {
             console.log (juegos);
             juegosRapidos = juegosRapidos.concat (juegos);
             console.log (juegosRapidos);
-            obs.next (juegosRapidos);
+           // obs.next (juegosRapidos);
+            this.peticionesAPI.DameJuegosDeCogerTurnoRapido(profesorId)
+            // tslint:disable-next-line:no-shadowed-variable
+            .subscribe(juegos => {
+              console.log ('Ya tengo los juegos de coger turno rapido');
+              console.log (juegos);
+              juegosRapidos = juegosRapidos.concat (juegos);
+              console.log (juegosRapidos);
+              obs.next (juegosRapidos);
+            });
           });
         });
       });
@@ -1839,7 +1848,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
   // DEJAR RELACIONES PREGUNTADELCUESTIONARIO QUE NO NOS SIRVEN EN LA BASE DE DATOS
   private EliminarPreguntasDelCuestionario() {
     // Pido las preguntasDelCuestionario correspondientes al cuestionario que voy a borrar
-    this.peticionesAPI.DamePreguntasDelCuestionarioCuestionario(this.sesion.DameCuestionario().id)
+    this.peticionesAPI.DameAsignacionesPreguntasACuestionario(this.sesion.DameCuestionario().id)
     .subscribe( preguntasDelCuestionario => {
       if (preguntasDelCuestionario[0] !== undefined) {
 
@@ -3708,5 +3717,180 @@ private EliminarAlumnosJuegoDeGeocaching() {
 
   });
 }
+
+// Devuelve la lista de ficheros de la familia que ya están en la base de datos
+// Se usa al cargar una familia nueva para asegurarnos de que no cargamos ficheros
+// que ya se usan en otros recursos, lo cual sería un problema al borrar un recurso
+public VerificarFicherosFamilia(familia: FamiliaAvatares): any {
+  const listaFicherosObservable = new Observable ( obs => {
+    const lista: string [] = [];
+    let cont = 0;
+    const numeroFicheros =  familia.Complemento1.length +
+                            familia.Complemento2.length +
+                            familia.Complemento3.length +
+                            familia.Complemento4.length +
+                            1;
+
+    this.peticionesAPI.DameImagenAvatar (familia.Silueta)
+    .subscribe (
+      (imagen) => {
+
+        lista.push (familia.Silueta);
+        cont++;
+        if (cont === numeroFicheros) {
+          obs.next (lista);
+        }
+      },
+      (error) => {
+        cont++;
+        if (cont === numeroFicheros) {
+          obs.next (lista);
+        }
+    });
+    familia.Complemento1.forEach (nombreFichero => {
+      this.peticionesAPI.DameImagenAvatar (nombreFichero)
+      .subscribe (
+        (imagen) => {
+
+          lista.push (nombreFichero);
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+        },
+        (error) => {
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+      });
+    });
+    familia.Complemento2.forEach (nombreFichero => {
+      this.peticionesAPI.DameImagenAvatar (nombreFichero)
+      .subscribe (
+        (imagen) => {
+
+          lista.push (nombreFichero);
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+        },
+        (error) => {
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+      });
+    });
+    familia.Complemento3.forEach (nombreFichero => {
+      this.peticionesAPI.DameImagenAvatar (nombreFichero)
+      .subscribe (
+        (imagen) => {
+
+          lista.push (nombreFichero);
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+        },
+        (error) => {
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+      });
+    });
+    familia.Complemento4.forEach (nombreFichero => {
+      this.peticionesAPI.DameImagenAvatar (nombreFichero)
+      .subscribe (
+        (imagen) => {
+
+          lista.push (nombreFichero);
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+        },
+        (error) => {
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+      });
+    });
+  });
+
+  return listaFicherosObservable;
+
+}
+
+public VerificarFicherosColeccion(coleccion: any): any {
+  const listaFicherosObservable = new Observable ( obs => {
+    const lista: string [] = [];
+    let numeroFicheros: number;
+    let cont = 0;
+    if (coleccion.DosCaras) {
+        numeroFicheros = coleccion.cromos.length * 2 + 1;
+    } else {
+        numeroFicheros = coleccion.cromos.length + 1;
+    }
+
+    this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
+    .subscribe (
+        (imagen) => {
+          lista.push (coleccion.ImagenColeccion);
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+        },
+        (error) => {
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+    });
+    coleccion.cromos.forEach (cromo => {
+        console.log ('nuevo cromo');
+        console.log (cromo);
+        this.peticionesAPI.DameImagenCromo (cromo.nombreImagenCromoDelante)
+        .subscribe (
+          (imagen) => {
+            lista.push (cromo.nombreImagenCromoDelante);
+            cont++;
+            if (cont === numeroFicheros) {
+              obs.next (lista);
+            }
+          },
+          (error) => {
+            cont++;
+            if (cont === numeroFicheros) {
+              obs.next (lista);
+            }
+        });
+
+        if (coleccion.DosCaras)  {
+          this.peticionesAPI.DameImagenCromo (cromo.nombreImagenCromoDetras)
+          .subscribe (
+            (imagen) => {
+              lista.push (cromo.nombreImagenCromoDetras);
+              cont++;
+              if (cont === numeroFicheros) {
+                obs.next (lista);
+              }
+            },
+            (error) => {
+              cont++;
+              if (cont === numeroFicheros) {
+                obs.next (lista);
+              }
+          });
+        }
+    });
+  });
+  return listaFicherosObservable;
+}
+
 
 }

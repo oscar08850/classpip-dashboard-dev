@@ -116,7 +116,7 @@
 
                 <label class = "LabelStepper">Selecciona un tipo de juego:</label>
                 <mat-chip-list class="mat-chip-list-stacked">
-                    <mat-chip *ngFor="let tipo of seleccionTipoJuego; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoJuego[i].selected}}"
+                    <mat-chip style= "width: 300px" *ngFor="let tipo of seleccionTipoJuego; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoJuego[i].selected}}"
                     (click)="TipoDeJuegoSeleccionado(seleccionTipoJuego[i])" [value]="tipo.nombre" [selectable]="true">
                       {{tipo.nombre}}
                     </mat-chip>
@@ -142,7 +142,7 @@
 
                 <label class = "LabelStepper">Selecciona un modo de juego:</label>
                 <mat-chip-list class="mat-chip-list-stacked">
-                  <mat-chip *ngFor="let tipo of seleccionModoJuego; let i = index" selected [color]="tipo.color"  selected="{{seleccionModoJuego[i].selected}}"
+                  <mat-chip style = "width: 150px" *ngFor="let tipo of seleccionModoJuego; let i = index" selected [color]="tipo.color"  selected="{{seleccionModoJuego[i].selected}}"
                      (click)="ModoDeJuegoSeleccionado(seleccionModoJuego[i])" [value]="tipo.nombre" [selectable]="true" >
                       {{tipo.nombre}}
                   </mat-chip>
@@ -566,7 +566,7 @@
 
                     <label class = "LabelStepper">Selecciona un tipo de competición para el juego:</label>
                     <mat-chip-list class="mat-chip-list-stacked">
-                      <mat-chip *ngFor="let tipo of seleccionTipoDeCompeticion; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeCompeticion[i].selected}}"
+                      <mat-chip style = "width: 150px" *ngFor="let tipo of seleccionTipoDeCompeticion; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeCompeticion[i].selected}}"
                          (click)="TipoDeCompeticionSeleccionado(seleccionTipoDeCompeticion[i])" [value]="tipo.nombre" [selectable]="true">
                           {{tipo.nombre}}
                       </mat-chip>

@@ -1,8 +1,12 @@
+import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
+
 export class JuegoDeEncuestaRapida {
 
     NombreJuego: string;
     Tipo: string;
     Clave: string;
+    RespuestasPreguntasAbiertas: any;
+    Respuestas: any;
     id: number;
     profesorId: number;
     cuestionarioSatisfaccionId: number;
@@ -15,5 +19,6 @@ export class JuegoDeEncuestaRapida {
         this.profesorId = profesorId;
         this.Clave = Clave;
         this.cuestionarioSatisfaccionId = cuestionarioSatisfaccionId;
+        this.Respuestas = [];
     }
 }
