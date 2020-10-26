@@ -146,12 +146,13 @@ import { DeactivateGuardEncuestaRapida } from './guardas/canExitEncuestaRapida.g
 import { DeactivateGuardCogerTurnoRapido } from './guardas/canExitCogerTurnoRapido.guard';
 import { DeactivateGuardCuestionarioRapido } from './guardas/canExitCuestionarioRapido.guard';
 import { DeactivateGuardVotacionRapida } from './guardas/canExitVotacionRapida.guard';
+import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-perfil.component';
 
 const routes: Routes = [
 
 
   // LOGIN
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: AppComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 
 
@@ -162,12 +163,16 @@ const routes: Routes = [
   { path: 'aboutClasspip', component: AboutClasspipComponent },
 
   // INICIO
+  { path: 'inicio', component: InicioComponent },
   { path: 'inicio/:id', component: InicioComponent },
 
   { path: 'inicio/:id/desarrolladores', component: DesarrolladoresComponent },
   { path: 'inicio/:id/estilos', component: EstilosComponent },
 
   { path: 'inicio/:id/recursos', component: MenuRecursosComponent },
+
+
+  { path: 'inicio/:id/perfil', component: ModificarPerfilComponent },
 
   // GRUPOS
   //  La página de crear grupos tiene una guarda para que no pueda abandonarse

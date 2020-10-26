@@ -114,7 +114,7 @@ export class MisColeccionesComponent implements OnInit {
           .subscribe ( profesores => {
             this.coleccionesPublicas.forEach (coleccion => {
               const propietario = profesores.filter (p => p.id === coleccion.profesorId)[0];
-              this.propietarios.push (propietario.Nombre + ' ' + propietario.Apellido);
+              this.propietarios.push (propietario.Nombre + ' ' + propietario.PrimerApellido);
             });
           });
         }

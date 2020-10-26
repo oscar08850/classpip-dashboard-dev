@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Profesor } from '../../../clases/index';
 
 // Servicios
-import {SesionService} from '../../../servicios/index';
+import {SesionService, ComServerService} from '../../../servicios/index';
 
 @Component({
   selector: 'app-navbar',
@@ -48,8 +48,9 @@ export class NavbarComponent implements OnInit {
   URLCrearJuegoRapido: string;
 
 
-  constructor( private sesion: SesionService,
-               private router: Router) { }
+  constructor(  private sesion: SesionService,
+                private comServer: ComServerService,
+                private router: Router) { }
 
   ngOnInit() {
 
@@ -65,7 +66,7 @@ export class NavbarComponent implements OnInit {
     this.URLMisAlumnos = this.URLInicio + '/misAlumnos';
     this.URLIntroducirAlumnos = this.URLInicio + '/introducirAlumnos';
     this.URLEstilos = this.URLInicio + '/estilos';
-    this.URLConfiguracion = this.URLInicio + '/configuracionProfesor';
+    this.URLConfiguracion = this.URLInicio + '/perfil';
     this.URLMisPreguntas = this.URLInicio + '/misPreguntas';
     this.URLCrearPregunta = this.URLInicio + '/crearPregunta';
     this.URLMisCuestionarios = this.URLInicio + '/misCuestionarios';
@@ -82,6 +83,16 @@ export class NavbarComponent implements OnInit {
     // Recupero al profesor porque se muestra en la barra de navegación
     this.profesor = this.sesion.DameProfesor();
 
+  }
+
+  CerrarSesion() {
+
+    this.comServer.Desonectar();
+    //this.router.navigateByUrl('localhost:4200');
+    //window.location.href = 'http://localhost:4200'
+
+    console.log ('voy a login');
+    this.router.navigate(['login']);
   }
 
 }

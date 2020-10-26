@@ -3,6 +3,7 @@
   <!-- CABECERA -->
   <form  *ngIf="profesor === undefined" class="contenedorInicioSesion">
       <button  routerLink = aboutClasspip mat-button [matMenuTriggerFor]="Classpip" >
+
           <img width="40" src="./assets/Icono Classpip.png">
           <h1 class="class">class</h1>
           <h1 class="pip">pip</h1>
@@ -25,11 +26,11 @@
 
           <div>
             <mat-form-field style="margin: 15px; width: 80%">
-              <input matInput type="text" name="nombre" placeholder="Nombre" required [(ngModel)]="nombre">
+              <input matInput type="text" name="nombre" placeholder="Nombre de usuario" required [(ngModel)]="nombre">
             </mat-form-field>
 
             <mat-form-field style="margin: 15px;width: 80%">
-              <input matInput type="password" name="apellido" placeholder="Contraseña" required [(ngModel)]="apellido">
+              <input matInput type="password" name="pass" placeholder="Contraseña" required [(ngModel)]="pass">
 
             </mat-form-field>
           </div>

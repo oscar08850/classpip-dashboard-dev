@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import * as URL from '../URLs/urls';
+import { Profesor} from '../clases/index';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,10 @@ export class ComServerService {
   public Conectar() {
     this.socket = io(URL.Servidor);
     this.socket.emit ('dash');
+  }
+
+  public Desonectar() {
+    this.socket.emit ('desconectarDash');
   }
 
   public EsperoRespuestasJuegoDeCuestionario (): any {
@@ -72,11 +77,11 @@ export class ComServerService {
     this.socket.emit ('notificacionGrupo' , {grupoId: grupoDestinatarioId, mensaje: mensajeAEnviar});
   }
 
-  public RecordarContrasena(emailRec: string, nombreRec: string, contrasenaRec: string) {
+  public RecordarContrasena(profesor: Profesor) {
     console.log ('dentro del servicio para recordar contraseña');
     // Me conecto momentaneamente para enviarle al servidor la contraseña que debe enviar por email
     this.socket = io(URL.Servidor);
-    this.socket.emit ('recordarContraseña' , {email: emailRec, nombre: nombreRec, contrasena: contrasenaRec});
+    this.socket.emit ('recordarContraseña' , {email: profesor.email, nombre: profesor.NombreUsuario, contrasena: profesor.Password});
     // Me desconecto
     this.socket.emit('forceDisconnect');
   }

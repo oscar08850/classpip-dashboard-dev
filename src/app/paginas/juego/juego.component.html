@@ -359,7 +359,7 @@
 
                   <label class = "LabelStepper">Selecciona el tipo de votación</label>
                   <mat-chip-list class="mat-chip-list-stacked">
-                    <mat-chip *ngFor="let tipo of seleccionTipoDeVotacion; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeVotacion[i].selected}}"
+                    <mat-chip style = "width: 150px" *ngFor="let tipo of seleccionTipoDeVotacion; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeVotacion[i].selected}}"
                        (click)="TipoDeVotacionSeleccionado(seleccionTipoDeVotacion[i])" [value]="tipo.nombre" [selectable]="true">
                         {{tipo.nombre}}
                     </mat-chip>
