@@ -1,6 +1,5 @@
+<!--
 
-<div style="display: flex;  justify-content: center; flex-direction: column;">
-  <!-- CABECERA -->
   <form  *ngIf="profesor === undefined" class="contenedorInicioSesion">
       <button  routerLink = aboutClasspip mat-button [matMenuTriggerFor]="Classpip" >
 
@@ -15,7 +14,7 @@
 
   </form>
 
-  <!-- LOGIN -->
+
   <form *ngIf="profesor === undefined" style="display: flex;  justify-content: center">
   <mat-card *ngIf ="mostrarLogin" class="cartaLogin">
 
@@ -41,7 +40,7 @@
           </mat-card-actions>
      </mat-card-content>
   </mat-card>
-  <!-- REGISTRO -->
+
   <mat-card *ngIf ="!mostrarLogin" class="cartaRegistro">
 
     <mat-card-content style="text-align: center; display: flex; align-items: center; flex-direction: column; ">
@@ -83,27 +82,26 @@
 </div>
 
 <div>
-  <!-- SI EL PROFESOR ENTRA CORRECTAMENTE, PODRÁ VER EL NAVBAR -->
+
   <div>
     <form *ngIf="profesor !== undefined">
         <app-navbar></app-navbar>
     </form>
   </div>
 
-  <!-- CONTENIDO PRINCIPAL  -->
-  <!-- style="height: 668px;" -->
   <div>
       <form *ngIf="profesor !== undefined">
         <router-outlet></router-outlet>
       </form>
   </div>
 
-  <!-- FALTA EL FOOTER -->
+
 
 </div>
 
+ -->
 
-
+<app-login></app-login>
 <div>
     <app-footer></app-footer>
 </div>

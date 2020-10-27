@@ -80,16 +80,17 @@ export class NavbarComponent implements OnInit {
     this.URLCrearJuegoRapido = this.URLInicio + '/crearJuegoRapido';
 
 
-    // Recupero al profesor porque se muestra en la barra de navegación
-    this.profesor = this.sesion.DameProfesor();
-
+    console.log ('estoy en navbar');
+    // Me subscribo para que cada vez que cambie el profesor pueda actualizar el navbar
+    // Esto es particularmente en el caso de logout, para que reciba un profesor undefined y
+    // desaparezca la barra de navegación hasta que se autentifique un nuevo profesor
+    this.sesion.EnviameProfesor ()
+    .subscribe ( profesor => this.profesor = profesor);
   }
 
   CerrarSesion() {
 
     this.comServer.Desonectar();
-    //this.router.navigateByUrl('localhost:4200');
-    //window.location.href = 'http://localhost:4200'
 
     console.log ('voy a login');
     this.router.navigate(['login']);
