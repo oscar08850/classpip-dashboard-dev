@@ -18,18 +18,17 @@ import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
 import { JuegoDeGeocaching } from '../clases/JuegoDeGeocaching';
 import { AlumnoJuegoDeGeocaching } from '../clases/AlumnoJuegoDeGeocaching';
+// import {host} from '../URLs/urls';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PeticionesAPIService {
 
+  // private host = host;
 
-
-
-
- // private host = 'http://localhost';
- private host = 'http://147.83.118.92';
+ private host = 'http://localhost';
+ // private host = 'http://147.83.118.92';
 
 
 

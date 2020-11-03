@@ -34,6 +34,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 
 import { ListViewModule } from '@syncfusion/ej2-angular-lists';
+import {MatSelectModule} from '@angular/material/select';
 
 
 // IMPORTs COMPONENTES
@@ -379,7 +380,7 @@ import { MisFamiliasImagenesPerfilComponent } from './paginas/mis-familias-image
     MatDatepickerModule,
     MatNativeDateModule,
     MatRadioModule,
-
+    MatSelectModule,
     HttpClientModule,
 
     NgxEchartsModule,

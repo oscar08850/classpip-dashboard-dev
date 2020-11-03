@@ -10,15 +10,17 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 // tslint:disable-next-line:max-line-length
-import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
+import {
+  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
 
-          AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
-          EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
-          EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
-          AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-          EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable,
-          JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
-          JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno } from '../../clases/index';
+  AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
+  EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
+  EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
+  AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
+  EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable,
+  JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
+  JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, Rubrica
+} from '../../clases/index';
 
 
 // Services
@@ -105,6 +107,7 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Cuestionario', color: 'accent'},
     {nombre: 'Juego De Geocaching', color: 'warn'},
     {nombre: 'Juego De Votación', color: 'primary'},
+    {nombre: 'Juego De Evaluación', color: 'accent'},
   ];
   seleccionModoJuego: ChipColor[] = [
     {nombre: 'Individual', color: 'primary'},
@@ -139,6 +142,27 @@ export class JuegoComponent implements OnInit {
   familiasElegidas: number[];
   tengoFamilias = false;
 
+  // Información para crear juego de evaluación
+  seleccionTipoDeEvaluacion: ChipColor[] = [
+    {nombre: '1 a N', color: 'primary'},
+    {nombre: 'Todos con todos', color: 'warn'}
+  ];
+  tipoDeEvaluacionSeleccionado: string;
+  tengoTipoDeEvaluacion = false;
+  //
+  seleccionRelacionesEvaluacion: ChipColor[] = [
+    {nombre: 'A elegir', color: 'primary'},
+    {nombre: 'Aleatorio', color: 'warn'}
+  ];
+  relacionesEvaluacionSeleccionado: string;
+  tengoRelacionEvaluacion = false;
+  //
+  profesorEvalua = false;
+  profesorEvaluaModo = 'normal';
+  autoevaluacion = false;
+  //
+  tengoRubrica = false;
+  rubricaElegida: Rubrica;
 
   // Información para crear juego de competicion
 
@@ -407,6 +431,30 @@ export class JuegoComponent implements OnInit {
         }
       }
     }
+  }
+
+  // FUNCIONES PARA LA CREACION DE JUEGO DE EVALUACION
+  TipoDeEvaluacionSeleccionado(tipoEvaluacion: ChipColor) {
+    this.tipoDeEvaluacionSeleccionado = tipoEvaluacion.nombre;
+    this.tengoTipoDeEvaluacion = true;
+  }
+
+  RelacionDeEvaluacionSeleccionado(relacionEvaluacion: ChipColor) {
+    this.relacionesEvaluacionSeleccionado = relacionEvaluacion.nombre;
+    this.tengoRelacionEvaluacion = true;
+  }
+  AutoevaluacionChange(isChecked: boolean) {
+    this.autoevaluacion = isChecked;
+  }
+  ProfesorEvaluaChange(isChecked: boolean) {
+    this.profesorEvalua = isChecked;
+  }
+  ProfesorEvaluaModoChange(value: string) {
+    this.profesorEvaluaModo = value;
+  }
+  RubricaSeleccionChange(value: string) {
+    console.log('Rubrica seleccionada', value);
+    this.tengoRubrica = value !== 'none';
   }
 
   // FUNCIONES PARA LA CREACION DE JUEGO DE PUNTOS
@@ -1032,6 +1080,7 @@ CrearJuegoDeVotacionUnoATodos() {
         for (let i = 0; i < this.alumnosGrupo.length; i++) {
           // tslint:disable-next-line:max-line-length
           this.peticionesAPI.InscribeAlumnoJuegoDeVotacionUnoATodos(
+            // tslint:disable-next-line:indent
 		          new AlumnoJuegoDeVotacionUnoATodos(this.alumnosGrupo[i].id, this.juego.id))
           .subscribe();
         }
@@ -1070,8 +1119,8 @@ PonConcepto() {
 BorraConcepto(nombre) {
   // tslint:disable-next-line:prefer-for-of
   for (let i = 0; i < this.listaConceptos.length; i++) {
-    if (this.listaConceptos[i]['nombre'] === nombre) {
-      this.totalPesos = this.totalPesos - this.listaConceptos[i]['peso'];
+    if (this.listaConceptos[i].nombre === nombre) {
+      this.totalPesos = this.totalPesos - this.listaConceptos[i].peso;
       this.listaConceptos.splice ( i, 1);
     }
   }
@@ -1088,8 +1137,8 @@ AsignarConceptos() {
     Swal.fire('Los pesos no suman el 100%', ' ', 'error');
   } else {
     this.listaConceptos.forEach (concepto => {
-      this.conceptos.push (concepto['nombre']);
-      this.pesos.push (concepto['peso']);
+      this.conceptos.push (concepto.nombre);
+      this.pesos.push (concepto.peso);
     });
     this.conceptosAsignados = true;
   }

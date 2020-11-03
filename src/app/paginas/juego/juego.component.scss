@@ -12,6 +12,16 @@ td {
   padding-right: 8px;
 }
 
+b {
+  color: black;
+}
+
+.radBtnProf {
+  display: flex; flex-direction: column;
+  /* display: inline-grid; */
+  /* display: grid; */
+  margin: 15px 0;
+}
 
 // /* Colores de iconos */
 // .material-icons.red { color: rgb(212, 57, 52); }

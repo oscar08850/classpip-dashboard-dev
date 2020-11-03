@@ -929,6 +929,96 @@
             </div>
 
 
+            <!-- ///////////////JUEGO DE EVALUACION///////////////// -->
+            <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Evaluación' && tengoModo">
+              <mat-step>
+                <ng-template matStepLabel><div>Evaluación</div></ng-template>
+
+                <div class = "colorsChips">
+                  <label class = "LabelStepper">Selecciona la forma de evaluación:</label>
+                  <mat-chip-list class="mat-chip-list-stacked">
+                    <mat-chip *ngFor="let tipo of seleccionTipoDeEvaluacion; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeEvaluacion[i].selected}}"
+                              (click)="TipoDeEvaluacionSeleccionado(seleccionTipoDeEvaluacion[i])" [value]="tipo.nombre" [selectable]="true">
+                      {{tipo.nombre}}
+                    </mat-chip>
+                  </mat-chip-list>
+                  <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoDeEvaluacionSeleccionado}}</span>
+
+                </div>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!tengoTipoDeEvaluacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+              <mat-step>
+                <ng-template matStepLabel><div>Relaciones</div></ng-template>
+
+                <div class = "colorsChips">
+                  <label class = "LabelStepper">Selecciona cómo hacer las relaciones:</label>
+                  <mat-chip-list class="mat-chip-list-stacked">
+                    <mat-chip *ngFor="let relacion of seleccionRelacionesEvaluacion; let i = index" selected [color]="relacion.color"  selected="{{seleccionRelacionesEvaluacion[i].selected}}"
+                              (click)="RelacionDeEvaluacionSeleccionado(seleccionRelacionesEvaluacion[i])" [value]="relacion.nombre" [selectable]="true">
+                      {{relacion.nombre}}
+                    </mat-chip>
+                  </mat-chip-list>
+                  <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{relacionesEvaluacionSeleccionado}}</span>
+
+                </div>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!tengoRelacionEvaluacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+              <!--PASO DE ELEGIR LAS RELACIONES MENUALMENTE-->
+              <mat-step>
+                <ng-template matStepLabel><div>Extras</div></ng-template>
+                <mat-list>
+
+                  <mat-list-item>
+                    <mat-checkbox (change)="AutoevaluacionChange($event.checked)">
+                    <b>Autoevaluación</b></mat-checkbox>
+                  </mat-list-item>
+
+                  <mat-list-item>
+                    <mat-checkbox (change)="ProfesorEvaluaChange($event.checked)">
+                      <b>Profesor Evalua</b></mat-checkbox>
+                  </mat-list-item>
+
+                  <mat-radio-group [disabled]="!profesorEvalua" class="radBtnProf" aria-label="Select an option">
+                    <mat-radio-button value="normal" [checked]="true" (change)="ProfesorEvaluaModoChange($event.value)"><b>Normal</b></mat-radio-button>
+                    <mat-radio-button value="dominante" (change)="ProfesorEvaluaModoChange($event.value)"><b>Dominante</b></mat-radio-button>
+                  </mat-radio-group>
+
+                </mat-list>
+
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+              <mat-step>
+                <ng-template matStepLabel><div>Rúbrica</div></ng-template>
+                <mat-form-field appearance="fill">
+                  <mat-label>Selecciona una rúbrica</mat-label>
+                  <mat-select (selectionChange)="RubricaSeleccionChange($event.value)">
+                    <mat-option value="none">None</mat-option>
+                    <mat-option value="option1">Option 1</mat-option>
+                    <mat-option value="option2">Option 2</mat-option>
+                    <mat-option value="option3">Option 3</mat-option>
+                  </mat-select>
+                    <!--
+                    <mat-option *ngFor="let food of foods" [value]="food.value">
+                      {{food.viewValue}}
+                    </mat-option>-->
+                </mat-form-field>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!tengoRubrica" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+            </div>
+
+
 
           <!-- //////////////////////////////// -->
 
