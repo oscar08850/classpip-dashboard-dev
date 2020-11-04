@@ -156,6 +156,7 @@ export class JuegoComponent implements OnInit {
   ];
   relacionesEvaluacionSeleccionado: string;
   tengoRelacionEvaluacion = false;
+  numeroDeMiembros = 1;
   //
   profesorEvalua = false;
   profesorEvaluaModo = 'normal';
@@ -163,7 +164,27 @@ export class JuegoComponent implements OnInit {
   //
   tengoRubrica = false;
   rubricaElegida: Rubrica;
-
+  rubricas: Rubrica[];
+  //
+  seleccionCriterioEvaluacion: ChipColor[] = [
+    {nombre: 'Por pesos', color: 'primary'},
+    {nombre: 'Por penalización', color: 'warn'}
+  ];
+  criterioEvaluacionSeleccionado: string;
+  tengoCriterioEvaluacion = false;
+  //
+  pesosArray = [];
+  pesosSuman100 = true;
+  penalizacionArray = [];
+  //
+  seleccionEquiposEvaluacion: ChipColor[] = [
+    {nombre: 'Individualmente', color: 'primary'},
+    {nombre: 'Por Equipos', color: 'warn'}
+  ];
+  equiposEvaluacionSeleccionado: string;
+  tengoEquipoEvaluacion = false;
+  //
+  relacionAlumnosEquipos = [];
   // Información para crear juego de competicion
 
   tipoDeCompeticionSeleccionado: string;
@@ -272,6 +293,12 @@ export class JuegoComponent implements OnInit {
         console.log('Hay equipos');
         this.equiposGrupo = equipos;
         console.log(this.equiposGrupo);
+        for (let equipo of equipos) {
+          this.peticionesAPI.DameAlumnosEquipo(equipo.id).subscribe((alumnos: Alumno[]) => {
+            this.relacionAlumnosEquipos.push({equipoId: equipo.id, alumnos});
+            console.log('relacion alumnos equipos', this.relacionAlumnosEquipos);
+          });
+        }
       } else {
         // mensaje al usuario
         console.log('Este grupo aun no tiene equipos');
@@ -309,6 +336,13 @@ export class JuegoComponent implements OnInit {
             }
 
     });
+    // Peticion API Juego de Evaluacion
+    this.peticionesAPI.DameRubricasProfesor(this.profesorId).subscribe(rubricas => {
+      console.log('Tengo rubricas', rubricas);
+      this.rubricas = rubricas;
+    });
+    // Fin Peticion API Juego de Evaluacion
+    //
     // Es este formulario recogeremos la información que vaya introduciendo
     // el usuario segun el tipo de juego
     this.myForm = this._formBuilder.group({
@@ -443,6 +477,37 @@ export class JuegoComponent implements OnInit {
     this.relacionesEvaluacionSeleccionado = relacionEvaluacion.nombre;
     this.tengoRelacionEvaluacion = true;
   }
+  CriterioDeEvaluacionSeleccionado(criterioEvaluacion: ChipColor) {
+    this.criterioEvaluacionSeleccionado = criterioEvaluacion.nombre;
+    this.tengoCriterioEvaluacion = true;
+    if (this.criterioEvaluacionSeleccionado === 'Por pesos') {
+      for (let i = 0; i < this.rubricaElegida.Criterios.length; i++) {
+        this.pesosArray.push([]);
+        for (let j = 0; j < this.rubricaElegida.Criterios[i].Elementos.length; j++) {
+          this.pesosArray[i].push(this.PesoPorDefecto(this.rubricaElegida.Criterios[i].Elementos.length));
+        }
+      }
+      console.log('pesos array', this.pesosArray);
+    } else {
+      for (let i = 0; i < this.rubricaElegida.Criterios.length; i++) {
+        this.penalizacionArray.push([]);
+        if (this.rubricaElegida.Criterios[i].Elementos.length >= 1) {
+          this.penalizacionArray[i].push({num: 1, p: 75});
+        }
+        if (this.rubricaElegida.Criterios[i].Elementos.length >= 2) {
+          this.penalizacionArray[i].push({num: 2, p: 50});
+        }
+        if (this.rubricaElegida.Criterios[i].Elementos.length >= 3) {
+          this.penalizacionArray[i].push({num: 3, p: 0});
+        }
+      }
+      console.log('penalizacion array', this.penalizacionArray);
+    }
+  }
+  EquipoDeEvaluacionSeleccionado(equipoEvaluacion: ChipColor) {
+    this.equiposEvaluacionSeleccionado = equipoEvaluacion.nombre;
+    this.tengoEquipoEvaluacion = true;
+  }
   AutoevaluacionChange(isChecked: boolean) {
     this.autoevaluacion = isChecked;
   }
@@ -452,9 +517,80 @@ export class JuegoComponent implements OnInit {
   ProfesorEvaluaModoChange(value: string) {
     this.profesorEvaluaModo = value;
   }
-  RubricaSeleccionChange(value: string) {
-    console.log('Rubrica seleccionada', value);
-    this.tengoRubrica = value !== 'none';
+  DameMaxSlider(): number {
+    if (this.modoDeJuegoSeleccionado === 'Individual') {
+      return this.alumnosGrupo.length - 1;
+    } else if (this.modoDeJuegoSeleccionado === 'Equipos') {
+      if (this.equiposEvaluacionSeleccionado === 'Por Equipos') {
+        return this.equiposGrupo.length - 1;
+      } else if (this.equiposEvaluacionSeleccionado === 'Individualmente') {
+        return this.alumnosGrupo.length - 1;
+      }
+    }
+  }
+
+  DameEvaluados(): any {
+    if (this.modoDeJuegoSeleccionado === 'Individual') {
+      return this.alumnosGrupo;
+    } else {
+      return this.equiposGrupo;
+    }
+  }
+  DameEvaluadores(): any {
+    if (this.equiposEvaluacionSeleccionado === 'Por Equipos') {
+      return this.equiposGrupo;
+    } else {
+      return this.alumnosGrupo;
+    }
+  }
+  public DameRelacionesAlumnoEquipos() {
+    return this.relacionAlumnosEquipos;
+  }
+  SliderChanged(value: number) {
+    console.log('Slider changed to', value);
+    this.numeroDeMiembros = value;
+  }
+  RubricaSeleccionChange(index: number) {
+    console.log('Rubrica seleccionada', this.rubricas[index]);
+    this.rubricaElegida = this.rubricas[index];
+    this.tengoRubrica = true;
+  }
+  PesoPorDefecto(total: number): number {
+    return parseFloat((100 / total).toFixed(2));
+  }
+  PesosChanged(name: string, value: string): void {
+    console.log('Pesos changed', name, value);
+    const criterio = name.split('-')[0];
+    const elemento = name.split('-')[1];
+    this.pesosArray[criterio][elemento] = parseFloat(value);
+    console.log('pesos array changed', this.pesosArray);
+    this.pesosSuman100 = this.PesosSuman100();
+  }
+  PesosSuman100(): boolean {
+    for (let i = 0; i < this.pesosArray.length; i++) {
+      let p = 0;
+      for (let j = 0; j < this.pesosArray[i].length; j++) {
+        p += this.pesosArray[i][j];
+      }
+      if (Math.round((p + Number.EPSILON) * 10) / 10 !== 100) {
+        return false;
+      }
+    }
+    return true;
+  }
+  PenalizacionChanged(name: string, value: string): void {
+    console.log('Penalizacion changed', name, value);
+    const criterio = name.split('-')[0];
+    const elemento = name.split('-')[1];
+    const tipo = name.split('-')[2];
+    if (tipo === 'num') {
+      const tmp = this.penalizacionArray[criterio][elemento].p;
+      this.penalizacionArray[criterio][elemento] = {num: parseInt(value, 10), p: tmp};
+    } else if (tipo === 'p') {
+      const tmp = this.penalizacionArray[criterio][elemento].num;
+      this.penalizacionArray[criterio][elemento] = {num: tmp, p: parseInt(value, 10)};
+    }
+    console.log('penalizacion array', this.penalizacionArray);
   }
 
   // FUNCIONES PARA LA CREACION DE JUEGO DE PUNTOS

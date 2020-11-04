@@ -35,6 +35,7 @@ import {MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 
 import { ListViewModule } from '@syncfusion/ej2-angular-lists';
 import {MatSelectModule} from '@angular/material/select';
+import {MatSliderModule} from '@angular/material/slider';
 
 
 // IMPORTs COMPONENTES
@@ -219,6 +220,8 @@ import { GuardarFamiliaComponent } from './paginas/mis-familias-avatares/guardar
 import { CrearFamiliaImagenesPerfilComponent } from './paginas/crear-familia-imagenes-perfil/crear-familia-imagenes-perfil.component';
 import { AsignarFamiliaImagenesPerfilComponent } from './paginas/mis-alumnos/asignar-familia-imagenes-perfil/asignar-familia-imagenes-perfil.component';
 import { MisFamiliasImagenesPerfilComponent } from './paginas/mis-familias-imagenes-perfil/mis-familias-imagenes-perfil.component';
+import { ExcludePipe } from './pipes/exclude.pipe';
+import { TeamExcludePipe } from './pipes/team-exclude.pipe';
 
 
 @NgModule({
@@ -341,7 +344,9 @@ import { MisFamiliasImagenesPerfilComponent } from './paginas/mis-familias-image
     GuardarFamiliaComponent,
     CrearFamiliaImagenesPerfilComponent,
     AsignarFamiliaImagenesPerfilComponent,
-    MisFamiliasImagenesPerfilComponent
+    MisFamiliasImagenesPerfilComponent,
+    ExcludePipe,
+    TeamExcludePipe
 
 
 
@@ -381,6 +386,7 @@ import { MisFamiliasImagenesPerfilComponent } from './paginas/mis-familias-image
     MatNativeDateModule,
     MatRadioModule,
     MatSelectModule,
+    MatSliderModule,
     HttpClientModule,
 
     NgxEchartsModule,
