@@ -3271,7 +3271,9 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
 
   //////////////////////////////////////// JUEGO DE VOTACION UNO A TODOS ///////////////////////////////////
   public PrepararTablaRankingIndividualVotacionUnoATodos(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[],
-                                                         alumnosDelJuego: Alumno[], puntos: number[]): TablaAlumnoJuegoDeVotacionUnoATodos[] {
+                                                         alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeVotacionUnoATodos[] {
+    console.log (' EN CALCULOS');
+    console.log (listaAlumnosOrdenadaPorPuntos);
     const rankingJuegoDeVotacion: TablaAlumnoJuegoDeVotacionUnoATodos [] = [];
     // tslint:disable-next-line:prefer-for-oF
     for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
@@ -3293,9 +3295,10 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
         // Este alumno ya ha votado
         const alumno = listaAlumnosOrdenadaPorPuntos[i];
         // Asigno los puntos a los destinatorios
-        for (let j = 0; j < puntos.length; j++) {
-          const votado = rankingJuegoDeVotacion.filter (al => al.id === alumno.Votos[j])[0];
-          votado.puntos = votado.puntos + puntos[j];
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < alumno.Votos.length; j++) {
+          const votado = rankingJuegoDeVotacion.filter (al => al.id === alumno.Votos[j].alumnoId)[0];
+          votado.puntos = votado.puntos + alumno.Votos[j].puntos;
         }
         // Marque que el alumno ya ha votado
         rankingJuegoDeVotacion.filter (al => al.id === alumno.alumnoId)[0].votado = true;
@@ -3307,7 +3310,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
 
 public PrepararTablaRankingIndividualVotacionUnoATodosAcabado(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[],
                                                               // tslint:disable-next-line:max-line-length
-                                                              alumnosDelJuego: Alumno[], puntos: number[]): TablaAlumnoJuegoDeVotacionUnoATodos[] {
+                                                              alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeVotacionUnoATodos[] {
     const rankingJuegoDeVotacion: TablaAlumnoJuegoDeVotacionUnoATodos [] = [];
     // tslint:disable-next-line:prefer-for-oF
     for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {

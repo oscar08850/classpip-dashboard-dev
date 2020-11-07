@@ -27,6 +27,14 @@
                               <label for="inputApellido2">Segundo Apellido</label>
                               <input (keyup)="Disabled()" type="text" id="inputApellido2" class="form-control" requiered [(ngModel)]="apellido2Alumno" placeholder="Escribe el segundo apellido">
                           </div>
+                          <div class="form-group">
+                              <label for="inputUsername">Nombre de usuario</label>
+                              <input (keyup)="Disabled()" type="text" id="inputUsername" class="form-control" requiered [(ngModel)]="nombreUsuario" placeholder="Elige su nombre de usuario">
+                          </div>
+                          <div class="form-group">
+                              <label for="inputEmail">email</label>
+                              <input (keyup)="Disabled()" type="text" id="inputEmail" class="form-control" requiered [(ngModel)]="email" placeholder="Escribe el email">
+                          </div>
 
 
                         </mat-card-content>
@@ -104,10 +112,10 @@
                       <mat-card-content>
 
                         <div class="form-group">
-                            <label for="inputNombres">Pega aquí linea a linea nombre y apellidos separados por ; (como en el ejemplo)</label>
+                            <label for="inputNombres">Pega aquí linea a linea nombre, primer y segundo apellido, nombre de usuario e email separados por ; (como en el ejemplo)</label>
                             <textarea rows="5" autofocus (keyup)="DisabledTexto()" matInput class="form-control" placeholder=
-                            "Pedro;García;Aguado
-Andrés;Iniesta;Luján"
+                            "Pedro;García;Aguado;pedrito;pedro@uni.es
+Andrés;Iniesta;Luján;adri;andres.iniesta@uni.es"
                             requiered [(ngModel)]="textoAlumnosNuevos"></textarea>
                         </div>
 

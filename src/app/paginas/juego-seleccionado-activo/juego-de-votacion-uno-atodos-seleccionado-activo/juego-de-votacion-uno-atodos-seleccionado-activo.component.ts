@@ -14,7 +14,7 @@ import { Howl } from 'howler';
   styleUrls: ['./juego-de-votacion-uno-atodos-seleccionado-activo.component.scss']
 })
 export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnInit {
-  juegoSeleccionado: JuegoDeVotacionUnoATodos;
+  juegoSeleccionado: any;
   alumnosDelJuego: Alumno[];
   listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[];
   rankingIndividualJuegoDeVotacionUnoATodos: TablaAlumnoJuegoDeVotacionUnoATodos[] = [];
@@ -48,12 +48,13 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
         sound.play();
         console.log ('llega votacion');
         console.log (res.votacion);
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < res.votacion.Votos.length; i++) {
-          const votado = this.rankingIndividualJuegoDeVotacionUnoATodos.filter (al => al.id === res.votacion.Votos[i])[0];
+          const votado = this.rankingIndividualJuegoDeVotacionUnoATodos.filter (al => al.id === res.votacion.Votos[i].alumnoId)[0];
           console.log ('votado');
           console.log (votado);
-          votado.puntos = votado.puntos + this.juegoSeleccionado.Puntos[i];
-          votado.incremento = this.juegoSeleccionado.Puntos[i];
+          votado.puntos = votado.puntos + res.votacion.Votos[i].puntos;
+          votado.incremento = res.votacion.Votos[i].puntos;
         }
         // Tomo nota de que el alumno ya ha votado
         this.rankingIndividualJuegoDeVotacionUnoATodos.filter (al => al.id === res.votacion.alumnoId)[0].votado = true;
@@ -104,12 +105,12 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
       // tslint:disable-next-line:max-line-length
       this.rankingIndividualJuegoDeVotacionUnoATodos = this.calculos.PrepararTablaRankingIndividualVotacionUnoATodos (
         this.listaAlumnosOrdenadaPorPuntos,
-        this.alumnosDelJuego,
-        this.juegoSeleccionado.Puntos);
+        this.alumnosDelJuego);
       // tslint:disable-next-line:only-arrow-functions
       this.rankingIndividualJuegoDeVotacionUnoATodos = this.rankingIndividualJuegoDeVotacionUnoATodos.sort(function(obj1, obj2) {
         return obj2.puntos - obj1.puntos;
       });
+      console.log (this.rankingIndividualJuegoDeVotacionUnoATodos);
       this.datasourceAlumno = new MatTableDataSource(this.rankingIndividualJuegoDeVotacionUnoATodos);
 
     } else {

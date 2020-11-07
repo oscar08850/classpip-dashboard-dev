@@ -92,7 +92,7 @@ export class AsignarFamiliasJuegoAvataresComponent implements OnInit {
       .subscribe (profesores => {
         publicasDeOtros.forEach (familia => {
           const propietario = profesores.filter (profesor => profesor.id === familia.profesorId)[0];
-          familia.NombreFamilia = familia.NombreFamilia + '(' + propietario.Nombre + ' ' + propietario.Apellido + ')';
+          familia.NombreFamilia = familia.NombreFamilia + '(' + propietario.Nombre + ' ' + propietario.PrimerApellido + ')';
         });
         this.familiasPublicas = publicasDeOtros;
 
