@@ -3,6 +3,11 @@
     <mat-divider class="lineaDivisoria"></mat-divider>
     <mat-card-content style="text-align: center; display: flex; align-items: center; flex-direction: column; ">
       <br>
+      <h4>El identificador que debes dar a tus alumnos cuando se registren es:</h4>
+      <h3>{{profesor.Identificador}}</h3>
+
+
+      <br>
       <br>
 
         <div style= "width: 40%">
@@ -10,6 +15,7 @@
             <input matInput type="text" name="nombre" placeholder="Nombre" required [(ngModel)]="nombre" (ngModelChange)= "cambio = true">
           </mat-form-field>
           <mat-form-field style="width: 80%">
+
             <input matInput type="text" name="primerApellido" placeholder="Primer Apellido" required [(ngModel)]="primerApellido" (ngModelChange)= "cambio = true">
           </mat-form-field>
           <mat-form-field style="width: 80%">

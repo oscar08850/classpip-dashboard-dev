@@ -192,6 +192,15 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Uno A Todos', color: 'primary'},
     {nombre: 'Todos A Uno', color: 'warn'}
   ];
+
+  modoDeRepartoSeleccionado: string;
+  seleccionModoReparto: ChipColor[] = [
+    {nombre: 'Reparto fijo según posición', color: 'primary'},
+    {nombre: 'Reparto libre', color: 'warn'}
+  ];
+  tengoModoReparto = false;
+  puntosARepartir = 0;
+
   tengoTipoDeVotacion = false;
   conceptos: string[];
   listaConceptos: any[] = [];
@@ -1024,10 +1033,30 @@ export class JuegoComponent implements OnInit {
     this.tengoTipoDeVotacion = true;
   }
 
+  ModoDeRepartoSeleccionado(modoReparto: ChipColor) {
+    this.modoDeRepartoSeleccionado = modoReparto.nombre;
+    this.tengoModoReparto = true;
+  }
+  // formatLabel(value: number) {
+  //   // if (value >= 1000) {
+  //   //   return Math.round(value / 1000) + 'k';
+  //   // }
+
+  //   this.puntosARepartir = value;
+  //   console.log ('aaaa: ' + value);
+  //   console.log ('bbb: ' + this.puntosARepartir);
+  //   return value;
+  // }
+  GuardaValor(event) {
+    this.puntosARepartir = event.value;
+    this.Puntuacion[0] = this.puntosARepartir;
+  }
+
 CrearJuegoDeVotacionUnoATodos() {
     const juegoDeVotacion = new JuegoDeVotacionUnoATodos (
       this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeVotacionSeleccionado ,
       this.modoDeJuegoSeleccionado,
+      this.modoDeRepartoSeleccionado,
       true,
       this.Puntuacion,
       this.nombreDelJuego,
@@ -1064,7 +1093,8 @@ CrearJuegoDeVotacionUnoATodos() {
       this.tabGroup.selectedIndex = 0;
 
     });
-}
+
+  }
 
 PonConcepto() {
 
@@ -1315,5 +1345,7 @@ Limpiar() {
     this.conceptosAsignados = false;
     this.listaConceptos = [];
     this.totalPesos = 0;
+    this.tengoModoReparto = true;
+
   }
 }

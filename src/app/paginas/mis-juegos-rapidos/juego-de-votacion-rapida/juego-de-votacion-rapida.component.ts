@@ -88,8 +88,8 @@ export class JuegoDeVotacionRapidaComponent implements OnInit {
           // tslint:disable-next-line:no-shadowed-variable
           let i;
           for (i = 0; i < respuesta.votos.length; i++) {
-            const index = this.datos.findIndex (entrada => entrada.concepto === respuesta.votos[i] );
-            this.datos [index].puntos =  this.datos [index].puntos + this.juegoSeleccionado.Puntos[i];
+            const index = this.datos.findIndex (entrada => entrada.concepto === respuesta.votos[i].c );
+            this.datos [index].puntos =  this.datos [index].puntos + respuesta.votos[i].puntos;
           }
           this.datos.sort((a, b) => b.puntos - a.puntos);
           this.dataSource = new MatTableDataSource(this.datos);
@@ -114,8 +114,8 @@ export class JuegoDeVotacionRapidaComponent implements OnInit {
       }
       this.respuestas.forEach (respuesta => {
         for (i = 0; i < respuesta.votos.length; i++) {
-          const index = this.datos.findIndex (entrada => entrada.concepto === respuesta.votos[i] );
-          this.datos [index].puntos =  this.datos [index].puntos + this.juegoSeleccionado.Puntos[i];
+          const index = this.datos.findIndex (entrada => entrada.concepto === respuesta.votos[i].c );
+          this.datos [index].puntos =  this.datos [index].puntos + respuesta.votos[i].puntos ;
         }
       });
       this.datos.sort((a, b) => b.puntos - a.puntos);

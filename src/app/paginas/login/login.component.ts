@@ -107,29 +107,42 @@ export class LoginComponent implements OnInit {
   }
 
   Registrar() {
-    if (this.contrasena !== this.contrasenaRepetida) {
-      Swal.fire('Error', 'No coincide la contraseña con la contraseña repetida', 'error');
-    } else if (!this.ValidaEmail (this.email)) {
-      Swal.fire('Error', 'El email no es correcto', 'error');
-    } else {
-      const profesor = new Profesor (
-      this.nombre,
-      this.primerApellido,
-      this.segundoApellido,
-      this.username,
-      this.email,
-      this.contrasena
-      );
-      this.peticionesAPI.RegistraProfesor (profesor)
-      .subscribe (  (res) => Swal.fire('OK', 'Registro completado con éxito', 'success'),
-                (err) => {
-                  Swal.fire('Error', 'Fallo en la conexion con la base de datos', 'error');
-      });
-    }
-    this.nombre = undefined;
-    this.contrasena = undefined;
-    this.mostrarLogin = true;
+    this.peticionesAPI.BuscaNombreUsuario (this.username)
+    .subscribe ( res => {
+      if (res[0] !== undefined) {
+        Swal.fire('Error', 'Ya existe alguien con el mismo nombre de usuario en Classpip', 'error');
 
+      } else {
+        if (this.contrasena !== this.contrasenaRepetida) {
+          Swal.fire('Error', 'No coincide la contraseña con la contraseña repetida', 'error');
+        } else if (!this.ValidaEmail (this.email)) {
+          Swal.fire('Error', 'El email no es correcto', 'error');
+        } else {
+          // creamos un identificador aleatorio de 5 digitos
+          const identificador = Math.random().toString().substr(2, 5);
+          const profesor = new Profesor (
+          this.nombre,
+          this.primerApellido,
+          this.segundoApellido,
+          this.username,
+          this.email,
+          this.contrasena,
+          null,
+          identificador
+          );
+          this.peticionesAPI.RegistraProfesor (profesor)
+          .subscribe (
+              // tslint:disable-next-line:no-shadowed-variable
+              (res) => Swal.fire('OK', 'Registro completado con éxito', 'success'),
+              (err) => Swal.fire('Error', 'Fallo en la conexion con la base de datos', 'error')
+          );
+        }
+        this.nombre = undefined;
+        this.contrasena = undefined;
+        this.mostrarLogin = true;
+      }
+
+    });
   }
   EnviarContrasena() {
     if (this.nombre === undefined) {

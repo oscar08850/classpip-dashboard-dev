@@ -200,6 +200,8 @@ export class MisAlumnosComponent implements OnInit {
     this.misAlumnos.forEach(alumno => {
       if (this.selection.isSelected(alumno)) {
         alumno.PermisoCambioImagenPerfil =  !alumno.PermisoCambioImagenPerfil ;
+        console.log ('voy a cambiar permiso de ');
+        console.log (alumno);
         this.peticionesAPI.ModificaAlumno (alumno)
         .subscribe(al => {
           console.log ('he modificado');

@@ -29,9 +29,6 @@ export class PeticionesAPIService {
 
 
 
-
-
- // private host = 'http://localhost';
  private host = URL.host;
 
 
@@ -163,6 +160,10 @@ export class PeticionesAPIService {
     return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][NombreUsuario]=' + nombre + '&filter[where][Password]=' + pass);
   }
 
+  public BuscaNombreUsuario(username: string): Observable<Profesor> {
+    return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][NombreUsuario]=' + username);
+  }
+
   public DameProfesores(): Observable<Profesor[]> {
     return this.http.get<Profesor[]>(this.APIUrlProfesores);
   }
@@ -191,6 +192,12 @@ export class PeticionesAPIService {
   public DameAlumno(alumnoId: number): Observable<Alumno> {
     return this.http.get<Alumno>(this.APIUrlAlumnos + '/' + alumnoId);
   }
+
+  public DameTodosLosAlumnos(): Observable<Alumno[]> {
+    return this.http.get<Alumno[]>(this.APIUrlAlumnos);
+  }
+
+
 
   // Esta no se para que se usa habiendo DameTodosMisAlumnos
   public DameAlumnos(): Observable<Alumno[]> {

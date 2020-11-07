@@ -578,8 +578,7 @@ export class CrearColeccionComponent implements OnInit {
                     this.peticionesAPI.PonImagenCromo(formDataDetras)
                     .subscribe(() => console.log('Imagen cargado'));
                   }
-                  Swal.fire('Coleccion creada con éxito', '', 'success');
-                  this.router.navigate(['/inicio/' + this.profesorId + '/misColecciones']);
+
               } else {
                 console.log('fallo en la asignación');
               }
@@ -588,6 +587,8 @@ export class CrearColeccionComponent implements OnInit {
         });
       }
     });
+    Swal.fire('Coleccion creada con éxito', '', 'success');
+    this.router.navigate(['/inicio/' + this.profesorId + '/misColecciones']);
   }
   Cancelar() {
     this.router.navigate(['/inicio/' + this.profesorId]);
