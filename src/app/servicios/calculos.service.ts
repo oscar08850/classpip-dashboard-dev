@@ -1869,10 +1869,12 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
 
   // Elimina la pregunta (La pregunta se guarda previamente en sesión.
   // Lo hago con un observable para que el componente que muestra la lista de preguntas
-  // espere hasta que se haya acabado la operacion de borrar la pregunta de la base de datos
+  // espere hasta que se haya acabado la operacion de borrar la pregunta de la base de datos.
+  // La primera función elimina la imagen asociada a la pregunta, mientras que la segunda elimina el modelo de la pregunta.
   public EliminarPregunta(): any {
     const eliminaObservable = new Observable ( obs => {
-          this.peticionesAPI.BorrarPregunta(
+      this.peticionesAPI.BorrarImagenPregunta(this.sesion.DamePregunta().Imagen).subscribe();    
+      this.peticionesAPI.BorrarPregunta(
                     this.sesion.DamePregunta().id)
           .subscribe(() => {
             this.EliminarPreguntasDelCuestionarioConPregunta();

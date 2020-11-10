@@ -957,6 +957,11 @@ export class PeticionesAPIService {
     return this.http.post<any>(this.APIUrlImagenesPreguntas + '/upload', formData);
   }
 
+  public BorrarImagenPregunta(imagen: string): Observable<any> {
+    return this.http.delete<any>(this.APIUrlImagenesPreguntas + '/files/' + imagen);
+  }
+
+
   //////////////////////////// GESTION DE CUESTIONARIOS /////////////////////////////
   public CreaCuestionario(cuestionario: Cuestionario, profesorId: number): Observable<Cuestionario> {
     console.log('Cuestionario: ' + cuestionario);
