@@ -44,6 +44,11 @@ export class PreguntaComponent implements OnInit {
   infoPreguntas: any;
   advertencia = true;
   ficheroCargado = false;
+  
+  // variables necesarias para la carga de la foto
+  filePregunta: File;
+  imagenPregunta: string;
+  nombreFicheroImagen: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -97,16 +102,25 @@ export class PreguntaComponent implements OnInit {
     feedbackCorrecto = this.myForm2.value.feedbackCorrecto;
     feedbackIncorrecto = this.myForm2.value.feedbackIncorrecto;
 
+    //Añadimos al final del constructor el nombre de la imagen nombreFicheroImagen
     const pregunta = new Pregunta(tituloPregunta, preguntaPregunta,
       tematicaPregunta, respuestaCorrecta, respuestaIncorrecta1,
       respuestaIncorrecta2, respuestaIncorrecta3, feedbackCorrecto,
-      feedbackIncorrecto);
+      feedbackIncorrecto, this.nombreFicheroImagen);
     console.log ('vamos a crear pregunta');
     this.peticionesAPI.CreaPregunta(pregunta, this.profesorId)
       .subscribe((res) => {
         if (res != null) {
           console.log('Pregunta creada correctamente' + res);
           this.pregunta = res;
+          
+          /*El modelo Pregunta y la imagen son independientes, por eso, 
+          una vez creado el modelo de la pregunta, necesitamos guardar la imagen a la que hace referencia el nombreFicheroImagen dentro de la API.*/
+          const imagenPreguntaData: FormData = new FormData();
+          imagenPreguntaData.append(this.filePregunta.name, this.filePregunta);
+          this.peticionesAPI.PonImagenPregunta(imagenPreguntaData)
+            .subscribe();
+
           this.aceptarGoBack();
         } else {
           console.log('Fallo en la creacion de la pregunta');
@@ -206,4 +220,23 @@ export class PreguntaComponent implements OnInit {
   Cancelar() {
     this.router.navigate(['/inicio/' + this.profesorId]);
   }
+
+  
+  ActivarInputImagen() {
+    document.getElementById('inputImagenPregunta').click();
+  }
+
+  //Evento que nos permite cargar una imagen y guardarla en el atributo imagenPregunta
+  CargarImagenPregunta($event) {
+    this.filePregunta = $event.target.files[0];
+    this.nombreFicheroImagen = this.filePregunta.name;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.filePregunta);
+    reader.onload = () => {
+      this.imagenPregunta = reader.result.toString();
+
+    };
+}
+
 }
