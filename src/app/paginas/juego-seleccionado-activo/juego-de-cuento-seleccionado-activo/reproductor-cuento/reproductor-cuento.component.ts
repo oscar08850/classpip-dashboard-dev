@@ -33,6 +33,8 @@ listaFondosAudio: any = [];
 listaTextos: any[] = [];
 
 textoFrame: any = "";
+numeroDeFrame = 0;
+listacompleja = [];
 
 showButtonAudioFrame: any = false;
 showButtonFondoFrame: any = false;
@@ -43,6 +45,7 @@ url = 'http://localhost:3000/api/imagenes/';
     this.idLibro = this.sesion.getIdLibro();
 
     this.damelibro();
+    this.numeroDeFrame = 0;
 
   }
 
@@ -89,11 +92,94 @@ url = 'http://localhost:3000/api/imagenes/';
           this.listaEscenas.push(element);
           this.tiempo = element.duracionFrame;
         });
-        this.dameFrames();
+        this.dameFrames3();
       });
 
 
   }
+
+
+  dameFrames3() {
+
+    this.listaEscenas.forEach(element => {
+      var id = element.id;
+
+      this.peticionesAPI.getFramesByEscenaId(id)
+        .subscribe(res => {
+          var lista = [];
+          console.log(res);
+
+          res.forEach(element => {
+            element.contador = this.numeroDeFrame;
+            lista.push(element);
+            this.numeroDeFrame++;
+
+          });
+          this.obtenerFrames2(lista);
+        });
+
+
+    });
+
+  }
+
+  obtenerFrames2(lista) {
+
+    /////////////////cambiar var contenedor///////////////////////////
+    var contenedor = this.libro.titulo;
+    lista.forEach(element => {
+
+      var objetolista = {
+        frame: '',
+        escena: String,
+        audio: '',
+        numero: Number,
+        duracion: Number,
+        texto: ''
+
+      }
+
+      this.peticionesAPI.getImagen(element.portadaFrame, contenedor)
+        .subscribe((res) => {
+          const blob = new Blob([res.blob()], { type: 'image/png' });
+
+          const reader = new FileReader();
+          reader.onloadend = (event) => {
+            if (reader.error) {
+              console.log(reader.error)
+            } else {
+
+              this.fotoimagen = reader.result.toString();
+              this.listaFotos.push(this.fotoimagen);
+              objetolista.frame = this.fotoimagen;
+              objetolista.audio = element.audioUrl;
+              objetolista.escena = element.escenaid;
+              objetolista.numero = element.contador;
+              objetolista.duracion = element.duracionAudio;
+              objetolista.texto = element.textos;
+
+              if (objetolista.audio != '') {
+                var audio = this.url + this.libro.titulo + "/download/" + objetolista.audio;
+                // this.audioFrame = audio;
+                objetolista.audio = audio;
+                // var audio =  this.url + this.libro.titulo + "/download/" + objetolista.audio;
+                // objetolista.audio = audio;
+              }
+
+              this.listacompleja.push(objetolista);
+              this.listacompleja.sort((a, b) => a.numero - b.numero);
+
+            }
+          };
+
+          if (blob) {
+            reader.readAsDataURL(blob);
+          }
+        });
+    });
+
+  }
+
 
   dameFrames() {
 
@@ -107,23 +193,26 @@ url = 'http://localhost:3000/api/imagenes/';
           var lista = [];
           console.log(res);
      
+          var audio = '';
+
   
           res.forEach(element => {
             lista.push(element);
+            audio = '';
             if(this.showButtonAudioFrame == true)
             {
-              var audio =  this.url + this.libro.titulo + "/download/" + element.audioUrl;
+             audio =  this.url + this.libro.titulo + "/download/" + element.audioUrl;
               this.listaAudios.push(audio);
             }
           });
-          this.obtenerFrames(lista);
+          this.obtenerFrames(lista,audio);
         });
 
 
     });
 
   }
-  obtenerFrames(lista) {
+  obtenerFrames(lista,au) {
 
     /////////////////cambiar var contenedor///////////////////////////
     var contenedor = this.libro.titulo;
