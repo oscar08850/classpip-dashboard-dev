@@ -14,32 +14,36 @@ export class ReproductorCuentoComponent implements OnInit {
   constructor(private sesion: SesionService, private peticionesAPI: PeticionesAPIService, private router: Router) { }
 
   idLibro: any;
-listaEscenas: any = [];
-tiempo: any;
-libro: any;
-listaFondos: any = [];
-fotoimagen: any;
-listaFotos: any = [];
+  listaEscenas: any = [];
+  tiempo: any;
+  libro: any;
+  listaFondos: any = [];
+  fotoimagen: any;
+  listaFotos: any = [];
 
-fotoPosicion: any = 0;
-fotoToShow: any = '../../../../../assets/reproductor/negro.png';
-intervalId;
+  fotoPosicion: any = 0;
+  fotoToShow: any = '../../../../../assets/reproductor/negro.png';
+  intervalId;
 
-listaAudios: any = [];
-tipoAudio: any = "frame";
-audioFrame: any;
+  listaAudios: any = [];
+  tipoAudio: any = "frame";
+  audioFrame: any;
 
-listaFondosAudio: any = [];
-listaTextos: any[] = [];
+  listaFondosAudio: any = [];
+  listaTextos: any[] = [];
 
-textoFrame: any = "";
-numeroDeFrame = 0;
-listacompleja = [];
+  textoFrame: any = "";
+  numeroDeFrame = 0;
+  listacompleja = [];
 
-showButtonAudioFrame: any = false;
-showButtonFondoFrame: any = false;
+  showButtonAudioFrame: any = false;
+  showButtonFondoFrame: any = false;
 
-url = 'http://localhost:3000/api/imagenes/';
+
+  get_duration_interval: any;
+  tiempoDeReproduccion: any = 1000;
+
+  url = 'http://localhost:3000/api/imagenes/';
   ngOnInit() {
 
     this.idLibro = this.sesion.getIdLibro();
@@ -69,24 +73,21 @@ url = 'http://localhost:3000/api/imagenes/';
       .subscribe(res => {
         console.log(res);
 
-        if(res.tipoAudio == "frame")
-     {
-        this.showButtonAudioFrame = true;
-     }
-     else if (res.tipoAudio != "frame")
-     {
-        if(res.urlAudioFondo != "no")
-        {
-          var audio =  this.url + this.libro.titulo + "/download/" + res.urlAudioFondo;
+        if (res.tipoAudio == "frame") {
+          this.showButtonAudioFrame = true;
+        }
+        else if (res.tipoAudio != "frame") {
+          if (res.urlAudioFondo != "no") {
+            var audio = this.url + this.libro.titulo + "/download/" + res.urlAudioFondo;
 
-          this.listaFondosAudio.push(audio);
-          this.showButtonFondoFrame = true;
+            this.listaFondosAudio.push(audio);
+            this.showButtonFondoFrame = true;
+          }
+          else (res.urlAudioFondo == "no")
+          {
+            this.listaFondosAudio.push("");
+          }
         }
-        else(res.urlAudioFondo == "no")
-        {
-          this.listaFondosAudio.push("");
-        }
-     }
 
         res.forEach(element => {
           this.listaEscenas.push(element);
@@ -187,32 +188,31 @@ url = 'http://localhost:3000/api/imagenes/';
       var id = element.id;
 
 
-     
+
       this.peticionesAPI.getFramesByEscenaId(id)
         .subscribe(res => {
           var lista = [];
           console.log(res);
-     
+
           var audio = '';
 
-  
+
           res.forEach(element => {
             lista.push(element);
             audio = '';
-            if(this.showButtonAudioFrame == true)
-            {
-             audio =  this.url + this.libro.titulo + "/download/" + element.audioUrl;
+            if (this.showButtonAudioFrame == true) {
+              audio = this.url + this.libro.titulo + "/download/" + element.audioUrl;
               this.listaAudios.push(audio);
             }
           });
-          this.obtenerFrames(lista,audio);
+          this.obtenerFrames(lista, audio);
         });
 
 
     });
 
   }
-  obtenerFrames(lista,au) {
+  obtenerFrames(lista, au) {
 
     /////////////////cambiar var contenedor///////////////////////////
     var contenedor = this.libro.titulo;
@@ -242,93 +242,110 @@ url = 'http://localhost:3000/api/imagenes/';
 
   }
 
-  
 
 
-play()
-{
-  this.intervalId = setInterval(() =>
-  {
-    this.fotoToShow = this.listaFotos[this.fotoPosicion];
-    this.audioFrame = this.listaAudios[this.fotoPosicion];
-    this.textoFrame = this.listaTextos[this.fotoPosicion];
-    if(this.fotoPosicion < this.listaFotos.length)
-    {
-    this.fotoPosicion = this.fotoPosicion + 1;
-    
-    }
-    else {
-      this.fotoPosicion = 0;
-      this.fotoToShow = this.listaFotos[this.fotoPosicion];
-      this.textoFrame = this.listaTextos[this.fotoPosicion];
+
+  play() {
+    this.get_duration_interval = setInterval(() => {
+      this.fotoDerechaAutoPlay();
+
+    }, this.tiempoDeReproduccion);
+  }
+
+  pause() {
+
+    if (this.get_duration_interval) {
+      clearInterval(this.get_duration_interval);
 
     }
+  }
 
-  }, 2000);
-}
+  fotoIzquierda() {
 
-pause()
-{
+    clearInterval(this.get_duration_interval);
+    this.fotoPosicion--;
 
-  clearInterval(this.intervalId);
+    if (this.fotoPosicion != this.listaFotos.length) {
+      this.fotoToShow = this.listacompleja[this.fotoPosicion].frame;
+      if (this.listacompleja[this.fotoPosicion].texto != undefined) {
+        this.textoFrame = this.listacompleja[this.fotoPosicion].texto;
+      }
+      else {
+        this.textoFrame = '';
 
-}
+      }
+      if (this.listacompleja[this.fotoPosicion].audio != '') {
+        this.audioFrame = this.listacompleja[this.fotoPosicion].audio;
 
-fotoIzquierda()
-{
+      }
+      else {
+        this.audioFrame = '';
+      }
 
-  if(this.fotoPosicion == this.listaFotos.length)
-{
-  this.fotoPosicion = this.listaFotos.length - 2;
-
-}
-
-  if(this.fotoPosicion != -1)
-  {
-    this.fotoToShow = this.listaFotos[this.fotoPosicion];
-    this.audioFrame = this.listaAudios[this.fotoPosicion];
-    this.textoFrame = this.listaTextos[this.fotoPosicion];
-
-    this.fotoPosicion = this.fotoPosicion - 1;
+    }
 
   }
 
-  
+  fotoDerecha() {
 
+    clearInterval(this.get_duration_interval);
+    this.fotoPosicion++;
 
-}
+    if (this.fotoPosicion != this.listaFotos.length) {
+      this.fotoToShow = this.listacompleja[this.fotoPosicion].frame;
+      if (this.listacompleja[this.fotoPosicion].texto != undefined) {
+        this.textoFrame = this.listacompleja[this.fotoPosicion].texto;
+      }
+      else {
+        this.textoFrame = '';
 
-fotoDerecha()
-{
+      }
+      if (this.listacompleja[this.fotoPosicion].audio != '') {
+        this.audioFrame = this.listacompleja[this.fotoPosicion].audio;
 
-  if(this.fotoPosicion == -1)
-  {
-    this.fotoPosicion = 1;
-  
+      }
+      else {
+        this.audioFrame = '';
+      }
+
+    }
   }
 
-  if(this.fotoPosicion != this.listaFotos.length)
-  {
-    this.fotoToShow = this.listaFotos[this.fotoPosicion];
-    this.audioFrame = this.listaAudios[this.fotoPosicion];
-    this.textoFrame = this.listaTextos[this.fotoPosicion];
+  fotoDerechaAutoPlay() {
+    clearInterval(this.get_duration_interval);
+    this.fotoPosicion++;
 
+    if (this.fotoPosicion != this.listaFotos.length) {
+      this.fotoToShow = this.listacompleja[this.fotoPosicion].frame;
+      if (this.listacompleja[this.fotoPosicion].texto != undefined) {
+        this.textoFrame = this.listacompleja[this.fotoPosicion].texto;
+      }
+      else {
+        this.textoFrame = '';
 
-    this.fotoPosicion = this.fotoPosicion + 1;
-
+      }
+      if (this.listacompleja[this.fotoPosicion].audio != '') {
+        this.audioFrame = this.listacompleja[this.fotoPosicion].audio;
+        this.tiempoDeReproduccion = 1000 * this.listacompleja[this.fotoPosicion].duracion;
+      }
+      else {
+        this.audioFrame = '';
+        this.tiempoDeReproduccion = 1000 * 10;
+      }
+      this.play();
+    }
   }
 
- 
-}
+  stop() {
 
-stop(){
+    if (this.get_duration_interval) {
+      clearInterval(this.get_duration_interval);
+    }
+    this.tiempoDeReproduccion=1000;
+    this.fotoPosicion = 0;
+    this.textoFrame = '';
+    this.audioFrame = '';
+    this.fotoToShow = '../../../../../assets/reproductor/negro.png';
 
-  this.fotoPosicion = 0;
-  clearInterval(this.intervalId);
-
- this.fotoToShow = '../../../../../assets/reproductor/negro.png';
-
-
-
-}
+  }
 }
