@@ -7,7 +7,7 @@ import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHis
          AlumnoJuegoDeCompeticionLiga, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno,
          // tslint:disable-next-line:max-line-length
          TablaClasificacionJornada, TablaPuntosFormulaUno, AlumnoJuegoDeVotacionUnoATodos, TablaAlumnoJuegoDeVotacionUnoATodos,
-         AlumnoJuegoDeVotacionTodosAUno,TablaAlumnoJuegoDeVotacionTodosAUno, JuegoDeVotacionTodosAUno, FamiliaAvatares} from '../clases/index';
+         AlumnoJuegoDeVotacionTodosAUno,TablaAlumnoJuegoDeVotacionTodosAUno, JuegoDeVotacionTodosAUno, FamiliaAvatares, Pregunta} from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -1872,18 +1872,40 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
   // espere hasta que se haya acabado la operacion de borrar la pregunta de la base de datos.
   // La primera función elimina la imagen asociada a la pregunta, mientras que la segunda elimina el modelo de la pregunta.
   public EliminarPregunta(): any {
-    const eliminaObservable = new Observable ( obs => {
-      this.peticionesAPI.BorrarImagenPregunta(this.sesion.DamePregunta().Imagen).subscribe();    
-      this.peticionesAPI.BorrarPregunta(
-                    this.sesion.DamePregunta().id)
-          .subscribe(() => {
-            this.EliminarPreguntasDelCuestionarioConPregunta();
-            obs.next ();
+    const eliminaObservable = new Observable ( obs => 
+      {
+        //Miramos si la imagen está asociada a más de una pregunta
+        var contador = 0;
+        //Recuperamos todas las preguntas que hay en la BD
+        this.peticionesAPI.DameTodasMisPreguntas(this.sesion.DameProfesor().id).subscribe( res => 
+          {
+            if (res[0] !== undefined){ 
+              //Comparamos cada una de las imágenes con la que queremos eliminar.
+              res.forEach( pregunta => {
+                if (pregunta.Imagen == this.sesion.DamePregunta().Imagen) { 
+                  contador ++;
+                }
+              });
+              
+              //Si el contador es dos o más, la imagen se usa en más de una Pregunta y, por lo tanto, no se puede borrar.
+              if (contador < 2){
+                this.peticionesAPI.BorrarImagenPregunta(this.sesion.DamePregunta().Imagen).subscribe(); 
+                console.log ("IMAGEN ELIMINADA");
+              }
+            }
           });
+        
+          console.log ("IMAGEN EN USO")
+        this.peticionesAPI.BorrarPregunta(
+                      this.sesion.DamePregunta().id)
+            .subscribe(() => {
+              this.EliminarPreguntasDelCuestionarioConPregunta();
+              obs.next ();
+      });
     });
     return eliminaObservable;
   }
-
+  
   // tslint:disable-next-line:max-line-length
   // ESTA FUNCIÓN RECUPERA TODOS LOS CUESTINARIOS QUE CONTIENEN ESA PREGUNTA Y DESPUÉS LA BORRA DE PREGUNTASDELCUESTIONARIO. ESTO LO HACEMOS PARA NO
   // DEJAR MATRICULAS QUE NO NOS SIRVEN EN LA BASE DE DATOS
