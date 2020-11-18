@@ -961,6 +961,11 @@ export class PeticionesAPIService {
     return this.http.delete<any>(this.APIUrlImagenesPreguntas + '/files/' + imagen);
   }
 
+  public DameImagenPregunta(imagen: string): Observable<any> {
+    return this.httpImagenes.get(this.APIUrlImagenesAvatares + '/download/' + imagen,
+      { responseType: ResponseContentType.Blob });
+  }
+
 
   //////////////////////////// GESTION DE CUESTIONARIOS /////////////////////////////
   public CreaCuestionario(cuestionario: Cuestionario, profesorId: number): Observable<Cuestionario> {

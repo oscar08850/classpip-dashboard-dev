@@ -9,6 +9,7 @@ import { SesionService, PeticionesAPIService } from 'src/app/servicios';
 
 //Clases
 import { Pregunta } from 'src/app/clases';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-pregunta',
@@ -40,6 +41,8 @@ export class PreguntaComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   finalizar: Boolean = false;
 
+  existeImagen: Boolean = false;
+
 
   infoPreguntas: any;
   advertencia = true;
@@ -49,6 +52,8 @@ export class PreguntaComponent implements OnInit {
   filePregunta: File;
   imagenPregunta: string;
   nombreFicheroImagen: string;
+
+  misPreguntas: Pregunta[];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -107,7 +112,10 @@ export class PreguntaComponent implements OnInit {
       tematicaPregunta, respuestaCorrecta, respuestaIncorrecta1,
       respuestaIncorrecta2, respuestaIncorrecta3, feedbackCorrecto,
       feedbackIncorrecto, this.nombreFicheroImagen);
+    
     console.log ('vamos a crear pregunta');
+    
+    //Creamos y guardamos el modelo de Pregunta
     this.peticionesAPI.CreaPregunta(pregunta, this.profesorId)
       .subscribe((res) => {
         if (res != null) {
@@ -115,11 +123,20 @@ export class PreguntaComponent implements OnInit {
           this.pregunta = res;
           
           /*El modelo Pregunta y la imagen son independientes, por eso, 
-          una vez creado el modelo de la pregunta, necesitamos guardar la imagen a la que hace referencia el nombreFicheroImagen dentro de la API.*/
-          const imagenPreguntaData: FormData = new FormData();
-          imagenPreguntaData.append(this.filePregunta.name, this.filePregunta);
-          this.peticionesAPI.PonImagenPregunta(imagenPreguntaData)
-            .subscribe();
+          una vez creado el modelo de la pregunta, necesitamos guardar la imagen
+          a la que hace referencia el nombreFicheroImagen dentro de la API.*/
+
+          //No queremos duplicidades en la BD, por eso, antes de añadir la imagen comprobaremos que no esté ya guardada en ella.
+          
+          this.ExisteImagen();
+         
+          //Finalmente, añadimos la imagen a la BD.
+          if (!this.existeImagen && this.filePregunta != null){
+            const imagenPreguntaData: FormData = new FormData();
+            imagenPreguntaData.append(this.filePregunta.name, this.filePregunta);
+            this.peticionesAPI.PonImagenPregunta(imagenPreguntaData)
+                .subscribe();
+          }
 
           this.aceptarGoBack();
         } else {
@@ -237,6 +254,24 @@ export class PreguntaComponent implements OnInit {
       this.imagenPregunta = reader.result.toString();
 
     };
+}
+
+ExisteImagen(){
+  console.log("EMPEZAMOS GUARDADO");
+  console.log("RECUPERAMOS LAS PREGUNTAS EXISTENTES");
+  this.peticionesAPI.DameTodasMisPreguntas (this.profesorId)
+  .subscribe( res => {
+    if (res[0] !== undefined) {
+      this.misPreguntas = res;
+      console.log("PREGUNTAS RECUPERADAS");
+      console.log(this.misPreguntas);
+    }})
+  
+  if (this.misPreguntas != null) {
+  this.misPreguntas.forEach( pregunta => {
+    if (pregunta.Imagen == this.imagenPregunta) { 
+        this.existeImagen = true} });
+  }
 }
 
 }

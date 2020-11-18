@@ -29,6 +29,12 @@ export class EditarPreguntaDialogComponent implements OnInit {
   respuestaIncorrecta3: string;
   feedbackCorrecto: string;
   feedbackIncorrecto: string;
+  imagenPregunta: string;
+
+  // variables necesarias para la carga de la foto
+  filePregunta: File;
+  nombreFicheroImagen: string;
+
 
   //PARA SABER SI TENEMOS TODOS LOS CAMPOS RELLENADOS
   isDisabled: Boolean = true;
@@ -51,7 +57,7 @@ export class EditarPreguntaDialogComponent implements OnInit {
       respuestaIncorrecta2: ['', Validators.required],
       respuestaIncorrecta3: ['', Validators.required],
       feedbackCorrecto: ['', Validators.required],
-      feedbackIncorrecto: ['', Validators.required]
+      feedbackIncorrecto: ['', Validators.required],
     })
 
     this.preguntaEditar = this.data.pregunta;
@@ -66,14 +72,20 @@ export class EditarPreguntaDialogComponent implements OnInit {
     this.respuestaIncorrecta3 = this.data.pregunta.RespuestaIncorrecta3;
     this.feedbackCorrecto = this.data.pregunta.FeedbackCorrecto;
     this.feedbackIncorrecto = this.data.pregunta.FeedbackIncorrecto;
+    this.imagenPregunta = this.data.pregunta.Imagen;
   }
 
   //COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN LA PREGUNTA
   GuardarPregunta() {
-    // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaPregunta(new Pregunta (this.titulo, this.pregunta, this.tematica, this.respuestaCorrecta, this.respuestaIncorrecta1, this.respuestaIncorrecta2, this.respuestaIncorrecta3, this.feedbackCorrecto, this.feedbackIncorrecto), this.profesorId, this.preguntaEditar.id )
+    this.peticionesAPI.ModificaPregunta(new Pregunta (this.titulo, this.pregunta, this.tematica, this.respuestaCorrecta, this.respuestaIncorrecta1, this.respuestaIncorrecta2, this.respuestaIncorrecta3, this.feedbackCorrecto, this.feedbackIncorrecto, this.nombreFicheroImagen), this.profesorId, this.preguntaEditar.id )
     .subscribe((res) => {
       if (res != null) {
+       //Añadimos la imagen a la BD
+        const imagenPreguntaData: FormData = new FormData();
+          imagenPreguntaData.append(this.filePregunta.name, this.filePregunta);
+          this.peticionesAPI.PonImagenPregunta(imagenPreguntaData)
+            .subscribe();
+
         Swal.fire('Pregunta editada correctamente', 'Bien hecho', 'success');
         this.goBack();
       } else {
@@ -105,5 +117,22 @@ export class EditarPreguntaDialogComponent implements OnInit {
       // Si ambos son diferentes a nulo, estará activado.
       this.isDisabled = false;
     }
+  }
+  ActivarInputImagen() {
+    document.getElementById('inputImagenPregunta').click();
+  }
+
+   // Seleccionamos una foto y guarda el nombre de la foto en la variable nombreFicheroImagen
+   CargarImagenPregunta($event) {
+    this.filePregunta = $event.target.files[0];
+
+    console.log('fichero ' + this.filePregunta.name);
+    this.nombreFicheroImagen = this.filePregunta.name;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.filePregunta);
+    reader.onload = () => {
+      this.imagenPregunta = reader.result.toString();
+    };
   }
 }
