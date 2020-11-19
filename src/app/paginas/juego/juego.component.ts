@@ -1,50 +1,64 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { ThemePalette } from '@angular/material/core';
-import { SelectionModel } from '@angular/cdk/collections';
-import { MatDialog, MatTabGroup } from '@angular/material';
-import { Location } from '@angular/common';
-import { MatTableDataSource } from '@angular/material/table';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {ThemePalette} from '@angular/material/core';
+import {SelectionModel} from '@angular/cdk/collections';
+import {MatDialog, MatTabGroup} from '@angular/material';
+import {Location} from '@angular/common';
+import {MatTableDataSource} from '@angular/material/table';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 
 // tslint:disable-next-line:max-line-length
 import {
-  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
-
-  AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
-  EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
-  EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
-  AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-  EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable,
-  JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
-  JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, Rubrica
+  Alumno,
+  AlumnoJuegoDeAvatar,
+  AlumnoJuegoDeColeccion,
+  AlumnoJuegoDeCompeticionFormulaUno,
+  AlumnoJuegoDeCompeticionLiga,
+  AlumnoJuegoDeGeocaching,
+  AlumnoJuegoDePuntos,
+  AlumnoJuegoDeVotacionTodosAUno,
+  AlumnoJuegoDeVotacionUnoATodos,
+  AsignacionPuntosJuego,
+  Coleccion,
+  Cuestionario,
+  Equipo,
+  EquipoJuegoDeColeccion,
+  EquipoJuegoDeCompeticionFormulaUno,
+  EquipoJuegoDeCompeticionLiga,
+  EquipoJuegoDePuntos,
+  Escenario,
+  Grupo,
+  Jornada,
+  Juego,
+  JuegoDeAvatar,
+  JuegoDeCompeticion,
+  JuegoDeGeocaching,
+  JuegoDeVotacionTodosAUno,
+  JuegoDeVotacionUnoATodos,
+  Nivel,
+  Punto,
+  PuntoGeolocalizable,
+  Rubrica,
+  TablaPuntosFormulaUno
 } from '../../clases/index';
 
 
 // Services
-import { SesionService, CalculosService, PeticionesAPIService, ComServerService } from '../../servicios/index';
+import {CalculosService, ComServerService, PeticionesAPIService, SesionService} from '../../servicios/index';
 
-import { Observable} from 'rxjs';
-import { of } from 'rxjs';
+import {Observable, of} from 'rxjs';
 import 'rxjs';
 
-import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import {DialogoConfirmacionComponent} from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import Swal from 'sweetalert2';
 
-import { AsignaCuestionarioComponent } from './asigna-cuestionario/asigna-cuestionario.component';
-import { JuegoDeCuestionario } from 'src/app/clases/JuegoDeCuestionario';
-import { AlumnoJuegoDeCuestionario } from 'src/app/clases/AlumnoJuegoDeCuestionario';
-import { Router } from '@angular/router';
+import {AsignaCuestionarioComponent} from './asigna-cuestionario/asigna-cuestionario.component';
+import {JuegoDeCuestionario} from 'src/app/clases/JuegoDeCuestionario';
+import {AlumnoJuegoDeCuestionario} from 'src/app/clases/AlumnoJuegoDeCuestionario';
+import {Router} from '@angular/router';
 
-import { AsignaEscenarioComponent } from './asigna-escenario/asigna-escenario.component';
-import { AsignaPreguntasComponent } from './asigna-preguntas/asigna-preguntas.component';
-
-
-
-
-
+import {AsignaEscenarioComponent} from './asigna-escenario/asigna-escenario.component';
+import {AsignaPreguntasComponent} from './asigna-preguntas/asigna-preguntas.component';
 
 
 export interface OpcionSeleccionada {
@@ -483,6 +497,7 @@ export class JuegoComponent implements OnInit {
     if (this.criterioEvaluacionSeleccionado === 'Por pesos') {
       for (let i = 0; i < this.rubricaElegida.Criterios.length; i++) {
         this.pesosArray.push([]);
+        this.pesosArray[i].push(this.PesoPorDefecto(this.rubricaElegida.Criterios.length));
         for (let j = 0; j < this.rubricaElegida.Criterios[i].Elementos.length; j++) {
           this.pesosArray[i].push(this.PesoPorDefecto(this.rubricaElegida.Criterios[i].Elementos.length));
         }
@@ -566,17 +581,28 @@ export class JuegoComponent implements OnInit {
     console.log('pesos array changed', this.pesosArray);
     this.pesosSuman100 = this.PesosSuman100();
   }
+  PesosParentChanged(name: string, value: string): void {
+    console.log('Pesos parent changed', name, value);
+    this.pesosArray[name][0] = parseFloat(value);
+    console.log('pesos array changed', this.pesosArray);
+    this.pesosSuman100 = this.PesosSuman100();
+  }
   PesosSuman100(): boolean {
+    let c = 0;
     for (let i = 0; i < this.pesosArray.length; i++) {
       let p = 0;
       for (let j = 0; j < this.pesosArray[i].length; j++) {
-        p += this.pesosArray[i][j];
+        if  (j === 0) {
+          c += this.pesosArray[i][j];
+        } else {
+          p += this.pesosArray[i][j];
+        }
       }
       if (Math.round((p + Number.EPSILON) * 10) / 10 !== 100) {
         return false;
       }
     }
-    return true;
+    return Math.round((c + Number.EPSILON) * 10) / 10 === 100;
   }
   PenalizacionChanged(name: string, value: string): void {
     console.log('Penalizacion changed', name, value);

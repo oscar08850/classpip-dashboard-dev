@@ -1011,22 +1011,26 @@
                 </div>
               </mat-step>
               <!--PASO DE ELEGIR LAS RELACIONES MENUALMENTE-->
-              <mat-step *ngIf="relacionesEvaluacionSeleccionado === 'A elegir'">
-                <ng-template matStepLabel><div>A Elegir</div></ng-template>
-                <mat-list>
-                  <mat-list-item *ngFor="let evaluado of DameEvaluados()">
-                    <mat-label>{{evaluado.Nombre}}</mat-label>
-                    <mat-form-field appearance="fill">
-                      <mat-label>Selecciona sus evaluadores</mat-label>
-                      <mat-select *ngIf="equiposEvaluacionSeleccionado !== 'Individualmente'" multiple>
-                        <mat-option *ngFor="let evaluador of DameEvaluadores() | exclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}}</mat-option>
-                      </mat-select>
-                      <mat-select *ngIf="equiposEvaluacionSeleccionado === 'Individualmente'" multiple>
-                        <mat-option *ngFor="let evaluador of DameEvaluadores() | teamExclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </mat-list-item>
-                </mat-list>
+              <mat-step>
+                <ng-template matStepLabel><div>Relaciones</div></ng-template>
+                <table>
+                  <tr *ngFor="let evaluado of DameEvaluados()">
+                    <td>
+                      <mat-label>{{evaluado.Nombre}}</mat-label>
+                    </td>
+                    <td>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Selecciona sus evaluadores</mat-label>
+                        <mat-select *ngIf="modoDeJuegoSeleccionado !== 'Equipos' || equiposEvaluacionSeleccionado !== 'Individualmente'" multiple>
+                          <mat-option *ngFor="let evaluador of DameEvaluadores() | exclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}}</mat-option>
+                        </mat-select>
+                        <mat-select *ngIf="modoDeJuegoSeleccionado === 'Equipos' && equiposEvaluacionSeleccionado === 'Individualmente'" multiple>
+                          <mat-option *ngFor="let evaluador of DameEvaluadores() | teamExclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                </table>
 
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
@@ -1048,8 +1052,8 @@
                   </mat-list-item>
 
                   <mat-radio-group *ngIf="profesorEvalua" class="radBtnProf" aria-label="Select an option">
-                    <mat-radio-button value="normal" [checked]="profesorEvaluaModo === 'normal'" (change)="ProfesorEvaluaModoChange($event.value)"><b>Normal</b></mat-radio-button>
-                    <mat-radio-button value="dominante" [checked]="profesorEvaluaModo === 'dominante'" (change)="ProfesorEvaluaModoChange($event.value)"><b>Dominante</b></mat-radio-button>
+                    <mat-radio-button value="normal" [checked]="profesorEvaluaModo === 'normal'" (change)="ProfesorEvaluaModoChange($event.value)"><b>Normal: La nota se cuenta como la de un evaluador más</b></mat-radio-button>
+                    <mat-radio-button value="dominante" [checked]="profesorEvaluaModo === 'dominante'" (change)="ProfesorEvaluaModoChange($event.value)"><b>Dominante: La nota del profesor es un 50% del total</b></mat-radio-button>
                   </mat-radio-group>
 
                 </mat-list>
@@ -1080,6 +1084,31 @@
               </mat-step>
               <mat-step *ngIf="criterioEvaluacionSeleccionado === 'Por pesos'">
                 <ng-template matStepLabel><div>Pesos</div></ng-template>
+                <table *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
+                  <tr>
+                    <td>
+                      <b>{{criterio.Nombre}}</b>
+                    </td>
+                    <td>
+                      <mat-form-field>
+                        <input matInput type="number" name="{{c}}" (change)="PesosParentChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(rubricaElegida.Criterios.length)}}" min="0" max="100">
+                        <span matSuffix>%</span>
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let elemento of criterio.Elementos; let e = index">
+                    <td>
+                      {{elemento}}
+                    </td>
+                    <td>
+                      <mat-form-field>
+                        <input matInput type="number" name="{{c}}-{{e+1}}" (change)="PesosChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(criterio.Elementos.length)}}" min="0" max="100">
+                        <span matSuffix>%</span>
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                </table>
+                <!--
                 <mat-list *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
                   <mat-list-item><b>{{criterio.Nombre}}</b></mat-list-item>
                   <mat-list-item *ngFor="let elemento of criterio.Elementos; let e = index">
@@ -1089,7 +1118,7 @@
                       <span matSuffix>%</span>
                     </mat-form-field>
                   </mat-list-item>
-                </mat-list>
+                </mat-list>-->
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                   <button [disabled]="!pesosSuman100" type="button" class="btn Next" matStepperNext>Siguiente</button>
