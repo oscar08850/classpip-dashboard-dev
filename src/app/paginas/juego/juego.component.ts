@@ -170,6 +170,7 @@ export class JuegoComponent implements OnInit {
   ];
   relacionesEvaluacionSeleccionado: string;
   tengoRelacionEvaluacion = false;
+  relacionesMap = new Map();
   numeroDeMiembros = 1;
   //
   profesorEvalua = false;
@@ -489,7 +490,41 @@ export class JuegoComponent implements OnInit {
 
   RelacionDeEvaluacionSeleccionado(relacionEvaluacion: ChipColor) {
     this.relacionesEvaluacionSeleccionado = relacionEvaluacion.nombre;
+    if (relacionEvaluacion.nombre === 'Aleatorio') {
+      this.HacerRelaciones(true);
+    } else {
+      this.HacerRelaciones(false);
+    }
     this.tengoRelacionEvaluacion = true;
+  }
+  HacerRelaciones(fill: boolean) {
+    const evaluados = this.DameEvaluados().map(item => item.id);
+    this.relacionesMap = new Map();
+    for (let i = 0; i < evaluados.length; i++) {
+      if (!fill) {
+        this.relacionesMap.set(evaluados[i], []);
+      } else {
+        let evaluadores = [];
+        if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
+          for (let equipo of this.relacionAlumnosEquipos) {
+            if (equipo.equipoId === evaluados[i]) {
+              evaluadores = this.DameEvaluadores()
+                .filter(({id: id1}) => !equipo.alumnos.some(({id: id2}) => id1 === id2))
+                .map(item => item.id);
+            }
+          }
+        } else {
+          evaluadores = this.DameEvaluadores().filter(item => item.id !== evaluados[i]).map(item => item.id);
+        }
+        this.relacionesMap.set(evaluados[i], evaluadores);
+      }
+    }
+    console.log('Relaciones object', this.relacionesMap);
+  }
+  RelacionChanged(id: number, value: string[]) {
+    console.log('Relaciones changed', id, value);
+    this.relacionesMap.set(id, value);
+    console.log('Relaciones object', this.relacionesMap);
   }
   CriterioDeEvaluacionSeleccionado(criterioEvaluacion: ChipColor) {
     this.criterioEvaluacionSeleccionado = criterioEvaluacion.nombre;

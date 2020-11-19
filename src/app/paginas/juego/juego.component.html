@@ -1021,10 +1021,10 @@
                     <td>
                       <mat-form-field appearance="fill">
                         <mat-label>Selecciona sus evaluadores</mat-label>
-                        <mat-select *ngIf="modoDeJuegoSeleccionado !== 'Equipos' || equiposEvaluacionSeleccionado !== 'Individualmente'" multiple>
+                        <mat-select *ngIf="modoDeJuegoSeleccionado !== 'Equipos' || equiposEvaluacionSeleccionado !== 'Individualmente'" multiple (selectionChange)="RelacionChanged(evaluado.id, $event.value)" [value]="this.relacionesMap.get(evaluado.id)">
                           <mat-option *ngFor="let evaluador of DameEvaluadores() | exclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}}</mat-option>
                         </mat-select>
-                        <mat-select *ngIf="modoDeJuegoSeleccionado === 'Equipos' && equiposEvaluacionSeleccionado === 'Individualmente'" multiple>
+                        <mat-select *ngIf="modoDeJuegoSeleccionado === 'Equipos' && equiposEvaluacionSeleccionado === 'Individualmente'" multiple (selectionChange)="RelacionChanged(evaluado.id, $event.value)" [value]="this.relacionesMap.get(evaluado.id)">
                           <mat-option *ngFor="let evaluador of DameEvaluadores() | teamExclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}}</mat-option>
                         </mat-select>
                       </mat-form-field>
