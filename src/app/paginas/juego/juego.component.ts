@@ -200,6 +200,8 @@ export class JuegoComponent implements OnInit {
   tengoEquipoEvaluacion = false;
   //
   relacionAlumnosEquipos = [];
+  comprobacionDeN = false;
+  todosTienenEvaluador = false;
   // Información para crear juego de competicion
 
   tipoDeCompeticionSeleccionado: string;
@@ -308,7 +310,7 @@ export class JuegoComponent implements OnInit {
         console.log('Hay equipos');
         this.equiposGrupo = equipos;
         console.log(this.equiposGrupo);
-        for (let equipo of equipos) {
+        for (const equipo of equipos) {
           this.peticionesAPI.DameAlumnosEquipo(equipo.id).subscribe((alumnos: Alumno[]) => {
             this.relacionAlumnosEquipos.push({equipoId: equipo.id, alumnos});
             console.log('relacion alumnos equipos', this.relacionAlumnosEquipos);
@@ -485,6 +487,10 @@ export class JuegoComponent implements OnInit {
   // FUNCIONES PARA LA CREACION DE JUEGO DE EVALUACION
   TipoDeEvaluacionSeleccionado(tipoEvaluacion: ChipColor) {
     this.tipoDeEvaluacionSeleccionado = tipoEvaluacion.nombre;
+    if (this.tipoDeEvaluacionSeleccionado === 'Todos con todos') {
+      this.numeroDeMiembros = this.DameMaxSlider();
+      this.HacerRelaciones(true);
+    }
     this.tengoTipoDeEvaluacion = true;
   }
 
@@ -497,36 +503,103 @@ export class JuegoComponent implements OnInit {
     }
     this.tengoRelacionEvaluacion = true;
   }
+  Shuffle(a) {
+    let j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      x = a[i];
+      a[i] = a[j];
+      a[j] = x;
+    }
+    return a;
+  }
   HacerRelaciones(fill: boolean) {
     const evaluados = this.DameEvaluados().map(item => item.id);
     this.relacionesMap = new Map();
-    for (let i = 0; i < evaluados.length; i++) {
-      if (!fill) {
-        this.relacionesMap.set(evaluados[i], []);
-      } else {
-        let evaluadores = [];
-        if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
-          for (let equipo of this.relacionAlumnosEquipos) {
-            if (equipo.equipoId === evaluados[i]) {
-              evaluadores = this.DameEvaluadores()
-                .filter(({id: id1}) => !equipo.alumnos.some(({id: id2}) => id1 === id2))
-                .map(item => item.id);
-            }
-          }
+    do {
+      for (let i = 0; i < evaluados.length; i++) {
+        if (!fill) {
+          this.relacionesMap.set(evaluados[i], []);
         } else {
-          evaluadores = this.DameEvaluadores().filter(item => item.id !== evaluados[i]).map(item => item.id);
+          let evaluadores = [];
+          if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
+            for (const equipo of this.relacionAlumnosEquipos) {
+              if (equipo.equipoId === evaluados[i]) {
+                evaluadores = this.DameEvaluadores()
+                  .filter(({id: id1}) => !equipo.alumnos.some(({id: id2}) => id1 === id2))
+                  .map(item => item.id);
+              }
+            }
+          } else {
+            evaluadores = this.DameEvaluadores().filter(item => item.id !== evaluados[i]).map(item => item.id);
+          }
+          evaluadores = this.Shuffle(evaluadores);
+          if (this.modoDeJuegoSeleccionado === 'Equipos'
+            && this.equiposEvaluacionSeleccionado === 'Individualmente'
+            && this.tipoDeEvaluacionSeleccionado === 'Todos con todos') {
+            evaluadores.length = this.alumnosGrupo.length;
+          } else {
+            evaluadores.length = this.numeroDeMiembros;
+          }
+          this.relacionesMap.set(evaluados[i], evaluadores.filter(item => !isNaN(item)));
         }
-        this.relacionesMap.set(evaluados[i], evaluadores);
       }
-    }
-    console.log('Relaciones object', this.relacionesMap);
+    } while (this.ComprobarSiTodosTienenEvaluadores() === false && fill === true);
+      console.log('Relaciones object', this.relacionesMap);
+      console.log('Todos tienen evaluadores', this.todosTienenEvaluador);
   }
   RelacionChanged(id: number, value: string[]) {
     console.log('Relaciones changed', id, value);
     this.relacionesMap.set(id, value);
     console.log('Relaciones object', this.relacionesMap);
+    this.ComprobarSiTodosTienenEvaluadores();
   }
-  CriterioDeEvaluacionSeleccionado(criterioEvaluacion: ChipColor) {
+    ComprobarSiTodosTienenEvaluadores() {
+    let encontrado1 = false;
+    let encontrado2 = false;
+    if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
+      this.relacionesMap.forEach((value, key) => {
+        if (value.length < this.numeroDeMiembros) {
+          this.comprobacionDeN = false;
+          encontrado2 = true;
+        }
+        value.forEach(item => {
+          if (this.ContarEvaluadores(item) === 0) {
+            this.todosTienenEvaluador = false;
+            encontrado1 = true;
+          }
+        });
+      });
+    } else {
+      this.relacionesMap.forEach((value, key) => {
+        if (this.ContarEvaluadores(key) === 0) {
+          this.todosTienenEvaluador = false;
+          encontrado1 = true;
+        }
+        if (value.length < this.numeroDeMiembros) {
+          this.comprobacionDeN = false;
+          encontrado2 = true;
+        }
+      });
+    }
+    if (!encontrado1) {
+      this.todosTienenEvaluador = true;
+    }
+    if (!encontrado2) {
+      this.comprobacionDeN = true;
+    }
+    return this.todosTienenEvaluador;
+  }
+    ContarEvaluadores(idEvaluado: number): number {
+    let suma = 0;
+    this.relacionesMap.forEach((value, key) => {
+      if (value.includes(idEvaluado)) {
+        suma++;
+      }
+    });
+    return suma;
+  }
+    CriterioDeEvaluacionSeleccionado(criterioEvaluacion: ChipColor) {
     this.criterioEvaluacionSeleccionado = criterioEvaluacion.nombre;
     this.tengoCriterioEvaluacion = true;
     if (this.criterioEvaluacionSeleccionado === 'Por pesos') {
@@ -554,39 +627,45 @@ export class JuegoComponent implements OnInit {
       console.log('penalizacion array', this.penalizacionArray);
     }
   }
-  EquipoDeEvaluacionSeleccionado(equipoEvaluacion: ChipColor) {
+    EquipoDeEvaluacionSeleccionado(equipoEvaluacion: ChipColor) {
     this.equiposEvaluacionSeleccionado = equipoEvaluacion.nombre;
     this.tengoEquipoEvaluacion = true;
   }
-  AutoevaluacionChange(isChecked: boolean) {
+    AutoevaluacionChange(isChecked: boolean) {
     this.autoevaluacion = isChecked;
   }
-  ProfesorEvaluaChange(isChecked: boolean) {
+    ProfesorEvaluaChange(isChecked: boolean) {
     this.profesorEvalua = isChecked;
   }
-  ProfesorEvaluaModoChange(value: string) {
+    ProfesorEvaluaModoChange(value: string) {
     this.profesorEvaluaModo = value;
   }
-  DameMaxSlider(): number {
+    DameMaxSlider(): number {
     if (this.modoDeJuegoSeleccionado === 'Individual') {
       return this.alumnosGrupo.length - 1;
     } else if (this.modoDeJuegoSeleccionado === 'Equipos') {
       if (this.equiposEvaluacionSeleccionado === 'Por Equipos') {
         return this.equiposGrupo.length - 1;
       } else if (this.equiposEvaluacionSeleccionado === 'Individualmente') {
-        return this.alumnosGrupo.length - 1;
+        let min = this.alumnosGrupo.length;
+        for (let i = 0; i < this.relacionAlumnosEquipos.length; i++) {
+          if (this.relacionAlumnosEquipos[i].alumnos.length < min) {
+            min = this.relacionAlumnosEquipos[i].alumnos.length;
+          }
+        }
+        return min;
       }
     }
   }
 
-  DameEvaluados(): any {
+    DameEvaluados(): any {
     if (this.modoDeJuegoSeleccionado === 'Individual') {
       return this.alumnosGrupo;
     } else {
       return this.equiposGrupo;
     }
   }
-  DameEvaluadores(): any {
+    DameEvaluadores(): any {
     if (this.equiposEvaluacionSeleccionado === 'Por Equipos') {
       return this.equiposGrupo;
     } else {

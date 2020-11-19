@@ -1020,12 +1020,18 @@
                     </td>
                     <td>
                       <mat-form-field appearance="fill">
-                        <mat-label>Selecciona sus evaluadores</mat-label>
+                        <mat-label *ngIf="relacionesEvaluacionSeleccionado !== 'Aleatorio'">Selecciona sus evaluadores</mat-label>
+                        <mat-label *ngIf="relacionesEvaluacionSeleccionado === 'Aleatorio'" style="color: green;">Evaluadores Asignados</mat-label>
                         <mat-select *ngIf="modoDeJuegoSeleccionado !== 'Equipos' || equiposEvaluacionSeleccionado !== 'Individualmente'" multiple (selectionChange)="RelacionChanged(evaluado.id, $event.value)" [value]="this.relacionesMap.get(evaluado.id)">
-                          <mat-option *ngFor="let evaluador of DameEvaluadores() | exclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}}</mat-option>
+                          <!--<mat-select-trigger>
+                            <span>
+                              ({{this.relacionesMap.get(evaluado.id) ? this.relacionesMap.get(evaluado.id).length : 0}})
+                            </span>
+                          </mat-select-trigger>-->
+                          <mat-option *ngFor="let evaluador of DameEvaluadores() | exclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}} <span *ngIf="ContarEvaluadores(evaluador.id) > 0">({{ContarEvaluadores(evaluador.id)}})</span></mat-option>
                         </mat-select>
                         <mat-select *ngIf="modoDeJuegoSeleccionado === 'Equipos' && equiposEvaluacionSeleccionado === 'Individualmente'" multiple (selectionChange)="RelacionChanged(evaluado.id, $event.value)" [value]="this.relacionesMap.get(evaluado.id)">
-                          <mat-option *ngFor="let evaluador of DameEvaluadores() | teamExclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}}</mat-option>
+                          <mat-option *ngFor="let evaluador of DameEvaluadores() | teamExclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}} <span *ngIf="ContarEvaluadores(evaluador.id) > 0">({{ContarEvaluadores(evaluador.id)}})</span></mat-option>
                         </mat-select>
                       </mat-form-field>
                     </td>
@@ -1034,7 +1040,7 @@
 
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button [disabled]="!tengoRubrica" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  <button [disabled]="!(todosTienenEvaluador && comprobacionDeN)" type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
               <mat-step>
