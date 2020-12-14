@@ -45,8 +45,10 @@ export class PreguntaComponent implements OnInit {
 
 
   infoPreguntas: any;
+  ficherosPreguntas;
   advertencia = true;
   ficheroCargado = false;
+  imagenCargado: Boolean = false;
   
   // variables necesarias para la carga de la foto
   filePregunta: File;
@@ -186,16 +188,16 @@ export class PreguntaComponent implements OnInit {
     }
   }
 
- // Activa la función SeleccionarFicheroPreguntas
+ // Activa la función SeleccionarInfoPreguntas
  ActivarInputInfo() {
   console.log('Activar input');
   document.getElementById('inputInfo').click();
 }
 
 
-   // Par abuscar el fichero JSON que contiene la info de la colección que se va
-  // a cargar desde ficheros
-  SeleccionarFicheroPreguntas($event) {
+   // Par abuscar el fichero JSON que contiene la info de las preguntas que se van
+  // a cargar desde fichero
+  SeleccionarInfoPreguntas($event) {
     const fileInfo = $event.target.files[0];
     const reader = new FileReader();
     reader.readAsText(fileInfo);
@@ -206,13 +208,34 @@ export class PreguntaComponent implements OnInit {
         console.log (this.infoPreguntas);
         Swal.fire('Las pregunta se han cargado correctamente', '', 'success');
         this.ficheroCargado = true;
+         
+        // Activamos la función SeleccionarFicherosPreguntas
+        console.log ("Hola");
+         document.getElementById('inputImagenes').click();
+         console.log ("Adios");
       } catch (e) {
         Swal.fire('Error en el formato del fichero', '', 'error');
       }
     };
   }
 
+  SeleccionarFicherosPreguntas($event) {
+    this.ficherosPreguntas = Array.from($event.target.files);
+    console.log(this.ficherosPreguntas);
+    console.log(this.infoPreguntas);
+    console.log(this.infoPreguntas.ImagenPregunta);
+    // Ya tenemos todos los ficheros de las imagenes
+    // Cogemos la imagen de la colección para que se muestre
+    const fileImagenPregunta = this.ficherosPreguntas.filter (f => f.name === this.infoPreguntas.Imagen);
 
+    const reader = new FileReader();
+    console.log(fileImagenPregunta);
+    reader.readAsDataURL(fileImagenPregunta);
+    reader.onload = () => {
+      this.imagenPregunta = reader.result.toString();
+      this.imagenCargado = true;
+    };
+  }
 
   RegistrarPreguntas() {
     let cont = 0;
@@ -221,6 +244,21 @@ export class PreguntaComponent implements OnInit {
       .subscribe((res) => {
         if (res != null) {
           cont++;
+          // console.log(cont);
+          
+          // //Si la pregunta se registra correctamente, enviamos también la imagen (si es que la hay)
+          // if (this.infoPreguntas.Imagen !== '') {
+          //   console.log ('Si que registro');
+          //   console.log(this.ficherosPreguntas.filter (f => f.name === this.pregunta.Imagen)[0]);
+          //   const ImagenPregunta = this.ficherosPreguntas.filter (f => f.name === this.pregunta.Imagen)[0];
+          //   const formDataImagen = new FormData();
+          //   console.log("HOLA");
+          //   formDataImagen.append(this.pregunta.Imagen, ImagenPregunta);
+          //   console.log("HOLA-1");
+          //   this.peticionesAPI.PonImagenPregunta (formDataImagen)
+          //   .subscribe(() => console.log('Imagen cargado'));
+          // }
+  
           if (cont === this.infoPreguntas.length) {
             Swal.fire('Las preguntas se han registrado correctamente', '', 'success');
             this.finalizar = true;

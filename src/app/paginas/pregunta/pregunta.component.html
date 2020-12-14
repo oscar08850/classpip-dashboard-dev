@@ -15,12 +15,13 @@
                 "Titulo": "suma",
                 "Pregunta": "¿Cuánto es 7 + 9 ?",
                 "Tematica": "Mates",
+                "Imagen": "foto_pregunta.png",
                 "RespuestaCorrecta": "16",
                 "RespuestaIncorrecta1": "15",
                 "RespuestaIncorrecta2": "17",
                 "RespuestaIncorrecta3": "0",
                 "FeedbackCorrecto": "Muy bien",
-                "FeedbackIncorrecto": "Fatal"
+                "FeedbackIncorrecto": "Fatal",
             {{'}'}},
             {{'{'}}
               ..... otras preguntas
@@ -35,7 +36,8 @@
       </div>
       <div class = "enFila">
         <div style = "width: 40%">
-          <input #file id = "inputInfo" type="file" accept= 'application/JSON;' accept-charset="UTF-8" (change)="SeleccionarFicheroPreguntas($event)" style="display:none">
+          <input #file id = "inputImagenes" type="file" accept= 'image/*' (change)="SeleccionarFicherosPreguntas($event)" style="display:none" multiple>
+          <input #file id = "inputInfo" type="file" accept= 'application/JSON;' accept-charset="UTF-8" (change)="SeleccionarInfoPreguntas($event)" style="display:none">
           <button style = "height:100px; width:80%" (click) = "ActivarInputInfo()" type="button" class="btn Agregar">
             Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
           </button>
