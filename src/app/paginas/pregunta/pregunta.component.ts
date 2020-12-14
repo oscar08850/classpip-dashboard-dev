@@ -9,7 +9,7 @@ import { SesionService, PeticionesAPIService } from 'src/app/servicios';
 
 //Clases
 import { Pregunta } from 'src/app/clases';
-import { Console } from 'console';
+//import { Console } from 'console';
 
 @Component({
   selector: 'app-pregunta',

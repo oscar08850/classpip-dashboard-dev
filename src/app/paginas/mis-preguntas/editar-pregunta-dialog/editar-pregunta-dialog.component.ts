@@ -2,10 +2,12 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { PeticionesAPIService } from 'src/app/servicios';
 import { Location } from '@angular/common';
-import { Pregunta } from 'src/app/clases';
+import { Coleccion, Pregunta } from 'src/app/clases';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+
+import * as URL from '../../../URLs/urls';
 
 @Component({
   selector: 'app-editar-pregunta-dialog',
@@ -73,6 +75,8 @@ export class EditarPreguntaDialogComponent implements OnInit {
     this.feedbackCorrecto = this.data.pregunta.FeedbackCorrecto;
     this.feedbackIncorrecto = this.data.pregunta.FeedbackIncorrecto;
     this.imagenPregunta = this.data.pregunta.Imagen;
+
+    this.TraeImagenPregunta(this.preguntaEditar);
   }
 
   //COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN LA PREGUNTA
@@ -118,21 +122,39 @@ export class EditarPreguntaDialogComponent implements OnInit {
       this.isDisabled = false;
     }
   }
+
   ActivarInputImagen() {
     document.getElementById('inputImagenPregunta').click();
   }
 
-   // Seleccionamos una foto y guarda el nombre de la foto en la variable nombreFicheroImagen
-   CargarImagenPregunta($event) {
+  //Evento que nos permite cargar una imagen y guardarla en el atributo imagenPregunta
+  CargarImagenPregunta($event) {
     this.filePregunta = $event.target.files[0];
-
-    console.log('fichero ' + this.filePregunta.name);
     this.nombreFicheroImagen = this.filePregunta.name;
 
     const reader = new FileReader();
     reader.readAsDataURL(this.filePregunta);
     reader.onload = () => {
       this.imagenPregunta = reader.result.toString();
+
     };
+}
+
+  // Le pasamos la pregunta y buscamos la imagen que tiene.
+ TraeImagenPregunta(pregunta: Pregunta) {
+
+  console.log('entro a buscar pregunta y foto');
+  console.log(pregunta.Imagen);
+  // Si la coleccion tiene una foto (recordemos que la foto no es obligatoria)
+  if (pregunta.Imagen !== undefined) {
+
+    this.imagenPregunta = URL.ImagenesPregunta + pregunta.Imagen ;
+    console.log (this.imagenPregunta);
+
+    // Sino la imagenColeccion será undefined para que no nos pinte la foto de otro equipo préviamente seleccionado
+  } else {
+    this.imagenPregunta = undefined;
+  }
+
   }
 }

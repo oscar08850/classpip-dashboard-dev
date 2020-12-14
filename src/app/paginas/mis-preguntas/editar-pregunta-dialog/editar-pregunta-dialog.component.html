@@ -60,12 +60,13 @@
                 </div>
                 <div>
                     <mat-label>Imagen</mat-label>     
-                      <input #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
-                        <!-- Cuando se cargue la imagen se activara la función que hara que se visualice con tamaño doble -->
-                        <img #img *ngIf="imagenPregunta"  [src]="imagenPregunta" width= '300' heigth = '300' style="margin: 5px; ">    
-                        <button (click) = "ActivarInputImagen()" type="button" class="btn Aceptar">
-                        Cambiar Imagen
-                        </button>
+        
+                    <input #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
+                    <!-- Cuando se cargue la imagen se activara la función que hara que se visualice con tamaño doble -->
+                    <img #img *ngIf="imagenPregunta" mat-card-image [src]="imagenPregunta">
+                    <button (click) = "ActivarInputImagen()" type="button" class="btn Agregar">
+                      Cambiar Imagen
+                    </button>
                 </div>
                 <div class="btnCambiarStep">
                   <button mat-raised-button class="btn Back" style="margin: 5px" (click) = "goBack();"> Cerrar </button>

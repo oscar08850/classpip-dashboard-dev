@@ -7,5 +7,6 @@ export const AudiosAvatares = host + ':3000/api/imagenes/AudiosAvatares/download
 export const ImagenesAlumno = host + ':3000/api/imagenes/imagenAlumno/download/';
 export const ImagenesPerfil = host + ':3000/api/imagenes/ImagenesPerfil/download/';
 export const LogosEquipos = host + ':3000/api/imagenes/LogosEquipos/download/';
+export const ImagenesPregunta = host + ':3000/api/imagenes/ImagenesPreguntas/download/';
 
 export const Servidor = host + ':8080';
