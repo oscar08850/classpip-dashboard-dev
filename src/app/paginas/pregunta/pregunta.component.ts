@@ -135,6 +135,8 @@ export class PreguntaComponent implements OnInit {
           //Finalmente, añadimos la imagen a la BD.
           if (!this.existeImagen && this.filePregunta != null){
             const imagenPreguntaData: FormData = new FormData();
+            console.log(this.filePregunta.name);
+            console.log(this.filePregunta);
             imagenPreguntaData.append(this.filePregunta.name, this.filePregunta);
             this.peticionesAPI.PonImagenPregunta(imagenPreguntaData)
                 .subscribe();
@@ -210,9 +212,7 @@ export class PreguntaComponent implements OnInit {
         this.ficheroCargado = true;
          
         // Activamos la función SeleccionarFicherosPreguntas
-        console.log ("Hola");
          document.getElementById('inputImagenes').click();
-         console.log ("Adios");
       } catch (e) {
         Swal.fire('Error en el formato del fichero', '', 'error');
       }
@@ -221,43 +221,27 @@ export class PreguntaComponent implements OnInit {
 
   SeleccionarFicherosPreguntas($event) {
     this.ficherosPreguntas = Array.from($event.target.files);
-    console.log(this.ficherosPreguntas);
-    console.log(this.infoPreguntas);
-    console.log(this.infoPreguntas.ImagenPregunta);
-    // Ya tenemos todos los ficheros de las imagenes
-    // Cogemos la imagen de la colección para que se muestre
-    const fileImagenPregunta = this.ficherosPreguntas.filter (f => f.name === this.infoPreguntas.Imagen);
-
-    const reader = new FileReader();
-    console.log(fileImagenPregunta);
-    reader.readAsDataURL(fileImagenPregunta);
-    reader.onload = () => {
-      this.imagenPregunta = reader.result.toString();
-      this.imagenCargado = true;
-    };
   }
 
   RegistrarPreguntas() {
     let cont = 0;
+
     this.infoPreguntas.forEach (pregunta => {
       this.peticionesAPI.CreaPregunta(pregunta, this.profesorId)
       .subscribe((res) => {
         if (res != null) {
           cont++;
-          // console.log(cont);
-          
-          // //Si la pregunta se registra correctamente, enviamos también la imagen (si es que la hay)
-          // if (this.infoPreguntas.Imagen !== '') {
-          //   console.log ('Si que registro');
-          //   console.log(this.ficherosPreguntas.filter (f => f.name === this.pregunta.Imagen)[0]);
-          //   const ImagenPregunta = this.ficherosPreguntas.filter (f => f.name === this.pregunta.Imagen)[0];
-          //   const formDataImagen = new FormData();
-          //   console.log("HOLA");
-          //   formDataImagen.append(this.pregunta.Imagen, ImagenPregunta);
-          //   console.log("HOLA-1");
-          //   this.peticionesAPI.PonImagenPregunta (formDataImagen)
-          //   .subscribe(() => console.log('Imagen cargado'));
-          // }
+          this.pregunta = res;     
+          //Si la pregunta se registra correctamente, enviamos también la imagen (si es que la hay)
+          if (this.infoPreguntas.Imagen !== '') {
+            console.log ('Si que registro');
+            //guardamos la imagen de la pregunta
+            const ImagenPregunta = this.ficherosPreguntas.filter (f => f.name === this.pregunta.Imagen.toUpperCase())[0];
+            const formDataImagen = new FormData();
+            formDataImagen.append(this.pregunta.Imagen, ImagenPregunta);
+            this.peticionesAPI.PonImagenPregunta (formDataImagen)
+            .subscribe(() => console.log('Imagen cargado'));
+           }
   
           if (cont === this.infoPreguntas.length) {
             Swal.fire('Las preguntas se han registrado correctamente', '', 'success');
