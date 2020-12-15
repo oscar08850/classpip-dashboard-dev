@@ -29,7 +29,9 @@ export class PeticionesAPIService {
 
 
 
- private host = URL.host;
+ private host = 'http://localhost';
+
+ //private host = URL.host;
 
 
 
@@ -109,6 +111,8 @@ export class PeticionesAPIService {
   private APIUrlImagenesPerfil = this.host + ':3000/api/imagenes/ImagenesPerfil';
 
   private APIUrlCuestionariosSatisfaccion = this.host + ':3000/api/cuestionariosSatisfaccion';
+
+  private APIUrlImagenesPreguntas = this.host + ':3000/api/imagenes/ImagenesPreguntas';
 
   private APIUrlJuegoDeCuestionarioSatisfaccion = this.host + ':3000/api/juegosDeCuestionarioSatisfaccion';
   private APIUrlAlumnoJuegoDeCuestionarioSatisfaccion = this.host + ':3000/api/alumnosJuegoDeCuestionarioSatisfaccion';
@@ -961,6 +965,20 @@ export class PeticionesAPIService {
   public ModificaPregunta(pregunta: Pregunta, profesorId: number, preguntaId: number): Observable<Pregunta> {
     return this.http.put<Pregunta>(this.APIUrlProfesores + '/' + profesorId + '/preguntas/' + preguntaId, pregunta);
   }
+
+  public PonImagenPregunta(formData: FormData): Observable<any> {
+    return this.http.post<any>(this.APIUrlImagenesPreguntas + '/upload', formData);
+  }
+
+  public BorrarImagenPregunta(imagen: string): Observable<any> {
+    return this.http.delete<any>(this.APIUrlImagenesPreguntas + '/files/' + imagen);
+  }
+
+  public DameImagenPregunta(imagen: string): Observable<any> {
+    return this.httpImagenes.get(this.APIUrlImagenesAvatares + '/download/' + imagen,
+      { responseType: ResponseContentType.Blob });
+  }
+
 
   //////////////////////////// GESTION DE CUESTIONARIOS /////////////////////////////
   public CreaCuestionario(cuestionario: Cuestionario, profesorId: number): Observable<Cuestionario> {
