@@ -13,6 +13,9 @@ import { of } from 'rxjs';
 import 'rxjs';
 
 
+import { NgxQrcodeElementTypes, NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
+
+
 
 @Component({
   selector: 'app-juego-de-coger-turno-rapido',
@@ -32,6 +35,10 @@ export class JuegoDeCogerTurnoRapidoComponent implements OnInit {
   displayedColumns: string[] = ['dia', 'hora', 'nombre', 'iconos'];
   ficheroGenerado = false;
   sonido = true;
+
+  elementType = NgxQrcodeElementTypes.URL;
+  correctionLevel = NgxQrcodeErrorCorrectionLevels.HIGH;
+  value = '147.83.118.92:8100/home';
 
   constructor(
     private calculos: CalculosService,
@@ -80,7 +87,7 @@ export class JuegoDeCogerTurnoRapidoComponent implements OnInit {
             contestado: false
           });
       });
-      this.comServer.EsperoTurnos(this.juegoSeleccionado.Clave)
+      this.comServer.EsperoTurnos()
       .subscribe((info) => {
           if (this.sonido) {
             sound.play();

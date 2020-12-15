@@ -40,7 +40,7 @@ export class CrearRubricaComponent implements OnInit {
   SeleccionarFicheroRubrica($event) {
     const fileInfo = $event.target.files[0];
     const reader = new FileReader();
-    reader.readAsText(fileInfo);
+    reader.readAsText(fileInfo, 'ISO-8859-1');
     reader.onload = () => {
       try {
         this.rubrica = JSON.parse(reader.result.toString());
