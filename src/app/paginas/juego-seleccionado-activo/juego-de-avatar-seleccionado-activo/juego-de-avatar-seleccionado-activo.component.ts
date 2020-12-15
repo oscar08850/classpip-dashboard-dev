@@ -21,7 +21,7 @@ import {MatTableDataSource} from '@angular/material/table';
 })
 export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
 
-  juegoSeleccionado: Juego;
+  juegoSeleccionado: any;
   alumnosDelJuego: Alumno[];
   inscripcionesAlumnosJuegodeAvatar: AlumnoJuegoDeAvatar[];
   selection1 = new SelectionModel<any>(true, []);
@@ -156,12 +156,15 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
   MasterToggle(n) {
 
       if (n === 1) {
+        console.log ('ha cambiado C1');
         if (this.IsAllSelected(1)) {
+          console.log ('Borro todos');
           // Si todos los elementos del selector estan activos hay que desactivarlos todos
           this.selection1.clear(); // Desactivamos todos
           // y quitar el privilegio correspondiente a todos los alumnos
           this.inscripcionesAlumnosJuegodeAvatar.forEach (inscripcion => inscripcion.Privilegios[0] = false);
         } else {
+          console.log ('activo todos');
           // Tengo que activar todos los elementos del selector
           this.datasourceAlumnos.data.forEach(row => this.selection1.select(row));
           // y conceder el privilegio correspondiente a todos los alumnos
@@ -205,7 +208,7 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
         }
       }
       if (n === 6) {
-        if (this.IsAllSelected(1)) {
+        if (this.IsAllSelected(6)) {
           this.selection6.clear(); // Desactivamos todos
           this.inscripcionesAlumnosJuegodeAvatar.forEach (inscripcion => inscripcion.Privilegios[5] = false);
         } else {
@@ -214,7 +217,8 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
         }
       }
       this.hayCambios = true;
-      this.haCambiado.forEach (valor => valor = true);
+      this.haCambiado = Array(this.inscripcionesAlumnosJuegodeAvatar.length).fill (true);
+      console.log (this.haCambiado);
   }
   HaCambiado(n ,i) {
     // Cuando hago click sobre el privilegio n del alumno i debo cambiar el estado de ese privilegio
@@ -224,6 +228,8 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
   }
 
   RegistrarCambios() {
+    console.log ('voy a guardar');
+    console.log (this.haCambiado);
     for (let i = 0; i < this.inscripcionesAlumnosJuegodeAvatar.length; i++) {
       // Solo reflejo los cambios si ha habido cambios
       if (this.haCambiado[i]) {
@@ -236,10 +242,40 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
   GuardarDatos(alumno: Alumno) {
     // Guardo en la sesión el alumno y su inscripción para que los recoja el componente que mostrará su avatar
     this.sesion.TomaAlumno (alumno);
+    this.sesion.TomaJuegoAvatar (this.juegoSeleccionado);
     // tslint:disable-next-line:max-line-length
     this.sesion.TomaAlumnoJuegoAvatar (this.inscripcionesAlumnosJuegodeAvatar.filter (inscripcion => inscripcion.alumnoId === alumno.id)[0]);
   }
 
+  VerTodosLosAvatares() {
+    this.sesion.TomaJuegoAvatar (this.juegoSeleccionado);
+    console.log ('Vamos a ver todos los avatares');
+  }
+
+  DesactivarJuego() {
+    Swal.fire({
+      title: '¿Seguro que quieres desactivar el juego de avatar?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then((result) => {
+      if (result.value) {
+
+        this.juegoSeleccionado.JuegoActivo = false;
+        this.peticionesAPI.CambiaEstadoJuegoDeAvatar (this.juegoSeleccionado)
+        .subscribe(res => {
+            if (res !== undefined) {
+              console.log(res);
+              console.log('juego desactivado');
+              Swal.fire('El juego se ha desactivado correctamente');
+              this.location.back();
+            }
+        });
+      }
+    });
+  }
 
 
 }

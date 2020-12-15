@@ -34,6 +34,15 @@ export class InicioComponent implements OnInit {
   profesor: Profesor;
   tabla: any [] = [];
 
+  date: Date = new Date();
+  settings = {
+      bigBanner: true,
+      timePicker: true,
+      format: 'dd-MM-yyyy-hh:mm',
+      defaultOpen: true
+  }
+  imagenSilueta = 'http://147.83.118.92:3000/api/imagenes/imagenColeccion/download/compositores.png';
+
   constructor(  private peticionesAPI: PeticionesAPIService,
                 private sesion: SesionService,
                 private calculos: CalculosService,
@@ -44,10 +53,13 @@ export class InicioComponent implements OnInit {
 
   ngOnInit() {
 
+
+
     this.profesor = this.sesion.DameProfesor();
     this.ObtenJuegosActivosDelProfesor();
 
   }
+
 
 ObtenJuegosActivosDelProfesor() {
   this.peticionesAPI.DameGruposProfesor(this.profesor.id)
@@ -86,7 +98,7 @@ PreparaTabla() {
 
 MostrarJuegoSeleccionado(juego: Juego) {
   console.log (juego);
-  const juegoSeleccionado = juego.todoElJuego;;
+  const juegoSeleccionado = juego.todoElJuego;
   this.sesion.TomaJuego(juegoSeleccionado);
   this.router.navigate(['/grupo/' + juegoSeleccionado.grupoId + '/juegos/juegoSeleccionadoActivo']);
 }

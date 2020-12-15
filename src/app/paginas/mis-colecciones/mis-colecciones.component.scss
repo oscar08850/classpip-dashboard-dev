@@ -60,3 +60,14 @@
 //     max-width: 130px;
 //     max-height: 130px;
 //   }
+// .header-align-right{
+//   display: flex;
+//   padding: 0 0;
+//   justify-content: flex-end;
+// }
+
+// para que la columna de iconos salga a la derecha
+.mat-column-iconos {
+  display: flex;
+  justify-content: flex-end;
+}

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ResponseContentType, Http, Response } from '@angular/http';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 
 // Imports para abrir diálogo confirmar eliminar equipo
@@ -15,9 +16,11 @@ import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion
 import { SesionService, PeticionesAPIService } from '../../servicios/index';
 
 // Clases
-import { Coleccion, Cromo } from '../../clases/index';
+import { Coleccion, Cromo, Profesor } from '../../clases/index';
 
 import * as URL from '../../URLs/urls';
+import { MatTableDataSource } from '@angular/material';
+import { Subscriber } from 'rxjs';
 
 @Component({
   selector: 'app-mis-colecciones',
@@ -29,20 +32,28 @@ export class MisColeccionesComponent implements OnInit {
   profesorId: number;
 
 
-  coleccionesProfesor: Coleccion[];
+  coleccionesProfesor: Coleccion[] = [];
+  coleccionesPublicas: Coleccion[];
   cromosColeccion: Cromo[];
   imagenColeccion: string;
 
   numeroDeCromos: number;
 
   file: File;
+  imagenColeccionFile: File;
+  dataSource;
+  dataSourcePublicas;
+  propietarios: string[];
 
   // PARA DIÁLOGO DE CONFIRMACIÓN
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Estás seguro/a de que quieres eliminar el equipo llamado: ';
+  displayedColumns: string[] = ['nombre', 'iconos'];
+  //displayedColumns: string[] = ['nombre', 'edit', 'delete', 'copy', 'publica'];
+  displayedColumnsPublica: string[] = ['nombre', 'copy'];
 
   constructor(
-    private route: ActivatedRoute,
+    private router: Router,
     public dialog: MatDialog,
     public sesion: SesionService,
     public peticionesAPI: PeticionesAPIService,
@@ -58,7 +69,8 @@ export class MisColeccionesComponent implements OnInit {
     console.log(this.profesorId);
 
     this.TraeColeccionesDelProfesor();
-    console.log(this.coleccionesProfesor);
+    this.DameTodasLasColeccionesPublicas();
+
 
 
   }
@@ -72,6 +84,7 @@ export class MisColeccionesComponent implements OnInit {
         console.log('Voy a dar la lista');
         this.coleccionesProfesor = coleccion;
         console.log(this.coleccionesProfesor);
+        this.dataSource = new MatTableDataSource(this.coleccionesProfesor);
         // this.profesorService.EnviarProfesorIdAlServicio(this.profesorId);
       } else {
         this.coleccionesProfesor = undefined;
@@ -80,61 +93,69 @@ export class MisColeccionesComponent implements OnInit {
     });
   }
 
- // Le pasamos la coleccion y buscamos la imagen que tiene y sus cromos
- DameCromosEImagenDeLaColeccion(coleccion: Coleccion) {
 
-  this.imagenColeccion = undefined;
-  console.log('entro a buscar cromos y foto');
-  console.log(coleccion.ImagenColeccion);
-  // Si la coleccion tiene una foto (recordemos que la foto no es obligatoria)
-  if (coleccion.ImagenColeccion !== undefined) {
-    this.imagenColeccion = URL.ImagenesColeccion + coleccion.ImagenColeccion;
+  DameTodasLasColeccionesPublicas() {
+    // traigo todos los publicos excepto los del profesor
+    this.peticionesAPI.DameColeccionesPublicas()
+    .subscribe ( res => {
+      console.log ('coleccioens publicas');
+      console.log (res);
 
-    // this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
-    // .subscribe(response => {
-    //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
+      if (res[0] !== undefined) {
+        this.coleccionesPublicas = res.filter (coleccion => coleccion.profesorId !== this.profesorId);
+        if (this.coleccionesPublicas.length === 0) {
+          this.coleccionesPublicas = undefined;
 
-    //   const reader = new FileReader();
-    //   reader.addEventListener('load', () => {
-    //     this.imagenColeccion = reader.result.toString();
-    //   }, false);
-
-    //   if (blob) {
-    //     reader.readAsDataURL(blob);
-    //   }
-    // });
-
-    // Sino la imagenColeccion será undefined para que no nos pinte la foto de otro equipo préviamente seleccionado
-  } else {
-    this.imagenColeccion = undefined;
+        } else {
+          this.dataSourcePublicas = new MatTableDataSource(this.coleccionesPublicas);
+          this.propietarios = [];
+          // Traigo profesores para preparar los nombres de los propietarios
+          this.peticionesAPI.DameProfesores()
+          .subscribe ( profesores => {
+            this.coleccionesPublicas.forEach (coleccion => {
+              const propietario = profesores.filter (p => p.id === coleccion.profesorId)[0];
+              this.propietarios.push (propietario.Nombre + ' ' + propietario.PrimerApellido);
+            });
+          });
+        }
+      }
+    });
   }
 
 
-  // Una vez tenemos el logo del equipo seleccionado, buscamos sus alumnos
-  console.log('voy a mostrar los cromos de la coleccion ' + coleccion.id);
+
+ EditarColeccion(coleccion: Coleccion) {
 
   // Busca los cromos dela coleccion en la base de datos
   this.peticionesAPI.DameCromosColeccion(coleccion.id)
   .subscribe(res => {
-    if (res[0] !== undefined) {
       this.cromosColeccion = res;
-      console.log(res);
-      this.numeroDeCromos = this.cromosColeccion.length;
-    } else {
-      console.log('No hay cromos en esta coleccion');
-      this.cromosColeccion = undefined;
-      this.numeroDeCromos = 0;
-    }
+      this.sesion.TomaColeccion(coleccion);
+      console.log ('voy a entregar los cromos');
+      console.log (this.cromosColeccion);
+      this.sesion.TomaCromos (this.cromosColeccion);
+      this.router.navigate(['/inicio/' + this.profesorId + '/misColecciones/editarColeccion']);
+
   });
   }
 
-  // Envialos la colecció y los cromos al servicio sesión porque los necesitaremos en los componentes
-  // editar y agregar
-  GuardarColeccion(coleccion: Coleccion) {
-  //  this.DameCromosEImagenDeLaColeccion(coleccion);
-    this.sesion.TomaColeccion(coleccion);
-    this.sesion.TomaCromos (this.cromosColeccion);
-  }
+
+
+ Descargar(coleccion: Coleccion) {
+
+  this.sesion.TomaColeccion(coleccion);
+  this.router.navigate(['/inicio/' + this.profesorId + '/misColecciones/guardarColeccion']);
+
+}
+
+
+Mostrar(coleccion: Coleccion) {
+
+  this.sesion.TomaColeccion(coleccion);
+  this.router.navigate(['/inicio/' + this.profesorId + '/misColecciones/mostrarColeccion']);
+
+}
+
 
 
    // Utilizamos esta función para eliminar una colección de la base de datos y actualiza la lista de colecciones
@@ -142,21 +163,32 @@ export class MisColeccionesComponent implements OnInit {
 
 
     console.log ('Vamos a eliminar la colección');
-    this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
-    .subscribe();
+
 
     this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe();
-    if (this.cromosColeccion !==  undefined) {
-      for (let i = 0; i < (this.cromosColeccion.length); i++) {
-        this.peticionesAPI.BorrarCromo (this.cromosColeccion[i].id).subscribe();
-        this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].ImagenDelante).subscribe();
-        if (this.cromosColeccion[i].ImagenDetras !== undefined) {
-          this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].ImagenDetras).subscribe();
+
+    this.peticionesAPI.DameCromosColeccion(coleccion.id)
+    .subscribe(res => {
+      this.cromosColeccion = res;
+
+      // Ya puedo borrar la colección
+      this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
+      .subscribe();
+
+
+      if (this.cromosColeccion !==  undefined) {
+        for (let i = 0; i < (this.cromosColeccion.length); i++) {
+          this.peticionesAPI.BorrarCromo (this.cromosColeccion[i].id).subscribe();
+          this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].ImagenDelante).subscribe();
+          if (this.cromosColeccion[i].ImagenDetras !== undefined) {
+            this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].ImagenDetras).subscribe();
+          }
         }
       }
-    }
+    });
     console.log ('La saco de la lista');
     this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
+    this.dataSource = new MatTableDataSource(this.coleccionesProfesor);
   }
 
 
@@ -181,6 +213,26 @@ export class MisColeccionesComponent implements OnInit {
         this.BorrarColeccion(coleccion);
         Swal.fire('Eliminado', coleccion.Nombre + ' eliminado correctamente', 'success');
       }
+    });
+  }
+
+  HazPublica(coleccion: Coleccion) {
+    coleccion.Publica = true;
+    this.peticionesAPI.ModificaColeccion  (coleccion, this.profesorId, coleccion.id).subscribe();
+  }
+
+
+  HazPrivada(coleccion: Coleccion) {
+    coleccion.Publica = false;
+    this.peticionesAPI.ModificaColeccion  (coleccion, this.profesorId, coleccion.id).subscribe();
+  }
+  TraeCromosEImagenesColeccion(coleccion: Coleccion) {
+    this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
+    .subscribe (imagen => this.imagenColeccionFile = imagen);
+    this.peticionesAPI.DameCromosColeccion (coleccion.id)
+    .subscribe ( cromos => {
+      this.cromosColeccion = cromos;
+      // Ahora traigo las imagenes de los cromos
     });
   }
 

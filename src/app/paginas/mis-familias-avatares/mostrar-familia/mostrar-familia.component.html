@@ -1,0 +1,56 @@
+<div class="titulo">Mostrar familia de avatares </div>
+<div *ngIf = 'familiaElegida' class="subtitulo">{{familiaElegida.NombreFamilia}}</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class = "contenedor">
+
+<div class = "enColumna">
+
+  <div *ngIf = "familiaCargada" class = "enFila">
+    <div  id = "imagenAvatar"  style = "width: 30%; margin-top: 15%; position: relative;">
+
+      <img #img id ="silueta" widht = '300' height= '324' *ngIf="imagenSilueta"   [src]="imagenSilueta">
+    </div>
+    <div class = "enColumna" style = "width: 70%">
+
+      <br>
+      <h4> Haz click sobre el complemento que quieres colocar en la silueta</h4>
+      <br>
+      <div class="enFila" styte = "width:20%">
+        <div style = "margin-left: 5%;">
+          <h4>{{familiaElegida.NombreComplemento1}}</h4>
+          <button style = "width: 30%; height: 35%"  mat-button  (click) = "QuitarComplemento (1)" class="btn Eliminar" >Quitar </button>
+        </div>
+      <div id = "imagenesComplementos1" style = "width: 80%;">
+      </div>
+      </div>
+      <div class="enFila" styte = "width:20%">
+        <div style = "margin-left: 5%;">
+          <h4>{{familiaElegida.NombreComplemento2}}</h4>
+          <button style = "width: 30%; height: 35%"  mat-button  (click) = "QuitarComplemento (2)" class="btn Eliminar" >Quitar </button>
+        </div>
+      <div id = "imagenesComplementos2" style = "width: 80%; ">
+      </div>
+      </div>
+      <div class="enFila" styte = "width:20%">
+        <div style = "margin-left: 5%;">
+          <h4>{{familiaElegida.NombreComplemento3}}</h4>
+          <button style = "width: 30%; height: 35%" mat-button  (click) = "QuitarComplemento (3)" class="btn Eliminar" >Quitar </button>
+        </div>
+      <div id = "imagenesComplementos3" style = "width: 80%; ">
+      </div>
+      </div>
+      <div class="enFila" styte = "width:20%">
+        <div style = "margin-left: 5%;">
+          <h4>{{familiaElegida.NombreComplemento4}}</h4>
+          <button style = "width: 30%; height: 35%" mat-button  (click) = "QuitarComplemento (4)" class="btn Eliminar" >Quitar </button>
+        </div>
+      <div id = "imagenesComplementos4" style = "width: 80%; ">
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+</div>
+</div>
+

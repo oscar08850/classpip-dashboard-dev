@@ -234,6 +234,8 @@ input[type=text] {
   font-weight: bold;
   font-size: 90%;
 }
+
+
 .texto{
   // margin: 5px;
   width: auto;
@@ -557,13 +559,28 @@ span.album5col {
 }
 
 // Opciones gráficas inicio sesión
-.cartaInicioSesion {
-  margin-top: 100px;
+.cartaLogin {
+  margin-top: 50px;
   margin-bottom: 100px;
   max-width: 300px;
   max-height: 370px;
   width: 300px;
   height: 370px;
+  background-color: rgb(190, 206, 204);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(154, 167, 165) !important;
+}
+
+.cartaRegistro {
+  margin-top: 50px;
+  margin-bottom: 100px;
+  max-width: 300px;
+  max-height: 550px;
+  width: 300px;
+  height:550px;
   background-color: rgb(190, 206, 204);
   border-top-left-radius: 15px !important;
   border-top-right-radius: 15px !important;
@@ -582,3 +599,67 @@ span.album5col {
   color: white;
 }
 
+// Para mostrar todos los avatares
+
+span.avatar5col {
+  display: inline-block;
+  width: 20%;
+}
+.parpadea {
+
+  animation-name: parpadeo;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  -webkit-animation-name:parpadeo;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes parpadeo{
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+
+@-webkit-keyframes parpadeo {
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+   100% { opacity: 1.0; }
+}
+
+@keyframes parpadeo {
+  0% { opacity: 1.0; }
+   50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+
+//Para que parpade la ultima votación en el juego de votaciones uno a todos
+.blink {
+  color: red;
+  font-size:large;
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
+// Para mostrar el código QR
+
+.cssQR {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(5px 5px 5px #222222);
+  opacity: .5;
+}

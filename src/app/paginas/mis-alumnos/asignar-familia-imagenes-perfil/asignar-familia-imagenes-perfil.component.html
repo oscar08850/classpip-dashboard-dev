@@ -1,0 +1,68 @@
+
+<div class="titulo">Familias disponibles</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<br>
+<br>
+<div class = "enColumna">
+  <table style="width: 100%" align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!--    La primera columna será un checkbox -->
+          <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+<!--
+                  <mat-checkbox
+                      (change)="$event ? MasterToggle() : null; ActualizarBotonTabla ();"
+                      [checked]="selection.hasValue() && IsAllSelected()"
+                      [indeterminate]="selection.hasValue() && !IsAllSelected()">
+                  </mat-checkbox> -->
+
+              </th>
+              <td mat-cell *matCellDef="let row">
+                  <mat-checkbox
+                                (click)="$event.stopPropagation()"
+                                (change)="selection.clear(); $event ? selection.toggle(row) : null;"
+                                [checked]="selection.isSelected(row)">
+                  </mat-checkbox>
+
+              </td>
+          </ng-container>
+
+      <ng-container matColumnDef="ejemplo">
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Ejemplo</th>
+            <td mat-cell *matCellDef="let elemento">
+              <img  style = "width:50px; height: 50px;" [src]="elemento.ejemplo">
+            </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreFamilia">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+        <td mat-cell *matCellDef="let elemento"> {{elemento.familia.NombreFamilia}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="numeroImagenes">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Número de imagenes </th>
+        <td mat-cell *matCellDef="let elemento"> {{elemento.familia.NumeroImagenes}} </td>
+      </ng-container>
+
+
+
+  <!-- Aquí indicamos de donde saca los identificadores de las columnas-->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+  <div class="enColumna">
+    <button style= "width: 50%" *ngIf ="!muestroPublicas" type="button" (click) = "MostrarPublicas()" class="btn Agregar">Mostrar también familias púlicas</button>
+    <button style= "width: 50%" *ngIf ="muestroPublicas" type="button" (click) = "QuitarPublicas()" class="btn Agregar">Quitar familias púlicas</button>
+  </div>
+  <br>
+<br>
+<br>
+<br>
+
+<button type="button"   class="btn Aceptar" (click) = "Volver()"> Elegir familia
+</button>
+</div>
+
+

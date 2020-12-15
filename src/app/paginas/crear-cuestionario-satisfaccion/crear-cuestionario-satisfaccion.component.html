@@ -1,0 +1,58 @@
+<div class="titulo"><h2>Crear cuestionario de satisfacción</h2></div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+<div class="contenedor">
+
+            <div class= "enColumna" *ngIf ="advertencia" style = "border-color: red;">
+              <!-- para preservar los espacios y los tabs del texto -->
+              <pre>
+                El fichero JSON debe tener el siguiente formato
+              <br>
+              {{'{'}}
+                    "Titulo": "Indicencias críticas",
+                    "Descripcion": "CUIC",
+                    "Afirmaciones": [
+                        "En este curso me estoy divirtiendo",
+                        "Estoy aprendiendo cosas valiosas"
+                      ],
+                    "PreguntasAbiertas": [
+                        "¿Cuál ha sido la incidencia crítica más positiva?",
+                        "¿Cuál ha sido la incidencia crítica más negativa?"
+                        ]
+              {{'}'}}
+
+              </pre>
+
+              <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
+                Ocultar advertencia
+              </button>
+            </div>
+            <div class = "enFila">
+              <div class = "enFila" style = "width: 60%">
+
+                <input #file id = "inputInfo" type="file" accept= 'application/JSON;' accept-charset="UTF-8" (change)="SeleccionarFicheroCuestionario($event)" style="display:none">
+                <button style = "height:100px; width:80%" (click) = "ActivarInputInfo()" type="button" class="btn Agregar">
+                  Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
+                </button>
+
+              </div>
+              <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "ficheroCargado">
+                <h3>Datos del cuestionario</h3>
+                <div class = "enFila" style = "width: 90%">
+                  <div>
+                    <p> Titulo: <strong>{{cuestionario.Titulo}}</strong></p>
+                    <p> Numero de afirmaciones: <strong>{{cuestionario.Afirmaciones.length}}</strong></p>
+                    <p> Numero de preguntas abiertas: <strong>{{cuestionario.PreguntasAbiertas.length}}</strong></p>
+                  </div>
+                </div>
+                <div class = "enFila" style = "width:50%">
+                  <button (click) = "RegistrarCuestionario()" type="button" class="btn Agregar">
+                    Registrar
+                  </button>
+                  <button (click) = "goBack()" type="button" class="btn Eliminar">
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
+
+</div>

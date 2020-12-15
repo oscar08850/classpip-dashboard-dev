@@ -39,6 +39,7 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Confirma que quieres eliminar el cromo: ';
   coleccion: Coleccion;
+  tieneCromos: boolean;
 
   constructor(
                private sesion: SesionService,
@@ -57,31 +58,33 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
     this.inscripcionAlumno = this.sesion.DameInscripcionAlumno();
     this.alumno = this.sesion.DameAlumno();
     this.CromosDelAlumno();
-    this.GET_ImagenPerfil();
+    this.DameImagenPerfil();
 
 
   }
 
   // Busca el logo que tiene el nombre del alumno.ImagenPerfil y lo carga en imagenPerfil
-  GET_ImagenPerfil() {
+  DameImagenPerfil() {
 
     if (this.alumno.ImagenPerfil !== undefined ) {
-      this.http.get('http://localhost:3000/api/imagenes/imagenAlumno/download/' + this.alumno.ImagenPerfil,
-      { responseType: ResponseContentType.Blob })
-      .subscribe(response => {
-
-        const blob = new Blob([response.blob()], { type: 'image/jpg'});
-
-        const reader = new FileReader();
-        reader.addEventListener('load', () => {
-          this.imagenPerfil = reader.result.toString();
-        }, false);
-
-        if (blob) {
-          reader.readAsDataURL(blob);
-        }
-      });
+      this.imagenPerfil = URL.ImagenesAlumno + this.alumno.ImagenPerfil;
     }
+    //   this.http.get('http://localhost:3000/api/imagenes/imagenAlumno/download/' + this.alumno.ImagenPerfil,
+    //   { responseType: ResponseContentType.Blob })
+    //   .subscribe(response => {
+
+    //     const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+    //     const reader = new FileReader();
+    //     reader.addEventListener('load', () => {
+    //       this.imagenPerfil = reader.result.toString();
+    //     }, false);
+
+    //     if (blob) {
+    //       reader.readAsDataURL(blob);
+    //     }
+    //   });
+    // }
 
   }
 
@@ -89,6 +92,11 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   CromosDelAlumno() {
     this.peticionesAPI.DameCromosAlumno(this.inscripcionAlumno.id)
     .subscribe(cromos => {
+      if (cromos.length === 0) {
+        this.tieneCromos = false;
+      } else {
+        this.tieneCromos = true;
+      }
       this.listaCromos = cromos;
       console.log ('temgo los cromos del alumno');
       console.log (this.listaCromos);
@@ -101,11 +109,12 @@ export class AlumnoSeleccionadoJuegoDeColeccionComponent implements OnInit {
       console.log (this.listaCromosSinRepetidos);
       this.sesion.TomaCromos(this.listaCromos);
       this.listaCromos.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
-      this.GET_ImagenesCromos();
+      this.DameImagenesCromos();
+
     });
   }
 
-  GET_ImagenesCromos() {
+  DameImagenesCromos() {
     console.log ('Voy a por las imagenes de los cromos');
 
     // tslint:disable-next-line:prefer-for-of

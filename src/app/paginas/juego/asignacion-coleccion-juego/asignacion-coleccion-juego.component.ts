@@ -41,6 +41,8 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
   selectedRowIndex = -1;
 
   coleccionSeleccionada: Coleccion;
+  muestroPublicas = false;
+  coleccionesPublicas: Coleccion[];
 
   constructor(
                private sesion: SesionService,
@@ -54,6 +56,7 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
     this.alumnos = this.sesion.DameAlumnosGrupo();
     this.TraeEquiposDelGrupo();
     this.TraeListaDeColecciones();
+    this.TraeColeccionesPublicas();
   }
 
   // RECUPERA LOS EQUIPOS DEL GRUPO
@@ -92,6 +95,27 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
     });
   }
 
+
+
+  TraeColeccionesPublicas() {
+
+    this.peticionesAPI.DameColeccionesPublicas()
+    .subscribe (publicas => {
+      // me quedo con los públicos de los demás
+      const publicasDeOtros = publicas.filter (coleccion => coleccion.profesorId !== Number(this.profesorId));
+      // traigo los profesores para añadir a los publicos el nombre del propietario
+      this.peticionesAPI.DameProfesores ()
+      .subscribe (profesores => {
+        publicasDeOtros.forEach (coleccion => {
+          const propietario = profesores.filter (profesor => profesor.id === coleccion.profesorId)[0];
+          coleccion.Nombre = coleccion.Nombre + '(' + propietario.Nombre + ' ' + propietario.PrimerApellido + ')';
+        });
+        this.coleccionesPublicas = publicasDeOtros;
+
+      });
+    });
+  }
+
   ColeccionSeleccionada(coleccion: Coleccion) {
     // Comunico el nombre de la colección seleccionada al padre
     this.coleccionSeleccionada = coleccion;
@@ -111,5 +135,16 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
       }
     });
   }
+
+  MostrarPublicas() {
+    this.muestroPublicas = true;
+    this.datasourceColecciones = new MatTableDataSource(this.colecciones.concat (this.coleccionesPublicas));
+  }
+
+  QuitarPublicas() {
+    this.muestroPublicas = false;
+    this.datasourceColecciones = new MatTableDataSource(this.colecciones);
+  }
+
 
  }

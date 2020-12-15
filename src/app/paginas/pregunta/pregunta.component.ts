@@ -54,8 +54,6 @@ export class PreguntaComponent implements OnInit {
 
   ngOnInit() {
 
-    // REALMENTE LA APP FUNCIONARÁ COGIENDO AL PROFESOR DEL SERVICIO, NO OBSTANTE AHORA LO RECOGEMOS DE LA URL
-    // this.profesorId = this.profesorService.RecibirProfesorIdDelServicio();
     this.profesorId = this.sesion.DameProfesor().id;
 
     // tslint:disable-next-line:no-string-literal
@@ -169,7 +167,7 @@ export class PreguntaComponent implements OnInit {
   SeleccionarFicheroPreguntas($event) {
     const fileInfo = $event.target.files[0];
     const reader = new FileReader();
-    reader.readAsText(fileInfo);
+    reader.readAsText(fileInfo, 'ISO-8859-1');
     reader.onload = () => {
       try {
         this.infoPreguntas = JSON.parse(reader.result.toString());
@@ -193,12 +191,13 @@ export class PreguntaComponent implements OnInit {
         if (res != null) {
           cont++;
           if (cont === this.infoPreguntas.length) {
-            Swal.fire('Las pregunta se han registrado correctamente', '', 'success');
+            Swal.fire('Las preguntas se han registrado correctamente', '', 'success');
             this.finalizar = true;
             this.goBack();
           }
         } else {
           console.log('Fallo en la creacion de la pregunta');
+          Swal.fire('Error en la creación de las preguntas', '', 'error');
         }
       });
     });

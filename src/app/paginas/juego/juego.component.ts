@@ -6,6 +6,9 @@ import { Location } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+
+
+
 // tslint:disable-next-line:max-line-length
 import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
 
@@ -13,11 +16,14 @@ import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFo
           EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
           EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
           AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-          EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable } from '../../clases/index';
+          EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable,
+          JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
+          JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, CuestionarioSatisfaccion,
+          JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion } from '../../clases/index';
 
 
 // Services
-import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
+import { SesionService, CalculosService, PeticionesAPIService, ComServerService } from '../../servicios/index';
 
 import { Observable} from 'rxjs';
 import { of } from 'rxjs';
@@ -61,6 +67,7 @@ export interface ChipColor {
 export class JuegoComponent implements OnInit {
 
 
+
   ///////////////////////////////////// VARIABLE GENERALES PARA EL COMPONENTE ///////////////////////////////////
 
   profesorId: number;
@@ -77,7 +84,7 @@ export class JuegoComponent implements OnInit {
   // que está abandonando el proceso de creación del juego
   creandoJuego = false;
 
-  juego: Juego;
+  juego: any;
   juegoDeCuestionario: JuegoDeCuestionario;
   juegoDeCompeticion: JuegoDeCompeticion;
   juegoDeAvatar: JuegoDeAvatar;
@@ -97,7 +104,9 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Competición', color: 'warn'},
     {nombre: 'Juego De Avatar', color: 'primary'},
     {nombre: 'Juego De Cuestionario', color: 'accent'},
-    {nombre: 'Juego De Geocaching', color: 'warn'}
+    {nombre: 'Juego De Geocaching', color: 'warn'},
+    {nombre: 'Juego De Votación', color: 'primary'},
+    {nombre: 'Juego De Cuestionario de Satisfacción', color: 'accent'},
   ];
   seleccionModoJuego: ChipColor[] = [
     {nombre: 'Individual', color: 'primary'},
@@ -113,6 +122,7 @@ export class JuegoComponent implements OnInit {
   // información para crear un juego de colección
   coleccionSeleccionada: Coleccion;
   tengoColeccion = false;
+  modoAsignacion;
 
 
   // información para crear un juego de cuestionario
@@ -125,6 +135,7 @@ export class JuegoComponent implements OnInit {
   seleccionModoPresentacion: string[] = ['Mismo orden para todos',
   'Preguntas desordenadas',
   'Preguntas y respuestas desordenadas'];
+  tiempoLimite: number;
 
   // información para crear juego de avatares
   familiasElegidas: number[];
@@ -172,9 +183,43 @@ export class JuegoComponent implements OnInit {
   puntuacionCorrectaGeoBonus: number;
   puntuacionIncorrectaGeoBonus: number;
 
+
+
+  // información para crear juego de votación
+
+  tipoDeVotacionSeleccionado: string;
+  seleccionTipoDeVotacion: ChipColor[] = [
+    {nombre: 'Uno A Todos', color: 'primary'},
+    {nombre: 'Todos A Uno', color: 'warn'}
+  ];
+
+  modoDeRepartoSeleccionado: string;
+  seleccionModoReparto: ChipColor[] = [
+    {nombre: 'Reparto fijo según posición', color: 'primary'},
+    {nombre: 'Reparto libre', color: 'warn'}
+  ];
+  tengoModoReparto = false;
+  puntosARepartir = 0;
+
+  tengoTipoDeVotacion = false;
+  conceptos: string[];
+  listaConceptos: any[] = [];
+  dataSourceConceptos;
+  nombreConcepto;
+  pesoConcepto;
+  pesos: number[];
+  totalPesos: number;
+  conceptosAsignados = false;
+  displayedColumnsConceptos: string[] = ['nombreConcepto', 'pesoConcepto', ' '];
+
+
+  // Información para el juego de cuestionario de satisfacción
+  cuestionarioSatisfaccion: CuestionarioSatisfaccion;
+  tengoCuestionarioSatisfaccion = false;
+  descripcionCuestionarioSatisfaccion: string;
+
+
   final = false;
-
-
 
   // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS, INACTIVOS Y PREPARADOS
   // Lo logico seria que fuesen listas de tipo Juego, pero meteremos objetos
@@ -197,6 +242,7 @@ export class JuegoComponent implements OnInit {
                public dialog: MatDialog,
                private calculos: CalculosService,
                private sesion: SesionService,
+               private comService: ComServerService,
                private location: Location,
                private peticionesAPI: PeticionesAPIService,
                // tslint:disable-next-line:variable-name
@@ -272,13 +318,20 @@ export class JuegoComponent implements OnInit {
       PuntuacionCorrectaGeo: ['', Validators.required],
       PuntuacionIncorrectaGeo : ['', Validators.required],
       PuntuacionCorrectaGeoBonus: ['', Validators.required],
-      PuntuacionIncorrectaGeoBonus: ['', Validators.required]
+      PuntuacionIncorrectaGeoBonus: ['', Validators.required],
+      NombreDelConcepto: ['', Validators.required],
+      PesoDelConcepto: ['', Validators.required],
+      TiempoLimite: ['', Validators.required]
     });
 
     this.TablaPuntuacion = [];
     this.TablaPuntuacion[0] = new TablaPuntosFormulaUno(1, 10);
     this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
     this.Puntuacion[0] = 10;
+
+    this.listaConceptos = [];
+    this.totalPesos = 0;
+
   }
 
   //////////////////////////////////////// FUNCIONES PARA LISTAR JUEGOS ///////////////////////////////////////////////
@@ -348,8 +401,14 @@ export class JuegoComponent implements OnInit {
     console.log(' tengo tipo ' + this.tipoDeJuegoSeleccionado);
     if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuestionario') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de cuestionario en equipo', 'warning');
-    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Avatares') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Avatar') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de avatares en equipo', 'warning');
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Geocaching') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+      Swal.fire('Alerta', 'Aún no es posible el juego de geocaching en equipo', 'warning');
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Votación') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+      Swal.fire('Alerta', 'Aún no es posible el juego de votación en equipo', 'warning');
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuestionario de Satisfacción') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+      Swal.fire('Alerta', 'No existe el juego de cuestionario de satisfacción en equipo', 'warning');
     } else {
       if (this.modoDeJuegoSeleccionado === 'Individual') {
         if (this.alumnosGrupo === undefined) {
@@ -395,7 +454,7 @@ export class JuegoComponent implements OnInit {
   CrearJuegoDePuntos() {
     // primero creamos el juego
     this.peticionesAPI.CreaJuegoDePuntos(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado,
-      undefined, undefined, undefined, undefined, undefined, undefined, this.nombreDelJuego), this.grupo.id)
+      undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       this.sesion.TomaJuego(this.juego);
@@ -462,7 +521,7 @@ export class JuegoComponent implements OnInit {
   }
 
   CrearJuegoDeColeccion() {
-    this.peticionesAPI.CreaJuegoDeColeccion(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado,
+    this.peticionesAPI.CreaJuegoDeColeccion(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.modoAsignacion,
       this.coleccionSeleccionada.id, undefined, undefined, undefined, undefined, undefined, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
@@ -495,6 +554,17 @@ export class JuegoComponent implements OnInit {
       this.Limpiar();
         // Regresamos a la lista de equipos (mat-tab con índice 0)
       this.tabGroup.selectedIndex = 0;
+      // Notificación para los miembros del grupo
+      // console.log ('envio notificación los miembros del grupo');
+      // this.comService.EnviarNotificacionGrupo (
+      //      this.grupo.id,
+      //      'Nuevo juego de colección para el grupo ' + this.grupo.Nombre
+      // );
+      console.log ('envio notificación los miembros del grupo');
+      this.comService.EnviarNotificacionGrupo (
+          this.grupo.id,
+          'Nuevo juego de colección para el grupo ' + this.grupo.Nombre
+      );
 
     });
   }
@@ -537,6 +607,14 @@ export class JuegoComponent implements OnInit {
     this.tengoModoPresentacion = true;
   }
 
+  GuardarTiempoLimite() {
+    this.tiempoLimite = this.myForm.value.TiempoLimite;
+    if (this.tiempoLimite === undefined) {
+      this.tiempoLimite = 0;
+    }
+  }
+
+
   CrearJuegoDeCuestionario() {
 
     // Tengo que crear un juego de tipo JuegoDeCuestionario y no uno de tipo Juego, como en los casos
@@ -547,7 +625,7 @@ export class JuegoComponent implements OnInit {
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.puntuacionCorrecta,
       this.puntuacionIncorrecta, this.modoPresentacion,
-      false, false, this.profesorId, this.grupo.id, this.cuestionario.id), this.grupo.id)
+      false, false, this.profesorId, this.grupo.id, this.cuestionario.id, this.tiempoLimite), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juegoDeCuestionario = juegoCreado;
       // Inscribimos a los alumnos (de momento no hay juego de cuestionario por equipos)
@@ -702,7 +780,7 @@ export class JuegoComponent implements OnInit {
 
   }
 
-  EliminarFina() {
+  EliminarFila() {
 
     let i: number;
     i = this.Puntuacion.length;
@@ -726,7 +804,7 @@ export class JuegoComponent implements OnInit {
 
     // tslint:disable-next-line:max-line-lengtholean)
     this.peticionesAPI.CreaJuegoDeCompeticionLiga(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeCompeticionSeleccionado,
-                                                    this.modoDeJuegoSeleccionado, undefined, true, this.numeroDeJornadas,
+                                                    this.modoDeJuegoSeleccionado, undefined, undefined, true, this.numeroDeJornadas,
                                                     this.tipoDeCompeticionSeleccionado,
                                                     undefined, undefined, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
@@ -781,7 +859,7 @@ export class JuegoComponent implements OnInit {
   CrearJuegoDeCompeticionFormulaUno() {
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.CreaJuegoDeCompeticionFormulaUno(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeCompeticionSeleccionado,
-                                                    this.modoDeJuegoSeleccionado, undefined, true, this.numeroDeJornadas,
+                                                    this.modoDeJuegoSeleccionado, undefined, undefined, true, this.numeroDeJornadas,
                                                     undefined, this.Puntuacion.length,
                                                     this.Puntuacion, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
@@ -894,7 +972,7 @@ export class JuegoComponent implements OnInit {
       console.log (this.PreguntasBasicas);
       console.log (this.PreguntasBonus);
 
-    })
+    });
   }
 
 
@@ -945,8 +1023,227 @@ export class JuegoComponent implements OnInit {
     });
   }
 
+  // Funciones para crear juego de votación
+  // Para crear el juego de votación de tipo Uno A Todos se usa la tabla
+  // de asignación de puntuaciones que ya se usa en la competición de Formula Uno
+  // junto con las funciones asociadas, porque lo que hay que hacer es exactamente lo mismo
+
+  TipoDeVotacionSeleccionado(tipoVotacion: ChipColor) {
+    this.tipoDeVotacionSeleccionado = tipoVotacion.nombre;
+    this.tengoTipoDeVotacion = true;
+  }
+
+  ModoDeRepartoSeleccionado(modoReparto: ChipColor) {
+    this.modoDeRepartoSeleccionado = modoReparto.nombre;
+    this.tengoModoReparto = true;
+  }
+  // formatLabel(value: number) {
+  //   // if (value >= 1000) {
+  //   //   return Math.round(value / 1000) + 'k';
+  //   // }
+
+  //   this.puntosARepartir = value;
+  //   console.log ('aaaa: ' + value);
+  //   console.log ('bbb: ' + this.puntosARepartir);
+  //   return value;
+  // }
+  GuardaValor(event) {
+    this.puntosARepartir = event.value;
+    this.Puntuacion[0] = this.puntosARepartir;
+  }
+
+CrearJuegoDeVotacionUnoATodos() {
+    const juegoDeVotacion = new JuegoDeVotacionUnoATodos (
+      this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeVotacionSeleccionado ,
+      this.modoDeJuegoSeleccionado,
+      this.modoDeRepartoSeleccionado,
+      true,
+      this.Puntuacion,
+      this.nombreDelJuego,
+      false,
+      this.grupo.id);
+    this.peticionesAPI.CreaJuegoDeVotacionUnoATodos (juegoDeVotacion, this.grupo.id)
+    .subscribe (juegoCreado => {
+      this.juego = juegoCreado;
+      this.sesion.TomaJuego(this.juego);
+      this.juegoCreado = true;
+
+      if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < this.alumnosGrupo.length; i++) {
+          // tslint:disable-next-line:max-line-length
+          this.peticionesAPI.InscribeAlumnoJuegoDeVotacionUnoATodos(
+		          new AlumnoJuegoDeVotacionUnoATodos(this.alumnosGrupo[i].id, this.juego.id))
+          .subscribe();
+        }
+      }
+
+      Swal.fire('Juego de votación tipo Uno A Todos creado correctamente', ' ', 'success');
+
+      // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+      if (this.juegosActivos === undefined) {
+      // Si la lista aun no se ha creado no podre hacer el push
+              this.juegosActivos = [];
+      }
+      this.juegosActivos.push (this.juego);
+      // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
+      this.Limpiar();
+      // Regresamos a la lista de equipos (mat-tab con índice 0)
+      this.tabGroup.selectedIndex = 0;
+
+    });
+
+  }
+
+PonConcepto() {
+
+  this.listaConceptos.push ({nombre: this.myForm.value.NombreDelConcepto, peso: this.myForm.value.PesoDelConcepto});
+  this.dataSourceConceptos = new MatTableDataSource (this.listaConceptos);
+  let peso: number;
+  peso = Number (this.myForm.value.PesoDelConcepto);
+  this.totalPesos = this.totalPesos + peso;
+  console.log ('total ' + this.totalPesos);
+
+  this.myForm.reset();
+
+}
 
 
+BorraConcepto(nombre) {
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < this.listaConceptos.length; i++) {
+    if (this.listaConceptos[i]['nombre'] === nombre) {
+      this.totalPesos = this.totalPesos - this.listaConceptos[i]['peso'];
+      this.listaConceptos.splice ( i, 1);
+    }
+  }
+  this.dataSourceConceptos = new MatTableDataSource (this.listaConceptos);
+
+}
+
+AsignarConceptos() {
+  this.conceptos = [];
+  this.pesos = [];
+
+
+  if (this.totalPesos !== 100) {
+    Swal.fire('Los pesos no suman el 100%', ' ', 'error');
+  } else {
+    this.listaConceptos.forEach (concepto => {
+      this.conceptos.push (concepto['nombre']);
+      this.pesos.push (concepto['peso']);
+    });
+    this.conceptosAsignados = true;
+  }
+}
+
+CrearJuegoDeVotacionTodosAUno() {
+  const juegoDeVotacion = new JuegoDeVotacionTodosAUno (
+    this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeVotacionSeleccionado ,
+    this.modoDeJuegoSeleccionado,
+    true,
+    this.conceptos,
+    this.pesos,
+    this.nombreDelJuego,
+    false,
+    this.grupo.id);
+  console.log ('voy a crear juego');
+  console.log (juegoDeVotacion);
+  this.peticionesAPI.CreaJuegoDeVotacionTodosAUno (juegoDeVotacion, this.grupo.id)
+  .subscribe (juegoCreado => {
+    this.juego = juegoCreado;
+    this.sesion.TomaJuego(this.juego);
+    this.juegoCreado = true;
+
+    if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.alumnosGrupo.length; i++) {
+        // tslint:disable-next-line:max-line-length
+        this.peticionesAPI.InscribeAlumnoJuegoDeVotacionTodosAUno(
+            new AlumnoJuegoDeVotacionTodosAUno(this.alumnosGrupo[i].id, this.juego.id))
+        .subscribe();
+      }
+    }
+
+    Swal.fire('Juego de votación tipo Todos A Uno creado correctamente', ' ', 'success');
+
+    // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+    if (this.juegosActivos === undefined) {
+    // Si la lista aun no se ha creado no podre hacer el push
+            this.juegosActivos = [];
+    }
+    this.juegosActivos.push (this.juego);
+    // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
+    this.Limpiar();
+    // Regresamos a la lista de equipos (mat-tab con índice 0)
+    this.tabGroup.selectedIndex = 0;
+
+  });
+}
+
+
+///////////////// FUNCIONES PARA CREAR JUEGO DE CUESTIONARIO DE SATISFACCION /////////////
+
+RecibeCuestionarioSatisfaccionElegido($event) {
+  this.cuestionarioSatisfaccion = $event;
+  this.tengoCuestionarioSatisfaccion = true;
+  console.log ('tengo cuestionario: ' + this.cuestionarioSatisfaccion.Titulo);
+}
+GuardaDescripcionCuestionarioSatisfaccion(ev) {
+  this.cuestionarioSatisfaccion.Descripcion = ev.target.value;
+}
+
+CrearJuegoDeCuestionarioDeSatisfaccion() {
+  console.log ('voy a crear el juego');
+  console.log ('cuestionario: ' + this.cuestionarioSatisfaccion.Titulo);
+  console.log ('Descripcion: ' + this.cuestionarioSatisfaccion.Descripcion);
+  const juegoDeCuestionarioSatisfaccion = new JuegoDeCuestionarioSatisfaccion (
+    this.nombreDelJuego,
+    this.tipoDeJuegoSeleccionado,
+    this.cuestionarioSatisfaccion.Descripcion,
+    true,
+    false,
+    this.profesorId,
+    this.grupo.id,
+    this.cuestionarioSatisfaccion.id);
+
+  console.log ('voy a crear juego');
+  console.log (juegoDeCuestionarioSatisfaccion);
+  this.peticionesAPI.CreaJuegoDeCuestionarioSatisfaccion (juegoDeCuestionarioSatisfaccion, this.grupo.id)
+  .subscribe (juegoCreado => {
+    this.juego = juegoCreado;
+    this.sesion.TomaJuego(this.juego);
+    this.juegoCreado = true;
+
+    if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.alumnosGrupo.length; i++) {
+        // tslint:disable-next-line:max-line-length
+        this.peticionesAPI.InscribeAlumnoJuegoDeCuestionarioSatisfaccion (
+            new AlumnoJuegoDeCuestionarioSatisfaccion(false, this.juego.id, this.alumnosGrupo[i].id))
+        .subscribe();
+      }
+    }
+
+    Swal.fire('Juego de cuestionario de satisfacción creado correctamente', ' ', 'success');
+
+    // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+    if (this.juegosActivos === undefined) {
+    // Si la lista aun no se ha creado no podre hacer el push
+            this.juegosActivos = [];
+    }
+    this.juegosActivos.push (this.juego);
+    // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
+    this.Limpiar();
+    // Regresamos a la lista de equipos (mat-tab con índice 0)
+    this.tabGroup.selectedIndex = 0;
+
+  });
+
+}
 
 goBack() {
     this.location.back();
@@ -1044,5 +1341,11 @@ Limpiar() {
     this.PreguntasBasicas = undefined;
     this.PreguntasBonus = undefined;
     this.tengoPreguntas = false;
+
+    this.conceptosAsignados = false;
+    this.listaConceptos = [];
+    this.totalPesos = 0;
+    this.tengoModoReparto = true;
+
   }
 }
