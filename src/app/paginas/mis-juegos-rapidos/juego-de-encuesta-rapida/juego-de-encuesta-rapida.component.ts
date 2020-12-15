@@ -13,6 +13,7 @@ import { Observable} from 'rxjs';
 import { of } from 'rxjs';
 import 'rxjs';
 
+import { NgxQrcodeElementTypes, NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
 
 
 
@@ -43,6 +44,10 @@ export class JuegoDeEncuestaRapidaComponent implements OnInit {
   ficheroGenerado = false;
   todoGuardado = true;
   sonido = true;
+
+  elementType = NgxQrcodeElementTypes.URL;
+  correctionLevel = NgxQrcodeErrorCorrectionLevels.HIGH;
+  value = '147.83.118.92:8100/home';
 
   constructor(
     private calculos: CalculosService,
@@ -95,6 +100,8 @@ export class JuegoDeEncuestaRapidaComponent implements OnInit {
         // tomo nota de que hay respuestas sin guardar en el pdf
         this.todoGuardado = false;
         this.numeroRespuestas++;
+        console.log ('recibo respuesta');
+        console.log (respuesta);
         this.respuestas.push (respuesta.respuestas);
         this.participantes.filter (participante => participante.nickName === respuesta.nick)[0].contestado = true;
         // Esto lo hago para que la información se actualice en la página en tiempo real

@@ -202,7 +202,7 @@ export class PreguntaComponent implements OnInit {
   SeleccionarInfoPreguntas($event) {
     const fileInfo = $event.target.files[0];
     const reader = new FileReader();
-    reader.readAsText(fileInfo);
+    reader.readAsText(fileInfo, 'ISO-8859-1');
     reader.onload = () => {
       try {
         this.infoPreguntas = JSON.parse(reader.result.toString());

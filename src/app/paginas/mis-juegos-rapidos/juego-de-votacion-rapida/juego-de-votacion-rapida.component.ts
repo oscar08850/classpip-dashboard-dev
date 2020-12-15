@@ -11,6 +11,9 @@ import { Observable} from 'rxjs';
 import { of } from 'rxjs';
 import 'rxjs';
 
+import { NgxQrcodeElementTypes, NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
+
+
 @Component({
   selector: 'app-juego-de-votacion-rapida',
   templateUrl: './juego-de-votacion-rapida.component.html',
@@ -32,6 +35,10 @@ export class JuegoDeVotacionRapidaComponent implements OnInit {
   profesorId: number;
   sonido = true;
   ficheroGenerado = false;
+
+  elementType = NgxQrcodeElementTypes.URL;
+  correctionLevel = NgxQrcodeErrorCorrectionLevels.HIGH;
+  value = '147.83.118.92:8100/home';
 
   constructor(
     private calculos: CalculosService,

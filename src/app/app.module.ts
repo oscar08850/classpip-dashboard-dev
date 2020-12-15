@@ -239,6 +239,7 @@ import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-p
 
 import {MatSliderModule} from '@angular/material/slider';
 
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 @NgModule({
   declarations: [
@@ -420,7 +421,8 @@ import {MatSliderModule} from '@angular/material/slider';
     ListViewModule,
     DragDropModule,
     AngularDateTimePickerModule,
-    MatSliderModule
+    MatSliderModule,
+    NgxQRCodeModule
 
   ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA

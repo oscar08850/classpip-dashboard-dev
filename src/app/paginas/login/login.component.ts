@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
           this.profesor = res[0]; // Si es diferente de null, el profesor existe y lo meto dentro de profesor
           // Notifico el nuevo profesor al componente navbar
           this.sesion.EnviaProfesor(this.profesor);
-          this.comServer.Conectar();
+          this.comServer.Conectar(this.profesor.id);
 
           // En principio, no seria necesario enviar el id del profesor porque ya
           // tengo el profesor en la sesión y puedo recuperarlo cuando quiera.

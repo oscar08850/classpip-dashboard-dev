@@ -15,20 +15,20 @@ export class ComServerService {
 
   constructor() {
   }
-  public Conectar() {
+  public Conectar(profesorId: number) {
     this.socket = io(URL.Servidor);
-    this.socket.emit ('dash');
+    this.socket.emit ('conectarDash', profesorId);
   }
 
-  public Desonectar() {
-    this.socket.emit ('desconectarDash');
+  public Desonectar(profesorId: number) {
+    this.socket.emit ('desconectarDash', profesorId);
   }
 
   public EsperoRespuestasJuegoDeCuestionario (): any {
     return Observable.create((observer) => {
-        this.socket.on('respuestaJuegoDeCuestionario', (alumnoId) => {
-            console.log ('Respuesta cuestionaro ' + alumnoId);
-            observer.next(alumnoId);
+        this.socket.on('respuestaJuegoDeCuestionario', (respuesta) => {
+            console.log ('Respuesta cuestionaro ' + respuesta);
+            observer.next(respuesta);
         });
     });
   }
@@ -105,6 +105,8 @@ export class ComServerService {
   public EsperoRespuestasEncuestaRapida(): any  {
     return Observable.create((observer) => {
         this.socket.on('respuestaEncuestaRapida', (respuesta) => {
+            console.log ('respuesta en comserver');
+            console.log (respuesta);
             observer.next(respuesta);
         });
     });
@@ -131,11 +133,9 @@ export class ComServerService {
     });
   }
 
-  public EsperoTurnos(clave: string): any  {
-    console.log ('voy a esperar turnos en');
-    console.log ('turnoElegido:' + clave);
+  public EsperoTurnos(): any  {
     return Observable.create((observer) => {
-        this.socket.on('turnoElegido:' + clave, (info) => {
+        this.socket.on('turnoElegido', (info) => {
             console.log ('ya tengo respuesta');
             console.log (info);
             observer.next(info);

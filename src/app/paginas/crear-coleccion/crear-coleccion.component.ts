@@ -493,7 +493,7 @@ export class CrearColeccionComponent implements OnInit {
   SeleccionarInfoColeccion($event) {
     const fileInfo = $event.target.files[0];
     const reader = new FileReader();
-    reader.readAsText(fileInfo);
+    reader.readAsText(fileInfo, 'ISO-8859-1');
     reader.onload = () => {
       try {
         this.infoColeccion = JSON.parse(reader.result.toString());

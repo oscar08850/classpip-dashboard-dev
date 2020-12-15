@@ -124,6 +124,9 @@ export class MisCuestionariosSatisfaccionComponent implements OnInit {
     this.peticionesAPI.CreaCuestionarioSatisfaccion(copia, this.profesor.id)
       .subscribe (nuevo => {
         // Añado el cuestionario creado a la lista que se muestra
+        if (this.misCuestionariosDeSatisfaccion === undefined) {
+          this.misCuestionariosDeSatisfaccion = [];
+        }
         this.misCuestionariosDeSatisfaccion.push (nuevo);
         this.dataSource = new MatTableDataSource(this.misCuestionariosDeSatisfaccion);
         Swal.fire('OK', 'Se ha creado una copia privada del cuestionario', 'success');

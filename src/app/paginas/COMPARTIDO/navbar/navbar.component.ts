@@ -90,7 +90,7 @@ export class NavbarComponent implements OnInit {
 
   CerrarSesion() {
 
-    this.comServer.Desonectar();
+    this.comServer.Desonectar (this.profesor.id);
 
     console.log ('voy a login');
     this.router.navigate(['login']);
