@@ -80,7 +80,7 @@ export class MisFamiliasAvataresComponent implements OnInit {
           .subscribe ( profesores => {
             this.familiasPublicas.forEach (familia => {
               const propietario = profesores.filter (p => p.id === familia.profesorId)[0];
-              this.propietarios.push (propietario.Nombre + ' ' + propietario.Apellido);
+              this.propietarios.push (propietario.Nombre + ' ' + propietario.PrimerApellido);
             });
           });
         }

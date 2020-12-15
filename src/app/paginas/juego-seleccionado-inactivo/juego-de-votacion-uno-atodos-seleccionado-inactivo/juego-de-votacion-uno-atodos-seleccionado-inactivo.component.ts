@@ -11,7 +11,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./juego-de-votacion-uno-atodos-seleccionado-inactivo.component.scss']
 })
 export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements OnInit {
-  juegoSeleccionado: JuegoDeVotacionUnoATodos;
+  juegoSeleccionado: any;
   alumnosDelJuego: Alumno[];
   listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[];
   rankingIndividualJuegoDeVotacionUnoATodos: TablaAlumnoJuegoDeVotacionUnoATodos[] = [];
@@ -68,8 +68,7 @@ export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements On
       // tslint:disable-next-line:max-line-length
       this.rankingIndividualJuegoDeVotacionUnoATodos = this.calculos.PrepararTablaRankingIndividualVotacionUnoATodosAcabado (
         this.listaAlumnosOrdenadaPorPuntos,
-        this.alumnosDelJuego,
-        this.juegoSeleccionado.Puntos);
+        this.alumnosDelJuego);
       // tslint:disable-next-line:only-arrow-functions
       this.rankingIndividualJuegoDeVotacionUnoATodos = this.rankingIndividualJuegoDeVotacionUnoATodos.sort(function(obj1, obj2) {
         return obj2.puntos - obj1.puntos;

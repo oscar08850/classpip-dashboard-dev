@@ -235,8 +235,9 @@ import { GuardarColeccionComponent } from './paginas/mis-colecciones/guardar-col
 import { MostrarColeccionComponent } from './paginas/mis-colecciones/mostrar-coleccion/mostrar-coleccion.component';
 import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 import { JuegoDeCogerTurnoRapidoComponent } from './paginas/mis-juegos-rapidos/juego-de-coger-turno-rapido/juego-de-coger-turno-rapido.component';
+import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-perfil.component';
 
-
+import {MatSliderModule} from '@angular/material/slider';
 
 
 @NgModule({
@@ -374,7 +375,8 @@ import { JuegoDeCogerTurnoRapidoComponent } from './paginas/mis-juegos-rapidos/j
     MostrarFamiliaComponent,
     GuardarColeccionComponent,
     MostrarColeccionComponent,
-    JuegoDeCogerTurnoRapidoComponent
+    JuegoDeCogerTurnoRapidoComponent,
+    ModificarPerfilComponent
 
   ],
   imports: [
@@ -417,7 +419,8 @@ import { JuegoDeCogerTurnoRapidoComponent } from './paginas/mis-juegos-rapidos/j
     NgxEchartsModule,
     ListViewModule,
     DragDropModule,
-    AngularDateTimePickerModule
+    AngularDateTimePickerModule,
+    MatSliderModule
 
   ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA

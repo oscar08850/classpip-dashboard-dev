@@ -29,10 +29,9 @@ export class PeticionesAPIService {
 
 
 
-
-
  private host = 'http://localhost';
- // private host = URL.host;
+
+ //private host = URL.host;
 
 
 
@@ -161,9 +160,12 @@ export class PeticionesAPIService {
   */
 
 /////////////////////  GESTION DE PROFESORES Y ALUNNOS ///////////////////////////////
-  public DameProfesor(nombre: string, apellido: string): Observable<Profesor> {
-    console.log('Entro a mostrar a ' + nombre + ' ' + apellido);
-    return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][Nombre]=' + nombre + '&filter[where][Apellido]=' + apellido);
+  public DameProfesor(nombre: string, pass: string): Observable<Profesor> {
+    return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][NombreUsuario]=' + nombre + '&filter[where][Password]=' + pass);
+  }
+
+  public BuscaNombreUsuario(username: string): Observable<Profesor> {
+    return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][NombreUsuario]=' + username);
   }
 
   public DameProfesores(): Observable<Profesor[]> {
@@ -174,13 +176,18 @@ export class PeticionesAPIService {
   // su nombre de usuario (de momento el nombre)
 
   public DameContrasena(nombre: string): Observable<Profesor> {
-    return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][Nombre]=' + nombre );
+    return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][NombreUsuario]=' + nombre );
   }
 
 
   public RegistraProfesor(profesor: Profesor): Observable<Profesor> {
     return this.http.post<Profesor>(this.APIUrlProfesores, profesor);
   }
+
+  public ModificaProfesor(profesor: Profesor): Observable<Profesor> {
+    return this.http.put<Profesor>(this.APIUrlProfesores + '/' + profesor.id, profesor);
+  }
+
 
   public DameTodosMisAlumnos(profesorId: number): Observable<Alumno[]> {
     return this.http.get<Alumno[]>(this.APIUrlProfesores + '/' + profesorId + '/alumnos');
@@ -189,6 +196,12 @@ export class PeticionesAPIService {
   public DameAlumno(alumnoId: number): Observable<Alumno> {
     return this.http.get<Alumno>(this.APIUrlAlumnos + '/' + alumnoId);
   }
+
+  public DameTodosLosAlumnos(): Observable<Alumno[]> {
+    return this.http.get<Alumno[]>(this.APIUrlAlumnos);
+  }
+
+
 
   // Esta no se para que se usa habiendo DameTodosMisAlumnos
   public DameAlumnos(): Observable<Alumno[]> {

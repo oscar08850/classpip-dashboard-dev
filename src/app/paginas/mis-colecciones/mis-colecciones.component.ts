@@ -114,7 +114,7 @@ export class MisColeccionesComponent implements OnInit {
           .subscribe ( profesores => {
             this.coleccionesPublicas.forEach (coleccion => {
               const propietario = profesores.filter (p => p.id === coleccion.profesorId)[0];
-              this.propietarios.push (propietario.Nombre + ' ' + propietario.Apellido);
+              this.propietarios.push (propietario.Nombre + ' ' + propietario.PrimerApellido);
             });
           });
         }
@@ -163,19 +163,29 @@ Mostrar(coleccion: Coleccion) {
 
 
     console.log ('Vamos a eliminar la colección');
-    this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
-    .subscribe();
+
 
     this.peticionesAPI.BorrarImagenColeccion(coleccion.ImagenColeccion).subscribe();
-    if (this.cromosColeccion !==  undefined) {
-      for (let i = 0; i < (this.cromosColeccion.length); i++) {
-        this.peticionesAPI.BorrarCromo (this.cromosColeccion[i].id).subscribe();
-        this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].ImagenDelante).subscribe();
-        if (this.cromosColeccion[i].ImagenDetras !== undefined) {
-          this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].ImagenDetras).subscribe();
+
+    this.peticionesAPI.DameCromosColeccion(coleccion.id)
+    .subscribe(res => {
+      this.cromosColeccion = res;
+
+      // Ya puedo borrar la colección
+      this.peticionesAPI.BorraColeccion(coleccion.id, coleccion.profesorId)
+      .subscribe();
+
+
+      if (this.cromosColeccion !==  undefined) {
+        for (let i = 0; i < (this.cromosColeccion.length); i++) {
+          this.peticionesAPI.BorrarCromo (this.cromosColeccion[i].id).subscribe();
+          this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].ImagenDelante).subscribe();
+          if (this.cromosColeccion[i].ImagenDetras !== undefined) {
+            this.peticionesAPI.BorrarImagenCromo(this.cromosColeccion[i].ImagenDetras).subscribe();
+          }
         }
       }
-    }
+    });
     console.log ('La saco de la lista');
     this.coleccionesProfesor = this.coleccionesProfesor.filter(res => res.id !== coleccion.id);
     this.dataSource = new MatTableDataSource(this.coleccionesProfesor);
