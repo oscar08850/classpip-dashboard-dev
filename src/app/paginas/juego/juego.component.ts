@@ -680,6 +680,7 @@ export class JuegoComponent implements OnInit {
               alumno.permisoparaver = this.permisoparaver;
               alumno.permisoparavotar = this.permisoparavotar;
               alumno.alumnoID = this.alumnosGrupo[i].id;
+              alumno.Nombre = this.alumnosGrupo[i].Nombre;
 
 
 

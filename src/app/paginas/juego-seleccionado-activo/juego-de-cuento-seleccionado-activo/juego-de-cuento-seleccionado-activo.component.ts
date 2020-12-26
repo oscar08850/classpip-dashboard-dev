@@ -22,7 +22,8 @@ import { MatTableDataSource } from '@angular/material/table';
 export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
 
 
-  displayedColumns: string[] = ['alumnoID', 'nivel1', 'nivel2', 'nivel3', 'permisoparaver', 'permisoparavotar'];
+  displayedColumns: string[] = [ 'alumnoID', 'Nombre',  'nivel1', 'nivel2', 'nivel3', 'permisoparaver', 'permisoparavotar'];
+  // displayedColumns: string[] = ['alumnoID',  'nivel1', 'nivel2', 'nivel3', 'permisoparaver', 'permisoparavotar'];
 
   datasourceAlumno;
   juegoSeleccionado: any;

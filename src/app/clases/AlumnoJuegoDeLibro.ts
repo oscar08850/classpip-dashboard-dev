@@ -5,12 +5,12 @@ export class AlumnoJuegoDeLibro {
   nivel3: boolean;
   permisoparaver: boolean;
   permisoparavotar: boolean;
-
+  Nombre: string;
   id: number;
   alumnoID: number;
   alumnojuegodecuentoId: number;
 
-  constructor(nivel1?: boolean, nivel2?: boolean, nivel3?: boolean, permisoparaver?: boolean, permisoparavotar?: boolean, alumnoID?: number) {
+  constructor(nivel1?: boolean, nivel2?: boolean, nivel3?: boolean, permisoparaver?: boolean, permisoparavotar?: boolean,  Nombre?: string, alumnoID?: number) {
 
     this.nivel1 = nivel1;
     this.nivel2 = nivel2;
@@ -18,5 +18,6 @@ export class AlumnoJuegoDeLibro {
     this.permisoparaver = permisoparaver;
     this.permisoparavotar = permisoparavotar;
     this.alumnoID = alumnoID;
+    this.Nombre = Nombre;
   }
 }
