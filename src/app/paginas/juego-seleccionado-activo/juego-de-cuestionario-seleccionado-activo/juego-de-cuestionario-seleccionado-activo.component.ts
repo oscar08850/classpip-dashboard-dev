@@ -221,6 +221,10 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
       }
     });
   }
+  
+  AvanzarPregunta(){
+    this.comServer.AvanzarPregunta(this.juegoSeleccionado.grupoId);
+  }
   applyFilter(filterValue: string) {
     this.dataSourceAlumno.filter = filterValue.trim().toLowerCase();
   }

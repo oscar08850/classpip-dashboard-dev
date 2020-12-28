@@ -153,6 +153,13 @@ export class ComServerService {
 
   }
 
+  //Función para testeo conexión a servidor
+  public AvanzarPregunta(grupoDestinatarioId: number) {
+    // Cuando apretemos el boton, queremos que avance a la siguiente pregunta en el mv.
+    console.log ('voy a avanzar la pregunta');
+    this.socket.emit ('avanzarPregunta', {grupoId: grupoDestinatarioId});
+  }
+
 
 
 
