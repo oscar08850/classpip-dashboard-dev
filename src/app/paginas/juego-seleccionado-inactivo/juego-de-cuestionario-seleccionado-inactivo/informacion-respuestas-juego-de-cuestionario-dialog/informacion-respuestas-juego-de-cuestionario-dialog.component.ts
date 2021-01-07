@@ -92,6 +92,8 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
                     this.inscripcionesAlumnosJuegoDeCuestionario.forEach (alumno => {
                       this.peticionesApi.DameRespuestasAlumnoJuegoDeCuestionario (alumno.id)
                       .subscribe (respuestas => {
+                        console.log ('respuestas del alumno ' + alumno.id );
+                        console.log (respuestas);
                         let aciertos = 0;
                         // voy a contar los aciertos de este alumno
                         respuestas.forEach (respuesta => {

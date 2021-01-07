@@ -74,18 +74,18 @@ export class AgregarPreguntasDialogComponent implements OnInit {
     if (found === undefined){
       this.peticionesAPI.PreguntasEnCuestionario( new PreguntaDelCuestionario (pregunta.id, this.cuestionarioId))
       .subscribe();
-  
+
       //Añadimos las preguntas a la lista
       this.preguntasDelCuestionario.push (pregunta);
       this.preguntasDelCuestionario.sort((a, b) => a.Tematica.localeCompare(b.Tematica));
       this.dataSourcePreguntasDelCuestionario = new MatTableDataSource (this.preguntasDelCuestionario);
-  
-      this.misPreguntas = this.misPreguntas.filter (a => a.Titulo !== pregunta.Titulo && a.Pregunta !== pregunta.Pregunta);
+
+      this.misPreguntas = this.misPreguntas.filter (a => a.id  !== pregunta.id);
       this.dataSourceMisPreguntas = new MatTableDataSource (this.misPreguntas);
     }else {
       Swal.fire('Cuidado', 'Esta pregunta ya esta en el cuestionario', 'error');
-    }  
-  } 
+    }
+  }
 
   AbrirDialogoConfirmacionBorrar(pregunta: Pregunta): void {
     const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
