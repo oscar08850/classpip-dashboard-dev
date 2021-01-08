@@ -540,4 +540,74 @@ RegistrarAsistencia() {
   //     }
   //   });
 
+  NuevaObservacion(sesion: SesionClase) {
+    Swal.fire({
+      title: "Introduce la nueva observación",
+      input: 'textarea',
+      showCancelButton: true
+    }).then((result) => {
+      if (result.value) {
+        if (sesion.Observaciones === undefined) {
+          sesion.Observaciones = [];
+        }
+        sesion.Observaciones.push (result.value);
+        this.peticionesAPI.ModificaSesionClase (sesion)
+        .subscribe ();
+      }
+    });
+  }
+
+  EliminarObservacion(sesion: SesionClase, i: number) {
+    Swal.fire({
+      title: '¿Estas seguro que quieres eliminar la observación?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then((result) => {
+      if (result.value) {
+        sesion.Observaciones.splice (i, 1);
+        this.peticionesAPI.ModificaSesionClase (sesion)
+        .subscribe ();
+      }
+    });
+  }
+//   EditarObservacionn(sesion: SesionClase, i: number)  {
+
+//     Swal.fire({
+//       title: "Enter your Name!",
+//       text: "<textarea id='text'></textarea>",
+//       // --------------^-- define html element with id
+//       html: true,
+//       showCancelButton: true,
+//       closeOnConfirm: false,
+//       showLoaderOnConfirm: true,
+//       animation: "slide-from-top"
+//     // tslint:disable-next-line:only-arrow-functions
+//     }).then((result) => {
+//       if (inputValue === false) {
+//         return false;
+//       }
+//       // get value using textarea id
+//       var val = document.getElementById('text').value;
+
+//     });
+// }
+
+
+  EditarObservacion(sesion: SesionClase, i: number)  {
+    Swal.fire({
+      title: "Modifica la observación",
+      inputValue: sesion.Observaciones[i],
+      input: 'textarea',
+      showCancelButton: true
+    }).then((result) => {
+      if (result.value) {
+        sesion.Observaciones[i] = result.value;
+        this.peticionesAPI.ModificaSesionClase (sesion)
+        .subscribe ();
+      }
+    });
+  }
 }

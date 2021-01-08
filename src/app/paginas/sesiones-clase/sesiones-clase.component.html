@@ -173,6 +173,47 @@
         </tbody>
       </table>
     </mat-tab>
+    <mat-tab label="Gestion de observaciones">
+      <br>
+      <br>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let sesion of sesiones; let i = index">
+          <mat-expansion-panel-header>
+
+            <mat-panel-title>
+              {{sesion.Descripcion}} {{sesion.Hora}}
+            </mat-panel-title>
+
+          </mat-expansion-panel-header>
+          <div class = "enColumna" >
+            <h4><strong>Observaciones de la sesión</strong></h4>
+            <div class="example-list" *ngIf = "sesion.Observaciones && sesion.Observaciones.length > 0">
+              <div class="example-box" *ngFor="let observacion of sesion.Observaciones; let i=index" >
+                <textarea style="border: none" cols="180">{{observacion}}</textarea>
+                <div  style = "display: flex; align-items: right">
+                  <button (click)= "EditarObservacion(sesion, i)" mat-icon-button matTooltip="Editar observación">
+                    <i class="material-icons green md-36">edit</i>
+                  </button>
+                  <button (click) = "EliminarObservacion(sesion, i)" mat-icon-button matTooltip="Eliminar observación">
+                    <i class="material-icons red md-36">delete</i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div  *ngIf = "!sesion.Observaciones || sesion.Observaciones.length === 0">
+              <br>
+              No hay ninguna obsercación en esta sesión
+              <br>
+            </div>
+            <button  style = "width: 20%" type="button"  class="btn Agregar" (click)= "NuevaObservacion(sesion)"> Añadir observación </button>
+          </div>
+
+
+
+        </mat-expansion-panel>
+      </mat-accordion>
+
+    </mat-tab>
 
   </mat-tab-group>
   <div class="contenedor">

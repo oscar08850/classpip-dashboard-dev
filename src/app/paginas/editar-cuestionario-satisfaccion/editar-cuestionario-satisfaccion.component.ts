@@ -53,7 +53,7 @@ export class EditarCuestionarioSatisfaccionComponent implements OnInit {
     Swal.fire({
       title: "Modifica la afirmación",
       input: 'text',
-      inputPlaceholder: this.cuestionarioSeleccionado.Afirmaciones[i],
+      inputValue: this.cuestionarioSeleccionado.Afirmaciones[i],
       showCancelButton: true
     }).then((result) => {
       if (result.value) {

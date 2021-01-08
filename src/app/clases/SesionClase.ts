@@ -5,6 +5,7 @@ export class SesionClase {
   id: number;
   grupoId: number;
   Asistencia: any[];
+  Observaciones: string[];
 
   constructor(Dia?: string, Hora?: string,  Descripcion?: string, Asistencia?: any[]) {
 
@@ -12,6 +13,7 @@ export class SesionClase {
     this.Hora = Hora;
     this.Descripcion = Descripcion;
     this.Asistencia = Asistencia;
+    this.Observaciones = [];
   }
 
 }
