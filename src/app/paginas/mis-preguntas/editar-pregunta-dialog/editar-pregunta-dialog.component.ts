@@ -131,6 +131,7 @@ export class EditarPreguntaDialogComponent implements OnInit {
   CargarImagenPregunta($event) {
     this.filePregunta = $event.target.files[0];
     this.nombreFicheroImagen = this.filePregunta.name;
+    this.isDisabled = false;
 
     const reader = new FileReader();
     reader.readAsDataURL(this.filePregunta);

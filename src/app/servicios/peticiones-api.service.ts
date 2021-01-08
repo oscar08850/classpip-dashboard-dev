@@ -29,9 +29,9 @@ export class PeticionesAPIService {
 
 
 
- private host = 'http://localhost';
+ //private host = 'http://localhost';
 
- //private host = URL.host;
+ private host = URL.host;
 
 
 
@@ -185,6 +185,9 @@ export class PeticionesAPIService {
   }
 
   public ModificaProfesor(profesor: Profesor): Observable<Profesor> {
+    const aaa = this.APIUrlProfesores + '/' + profesor.id;
+    console.log ('url');
+    console.log (aaa);
     return this.http.put<Profesor>(this.APIUrlProfesores + '/' + profesor.id, profesor);
   }
 
@@ -345,8 +348,12 @@ export class PeticionesAPIService {
 
   ////////////////////////////////// GESTION DE SESIONES DE CLASE //////////////////////
 
-  public CreaSesionClase(sesion: SesionClase, grupoId: number): Observable<Grupo> {
-    return this.http.post<Grupo>(this.APIUrlGrupos + '/' + grupoId + '/sesionesClase', sesion);
+  public CreaSesionClase(sesion: SesionClase, grupoId: number): Observable<SesionClase> {
+    return this.http.post<SesionClase>(this.APIUrlGrupos + '/' + grupoId + '/sesionesClase', sesion);
+  }
+
+  public ModificaSesionClase(sesion: SesionClase): Observable<SesionClase> {
+    return this.http.put<SesionClase>(this.APIUrlSesionesClase + '/' + sesion.id, sesion);
   }
 
   public RegistraAsistenciaAlumno(asistencia: AsistenciaClase): Observable<AsistenciaClase> {
@@ -975,7 +982,7 @@ export class PeticionesAPIService {
   }
 
   public DameImagenPregunta(imagen: string): Observable<any> {
-    return this.httpImagenes.get(this.APIUrlImagenesAvatares + '/download/' + imagen,
+    return this.httpImagenes.get(this.APIUrlImagenesPreguntas + '/download/' + imagen,
       { responseType: ResponseContentType.Blob });
   }
 

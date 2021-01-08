@@ -21,6 +21,8 @@ export class ModificarPerfilComponent implements OnInit {
   contrasenaRepetida: string;
   cambio = false;
   cambioPass = false;
+  identificador: string;
+  imagenPerfil: string;
 
 
   constructor(
@@ -37,6 +39,9 @@ export class ModificarPerfilComponent implements OnInit {
     this.username = this.profesor.NombreUsuario;
     this.email = this.profesor.email;
     this.contrasena = this.profesor.Password;
+    this.identificador = this.profesor.Identificador;
+    this.imagenPerfil = this.profesor.ImagenPerfil;
+
 
 
   }
@@ -51,7 +56,7 @@ export class ModificarPerfilComponent implements OnInit {
 
 
   Registrar() {
-    if (this.contrasena !== this.contrasenaRepetida) {
+      if (this.cambioPass && (this.contrasena !== this.contrasenaRepetida)) {
       Swal.fire('Error', 'No coincide la contraseña con la contraseña repetida', 'error');
     } else if (!this.ValidaEmail (this.email)) {
       Swal.fire('Error', 'El email no es correcto', 'error');
@@ -72,6 +77,10 @@ export class ModificarPerfilComponent implements OnInit {
               this.profesor.NombreUsuario = this.username,
               this.profesor.email = this.email,
               this.profesor.Password = this.contrasena,
+              this.profesor.Identificador = this.identificador,
+              this.profesor.ImagenPerfil = this.imagenPerfil,
+              console.log ('voy a modificar profesor');
+              console.log (this.profesor);
 
               this.peticionesAPI.ModificaProfesor (this.profesor)
               .subscribe (  (res) => Swal.fire('OK', 'Datos modificados', 'success'),

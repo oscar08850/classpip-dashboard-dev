@@ -59,11 +59,11 @@
                   </mat-form-field>
                 </div>
                 <div>
-                    <mat-label>Imagen</mat-label>     
-        
+                    <mat-label>Imagen</mat-label>
+
                     <input #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
                     <!-- Cuando se cargue la imagen se activara la función que hara que se visualice con tamaño doble -->
-                    <img #img *ngIf="imagenPregunta" mat-card-image [src]="imagenPregunta">
+                    <img #img *ngIf="imagenPregunta" mat-card-image  [src]="imagenPregunta">
                     <button (click) = "ActivarInputImagen()" type="button" class="btn Agregar">
                       Cambiar Imagen
                     </button>

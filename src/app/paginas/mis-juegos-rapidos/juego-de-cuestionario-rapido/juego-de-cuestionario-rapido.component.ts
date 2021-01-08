@@ -112,10 +112,13 @@ export class JuegoDeCuestionarioRapidoComponent implements OnInit {
 
 
         // actualizo los donuts
-
+        console.log ('actualizo donuts');
+        console.log (this.misDonuts);
         for (j = 0; j < respuesta.respuestas.Preguntas.length; j++) {
           const e = this.misDonuts.filter (elemento => elemento.id === respuesta.respuestas.Preguntas[j]);
           const donut = e[0].donut;
+          console.log ('donut ' + j);
+          console.log (donut);
           donut.filter (p => p.respuesta === respuesta.respuestas.Respuestas [j])[0].cont++;
 
         }

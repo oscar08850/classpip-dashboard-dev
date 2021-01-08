@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 //Servicios
-import { SesionService, PeticionesAPIService } from 'src/app/servicios';
+import { SesionService, PeticionesAPIService, CalculosService } from 'src/app/servicios';
 
 //Clases
 import { Pregunta } from 'src/app/clases';
@@ -49,19 +49,24 @@ export class PreguntaComponent implements OnInit {
   advertencia = true;
   ficheroCargado = false;
   imagenCargado: Boolean = false;
-  
+
   // variables necesarias para la carga de la foto
   filePregunta: File;
   imagenPregunta: string;
   nombreFicheroImagen: string;
 
   misPreguntas: Pregunta[];
+  ficherosQueFaltan: string[];
+  faltanFicheros = false;
+  hayFicherosRepetidos = false;
+  ficherosRepetidos: string[];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               public dialog: MatDialog,
               public sesion: SesionService,
               public peticionesAPI: PeticionesAPIService,
+              public calculos: CalculosService,
               private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -114,24 +119,24 @@ export class PreguntaComponent implements OnInit {
       tematicaPregunta, respuestaCorrecta, respuestaIncorrecta1,
       respuestaIncorrecta2, respuestaIncorrecta3, feedbackCorrecto,
       feedbackIncorrecto, this.nombreFicheroImagen);
-    
+
     console.log ('vamos a crear pregunta');
-    
+
     //Creamos y guardamos el modelo de Pregunta
     this.peticionesAPI.CreaPregunta(pregunta, this.profesorId)
       .subscribe((res) => {
         if (res != null) {
           console.log('Pregunta creada correctamente' + res);
           this.pregunta = res;
-          
-          /*El modelo Pregunta y la imagen son independientes, por eso, 
+
+          /*El modelo Pregunta y la imagen son independientes, por eso,
           una vez creado el modelo de la pregunta, necesitamos guardar la imagen
           a la que hace referencia el nombreFicheroImagen dentro de la API.*/
 
           //No queremos duplicidades en la BD, por eso, antes de añadir la imagen comprobaremos que no esté ya guardada en ella.
-          
+
           this.ExisteImagen();
-         
+
           //Finalmente, añadimos la imagen a la BD.
           if (!this.existeImagen && this.filePregunta != null){
             const imagenPreguntaData: FormData = new FormData();
@@ -208,11 +213,34 @@ export class PreguntaComponent implements OnInit {
         this.infoPreguntas = JSON.parse(reader.result.toString());
         console.log ('Ya tengo las preguntas');
         console.log (this.infoPreguntas);
-        Swal.fire('Las pregunta se han cargado correctamente', '', 'success');
-        this.ficheroCargado = true;
-         
-        // Activamos la función SeleccionarFicherosPreguntas
-         document.getElementById('inputImagenes').click();
+        if (this.infoPreguntas.some (pregunta => pregunta.Imagen)) {
+        // hay imagenes en alguna de las preguntas
+          this.calculos.VerificarFicherosPreguntas (this.infoPreguntas)
+          .subscribe (lista => {
+            console.log ('lista de ficheros repetidos');
+            console.log (lista);
+            if (lista.length === 0) {
+              Swal.fire({
+                title: 'Selecciona ahora las imagenes de las preguntas',
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Selecciona'
+              }).then((result) => {
+                if (result.value) {
+                  // Activamos la función SeleccionarFicherosCromos
+                  document.getElementById('inputImagenes').click();
+                }
+              });
+            } else {
+              this.hayFicherosRepetidos = true;
+              this.ficherosRepetidos = lista;
+            }
+          });
+        } else {
+          this.ficheroCargado = true;
+        }
       } catch (e) {
         Swal.fire('Error en el formato del fichero', '', 'error');
       }
@@ -221,6 +249,20 @@ export class PreguntaComponent implements OnInit {
 
   SeleccionarFicherosPreguntas($event) {
     this.ficherosPreguntas = Array.from($event.target.files);
+    console.log ('He cargado ' + this.ficherosPreguntas.length + ' imagenes');
+    this.ficherosQueFaltan = [];
+    this.infoPreguntas.forEach (pregunta => {
+      if (pregunta.Imagen) {
+        if (!this.ficherosPreguntas.some (fichero => fichero.name === pregunta.Imagen)) {
+          this.ficherosQueFaltan.push (pregunta.Imagen);
+        }
+      }
+    });
+    if (this.ficherosQueFaltan.length > 0) {
+      this.faltanFicheros = true;
+    } else {
+      this.ficheroCargado = true;
+    }
   }
 
   RegistrarPreguntas() {
@@ -231,18 +273,21 @@ export class PreguntaComponent implements OnInit {
       .subscribe((res) => {
         if (res != null) {
           cont++;
-          this.pregunta = res;     
+          this.pregunta = res;
           //Si la pregunta se registra correctamente, enviamos también la imagen (si es que la hay)
-          if (this.infoPreguntas.Imagen !== '') {
+          if (this.pregunta.Imagen) {
             console.log ('Si que registro');
+            console.log (this.pregunta.Imagen);
             //guardamos la imagen de la pregunta
-            const ImagenPregunta = this.ficherosPreguntas.filter (f => f.name === this.pregunta.Imagen.toUpperCase())[0];
+            const ImagenPregunta = this.ficherosPreguntas.filter (f => f.name === this.pregunta.Imagen)[0];
+            console.log ('imagen ');
+            console.log (ImagenPregunta);
             const formDataImagen = new FormData();
             formDataImagen.append(this.pregunta.Imagen, ImagenPregunta);
             this.peticionesAPI.PonImagenPregunta (formDataImagen)
             .subscribe(() => console.log('Imagen cargado'));
            }
-  
+
           if (cont === this.infoPreguntas.length) {
             Swal.fire('Las preguntas se han registrado correctamente', '', 'success');
             this.finalizar = true;
@@ -260,7 +305,7 @@ export class PreguntaComponent implements OnInit {
     this.router.navigate(['/inicio/' + this.profesorId]);
   }
 
-  
+
   ActivarInputImagen() {
     document.getElementById('inputImagenPregunta').click();
   }
@@ -288,10 +333,10 @@ ExisteImagen(){
       console.log("PREGUNTAS RECUPERADAS");
       console.log(this.misPreguntas);
     }})
-  
+
   if (this.misPreguntas != null) {
   this.misPreguntas.forEach( pregunta => {
-    if (pregunta.Imagen == this.imagenPregunta) { 
+    if (pregunta.Imagen === this.imagenPregunta) {
         this.existeImagen = true} });
   }
 }

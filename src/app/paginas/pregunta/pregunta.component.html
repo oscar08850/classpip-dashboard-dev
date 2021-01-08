@@ -9,7 +9,7 @@
         <pre>
         <br>
         La información de las preguntas debe estar en un fichero <strong>JSON</strong>
-        con el contenido mostrado en el siguiente ejemplo.
+        con el contenido mostrado en el siguiente ejemplo. La imagen deben ser cuadrada.
           [
             {{'{'}}
                 "Titulo": "suma",
@@ -40,6 +40,26 @@
           <input #file id = "inputInfo" type="file" accept= 'application/JSON;' accept-charset="UTF-8" (change)="SeleccionarInfoPreguntas($event)" style="display:none">
           <button style = "height:100px; width:80%" (click) = "ActivarInputInfo()" type="button" class="btn Agregar">
             Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
+          </button>
+        </div>
+        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "hayFicherosRepetidos">
+          <h3 style = "color: red">ATENCION</h3>
+
+          <h5 style = "padding: 5%;"> Ya hay ficheros en la base de datos con nombres iguales a algunos que quieres cargar</h5>
+          <p *ngFor = "let fichero of ficherosRepetidos">{{fichero}}</p>
+
+          <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+              Cancelar
+          </button>
+        </div>
+        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "faltanFicheros">
+          <h3 style = "color: red">ATENCION</h3>
+
+          <h5 style = "padding: 5%;"> Necesitas los siguientes ficheros, que no están entre los seleccionados</h5>
+          <p *ngFor = "let fichero of ficherosQueFaltan">{{fichero}}</p>
+
+          <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+              Cancelar
           </button>
         </div>
         <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "ficheroCargado">
@@ -101,7 +121,7 @@
                       </mat-step>
 
                       <!-- SEGUNDO PASO; AÑADIDO PARA LA INSERCIÓN DE IMAGEN EN LA PREGUNTA (OPCIONAL)-->
-                      <mat-step> 
+                      <mat-step>
                         <ng-template matStepLabel>Imagen</ng-template>
                         <input #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
                         <!-- Cuando se cargue la imagen se activara la función que hara que se visualice con tamaño doble -->
