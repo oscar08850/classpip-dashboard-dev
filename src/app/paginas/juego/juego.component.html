@@ -1127,7 +1127,7 @@
                 </mat-list>-->
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button [disabled]="!pesosSuman100" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  <button [disabled]="!pesosSuman100" type="button" class="btn Next" (click)="CrearJuegoEvaluacion()">Siguiente</button>
                 </div>
               </mat-step>
               <mat-step *ngIf="criterioEvaluacionSeleccionado === 'Por penalización'">
@@ -1185,7 +1185,7 @@
                 </mat-list>
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  <button type="button" class="btn Next" (click)="CrearJuegoEvaluacion()">Siguiente</button>
                 </div>
               </mat-step>
 

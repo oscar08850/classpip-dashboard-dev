@@ -59,6 +59,8 @@ import {Router} from '@angular/router';
 
 import {AsignaEscenarioComponent} from './asigna-escenario/asigna-escenario.component';
 import {AsignaPreguntasComponent} from './asigna-preguntas/asigna-preguntas.component';
+import {JuegoDeEvaluacion} from '../../clases/JuegoDeEvaluacion';
+import {log} from 'util';
 
 
 export interface OpcionSeleccionada {
@@ -545,8 +547,8 @@ export class JuegoComponent implements OnInit {
         }
       }
     } while (this.ComprobarSiTodosTienenEvaluadores() === false && fill === true);
-      console.log('Relaciones object', this.relacionesMap);
-      console.log('Todos tienen evaluadores', this.todosTienenEvaluador);
+    console.log('Relaciones object', this.relacionesMap);
+    console.log('Todos tienen evaluadores', this.todosTienenEvaluador);
   }
   RelacionChanged(id: number, value: string[]) {
     console.log('Relaciones changed', id, value);
@@ -554,7 +556,7 @@ export class JuegoComponent implements OnInit {
     console.log('Relaciones object', this.relacionesMap);
     this.ComprobarSiTodosTienenEvaluadores();
   }
-    ComprobarSiTodosTienenEvaluadores() {
+  ComprobarSiTodosTienenEvaluadores() {
     let encontrado1 = false;
     let encontrado2 = false;
     if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
@@ -603,6 +605,7 @@ export class JuegoComponent implements OnInit {
     this.criterioEvaluacionSeleccionado = criterioEvaluacion.nombre;
     this.tengoCriterioEvaluacion = true;
     if (this.criterioEvaluacionSeleccionado === 'Por pesos') {
+      this.pesosArray = [];
       for (let i = 0; i < this.rubricaElegida.Criterios.length; i++) {
         this.pesosArray.push([]);
         this.pesosArray[i].push(this.PesoPorDefecto(this.rubricaElegida.Criterios.length));
@@ -612,6 +615,7 @@ export class JuegoComponent implements OnInit {
       }
       console.log('pesos array', this.pesosArray);
     } else {
+      this.penalizacionArray = [];
       for (let i = 0; i < this.rubricaElegida.Criterios.length; i++) {
         this.penalizacionArray.push([]);
         if (this.rubricaElegida.Criterios[i].Elementos.length >= 1) {
@@ -731,6 +735,49 @@ export class JuegoComponent implements OnInit {
       this.penalizacionArray[criterio][elemento] = {num: tmp, p: parseInt(value, 10)};
     }
     console.log('penalizacion array', this.penalizacionArray);
+  }
+  CrearJuegoEvaluacion() {
+    let evaluadores: number;
+    if (this.tipoDeEvaluacionSeleccionado === 'Todos con todos') {
+      evaluadores = 0;
+    } else {
+      evaluadores = this.numeroDeMiembros;
+    }
+    const juego: JuegoDeEvaluacion = new JuegoDeEvaluacion(
+      null,
+      this.nombreDelJuego,
+      'Evaluacion',
+      this.modoDeJuegoSeleccionado,
+      true,
+      false,
+      this.profesorEvalua,
+      this.profesorEvaluaModo === 'normal',
+      this.autoevaluacion,
+      evaluadores,
+      this.pesosArray,
+      this.criterioEvaluacionSeleccionado === 'Por pesos',
+      this.penalizacionArray,
+      this.rubricaElegida.id,
+      this.profesorId,
+      this.grupo.id
+    );
+    console.log('Creando Juego de Evaluacion', juego);
+    this.peticionesAPI.CrearJuegoDeEvaluacion(juego).subscribe(res => {
+      console.log('JuegoDeEvaluacionCreado', res);
+      Swal.fire('Juego de Evaluación creado correctamente', ' ', 'success');
+      this.juego = res;
+      this.sesion.TomaJuego(this.juego);
+      this.juegoCreado = true;
+      // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+      if (this.juegosActivos === undefined) {
+        // Si la lista aun no se ha creado no podre hacer el push
+        this.juegosActivos = [];
+      }
+      this.juegosActivos.push(this.juego);
+      this.Limpiar();
+      // Regresamos a la lista de equipos (mat-tab con índice 0)
+      this.tabGroup.selectedIndex = 0;
+    });
   }
 
   // FUNCIONES PARA LA CREACION DE JUEGO DE PUNTOS
