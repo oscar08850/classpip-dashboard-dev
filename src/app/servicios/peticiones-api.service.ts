@@ -20,6 +20,7 @@ import { JuegoDeGeocaching } from '../clases/JuegoDeGeocaching';
 import { AlumnoJuegoDeGeocaching } from '../clases/AlumnoJuegoDeGeocaching';
 import {JuegoDeEvaluacion} from '../clases/JuegoDeEvaluacion';
 import {EquipoJuegoEvaluado} from '../clases/EquipoJuegoEvaluado';
+import {AlumnoJuegoEvaluado} from '../clases/AlumnoJuegoEvaluado';
 // import {host} from '../URLs/urls';
 
 @Injectable({
@@ -99,7 +100,8 @@ export class PeticionesAPIService {
   private APIUrlPuntosGeolocalizables = this.host + ':3000/api/PuntosGeolocalizables';
 
   private APIURLJuegoDeEvaluacion = this.host + ':3000/api/juegosDeEvaluacion';
-  private APIURLEquiposJuegoDeEvaluacion = this.host + ':3000/api/equiposJuegoEvaluado';
+  private APIURLEquiposJuegoEvaluado = this.host + ':3000/api/equiposJuegoEvaluado';
+  private APIURLAlumnoJuegoEvaluado = this.host + ':3000/api/alumnosJuegoEvaluado';
 
   private APIUrlJuegoDeVotacionUnoATodos = this.host + ':3000/api/JuegosDeVotacionUnoATodos';
   private APIUrlAlumnoJuegoDeVotacionUnoATodos = this.host + ':3000/api/alumnosJuegoDeVotacionUnoATodos';
@@ -1320,7 +1322,10 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
     return this.http.post<JuegoDeEvaluacion>(this.APIURLJuegoDeEvaluacion, juego);
   }
   public CrearEquipoJuegoDeEvaluacion(equipo: EquipoJuegoEvaluado): Observable<EquipoJuegoEvaluado> {
-    return this.http.post<EquipoJuegoEvaluado>(this.APIURLEquiposJuegoDeEvaluacion, equipo);
+    return this.http.post<EquipoJuegoEvaluado>(this.APIURLEquiposJuegoEvaluado, equipo);
+  }
+  public CrearAlumnoJuegoDeEvaluacion(alumno: AlumnoJuegoEvaluado): Observable<AlumnoJuegoEvaluado> {
+    return this.http.post<AlumnoJuegoEvaluado>(this.APIURLAlumnoJuegoEvaluado, alumno);
   }
 
 }

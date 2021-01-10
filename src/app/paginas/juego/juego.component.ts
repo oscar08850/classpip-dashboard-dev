@@ -62,6 +62,7 @@ import {AsignaPreguntasComponent} from './asigna-preguntas/asigna-preguntas.comp
 import {JuegoDeEvaluacion} from '../../clases/JuegoDeEvaluacion';
 import {log} from 'util';
 import {EquipoJuegoEvaluado} from '../../clases/EquipoJuegoEvaluado';
+import {AlumnoJuegoEvaluado} from '../../clases/AlumnoJuegoEvaluado';
 
 
 export interface OpcionSeleccionada {
@@ -790,6 +791,15 @@ export class JuegoComponent implements OnInit {
             null
           );
           await this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).toPromise();
+        } else if (this.modoDeJuegoSeleccionado === 'Individual') {
+          const alumno: AlumnoJuegoEvaluado = new AlumnoJuegoEvaluado(
+            null,
+            res.id,
+            key,
+            value,
+            null
+          );
+          await this.peticionesAPI.CrearAlumnoJuegoDeEvaluacion(alumno).toPromise();
         }
       });
 
