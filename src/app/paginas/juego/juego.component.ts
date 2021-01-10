@@ -61,6 +61,7 @@ import {AsignaEscenarioComponent} from './asigna-escenario/asigna-escenario.comp
 import {AsignaPreguntasComponent} from './asigna-preguntas/asigna-preguntas.component';
 import {JuegoDeEvaluacion} from '../../clases/JuegoDeEvaluacion';
 import {log} from 'util';
+import {EquipoJuegoEvaluado} from '../../clases/EquipoJuegoEvaluado';
 
 
 export interface OpcionSeleccionada {
@@ -768,6 +769,20 @@ export class JuegoComponent implements OnInit {
       this.juego = res;
       this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
+
+      if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Por Equipos') {
+        this.relacionesMap.forEach(async (value: number[], key: number) => {
+          const equipo: EquipoJuegoEvaluado = new EquipoJuegoEvaluado(
+            null,
+            res.id,
+            key,
+            value,
+            0
+          );
+          await this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).toPromise();
+        });
+      }
+
       // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
       if (this.juegosActivos === undefined) {
         // Si la lista aun no se ha creado no podre hacer el push
