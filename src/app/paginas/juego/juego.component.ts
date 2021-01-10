@@ -769,19 +769,29 @@ export class JuegoComponent implements OnInit {
       this.juego = res;
       this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
-
-      if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Por Equipos') {
-        this.relacionesMap.forEach(async (value: number[], key: number) => {
+      this.relacionesMap.forEach(async (value: number[], key: number) => {
+        if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Por Equipos') {
           const equipo: EquipoJuegoEvaluado = new EquipoJuegoEvaluado(
             null,
             res.id,
             key,
             value,
-            0
+            null,
+            null
           );
           await this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).toPromise();
-        });
-      }
+        } else if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
+          const equipo: EquipoJuegoEvaluado = new EquipoJuegoEvaluado(
+            null,
+            res.id,
+            key,
+            null,
+            value,
+            null
+          );
+          await this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).toPromise();
+        }
+      });
 
       // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
       if (this.juegosActivos === undefined) {

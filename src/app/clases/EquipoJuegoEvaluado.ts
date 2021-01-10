@@ -4,13 +4,16 @@ export class EquipoJuegoEvaluado {
   juegoEvaluacionId: number;
   equipoEvaluadoId: number;
   equiposEvaluadoresIds: number[];
+  alumnosEvaluadoresIds: number[];
   notaFinal: number;
 
-  constructor(id: number, juegoEvaluacionId: number, equipoEvaluadoId: number, equiposEvaluadoresIds: number[], notaFinal: number) {
+  // tslint:disable-next-line:max-line-length
+  constructor(id: number, juegoEvaluacionId: number, equipoEvaluadoId: number, equiposEvaluadoresIds: number[], alumnosEvaluadoresIds: number[], notaFinal: number) {
     this.id = id;
     this.juegoEvaluacionId = juegoEvaluacionId;
     this.equipoEvaluadoId = equipoEvaluadoId;
     this.equiposEvaluadoresIds = equiposEvaluadoresIds;
+    this.alumnosEvaluadoresIds = alumnosEvaluadoresIds;
     this.notaFinal = notaFinal;
   }
 }
