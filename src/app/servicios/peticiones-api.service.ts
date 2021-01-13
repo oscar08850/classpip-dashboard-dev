@@ -1318,6 +1318,9 @@ public DameInscripcionesAlumnoJuegoDeGeocaching(juegoDeGeocachingId: number): Ob
   }
 
   // JUEGO DE EVALUACION
+  public DameJuegosDeEvaluacion(grupoId: number): Observable<JuegoDeEvaluacion[]> {
+    return this.http.get<JuegoDeEvaluacion[]>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeEvaluacion');
+  }
   public CrearJuegoDeEvaluacion(juego: JuegoDeEvaluacion): Observable<JuegoDeEvaluacion> {
     return this.http.post<JuegoDeEvaluacion>(this.APIURLJuegoDeEvaluacion, juego);
   }

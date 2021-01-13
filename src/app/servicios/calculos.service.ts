@@ -631,7 +631,9 @@ export class CalculosService {
                             juegosInactivos.push(juegosVotacioTodosAUno[i]);
                           }
                         }
-
+                        // EVALUACION
+                          this.peticionesAPI.DameJuegoDe
+                          //
                         const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
                         obs.next (resultado);
                       });
