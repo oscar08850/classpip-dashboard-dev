@@ -378,7 +378,7 @@ import { TeamExcludePipe } from './pipes/team-exclude.pipe';
     MostrarFamiliaComponent,
     GuardarColeccionComponent,
     MostrarColeccionComponent,
-    JuegoDeCogerTurnoRapidoComponent
+    JuegoDeCogerTurnoRapidoComponent,
     MisFamiliasImagenesPerfilComponent,
     ExcludePipe,
     TeamExcludePipe
