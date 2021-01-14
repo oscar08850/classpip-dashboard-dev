@@ -38,30 +38,6 @@
       <button style = 'width: 50%' type="button" class="btn Info" (click) = "Voltear ()">
         Dar la vuelta a todos los cromos <i class="material-icons">library_add</i>
       </button>
-      <button style = 'width: 25%' type="button" class="btn Aceptar" (click) = "GuardarColeccion ()">
-        Guardar colección <i class="material-icons">check</i>
-      </button>
-    </div>
-    <div *ngIf = mostrarTextoGuardar>
-      <br>
-      <br>
-      <h3>Aquí podrás crear una carpeta con los ficheros de esta colección, en el formato que se necesita para cargarla en el sistema desde el Dashboard.
-        <br>
-        Primero haz click (botón derecho) en el enlace para crear el fichero JSON con los datos de la colección. Ese fichero tendrá el nombre que tiene la colección. Se recomienda crear una carpeta para guardar en ella ese fichero y todas las imagenes de la colección.
-        <br>
-        Después, descarga (botón derecho y dejar imagen) cada una de las imágenes de la colección en la misma carpera, sin modificar los nombres de los ficheros.
-        <br>
-        En el caso de que la colección tenga cromos de dos caras, verás que al acercar el ratón a un cromo éste se dará la vuelta. Te resultará más cómodo descargar primero la cara de detrás y después, darle la vuelta a todos los cromos (pulsando el botón amarillo) y descargar la cara delantera.
-
-        <br>
-        <br>
-        <br>
-        Para generar el fichero JSON: <a id ="generarJSON"> </a>
-        <br>
-        <br>
-        <br>
-      </h3>
-
     </div>
     <div *ngIf = "!coleccion.DosCaras" class = 'enColumna' >
       <button style = 'width: 30%' type="button" class="btn Agregar" (click) = AbrirDialogoAgregarCromoColeccion()>

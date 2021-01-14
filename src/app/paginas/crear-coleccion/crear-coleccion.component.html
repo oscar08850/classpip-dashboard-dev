@@ -42,6 +42,16 @@
                   Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
                 </button>
               </div>
+              <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "errorFicheros">
+                <h3 style = "color: red">ATENCION</h3>
+
+                <h5 style = "padding: 5%;"> Ya hay ficheros en la base de datos con nombres iguales a algunos de la colección que quieres cargar</h5>
+                <p *ngFor = "let fichero of ficherosRepetidos">{{fichero}}</p>
+
+                <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+                    Cancelar
+                </button>
+              </div>
               <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "ficherosColeccion">
                 <h3>Datos de la colección</h3>
                 <div class = "enFila" style = "width: 90%">

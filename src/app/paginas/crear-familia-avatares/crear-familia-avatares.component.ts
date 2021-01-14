@@ -63,6 +63,8 @@ export class CrearFamiliaAvataresComponent implements OnInit {
   infoFamilia;
   ficherosFamilia;
   advertencia = true;
+  errorFicheros = false;
+  ficherosRepetidos: string[];
 
 
 
@@ -71,6 +73,7 @@ export class CrearFamiliaAvataresComponent implements OnInit {
     private router: Router,
     private peticionesAPI: PeticionesAPIService,
     private sesion: SesionService,
+    private calculos: CalculosService,
     private location: Location,
     private http: HttpClient
   ) { }
@@ -382,29 +385,39 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       reader.onload = () => {
         try {
           this.infoFamilia = JSON.parse(reader.result.toString());
-          Swal.fire({
-            title: 'Selecciona ahora las imagenes de la familia',
-            text: 'Selecciona todos los ficheros de la carpeta de imagenes',
-            icon: 'success',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Selecciona'
-          }).then((result) => {
-            if (result.value) {
-              // Activamos la función SeleccionarFicherosFamilia
-              document.getElementById('inputFamilia').click();
+          const familia = new FamiliaAvatares ();
+          Object.assign (familia, this.infoFamilia);
+          this.calculos.VerificarFicherosFamilia (familia)
+          .subscribe (lista => {
+            if (lista.length === 0) {
+              Swal.fire({
+                title: 'Selecciona ahora las imagenes de la familia',
+                text: 'Selecciona todos los ficheros de la carpeta de imagenes',
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Selecciona'
+              }).then((result) => {
+                if (result.value) {
+                  // Activamos la función SeleccionarFicherosFamilia
+                  document.getElementById('inputFamilia').click();
+                }
+              });
+            } else {
+              this.ficherosRepetidos = lista;
+              this.errorFicheros = true;
             }
           });
         } catch (e) {
-          Swal.fire('Error en el formato del fichero', '', 'error');
+              Swal.fire('Error en el formato del fichero', '', 'error');
         }
       };
     }
 
   SeleccionarFicherosFamilia($event) {
       this.ficherosFamilia = Array.from($event.target.files);
-    }
+  }
 
   RegistrarFamilia() {
       const familia = new FamiliaAvatares ();
@@ -460,7 +473,6 @@ export class CrearFamiliaAvataresComponent implements OnInit {
           console.log('fallo al crear la familia');
         }
       });
-
   }
 
   Cancelar() {

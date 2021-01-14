@@ -8,7 +8,7 @@ import { MatDialog, MatTabGroup } from '@angular/material';
 
 
 // Servicios
-import { SesionService, PeticionesAPIService } from '../../servicios/index';
+import { SesionService, PeticionesAPIService, CalculosService } from '../../servicios/index';
 
 // Clases
 import { Coleccion, Cromo } from '../../clases/index';
@@ -107,13 +107,15 @@ export class CrearColeccionComponent implements OnInit {
   // PONEMOS LAS COLUMNAS DE LA TABLA Y LA LISTA QUE TENDRÁ LA INFORMACIÓN QUE QUEREMOS MOSTRAR
   displayedColumns: string[] = ['nombreCromo', 'probabilidadCromo', 'nivelCromo', ' '];
 
-
+  ficherosRepetidos: string[];
+  errorFicheros = false;
 
   constructor(
     private router: Router,
     public dialog: MatDialog,
     public sesion: SesionService,
     public peticionesAPI: PeticionesAPIService,
+    public calculos: CalculosService,
     public location: Location,
     private formBuilder: FormBuilder) { }
 
@@ -495,18 +497,26 @@ export class CrearColeccionComponent implements OnInit {
     reader.onload = () => {
       try {
         this.infoColeccion = JSON.parse(reader.result.toString());
-        Swal.fire({
-          title: 'Selecciona ahora las imagenes de los cromos',
-          text: 'Selecciona todos los ficheros de la carpeta imagenes',
-          icon: 'success',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Selecciona'
-        }).then((result) => {
-          if (result.value) {
-            // Activamos la función SeleccionarFicherosCromos
-            document.getElementById('inputCromos').click();
+        this.calculos.VerificarFicherosColeccion (this.infoColeccion)
+        .subscribe (lista => {
+          if (lista.length === 0) {
+            Swal.fire({
+              title: 'Selecciona ahora las imagenes de los cromos',
+              text: 'Selecciona todos los ficheros de la carpeta imagenes',
+              icon: 'success',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Selecciona'
+            }).then((result) => {
+              if (result.value) {
+                // Activamos la función SeleccionarFicherosCromos
+                document.getElementById('inputCromos').click();
+              }
+            });
+          } else {
+            this.ficherosRepetidos = lista;
+            this.errorFicheros = true;
           }
         });
       } catch (e) {

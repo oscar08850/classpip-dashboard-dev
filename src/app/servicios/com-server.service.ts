@@ -81,6 +81,69 @@ export class ComServerService {
     this.socket.emit('forceDisconnect');
   }
 
+  public EsperoNickNames(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('nickNameJuegoRapido', (nick) => {
+            console.log ('recibo nick: ' + nick);
+            observer.next(nick);
+        });
+    });
+  }
+
+  public EsperoRespuestasEncuestaRapida(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('respuestaEncuestaRapida', (respuesta) => {
+            observer.next(respuesta);
+        });
+    });
+  }
+
+
+  public EsperoRespuestasVotacionRapida(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('respuestaVotacionRapida', (respuesta) => {
+            console.log ('ya tengo votacion');
+            console.log (respuesta);
+            observer.next(respuesta);
+        });
+    });
+  }
+
+  public EsperoRespuestasCuestionarioRapido(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('respuestaCuestionarioRapido', (respuesta) => {
+            console.log ('ya tengo respuesta');
+            console.log (respuesta);
+            observer.next(respuesta);
+        });
+    });
+  }
+
+  public EsperoTurnos(clave: string): any  {
+    console.log ('voy a esperar turnos en');
+    console.log ('turnoElegido:' + clave);
+    return Observable.create((observer) => {
+        this.socket.on('turnoElegido:' + clave, (info) => {
+            console.log ('ya tengo respuesta');
+            console.log (info);
+            observer.next(info);
+        });
+    });
+  }
+
+  public NotificarTurnoCogido(claveJuego: string, turnoElegido: any) {
+    this.socket.emit ('notificacionTurnoCogido' , {clave: claveJuego, turno: turnoElegido});
+
+  }
+
+  public NotificarTurnoNuevo(claveJuego: string, turnoNuevo: any) {
+    this.socket.emit ('notificacionTurnoNuevo' , {clave: claveJuego, turno: turnoNuevo});
+
+  }
+
+
+
+
 
 }
 

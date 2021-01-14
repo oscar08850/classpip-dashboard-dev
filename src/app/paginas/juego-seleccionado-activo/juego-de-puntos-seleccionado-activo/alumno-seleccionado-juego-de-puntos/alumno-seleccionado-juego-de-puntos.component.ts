@@ -65,10 +65,7 @@ export class AlumnoSeleccionadoJuegoDePuntosComponent implements OnInit {
     const datos = this.sesion.DameDatosEvolucionAlumnoJuegoPuntos();
     this.posicion = datos.posicion;
     this.puntosDelJuego = datos.tiposPuntosDelJuego;
-    console.log ('tipos de puntos ' + this.puntosDelJuego.length);
-    console.log ('tipos de puntos ' + this.puntosDelJuego[0].Nombre);
-    console.log ('tipos de puntos ' + this.puntosDelJuego[1].Nombre);
-    console.log ('tipos de puntos ' + this.puntosDelJuego[2].Nombre);
+
     this.nivelesDelJuego = datos.nivelesDelJuego;
     this.alumnoSeleccionado = datos.alumnoSeleccionado;
     this.alumnoJuegoDePuntos = datos.inscripcionAlumnoJuego;

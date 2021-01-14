@@ -4,7 +4,7 @@
 <br>
 <br>
 <div class = "enColumna">
-<table style="width: 100%" align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <table style="width: 100%" align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
   <!--    La primera columna será un checkbox -->
           <ng-container matColumnDef="select">
@@ -52,6 +52,10 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
   </table>
+  <div class="enColumna">
+    <button style= "width: 50%" *ngIf ="!muestroPublicas" type="button" (click) = "MostrarPublicas()" class="btn Agregar">Mostrar también familias púlicas</button>
+    <button style= "width: 50%" *ngIf ="muestroPublicas" type="button" (click) = "QuitarPublicas()" class="btn Agregar">Quitar familias púlicas</button>
+  </div>
   <br>
 <br>
 <br>

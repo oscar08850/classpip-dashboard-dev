@@ -61,6 +61,16 @@
             </button>
           </div>
         </div>
+        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "errorFicheros">
+          <h3 style = "color: red">ATENCION</h3>
+
+          <h5 style = "padding: 5%;"> Ya hay ficheros en la base de datos con nombres iguales a algunos de la familia que quieres cargar</h5>
+          <p *ngFor = "let fichero of ficherosRepetidos">{{fichero}}</p>
+
+          <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+              Cancelar
+          </button>
+        </div>
       </div>
     </mat-tab>
     <mat-tab label="Introducir nueva familia">

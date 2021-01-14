@@ -10,6 +10,8 @@ import { Equipo, Alumno, AsignacionEquipo } from '../../../clases/index';
 
 // Servicios
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
+import * as URL from '../../../URLs/urls';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-editar-equipo',
@@ -56,12 +58,15 @@ export class EditarEquipoComponent implements OnInit {
 
   ngOnInit() {
     this.equipo = this.sesion.DameEquipo();
+    this.imagenLogo = this.equipo.FotoEquipo;
     this.nombreEquipo = this.equipo.Nombre;
     this.alumnosEquipo = this.sesion.DameAlumnosEquipo();
     this.alumnosGrupo = this.sesion.DameAlumnosGrupo();
+    console.log ('ya tengo equipo');
+    console.log (this.equipo);
 
     // Cargo el logo
-    this.GET_Logo();
+    //this.GET_Logo();
     // Pedimos las listas de alumnos con y sin equipo
     this.calculos.DameListasAlumnosConYSinEquipo (this.equipo, this.alumnosGrupo)
     .subscribe (res => {
@@ -70,29 +75,29 @@ export class EditarEquipoComponent implements OnInit {
     });
   }
 
-  // Busca el logo que tiene el nombre del equipo.FotoEquipo y lo carga en imagenLogo
-  GET_Logo() {
+  // // Busca el logo que tiene el nombre del equipo.FotoEquipo y lo carga en imagenLogo
+  // GET_Logo() {
 
-    if (this.equipo.FotoEquipo !== undefined ) {
-      this.peticionesAPI.DameLogoEquipo (this.equipo.FotoEquipo)
-      .subscribe(response => {
+  //   if (this.equipo.FotoEquipo !== undefined ) {
+  //     this.peticionesAPI.DameLogoEquipo (this.equipo.FotoEquipo)
+  //     .subscribe(response => {
 
-        const blob = new Blob([response.blob()], { type: 'image/jpg'});
+  //       const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-        const reader = new FileReader();
-        reader.addEventListener('load', () => {
-          this.imagenLogo = reader.result.toString();
-          // La necesitaremos al regresar para actualizar el logo en la lista que ve el usuario
-          this.sesion.TomaImagenLogoEquipo (this.imagenLogo);
-        }, false);
+  //       const reader = new FileReader();
+  //       reader.addEventListener('load', () => {
+  //         this.imagenLogo = reader.result.toString();
+  //         // La necesitaremos al regresar para actualizar el logo en la lista que ve el usuario
+  //         this.sesion.TomaImagenLogoEquipo (this.imagenLogo);
+  //       }, false);
 
-        if (blob) {
-          reader.readAsDataURL(blob);
-        }
-      });
-    }
+  //       if (blob) {
+  //         reader.readAsDataURL(blob);
+  //       }
+  //     });
+  //   }
 
-  }
+  // }
 
 // LE PASAMOS EL IDENTIFICADOR DEL EQUIPO Y BUSCAMOS LOS ALUMNOS QUE TIENE. LA UTILIZAMOS PARA ACTUALIZAR LA TABLA
   AlumnosDelEquipo(equipoId: number) {
@@ -182,8 +187,23 @@ export class EditarEquipoComponent implements OnInit {
 
   // NOS PERMITE MODIFICAR EL NOMBRE Y EL LOGO DEL EQUIPO
   EditarEquipo() {
-
-    this.peticionesAPI.ModificaEquipo(new Equipo(this.nombreEquipo, this.nombreLogo), this.equipo.grupoId, this.equipo.id)
+    if (this.logoCambiado) {
+      if (this.equipo.FotoEquipo !== undefined) {
+        // hay que eliminar el fichero con el logo actual
+        const url = this.equipo.FotoEquipo.split ('/');
+        const imagen = url[url.length - 1];
+        this.peticionesAPI.BorraLogoEquipo (imagen).subscribe ();
+      }
+      if (this.imagenLogo !== undefined) {
+        this.equipo.FotoEquipo = URL.LogosEquipos + this.nombreLogo;
+      } else {
+        this.equipo.FotoEquipo = undefined;
+      }
+    } else {
+      this.nombreLogo = this.equipo.FotoEquipo;
+    }
+    this.equipo.Nombre = this.nombreEquipo;
+    this.peticionesAPI.ModificaEquipo(this.equipo)
     .subscribe((res) => {
       if (res != null) {
 
@@ -202,7 +222,7 @@ export class EditarEquipoComponent implements OnInit {
         console.log('fallo editando');
       }
     });
-    this.goBack();
+    this.location.back();
   }
 
   // AL CLICAR EN AGREGAR LOGO NOS ACTIVARÁ LA FUNCIÓN MOSTRAR DE ABAJO
@@ -215,7 +235,6 @@ export class EditarEquipoComponent implements OnInit {
    // Seleccionamos una foto y guarda el nombre de la foto en la variable logo
   Mostrar($event) {
     this.file = $event.target.files[0];
-
     console.log('fichero ' + this.file.name);
     this.nombreLogo = this.file.name;
 
@@ -269,8 +288,48 @@ export class EditarEquipoComponent implements OnInit {
     });
   }
 
+  QuitarLogo() {
+    if (!this.logoCambiado) {
+      console.log ('vamos a quitar el logo');
+      console.log (this.equipo);
+      const url = this.equipo.FotoEquipo.split ('/');
+      const imagen = url[url.length - 1];
+
+      this.peticionesAPI.BorraLogoEquipo (imagen).subscribe ();
+      this.imagenLogo = undefined;
+      this.logoCambiado = true;
+    } else {
+      this.peticionesAPI.BorraLogoEquipo (this.nombreLogo).subscribe ();
+      this.imagenLogo = undefined;
+
+    }
+    // this.peticionesAPI.ModificaEquipo(this.equipo)
+    // .subscribe(e => console.log (e));
+
+
+  }
+
   // NOS DEVOLVERÁ A LA DE LA QUE VENIMOS
   goBack() {
-    this.location.back();
+    if (this.logoCambiado || this.nombreEquipo !== this.equipo.Nombre) {
+
+      Swal.fire({
+        title: '¿Seguro que quieres salir?',
+        text: 'Has hecho cambios que no has aceptado',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, estoy seguro'
+      }).then((result) => {
+        if (result.value) {
+          this.location.back();
+        }
+      });
+    } else {
+      this.location.back();
+    }
+
+
   }
 }

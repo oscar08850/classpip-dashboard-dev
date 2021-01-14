@@ -3,7 +3,7 @@ import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insign
          // tslint:disable-next-line:max-line-length
          TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeCuestionario,
          TablaAlumnoJuegoDeCuestionario,
-         FamiliaAvatares} from '../clases';
+         FamiliaAvatares, CuestionarioSatisfaccion} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
@@ -74,6 +74,7 @@ export class SesionService {
   alumnoJuegoDeCuestionario: TablaAlumnoJuegoDeCuestionario;
 
   familia: FamiliaAvatares;
+  cuestionarioDeSatiafaccion: CuestionarioSatisfaccion;
 
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
@@ -540,7 +541,15 @@ public DameInscripcionAlumnoJuegoDeCuestionario(): AlumnoJuegoDeCuestionario {
 public TomaFamilia(familia: FamiliaAvatares) {
   this.familia = familia;
 }
-public DameFamilia (): FamiliaAvatares {
+public DameFamilia(): FamiliaAvatares {
   return this.familia;
 }
+public TomaCuestionarioSatisfaccion(cuestionario: CuestionarioSatisfaccion) {
+  this.cuestionarioDeSatiafaccion = cuestionario;
+}
+
+public DameCuestionarioSatisfaccion(): CuestionarioSatisfaccion {
+  return this.cuestionarioDeSatiafaccion;
+}
+
 }

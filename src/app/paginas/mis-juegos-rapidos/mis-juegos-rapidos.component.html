@@ -1,0 +1,26 @@
+
+<div class="titulo">Juegos rápidos</div>
+<mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
+
+
+<div class="contenedor">
+
+
+  <table mat-table [dataSource]="dataSource" matSort  style = 'width: 100%' class="mat-elevation-z8">
+
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef mat-sort-header> Nombre del juego </th>
+              <td mat-cell (click) = "MostrarJuegoRapido(juego)" style= "text-align: left" *matCellDef="let juego"> {{juego.NombreJuego}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tipo">
+              <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef mat-sort-header> Tipo de juego </th>
+              <td mat-cell (click) = "MostrarJuegoRapido(juego)" style= "text-align: left" *matCellDef="let juego"> {{juego.Tipo}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          </table>
+
+</div>
