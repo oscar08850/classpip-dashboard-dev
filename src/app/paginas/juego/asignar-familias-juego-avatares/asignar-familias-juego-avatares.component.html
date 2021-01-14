@@ -1,0 +1,62 @@
+
+<form *ngIf="familias">
+
+  <table align="center" mat-table [dataSource]="datasource" class="example-container mat-elevation-z8">
+
+   <!--    La primera columna será un checkbox -->
+   <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+<!--    Si cambia el checkbox header (change) hay que actualizar los seleccionados y el
+        estado del botón
+        Sl estado del checkbox header será [checked] si todas las filas están
+        seleccionadas
+        y será [indeterminate] si hay alguna seleccionada pero no todas
+        La función selection.hasValue() esta predefinida.
+-->
+      <mat-checkbox
+                    (change)="$event ? MasterToggle() : null;"
+                    [checked]="selection.hasValue() && IsAllSelected()"
+                    [indeterminate]="selection.hasValue() && !IsAllSelected()">
+      </mat-checkbox>
+    </th>
+
+    <td mat-cell  style= "text-align: left" *matCellDef="let row">
+   <!--    Para cada uno de los check box de la columna
+      En el caso de que haya un cambio entonces pasa de seleccionada a no seleccionada
+      o viceversa. Además hay que actualizar el estado del boton
+      El checkbox estará [checked] si la fila está seleccionada
+      Las funciones selection.isSelected(row) y selection.toggle(row) estan predefinidas
+      Lo que se pone en (click) no lo entiendo muy bien pero si no se pone a veces falla
+      (no se queda marcado el checkbox)
+-->
+      <mat-checkbox
+                    (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.toggle(row) : null; "
+                    [checked]="selection.isSelected(row)">
+      </mat-checkbox>
+    </td>
+    </ng-container>
+
+    <!-- Nombre Coleccion Column -->
+    <ng-container matColumnDef="nombreFamilia">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="text-align: left !important;"> Nombre </th>
+      <td mat-cell *matCellDef="let familia" > {{familia.NombreFamilia}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+     <!-- Para que al hacer click se quede la fila marcada -->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+    [ngClass]="{'highlight': selectedRowIndex == row.id}"
+    (click)="highlight(row)"></tr>
+
+  </table>
+  <div class="enColumna">
+    <button style= "width: 50%" *ngIf ="!muestroPublicas" type="button" (click) = "MostrarPublicas()" class="btn Agregar">Mostrar también familias de avatares públicas</button>
+    <button style= "width: 50%" *ngIf ="muestroPublicas" type="button" (click) = "QuitarPublicas()" class="btn Agregar">Quitar familias de avatares públicas</button>
+  </div>
+
+</form>
+<div class="enColumna">
+  <button [disabled]="selection.selected.length ===0" type="button" (click) = "AcabarSeleccion()" class="btn Aceptar">Asignar familias</button>
+</div>
+

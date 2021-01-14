@@ -70,13 +70,14 @@ export class EditarPreguntaDialogComponent implements OnInit {
 
   //COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN LA PREGUNTA
   GuardarPregunta() {
+    // tslint:disable-next-line:max-line-length
     this.peticionesAPI.ModificaPregunta(new Pregunta (this.titulo, this.pregunta, this.tematica, this.respuestaCorrecta, this.respuestaIncorrecta1, this.respuestaIncorrecta2, this.respuestaIncorrecta3, this.feedbackCorrecto, this.feedbackIncorrecto), this.profesorId, this.preguntaEditar.id )
     .subscribe((res) => {
-      if(res != null) {
+      if (res != null) {
         Swal.fire('Pregunta editada correctamente', 'Bien hecho', 'success');
         this.goBack();
-      }else{
-        Swal.fire('Alerta', 'Hay algun problema con el servidor intenelo mas tarde', 'error');
+      } else {
+        Swal.fire('Alerta', 'Hay algun problema con el servidor intentelo mas tarde', 'error');
       }
     })
 

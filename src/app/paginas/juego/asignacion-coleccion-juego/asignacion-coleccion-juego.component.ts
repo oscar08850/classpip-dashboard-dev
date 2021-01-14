@@ -2,15 +2,14 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 // Imports para abrir diálogo mostrar cromos
-import { MatDialog, MatTabGroup } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { DialogMostrarCromosComponent } from './dialog-mostrar-cromos/dialog-mostrar-cromos.component';
 
-import { Coleccion, Juego, Alumno, Equipo, AlumnoJuegoDeColeccion,
- EquipoJuegoDeColeccion} from 'src/app/clases/index';
+import { Coleccion, Juego, Alumno, Equipo} from 'src/app/clases/index';
 // Services
 
    // Services
-import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
+import { SesionService, PeticionesAPIService } from '../../../servicios/index';
 
 @Component({
   selector: 'app-asignacion-coleccion-juego',
@@ -19,7 +18,7 @@ import { SesionService, PeticionesAPIService, CalculosService } from '../../../s
 })
 export class AsignacionColeccionJuegoComponent implements OnInit {
   // Para comunicar el nombre de la colección seleccionada a componente padre
-  @Output() emisorNombreColeccion = new EventEmitter <string>();
+  @Output() emisorColeccion = new EventEmitter <Coleccion>();
   grupoId: number;
   profesorId: number;
 
@@ -42,6 +41,8 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
   selectedRowIndex = -1;
 
   coleccionSeleccionada: Coleccion;
+  muestroPublicas = false;
+  coleccionesPublicas: Coleccion[];
 
   constructor(
                private sesion: SesionService,
@@ -51,18 +52,16 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
   ngOnInit() {
 
     this.profesorId = this.sesion.DameProfesor().id;
-    this.juego = this.sesion.DameJuego();
-   // this.coleccionService.RecibirColeccionDelServicio();
+    this.grupoId = this.sesion.DameGrupo().id;
     this.alumnos = this.sesion.DameAlumnosGrupo();
     this.TraeEquiposDelGrupo();
     this.TraeListaDeColecciones();
-
-    this.grupoId = this.juego.grupoId;
+    this.TraeColeccionesPublicas();
   }
 
   // RECUPERA LOS EQUIPOS DEL GRUPO
   TraeEquiposDelGrupo() {
-    this.peticionesAPI.DameEquiposDelGrupo(this.juego.grupoId)
+    this.peticionesAPI.DameEquiposDelGrupo(this.grupoId)
     .subscribe(equipos => {
       if (equipos !== undefined) {
         this.equipos = equipos;
@@ -96,46 +95,35 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
     });
   }
 
+
+
+  TraeColeccionesPublicas() {
+
+    this.peticionesAPI.DameColeccionesPublicas()
+    .subscribe (publicas => {
+      // me quedo con los públicos de los demás
+      const publicasDeOtros = publicas.filter (coleccion => coleccion.profesorId !== Number(this.profesorId));
+      // traigo los profesores para añadir a los publicos el nombre del propietario
+      this.peticionesAPI.DameProfesores ()
+      .subscribe (profesores => {
+        publicasDeOtros.forEach (coleccion => {
+          const propietario = profesores.filter (profesor => profesor.id === coleccion.profesorId)[0];
+          coleccion.Nombre = coleccion.Nombre + '(' + propietario.Nombre + ' ' + propietario.Apellido + ')';
+        });
+        this.coleccionesPublicas = publicasDeOtros;
+
+      });
+    });
+  }
+
   ColeccionSeleccionada(coleccion: Coleccion) {
     // Comunico el nombre de la colección seleccionada al padre
     this.coleccionSeleccionada = coleccion;
-    this.emisorNombreColeccion.emit (coleccion.Nombre);
+    this.emisorColeccion.emit (coleccion);
     this.isDisabled = false;
     console.log(this.coleccionSeleccionada);
   }
 
-  AsignarColeccionJuego() {
-    // Añadimos la colección elegida al juego de colección (que ya se había creado)
-    this.peticionesAPI.CompletaJuegoDeColeccion(new Juego (this.juego.Tipo, this.juego.Modo, this.coleccionSeleccionada.id,
-      this.juego.JuegoActivo, this.juego.NumeroTotalJornadas, this.juego.TipoJuegoCompeticion,
-      this.juego.NumeroParticipantesPuntuan, this.juego.Puntos, this.juego.NombreJuego),
-     this.grupoId, this.juego.id).subscribe(res => {
-      this.InscribirParticipantesJuego();
-      console.log(res);
-     });
-  }
-
-  InscribirParticipantesJuego() {
-
-    if (this.juego.Modo === 'Individual') {
-      console.log('voy a inscribir alumnos');
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.alumnos.length; i++) {
-        console.log(this.alumnos[i]);
-        this.peticionesAPI.InscribeAlumnoJuegoDeColeccion(new AlumnoJuegoDeColeccion (this.alumnos[i].id, this.juego.id))
-        .subscribe(alumnoJuego => console.log('alumnos inscritos correctamente en el juego de coleccion'));
-      }
-    } else {
-      console.log('voy a inscribir equipos');
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < this.equipos.length; i++) {
-        console.log(this.equipos[i]);
-        this.peticionesAPI.InscribeEquipoJuegoDeColeccion(new EquipoJuegoDeColeccion(this.equipos[i].id, this.juego.id))
-        .subscribe(equiposJuego => console.log(equiposJuego));
-      }
-    }
-
-  }
 
   AbrirDialogoMostrarCromos(coleccionSeleccionada: Coleccion): void {
 
@@ -147,5 +135,16 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
       }
     });
   }
+
+  MostrarPublicas() {
+    this.muestroPublicas = true;
+    this.datasourceColecciones = new MatTableDataSource(this.colecciones.concat (this.coleccionesPublicas));
+  }
+
+  QuitarPublicas() {
+    this.muestroPublicas = false;
+    this.datasourceColecciones = new MatTableDataSource(this.colecciones);
+  }
+
 
  }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 // Clases
-import { Juego } from '../../clases/index';
+import { Juego, JuegoDeAvatar } from '../../clases/index';
 import { Location } from '@angular/common';
 
 // Services

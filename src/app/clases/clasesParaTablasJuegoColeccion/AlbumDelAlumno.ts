@@ -1,6 +1,7 @@
 export class AlbumDelAlumno {
   Nombre: string;
-  Imagen: string;
+  ImagenDelante: string;
+  ImagenDetras: string;
   Probabilidad: string;
   Nivel: string;
   id: number;
@@ -8,10 +9,11 @@ export class AlbumDelAlumno {
   // tslint:disable-next-line:semicolon
   Tengi: boolean
 
-  constructor(nombre?: string, imagen?: string, probabilidad?: string, nivel?: string, tengi?: boolean) {
+  constructor(nombre?: string, probabilidad?: string, nivel?: string, tengi?: boolean,  imagenDelante?: string,  imagenDetras?: string) {
 
     this.Nombre = nombre;
-    this.Imagen = imagen;
+    this.ImagenDelante = imagenDelante;
+    this.ImagenDetras = imagenDetras;
     this.Probabilidad = probabilidad;
     this.Nivel = nivel;
     this.Tengi = tengi;

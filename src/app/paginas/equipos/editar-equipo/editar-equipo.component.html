@@ -11,7 +11,7 @@ R
           </p>
           <div>
               <input #file id = "input" type="file" accept= 'image/*' (change)="Mostrar($event)" style="display:none">
-              <img class ="logo" *ngIf="imagenLogo" hight = "130" width = "130" mat-card-image [src]="imagenLogo" >
+              <img  *ngIf="imagenLogo" style = "width: 130px; height: 130px;" mat-card-image [src]="imagenLogo" >
           </div>
           <button type="button"  class="btn Aceptar"  (click)= "EditarEquipo()">Aceptar Cambios <i class="material-icons">
               check </i></button>
@@ -20,6 +20,9 @@ R
           <button (click) = "ActivarInput()" type="button" class="btn Next">
              Agregar logo<i class="material-icons">add_photo_alternate</i>
           </button>
+          <button [disabled] ="!imagenLogo" (click) = "QuitarLogo()" type="button" class="btn Eliminar">
+            Quitar logo
+         </button>
 
           <button type="button" class="btn Agregar" (click) = AbrirDialogoAgregarAlumnosEquipo()>
              Agregar alumno <i class="material-icons">group_add</i>

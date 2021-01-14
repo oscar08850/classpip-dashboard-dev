@@ -1,0 +1,118 @@
+<div class="subtitulo" align="center">Informacion Juego</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<br>
+<div *ngIf="(JuegoActivo || JuegoTerminado)" class = "contenedor" >
+  <div class = "enColumna">
+    <form>
+        <mat-card class= "cardBorder">
+          <mat-card-content>
+                  <p style="font-size: medium;">
+                    <span style="font-weight: bold; font-size: medium;">Nombre del Juego: </span>
+                    {{NombreJuego}}
+                  </p>
+                <div>
+                  <p style="font-size: medium;">
+                    <span style="font-weight: bold; font-size: medium;">Puntuación correcta: </span>
+                    {{PuntuacionCorrecta}}
+                  </p>
+                </div>
+                <div>
+                  <p style="font-size: medium;">
+                    <span style="font-weight: bold; font-size: medium;">Puntuación Incorrecta: </span>
+                    {{PuntuacionIncorrecta}}
+                  </p>
+                </div>
+                <div>
+                  <p style="font-size: medium;">
+                    <span style="font-weight: bold; font-size: medium;">Presentación: </span>
+                    {{Presentacion}}
+                  </p>
+                </div>
+                <div>
+                  <p style="font-size: medium;">
+                    <span style="font-weight: bold; font-size: medium;">Juego Activo: </span>
+                    {{JuegoActivo}}
+                  </p>
+                </div>
+                <div>
+                  <p style="font-size: medium;">
+                    <span style="font-weight: bold; font-size: medium;">Juego Termiando: </span>
+                    {{JuegoTerminado}}
+                  </p>
+                </div>
+                <div>
+                  <p style="font-size: medium;">
+                    <span style="font-weight: bold; font-size: medium;">Cuestionario: </span>
+                    {{TituloCuestionario}}
+                  </p>
+                </div>
+                <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()"> Cerrar </button>
+                </div>
+          </mat-card-content>
+        </mat-card>
+      </form>
+  </div>
+</div>
+<div *ngIf="(!JuegoActivo && !JuegoTerminado)" class= "contenedor">
+  <div class = "enColumna">
+    <form [formGroup]="myForm">
+        <mat-card class= "cardBorder">
+          <mat-card-content>
+                <mat-form-field style=  "width: 100%;">
+                  <mat-label>Nombre del Juego</mat-label>
+                  <input (keyup)="Disabled()" matInput formControlName="NombreJuego" required [(ngModel)]="NombreJuego">
+                </mat-form-field>
+                <div>
+                  <mat-form-field style=  "width: 100%;">
+                    <mat-label>Puntuacion Correcta</mat-label>
+                      <input (keyup)="Disabled()" matInput formControlName="PuntuacionCorrecta" required [(ngModel)]="PuntuacionCorrecta">
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field style=  "width: 100%;">
+                    <mat-label>Puntuacion Incorrecta</mat-label>
+                      <input (keyup)="Disabled()" matInput formControlName="PuntuacionIncorrecta" required [(ngModel)]="PuntuacionIncorrecta">
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field style="width: 100%;">
+                    <mat-label>Presentacion</mat-label>
+                    <select (click)="Disabled()" matNativeControl formControlName="Presentacion" [(ngModel)]="Presentacion">
+                      <option *ngFor="let presentacion of Presentaciones" [value]="presentacion">
+                        {{presentacion}}
+                      </option>
+                    </select>
+                  </mat-form-field>
+                </div>
+                <div>
+                  <p style="font-size: medium;">
+                    <span style="font-weight: bold; font-size: medium;">Juego Activo: </span>
+                    {{JuegoActivo}}
+                  </p>
+                </div>
+                <div>
+                  <p style="font-size: medium;">
+                    <span style="font-weight: bold; font-size: medium;">Juego Terminado: </span>
+                    {{JuegoTerminado}}
+                  </p>
+                </div>
+                <div>
+                  <p style="font-size: medium;">
+                    <span style="font-weight: bold; font-size: medium;">Cuestionario: </span>
+                    {{TituloCuestionario}}
+                  </p>
+                </div>
+                <div class="btnCambiarStep">
+                  <button mat-raised-button class="btn Back" style="margin: 5px" (click) = "goBack();"> Cerrar </button>
+                  <button [disabled]="isDisabled" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "GuardarCambios();"> Guardar </button>
+                </div>
+                <div>
+                  <p style="font-size: smaller;">
+                    En el caso de que se desee modificar el cuestionario escogido, elimine el juego y creelo de nuevo
+                  </p>
+                </div>
+          </mat-card-content>
+        </mat-card>
+      </form>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 
 <div class="titulo">{{juegoSeleccionado.NombreJuego}}</div>
-<div class="subtitulo">{{juegoSeleccionado.Tipo}} {{juegoSeleccionado.Modo}}</div>
+<div *ngIf = "juegoSeleccionado.Asignacion !== 'Individual'" class="subtitulo">{{juegoSeleccionado.Tipo}} {{juegoSeleccionado.Modo}}</div>
+<div *ngIf = "juegoSeleccionado.Asignacion === 'Individual'" class="subtitulo">{{juegoSeleccionado.Tipo}} {{juegoSeleccionado.Modo}} con asignación individual</div>
 <mat-divider class="lineaDivisoria"></mat-divider>
 
 <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Puntos'">
@@ -18,6 +19,32 @@
 <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Competición Fórmula Uno'">
   <app-juego-formula-uno-seleccionado-activo></app-juego-formula-uno-seleccionado-activo>
 </div>
+
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Avatar'">
+  <app-juego-de-avatar-seleccionado-activo></app-juego-de-avatar-seleccionado-activo>
+</div>
+<div>
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuestionario'">
+    <app-juego-de-cuestionario-seleccionado-activo></app-juego-de-cuestionario-seleccionado-activo>
+</div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Geocaching'">
+  <app-juego-de-geocaching-seleccionado-activo></app-juego-de-geocaching-seleccionado-activo>
+</div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Votación Uno A Todos'">
+  <app-juego-de-votacion-uno-atodos-seleccionado-activo></app-juego-de-votacion-uno-atodos-seleccionado-activo>
+</div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Votación Todos A Uno'">
+  <app-juego-de-votacion-todos-auno-seleccionado-activo></app-juego-de-votacion-todos-auno-seleccionado-activo>
+</div>
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuestionario de Satisfacción'">
+  <app-juego-de-cuestionario-satisfaccion-activo></app-juego-de-cuestionario-satisfaccion-activo>
+</div>
+
 
 <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver</button>
 </div>

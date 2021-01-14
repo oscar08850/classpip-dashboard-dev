@@ -1,0 +1,125 @@
+<div class="titulo">Crear nueva rúbrica</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class = "contenedor">
+  <mat-tab-group>
+
+    <mat-tab label="Cargar rubrica desde fichero">
+      <div class= "enColumna" *ngIf ="advertencia" style = "border-color: red;">
+        <!-- para preservar los espacios y los tabs del texto -->
+        <pre>
+        <br>
+
+        El fichero <strong>JSON</strong>
+        con la información sobre la rúbrica debe tener el formato mostrado en el siguiente ejemplo.
+
+        {{'{'}}
+          "Nombre": "Presentacion oral",
+          "Descripcion": "Para evaluar presentaciones orales",
+          "Criterios": [
+                          {{'{'}}
+                            "Nombre": "Lenguaje corporal",
+                            "Elementos": [  "Mira a toda la audiencia",
+                                            "No permanece inmóvil"
+                                          ]
+                          {{'}'}},
+                          {{'{'}}
+                            OTROS CRITERIOS
+                          {{'}'}}
+                        ]
+
+        {{'}'}}
+
+
+        </pre>
+
+        <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
+          Ocultar advertencia
+        </button>
+      </div>
+      <div class = "enFila">
+        <div style = "width: 40%">
+          <input #file id = "inputInfo" type="file" accept= 'application/JSON;' accept-charset="UTF-8" (change)="SeleccionarFicheroRubrica($event)" style="display:none">
+          <button style = "height:100px; width:80%" (click) = "ActivarInputInfo()" type="button" class="btn Agregar">
+            Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
+          </button>
+        </div>
+        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "rubricaCargada">
+          <h3>Datos de la rúbrica</h3>
+          <div class = "enFila" style = "width: 90%">
+            <div>
+              <p> Nombre: <strong>{{rubrica.Nombre}}</strong></p>
+              <p> Descripción: <strong>{{rubrica.Descripcion}}</strong></p>
+              <p> Número de criterios: <strong>{{rubrica.Criterios.length}}</strong></p>
+              <br>
+            </div>
+          </div>
+          <div class = "enFila" style = "width:50%">
+            <button (click) = "RegistrarRubrica()" type="button" class="btn Agregar">
+              Guardar
+            </button>
+            <button (click) = "goBack()" type="button" class="btn Eliminar">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Crear rubrica paso a paso">
+      <mat-card-content>
+        <mat-horizontal-stepper [linear]="true" #stepper>
+          <!-- PASO 1 -->
+          <mat-step [stepControl]="firstFormGroup">
+            <!-- Usare un primer formulario para introducir nombre y la descripción -->
+            <form [formGroup]="firstFormGroup">
+              <!-- El nombre introducido se guardará en la variable nombre del formulario -->
+              <ng-template matStepLabel>Nombre</ng-template>
+              <mat-form-field style= "width: 40%">
+                <mat-label>Nombre</mat-label>
+                <!-- En cuanto escriba algo llamo a la función Disabled para decidir si muestro
+                ya el boton de siguiente (que solo se muestra si se ha escrito algo en los dos campos) -->
+                  <input  (keyup)="BotonPaso1()" matInput placeholder="Nombre de la rúbrica" formControlName="nombreRubrica" required>
+              </mat-form-field>
+              <!-- Pongo una DIV ahora para que la edad la ponga debajo del nombre, y no al lado -->
+              <div>
+                <ng-template matStepLabel>Descripcion</ng-template>
+                <mat-form-field style= "width: 40%">
+                  <mat-label>Descripcion</mat-label>
+                    <input  (keyup)="BotonPaso1()" matInput placeholder="Añade una descripción" formControlName="descripcionRubrica" required>
+                </mat-form-field>
+              </div>
+
+              <div class="btnCambiarStep">
+                <button [disabled]="isDisabled"  mat-raised-button class="btn Next"  (click)= CrearRubrica() matStepperNext>Siguiente
+                  <i class="material-icons">
+                    navigate_next</i>
+                </button>
+              </div>
+
+            </form>
+          </mat-step>
+
+          <!-- SEGUNDO PASO -->
+          <mat-step>
+            <ng-template matStepLabel>Añadir Criterios</ng-template>
+            <div>
+              <div>
+                <button type="button" class="btn Agregar" (click)= "AbrirDialogoAgregarCriterios()">
+                  Añadir Criterios
+                  <i class="material-icons">
+                  post_add </i></button>
+              </div>
+              <div class="btnCambiarStep">
+                <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                  Atrás</button>
+                <button  mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                  Finalizar
+                </button>
+              </div>
+            </div>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </mat-card-content>
+    </mat-tab>
+  </mat-tab-group>
+</div>

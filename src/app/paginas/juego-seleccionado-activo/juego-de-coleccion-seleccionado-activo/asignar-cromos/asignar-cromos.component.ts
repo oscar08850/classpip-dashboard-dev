@@ -11,12 +11,12 @@ import Swal from 'sweetalert2';
 import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion,
  Album, AlbumEquipo, Coleccion, Cromo, AlumnoJuegoDePuntos } from '../../../../clases/index';
 
-// Services
-import { JuegoService, EquipoService, ColeccionService, JuegoDeColeccionService } from '../../../../servicios/index';
 
-import {SesionService, PeticionesAPIService, CalculosService} from '../../../../servicios/index';
+import {SesionService, PeticionesAPIService, CalculosService, ComServerService} from '../../../../servicios/index';
 
 import { Location } from '@angular/common';
+
+import * as URL from '../../../../URLs/urls';
 
 @Component({
   selector: 'app-asignar-cromos',
@@ -53,7 +53,8 @@ export class AsignarCromosComponent implements OnInit {
 
   cromoSeleccionadoId: number;
   cromoSeleccionado: Cromo;
-  imagenCromoSeleccionado: string;
+  imagenDelanteCromoSeleccionado: string;
+  imagenDetrasCromoSeleccionado: string;
 
   alumnosEquipo: Alumno[];
 
@@ -105,13 +106,11 @@ export class AsignarCromosComponent implements OnInit {
   tercerEquipo: Equipo;
   mostrarLista = true;
 
-  constructor( private juegoService: JuegoService,
-               private equipoService: EquipoService,
-               private coleccionService: ColeccionService,
+  constructor(
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
                private calculos: CalculosService,
-               private juegoDeColeccionService: JuegoDeColeccionService,
+               private comService: ComServerService,
                public dialog: MatDialog,
                private http: Http,
                public location: Location) { }
@@ -125,14 +124,30 @@ export class AsignarCromosComponent implements OnInit {
       this.alumnosDelJuego = this.sesion.DameAlumnosDelJuego();
       this.RecuperarInscripcionesAlumnoJuego();
       this.dataSource = new MatTableDataSource(this.alumnosDelJuego);
-    } else {
+    } else if (this.juegoSeleccionado.Modo === 'Equipos') {
       this.equiposDelJuego = this.sesion.DameEquiposDelJuego();
       this.RecuperarInscripcionesEquiposJuego();
-      this.dataSource = new MatTableDataSource(this.equiposDelJuego);
+      if (this.juegoSeleccionado.Asignacion === 'Individual') {
+        this.alumnosDelJuego = this.sesion.DameAlumnosDelJuego();
+        this.dataSource = new MatTableDataSource(this.alumnosDelJuego);
+      } else {
+        this.dataSource = new MatTableDataSource(this.equiposDelJuego);
+      }
     }
     // Necesitaré los juegos de puntos de este grupo por si quiere
     // asignar cromos segun los puntos
     this.DameJuegosPuntos ();
+  }
+
+
+  HayQueMostrarAlumnos(): boolean {
+    // tslint:disable-next-line:max-line-length
+    const res = ((this.juegoSeleccionado.Modo === 'Individual') || (this.juegoSeleccionado.Asignacion === 'Individual')) && (this.alumnosDelJuego !== undefined);
+    return res;
+  }
+  HayQueMostrarEquipos(): boolean {
+    const res = (this.juegoSeleccionado.Asignacion === 'Equipo') && this.equiposDelJuego !== undefined;
+    return res;
   }
 
 
@@ -187,11 +202,30 @@ export class AsignarCromosComponent implements OnInit {
   DameJuegosPuntos() {
     this.peticionesAPI.DameJuegoDePuntosGrupo (this.sesion.DameGrupo().id)
     .subscribe ( juegos => {
+      this.juegosPuntos = [];
+      console.log ('juegos de puntos');
+      console.log (juegos);
+      juegos.forEach (juego => {
+        if ((juego.Modo === 'Individual') && juego.JuegoActivo) {
+          console.log ('juego individual');
+          if ((this.juegoSeleccionado.Modo === 'Individual') || (this.juegoSeleccionado.Asignacion === 'Individual')) {
+            this.juegosPuntos.push (juego);
+          }
+        } else if ((juego.Modo === 'Equipos') && juego.JuegoActivo) {
+          console.log ('juego equipos');
+          if ((this.juegoSeleccionado.Modo === 'Equipos') && (this.juegoSeleccionado.Asignacion === 'Equipo')) {
+            this.juegosPuntos.push (juego);
+          }
+        }
+      });
 
-      this.juegosPuntos = juegos.filter (j => j.Modo === this.juegoSeleccionado.Modo && j.JuegoActivo);
-      console.log ('HHHHH ' + this.juegosPuntos.length);
-    }
-    );
+
+      console.log ('juegos seleccionados');
+      console.log (this.juegosPuntos);
+      console.log ('mi juego es');
+      console.log (this.juegoSeleccionado);
+
+    });
   }
 
   /* Esta función decide si el boton debe estar activo (si hay al menos
@@ -270,7 +304,6 @@ export class AsignarCromosComponent implements OnInit {
     this.peticionesAPI.DameInscripcionesAlumnoJuegoDeColeccion(this.juegoSeleccionado.id)
     .subscribe(inscripciones => {
       this.inscripcionesAlumnos = inscripciones;
-      console.log(this.inscripcionesAlumnos);
     });
   }
 
@@ -280,22 +313,18 @@ export class AsignarCromosComponent implements OnInit {
     this.peticionesAPI.DameInscripcionesEquipoJuegoDeColeccion(this.juegoSeleccionado.id)
     .subscribe(inscripciones => {
       this.inscripcionesEquipos = inscripciones;
-      console.log(this.inscripcionesEquipos);
-      this.datasourceEquipo = new MatTableDataSource(this.equiposDelJuego);
-      // this.OrdenarPorPuntosEquipos();
-      // this.TablaClasificacionTotal();
     });
   }
 
   AsignarCromo() {
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
-      console.log('el juego es individual');
       this.AsignarCromoAlumnos(this.cromoSeleccionadoId);
 
-    } else {
-      console.log('El juego es en equipo');
+    } else if (this.juegoSeleccionado.Asignacion === 'Equipo') {
       this.AsignarCromoEquipos(this.cromoSeleccionadoId);
+    } else {
+      this.AsignarCromoEquiposDeAlumnosElegidos (this.cromoSeleccionadoId);
     }
 
 
@@ -321,10 +350,15 @@ export class AsignarCromosComponent implements OnInit {
                         console.log(res);
 
                       });
-
+                      // Notificación para el alumno
+                      console.log ('envio notificación al alumno')
+                      this.comService.EnviarNotificacionIndividual (
+                        alumnoJuegoDeColeccion.alumnoId,
+                        'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
                     }
             }
     );
+    Swal.fire('OK', 'Cromo asignado a los alumnos elegidos', 'success');
   }
 
 
@@ -347,47 +381,142 @@ export class AsignarCromosComponent implements OnInit {
 
                           console.log(res);
                         });
+                        // Notificación para los miembros del equipo
+                        console.log ('envio notificación los miembros del equipo');
+                        this.comService.EnviarNotificacionEquipo (
+                            equipo.id,
+                            'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
+                        );
                 }
             }
     );
+    Swal.fire('OK', 'Cromo asignado a los equipos elegidos', 'success');
+
   }
+
+
+  AsignarCromoEquiposDeAlumnosElegidos(cromoSeleccionado) {
+
+    this.dataSource.data.forEach
+    (row => {
+                if (this.selection.isSelected(row))  {
+                        let alumno: Alumno;
+                        alumno = row;
+                        // Buscamos el equipo del juego al que pertenece el alumno
+                        this.peticionesAPI.DameEquiposDelAlumno (alumno.id)
+                        .subscribe (equiposDelAlumno => {
+                          // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso del
+                          // alumno
+                          const equipo = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
+                          let equipoJuegoDeColeccion: EquipoJuegoDeColeccion;
+                          equipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0];
+                          console.log(equipoJuegoDeColeccion);
+
+                          this.peticionesAPI.AsignarCromoEquipo(new AlbumEquipo (equipoJuegoDeColeccion.id, cromoSeleccionado))
+                          .subscribe(res => {
+
+                            console.log(res);
+                          });
+                          // Notificación para los miembros del equipo
+                          console.log ('envio notificación los miembros del equipo');
+                          this.comService.EnviarNotificacionEquipo (
+                              equipo.id,
+                              'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
+                          );
+                        });
+                }
+            }
+    );
+    Swal.fire('OK', 'Cromo asignado a los equipos de los alumnos elegidos', 'success');
+
+  }
+
 
   AsignarCromosAleatorios() {
-    // const randomIndex = Math.floor(Math.random() * this.cromosColeccion.length);
-    // console.log(randomIndex);
-    // const randomCromo = this.cromosColeccion[randomIndex];
-    // console.log(randomCromo);
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
-      console.log('el juego es individual');
       this.AsignarCromosAleatoriosAlumno();
 
-    } else {
-      console.log('El juego es en equipo');
+    } else if (this.juegoSeleccionado.Asignacion === 'Equipo') {
       this.AsignarCromosAleatoriosEquipo();
-    }
-  }
-
-  AsignarAleatoriamenteCromosAleatorios() {
-    if (this.juegoSeleccionado.Modo === 'Individual') {
-      console.log('el juego es individual');
-      this.AsignarCromosAleatoriosAlumnoAleatorio();
-
     } else {
-      console.log('El juego es en equipo');
-      this.AsignarCromosAleatoriosEquipoAleatorio();
+      this.AsignarCromosAleatoriosEquiposDeAlumnosElegidos ();
     }
   }
-
 
   AsignarCromosAleatoriosAlumno() {
     this.dataSource.data.forEach
     (row =>  {  if (this.selection.isSelected(row))  {
+                const alumno: Alumno = row;
                 this.calculos.AsignarCromosAleatoriosAlumno (
-                  row, this.inscripcionesAlumnos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
-                  );
+                  alumno, this.inscripcionesAlumnos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
+                );
+                  // Notificación para el alumno
+                console.log ('envio notificación al alumno');
+                this.comService.EnviarNotificacionIndividual (
+                      alumno.id,
+                      'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
                 }
-          });
+    });
+    Swal.fire('OK', 'Cromos aleatorios asignados a los alumnos elegidos', 'success');
+  }
+  AsignarCromosAleatoriosEquipo() {
+
+    this.dataSource.data.forEach
+    (row => {
+              if (this.selection.isSelected(row))  {
+                const equipo: Equipo = row;
+                // tslint:disable-next-line:max-line-length
+                this.calculos.AsignarCromosAleatoriosEquipo (equipo, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
+                console.log ('envio notificación los miembros del equipo');
+                this.comService.EnviarNotificacionEquipo (
+                    equipo.id,
+                    'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
+                );
+              }
+    });
+    Swal.fire('OK', 'Cromos aleatorios asignados a los equipos elegidos', 'success');
+  }
+
+  AsignarCromosAleatoriosEquiposDeAlumnosElegidos() {
+    this.dataSource.data.forEach
+    (row =>  {
+            if (this.selection.isSelected(row))  {
+                  let alumno: Alumno;
+                  alumno = row;
+                  // Buscamos el equipo del juego al que pertenece el alumno
+                  this.peticionesAPI.DameEquiposDelAlumno (alumno.id)
+                  .subscribe (equiposDelAlumno => {
+                    // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso del
+                    // alumno
+                    const equipo = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
+                    let equipoJuegoDeColeccion: EquipoJuegoDeColeccion;
+                    equipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0];
+
+                    // tslint:disable-next-line:max-line-length
+                    this.calculos.AsignarCromosAleatoriosEquipo (equipo, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
+                    // Notificación para los miembros del equipo
+                    console.log ('envio notificación los miembros del equipo');
+                    this.comService.EnviarNotificacionEquipo (
+                        equipo.id,
+                        'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
+                    );
+                  });
+            }
+    });
+    Swal.fire('OK', 'Cromos aleatorios asignados a los equipos de los alumnos elegidos', 'success');
+  }
+
+  AsignarAleatoriamenteCromosAleatorios() {
+
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      this.AsignarCromosAleatoriosAlumnoAleatorio();
+
+    } else if (this.juegoSeleccionado.Asignacion === 'Equipo') {
+      this.AsignarCromosAleatoriosEquipoAleatorio();
+    } else {
+      this.AsignarCromosAleatoriosEquipoDeAlumnoAleatorio ();
+    }
   }
 
   AsignarCromosAleatoriosAlumnoAleatorio() {
@@ -397,7 +526,12 @@ export class AsignarCromosComponent implements OnInit {
     this.calculos.AsignarCromosAleatoriosAlumno (
             this.alumnoElegido, this.inscripcionesAlumnos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
     );
-    Swal.fire(this.alumnoElegido.Nombre + ' Enhorabuena', 'Cromo asignado correctamente', 'success');
+    // Notificación para el alumno
+    console.log ('envio notificación al alumno');
+    this.comService.EnviarNotificacionIndividual (
+            this.alumnoElegido.id,
+            'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
+    Swal.fire('OK', 'Cromos aleatorios asignados a: ' + this.alumnoElegido.Nombre, 'success');
   }
 
   AsignarCromosAleatoriosEquipoAleatorio() {
@@ -407,19 +541,40 @@ export class AsignarCromosComponent implements OnInit {
     this.calculos.AsignarCromosAleatoriosEquipo (
             this.equipoElegido, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
     );
-    Swal.fire(this.equipoElegido.Nombre + ' Enhorabuena', 'Cromo asignado correctamente', 'success');
+    console.log ('envio notificación los miembros del equipo');
+    this.comService.EnviarNotificacionEquipo (
+        this.equipoElegido.id,
+        'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
+    );
+    Swal.fire('OK', 'Cromos aleatorios asignados al equipo: ' + this.equipoElegido.Nombre, 'success');
   }
 
-  AsignarCromosAleatoriosEquipo() {
+  AsignarCromosAleatoriosEquipoDeAlumnoAleatorio() {
+    const numeroAlumnos = this.alumnosDelJuego.length;
+    const elegido = Math.floor(Math.random() * numeroAlumnos);
+    const alumno = this.alumnosDelJuego[elegido];
 
-    this.dataSource.data.forEach
-    (row => {
-              if (this.selection.isSelected(row))  {
-                // tslint:disable-next-line:max-line-length
-                this.calculos.AsignarCromosAleatoriosEquipo (row, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
-              }
-    });
+    // Buscamos el equipo del juego al que pertenece el alumno
+    this.peticionesAPI.DameEquiposDelAlumno (alumno.id)
+                  .subscribe (equiposDelAlumno => {
+                    // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso del
+                    // alumno
+                    const equipo = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
+                    let equipoJuegoDeColeccion: EquipoJuegoDeColeccion;
+                    equipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0];
+                    this.calculos.AsignarCromosAleatoriosEquipo (
+                      equipo, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
+                    );
+                    Swal.fire('OK', 'Cromos aleatorios asignados al equipo de: ' + alumno.Nombre, 'success');
+                    console.log ('envio notificación los miembros del equipo');
+                    this.comService.EnviarNotificacionEquipo (
+                        equipo.id,
+                        'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
+                    );
+                  });
   }
+
+
 
   AlumnosDelEquipo(equipo: Equipo) {
     console.log(equipo);
@@ -453,15 +608,28 @@ export class AsignarCromosComponent implements OnInit {
         this.calculos.AsignarCromosAleatoriosAlumno (
           this.primerAlumno, this.inscripcionesAlumnos, this.cromosParaPrimero, this.probabilidadCromos, this.cromosColeccion
         );
+        console.log ('envio notificación al alumno');
+        this.comService.EnviarNotificacionIndividual (
+                this.primerAlumno.id,
+                'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
+
         this.calculos.AsignarCromosAleatoriosAlumno (
           this.segundoAlumno, this.inscripcionesAlumnos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion
         );
+        this.comService.EnviarNotificacionIndividual (
+                this.segundoAlumno.id,
+                'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
         this.calculos.AsignarCromosAleatoriosAlumno (
           this.tercerAlumno, this.inscripcionesAlumnos, this.cromosParaTercero, this.probabilidadCromos, this.cromosColeccion
         );
+        this.comService.EnviarNotificacionIndividual (
+          this.tercerAlumno.id,
+          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
+        Swal.fire('OK', 'Cromos aleatorios asignados a los tres mejores alumnos en el juego de puntos elegido: ', 'success');
+
       });
 
-    } else {
+    } else if (this.juegoSeleccionado.Asignacion === 'Equipo') {
       this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos(this.juegoPuntosSeleccionadoId)
       .subscribe(inscripciones => {
         // tslint:disable-next-line:only-arrow-functions
@@ -477,14 +645,84 @@ export class AsignarCromosComponent implements OnInit {
         this.calculos.AsignarCromosAleatoriosEquipo (
           this.primerEquipo, this.inscripcionesEquipos, this.cromosParaPrimero, this.probabilidadCromos, this.cromosColeccion
         );
+        this.comService.EnviarNotificacionEquipo (
+          this.primerEquipo.id,
+          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
+        );
         this.calculos.AsignarCromosAleatoriosEquipo (
           this.segundoEquipo, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion
+        );
+        this.comService.EnviarNotificacionEquipo (
+          this.segundoEquipo.id,
+          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
         );
         this.calculos.AsignarCromosAleatoriosEquipo (
           this.tercerEquipo, this.inscripcionesEquipos, this.cromosParaTercero, this.probabilidadCromos, this.cromosColeccion
         );
+        this.comService.EnviarNotificacionEquipo (
+          this.tercerEquipo.id,
+          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
+        );
+        Swal.fire('OK', 'Cromos aleatorios asignados a los tres mejores equipos en el juego de puntos elegido: ', 'success');
+
       });
 
+
+    } else {
+    // el juego es de equipo pero con asignación individual
+    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(this.juegoPuntosSeleccionadoId)
+    .subscribe(inscripciones => {
+      // tslint:disable-next-line:only-arrow-functions
+      const ranking = inscripciones.sort(function(obj1, obj2) {
+        return obj2.PuntosTotalesAlumno - obj1.PuntosTotalesAlumno;
+      });
+      // Obtengo los tres primeros alumnos del ranking (atención porque el ranking solo
+      // tiene los identificadores de los alumnos y a partir de ellos tengo que conseguir los alumnos)
+      this.primerAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[0].alumnoId)[0];
+      this.segundoAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[1].alumnoId)[0];
+      this.tercerAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[2].alumnoId)[0];
+
+      // Buscamos el equipo del juego al que pertenece cada uno de los alumnos para asignarle los cromos
+      this.peticionesAPI.DameEquiposDelAlumno (this.primerAlumno.id)
+      .subscribe (equiposDelAlumno => {
+        // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso de alumno
+        const equipoPrimerAlumno = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
+        this.calculos.AsignarCromosAleatoriosEquipo (
+          equipoPrimerAlumno, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion
+        );
+        this.comService.EnviarNotificacionEquipo (
+          equipoPrimerAlumno.id,
+          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
+        );
+      });
+
+      this.peticionesAPI.DameEquiposDelAlumno (this.segundoAlumno.id)
+      .subscribe (equiposDelAlumno => {
+        // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso de alumno
+        const equipoSegundoAlumno = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
+        this.calculos.AsignarCromosAleatoriosEquipo (
+          equipoSegundoAlumno, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion
+        );
+        this.comService.EnviarNotificacionEquipo (
+          equipoSegundoAlumno.id,
+          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
+        );
+      });
+
+      this.peticionesAPI.DameEquiposDelAlumno (this.tercerAlumno.id)
+      .subscribe (equiposDelAlumno => {
+        // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso de alumno
+        const equipoTercerAlumno = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
+        this.calculos.AsignarCromosAleatoriosEquipo (
+          equipoTercerAlumno, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion
+        );
+        this.comService.EnviarNotificacionEquipo (
+          equipoTercerAlumno.id,
+          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
+        );
+      });
+      Swal.fire('OK', 'Cromos aleatorios asignados a los  equipos de los tres mejores alumnos en el juego de puntos elegido: ', 'success');
+    });
 
     }
 
@@ -506,7 +744,6 @@ export class AsignarCromosComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.AsignarCromo();
-        Swal.fire('Asignado', 'Cromo asignado correctamente', 'success');
       }
     });
   }
@@ -524,7 +761,6 @@ export class AsignarCromosComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.AsignarCromosAleatorios();
-        Swal.fire('Asignado', 'Cromo asignado correctamente', 'success');
       }
     });
   }
@@ -558,7 +794,6 @@ export class AsignarCromosComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.AsignarCromosMejoresRanking();
-        Swal.fire('Asignado', 'Cromo asignado correctamente', 'success');
       }
     });
 
@@ -567,21 +802,14 @@ export class AsignarCromosComponent implements OnInit {
     // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo
     GET_ImagenCromo() {
 
-      if (this.cromoSeleccionado.Imagen !== undefined ) {
-        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.peticionesAPI.DameImagenCromo (this.cromoSeleccionado.Imagen)
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+      if (this.cromoSeleccionado.ImagenDelante !== undefined ) {
+        this.imagenDelanteCromoSeleccionado = URL.ImagenesCromo + this.cromoSeleccionado.ImagenDelante;
 
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenCromoSeleccionado = reader.result.toString();
-          }, false);
+      }
 
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-      });
+      if (this.cromoSeleccionado.ImagenDetras !== undefined ) {
+        this.imagenDetrasCromoSeleccionado = URL.ImagenesCromo + this.cromoSeleccionado.ImagenDetras;
+
       }
   }
   goBack() {

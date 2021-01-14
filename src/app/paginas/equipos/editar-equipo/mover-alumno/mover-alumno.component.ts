@@ -7,8 +7,8 @@ import { DialogoConfirmacionComponent } from '../../../COMPARTIDO/dialogo-confir
 
 import { Alumno, Equipo, AsignacionEquipo } from 'src/app/clases/index';
 
-// Servicios
-import { GrupoService, EquipoService, AlumnoService } from '../../../../servicios/index';
+
+
 import {SesionService, PeticionesAPIService, CalculosService} from '../../../../servicios/index';
 import {MatTableDataSource} from '@angular/material/table';
 

@@ -42,3 +42,41 @@ export * from './PreguntaDelCuestionario';
 export * from './Cuestionario';
 export * from './clasesParaTablasJuegoDeCompeticion/InformacionPartidosLiga';
 export * from './clasesParaTablasJuegoDeCompeticionFormulaUno/TablaClasificacionJornada';
+export * from './SesionClase';
+export * from './AsistenciaClase';
+export * from './FamiliaAvatares';
+export * from './JuegoDeAvatar';
+export * from './AlumnoJuegoDeAvatar';
+export * from './Cuestionario';
+export * from './AlumnoJuegoDeCuestionario';
+export * from './JuegoDeCuestionario';
+export * from './Escenario';
+export * from './PuntoGeolocalizable';
+export * from './JuegoDeGeocaching';
+export * from './JuegoDeGeocachingPregunta';
+export * from './TablaAlumnoJuegoDeGeocaching';
+export * from './AlumnoJuegoDeGeocaching';
+export * from './ParaAlbum';
+export * from './RespuestaJuegoDeCuestionario';
+export * from './TablaAlumnoJuegoDeCuestionario';
+export * from './JuegoDeVotacionUnoATodos';
+export * from './AlumnoJuegoDeVotacionUnoATodos';
+export * from './TablaAlumnoJuegoDeVotacionUnoATodos';
+export * from './AlumnoJuegoDeVotacionTodosAUno';
+export * from './JuegoDeVotacionTodosAUno';
+export * from './TablaAlumnoJuegoDeVotacionTodosAUno';
+export * from './Criterio';
+export * from './Rubrica';
+export * from './CuestionarioSatisfaccion';
+export * from './JuegoDeCuestionarioSatisfaccion';
+export * from './AlumnoJuegoDeCuestionarioSatisfaccion';
+export * from './JuegoDeEncuestaRapida';
+export * from './JuegoDeVotacionRapida';
+
+export * from './FamiliaDeImagenesDePerfil';
+export * from './JuegoDeCuestionarioRapido';
+export * from './JuegoDeCogerTurnoRapido';
+
+
+
+

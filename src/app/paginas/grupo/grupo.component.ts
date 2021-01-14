@@ -12,6 +12,7 @@ import { SesionService, PeticionesAPIService, CalculosService  } from '../../ser
 import { MatDialog, } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import Swal from 'sweetalert2';
+import * as URL from '../../URLs/urls';
 
 
 @Component({
@@ -22,13 +23,14 @@ import Swal from 'sweetalert2';
 export class GrupoComponent implements OnInit {
 
   // PONEMOS LAS COLUMNAS DE LA TABLA Y LA LISTA QUE TENDRÁ LA INFORMACIÓN QUE QUEREMOS MOSTRAR
-  displayedColumns: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'alumnoId'];
+  displayedColumns: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'alumnoId', 'imagen'];
   alumnosGrupoSeleccionado: Alumno[];
   dataSource;
 
   // Grupo en el que hemos entrado
   grupo: Grupo;
   profesorId: number;
+
 
 
   // Mensaje confirmación borrado
@@ -67,6 +69,12 @@ export class GrupoComponent implements OnInit {
 
       if (res[0] !== undefined) {
         this.alumnosGrupoSeleccionado = res;
+        // this.alumnosGrupoSeleccionado.forEach (alumno => {
+        //   if (alumno.ImagenPerfil) {
+        //     // añado la url para poder visualizar la imagen de perfil
+        //     alumno.ImagenPerfil = URL.ImagenesPerfil + alumno.ImagenPerfil;
+        //   }
+        // });
         this.dataSource = new MatTableDataSource(this.alumnosGrupoSeleccionado);
       } else {
         console.log('No hay alumnos en este grupo');
@@ -75,7 +83,11 @@ export class GrupoComponent implements OnInit {
   }
   EliminarGrupo() {
     // Para eliminar grupo hay muchas cosas que hacer. Estar en el servicio de calculos
-    this.calculos.EliminarGrupo ().subscribe (this.goBack());
+    this.calculos.EliminarGrupo ().subscribe (() => {
+      Swal.fire('Grupo borrado', 'success');
+      this.goBack();
+    }
+    );
    // this.goBack();
   }
 
@@ -93,7 +105,6 @@ export class GrupoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.EliminarGrupo();
-        Swal.fire('Eliminado', this.grupo.Nombre + ' eliminado correctamente', 'success');
       }
     });
   }

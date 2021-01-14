@@ -40,7 +40,9 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   JornadasCompeticion: TablaJornadas[];
   TablaeditarPuntos: TablaPuntosFormulaUno[];
 
-  juegosActivosPuntos: Juego[] = [];
+  juegosPuntos: Juego[] = [];
+  juegosCuestionariosTerminados: Juego[] = [];
+  juegosDeVotacionUnoATodosTerminados: any[] = [];
   botoneditarPuntosDesactivado = true;
   datasourceAlumno;
   datasourceEquipo;
@@ -68,7 +70,9 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
       this.EquiposDelJuego();
     }
     this.DameJornadasDelJuegoDeCompeticionSeleccionado();
-    this.DameJuegosdePuntosActivos();
+    this.DameJuegosdePuntos();
+    this.DameJuegosdeCuestionariosAcabados();
+    this.DameJuegosdeVotacionUnoATodosAcabados();
   }
 
   // Recupera los alumnos que pertenecen al juego
@@ -133,7 +137,6 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
       let finalizada: boolean = true;
       this.jornadas.forEach (jornada => {
                 if (!this.calculos.JornadaF1TieneGanadores (jornada.id, this.jornadas)) {
-                  console.log ('La jornada ' + jornada.id + 'no se ha disputado');
                   finalizada = false;
                 }
       });
@@ -236,7 +239,9 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposFormulaUno);
     this.sesion.TomaInscripcionAlumno(this.listaAlumnosOrdenadaPorPuntos);
     this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
-    this.sesion.TomaJuegosDePuntos(this.juegosActivosPuntos);
+    this.sesion.TomaJuegosDePuntos(this.juegosPuntos);
+    this.sesion.TomaJuegosDeCuestionario (this.juegosCuestionariosTerminados);
+    this.sesion.TomaJuegosDeVotacionUnoATodos (this.juegosDeVotacionUnoATodosTerminados);
   }
 
   editarjornadas() {
@@ -273,6 +278,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   DesactivarJuego() {
     console.log(this.juegoSeleccionado);
     this.peticionesAPI.CambiaEstadoJuegoDeCompeticionFormulaUno(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
+      this.juegoSeleccionado.Asignacion,
       undefined, false), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
         if (res !== undefined) {
           console.log(res);
@@ -307,19 +313,53 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     this.datasourceEquipo.filter = filterValue.trim().toLowerCase();
   }
 
-  DameJuegosdePuntosActivos() {
+  DameJuegosdePuntos() {
     this.peticionesAPI.DameJuegoDePuntosGrupo(this.juegoSeleccionado.grupoId)
     .subscribe(juegosPuntos => {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < juegosPuntos.length; i++) {
-        if (juegosPuntos[i].JuegoActivo === true) {
-          this.juegosActivosPuntos.push(juegosPuntos[i]);
-        }
+          this.juegosPuntos.push(juegosPuntos[i]);
       }
     });
-    console.log('Juegos disponibles');
-    console.log(this.juegosActivosPuntos);
-    return this.juegosActivosPuntos;
+
+  }
+
+  DameJuegosdeCuestionariosAcabados() {
+    console.log ('vamos a por los juegos de cuestionarios del grupo ' + this.juegoSeleccionado.grupoId);
+    this.peticionesAPI.DameJuegoDeCuestionario(this.juegoSeleccionado.grupoId)
+    .subscribe(juegosCuestionarios => {
+      console.log ('Ya tengo los juegos cuestionarios');
+      console.log (juegosCuestionarios);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegosCuestionarios.length; i++) {
+        if (juegosCuestionarios[i].JuegoTerminado === true) {
+          this.juegosCuestionariosTerminados.push(juegosCuestionarios[i]);
+        }
+      }
+      console.log('Juegos de cuestionario disponibles');
+      console.log(this.juegosCuestionariosTerminados);
+    });
+
+
+  }
+
+
+  DameJuegosdeVotacionUnoATodosAcabados() {
+    console.log ('vamos a por los juegos de votacion Uno A Todos ' + this.juegoSeleccionado.grupoId);
+    this.peticionesAPI.DameJuegosDeVotacionUnoATodos(this.juegoSeleccionado.grupoId)
+    .subscribe(juegos => {
+      console.log ('Ya tengo los juegos de votacion Uno A Todos');
+      console.log (juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === false) {
+          this.juegosDeVotacionUnoATodosTerminados.push(juegos[i]);
+        }
+      }
+      console.log('Juegos de  votacion Uno A Todos disponibles');
+      console.log(this.juegosDeVotacionUnoATodosTerminados);
+    });
+
 
   }
 }

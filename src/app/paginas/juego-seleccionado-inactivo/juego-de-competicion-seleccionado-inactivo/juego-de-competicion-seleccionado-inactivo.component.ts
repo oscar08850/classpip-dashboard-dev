@@ -47,7 +47,7 @@ export class JuegoDeCompeticionSeleccionadoInactivoComponent implements OnInit {
   // displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'partidosTotales',
   //                                      'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'partidosTotales',
-                                       'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
+                                       'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos'];
   displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'partidosTotales', 'partidosJugados',
                                        'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos'];
 
@@ -255,6 +255,7 @@ export class JuegoDeCompeticionSeleccionadoInactivoComponent implements OnInit {
   ReactivarJuego() {
     console.log(this.juegoSeleccionado);
     this.peticionesAPI.CambiaEstadoJuegoDeCompeticionLiga(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
+      this.juegoSeleccionado.Asignacion,
       undefined, true, this.juegoSeleccionado.NumeroTotalJornadas, this.juegoSeleccionado.TipoJuegoCompeticion,
       this.juegoSeleccionado.NumeroParticipantesPuntuan, this.juegoSeleccionado.Puntos, this.juegoSeleccionado.NombreJuego),
       this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {

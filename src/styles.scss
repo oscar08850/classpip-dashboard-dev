@@ -4,8 +4,8 @@
 
 // Imagen del alumno
 .imagen {
-  max-width: 200px;
-  max-height: 200px;
+  max-width: 150px;
+  max-height: 162px;
   margin: 10px;
 }
 // Estilos para la página del Login
@@ -181,6 +181,14 @@ label{
   width: 100%;
 }
 
+.CabeceraPreparados {
+  background-color: rgb(197, 197, 37);
+  color: white;
+  font-style: bold;
+  width: 100%;
+  font-size: 2em;
+}
+
 
 // Iconos
 .material-icons{
@@ -226,6 +234,8 @@ input[type=text] {
   font-weight: bold;
   font-size: 90%;
 }
+
+
 .texto{
   // margin: 5px;
   width: auto;
@@ -358,7 +368,6 @@ input[type=text] {
   display: flex;
   display: -webkit-flex;
   display: -ms-flexbox;
-
   justify-content: space-between;
   width: 100%;
 }
@@ -400,18 +409,90 @@ table {
 
 
 // Opciones gráficas cromos
+:root {
+  --anchoImagenCromo:156px;
+  --altoImagenCromo:225px;
+  --anchoCromo:250px;
+  --altoCromo:500px;
+}
+
+// Para mostrar los cromos del album en tres columnas
+span.album3col {
+  display: inline-block;
+  width: 33%;
+}
+// Para mostrar los cromos del album en cuatro columnas
+span.album4col {
+  display: inline-block;
+  width: 25%;
+}
+// Para mostrar los cromos del album en cinco columnas
+span.album5col {
+  display: inline-block;
+  width: 20%;
+}
+// Los siguientes son para el flip del cromo
+
+/* The flip box container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
+.flip-box {
+  background-color: transparent;
+  width: var(--anchoImagenCromo);
+  height: var(--altoImagenCromo);
+  //border: 1px solid #f1f1f1;
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+}
+
+/* This container is needed to position the front and back side */
+.flip-box-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+/* Do an horizontal flip when you move the mouse over the flip box container */
+.flip-box:hover .flip-box-inner {
+  transform: rotateY(180deg);
+}
+
+/* Position the front and back side */
+.flip-box-front, .flip-box-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+}
+
+/* Style the front side (fallback if image is missing) */
+.flip-box-front {
+  // background-color: #bbb;
+  background-color: transparent;
+  color: black;
+}
+
+/* Style the back side */
+.flip-box-back {
+  //background-color: dodgerblue;
+  background-color: transparent;
+  color: white;
+  transform: rotateY(180deg);
+}
+
 
 .imagenCromo {
-  max-width: 200px;
-  max-height: 150px;
+  max-width: var(--anchoImagenCromo);
+  max-height: var(--altoImagenCromo);
   margin-top: 0px !important;
-  margin: 5px;
+  margin: 0px;
 }
 .cromo {
-  max-width: 300px;
-  max-height: 300px;
-  width: 300px;
-  height: 300px;
+  max-width: var(--anchoCromo);
+  max-height: var(--altoCromo);
+  width: var(--anchoCromo);
+  height: var(--altoCromo);
 }
 
 .Diamante {
@@ -470,14 +551,16 @@ table {
   border-bottom-right-radius: 15px;
   box-shadow: 0px 3px 6px 0px  rgb(126, 138, 141) !important;
 }
+
+
 // Tabs que ocupen el 50% del espacio total cada uno
 .mat-tab-label {
   width: 50%;
 }
 
 // Opciones gráficas inicio sesión
-.cartaInicioSesion {
-  margin-top: 100px;
+.cartaLogin {
+  margin-top: 50px;
   margin-bottom: 100px;
   max-width: 300px;
   max-height: 370px;
@@ -490,3 +573,84 @@ table {
   border-bottom-right-radius: 15px !important;
   box-shadow: 0px 3px 6px 0px rgb(154, 167, 165) !important;
 }
+
+.cartaRegistro {
+  margin-top: 50px;
+  margin-bottom: 100px;
+  max-width: 300px;
+  max-height: 550px;
+  width: 300px;
+  height:550px;
+  background-color: rgb(190, 206, 204);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(154, 167, 165) !important;
+}
+.imagenPanelRecursos {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+}
+// Color de la flecha que indica ordenación en las cabaceras de las tablas
+.mat-sort-header-arrow {
+  color: white;
+}
+
+// Para mostrar todos los avatares
+
+span.avatar5col {
+  display: inline-block;
+  width: 20%;
+}
+.parpadea {
+
+  animation-name: parpadeo;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  -webkit-animation-name:parpadeo;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes parpadeo{
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+
+@-webkit-keyframes parpadeo {
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+   100% { opacity: 1.0; }
+}
+
+@keyframes parpadeo {
+  0% { opacity: 1.0; }
+   50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+
+//Para que parpade la ultima votación en el juego de votaciones uno a todos
+.blink {
+  color: red;
+  font-size:large;
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+

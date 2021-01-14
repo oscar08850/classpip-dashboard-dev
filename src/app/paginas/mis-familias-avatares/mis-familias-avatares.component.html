@@ -1,0 +1,108 @@
+<div class="titulo">Mis familias de avatares</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+  <mat-tab-group>
+
+    <mat-tab label="Mis familias de avatares">
+      <br>
+
+      <div class ='enColumna'>
+        <form style = "width: 80%"  *ngIf="listaFamilias;else Aviso_no_familias">
+
+          <div class = "filter">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar familia...">
+              <i class="material-icons" matSuffix>search</i>
+            </mat-form-field>
+          </div>
+          <table style = "width: 80%" align= "center" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+              <td mat-cell *matCellDef="let familia"> {{familia.NombreFamilia}} </td>
+
+            </ng-container>
+
+            <ng-container matColumnDef="iconos">
+              <th  mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+              <td  mat-cell *matCellDef="let familia">
+                <div  style = "display: flex; align-items: right">
+                  <button (click)= "Mostrar(familia)" mat-icon-button matTooltip="Ver imagenes de la familia">
+                    <i class="material-icons green md-36">visibility</i>
+                  </button>
+                  <button (click) = "EliminarFamilia(familia)" mat-icon-button matTooltip="Eliminar la familia">
+                    <i class="material-icons red md-36">delete</i>
+                  </button>
+                  <button (click) = "Descargar(familia)" mat-icon-button matTooltip="Descargar familia en JSON">
+                    <i class="material-icons blue md-36">get_app</i>
+                  </button>
+                  <button *ngIf = "!familia.Publica" (click) = "HazPublica(familia)" mat-icon-button matTooltip="Haz pública la familia">
+                    <i class="material-icons grey md-36">public_off</i>
+                  </button>
+                  <button *ngIf = "familia.Publica" (click) = "HazPrivada(familia)" mat-icon-button matTooltip="Haz privada la familia">
+                    <i class="material-icons green md-36">public</i>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+            </tr>
+          </table>
+        </form>
+
+        <div class="contenedor">
+            <ng-template  #Aviso_no_familias><div class="texto">No tienes familias de avatares</div></ng-template>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Familias de avatares públicas">
+      <br>
+
+      <div class ='enColumna'>
+        <form style = "width: 80%"  *ngIf="familiasPublicas;else Aviso_no_familias_publicas">
+
+          <div class = "filter">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar familia...">
+              <i class="material-icons" matSuffix>search</i>
+            </mat-form-field>
+          </div>
+          <table style = "width: 80%" align= "center" mat-table [dataSource]="dataSourcePublicas" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
+              <td mat-cell *matCellDef="let familia; let i = index"> {{familia.NombreFamilia}} ({{propietarios[i]}}) </td>
+
+            </ng-container>
+
+            <ng-container matColumnDef="iconos">
+              <th  mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+              <td  mat-cell *matCellDef="let familia">
+                <div  style = "display: flex; align-items: right">
+                  <button (click)= "Mostrar(familia)" mat-icon-button matTooltip="Ver imagenes de la familia">
+                    <i class="material-icons green md-36">visibility</i>
+                  </button>
+                  <button (click) = "Descargar(familia)" mat-icon-button matTooltip="Descargar familia en JSON">
+                    <i class="material-icons blue md-36">get_app</i>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+            </tr>
+          </table>
+        </form>
+
+        <div class="contenedor">
+            <ng-template  #Aviso_no_familias_publicas><div class="texto">No hay familias de avatares publicas</div></ng-template>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+

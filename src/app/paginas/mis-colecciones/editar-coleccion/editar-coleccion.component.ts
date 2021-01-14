@@ -10,11 +10,13 @@ import Swal from 'sweetalert2';
 // Clases
 import { Cromo, Coleccion } from '../../../clases/index';
 
-// Servicios
-import { ColeccionService } from '../../../servicios/index';
+
 // Servicios
 import { SesionService, PeticionesAPIService } from '../../../servicios/index';
 
+import * as URL from '../../../URLs/urls';
+import { AnonymousSubject } from 'rxjs/internal/Subject';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 @Component({
   selector: 'app-editar-coleccion',
@@ -28,7 +30,8 @@ export class EditarColeccionComponent implements OnInit {
 
   cromo: Cromo;
   imagenCromo: string;
-  imagenesCromos: string[] = [];
+  imagenesCromosDelante: string[] = [];
+  imagenesCromosDetras: string[] = [];
 
   nombreColeccion: string;
   // imagen coleccion
@@ -45,9 +48,15 @@ export class EditarColeccionComponent implements OnInit {
 
   // tslint:disable-next-line:ban-types
   cambios: Boolean = false;
+  // tslint:disable-next-line:ban-types
+  voltear: Boolean = false;
+  // tslint:disable-next-line:ban-types
+  mostrarTextoGuardar: Boolean = false;
+
+  interval;
+
 
   constructor(
-              private coleccionService: ColeccionService,
               public dialog: MatDialog,
               private location: Location,
               private http: Http,
@@ -59,6 +68,8 @@ export class EditarColeccionComponent implements OnInit {
     this.coleccion = this.sesion.DameColeccion();
     this.nombreColeccion = this.coleccion.Nombre;
     this.cromosColeccion = this.sesion.DameCromos();
+    console.log ('cromos');
+    console.log (this.cromosColeccion);
     // Me traigo la imagen de la colección y las imagenes de cada cromo
     this.TraeImagenColeccion(this.coleccion);
     // Cargo el imagen de la coleccion
@@ -102,23 +113,9 @@ export class EditarColeccionComponent implements OnInit {
     for (let i = 0; i < this.cromosColeccion.length; i++) {
 
       this.cromo = this.cromosColeccion[i];
+      this.imagenesCromosDelante[i] = URL.ImagenesCromo + this.cromo.ImagenDelante;
+      this.imagenesCromosDetras[i] = URL.ImagenesCromo + this.cromo.ImagenDetras;
 
-      if (this.cromo.Imagen !== undefined ) {
-        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.peticionesAPI.DameImagenCromo (this.cromo.Imagen)
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
-
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenesCromos[i] = reader.result.toString();
-          }, false);
-
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
-      });
-      }
     }
   }
 
@@ -157,7 +154,7 @@ export class EditarColeccionComponent implements OnInit {
       maxHeight: '600px',
       // Le pasamos solo los id del grupo y profesor ya que es lo único que hace falta para vincular los alumnos
       data: {
-        coleccionId: this.coleccion.id,
+        coleccion: this.coleccion,
       }
     });
 
@@ -177,13 +174,12 @@ export class EditarColeccionComponent implements OnInit {
   // TAMBIEN EDITAREMOS EL CROMO EN UN DIALOGO
   AbrirDialogoEditarCromo(cromo: Cromo): void {
 
-    console.log ('Vamos a editar cromo ' + cromo.Imagen);
     const dialogRef = this.dialog.open ( EditarCromoDialogComponent , {
       width: '900px',
       maxHeight: '600px',
       data: {
         cr : cromo,
-        coleccionId: this.coleccion.id,
+        coleccion: this.coleccion,
       }
     });
 
@@ -234,25 +230,34 @@ export class EditarColeccionComponent implements OnInit {
 
   // Utilizamos esta función para eliminar un cromo de la base de datos y actualiza la lista de cromos
   BorrarCromo(cromo: Cromo) {
-    this.peticionesAPI.BorrarCromo(cromo.id, this.coleccion.id)
-    .subscribe(() => {
-      // Eliminamos el cromo de la colección
-      console.log ('coleccion:' + this.coleccion);
-      const i = this.cromosColeccion.indexOf(cromo);
-      console.log ('posicion ' + i);
-      this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
-      this.TraeImagenesCromos();
-      // En teoria debería poder ahorrarme traer otra vez los cromos
-      // de la base de datos, eliminando la imagen del vector de imagenes
-      // con la sentencia siguiente:
-      // this.imagenesCromos = this.imagenesCromos.slice(i, 1);
-      // Sin embargo, no funciona.
+    const posicion = this.cromosColeccion.indexOf (cromo);
+    console.log ('voy a borrar el cromo ' + cromo.id +  ' de la posición ' + posicion);
 
-    });
-    this.peticionesAPI.BorrarImagenCromo(cromo.Imagen).subscribe(() => {
-      this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
-      this.TraeImagenesCromos();
-    });
+    this.peticionesAPI.BorrarCromo (cromo.id).subscribe( () => {
+        const nueva = this.cromosColeccion.slice(0, posicion).concat(this.cromosColeccion.slice(posicion + 1, this.cromosColeccion.length))
+        this.cromosColeccion = nueva;
+        console.log ('ya esta borrado');
+        console.log (this.cromosColeccion);
+      }
+    );
+    console.log (this.cromosColeccion);
+    this.peticionesAPI.BorrarImagenCromo(cromo.ImagenDelante).subscribe( () => {
+        // tslint:disable-next-line:max-line-length
+        const nueva = this.imagenesCromosDelante.slice(0, posicion).concat(this.imagenesCromosDelante.slice(posicion + 1, this.imagenesCromosDelante.length));
+        this.imagenesCromosDelante = nueva;
+      }
+    );
+    if (cromo.ImagenDetras !== undefined) {
+      this.peticionesAPI.BorrarImagenCromo(cromo.ImagenDelante).subscribe( () => {
+        // tslint:disable-next-line:max-line-length
+        const nueva = this.imagenesCromosDetras.slice(0, posicion).concat(this.imagenesCromosDetras.slice(posicion + 1, this.imagenesCromosDetras.length));
+        this.imagenesCromosDelante = nueva;
+      }
+      );
+    }
+
+
+
   }
 
 
@@ -264,20 +269,7 @@ export class EditarColeccionComponent implements OnInit {
   // Si la coleccion tiene una foto (recordemos que la foto no es obligatoria)
   if (coleccion.ImagenColeccion !== undefined) {
 
-    // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-    this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
-    .subscribe(response => {
-      const blob = new Blob([response.blob()], { type: 'image/jpg'});
-
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        this.imagenColeccion = reader.result.toString();
-      }, false);
-
-      if (blob) {
-        reader.readAsDataURL(blob);
-      }
-    });
+    this.imagenColeccion = URL.ImagenesColeccion + coleccion.ImagenColeccion ;
 
     // Sino la imagenColeccion será undefined para que no nos pinte la foto de otro equipo préviamente seleccionado
   } else {
@@ -311,4 +303,8 @@ export class EditarColeccionComponent implements OnInit {
       this.location.back();
     }
   }
+  Voltear() {
+    this.voltear = !this.voltear;
+  }
+
 }

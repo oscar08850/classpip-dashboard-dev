@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga,
-         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta} from '../clases';
+         // tslint:disable-next-line:max-line-length
+         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeCuestionario,
+         TablaAlumnoJuegoDeCuestionario,
+         FamiliaAvatares, CuestionarioSatisfaccion} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
+import { Escenario } from '../clases/Escenario';
+import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
+import { FieldsMapping } from '@syncfusion/ej2-angular-lists';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +17,7 @@ export class SesionService {
   profesor: Profesor;
   grupo: Grupo;
   juego: Juego;
+  juegoAvatar: JuegoDeAvatar;
   equipo: Equipo;
   alumnosEquipo: Alumno[];
   alumnosGrupo: Alumno[];
@@ -46,12 +53,28 @@ export class SesionService {
   TablaAlumnoJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion[];
   TablaEquipoJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion[];
   TablaeditarPuntos: TablaPuntosFormulaUno[];
-  JuegosDePuntosActivos: Juego[];
+  JuegosDePuntos: Juego[];
+  JuegosDeCuestionariosAcabados: Juego[];
+  juegosDeVotacionUnoATodosAcabados: Juego[];
   // listaEquiposGrupo: any;
 
   pregunta: Pregunta;
   cuestionario: Cuestionario;
   listaCuestionarios: any;
+  escenario: Escenario;
+  puntogeolocalizable: PuntoGeolocalizable;
+  listaEscenarios: any;
+  puntosgeolocalizables: PuntoGeolocalizable[];
+  IdMisPreguntasBasicas: number[];
+  IdMisPreguntasBonus: number[];
+
+  inscripcionAlumnoJuegoAvatar: AlumnoJuegoDeAvatar;
+
+  inscripcionAlumnoJuegoDeCuestionario: AlumnoJuegoDeCuestionario;
+  alumnoJuegoDeCuestionario: TablaAlumnoJuegoDeCuestionario;
+
+  familia: FamiliaAvatares;
+  cuestionarioDeSatiafaccion: CuestionarioSatisfaccion;
 
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
@@ -89,6 +112,18 @@ export class SesionService {
   }
   public  DameJuego(): Juego {
     return this.juego;
+  }
+  public TomaJuegoAvatar(juego: JuegoDeAvatar) {
+    this.juegoAvatar = juego;
+  }
+  public  DameJuegoAvatar(): JuegoDeAvatar {
+    return this.juegoAvatar;
+  }
+  public TomaAlumnoJuegoAvatar(alumnoJuegoAvatar: AlumnoJuegoDeAvatar) {
+    this.inscripcionAlumnoJuegoAvatar = alumnoJuegoAvatar;
+  }
+  public DameAlumnoJuegoAvatar(): AlumnoJuegoDeAvatar {
+    return this.inscripcionAlumnoJuegoAvatar;
   }
   public TomaEquipo(equipo: Equipo) {
     this.equipo = equipo;
@@ -359,9 +394,62 @@ public DameListaCuestionarios(): any {
   return this.listaCuestionarios;
 }
 
-public TomaListaCuestionarios(listaCuestionarios: any){
+public TomaListaCuestionarios(listaCuestionarios: any) {
   this.listaCuestionarios = listaCuestionarios;
 }
+
+
+
+
+public TomaEscenario(escenario: Escenario) {
+  this.escenario = escenario;
+}
+
+public  DameEscenario(): Escenario {
+  return this.escenario;
+}
+
+public DamePuntoGeolocalizable(): PuntoGeolocalizable {
+  return this.puntogeolocalizable;
+}
+
+public TomaPuntoGeolocalizable(puntogeolocalizable: PuntoGeolocalizable) {
+  this.puntogeolocalizable = puntogeolocalizable;
+}
+
+public TomaPuntosGeolocalizables(puntosgeolocalizablesEscenario: PuntoGeolocalizable[]) {
+  this.puntosgeolocalizables = puntosgeolocalizablesEscenario;
+}
+public DamePuntosGeolocalizables(): PuntoGeolocalizable[] {
+  return this.puntosgeolocalizables;
+}
+
+
+public DameListaEscenarios(): any {
+  return this.listaEscenarios;
+}
+
+public TomaListaEscenarios(listaEscenarios: any) {
+  this.listaEscenarios = listaEscenarios;
+}
+
+public TomaIdPreguntasBasicas(IdMisPreguntasBasicas: number[]) {
+  this.IdMisPreguntasBasicas = IdMisPreguntasBasicas;
+}
+
+public  DameIdPreguntasBasicas(): any {
+  return this.IdMisPreguntasBasicas;
+}
+
+public TomaIdPreguntasBonus(IdMisPreguntasBonus: number[]) {
+  this.IdMisPreguntasBonus = IdMisPreguntasBonus;
+}
+
+public  DameIdPreguntasBonus(): any {
+  return this.IdMisPreguntasBonus;
+}
+
+
 
 public TomaDatosJornadasJuegoComponent(
   jornadas: Jornada[],
@@ -400,19 +488,68 @@ public DameTablaEquipoJuegoDeCompeticion(): TablaEquipoJuegoDeCompeticion[] {
   return Tabla;
 }
 
-public TomaJuegosDePuntos(juegosActivos: Juego[]) {
-  this.JuegosDePuntosActivos = juegosActivos;
+public TomaJuegosDePuntos(juegosPuntos: Juego[]) {
+  this.JuegosDePuntos = juegosPuntos;
 }
-public DameJuegosDePuntosActivos(): Juego[] {
-  const juegosActivosPuntos = this.JuegosDePuntosActivos ;
-  return juegosActivosPuntos;
+public DameJuegosDePuntos(): Juego[] {
+  return this.JuegosDePuntos;
 }
+
+ public TomaJuegosDeCuestionario(juegosCuestionarios: Juego[]) {
+   console.log ('guardo juegos cuestionarios acabados');
+   console.log (juegosCuestionarios);
+   this.JuegosDeCuestionariosAcabados = juegosCuestionarios;
+ }
+
+ public DameJuegosDeCuestionariosAcabados(): Juego[] {
+  return this.JuegosDeCuestionariosAcabados;
+}
+
+public TomaJuegosDeVotacionUnoATodos(juegosDeVotacionUnoATodos: Juego[]) {
+  console.log ('guardo juegos de votacion Uno A Todos acabados');
+  console.log (juegosDeVotacionUnoATodos);
+  this.juegosDeVotacionUnoATodosAcabados = juegosDeVotacionUnoATodos;
+}
+
+public DameJuegosDeVotacionUnoATodosAcabados(): Juego[] {
+ return this.juegosDeVotacionUnoATodosAcabados;
+}
+
 public TomaTablaeditarPuntos( TablaeditarPuntos: TablaPuntosFormulaUno[]) {
   this.TablaeditarPuntos = TablaeditarPuntos;
 }
 public DameTablaeditarPuntos(): TablaPuntosFormulaUno[] {
   const TablaeditarPuntos = this.TablaeditarPuntos ;
   return TablaeditarPuntos;
+}
+
+public TomaInscripcionAlumnoJuegoDeCuestionario(inscripcion: AlumnoJuegoDeCuestionario) {
+  this.inscripcionAlumnoJuegoDeCuestionario = inscripcion;
+}
+
+public TomaAlumnoJuegoDeCuestionario(alumno: TablaAlumnoJuegoDeCuestionario) {
+  this.alumnoJuegoDeCuestionario = alumno;
+}
+
+public DameAlumnoJuegoDeCuestionario(): TablaAlumnoJuegoDeCuestionario {
+  return this.alumnoJuegoDeCuestionario;
+}
+
+public DameInscripcionAlumnoJuegoDeCuestionario(): AlumnoJuegoDeCuestionario {
+  return this.inscripcionAlumnoJuegoDeCuestionario;
+}
+public TomaFamilia(familia: FamiliaAvatares) {
+  this.familia = familia;
+}
+public DameFamilia(): FamiliaAvatares {
+  return this.familia;
+}
+public TomaCuestionarioSatisfaccion(cuestionario: CuestionarioSatisfaccion) {
+  this.cuestionarioDeSatiafaccion = cuestionario;
+}
+
+public DameCuestionarioSatisfaccion(): CuestionarioSatisfaccion {
+  return this.cuestionarioDeSatiafaccion;
 }
 
 }

@@ -43,6 +43,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   // displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'partidosTotales',
   //                                      'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'partidosTotales',
+                                       // tslint:disable-next-line:max-line-length
                                        'partidosJugados', 'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
   displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'partidosTotales', 'partidosJugados',
                                        'partidosGanados', 'partidosEmpatados', 'partidosPerdidos', 'puntos', ' '];
@@ -54,7 +55,9 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   JornadasCompeticion: TablaJornadas[] = [];
   // enfrentamientosDelJuego: EnfrentamientoLiga[] = [];
   enfrentamientosDelJuego: Array<Array<EnfrentamientoLiga>>;
-  juegosActivosPuntos: Juego[] = [];
+  juegosPuntos: Juego[] = [];
+  juegosCuestionariosTerminados: Juego[] = [];
+  juegosDeVotacionUnoATodosTerminados: any[] = [];
 
   constructor(  public dialog: MatDialog,
                 public sesion: SesionService,
@@ -64,13 +67,17 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
+    console.log ('juego de liga que estamos probando');
     console.log(this.juegoSeleccionado);
     this.DameJornadasDelJuegoDeCompeticionSeleccionado();
-    this.DameJuegosdePuntosActivos();
+    this.DameJuegosDePuntos();
+    this.DameJuegosDeCuestionariosAcabados();
+    this.DameJuegosdeVotacionUnoATodosAcabados();
   }
 
 
   DameJornadasDelJuegoDeCompeticionSeleccionado() {
+    console.log ('voy a por las jornadas');
     this.peticionesAPI.DameJornadasDeCompeticionLiga(this.juegoSeleccionado.id)
       .subscribe(inscripciones => {
         this.jornadas = inscripciones;
@@ -87,6 +94,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     this.enfrentamientosDelJuego = [];
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.jornadas.length; i++) {
+      console.log ('siguiente jornada');
       this.enfrentamientosDelJuego[i] = [];
       this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga(this.jornadas[i].id)
       .subscribe((enfrentamientosDeLaJornada: Array<EnfrentamientoLiga>) => {
@@ -249,6 +257,7 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
   DesactivarJuego() {
     console.log(this.juegoSeleccionado);
     this.peticionesAPI.CambiaEstadoJuegoDeCompeticionLiga(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
+      this.juegoSeleccionado.Asignacion,
       undefined, false, this.juegoSeleccionado.NumeroTotalJornadas, this.juegoSeleccionado.TipoJuegoCompeticion,
       this.juegoSeleccionado.NumeroParticipantesPuntuan, this.juegoSeleccionado.Puntos, this.juegoSeleccionado.NombreJuego),
       this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
@@ -309,22 +318,56 @@ export class JuegoDeCompeticionSeleccionadoActivoComponent implements OnInit {
     this.sesion.TomaTablaEquipoJuegoDeCompeticion(this.rankingEquiposJuegoDeCompeticion);
     this.sesion.TomaInscripcionAlumno(this.listaAlumnosOrdenadaPorPuntos);
     this.sesion.TomaInscripcionEquipo(this.listaEquiposOrdenadaPorPuntos);
-    this.sesion.TomaJuegosDePuntos(this.juegosActivosPuntos);
+    this.sesion.TomaJuegosDePuntos(this.juegosPuntos);
+    this.sesion.TomaJuegosDeCuestionario (this.juegosCuestionariosTerminados);
+    this.sesion.TomaJuegosDeVotacionUnoATodos (this.juegosDeVotacionUnoATodosTerminados);
   }
 
-  DameJuegosdePuntosActivos() {
+
+  DameJuegosDePuntos() {
     this.peticionesAPI.DameJuegoDePuntosGrupo(this.juegoSeleccionado.grupoId)
     .subscribe(juegosPuntos => {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < juegosPuntos.length; i++) {
-        if (juegosPuntos[i].JuegoActivo === true) {
-          this.juegosActivosPuntos.push(juegosPuntos[i]);
-        }
+          this.juegosPuntos.push(juegosPuntos[i]);
       }
     });
-    console.log('Juegos disponibles');
-    console.log(this.juegosActivosPuntos);
-    return this.juegosActivosPuntos;
+
+  }
+
+  DameJuegosDeCuestionariosAcabados() {
+    console.log ('vamos a por los juegos de cuestionarios del grupo ' + this.juegoSeleccionado.grupoId);
+    this.peticionesAPI.DameJuegoDeCuestionario(this.juegoSeleccionado.grupoId)
+    .subscribe(juegosCuestionarios => {
+      console.log ('Ya tengo los juegos cuestionarios');
+      console.log (juegosCuestionarios);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegosCuestionarios.length; i++) {
+        if (juegosCuestionarios[i].JuegoTerminado === true) {
+          this.juegosCuestionariosTerminados.push(juegosCuestionarios[i]);
+        }
+      }
+      console.log('Juegos de cuestionario disponibles');
+      console.log(this.juegosCuestionariosTerminados);
+    });
+  }
+
+  DameJuegosdeVotacionUnoATodosAcabados() {
+    console.log ('vamos a por los juegos de votacion Uno A Todos ' + this.juegoSeleccionado.grupoId);
+    this.peticionesAPI.DameJuegosDeVotacionUnoATodos(this.juegoSeleccionado.grupoId)
+    .subscribe(juegos => {
+      console.log ('Ya tengo los juegos de votacion Uno A Todos');
+      console.log (juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === false) {
+          this.juegosDeVotacionUnoATodosTerminados.push(juegos[i]);
+        }
+      }
+      console.log('Juegos de  votacion Uno A Todos disponibles');
+      console.log(this.juegosDeVotacionUnoATodosTerminados);
+    });
+
 
   }
 

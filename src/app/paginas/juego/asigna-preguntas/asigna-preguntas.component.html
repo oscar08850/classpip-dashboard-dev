@@ -1,0 +1,174 @@
+
+<div class="subtitulo" align="center">Agregar preguntas al Juego</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<br>
+
+
+<div class="enColumna">
+ <form style="width: 70%">
+  <mat-label>Selecciona un total de {{ numeroDePuntosGeolocalizables }} Preguntas Básicas y {{ numeroDePuntosGeolocalizables }} Preguntas Bonus</mat-label>
+    <div>
+        <p>
+            <span style="font-weight: bold;text-align: center;">Preguntas Básicas seleccionadas </span>
+        </p>
+    </div>
+     <!-- tabla para preguntas basicas añadidas -->
+
+    <table style="width: 100%; table-layout:fixed;"  *ngIf="misPreguntasBasicas[0]" mat-table [dataSource]="dataSourceMisPreguntasBasicas" class="example-container mat-elevation-z8">
+
+
+      <!-- Titulo Pregunta Column -->
+      <ng-container matColumnDef="titulo">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Título </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Titulo}} </td>
+      </ng-container>
+
+      <!-- Pregunta Pregunta Column -->
+      <ng-container matColumnDef="pregunta">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Pregunta </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Pregunta}} </td>
+      </ng-container>
+
+      <!-- Tematica Pregunta Column -->
+      <ng-container matColumnDef="tematica">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Temática </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Tematica}} </td>
+      </ng-container>
+
+      <!-- Delete Column -->
+      <ng-container matColumnDef=" ">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+        <td mat-cell *matCellDef="let pregunta">
+            <button (click) = "AbrirDialogoConfirmacionBorrarBasica (pregunta)" mat-icon-button matTooltip="Borrar a {{pregunta.Titulo}} de Preguntas Basicas">
+              <i class="material-icons red md-36">delete</i>
+            </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsPreguntasSeleccionadas; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsPreguntasSeleccionadas;"></tr>
+
+    </table>
+    <mat-divider class="lineaDivisoria"></mat-divider>
+
+
+    <div>
+      <p>
+          <span style="font-weight: bold;text-align: center;">Preguntas Bonus seleccionadas </span>
+      </p>
+  </div>
+
+    <!-- tabla para preguntas bonus añadidas -->
+
+    <table style="width: 100%; table-layout:fixed;"  *ngIf="misPreguntasBonus[0]" mat-table [dataSource]="dataSourceMisPreguntasBonus" class="example-container mat-elevation-z8">
+
+      <!-- Titulo Pregunta Column -->
+      <ng-container matColumnDef="titulo">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Título </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Titulo}} </td>
+      </ng-container>
+
+      <!-- Pregunta Pregunta Column -->
+      <ng-container matColumnDef="pregunta">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Pregunta </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Pregunta}} </td>
+      </ng-container>
+
+      <!-- Tematica Pregunta Column -->
+      <ng-container matColumnDef="tematica">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Temática </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Tematica}} </td>
+      </ng-container>
+
+      <!-- Delete Column -->
+      <ng-container matColumnDef=" ">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+        <td mat-cell *matCellDef="let pregunta">
+            <button (click) = "AbrirDialogoConfirmacionBorrarBonus (pregunta)" mat-icon-button matTooltip="Borrar a {{pregunta.Titulo}} de Preguntas Bonus">
+              <i class="material-icons red md-36">delete</i>
+            </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsPreguntasSeleccionadas; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsPreguntasSeleccionadas;"></tr>
+
+
+
+
+ <!-- tabla de preguntas -->
+
+    </table>
+    <mat-divider class="lineaDivisoria"></mat-divider>
+    <br>
+
+    <div>
+      <p>
+          <span style="font-weight: bold; align-content: center;">Mis preguntas</span>
+      </p>
+    </div>
+
+    <div class = "filter">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilterMisPreguntas($event.target.value)" placeholder="Filtro para buscar pregunta...">
+          <i class="material-icons" matSuffix>search</i>
+        </mat-form-field>
+      </div>
+
+
+    <table style="width: 100%; table-layout:fixed;"  *ngIf="misPreguntas[0]" mat-table [dataSource]="dataSourceMisPreguntas" class="example-container mat-elevation-z8">
+
+      <!-- Titulo Pregunta Column -->
+      <ng-container matColumnDef="titulo">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Título </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Titulo}} </td>
+      </ng-container>
+
+      <!-- Pregunta Pregunta Column -->
+      <ng-container matColumnDef="pregunta">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Pregunta </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Pregunta}} </td>
+      </ng-container>
+
+      <!-- Tematica Pregunta Column -->
+      <ng-container matColumnDef="tematica">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 23%"> Temática </th>
+        <td mat-cell *matCellDef="let pregunta"> {{pregunta.Tematica}} </td>
+      </ng-container>
+
+      <!-- Add Column -->
+      <ng-container matColumnDef="basicas" stickyEnd>
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Básicas </th>
+          <td mat-cell *matCellDef="let pregunta">
+              <button (click) = "AsignarPreguntaBasica(pregunta)" mat-icon-button matTooltip = "Añadir a {{pregunta.Titulo}} a Preguntas Basicas">
+                  <i class="material-icons green md-36">add_circle_outline</i>
+              </button>
+          </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bonus" stickyEnd>
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Bonus </th>
+        <td mat-cell *matCellDef="let pregunta">
+            <button (click) = "AsignarPreguntaBonus(pregunta)" mat-icon-button matTooltip = "Añadir a {{pregunta.Titulo}} a Preguntas Bonus">
+                <i class="material-icons green md-36">add_circle_outline</i>
+            </button>
+        </td>
+    </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsMisPreguntas; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsMisPreguntas;"></tr>
+
+    </table>
+    <mat-divider class="lineaDivisoria"></mat-divider>
+    <br>
+    <div class="enFila">
+      <button type="button" (click) = "goBack()" class="btn Back">Volver </button>
+    <div *ngIf="numeroDePuntosGeolocalizables === misPreguntasBasicas.length && numeroDePuntosGeolocalizables === misPreguntasBonus.length">
+      <button type="button" (click) = "AbrirDialogoConfirmacionAsignarPreguntas()" class="btn Aceptar">Aceptar </button>
+    </div>
+  </div>
+</form>
+</div>
+
+

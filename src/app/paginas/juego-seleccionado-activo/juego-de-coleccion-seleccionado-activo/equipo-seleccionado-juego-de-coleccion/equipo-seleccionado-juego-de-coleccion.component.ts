@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ResponseContentType, Http, Response } from '@angular/http';
 
-import { Alumno, Equipo, Juego, EquipoJuegoDeColeccion, Cromo } from '../../../../clases/index';
+import { Alumno, Equipo, Juego, EquipoJuegoDeColeccion, Cromo, Coleccion } from '../../../../clases/index';
 
 
 // Services
@@ -11,6 +11,8 @@ import { Location } from '@angular/common';
 import { DialogoConfirmacionComponent } from '../../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 import { MatDialog } from '@angular/material';
 import Swal from 'sweetalert2';
+
+import * as URL from '../../../../URLs/urls';
 
 @Component({
   selector: 'app-equipo-seleccionado-juego-de-coleccion',
@@ -35,9 +37,11 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   listaCromosSinRepetidos: any [];
   cromo: Cromo;
 
-  imagenCromoArray: string[] = [];
+  imagenCromoDelante: string[] = [];
+  imagenCromoDetras: string[] = [];
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Confirma que quieres eliminar el cromo: ';
+  coleccion: Coleccion;
 
   constructor( private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
@@ -49,8 +53,13 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
 
   ngOnInit() {
     this.equipo = this.sesion.DameEquipo();
+    this.coleccion = this.sesion.DameColeccion();
     this.juegoSeleccionado = this.sesion.DameJuego();
     this.inscripcionEquipo = this.sesion.DameInscripcionEquipo();
+    console.log ('equipo');
+    console.log (this.equipo);
+    console.log ('inscripcion');
+    console.log (this.inscripcionEquipo);
     this.CromosDelEquipo();
     this.GET_ImagenPerfil();
   }
@@ -86,41 +95,88 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
 
       this.sesion.TomaCromos(this.listaCromos);
       this.listaCromos.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
-      this.GET_ImagenesCromos();
+      this.DameImagenesCromos();
 
     });
   }
 
 
-
-  GET_ImagenesCromos() {
+  DameImagenesCromos() {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.listaCromosSinRepetidos.length; i++) {
 
-      this.cromo = this.listaCromosSinRepetidos[i].cromo;
 
-      if (this.cromo.Imagen !== undefined ) {
+      const elem  = this.listaCromosSinRepetidos[i];
 
+
+      if (elem.cromo.ImagenDelante !== undefined ) {
+        this.imagenCromoDelante[i] = URL.ImagenesCromo + elem.cromo.ImagenDelante;
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-        this.http.get('http://localhost:3000/api/imagenes/ImagenCromo/download/' + this.cromo.Imagen,
-        { responseType: ResponseContentType.Blob })
-        .subscribe(response => {
-          const blob = new Blob([response.blob()], { type: 'image/jpg'});
+        // this.peticionesAPI.DameImagenCromo (elem.cromo.ImagenDelante)
+        // .subscribe(response => {
+        //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
 
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imagenCromoArray[i] = reader.result.toString();
-          }, false);
+        //   const reader = new FileReader();
+        //   reader.addEventListener('load', () => {
+        //     this.imagenCromoDelante[i] = reader.result.toString();
+        //   }, false);
 
-          if (blob) {
-            reader.readAsDataURL(blob);
-          }
+        //   if (blob) {
+        //     reader.readAsDataURL(blob);
+        //   }
+        // });
+      }
 
-        });
+      if (elem.cromo.ImagenDetras !== undefined ) {
+        this.imagenCromoDetras[i] = URL.ImagenesCromo + elem.cromo.ImagenDetras;
+        // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+        // this.peticionesAPI.DameImagenCromo (elem.cromo.ImagenDetras)
+        // .subscribe(response => {
+        //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+        //   const reader = new FileReader();
+        //   reader.addEventListener('load', () => {
+        //     this.imagenCromoDetras[i] = reader.result.toString();
+        //   }, false);
+
+        //   if (blob) {
+        //     reader.readAsDataURL(blob);
+        //   }
+        // });
       }
     }
   }
+
+
+  // GET_ImagenesCromos() {
+
+  //   // tslint:disable-next-line:prefer-for-of
+  //   for (let i = 0; i < this.listaCromosSinRepetidos.length; i++) {
+
+  //     this.cromo = this.listaCromosSinRepetidos[i].cromo;
+
+  //     if (this.cromo.Imagen !== undefined ) {
+
+  //       // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
+  //       this.http.get('http://localhost:3000/api/imagenes/ImagenCromo/download/' + this.cromo.Imagen,
+  //       { responseType: ResponseContentType.Blob })
+  //       .subscribe(response => {
+  //         const blob = new Blob([response.blob()], { type: 'image/jpg'});
+
+  //         const reader = new FileReader();
+  //         reader.addEventListener('load', () => {
+  //           this.imagenCromoArray[i] = reader.result.toString();
+  //         }, false);
+
+  //         if (blob) {
+  //           reader.readAsDataURL(blob);
+  //         }
+
+  //       });
+  //     }
+  //   }
+  // }
 
 
 
@@ -148,10 +204,10 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
    // Utilizamos esta función para eliminar un cromo de la base de datos y actualiza la lista de cromos
    BorrarCromo(cromo: Cromo) {
     // primero obtengo todas las asignaciones del cromo al alumno
-    this.peticionesAPI.DameAsignacionesCromosEquipo (this.inscripcionEquipo.id, cromo.id)
+    this.peticionesAPI.DameAsignacionesCromoConcretoEquipo (this.inscripcionEquipo.id, cromo.id)
     .subscribe((res) => {
       // Y ahora elimino la primera de ellas (una cualquiera)
-      this.peticionesAPI.BorrarCromoEquipo (res[0].id)
+      this.peticionesAPI.BorrarAsignacionCromoEquipo (res[0].id)
       .subscribe ( () => this.CromosDelEquipo());
     });
   }

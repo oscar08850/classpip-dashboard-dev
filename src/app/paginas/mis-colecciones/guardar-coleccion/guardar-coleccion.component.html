@@ -1,0 +1,77 @@
+
+<div class="titulo">Guardar colección</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+  <div class="enColumna">
+
+    <br>
+    <br>
+    <mat-divider class="lineaDivisoria"></mat-divider>
+
+      <br>
+      <br>
+      <h3>Aquí podrás crear una carpeta con los ficheros de esta colección, en el formato que se necesita para cargarla en el sistema desde el Dashboard.
+        <br>
+        Primero haz click (botón derecho) en el enlace para crear el fichero JSON con los datos de la colección. Ese fichero tendrá el nombre que tiene la colección. Se recomienda crear una carpeta para guardar en ella ese fichero y todas las imagenes de la colección.
+        <br>
+        Después, descarga (botón derecho y dejar imagen) cada una de las imágenes de la colección en la misma carpera, sin modificar los nombres de los ficheros.
+        <br>
+        En el caso de que la colección tenga cromos de dos caras, verás que al acercar el ratón a un cromo éste se dará la vuelta. Te resultará más cómodo descargar primero la cara de detrás y después, darle la vuelta a todos los cromos (pulsando el botón amarillo) y descargar la cara delantera.
+
+        <br>
+        <br>
+        <br>
+        Para generar el fichero JSON: <a id ="generarJSON"> </a>
+        <br>
+        <br>
+        <br>
+      </h3>
+
+    <button style = 'width: 50%' type="button" class="btn Info" (click) = "Voltear ()">
+        Dar la vuelta a todos los cromos <i class="material-icons">library_add</i>
+    </button>
+    <br>
+    <br>
+
+    <img class ="imagen" *ngIf="imagenColeccion"  mat-card-image [src]="imagenColeccion" >
+
+    <mat-grid-list cols="3" rowHeight="100px" style="width: 100%;" >
+      <mat-grid-tile
+          *ngFor="let cromo of cromosColeccion; let i = index"
+          [colspan]="1"
+          [rowspan]="4"
+          [style.background]="white">
+
+
+                <div *ngIf = "!coleccion.DosCaras" class="posicionImagen">
+                  <img class ="imagenCromo" *ngIf="imagenesCromosDelante[i]"  mat-card-image [src]="imagenesCromosDelante[i]" >
+                </div>
+
+                <div  *ngIf = "coleccion.DosCaras"  class="flip-box">
+                    <div class="flip-box-inner">
+                      <div class="flip-box-front">
+                        <div class="posicionImagen" >
+                          <img *ngIf= '!voltear' class ="imagenCromo"  mat-card-image [src]="imagenesCromosDelante[i]" >
+                          <img *ngIf= 'voltear' class ="imagenCromo"  mat-card-image [src]="imagenesCromosDetras[i]" >
+                        </div>
+                      </div>
+                      <div class="flip-box-back">
+                        <div class="posicionImagen" >
+                          <img *ngIf= '!voltear' class ="imagenCromo"   mat-card-image [src]="imagenesCromosDetras[i]" >
+                          <img *ngIf= 'voltear' class ="imagenCromo"   mat-card-image [src]="imagenesCromosDelante[i]" >
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+
+
+  </div>
+
+</div>
