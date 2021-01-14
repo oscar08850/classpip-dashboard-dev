@@ -27,6 +27,7 @@ export class AsignarFamiliasJuegoAvataresComponent implements OnInit {
   profesorId: number;
 
   familias: FamiliaAvatares[];
+  familiasPublicas: FamiliaAvatares[];
   familiasElegidas: number[] = [];
 
   alumnos: Alumno[];
@@ -47,6 +48,7 @@ export class AsignarFamiliasJuegoAvataresComponent implements OnInit {
 
   /* Estructura necesaria para determinar que filas son las que se han seleccionado */
   selection = new SelectionModel<any>(true, []);
+  muestroPublicas = false;
 
   constructor(
                private sesion: SesionService,
@@ -57,6 +59,7 @@ export class AsignarFamiliasJuegoAvataresComponent implements OnInit {
 
     this.profesorId = this.sesion.DameProfesor().id;
     this.TraeFamilias();
+    this.TraeFamiliasDeAvataresPublicas();
   }
 
 
@@ -77,6 +80,26 @@ export class AsignarFamiliasJuegoAvataresComponent implements OnInit {
       }
     });
   }
+
+  TraeFamiliasDeAvataresPublicas() {
+
+    this.peticionesAPI.DameFamiliasAvataresPublicas()
+    .subscribe (publicas => {
+      // me quedo con los públicos de los demás
+      const publicasDeOtros = publicas.filter (familia => familia.profesorId !== Number(this.profesorId));
+      // traigo los profesores para añadir a los publicos el nombre del propietario
+      this.peticionesAPI.DameProfesores ()
+      .subscribe (profesores => {
+        publicasDeOtros.forEach (familia => {
+          const propietario = profesores.filter (profesor => profesor.id === familia.profesorId)[0];
+          familia.NombreFamilia = familia.NombreFamilia + '(' + propietario.Nombre + ' ' + propietario.Apellido + ')';
+        });
+        this.familiasPublicas = publicasDeOtros;
+
+      });
+    });
+  }
+
 
   // AgregaFamilia(familia: FamiliaAvatares) {
   //   this.familiasElegidas.push (familia);
@@ -112,19 +135,15 @@ export class AsignarFamiliasJuegoAvataresComponent implements OnInit {
       this.datasource.data.forEach(row => this.selection.select(row));
     }
   }
+  MostrarPublicas() {
+    this.muestroPublicas = true;
+    this.datasource = new MatTableDataSource(this.familias.concat (this.familiasPublicas));
+  }
 
-
-  // /* Esta función decide si el boton debe estar activo (si hay al menos
-  // una fila seleccionada) o si debe estar desactivado (si no hay ninguna fila seleccionada) */
-  // ActualizarBotonTabla() {
-  //   if (this.selection.selected.length === 0) {
-  //     this.botonTablaDesactivado = true;
-  //   } else {
-  //     this.botonTablaDesactivado = false;
-  //   }
-  // }
-
-
+  QuitarPublicas() {
+    this.muestroPublicas = false;
+    this.datasource = new MatTableDataSource(this.familias);
+  }
 
 
 }

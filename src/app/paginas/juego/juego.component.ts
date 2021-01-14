@@ -1,34 +1,29 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { ThemePalette } from '@angular/material/core';
-import { SelectionModel } from '@angular/cdk/collections';
-import { MatDialog, MatTabGroup } from '@angular/material';
-import { Location } from '@angular/common';
-import { MatTableDataSource } from '@angular/material/table';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-// Clases
-// tslint:disable-next-line:max-line-length
-// import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
-//           AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
-//           EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
-//           EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
-//           AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-//           EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching} from '../../clases/index';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {ThemePalette} from '@angular/material/core';
+import {SelectionModel} from '@angular/cdk/collections';
+import {MatDialog, MatTabGroup} from '@angular/material';
+import {Location} from '@angular/common';
+import {MatTableDataSource} from '@angular/material/table';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
-          // tslint:disable-next-line:max-line-length
+
+// tslint:disable-next-line:max-line-length
 import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFormulaUno,
 
           AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
           EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
           EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
           AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-          EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable } from '../../clases/index';
+          EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable,
+          JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
+          JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, CuestionarioSatisfaccion,
+          JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion, Rubrica } from '../../clases/index';
 
 
 // Services
-import { SesionService, CalculosService, PeticionesAPIService } from '../../servicios/index';
+import { SesionService, CalculosService, PeticionesAPIService, ComServerService } from '../../servicios/index';
 
-import { Observable} from 'rxjs';
-import { of } from 'rxjs';
+import {Observable, of} from 'rxjs';
 import 'rxjs';
 
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
@@ -39,13 +34,12 @@ import { JuegoDeCuestionario } from 'src/app/clases/JuegoDeCuestionario';
 import { AlumnoJuegoDeCuestionario } from 'src/app/clases/AlumnoJuegoDeCuestionario';
 import { Router } from '@angular/router';
 
-import { AsignaEscenarioComponent } from './asigna-escenario/asigna-escenario.component';
-import { AsignaPreguntasComponent } from './asigna-preguntas/asigna-preguntas.component';
-
-
-
-
-
+import {AsignaEscenarioComponent} from './asigna-escenario/asigna-escenario.component';
+import {AsignaPreguntasComponent} from './asigna-preguntas/asigna-preguntas.component';
+import {JuegoDeEvaluacion} from '../../clases/JuegoDeEvaluacion';
+import {log} from 'util';
+import {EquipoJuegoEvaluado} from '../../clases/EquipoJuegoEvaluado';
+import {AlumnoJuegoEvaluado} from '../../clases/AlumnoJuegoEvaluado';
 
 
 export interface OpcionSeleccionada {
@@ -69,6 +63,7 @@ export interface ChipColor {
 export class JuegoComponent implements OnInit {
 
 
+
   ///////////////////////////////////// VARIABLE GENERALES PARA EL COMPONENTE ///////////////////////////////////
 
   profesorId: number;
@@ -85,7 +80,7 @@ export class JuegoComponent implements OnInit {
   // que está abandonando el proceso de creación del juego
   creandoJuego = false;
 
-  juego: Juego;
+  juego: any;
   juegoDeCuestionario: JuegoDeCuestionario;
   juegoDeCompeticion: JuegoDeCompeticion;
   juegoDeAvatar: JuegoDeAvatar;
@@ -105,7 +100,10 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Competición', color: 'warn'},
     {nombre: 'Juego De Avatar', color: 'primary'},
     {nombre: 'Juego De Cuestionario', color: 'accent'},
-    {nombre: 'Juego De Geocaching', color: 'warn'}
+    {nombre: 'Juego De Geocaching', color: 'warn'},
+    {nombre: 'Juego De Votación', color: 'primary'},
+    {nombre: 'Juego De Cuestionario de Satisfacción', color: 'accent'},
+    {nombre: 'Juego De Evaluación', color: 'accent'},
   ];
   seleccionModoJuego: ChipColor[] = [
     {nombre: 'Individual', color: 'primary'},
@@ -121,6 +119,7 @@ export class JuegoComponent implements OnInit {
   // información para crear un juego de colección
   coleccionSeleccionada: Coleccion;
   tengoColeccion = false;
+  modoAsignacion;
 
 
   // información para crear un juego de cuestionario
@@ -133,12 +132,58 @@ export class JuegoComponent implements OnInit {
   seleccionModoPresentacion: string[] = ['Mismo orden para todos',
   'Preguntas desordenadas',
   'Preguntas y respuestas desordenadas'];
+  tiempoLimite: number;
 
   // información para crear juego de avatares
   familiasElegidas: number[];
   tengoFamilias = false;
 
-
+  // Información para crear juego de evaluación
+  seleccionTipoDeEvaluacion: ChipColor[] = [
+    {nombre: '1 a N', color: 'primary'},
+    {nombre: 'Todos con todos', color: 'warn'}
+  ];
+  tipoDeEvaluacionSeleccionado: string;
+  tengoTipoDeEvaluacion = false;
+  //
+  seleccionRelacionesEvaluacion: ChipColor[] = [
+    {nombre: 'A elegir', color: 'primary'},
+    {nombre: 'Aleatorio', color: 'warn'}
+  ];
+  relacionesEvaluacionSeleccionado: string;
+  tengoRelacionEvaluacion = false;
+  relacionesMap = new Map();
+  numeroDeMiembros = 1;
+  //
+  profesorEvalua = false;
+  profesorEvaluaModo = 'normal';
+  autoevaluacion = false;
+  //
+  tengoRubrica = false;
+  rubricaElegida: Rubrica;
+  rubricas: Rubrica[];
+  //
+  seleccionCriterioEvaluacion: ChipColor[] = [
+    {nombre: 'Por pesos', color: 'primary'},
+    {nombre: 'Por penalización', color: 'warn'}
+  ];
+  criterioEvaluacionSeleccionado: string;
+  tengoCriterioEvaluacion = false;
+  //
+  pesosArray = [];
+  pesosSuman100 = true;
+  penalizacionArray = [];
+  //
+  seleccionEquiposEvaluacion: ChipColor[] = [
+    {nombre: 'Individualmente', color: 'primary'},
+    {nombre: 'Por Equipos', color: 'warn'}
+  ];
+  equiposEvaluacionSeleccionado: string;
+  tengoEquipoEvaluacion = false;
+  //
+  relacionAlumnosEquipos = [];
+  comprobacionDeN = false;
+  todosTienenEvaluador = false;
   // Información para crear juego de competicion
 
   tipoDeCompeticionSeleccionado: string;
@@ -180,9 +225,34 @@ export class JuegoComponent implements OnInit {
   puntuacionCorrectaGeoBonus: number;
   puntuacionIncorrectaGeoBonus: number;
 
+
+
+  // información para crear juego de votación
+
+  tipoDeVotacionSeleccionado: string;
+  seleccionTipoDeVotacion: ChipColor[] = [
+    {nombre: 'Uno A Todos', color: 'primary'},
+    {nombre: 'Todos A Uno', color: 'warn'}
+  ];
+  tengoTipoDeVotacion = false;
+  conceptos: string[];
+  listaConceptos: any[] = [];
+  dataSourceConceptos;
+  nombreConcepto;
+  pesoConcepto;
+  pesos: number[];
+  totalPesos: number;
+  conceptosAsignados = false;
+  displayedColumnsConceptos: string[] = ['nombreConcepto', 'pesoConcepto', ' '];
+
+
+  // Información para el juego de cuestionario de satisfacción
+  cuestionarioSatisfaccion: CuestionarioSatisfaccion;
+  tengoCuestionarioSatisfaccion = false;
+  descripcionCuestionarioSatisfaccion: string;
+
+
   final = false;
-
-
 
   // HACEMOS DOS LISTAS CON LOS JUEGOS ACTIVOS, INACTIVOS Y PREPARADOS
   // Lo logico seria que fuesen listas de tipo Juego, pero meteremos objetos
@@ -199,79 +269,13 @@ export class JuegoComponent implements OnInit {
   // criterioComplemento1: string;
 
   //////////////////////////////////// PARÁMETROS PARA PÁGINA DE CREAR JUEGO //////////////////////////////////////
-  // para leer el nombre
-  // formNombre: FormGroup;
-
-
-  // En el primer paso mostraremos tres Chips con las diferentes opciones de tipo de juego que podemos crear y su color
-
-
-  // En el segundo paso mostraremos dos Chips con los dos modos de juego que podemos crear y su color
-
-
-    // En el segundo paso mostraremos dos Chips con los dos modos de juego que podemos crear y su color
-
-  // Recogemos la opción que seleccionemos en el primer (tipoDeJuegoSeleccionado) y en el segundo paso (modoDeJuegoSeleccionado)
-
-
-
-  // NumeroDeVueltasValueInd: number;
-  // NumeroDeVueltasValueEqu: number;
-
-  // // Todo lo relacionado con juego de cuestionario
-  // myFormPuntuacion: FormGroup;
-  // PuntuacionCorrecta: number;
-  // PuntuacionIncorrecta: number;
-
-
-  // // tslint:disable-next-line:ban-types
-  // DisabledCuestionario: Boolean = true;
-  //  // tslint:disable-next-line:ban-types
-  // DisabledPuntuacion: Boolean = true;
-  //  // tslint:disable-next-line:ban-types
-  // DisabledPresentacion: Boolean =  true;
-  // juegoDeCuestionarioId: number;
-
-  // // Tipos de presentacion para el juego de cuestionario
-
-  // ModoPresentacionFavorito: string;
-  // myFormPresentacion: FormGroup;
-
-  // // Recogemos el tipo de presentacion para el juego de cuestionario
-  // tipoDePresentacion: string;
-  // //
-  // tipoJuegoCompeticionSeleccionado: string;
-
-  // // No nos permite avanzar si no se ha seleccionado una opción
-  // // tslint:disable-next-line:ban-types
-  // isDisabled: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledNombre: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledModo: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledExtra: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledTipoCompeticion: Boolean = true;
-  // // tslint:disable-next-line:ban-types
-  // isDisabledJornadas: Boolean = true;
-
-  // tipoJuegoElegido: string;
-  // nombreColeccionSeleccionada: string;
-  // // tslint:disable-next-line:ban-types
-  // finalizar: Boolean = false;
-
-  // botonTablaDesactivado = true;
-  // seleccionados: boolean[];
-
-  // botonTablaDesactivadoJugadorExtra = true;
-
 
 
   constructor(
                public dialog: MatDialog,
                private calculos: CalculosService,
                private sesion: SesionService,
+               private comService: ComServerService,
                private location: Location,
                private peticionesAPI: PeticionesAPIService,
                // tslint:disable-next-line:variable-name
@@ -293,6 +297,12 @@ export class JuegoComponent implements OnInit {
         console.log('Hay equipos');
         this.equiposGrupo = equipos;
         console.log(this.equiposGrupo);
+        for (const equipo of equipos) {
+          this.peticionesAPI.DameAlumnosEquipo(equipo.id).subscribe((alumnos: Alumno[]) => {
+            this.relacionAlumnosEquipos.push({equipoId: equipo.id, alumnos});
+            console.log('relacion alumnos equipos', this.relacionAlumnosEquipos);
+          });
+        }
       } else {
         // mensaje al usuario
         console.log('Este grupo aun no tiene equipos');
@@ -330,6 +340,13 @@ export class JuegoComponent implements OnInit {
             }
 
     });
+    // Peticion API Juego de Evaluacion
+    this.peticionesAPI.DameRubricasProfesor(this.profesorId).subscribe(rubricas => {
+      console.log('Tengo rubricas', rubricas);
+      this.rubricas = rubricas;
+    });
+    // Fin Peticion API Juego de Evaluacion
+    //
     // Es este formulario recogeremos la información que vaya introduciendo
     // el usuario segun el tipo de juego
     this.myForm = this._formBuilder.group({
@@ -347,13 +364,20 @@ export class JuegoComponent implements OnInit {
       PuntuacionCorrectaGeo: ['', Validators.required],
       PuntuacionIncorrectaGeo : ['', Validators.required],
       PuntuacionCorrectaGeoBonus: ['', Validators.required],
-      PuntuacionIncorrectaGeoBonus: ['', Validators.required]
+      PuntuacionIncorrectaGeoBonus: ['', Validators.required],
+      NombreDelConcepto: ['', Validators.required],
+      PesoDelConcepto: ['', Validators.required],
+      TiempoLimite: ['', Validators.required]
     });
 
     this.TablaPuntuacion = [];
     this.TablaPuntuacion[0] = new TablaPuntosFormulaUno(1, 10);
     this.dataSource = new MatTableDataSource (this.TablaPuntuacion);
     this.Puntuacion[0] = 10;
+
+    this.listaConceptos = [];
+    this.totalPesos = 0;
+
   }
 
   //////////////////////////////////////// FUNCIONES PARA LISTAR JUEGOS ///////////////////////////////////////////////
@@ -423,8 +447,14 @@ export class JuegoComponent implements OnInit {
     console.log(' tengo tipo ' + this.tipoDeJuegoSeleccionado);
     if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuestionario') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de cuestionario en equipo', 'warning');
-    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Avatares') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Avatar') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de avatares en equipo', 'warning');
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Geocaching') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+      Swal.fire('Alerta', 'Aún no es posible el juego de geocaching en equipo', 'warning');
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Votación') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+      Swal.fire('Alerta', 'Aún no es posible el juego de votación en equipo', 'warning');
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuestionario de Satisfacción') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+      Swal.fire('Alerta', 'No existe el juego de cuestionario de satisfacción en equipo', 'warning');
     } else {
       if (this.modoDeJuegoSeleccionado === 'Individual') {
         if (this.alumnosGrupo === undefined) {
@@ -445,6 +475,333 @@ export class JuegoComponent implements OnInit {
         }
       }
     }
+  }
+
+  // FUNCIONES PARA LA CREACION DE JUEGO DE EVALUACION
+  TipoDeEvaluacionSeleccionado(tipoEvaluacion: ChipColor) {
+    this.tipoDeEvaluacionSeleccionado = tipoEvaluacion.nombre;
+    if (this.tipoDeEvaluacionSeleccionado === 'Todos con todos') {
+      this.numeroDeMiembros = this.DameMaxSlider();
+      this.HacerRelaciones(true);
+    }
+    this.tengoTipoDeEvaluacion = true;
+  }
+
+  RelacionDeEvaluacionSeleccionado(relacionEvaluacion: ChipColor) {
+    this.relacionesEvaluacionSeleccionado = relacionEvaluacion.nombre;
+    if (relacionEvaluacion.nombre === 'Aleatorio') {
+      this.HacerRelaciones(true);
+    } else {
+      this.HacerRelaciones(false);
+    }
+    this.tengoRelacionEvaluacion = true;
+  }
+  Shuffle(a) {
+    let j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      x = a[i];
+      a[i] = a[j];
+      a[j] = x;
+    }
+    return a;
+  }
+  HacerRelaciones(fill: boolean) {
+    const evaluados = this.DameEvaluados().map(item => item.id);
+    this.relacionesMap = new Map();
+    do {
+      for (let i = 0; i < evaluados.length; i++) {
+        if (!fill) {
+          this.relacionesMap.set(evaluados[i], []);
+        } else {
+          let evaluadores = [];
+          if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
+            for (const equipo of this.relacionAlumnosEquipos) {
+              if (equipo.equipoId === evaluados[i]) {
+                evaluadores = this.DameEvaluadores()
+                  .filter(({id: id1}) => !equipo.alumnos.some(({id: id2}) => id1 === id2))
+                  .map(item => item.id);
+              }
+            }
+          } else {
+            evaluadores = this.DameEvaluadores().filter(item => item.id !== evaluados[i]).map(item => item.id);
+          }
+          evaluadores = this.Shuffle(evaluadores);
+          if (this.modoDeJuegoSeleccionado === 'Equipos'
+            && this.equiposEvaluacionSeleccionado === 'Individualmente'
+            && this.tipoDeEvaluacionSeleccionado === 'Todos con todos') {
+            evaluadores.length = this.alumnosGrupo.length;
+          } else {
+            evaluadores.length = this.numeroDeMiembros;
+          }
+          this.relacionesMap.set(evaluados[i], evaluadores.filter(item => !isNaN(item)));
+        }
+      }
+    } while (this.ComprobarSiTodosTienenEvaluadores() === false && fill === true);
+    console.log('Relaciones object', this.relacionesMap);
+    console.log('Todos tienen evaluadores', this.todosTienenEvaluador);
+  }
+  RelacionChanged(id: number, value: string[]) {
+    console.log('Relaciones changed', id, value);
+    this.relacionesMap.set(id, value);
+    console.log('Relaciones object', this.relacionesMap);
+    this.ComprobarSiTodosTienenEvaluadores();
+  }
+  ComprobarSiTodosTienenEvaluadores() {
+    let encontrado1 = false;
+    let encontrado2 = false;
+    if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
+      this.relacionesMap.forEach((value, key) => {
+        if (value.length < this.numeroDeMiembros) {
+          this.comprobacionDeN = false;
+          encontrado2 = true;
+        }
+        value.forEach(item => {
+          if (this.ContarEvaluadores(item) === 0) {
+            this.todosTienenEvaluador = false;
+            encontrado1 = true;
+          }
+        });
+      });
+    } else {
+      this.relacionesMap.forEach((value, key) => {
+        if (this.ContarEvaluadores(key) === 0) {
+          this.todosTienenEvaluador = false;
+          encontrado1 = true;
+        }
+        if (value.length < this.numeroDeMiembros) {
+          this.comprobacionDeN = false;
+          encontrado2 = true;
+        }
+      });
+    }
+    if (!encontrado1) {
+      this.todosTienenEvaluador = true;
+    }
+    if (!encontrado2) {
+      this.comprobacionDeN = true;
+    }
+    return this.todosTienenEvaluador;
+  }
+    ContarEvaluadores(idEvaluado: number): number {
+    let suma = 0;
+    this.relacionesMap.forEach((value, key) => {
+      if (value.includes(idEvaluado)) {
+        suma++;
+      }
+    });
+    return suma;
+  }
+    CriterioDeEvaluacionSeleccionado(criterioEvaluacion: ChipColor) {
+    this.criterioEvaluacionSeleccionado = criterioEvaluacion.nombre;
+    this.tengoCriterioEvaluacion = true;
+    if (this.criterioEvaluacionSeleccionado === 'Por pesos') {
+      this.pesosArray = [];
+      for (let i = 0; i < this.rubricaElegida.Criterios.length; i++) {
+        this.pesosArray.push([]);
+        this.pesosArray[i].push(this.PesoPorDefecto(this.rubricaElegida.Criterios.length));
+        for (let j = 0; j < this.rubricaElegida.Criterios[i].Elementos.length; j++) {
+          this.pesosArray[i].push(this.PesoPorDefecto(this.rubricaElegida.Criterios[i].Elementos.length));
+        }
+      }
+      console.log('pesos array', this.pesosArray);
+    } else {
+      this.penalizacionArray = [];
+      for (let i = 0; i < this.rubricaElegida.Criterios.length; i++) {
+        this.penalizacionArray.push([]);
+        if (this.rubricaElegida.Criterios[i].Elementos.length >= 1) {
+          this.penalizacionArray[i].push({num: 1, p: 75});
+        }
+        if (this.rubricaElegida.Criterios[i].Elementos.length >= 2) {
+          this.penalizacionArray[i].push({num: 2, p: 50});
+        }
+        if (this.rubricaElegida.Criterios[i].Elementos.length >= 3) {
+          this.penalizacionArray[i].push({num: 3, p: 0});
+        }
+      }
+      console.log('penalizacion array', this.penalizacionArray);
+    }
+  }
+    EquipoDeEvaluacionSeleccionado(equipoEvaluacion: ChipColor) {
+    this.equiposEvaluacionSeleccionado = equipoEvaluacion.nombre;
+    this.tengoEquipoEvaluacion = true;
+  }
+    AutoevaluacionChange(isChecked: boolean) {
+    this.autoevaluacion = isChecked;
+  }
+    ProfesorEvaluaChange(isChecked: boolean) {
+    this.profesorEvalua = isChecked;
+  }
+    ProfesorEvaluaModoChange(value: string) {
+    this.profesorEvaluaModo = value;
+  }
+    DameMaxSlider(): number {
+    if (this.modoDeJuegoSeleccionado === 'Individual') {
+      return this.alumnosGrupo.length - 1;
+    } else if (this.modoDeJuegoSeleccionado === 'Equipos') {
+      if (this.equiposEvaluacionSeleccionado === 'Por Equipos') {
+        return this.equiposGrupo.length - 1;
+      } else if (this.equiposEvaluacionSeleccionado === 'Individualmente') {
+        let min = this.alumnosGrupo.length;
+        for (let i = 0; i < this.relacionAlumnosEquipos.length; i++) {
+          if (this.relacionAlumnosEquipos[i].alumnos.length < min) {
+            min = this.relacionAlumnosEquipos[i].alumnos.length;
+          }
+        }
+        return min;
+      }
+    }
+  }
+
+    DameEvaluados(): any {
+    if (this.modoDeJuegoSeleccionado === 'Individual') {
+      return this.alumnosGrupo;
+    } else {
+      return this.equiposGrupo;
+    }
+  }
+    DameEvaluadores(): any {
+    if (this.equiposEvaluacionSeleccionado === 'Por Equipos') {
+      return this.equiposGrupo;
+    } else {
+      return this.alumnosGrupo;
+    }
+  }
+  public DameRelacionesAlumnoEquipos() {
+    return this.relacionAlumnosEquipos;
+  }
+  SliderChanged(value: number) {
+    console.log('Slider changed to', value);
+    this.numeroDeMiembros = value;
+  }
+  RubricaSeleccionChange(index: number) {
+    console.log('Rubrica seleccionada', this.rubricas[index]);
+    this.rubricaElegida = this.rubricas[index];
+    this.tengoRubrica = true;
+  }
+  PesoPorDefecto(total: number): number {
+    return parseFloat((100 / total).toFixed(2));
+  }
+  PesosChanged(name: string, value: string): void {
+    console.log('Pesos changed', name, value);
+    const criterio = name.split('-')[0];
+    const elemento = name.split('-')[1];
+    this.pesosArray[criterio][elemento] = parseFloat(value);
+    console.log('pesos array changed', this.pesosArray);
+    this.pesosSuman100 = this.PesosSuman100();
+  }
+  PesosParentChanged(name: string, value: string): void {
+    console.log('Pesos parent changed', name, value);
+    this.pesosArray[name][0] = parseFloat(value);
+    console.log('pesos array changed', this.pesosArray);
+    this.pesosSuman100 = this.PesosSuman100();
+  }
+  PesosSuman100(): boolean {
+    let c = 0;
+    for (let i = 0; i < this.pesosArray.length; i++) {
+      let p = 0;
+      for (let j = 0; j < this.pesosArray[i].length; j++) {
+        if  (j === 0) {
+          c += this.pesosArray[i][j];
+        } else {
+          p += this.pesosArray[i][j];
+        }
+      }
+      if (Math.round((p + Number.EPSILON) * 10) / 10 !== 100) {
+        return false;
+      }
+    }
+    return Math.round((c + Number.EPSILON) * 10) / 10 === 100;
+  }
+  PenalizacionChanged(name: string, value: string): void {
+    console.log('Penalizacion changed', name, value);
+    const criterio = name.split('-')[0];
+    const elemento = name.split('-')[1];
+    const tipo = name.split('-')[2];
+    if (tipo === 'num') {
+      const tmp = this.penalizacionArray[criterio][elemento].p;
+      this.penalizacionArray[criterio][elemento] = {num: parseInt(value, 10), p: tmp};
+    } else if (tipo === 'p') {
+      const tmp = this.penalizacionArray[criterio][elemento].num;
+      this.penalizacionArray[criterio][elemento] = {num: tmp, p: parseInt(value, 10)};
+    }
+    console.log('penalizacion array', this.penalizacionArray);
+  }
+  CrearJuegoEvaluacion() {
+    let evaluadores: number;
+    if (this.tipoDeEvaluacionSeleccionado === 'Todos con todos') {
+      evaluadores = 0;
+    } else {
+      evaluadores = this.numeroDeMiembros;
+    }
+    const juego: JuegoDeEvaluacion = new JuegoDeEvaluacion(
+      null,
+      this.nombreDelJuego,
+      'Evaluacion',
+      this.modoDeJuegoSeleccionado,
+      true,
+      false,
+      this.profesorEvalua,
+      this.profesorEvaluaModo === 'normal',
+      this.autoevaluacion,
+      evaluadores,
+      this.pesosArray,
+      this.criterioEvaluacionSeleccionado === 'Por pesos',
+      this.penalizacionArray,
+      this.rubricaElegida.id,
+      this.profesorId,
+      this.grupo.id
+    );
+    console.log('Creando Juego de Evaluacion', juego);
+    this.peticionesAPI.CrearJuegoDeEvaluacion(juego).subscribe(res => {
+      console.log('JuegoDeEvaluacionCreado', res);
+      Swal.fire('Juego de Evaluación creado correctamente', ' ', 'success');
+      this.juego = res;
+      this.sesion.TomaJuego(this.juego);
+      this.juegoCreado = true;
+      this.relacionesMap.forEach(async (value: number[], key: number) => {
+        if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Por Equipos') {
+          const equipo: EquipoJuegoEvaluado = new EquipoJuegoEvaluado(
+            null,
+            res.id,
+            key,
+            value,
+            null,
+            null
+          );
+          await this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).toPromise();
+        } else if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
+          const equipo: EquipoJuegoEvaluado = new EquipoJuegoEvaluado(
+            null,
+            res.id,
+            key,
+            null,
+            value,
+            null
+          );
+          await this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).toPromise();
+        } else if (this.modoDeJuegoSeleccionado === 'Individual') {
+          const alumno: AlumnoJuegoEvaluado = new AlumnoJuegoEvaluado(
+            null,
+            res.id,
+            key,
+            value,
+            null
+          );
+          await this.peticionesAPI.CrearAlumnoJuegoDeEvaluacion(alumno).toPromise();
+        }
+      });
+
+      // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+      if (this.juegosActivos === undefined) {
+        // Si la lista aun no se ha creado no podre hacer el push
+        this.juegosActivos = [];
+      }
+      this.juegosActivos.push(this.juego);
+      this.Limpiar();
+      // Regresamos a la lista de equipos (mat-tab con índice 0)
+      this.tabGroup.selectedIndex = 0;
+    });
   }
 
   // FUNCIONES PARA LA CREACION DE JUEGO DE PUNTOS
@@ -470,7 +827,7 @@ export class JuegoComponent implements OnInit {
   CrearJuegoDePuntos() {
     // primero creamos el juego
     this.peticionesAPI.CreaJuegoDePuntos(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado,
-      undefined, undefined, undefined, undefined, undefined, undefined, this.nombreDelJuego), this.grupo.id)
+      undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       this.sesion.TomaJuego(this.juego);
@@ -537,7 +894,7 @@ export class JuegoComponent implements OnInit {
   }
 
   CrearJuegoDeColeccion() {
-    this.peticionesAPI.CreaJuegoDeColeccion(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado,
+    this.peticionesAPI.CreaJuegoDeColeccion(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.modoAsignacion,
       this.coleccionSeleccionada.id, undefined, undefined, undefined, undefined, undefined, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
@@ -570,6 +927,17 @@ export class JuegoComponent implements OnInit {
       this.Limpiar();
         // Regresamos a la lista de equipos (mat-tab con índice 0)
       this.tabGroup.selectedIndex = 0;
+      // Notificación para los miembros del grupo
+      // console.log ('envio notificación los miembros del grupo');
+      // this.comService.EnviarNotificacionGrupo (
+      //      this.grupo.id,
+      //      'Nuevo juego de colección para el grupo ' + this.grupo.Nombre
+      // );
+      console.log ('envio notificación los miembros del grupo');
+      this.comService.EnviarNotificacionGrupo (
+          this.grupo.id,
+          'Nuevo juego de colección para el grupo ' + this.grupo.Nombre
+      );
 
     });
   }
@@ -612,6 +980,14 @@ export class JuegoComponent implements OnInit {
     this.tengoModoPresentacion = true;
   }
 
+  GuardarTiempoLimite() {
+    this.tiempoLimite = this.myForm.value.TiempoLimite;
+    if (this.tiempoLimite === undefined) {
+      this.tiempoLimite = 0;
+    }
+  }
+
+
   CrearJuegoDeCuestionario() {
 
     // Tengo que crear un juego de tipo JuegoDeCuestionario y no uno de tipo Juego, como en los casos
@@ -622,7 +998,7 @@ export class JuegoComponent implements OnInit {
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.puntuacionCorrecta,
       this.puntuacionIncorrecta, this.modoPresentacion,
-      false, false, this.profesorId, this.grupo.id, this.cuestionario.id), this.grupo.id)
+      false, false, this.profesorId, this.grupo.id, this.cuestionario.id, this.tiempoLimite), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juegoDeCuestionario = juegoCreado;
       // Inscribimos a los alumnos (de momento no hay juego de cuestionario por equipos)
@@ -777,7 +1153,7 @@ export class JuegoComponent implements OnInit {
 
   }
 
-  EliminarFina() {
+  EliminarFila() {
 
     let i: number;
     i = this.Puntuacion.length;
@@ -801,7 +1177,7 @@ export class JuegoComponent implements OnInit {
 
     // tslint:disable-next-line:max-line-lengtholean)
     this.peticionesAPI.CreaJuegoDeCompeticionLiga(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeCompeticionSeleccionado,
-                                                    this.modoDeJuegoSeleccionado, undefined, true, this.numeroDeJornadas,
+                                                    this.modoDeJuegoSeleccionado, undefined, undefined, true, this.numeroDeJornadas,
                                                     this.tipoDeCompeticionSeleccionado,
                                                     undefined, undefined, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
@@ -856,7 +1232,7 @@ export class JuegoComponent implements OnInit {
   CrearJuegoDeCompeticionFormulaUno() {
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.CreaJuegoDeCompeticionFormulaUno(new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeCompeticionSeleccionado,
-                                                    this.modoDeJuegoSeleccionado, undefined, true, this.numeroDeJornadas,
+                                                    this.modoDeJuegoSeleccionado, undefined, undefined, true, this.numeroDeJornadas,
                                                     undefined, this.Puntuacion.length,
                                                     this.Puntuacion, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
@@ -969,7 +1345,7 @@ export class JuegoComponent implements OnInit {
       console.log (this.PreguntasBasicas);
       console.log (this.PreguntasBonus);
 
-    })
+    });
   }
 
 
@@ -1005,7 +1381,7 @@ export class JuegoComponent implements OnInit {
         this.peticionesAPI.InscribeAlumnoJuegoDeGeocaching(new AlumnoJuegoDeGeocaching(0, 0, this.alumnosGrupo[i].id, this.juegoDeGeocaching.id ))
         .subscribe();
       }
-      Swal.fire('Juego de geocatching creado correctamente', ' ', 'success');
+      Swal.fire('Juego de geocaching creado correctamente', ' ', 'success');
 
       // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
       if (this.juegosPreparados === undefined) {
@@ -1020,8 +1396,207 @@ export class JuegoComponent implements OnInit {
     });
   }
 
+  // Funciones para crear juego de votación
+  // Para crear el juego de votación de tipo Uno A Todos se usa la tabla
+  // de asignación de puntuaciones que ya se usa en la competición de Formula Uno
+  // junto con las funciones asociadas, porque lo que hay que hacer es exactamente lo mismo
+
+  TipoDeVotacionSeleccionado(tipoVotacion: ChipColor) {
+    this.tipoDeVotacionSeleccionado = tipoVotacion.nombre;
+    this.tengoTipoDeVotacion = true;
+  }
+
+CrearJuegoDeVotacionUnoATodos() {
+    const juegoDeVotacion = new JuegoDeVotacionUnoATodos (
+      this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeVotacionSeleccionado ,
+      this.modoDeJuegoSeleccionado,
+      true,
+      this.Puntuacion,
+      this.nombreDelJuego,
+      false,
+      this.grupo.id);
+    this.peticionesAPI.CreaJuegoDeVotacionUnoATodos (juegoDeVotacion, this.grupo.id)
+    .subscribe (juegoCreado => {
+      this.juego = juegoCreado;
+      this.sesion.TomaJuego(this.juego);
+      this.juegoCreado = true;
+
+      if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < this.alumnosGrupo.length; i++) {
+          // tslint:disable-next-line:max-line-length
+          this.peticionesAPI.InscribeAlumnoJuegoDeVotacionUnoATodos(
+            // tslint:disable-next-line:indent
+		          new AlumnoJuegoDeVotacionUnoATodos(this.alumnosGrupo[i].id, this.juego.id))
+          .subscribe();
+        }
+      }
+
+      Swal.fire('Juego de votación tipo Uno A Todos creado correctamente', ' ', 'success');
+
+      // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+      if (this.juegosActivos === undefined) {
+      // Si la lista aun no se ha creado no podre hacer el push
+              this.juegosActivos = [];
+      }
+      this.juegosActivos.push (this.juego);
+      // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
+      this.Limpiar();
+      // Regresamos a la lista de equipos (mat-tab con índice 0)
+      this.tabGroup.selectedIndex = 0;
+
+    });
+}
+
+PonConcepto() {
+
+  this.listaConceptos.push ({nombre: this.myForm.value.NombreDelConcepto, peso: this.myForm.value.PesoDelConcepto});
+  this.dataSourceConceptos = new MatTableDataSource (this.listaConceptos);
+  let peso: number;
+  peso = Number (this.myForm.value.PesoDelConcepto);
+  this.totalPesos = this.totalPesos + peso;
+  console.log ('total ' + this.totalPesos);
+
+  this.myForm.reset();
+
+}
 
 
+BorraConcepto(nombre) {
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < this.listaConceptos.length; i++) {
+    if (this.listaConceptos[i]['nombre'] === nombre) {
+      this.totalPesos = this.totalPesos - this.listaConceptos[i]['peso'];
+      this.listaConceptos.splice ( i, 1);
+    }
+  }
+  this.dataSourceConceptos = new MatTableDataSource (this.listaConceptos);
+
+}
+
+AsignarConceptos() {
+  this.conceptos = [];
+  this.pesos = [];
+
+
+  if (this.totalPesos !== 100) {
+    Swal.fire('Los pesos no suman el 100%', ' ', 'error');
+  } else {
+    this.listaConceptos.forEach (concepto => {
+      this.conceptos.push (concepto['nombre']);
+      this.pesos.push (concepto['peso']);
+    });
+    this.conceptosAsignados = true;
+  }
+}
+
+CrearJuegoDeVotacionTodosAUno() {
+  const juegoDeVotacion = new JuegoDeVotacionTodosAUno (
+    this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeVotacionSeleccionado ,
+    this.modoDeJuegoSeleccionado,
+    true,
+    this.conceptos,
+    this.pesos,
+    this.nombreDelJuego,
+    false,
+    this.grupo.id);
+  console.log ('voy a crear juego');
+  console.log (juegoDeVotacion);
+  this.peticionesAPI.CreaJuegoDeVotacionTodosAUno (juegoDeVotacion, this.grupo.id)
+  .subscribe (juegoCreado => {
+    this.juego = juegoCreado;
+    this.sesion.TomaJuego(this.juego);
+    this.juegoCreado = true;
+
+    if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.alumnosGrupo.length; i++) {
+        // tslint:disable-next-line:max-line-length
+        this.peticionesAPI.InscribeAlumnoJuegoDeVotacionTodosAUno(
+            new AlumnoJuegoDeVotacionTodosAUno(this.alumnosGrupo[i].id, this.juego.id))
+        .subscribe();
+      }
+    }
+
+    Swal.fire('Juego de votación tipo Todos A Uno creado correctamente', ' ', 'success');
+
+    // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+    if (this.juegosActivos === undefined) {
+    // Si la lista aun no se ha creado no podre hacer el push
+            this.juegosActivos = [];
+    }
+    this.juegosActivos.push (this.juego);
+    // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
+    this.Limpiar();
+    // Regresamos a la lista de equipos (mat-tab con índice 0)
+    this.tabGroup.selectedIndex = 0;
+
+  });
+}
+
+
+///////////////// FUNCIONES PARA CREAR JUEGO DE CUESTIONARIO DE SATISFACCION /////////////
+
+RecibeCuestionarioSatisfaccionElegido($event) {
+  this.cuestionarioSatisfaccion = $event;
+  this.tengoCuestionarioSatisfaccion = true;
+  console.log ('tengo cuestionario: ' + this.cuestionarioSatisfaccion.Titulo);
+}
+GuardaDescripcionCuestionarioSatisfaccion(ev) {
+  this.cuestionarioSatisfaccion.Descripcion = ev.target.value;
+}
+
+CrearJuegoDeCuestionarioDeSatisfaccion() {
+  console.log ('voy a crear el juego');
+  console.log ('cuestionario: ' + this.cuestionarioSatisfaccion.Titulo);
+  console.log ('Descripcion: ' + this.cuestionarioSatisfaccion.Descripcion);
+  const juegoDeCuestionarioSatisfaccion = new JuegoDeCuestionarioSatisfaccion (
+    this.nombreDelJuego,
+    this.tipoDeJuegoSeleccionado,
+    this.cuestionarioSatisfaccion.Descripcion,
+    true,
+    false,
+    this.profesorId,
+    this.grupo.id,
+    this.cuestionarioSatisfaccion.id);
+
+  console.log ('voy a crear juego');
+  console.log (juegoDeCuestionarioSatisfaccion);
+  this.peticionesAPI.CreaJuegoDeCuestionarioSatisfaccion (juegoDeCuestionarioSatisfaccion, this.grupo.id)
+  .subscribe (juegoCreado => {
+    this.juego = juegoCreado;
+    this.sesion.TomaJuego(this.juego);
+    this.juegoCreado = true;
+
+    if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.alumnosGrupo.length; i++) {
+        // tslint:disable-next-line:max-line-length
+        this.peticionesAPI.InscribeAlumnoJuegoDeCuestionarioSatisfaccion (
+            new AlumnoJuegoDeCuestionarioSatisfaccion(false, this.juego.id, this.alumnosGrupo[i].id))
+        .subscribe();
+      }
+    }
+
+    Swal.fire('Juego de cuestionario de satisfacción creado correctamente', ' ', 'success');
+
+    // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+    if (this.juegosActivos === undefined) {
+    // Si la lista aun no se ha creado no podre hacer el push
+            this.juegosActivos = [];
+    }
+    this.juegosActivos.push (this.juego);
+    // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
+    this.Limpiar();
+    // Regresamos a la lista de equipos (mat-tab con índice 0)
+    this.tabGroup.selectedIndex = 0;
+
+  });
+
+}
 
 goBack() {
     this.location.back();
@@ -1108,7 +1683,6 @@ Limpiar() {
     this.tengoTipoDeCompeticion = false;
     this.tengoNuevaPuntuacion = false;
 
-
     this.puntuacionCorrectaGeo = undefined;
     this.puntuacionIncorrectaGeo = undefined;
     this.puntuacionCorrectaGeoBonus = undefined;
@@ -1121,8 +1695,8 @@ Limpiar() {
     this.PreguntasBonus = undefined;
     this.tengoPreguntas = false;
 
-
-}
-
-
+    this.conceptosAsignados = false;
+    this.listaConceptos = [];
+    this.totalPesos = 0;
+  }
 }

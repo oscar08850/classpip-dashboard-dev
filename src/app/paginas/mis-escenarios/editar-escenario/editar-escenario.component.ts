@@ -48,14 +48,36 @@ export class EditarEscenarioComponent implements OnInit {
 
   ngOnInit() {
     this.escenario = this.sesion.DameEscenario();
+    this.DamePuntosGeolocalizablesDelEscenario();
     this.mapaEscenario = this.escenario.Mapa;
     this.descripcionEscenario = this.escenario.Descripcion;
-    this.puntosgeolocalizablesEscenario = this.sesion.DamePuntosGeolocalizables();
-  
+
     // Me traigo la imagen de la colección y las imagenes de cada cromo
     // Cargo el imagen de la coleccion
     // this.GET_Imagen();
   }
+
+
+  Cambio() {
+    this.cambios = true;
+  }
+
+ DamePuntosGeolocalizablesDelEscenario() {
+
+  console.log('voy a mostrar los puntosgeolocalizables del escenario ' + this.escenario.id);
+
+  this.peticionesAPI.DamePuntosGeolocalizablesEscenario(this.escenario.id)
+  .subscribe(res => {
+    if (res[0] !== undefined) {
+      this.puntosgeolocalizablesEscenario = res;
+      console.log(res);
+    } else {
+      console.log('No hay puntosgeolocalizables en el escenario');
+      this.puntosgeolocalizablesEscenario = undefined;
+    }
+  });
+  }
+
 
   // Se hace un PUT de la coleccion seleccionada para editar
   EditarEscenario() {
@@ -157,6 +179,8 @@ export class EditarEscenarioComponent implements OnInit {
 
     });
   }
+
+
 
   goBack() {
     if (this.cambios) {

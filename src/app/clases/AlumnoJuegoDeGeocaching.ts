@@ -3,13 +3,13 @@ export class AlumnoJuegoDeGeocaching {
     Puntuacion: number;
     Etapa: number;
     id: number;
-    AlumnoId: number;
+    alumnoId: number;
     juegoDeGeocachingId: number;
 
     constructor(Puntuacion?: number, Etapa?: number, AlumnoId?: number, juegoDeGeocaching?: number) {
         this.Puntuacion = Puntuacion;
         this.Etapa = Etapa;
-        this.AlumnoId = AlumnoId;
+        this.alumnoId = AlumnoId;
         this.juegoDeGeocachingId = juegoDeGeocaching;
     }
 }

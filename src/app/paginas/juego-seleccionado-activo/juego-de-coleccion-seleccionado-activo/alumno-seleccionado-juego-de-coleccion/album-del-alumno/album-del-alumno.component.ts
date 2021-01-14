@@ -84,6 +84,7 @@ export class AlbumDelAlumnoComponent implements OnInit {
       let cromo: Cromo;
       cromo = this.cromosColeccion[i];
 
+
       if (cromo.ImagenDelante !== undefined ) {
         this.imagenCromoDelante[i] = URL.ImagenesCromo + cromo.ImagenDelante;
         // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera

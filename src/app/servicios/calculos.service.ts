@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { SesionService, PeticionesAPIService} from './index';
 import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos,
          TablaEquipoJuegoDePuntos, HistorialPuntosAlumno, HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo,
-         AlumnoJuegoDeColeccion, Album, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
+         AlumnoJuegoDeColeccion, Album, Coleccion, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
          TablaEquipoJuegoDeCompeticion, Jornada, EquipoJuegoDeCompeticionLiga, EnfrentamientoLiga, InformacionPartidosLiga,
          AlumnoJuegoDeCompeticionLiga, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno,
-         TablaClasificacionJornada, TablaPuntosFormulaUno} from '../clases/index';
+         // tslint:disable-next-line:max-line-length
+         TablaClasificacionJornada, TablaPuntosFormulaUno, AlumnoJuegoDeVotacionUnoATodos, TablaAlumnoJuegoDeVotacionUnoATodos,
+         AlumnoJuegoDeVotacionTodosAUno,TablaAlumnoJuegoDeVotacionTodosAUno, JuegoDeVotacionTodosAUno, FamiliaAvatares} from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -17,6 +19,7 @@ import { AlumnoJuegoDeCuestionario } from '../clases/AlumnoJuegoDeCuestionario';
 import { TablaAlumnoJuegoDeCuestionario } from '../clases/TablaAlumnoJuegoDeCuestionario';
 import { AlumnoJuegoDeGeocaching } from '../clases/AlumnoJuegoDeGeocaching';
 import { TablaAlumnoJuegoDeGeocaching } from '../clases/TablaAlumnoJuegoDeGeocaching';
+
 
 
 @Injectable({
@@ -257,6 +260,130 @@ export class CalculosService {
                       }
                     });
 
+                  } else if (juego.Tipo === 'Juego De Cuestionario') {
+                    if (juego.Modo === 'Individual') {
+                      this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionario(juego.id)
+                      .subscribe( AlumnosDelJuego => {
+                        if (AlumnosDelJuego[0] !== undefined) {
+                          // Una vez recibo las inscripciones, las voy borrando una a una
+                          // tslint:disable-next-line:prefer-for-of
+                          for (let i = 0; i < AlumnosDelJuego.length; i++) {
+                            this.peticionesAPI.BorraAlumnoDelJuegoDeCuestionario(AlumnosDelJuego[i].id)
+                            .subscribe(() => {
+                                console.log('Inscripcion al juego borrada correctamente');
+                            });
+                          }
+                        } else {
+                          console.log('No hay alumnos en el juego de cuestionario');
+                        }
+                      });
+                      this.peticionesAPI.DameRespuestasAlumnoJuegoDeCuestionario(juego.id)
+                      .subscribe( respuestas => {
+                        if (respuestas[0] !== undefined) {
+                          // Una vez recibo las inscripciones, las voy borrando una a una
+                          // tslint:disable-next-line:prefer-for-of
+                          for (let i = 0; i < respuestas.length; i++) {
+                            this.peticionesAPI.BorraRespuestaAlumnoDelJuegoDeCuestionario(respuestas[i].id)
+                            .subscribe(() => {
+                                console.log('Respuesta borrada correctamente');
+                            });
+                          }
+                        } else {
+                          console.log('No hay respuestas en el juego de cuestionario');
+                        }
+
+                      });
+
+                    }
+                    this.peticionesAPI.BorrarJuegoDeCuestionario (juego.id)
+                    .subscribe (() => {
+                        // Esto es lo que no hace la funcion que borra el juego de liga
+                        cont++;
+                        if (cont === juegos.length) {
+                          obs.next();
+                        }
+                    });
+
+                  } else if (juego.Tipo === 'Juego De Geocaching') {
+                    if (juego.Modo === 'Individual') {
+                      this.peticionesAPI.DameAlumnosDelJuegoDeGeocaching(juego.id)
+                      .subscribe( AlumnosDelJuego => {
+                        if (AlumnosDelJuego[0] !== undefined) {
+
+                          // Una vez recibo las inscripciones, las voy borrando una a una
+                          // tslint:disable-next-line:prefer-for-of
+                          for (let i = 0; i < AlumnosDelJuego.length; i++) {
+                            this.peticionesAPI.BorraAlumnoDelJuegoDeGeocaching(AlumnosDelJuego[i].id)
+                            .subscribe(() => {
+                                console.log('Inscripcion al juego borrada correctamente');
+                            });
+                          }
+                        } else {
+                          console.log('No hay alumnos en el juego de geocaching');
+                        }
+
+                      });
+                    }
+                    this.peticionesAPI.BorrarJuegoDeGeocaching (juego.id)
+                    .subscribe (() => {
+                        // Esto es lo que no hace la funcion que borra el juego de liga
+                        cont++;
+                        if (cont === juegos.length) {
+                          obs.next();
+                        }
+                    });
+                  } else if (juego.Tipo === 'Juego De Votación Uno A Todos') {
+                    if (juego.Modo === 'Individual') {
+                      this.peticionesAPI.DameAlumnosJuegoDeVotacionUnoATodos(juego.id)
+                      .subscribe( AlumnosDelJuego => {
+                        if (AlumnosDelJuego[0] !== undefined) {
+                          // Una vez recibo las inscripciones, las voy borrando una a una
+                          // tslint:disable-next-line:prefer-for-of
+                          for (let i = 0; i < AlumnosDelJuego.length; i++) {
+                            this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionUnoATodos(AlumnosDelJuego[i].id)
+                            .subscribe(() => {
+                                console.log('Inscripcion al juego borrada correctamente');
+                            });
+                          }
+                        } else {
+                          console.log('No hay alumnos en el juego de votacion');
+                        }
+                      });
+                    }
+                    this.peticionesAPI.BorraJuegoDeVotacionUnoATodos (juego.id)
+                    .subscribe (() => {
+                        // Esto es lo que no hace la funcion que borra el juego de liga
+                        cont++;
+                        if (cont === juegos.length) {
+                          obs.next();
+                        }
+                    });
+                  } else if (juego.Tipo === 'Juego De Votación Todos A Uno') {
+                    if (juego.Modo === 'Individual') {
+                      this.peticionesAPI.DameAlumnosJuegoDeVotacionTodosAUno(juego.id)
+                      .subscribe( AlumnosDelJuego => {
+                        if (AlumnosDelJuego[0] !== undefined) {
+                          // Una vez recibo las inscripciones, las voy borrando una a una
+                          // tslint:disable-next-line:prefer-for-of
+                          for (let i = 0; i < AlumnosDelJuego.length; i++) {
+                            this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionTodosAUno(AlumnosDelJuego[i].id)
+                            .subscribe(() => {
+                                console.log('Inscripcion al juego borrada correctamente');
+                            });
+                          }
+                        } else {
+                          console.log('No hay alumnos en el juego de votacion');
+                        }
+                      });
+                    }
+                    this.peticionesAPI.BorraJuegoDeVotacionTodosAUno (juego.id)
+                    .subscribe (() => {
+                        // Esto es lo que no hace la funcion que borra el juego de liga
+                        cont++;
+                        if (cont === juegos.length) {
+                          obs.next();
+                        }
+                    });
                   }
                 });
               } else {
@@ -361,9 +488,9 @@ export class CalculosService {
   public DameListaJuegos(grupoID: number): any {
     const listasObservables = new Observable ( obs => {
 
-      const juegosActivos: Juego[] = [];
-      const juegosInactivos: Juego[] = [];
-      const juegosPreparados: Juego[] = [];
+      const juegosActivos: any[] = [];
+      const juegosInactivos: any[] = [];
+      const juegosPreparados: any[] = [];
 
       console.log ('vamos a por los juegos de puntos del grupo: ' + grupoID);
       this.peticionesAPI.DameJuegoDePuntosGrupo(grupoID)
@@ -474,10 +601,71 @@ export class CalculosService {
                         juegosInactivos.push(juegosGeocaching[i]);
                       }
                     }
+                    console.log ('Vamos a por los juegos de votacion Uno a Todos del grupo: ' + grupoID);
+                    this.peticionesAPI.DameJuegosDeVotacionUnoATodos(grupoID)
+                      .subscribe(juegosVotacionUnoATodos => {
+                      console.log('He recibido los juegos de votacion Uno A Todos');
+                      console.log(juegosVotacionUnoATodos);
+                      // tslint:disable-next-line:prefer-for-of
+                      for (let i = 0; i < juegosVotacionUnoATodos.length; i++) {
+                        if (juegosVotacionUnoATodos[i].JuegoActivo === true) {
+                          juegosVotacionUnoATodos[i].Tipo = 'Juego De Votación Uno A Todos';
+                          juegosActivos.push(juegosVotacionUnoATodos[i]);
+                        } else {
+                          juegosVotacionUnoATodos[i].Tipo = 'Juego De Votación Uno A Todos';
+                          juegosInactivos.push(juegosVotacionUnoATodos[i]);
+                        }
+                      }
+                      console.log ('Vamos a por los juegos de votacion Todos A Uno del grupo: ' + grupoID);
+                      this.peticionesAPI.DameJuegosDeVotacionTodosAUno(grupoID)
+                        .subscribe(juegosVotacioTodosAUno => {
+                        console.log('He recibido los juegos de votacion Todos A Uno');
+                        console.log(juegosVotacioTodosAUno);
+                        // tslint:disable-next-line:prefer-for-of
+                        for (let i = 0; i < juegosVotacioTodosAUno.length; i++) {
+                          if (juegosVotacioTodosAUno[i].JuegoActivo === true) {
+                            juegosVotacioTodosAUno[i].Tipo = 'Juego De Votación Todos A Uno';
+                            juegosActivos.push(juegosVotacioTodosAUno[i]);
+                          } else {
+                            juegosVotacioTodosAUno[i].Tipo = 'Juego De Votación Todos A Uno';
+                            juegosInactivos.push(juegosVotacioTodosAUno[i]);
+                          }
+                        }
+                        console.log ('Vamos a por los juegos de cuestionario de satisfacción: ' + grupoID);
+                        this.peticionesAPI.DameJuegosDeCuestionarioSatisfaccion(grupoID)
+                          .subscribe(juegosCuestionarioSatisfaccion => {
+                          console.log('He recibido los juegos de cuestionario de satisfacción');
+                          console.log(juegosCuestionarioSatisfaccion);
+                          // tslint:disable-next-line:prefer-for-of
+                          for (let i = 0; i < juegosCuestionarioSatisfaccion.length; i++) {
+                            if (juegosCuestionarioSatisfaccion[i].JuegoActivo === true) {
+                              juegosActivos.push(juegosCuestionarioSatisfaccion[i]);
+                            } else {
+                              juegosInactivos.push(juegosCuestionarioSatisfaccion[i]);
+                            }
+                          }
+                          console.log('GET JuegoDeEvaluacion OF grupoID: ', grupoID);
+                          this.peticionesAPI.DameJuegosDeEvaluacion(grupoID)
+                            .subscribe(juegosDeEvaluacion => {
+                              console.log('GET RESPONSE JuegoDeEvaluacion', juegosDeEvaluacion);
+                              // tslint:disable-next-line:prefer-for-of
+                              for (let i = 0; i < juegosDeEvaluacion.length; i++) {
+                                if (juegosDeEvaluacion[i].JuegoActivo === true) {
+                                  juegosDeEvaluacion[i].Tipo = 'Evaluacion';
+                                  juegosActivos.push(juegosDeEvaluacion[i]);
+                                } else {
+                                  juegosDeEvaluacion[i].Tipo = 'Evaluacion';
+                                  juegosInactivos.push(juegosDeEvaluacion[i]);
+                                }
+                              }
 
-                    const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-                    obs.next (resultado);
+                          const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+                          obs.next (resultado);
+                          });
+                        });
+                      });
                     });
+                  });
                 });
               });
             });
@@ -488,6 +676,47 @@ export class CalculosService {
 
     return listasObservables;
   }
+
+  public DameJuegosRapidos(profesorId: number): any {
+    const listasObservables = new Observable ( obs => {
+
+      let juegosRapidos: any[] = [];
+      this.peticionesAPI.DameJuegosDeEncuestaRapida(profesorId)
+      .subscribe(juegos => {
+        console.log ('Ya tengo los juegos de encuesta rápida');
+        console.log (juegos);
+        juegosRapidos = juegosRapidos.concat (juegos);
+        this.peticionesAPI.DameJuegosDeVotacionRapida(profesorId)
+        // tslint:disable-next-line:no-shadowed-variable
+        .subscribe(juegos => {
+          console.log ('Ya tengo los juegos de votación rápida');
+          console.log (juegos);
+          juegosRapidos = juegosRapidos.concat (juegos);
+          this.peticionesAPI.DameJuegosDeCuestionarioRapido(profesorId)
+          // tslint:disable-next-line:no-shadowed-variable
+          .subscribe(juegos => {
+            console.log ('Ya tengo los juegos de cuestionario rapido');
+            console.log (juegos);
+            juegosRapidos = juegosRapidos.concat (juegos);
+            console.log (juegosRapidos);
+           // obs.next (juegosRapidos);
+            this.peticionesAPI.DameJuegosDeCogerTurnoRapido(profesorId)
+            // tslint:disable-next-line:no-shadowed-variable
+            .subscribe(juegos => {
+              console.log ('Ya tengo los juegos de coger turno rapido');
+              console.log (juegos);
+              juegosRapidos = juegosRapidos.concat (juegos);
+              console.log (juegosRapidos);
+              obs.next (juegosRapidos);
+            });
+          });
+        });
+      });
+    });
+
+    return listasObservables;
+  }
+
 
   public PrepararTablaRankingIndividual(  listaAlumnosOrdenadaPorPuntos,
                                           alumnosDelJuego,
@@ -575,6 +804,7 @@ export class CalculosService {
     });
     return rankingObservable;
   }
+
 
   public DameRankingPuntoSeleccionadoAlumnos(
                             listaAlumnosOrdenadaPorPuntos: any,
@@ -1633,7 +1863,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
   // DEJAR RELACIONES PREGUNTADELCUESTIONARIO QUE NO NOS SIRVEN EN LA BASE DE DATOS
   private EliminarPreguntasDelCuestionario() {
     // Pido las preguntasDelCuestionario correspondientes al cuestionario que voy a borrar
-    this.peticionesAPI.DamePreguntasDelCuestionarioCuestionario(this.sesion.DameCuestionario().id)
+    this.peticionesAPI.DameAsignacionesPreguntasACuestionario(this.sesion.DameCuestionario().id)
     .subscribe( preguntasDelCuestionario => {
       if (preguntasDelCuestionario[0] !== undefined) {
 
@@ -3054,7 +3284,165 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
     }
   }
 
+  //////////////////////////////////////// JUEGO DE VOTACION UNO A TODOS ///////////////////////////////////
+  public PrepararTablaRankingIndividualVotacionUnoATodos(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[],
+                                                         alumnosDelJuego: Alumno[], puntos: number[]): TablaAlumnoJuegoDeVotacionUnoATodos[] {
+    const rankingJuegoDeVotacion: TablaAlumnoJuegoDeVotacionUnoATodos [] = [];
+    // tslint:disable-next-line:prefer-for-oF
+    for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+      let alumno: Alumno;
+      const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
+      alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+      // tslint:disable-next-line:max-line-length
 
+      const elem = new TablaAlumnoJuegoDeVotacionUnoATodos(i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+        0, alumnoId);
+      rankingJuegoDeVotacion[i] = elem;
+    }
+
+    // Ahora voy a ver qué alumnos ya han votado para acumular sus votos y marcarlos
+    // como que ya han votado
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+      if (listaAlumnosOrdenadaPorPuntos[i].Votos) {
+        // Este alumno ya ha votado
+        const alumno = listaAlumnosOrdenadaPorPuntos[i];
+        // Asigno los puntos a los destinatorios
+        for (let j = 0; j < puntos.length; j++) {
+          const votado = rankingJuegoDeVotacion.filter (al => al.id === alumno.Votos[j])[0];
+          votado.puntos = votado.puntos + puntos[j];
+        }
+        // Marque que el alumno ya ha votado
+        rankingJuegoDeVotacion.filter (al => al.id === alumno.alumnoId)[0].votado = true;
+      }
+    }
+
+    return rankingJuegoDeVotacion;
+}
+
+public PrepararTablaRankingIndividualVotacionUnoATodosAcabado(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[],
+                                                              // tslint:disable-next-line:max-line-length
+                                                              alumnosDelJuego: Alumno[], puntos: number[]): TablaAlumnoJuegoDeVotacionUnoATodos[] {
+    const rankingJuegoDeVotacion: TablaAlumnoJuegoDeVotacionUnoATodos [] = [];
+    // tslint:disable-next-line:prefer-for-oF
+    for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+      let alumno: Alumno;
+      const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
+      alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+      // tslint:disable-next-line:max-line-length
+
+      const elem = new TablaAlumnoJuegoDeVotacionUnoATodos(i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+        listaAlumnosOrdenadaPorPuntos[i].puntosTotales, alumnoId);
+      rankingJuegoDeVotacion[i] = elem;
+    }
+
+    return rankingJuegoDeVotacion;
+}
+
+
+  //////////////////////////////////////// JUEGO DE VOTACION  TODOS A UNO ///////////////////////////////////
+public PrepararTablaRankingIndividualVotacionTodosAUno(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionTodosAUno[],
+                                                       // tslint:disable-next-line:max-line-length
+                                                       alumnosDelJuego: Alumno[], juego: JuegoDeVotacionTodosAUno): TablaAlumnoJuegoDeVotacionTodosAUno[] {
+  const rankingJuegoDeVotacion: TablaAlumnoJuegoDeVotacionTodosAUno [] = [];
+  // tslint:disable-next-line:prefer-for-oF
+  for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+    let alumno: Alumno;
+    const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
+    alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+    // tslint:disable-next-line:max-line-length
+
+    const elem = new TablaAlumnoJuegoDeVotacionTodosAUno(i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+    0, alumnoId);
+    if (listaAlumnosOrdenadaPorPuntos[i].VotosEmitidos.length === listaAlumnosOrdenadaPorPuntos.length - 1) {
+      elem.votado = true;
+    } else {
+      elem.votado = false;
+    }
+    elem.conceptos = Array(juego.Conceptos.length).fill (0);
+    rankingJuegoDeVotacion[i] = elem;
+  }
+
+  // Ahora para cada alumno voy a calcular los votos recibidos y la nota en cada uno de los conceptos, asi como su nota temporal
+
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+    if (listaAlumnosOrdenadaPorPuntos[i].VotosEmitidos) {
+      // Este alumno ha emitido algunos votos
+      listaAlumnosOrdenadaPorPuntos[i].VotosEmitidos.forEach (votoEmitido => {
+        // busco al alumno que ha recibido estos votos
+        // tslint:disable-next-line:no-shadowed-variable
+        const alumnoVotado = rankingJuegoDeVotacion.filter (alumno => alumno.id === votoEmitido.alumnoId)[0];
+        alumnoVotado.votosRecibidos++;
+        // le asigno los votos que ha recibido para cada concepto
+        for (let j = 0; j < votoEmitido.votos.length; j++) {
+          alumnoVotado.conceptos[j] = alumnoVotado.conceptos[j] + votoEmitido.votos[j];
+        }
+
+      });
+    }
+  }
+
+  // Para acabar calculo la nota parcial total  para cada alumno
+  rankingJuegoDeVotacion.forEach (alumno => {
+
+    if (alumno.votosRecibidos === 0) {
+      alumno.nota = 0;
+    } else {
+      let nota = 0;
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < alumno.conceptos.length; i++) {
+        nota = nota + (alumno.conceptos[i] * juego.Pesos[i]) / 100;
+      }
+      alumno.nota = nota / alumno.votosRecibidos;
+    }
+  });
+
+  return rankingJuegoDeVotacion;
+}
+
+public PrepararTablaRankingIndividualVotacionTodosAUnoAcabado(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionTodosAUno[],
+  // tslint:disable-next-line:max-line-length
+                                                              alumnosDelJuego: Alumno[], juego: JuegoDeVotacionTodosAUno): TablaAlumnoJuegoDeVotacionTodosAUno[] {
+  const rankingJuegoDeVotacion: TablaAlumnoJuegoDeVotacionTodosAUno [] = [];
+  // tslint:disable-next-line:prefer-for-oF
+  for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+    let alumno: Alumno;
+    const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
+    alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+    // tslint:disable-next-line:max-line-length
+
+
+    const elem = new TablaAlumnoJuegoDeVotacionTodosAUno(i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+      listaAlumnosOrdenadaPorPuntos[i].PuntosTotales, alumnoId);
+    console.log ('elemento');
+    console.log (elem);
+    elem.conceptos = Array(juego.Conceptos.length).fill (0);
+    rankingJuegoDeVotacion[i] = elem;
+  }
+
+  // Ahora para cada alumno voy a calcular los votos recibidos y la nota en cada uno de los conceptos
+
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+    if (listaAlumnosOrdenadaPorPuntos[i].VotosEmitidos) {
+      // Este alumno ha emitido algunos votos
+      listaAlumnosOrdenadaPorPuntos[i].VotosEmitidos.forEach (votoEmitido => {
+      // busco al alumno que ha recibido estos votos
+      // tslint:disable-next-line:no-shadowed-variable
+      const alumnoVotado = rankingJuegoDeVotacion.filter (alumno => alumno.id === votoEmitido.alumnoId)[0];
+      alumnoVotado.votosRecibidos++;
+      // le asigno los votos que ha recibido para cada concepto
+      for (let j = 0; j < votoEmitido.votos.length; j++) {
+        alumnoVotado.conceptos[j] = alumnoVotado.conceptos[j] + votoEmitido.votos[j];
+      }
+
+      });
+    }
+  }
+
+  return rankingJuegoDeVotacion;
+}
 
   //////////////////////////////////////// JUEGO DE COMPETICIÓN FÓRUMULA UNO ///////////////////////////////////
   public PrepararTablaRankingIndividualFormulaUno(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCompeticionFormulaUno[],
@@ -3228,7 +3616,8 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
     const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
     alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
     rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeCuestionario(alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
-    listaAlumnosOrdenadaPorPuntos[i].Nota, listaAlumnosOrdenadaPorPuntos[i].Contestado, alumnoId);
+    // tslint:disable-next-line:max-line-length
+    listaAlumnosOrdenadaPorPuntos[i].Nota, listaAlumnosOrdenadaPorPuntos[i].Contestado, alumnoId, listaAlumnosOrdenadaPorPuntos[i].TiempoEmpleado);
     }
     return rankingJuegoDeCompeticion;
   }
@@ -3294,16 +3683,16 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
 
 
 
-//juego geocaching
+// juego geocaching
 
 
   public PrepararTablaRankingGeocaching(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeGeocaching[],
-    alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeGeocaching[] {
+                                        alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeGeocaching[] {
 const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeGeocaching [] = [];
 // tslint:disable-next-line:prefer-for-oF
 for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
 let alumno: Alumno;
-const AlumnoId = listaAlumnosOrdenadaPorPuntos[i].AlumnoId;
+const AlumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
 alumno = alumnosDelJuego.filter(res => res.id === AlumnoId)[0];
 rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeGeocaching(alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
 listaAlumnosOrdenadaPorPuntos[i].Puntuacion, listaAlumnosOrdenadaPorPuntos[i].Etapa, AlumnoId);
@@ -3343,5 +3732,180 @@ private EliminarAlumnosJuegoDeGeocaching() {
 
   });
 }
+
+// Devuelve la lista de ficheros de la familia que ya están en la base de datos
+// Se usa al cargar una familia nueva para asegurarnos de que no cargamos ficheros
+// que ya se usan en otros recursos, lo cual sería un problema al borrar un recurso
+public VerificarFicherosFamilia(familia: FamiliaAvatares): any {
+  const listaFicherosObservable = new Observable ( obs => {
+    const lista: string [] = [];
+    let cont = 0;
+    const numeroFicheros =  familia.Complemento1.length +
+                            familia.Complemento2.length +
+                            familia.Complemento3.length +
+                            familia.Complemento4.length +
+                            1;
+
+    this.peticionesAPI.DameImagenAvatar (familia.Silueta)
+    .subscribe (
+      (imagen) => {
+
+        lista.push (familia.Silueta);
+        cont++;
+        if (cont === numeroFicheros) {
+          obs.next (lista);
+        }
+      },
+      (error) => {
+        cont++;
+        if (cont === numeroFicheros) {
+          obs.next (lista);
+        }
+    });
+    familia.Complemento1.forEach (nombreFichero => {
+      this.peticionesAPI.DameImagenAvatar (nombreFichero)
+      .subscribe (
+        (imagen) => {
+
+          lista.push (nombreFichero);
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+        },
+        (error) => {
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+      });
+    });
+    familia.Complemento2.forEach (nombreFichero => {
+      this.peticionesAPI.DameImagenAvatar (nombreFichero)
+      .subscribe (
+        (imagen) => {
+
+          lista.push (nombreFichero);
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+        },
+        (error) => {
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+      });
+    });
+    familia.Complemento3.forEach (nombreFichero => {
+      this.peticionesAPI.DameImagenAvatar (nombreFichero)
+      .subscribe (
+        (imagen) => {
+
+          lista.push (nombreFichero);
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+        },
+        (error) => {
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+      });
+    });
+    familia.Complemento4.forEach (nombreFichero => {
+      this.peticionesAPI.DameImagenAvatar (nombreFichero)
+      .subscribe (
+        (imagen) => {
+
+          lista.push (nombreFichero);
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+        },
+        (error) => {
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+      });
+    });
+  });
+
+  return listaFicherosObservable;
+
+}
+
+public VerificarFicherosColeccion(coleccion: any): any {
+  const listaFicherosObservable = new Observable ( obs => {
+    const lista: string [] = [];
+    let numeroFicheros: number;
+    let cont = 0;
+    if (coleccion.DosCaras) {
+        numeroFicheros = coleccion.cromos.length * 2 + 1;
+    } else {
+        numeroFicheros = coleccion.cromos.length + 1;
+    }
+
+    this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
+    .subscribe (
+        (imagen) => {
+          lista.push (coleccion.ImagenColeccion);
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+        },
+        (error) => {
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+    });
+    coleccion.cromos.forEach (cromo => {
+        console.log ('nuevo cromo');
+        console.log (cromo);
+        this.peticionesAPI.DameImagenCromo (cromo.nombreImagenCromoDelante)
+        .subscribe (
+          (imagen) => {
+            lista.push (cromo.nombreImagenCromoDelante);
+            cont++;
+            if (cont === numeroFicheros) {
+              obs.next (lista);
+            }
+          },
+          (error) => {
+            cont++;
+            if (cont === numeroFicheros) {
+              obs.next (lista);
+            }
+        });
+
+        if (coleccion.DosCaras)  {
+          this.peticionesAPI.DameImagenCromo (cromo.nombreImagenCromoDetras)
+          .subscribe (
+            (imagen) => {
+              lista.push (cromo.nombreImagenCromoDetras);
+              cont++;
+              if (cont === numeroFicheros) {
+                obs.next (lista);
+              }
+            },
+            (error) => {
+              cont++;
+              if (cont === numeroFicheros) {
+                obs.next (lista);
+              }
+          });
+        }
+    });
+  });
+  return listaFicherosObservable;
+}
+
 
 }

@@ -4,6 +4,7 @@ export class Album {
   Fecha: string;
   id: number;
 
+
   constructor(alumnoJuegoDeColeccionId?: number, cromoId?: number, Fecha?: string) {
 
     this.alumnoJuegoDeColeccionId = alumnoJuegoDeColeccionId;

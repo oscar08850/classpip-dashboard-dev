@@ -1,124 +1,180 @@
 <div class="titulo">Crear Pregunta</div>
 <mat-divider class="lineaDivisoria"></mat-divider>
 <div class = "contenedor" >
-<div class = "enColumna">
-<form [formGroup]="myForm">
 
-    <mat-card class="panel">
+  <mat-tab-group>
+    <mat-tab label="Cargar preguntas desde fichero">
+      <div class= "enColumna" *ngIf ="advertencia" style = "border-color: red;">
+        <!-- para preservar los espacios y los tabs del texto -->
+        <pre>
+        <br>
+        La información de las preguntas debe estar en un fichero <strong>JSON</strong>
+        con el contenido mostrado en el siguiente ejemplo.
+          [
+            {{'{'}}
+                "Titulo": "suma",
+                "Pregunta": "¿Cuánto es 7 + 9 ?",
+                "Tematica": "Mates",
+                "RespuestaCorrecta": "16",
+                "RespuestaIncorrecta1": "15",
+                "RespuestaIncorrecta2": "17",
+                "RespuestaIncorrecta3": "0",
+                "FeedbackCorrecto": "Muy bien",
+                "FeedbackIncorrecto": "Fatal"
+            {{'}'}},
+            {{'{'}}
+              ..... otras preguntas
+            {{'}'}}
 
-        <mat-card-content>
-            <mat-horizontal-stepper #linearHorizontalStepper="matHorizontalStepper" [linear]="true" style="width:100%">
+          ]
+        </pre>
 
-                <!-- PRIMER PASO -->
-                <mat-step [stepControl]="myForm">
-                  <ng-template matStepLabel>Pregunta</ng-template>
-                  <mat-form-field style=  "width: 50%;">
-                    <mat-label>Titulo</mat-label>
-                    <input (keyup)="Disabled()" matInput formControlName="tituloPregunta" required>
-                  </mat-form-field>
+        <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
+          Ocultar advertencia
+        </button>
+      </div>
+      <div class = "enFila">
+        <div style = "width: 40%">
+          <input #file id = "inputInfo" type="file" accept= 'application/JSON;' accept-charset="UTF-8" (change)="SeleccionarFicheroPreguntas($event)" style="display:none">
+          <button style = "height:100px; width:80%" (click) = "ActivarInputInfo()" type="button" class="btn Agregar">
+            Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
+          </button>
+        </div>
+        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "ficheroCargado">
+          <h3>Nuevas preguntas</h3>
+          <div class = "enFila" style = "width: 90%">
+              <p> Número de nuevas preguntas: : <strong>{{infoPreguntas.length}}</strong></p>
+          </div>
+          <div class = "enFila" style = "width:50%">
+            <button (click) = "RegistrarPreguntas()" type="button" class="btn Agregar">
+              Registrar
+            </button>
+            <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Introducir nueva pregunta">
+      <form [formGroup]="myForm">
 
-                  <div>
-                    <mat-form-field style=  "width: 100%;">
-                      <mat-label>Pregunta</mat-label>
-                        <input (keyup)="Disabled()" matInput formControlName="preguntaPregunta" required>
-                    </mat-form-field>
-                  </div>
-                  
-                  <div>
-                    <mat-form-field style=  "width: 50%;">
-                      <mat-label>Temática</mat-label>
-                        <input (keyup)="Disabled()" matInput formControlName="tematicaPregunta" required>
-                    </mat-form-field>
-                  </div>
+          <mat-card class="panel">
 
-                  <div class="btnCambiarStep">
-                    <!-- <button [disabled]="isDisabled" *ngIf="preguntaYaCreada === false" mat-raised-button class="btn Next"  (click)= CrearGrupo() matStepperNext>Siguiente</button>
-                    <button [disabled]="isDisabled" *ngIf="preguntaYaCreada === true" mat-raised-button class="btn Next"  (click)= EditarGrupo() matStepperNext>Siguiente</button> -->
-                    <button [disabled]="isDisabled" mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
-                      Atrás</button>
-                   <button  [disabled]="isDisabled" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
-                      Siguiente
-                   </button>
-                  </div>
+              <mat-card-content>
+                  <mat-horizontal-stepper #linearHorizontalStepper="matHorizontalStepper" [linear]="true" style="width:100%">
 
-                </mat-step>
+                      <!-- PRIMER PASO -->
+                      <mat-step [stepControl]="myForm">
+                        <ng-template matStepLabel>Pregunta</ng-template>
+                        <mat-form-field style=  "width: 50%;">
+                          <mat-label>Titulo</mat-label>
+                          <input (keyup)="Disabled()" matInput formControlName="tituloPregunta" required>
+                        </mat-form-field>
 
-                <!-- SEGUNDO PASO -->
-                <mat-step  [stepControl]="myForm2">
-                  <form [formGroup]='myForm2'>
-                  <ng-template matStepLabel>Añadir Respuestas</ng-template>
-                  <mat-form-field style=  "width: 100%;">
-                    <mat-label>Respuesta Correcta</mat-label>
-                    <input (keyup)="Disabled2()" matInput formControlName="respuestaCorrecta" required>
-                  </mat-form-field>
+                        <div>
+                          <mat-form-field style=  "width: 100%;">
+                            <mat-label>Pregunta</mat-label>
+                              <input (keyup)="Disabled()" matInput formControlName="preguntaPregunta" required>
+                          </mat-form-field>
+                        </div>
 
-                  <div>
-                    <mat-form-field style=  "width: 100%;">
-                      <mat-label>Respuesta Incorrecta 1</mat-label>
-                        <input (keyup)="Disabled2()" matInput formControlName="respuestaIncorrecta1" required>
-                    </mat-form-field>
-                  </div>
-                  
-                  <div>
-                    <mat-form-field style=  "width: 100%;">
-                      <mat-label>Respuesta Incorrecta 2</mat-label>
-                        <input (keyup)="Disabled2()" matInput formControlName="respuestaIncorrecta2" required>
-                    </mat-form-field>
-                  </div>
+                        <div>
+                          <mat-form-field style=  "width: 50%;">
+                            <mat-label>Temática</mat-label>
+                              <input (keyup)="Disabled()" matInput formControlName="tematicaPregunta" required>
+                          </mat-form-field>
+                        </div>
 
-                  <div>
-                    <mat-form-field style=  "width: 100%;">
-                      <mat-label>Respuesta Incorrecta 3</mat-label>
-                        <input (keyup)="Disabled2()" matInput formControlName="respuestaIncorrecta3" required>
-                    </mat-form-field>
-                  </div>
+                        <div class="btnCambiarStep">
+                          <!-- <button [disabled]="isDisabled" *ngIf="preguntaYaCreada === false" mat-raised-button class="btn Next"  (click)= CrearGrupo() matStepperNext>Siguiente</button>
+                          <button [disabled]="isDisabled" *ngIf="preguntaYaCreada === true" mat-raised-button class="btn Next"  (click)= EditarGrupo() matStepperNext>Siguiente</button> -->
+                          <button [disabled]="isDisabled" mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                            Atrás</button>
+                        <button  [disabled]="isDisabled" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                            Siguiente
+                        </button>
+                        </div>
 
-                  <div>
-                    <mat-form-field style=  "width: 100%;">
-                      <mat-label>Feedback Correcto</mat-label>
-                        <input (keyup)="Disabled2()" matInput formControlName="feedbackCorrecto" required>
-                    </mat-form-field>
-                  </div>
-
-                  <div>
-                    <mat-form-field style=  "width: 100%;">
-                      <mat-label>Feedback Incorrecto</mat-label>
-                        <input (keyup)="Disabled2()" matInput formControlName="feedbackIncorrecto" required>
-                    </mat-form-field>
-                  </div>
-                  
-                  <div class="btnCambiarStep">
-                    <button [disabled]="isDisabled2" mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
-                       Atrás</button>
-                    <button [disabled]="isDisabled2" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
-                       Siguiente
-                    </button>
-                  </div>
-                </form>
-                </mat-step>
-
-                <mat-step>
-                  <ng-template matStepLabel>Finalizar</ng-template>
-                  <div style="margin: 5px;">
-                    <p>Pregunta creada correctamente.</p>
-                    <p> Haga click en "Finalizar" para guardar los cambios.</p>
-                  </div>
-                  <div class="btnCambiarStep">
-                    <button mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious> Atrás</button>
-                    <button mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "CrearPregunta();"> Finalizar</button>
-                  </div>
-                </mat-step>
-              </mat-horizontal-stepper>
-
-        </mat-card-content>
-      </mat-card>
-
-      <br>
-
-</form>
+                      </mat-step>
 
 
-  <br>
-</div>
+
+                      <!-- SEGUNDO PASO -->
+                      <mat-step  [stepControl]="myForm2">
+                        <form [formGroup]='myForm2'>
+                        <ng-template matStepLabel>Añadir Respuestas</ng-template>
+                        <mat-form-field style=  "width: 100%;">
+                          <mat-label>Respuesta Correcta</mat-label>
+                          <input (keyup)="Disabled2()" matInput formControlName="respuestaCorrecta" required>
+                        </mat-form-field>
+
+                        <div>
+                          <mat-form-field style=  "width: 100%;">
+                            <mat-label>Respuesta Incorrecta 1</mat-label>
+                              <input (keyup)="Disabled2()" matInput formControlName="respuestaIncorrecta1" required>
+                          </mat-form-field>
+                        </div>
+
+                        <div>
+                          <mat-form-field style=  "width: 100%;">
+                            <mat-label>Respuesta Incorrecta 2</mat-label>
+                              <input (keyup)="Disabled2()" matInput formControlName="respuestaIncorrecta2" required>
+                          </mat-form-field>
+                        </div>
+
+                        <div>
+                          <mat-form-field style=  "width: 100%;">
+                            <mat-label>Respuesta Incorrecta 3</mat-label>
+                              <input (keyup)="Disabled2()" matInput formControlName="respuestaIncorrecta3" required>
+                          </mat-form-field>
+                        </div>
+
+                        <div>
+                          <mat-form-field style=  "width: 100%;">
+                            <mat-label>Feedback Correcto</mat-label>
+                              <input (keyup)="Disabled2()" matInput formControlName="feedbackCorrecto" required>
+                          </mat-form-field>
+                        </div>
+
+                        <div>
+                          <mat-form-field style=  "width: 100%;">
+                            <mat-label>Feedback Incorrecto</mat-label>
+                              <input (keyup)="Disabled2()" matInput formControlName="feedbackIncorrecto" required>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="btnCambiarStep">
+                          <button [disabled]="isDisabled2" mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                            Atrás</button>
+                          <button [disabled]="isDisabled2" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                            Siguiente
+                          </button>
+                        </div>
+                      </form>
+                      </mat-step>
+
+                      <mat-step>
+                        <ng-template matStepLabel>Finalizar</ng-template>
+                        <div style="margin: 5px;">
+                          <p>Pregunta creada correctamente.</p>
+                          <p> Haga click en "Finalizar" para guardar los cambios.</p>
+                        </div>
+                        <div class="btnCambiarStep">
+                          <button mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious> Atrás</button>
+                          <button mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "CrearPregunta();"> Finalizar</button>
+                        </div>
+                      </mat-step>
+                    </mat-horizontal-stepper>
+
+              </mat-card-content>
+            </mat-card>
+
+            <br>
+
+      </form>
+    </mat-tab>
+  </mat-tab-group>
+
 </div>
 

@@ -29,6 +29,11 @@ import { JuegoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado
 import { EditarPuntoComponent } from './paginas/mis-puntos/editar-punto/editar-punto.component';
 import { EditarInsigniaComponent } from './paginas/mis-puntos/editar-insignia/editar-insignia.component';
 import { EditarColeccionComponent } from './paginas/mis-colecciones/editar-coleccion/editar-coleccion.component';
+import { GuardarColeccionComponent } from './paginas/mis-colecciones/guardar-coleccion/guardar-coleccion.component';
+import { MostrarColeccionComponent } from './paginas/mis-colecciones/mostrar-coleccion/mostrar-coleccion.component';
+
+
+
 // tslint:disable-next-line:max-line-length
 import { AsignarCromosComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/asignar-cromos/asignar-cromos.component';
 // tslint:disable-next-line:max-line-length
@@ -56,8 +61,6 @@ import { InformacionJuegoDeCompeticionInactivoComponent } from './paginas/juego-
 
 // tslint:disable-next-line:max-line-length
 import { EditarJornadasJuegoDeCompeticionComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/editar-jornadas-juego-de-competicion/editar-jornadas-juego-de-competicion.component';
-// tslint:disable-next-line:max-line-length
-import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/alumnos-seleccionado-juego-de-competicion-liga/alumnos-seleccionado-juego-de-competicion-liga.component';
 
 // tslint:disable-next-line:max-line-length
 import { GanadorJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/ganador-juego-de-competicion-liga/ganador-juego-de-competicion-liga.component';
@@ -80,6 +83,7 @@ import { DeactivateGuardCrearGrupo } from './guardas/canExitCrearGrupo.guard';
 import { DeactivateGuardCrearColeccion } from './guardas/canExitCrearColeccion.guard';
 import { DeactivateGuardCrearJuego } from './guardas/canExitCrearJuego.guard';
 
+
 // Importamos componentes modulo cuestionario
 import { PreguntaComponent } from './paginas/pregunta/pregunta.component';
 import { CrearCuestionarioComponent } from './paginas/crear-cuestionario/crear-cuestionario.component';
@@ -99,16 +103,49 @@ import { MisFamiliasAvataresComponent } from './paginas/mis-familias-avatares/mi
 
 // tslint:disable-next-line:max-line-length
 import { MostrarAvatarAlumnoComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/mostrar-avatar-alumno/mostrar-avatar-alumno.component';
-
+import {VerTodosComponent} from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/ver-todos/ver-todos.component';
 // tslint:disable-next-line:max-line-length
 import { InformacionJuegoAvatarComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/informacion-juego-avatar/informacion-juego-avatar.component';
 
-
+import {GuardarFamiliaComponent} from './paginas/mis-familias-avatares/guardar-familia/guardar-familia.component';
+import { MostrarFamiliaComponent } from './paginas/mis-familias-avatares/mostrar-familia/mostrar-familia.component';
 import { DeactivateGuardCrearEscenario } from './guardas/canExitCrearEscenario.guard';
 import { CrearEscenarioComponent } from './paginas/crear-escenario/crear-escenario.component';
 import { EditarEscenarioComponent } from './paginas/mis-escenarios/editar-escenario/editar-escenario.component';
 import { MisEscenariosComponent } from './paginas/mis-escenarios/mis-escenarios.component';
 import {MenuRecursosComponent} from './paginas/menu-recursos/menu-recursos.component';
+
+import {CrearRubricaComponent } from './paginas/crear-rubrica/crear-rubrica.component';
+import { MisRubricasComponent } from './paginas/mis-rubricas/mis-rubricas.component';
+
+
+import {CrearFamiliaImagenesPerfilComponent} from './paginas/crear-familia-imagenes-perfil/crear-familia-imagenes-perfil.component';
+import {MisFamiliasImagenesPerfilComponent} from './paginas/mis-familias-imagenes-perfil/mis-familias-imagenes-perfil.component';
+
+// tslint:disable-next-line:max-line-length
+import { CrearCuestionarioSatisfaccionComponent } from './paginas/crear-cuestionario-satisfaccion/crear-cuestionario-satisfaccion.component';
+import {MisCuestionariosSatisfaccionComponent} from './paginas/mis-cuestionarios-satisfaccion/mis-cuestionarios-satisfaccion.component';
+
+import {MisJuegosRapidosComponent} from './paginas/mis-juegos-rapidos/mis-juegos-rapidos.component';
+
+import {CrearJuegoRapidoComponent} from './paginas/crear-juego-rapido/crear-juego-rapido.component';
+
+import {JuegoDeEncuestaRapidaComponent} from './paginas/mis-juegos-rapidos/juego-de-encuesta-rapida/juego-de-encuesta-rapida.component';
+import {JuegoDeVotacionRapidaComponent} from './paginas/mis-juegos-rapidos/juego-de-votacion-rapida/juego-de-votacion-rapida.component';
+// tslint:disable-next-line:max-line-length
+import {JuegoDeCuestionarioRapidoComponent} from './paginas/mis-juegos-rapidos/juego-de-cuestionario-rapido/juego-de-cuestionario-rapido.component';
+
+// tslint:disable-next-line:max-line-length
+import {JuegoDeCogerTurnoRapidoComponent} from './paginas/mis-juegos-rapidos/juego-de-coger-turno-rapido/juego-de-coger-turno-rapido.component';
+
+
+// tslint:disable-next-line:max-line-length
+import { EditarCuestionarioSatisfaccionComponent } from './paginas/editar-cuestionario-satisfaccion/editar-cuestionario-satisfaccion.component';
+
+import { DeactivateGuardEncuestaRapida } from './guardas/canExitEncuestaRapida.guard';
+import { DeactivateGuardCogerTurnoRapido } from './guardas/canExitCogerTurnoRapido.guard';
+import { DeactivateGuardCuestionarioRapido } from './guardas/canExitCuestionarioRapido.guard';
+import { DeactivateGuardVotacionRapida } from './guardas/canExitVotacionRapida.guard';
 
 const routes: Routes = [
 
@@ -212,8 +249,6 @@ const routes: Routes = [
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/editarjornadasJuegoDeCompeticion', component: EditarJornadasJuegoDeCompeticionComponent },
   // tslint:disable-next-line:max-line-length
-  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionAlumnoJuegoCompeticionLiga', component: AlumnosSeleccionadoJuegoDeCompeticionLigaComponent },
-  // tslint:disable-next-line:max-line-length
   {path: 'grupo/:id/juegos/juegoSeleccionadoActivo/seleccionarGanadorJuegoDeCompeticionLiga', component: GanadorJuegoDeCompeticionLigaComponent},
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionJuegoDeCompeticionInactivo', component: InformacionJuegoDeCompeticionInactivoComponent },
@@ -233,8 +268,8 @@ const routes: Routes = [
 
   // COLECCIÓN
   { path: 'inicio/:id/misColecciones/editarColeccion', component: EditarColeccionComponent },
-
-
+  { path: 'inicio/:id/misColecciones/guardarColeccion', component: GuardarColeccionComponent },
+  { path: 'inicio/:id/misColecciones/mostrarColeccion', component: MostrarColeccionComponent },
 
   // PUNTOS E INSIGNIAS
   { path: 'inicio/:id/misPuntos/editarPunto', component: EditarPuntoComponent },
@@ -259,15 +294,51 @@ const routes: Routes = [
 
   // AVATARES
   { path: 'inicio/:id/misFamiliasAvatares', component: MisFamiliasAvataresComponent},
+  { path: 'inicio/:id/misFamiliasAvatares/guardarFamilia', component: GuardarFamiliaComponent},
+  { path: 'inicio/:id/misFamiliasAvatares/mostrarFamilia', component: MostrarFamiliaComponent},
   { path: 'inicio/:id/crearFamiliaAvatares', component: CrearFamiliaAvataresComponent},
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/MostrarAvatarAlumno', component: MostrarAvatarAlumnoComponent },
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoAvatar', component: InformacionJuegoAvatarComponent },
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/verTodos', component: VerTodosComponent },
+
+
+  // Rubricas
+  { path: 'inicio/:id/crearRubrica', component: CrearRubricaComponent},
+  { path: 'inicio/:id/misRubricas', component: MisRubricasComponent},
+
+  // Familias de imagenes de perfil
+  { path: 'inicio/:id/crearFamiliaDeImagenesDePerfil', component: CrearFamiliaImagenesPerfilComponent},
+  { path: 'inicio/:id/misFamiliasDeImagenesDePerfil', component: MisFamiliasImagenesPerfilComponent},
+
+  // Cuestionarios de satisfacción
+  { path: 'inicio/:id/crearCuestionarioDeSatisfaccion', component: CrearCuestionarioSatisfaccionComponent},
+  { path: 'inicio/:id/misCuestionariosDeSatisfaccion', component: MisCuestionariosSatisfaccionComponent},
+  { path: 'inicio/:id/editarCuestionarioDeSatisfaccion', component: EditarCuestionarioSatisfaccionComponent},
+
+
+
+
+  // JUEGOS RAPIDOS
+
+  { path: 'inicio/:id/misJuegosRapidos', component: MisJuegosRapidosComponent},
+  { path: 'inicio/:id/crearJuegoRapido', component: CrearJuegoRapidoComponent},
+  // tslint:disable-next-line:max-line-length
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeEncuestaRapida', component: JuegoDeEncuestaRapidaComponent, canDeactivate: [DeactivateGuardEncuestaRapida]},
+  // tslint:disable-next-line:max-line-length
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeVotacionRapida', component: JuegoDeVotacionRapidaComponent, canDeactivate: [DeactivateGuardVotacionRapida]},
+  // tslint:disable-next-line:max-line-length
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeCuestionarioRapido', component: JuegoDeCuestionarioRapidoComponent, canDeactivate: [DeactivateGuardCuestionarioRapido]},
+  // tslint:disable-next-line:max-line-length
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeCogerTurnoRapido', component: JuegoDeCogerTurnoRapidoComponent, canDeactivate: [DeactivateGuardCogerTurnoRapido]}
+  ,
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   // tslint:disable-next-line:max-line-length
-  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego, DeactivateGuardCrearCuestionario, DeactivateGuardCrearEscenario],
+  providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego,
+              DeactivateGuardCrearCuestionario, DeactivateGuardCrearEscenario, DeactivateGuardEncuestaRapida,
+              DeactivateGuardCogerTurnoRapido, DeactivateGuardCuestionarioRapido, DeactivateGuardVotacionRapida],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
