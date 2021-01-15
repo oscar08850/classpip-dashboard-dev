@@ -759,7 +759,7 @@ export class JuegoComponent implements OnInit {
       this.juego = res;
       this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
-      this.relacionesMap.forEach(async (value: number[], key: number) => {
+      this.relacionesMap.forEach( (value: number[], key: number) => {
         if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Por Equipos') {
           const equipo: EquipoJuegoEvaluado = new EquipoJuegoEvaluado(
             null,
@@ -769,7 +769,7 @@ export class JuegoComponent implements OnInit {
             null,
             null
           );
-          await this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).toPromise();
+          this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).subscribe(equipores => console.log('EquipoJuegoEvaluado', equipores));
         } else if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
           const equipo: EquipoJuegoEvaluado = new EquipoJuegoEvaluado(
             null,
@@ -779,7 +779,7 @@ export class JuegoComponent implements OnInit {
             value,
             null
           );
-          await this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).toPromise();
+          this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).subscribe(equipores => console.log('EquipoJuegoEvaluado', equipores));
         } else if (this.modoDeJuegoSeleccionado === 'Individual') {
           const alumno: AlumnoJuegoEvaluado = new AlumnoJuegoEvaluado(
             null,
@@ -788,7 +788,7 @@ export class JuegoComponent implements OnInit {
             value,
             null
           );
-          await this.peticionesAPI.CrearAlumnoJuegoDeEvaluacion(alumno).toPromise();
+          this.peticionesAPI.CrearAlumnoJuegoDeEvaluacion(alumno).subscribe(alumnosres => console.log('AlumnoJuegoEvaluado', alumnosres));
         }
       });
 
