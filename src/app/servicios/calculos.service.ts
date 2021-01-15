@@ -3920,6 +3920,21 @@ public VerificarFicherosColeccion(coleccion: any): any {
 }
 
 
+public NombreFicheroImagenPreguntaRepetido (nombreFichero: string): any {
+  const verificarFicheroObservable = new Observable ( obs => {
+    this.peticionesAPI.DameImagenPregunta (nombreFichero)
+    .subscribe (
+          (imagen) => {
+            obs.next (true);
+          },
+          (error) => {
+            obs.next (false);
+        });
+    });
+  return verificarFicheroObservable;
+}
+
+
 public VerificarFicherosPreguntas(preguntas: any): any {
   const listaFicherosObservable = new Observable ( obs => {
     let numeroFicheros = 0;

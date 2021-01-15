@@ -97,10 +97,24 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
                         let aciertos = 0;
                         // voy a contar los aciertos de este alumno
                         respuestas.forEach (respuesta => {
-                          // tslint:disable-next-line:max-line-length
-                          const respuestaCorrecta = this.preguntas.filter (pregunta => pregunta.id === respuesta.preguntaId)[0].RespuestaCorrecta;
-                          if (respuestaCorrecta === respuesta.Respuesta) {
-                            aciertos++;
+                          const pregunta = this.preguntas.filter (p => p.id === respuesta.preguntaId)[0];
+                          if (pregunta.Tipo === 'Emparejamiento') {
+                            if (respuesta.Respuesta !== undefined) {
+                              let n = 0;
+                              for (let i = 0; i < pregunta.Emparejamientos.length; i++) {
+                                if (pregunta.Emparejamientos[i].r === respuesta.Respuesta[i]) {
+                                  n++;
+                                }
+                              }
+                              if (n === pregunta.Emparejamientos.length) {
+                                aciertos++;
+                              }
+                            }
+
+                          } else {
+                            if (pregunta.RespuestaCorrecta === respuesta.Respuesta[0]) {
+                              aciertos++;
+                            }
                           }
                         });
                         this.histogramaAciertos[aciertos]++;
@@ -131,18 +145,79 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
       let miDonut: any;
       miDonut = [];
       // preparo los datos del donut
-      miDonut.push ( { respuesta: pregunta.RespuestaCorrecta, cont: 0});
-      miDonut.push ( { respuesta: pregunta.RespuestaIncorrecta1, cont: 0});
-      miDonut.push ( { respuesta: pregunta.RespuestaIncorrecta2, cont: 0});
-      miDonut.push ( { respuesta: pregunta.RespuestaIncorrecta3, cont: 0});
-      // esto es para el caso de respuesta en blando
-      miDonut.push ( { respuesta: '-', cont: 0});
-      // ahora cuento las veces que aparece cada una de las respuestas
-      respuestas.forEach (respuesta =>
-        miDonut.filter (entrada => entrada.respuesta === respuesta.Respuesta)[0].cont++
-      );
-      this.misDonuts.push (miDonut);
+      // primero meto el tipo de pregunta
+      miDonut.push ( { tipo: pregunta.Tipo});
+      if (pregunta.Tipo === 'Cuatro opciones') {
+        miDonut.push ( { respuesta: pregunta.RespuestaCorrecta, cont: 0});
+        miDonut.push ( { respuesta: pregunta.RespuestaIncorrecta1, cont: 0});
+        miDonut.push ( { respuesta: pregunta.RespuestaIncorrecta2, cont: 0});
+        miDonut.push ( { respuesta: pregunta.RespuestaIncorrecta3, cont: 0});
+        // esto es para el caso de respuesta en blando
+        miDonut.push ( { respuesta: '-', cont: 0});
+        // ahora cuento las veces que aparece cada una de las respuestas
+        respuestas.forEach (respuesta =>
+          miDonut.filter (entrada => entrada.respuesta === respuesta.Respuesta[0])[0].cont++
+        );
 
+      } else if (pregunta.Tipo === 'Respuesta abierta') {
+        miDonut.push ( { respuesta: pregunta.RespuestaCorrecta, cont: 0});
+        miDonut.push ( { respuesta: 'Otras respuestas', cont: 0});
+        // esto es para el caso de respuesta en blando
+        miDonut.push ( { respuesta: '-', cont: 0});
+        // ahora cuento las veces que aparece cada una de las respuestas
+        respuestas.forEach (respuesta => {
+          if (respuesta.Respuesta[0] === pregunta.RespuestaCorrecta) {
+            miDonut.filter (entrada => entrada.respuesta === pregunta.RespuestaCorrecta)[0].cont++;
+          } else if (respuesta.Respuesta[0] === '-') {
+            miDonut.filter (entrada => entrada.respuesta === '-')[0].cont++;
+          } else {
+            miDonut.filter (entrada => entrada.respuesta === 'Otras respuestas')[0].cont++;
+          }
+        });
+
+      } else if (pregunta.Tipo === 'Verdadero o falso') {
+        miDonut.push ( { respuesta: pregunta.RespuestaCorrecta, cont: 0});
+        miDonut.push ( { respuesta: 'Mal', cont: 0});
+        // esto es para el caso de respuesta en blando
+        miDonut.push ( { respuesta: '-', cont: 0});
+        // ahora cuento las veces que aparece cada una de las respuestas
+        respuestas.forEach (respuesta => {
+          if (respuesta.Respuesta[0] === pregunta.RespuestaCorrecta) {
+            miDonut.filter (entrada => entrada.respuesta === pregunta.RespuestaCorrecta)[0].cont++;
+          } else if (respuesta.Respuesta[0] === '-') {
+            miDonut.filter (entrada => entrada.respuesta === '-')[0].cont++;
+          } else {
+            miDonut.filter (entrada => entrada.respuesta === 'Mal')[0].cont++;
+          }
+        });
+
+      } else {
+        miDonut.push ( { respuesta: 'Emparejamientos correctos', cont: 0});
+        miDonut.push ( { respuesta: 'Otros emparejamientos incorrectos', cont: 0});
+        // esto es para el caso de respuesta en blando
+        miDonut.push ( { respuesta: '-', cont: 0});
+        // ahora cuento las veces que aparece cada una de las respuestas
+        respuestas.forEach (respuesta => {
+          if (respuesta.Respuesta === undefined) {
+            miDonut.filter (entrada => entrada.respuesta === '-')[0].cont++;
+          } else {
+            let n = 0;
+            for (let i = 0; i < pregunta.Emparejamientos.length; i++) {
+              if (pregunta.Emparejamientos[i].r === respuesta.Respuesta[i]) {
+                n++;
+              }
+            }
+            if (n === pregunta.Emparejamientos.length) {
+              miDonut.filter (entrada => entrada.respuesta === 'Emparejamientos correctos')[0].cont++;
+            } else {
+              miDonut.filter (entrada => entrada.respuesta ===  'Otros emparejamientos incorrectos')[0].cont++;
+            }
+          }
+        });
+
+      }
+
+      this.misDonuts.push (miDonut);
     });
 
     this.PrepararGraficos();
@@ -190,51 +265,181 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
     };
 
     // ahora preparo los donuts
+    console.log ('PREPARO DONUTS');
+    console.log (this.misDonuts);
     let i = 1;
     this.misDonuts.forEach (miDonut => {
-      const datos = [
-        // las respuestas correctas siempre en verde
-        {value: miDonut[0].cont, name: miDonut[0].respuesta, itemStyle: {color: 'green'}},
-        {value: miDonut[1].cont, name: miDonut[1].respuesta, itemStyle: {color: 'rgb(50,50,50)'}},
-        {value: miDonut[2].cont, name: miDonut[2].respuesta, itemStyle: {color: 'rgb(100,100,100)'}},
-        {value: miDonut[3].cont, name: miDonut[3].respuesta, itemStyle: {color: 'rgb(125,125,125)'}},
-        {value: miDonut[4].cont, name: 'No contesta ' , itemStyle: {color: 'rgb(150,150,150)'}}
-      ];
-      const  donut = {
-        title: {
-          text: 'Pregunta ' + i++,
-          subtext: 'Respuesta correcta: ' + miDonut[0].respuesta ,
-          left: 'center'
-        },
-        tooltip: {
-            trigger: 'item',
-            formatter: '{c} alumnos <br/> ({d}%)'
-        },
-        series: [
-            {
-                name: '',
-                type: 'pie',
-                radius: ['50%', '70%'],
-                avoidLabelOverlap: false,
-                label: {
-                    show: false,
-                    position: 'center'
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: '30',
-                        fontWeight: 'bold'
-                    }
-                },
-                labelLine: {
-                    show: false
-                },
-                data: datos
-            }
-        ]
-      };
-      this.donuts.push (donut);
+      if (miDonut[0].tipo === 'Cuatro opciones') {
+        const datos = [
+          // las respuestas correctas siempre en verde
+          {value: miDonut[1].cont, name: miDonut[1].respuesta, itemStyle: {color: 'green'}},
+          {value: miDonut[2].cont, name: miDonut[2].respuesta, itemStyle: {color: 'rgb(50,50,50)'}},
+          {value: miDonut[3].cont, name: miDonut[3].respuesta, itemStyle: {color: 'rgb(100,100,100)'}},
+          {value: miDonut[4].cont, name: miDonut[4].respuesta, itemStyle: {color: 'rgb(125,125,125)'}},
+          {value: miDonut[5].cont, name: 'No contesta ' , itemStyle: {color: 'rgb(150,150,150)'}}
+        ];
+        const  donut = {
+          title: {
+            text: 'Pregunta ' + i++,
+            subtext: 'Respuesta correcta: ' + miDonut[1].respuesta ,
+            left: 'center'
+          },
+          tooltip: {
+              trigger: 'item',
+              formatter: '{c} alumnos <br/> ({d}%)'
+          },
+          series: [
+              {
+                  name: '',
+                  type: 'pie',
+                  radius: ['50%', '70%'],
+                  avoidLabelOverlap: false,
+                  label: {
+                      show: false,
+                      position: 'center'
+                  },
+                  emphasis: {
+                      label: {
+                          show: true,
+                          fontSize: '30',
+                          fontWeight: 'bold'
+                      }
+                  },
+                  labelLine: {
+                      show: false
+                  },
+                  data: datos
+              }
+          ]
+        };
+        this.donuts.push (donut);
+      } else if (miDonut[0].tipo === 'Respuesta abierta') {
+        const datos = [
+          // las respuestas correctas siempre en verde
+          {value: miDonut[1].cont, name: miDonut[1].respuesta, itemStyle: {color: 'green'}},
+          {value: miDonut[2].cont, name: 'Otras respuestas', itemStyle: {color: 'rgb(50,50,50)'}},
+          {value: miDonut[3].cont, name: 'No contesta ' , itemStyle: {color: 'rgb(150,150,150)'}}
+        ];
+        const  donut = {
+          title: {
+            text: 'Pregunta ' + i++,
+            subtext: 'Respuesta correcta: ' + miDonut[1].respuesta ,
+            left: 'center'
+          },
+          tooltip: {
+              trigger: 'item',
+              formatter: '{c} alumnos <br/> ({d}%)'
+          },
+          series: [
+              {
+                  name: '',
+                  type: 'pie',
+                  radius: ['50%', '70%'],
+                  avoidLabelOverlap: false,
+                  label: {
+                      show: false,
+                      position: 'center'
+                  },
+                  emphasis: {
+                      label: {
+                          show: true,
+                          fontSize: '30',
+                          fontWeight: 'bold'
+                      }
+                  },
+                  labelLine: {
+                      show: false
+                  },
+                  data: datos
+              }
+          ]
+        };
+        this.donuts.push (donut);
+      } else if (miDonut[0].tipo === 'Verdadero o falso') {
+        const datos = [
+          // las respuestas correctas siempre en verde
+          {value: miDonut[1].cont, name: miDonut[1].respuesta, itemStyle: {color: 'green'}},
+          {value: miDonut[2].cont, name: 'Mal', itemStyle: {color: 'rgb(50,50,50)'}},
+          {value: miDonut[3].cont, name: 'No contesta ' , itemStyle: {color: 'rgb(150,150,150)'}}
+        ];
+        const  donut = {
+          title: {
+            text: 'Pregunta ' + i++,
+            subtext: 'Respuesta correcta: ' + miDonut[1].respuesta ,
+            left: 'center'
+          },
+          tooltip: {
+              trigger: 'item',
+              formatter: '{c} alumnos <br/> ({d}%)'
+          },
+          series: [
+              {
+                  name: '',
+                  type: 'pie',
+                  radius: ['50%', '70%'],
+                  avoidLabelOverlap: false,
+                  label: {
+                      show: false,
+                      position: 'center'
+                  },
+                  emphasis: {
+                      label: {
+                          show: true,
+                          fontSize: '30',
+                          fontWeight: 'bold'
+                      }
+                  },
+                  labelLine: {
+                      show: false
+                  },
+                  data: datos
+              }
+          ]
+        };
+        this.donuts.push (donut);
+      } else {
+        const datos = [
+          // las respuestas correctas siempre en verde
+          {value: miDonut[1].cont, name: 'Emparejamientos correctos', itemStyle: {color: 'green'}},
+          {value: miDonut[2].cont, name: 'Otros emparejamientos incorrectos', itemStyle: {color: 'rgb(50,50,50)'}},
+          {value: miDonut[3].cont, name: 'No contesta ' , itemStyle: {color: 'rgb(150,150,150)'}}
+        ];
+        const  donut = {
+          title: {
+            text: 'Pregunta ' + i++,
+            subtext: 'Respuesta correcta: ' + miDonut[1].respuesta ,
+            left: 'center'
+          },
+          tooltip: {
+              trigger: 'item',
+              formatter: '{c} alumnos <br/> ({d}%)'
+          },
+          series: [
+              {
+                  name: '',
+                  type: 'pie',
+                  radius: ['50%', '70%'],
+                  avoidLabelOverlap: false,
+                  label: {
+                      show: false,
+                      position: 'center'
+                  },
+                  emphasis: {
+                      label: {
+                          show: true,
+                          fontSize: '30',
+                          fontWeight: 'bold'
+                      }
+                  },
+                  labelLine: {
+                      show: false
+                  },
+                  data: datos
+              }
+          ]
+        };
+        this.donuts.push (donut);
+      }
     });
 
   }

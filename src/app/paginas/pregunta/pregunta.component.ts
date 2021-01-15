@@ -3,12 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+import * as URL from '../../URLs/urls';
 
 //Servicios
 import { SesionService, PeticionesAPIService, CalculosService } from 'src/app/servicios';
 
 //Clases
 import { Pregunta } from 'src/app/clases';
+import { ChipColor } from '../juego/juego.component';
 //import { Console } from 'console';
 
 @Component({
@@ -22,21 +24,14 @@ export class PreguntaComponent implements OnInit {
   profesorId: number;
 
   //Pregunta a crear
-  pregunta: Pregunta
+  nuevaPregunta: Pregunta
 
-  //Para el stepper
-  myForm: FormGroup;
-
-  //Para el stepper
-  myForm2: FormGroup;
 
   // URL del inicio
   URLVueltaInicio: string;
 
   // Para saber si el botón está habilitado o no
   // tslint:disable-next-line:ban-types
-  isDisabled: Boolean = true;
-  isDisabled2: Boolean = true;
 
   // tslint:disable-next-line:ban-types
   finalizar: Boolean = false;
@@ -60,14 +55,41 @@ export class PreguntaComponent implements OnInit {
   faltanFicheros = false;
   hayFicherosRepetidos = false;
   ficherosRepetidos: string[];
+  seleccionTipoPregunta: ChipColor[] = [
+    {nombre: 'Cuatro opciones', color: 'primary'},
+    {nombre: 'Respuesta abierta', color: 'accent'},
+    {nombre: 'Verdadero o falso', color: 'warn'},
+    {nombre: 'Emparejamiento', color: 'primary'},
+  ];
+
+  tengoTipo = false;
+
+
+  titulo: string;
+  pregunta: string;
+  tematica: string;
+  tipoDePreguntaSeleccionado: string;
+  respuestaCorrecta: string;
+  respuestaIncorrecta1: string;
+  respuestaIncorrecta2: string;
+  respuestaIncorrecta3: string;;
+  feedbackCorrecto: string;
+  feedbackIncorrecto: string;
+  emparejamientos: any[] = [];
+
+  nuevaParejaL: string;
+  nuevaParejaR: string;
+
+
+
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               public dialog: MatDialog,
               public sesion: SesionService,
               public peticionesAPI: PeticionesAPIService,
-              public calculos: CalculosService,
-              private _formBuilder: FormBuilder) { }
+              public calculos: CalculosService
+              ) { }
 
   ngOnInit() {
 
@@ -76,49 +98,22 @@ export class PreguntaComponent implements OnInit {
     // tslint:disable-next-line:no-string-literal
     this.URLVueltaInicio = this.route.snapshot.queryParams['URLVueltaInicio'] || '/inicio';
 
-    this.myForm = this._formBuilder.group({
-      tituloPregunta: ['', Validators.required],
-      preguntaPregunta: ['', Validators.required],
-      tematicaPregunta: ['', Validators.required]
-    })
 
-    this.myForm2 = this._formBuilder.group({
-      respuestaCorrecta: ['', Validators.required],
-      respuestaIncorrecta1: ['', Validators.required],
-      respuestaIncorrecta2: ['', Validators.required],
-      respuestaIncorrecta3: ['', Validators.required],
-      feedbackCorrecto: ['', Validators.required],
-      feedbackIncorrecto: ['', Validators.required]
-    })
   }
 
   //CREAMOS Y GUARDAMOS LA PREGUNTA CON LOS VALORES AÑADIDOS
   CrearPregunta() {
-    let tituloPregunta: string;
-    let preguntaPregunta: string;
-    let tematicaPregunta: string;
-    let respuestaCorrecta: string;
-    let respuestaIncorrecta1: string;
-    let respuestaIncorrecta2: string;
-    let respuestaIncorrecta3: string;
-    let feedbackCorrecto: string;
-    let feedbackIncorrecto: string;
-
-    tituloPregunta = this.myForm.value.tituloPregunta;
-    preguntaPregunta = this.myForm.value.preguntaPregunta;
-    tematicaPregunta = this.myForm.value.tematicaPregunta;
-    respuestaCorrecta = this.myForm2.value.respuestaCorrecta;
-    respuestaIncorrecta1 = this.myForm2.value.respuestaIncorrecta1;
-    respuestaIncorrecta2 = this.myForm2.value.respuestaIncorrecta2;
-    respuestaIncorrecta3 = this.myForm2.value.respuestaIncorrecta3;
-    feedbackCorrecto = this.myForm2.value.feedbackCorrecto;
-    feedbackIncorrecto = this.myForm2.value.feedbackIncorrecto;
-
     //Añadimos al final del constructor el nombre de la imagen nombreFicheroImagen
-    const pregunta = new Pregunta(tituloPregunta, preguntaPregunta,
-      tematicaPregunta, respuestaCorrecta, respuestaIncorrecta1,
-      respuestaIncorrecta2, respuestaIncorrecta3, feedbackCorrecto,
-      feedbackIncorrecto, this.nombreFicheroImagen);
+    // tslint:disable-next-line:max-line-length
+    const pregunta = new Pregunta (this.titulo, this.tipoDePreguntaSeleccionado, this.pregunta, this.tematica, this.nombreFicheroImagen, this.feedbackCorrecto, this.feedbackIncorrecto);
+
+    pregunta.Emparejamientos = this.emparejamientos;
+    pregunta.RespuestaCorrecta = this.respuestaCorrecta;
+    pregunta.RespuestaIncorrecta1 = this.respuestaIncorrecta1;
+    pregunta.RespuestaIncorrecta2 = this.respuestaIncorrecta2;
+    pregunta.RespuestaIncorrecta3 = this.respuestaIncorrecta3;
+
+
 
     console.log ('vamos a crear pregunta');
 
@@ -127,27 +122,17 @@ export class PreguntaComponent implements OnInit {
       .subscribe((res) => {
         if (res != null) {
           console.log('Pregunta creada correctamente' + res);
-          this.pregunta = res;
+          this.nuevaPregunta = res;
 
-          /*El modelo Pregunta y la imagen son independientes, por eso,
-          una vez creado el modelo de la pregunta, necesitamos guardar la imagen
-          a la que hace referencia el nombreFicheroImagen dentro de la API.*/
-
-          //No queremos duplicidades en la BD, por eso, antes de añadir la imagen comprobaremos que no esté ya guardada en ella.
-
-          this.ExisteImagen();
-
-          //Finalmente, añadimos la imagen a la BD.
-          if (!this.existeImagen && this.filePregunta != null){
+          if (this.nombreFicheroImagen !== undefined){
             const imagenPreguntaData: FormData = new FormData();
-            console.log(this.filePregunta.name);
-            console.log(this.filePregunta);
             imagenPreguntaData.append(this.filePregunta.name, this.filePregunta);
             this.peticionesAPI.PonImagenPregunta(imagenPreguntaData)
-                .subscribe();
+            .subscribe();
           }
+          Swal.fire('OK', 'Pregunta creada con éxito', 'success');
 
-          this.aceptarGoBack();
+          this.goBack();
         } else {
           console.log('Fallo en la creacion de la pregunta');
           Swal.fire('Se ha producido un error creando la pregunta', 'ERROR', 'error');
@@ -156,7 +141,6 @@ export class PreguntaComponent implements OnInit {
   }
 
 
-  // VUELTA AL INICIO
   VueltaInicio() {
     this.router.navigate([this.URLVueltaInicio, this.profesorId]);
     console.log(this.URLVueltaInicio);
@@ -171,29 +155,63 @@ export class PreguntaComponent implements OnInit {
     this.goBack();
   }
 
-  // MIRO SI HAY ALGO SIMULTÁNEAMENTE EN EL TITULO, PREGUNTA Y LA TEMATICA
-  Disabled() {
-    if (this.myForm.value.tituloPregunta === '' || this.myForm.value.preguntaPregunta === '' || this.myForm.value.tematicaPregunta === '') {
-      // Si alguno de los valores es igual a nada, entonces estará desactivado
-      this.isDisabled = true;
+
+  tengoDatosBasicos(): boolean {
+    // tslint:disable-next-line:max-line-length
+    if (this.titulo === undefined || this.pregunta === undefined || this.tematica === undefined || this.tipoDePreguntaSeleccionado === undefined) {
+      return false;
     } else {
-      // Si ambos son diferentes a nulo, estará activado.
-      this.isDisabled = false;
+      return true;
     }
   }
 
-  // MIRO SI HAY ALGO SIMULTÁNEAMENTE EN EL TODAS LAS RESPUESTAS Y EN LOS FEEDBACKS
-  Disabled2() {
-    if (this.myForm2.value.respuestaCorrecta === '' || this.myForm2.value.respuestaIncorrecta1 === '' ||
-     this.myForm2.value.respuestaIncorrecta2 === '' || this.myForm2.value.respuestaIncorrecta3 === '' ||
-      this.myForm2.value.feedbackCorrecto === '' || this.myForm2.value.feedbackIncorrecto === '') {
-      // Si alguno de los valores es igual a nada, entonces estará desactivado
-      this.isDisabled2 = true;
+  tengoCuatroOpciones(): boolean {
+    if (this.respuestaCorrecta === undefined || this.respuestaIncorrecta1 === undefined ||
+     this.respuestaIncorrecta2 === undefined || this.respuestaIncorrecta3 === undefined ) {
+      return false;
     } else {
-      // Si ambos son diferentes a nulo, estará activado.
-      this.isDisabled2 = false;
+      return true;
     }
   }
+
+   tengoRespuestaCorrecta(): boolean {
+    if (this.respuestaCorrecta === undefined) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+
+  tengoOpcionesVerdaderoFalso(): boolean {
+      if (this.respuestaCorrecta === undefined) {
+        return false;
+      } else {
+        return true;
+      }
+  }
+
+  tengoFeedback(): boolean {
+    if (this.feedbackCorrecto === undefined || this.feedbackIncorrecto === undefined){
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  hayNuevaPareja (): boolean {
+    if (this.nuevaParejaL === undefined || this.nuevaParejaR === undefined){
+      return false;
+    } else {
+      return true;
+    }
+
+  }
+
+  tengoEmparejamientos (): boolean {
+    return this.emparejamientos.length > 0;
+  }
+
 
  // Activa la función SeleccionarInfoPreguntas
  ActivarInputInfo() {
@@ -273,17 +291,18 @@ export class PreguntaComponent implements OnInit {
       .subscribe((res) => {
         if (res != null) {
           cont++;
-          this.pregunta = res;
+          // tslint:disable-next-line:no-shadowed-variable
+          const pregunta = res;
           //Si la pregunta se registra correctamente, enviamos también la imagen (si es que la hay)
-          if (this.pregunta.Imagen) {
+          if (pregunta.Imagen) {
             console.log ('Si que registro');
-            console.log (this.pregunta.Imagen);
+            console.log (pregunta.Imagen);
             //guardamos la imagen de la pregunta
-            const ImagenPregunta = this.ficherosPreguntas.filter (f => f.name === this.pregunta.Imagen)[0];
+            const ImagenPregunta = this.ficherosPreguntas.filter (f => f.name === pregunta.Imagen)[0];
             console.log ('imagen ');
             console.log (ImagenPregunta);
             const formDataImagen = new FormData();
-            formDataImagen.append(this.pregunta.Imagen, ImagenPregunta);
+            formDataImagen.append(pregunta.Imagen, ImagenPregunta);
             this.peticionesAPI.PonImagenPregunta (formDataImagen)
             .subscribe(() => console.log('Imagen cargado'));
            }
@@ -310,18 +329,28 @@ export class PreguntaComponent implements OnInit {
     document.getElementById('inputImagenPregunta').click();
   }
 
-  //Evento que nos permite cargar una imagen y guardarla en el atributo imagenPregunta
+
+
+
+  // Evento que nos permite cargar una imagen y guardarla en el atributo imagenPregunta
   CargarImagenPregunta($event) {
     this.filePregunta = $event.target.files[0];
-    this.nombreFicheroImagen = this.filePregunta.name;
 
-    const reader = new FileReader();
-    reader.readAsDataURL(this.filePregunta);
-    reader.onload = () => {
-      this.imagenPregunta = reader.result.toString();
+    this.calculos.NombreFicheroImagenPreguntaRepetido ( this.filePregunta.name)
+    .subscribe (repetido => {
+      if (repetido) {
+        Swal.fire('Error', 'Ya hay un fichero en la base de datos con el mismo nombre', 'error');
+      } else {
+          this.nombreFicheroImagen  = this.filePregunta.name;
+          const reader = new FileReader();
+          reader.readAsDataURL(this.filePregunta);
+          reader.onload = () => {
+            this.imagenPregunta = reader.result.toString();
+          };
+      }
+    });
+  }
 
-    };
-}
 
 ExisteImagen(){
   console.log("EMPEZAMOS GUARDADO");
@@ -339,6 +368,25 @@ ExisteImagen(){
     if (pregunta.Imagen === this.imagenPregunta) {
         this.existeImagen = true} });
   }
+}
+
+TipoDePreguntaSeleccionado(tipo: ChipColor) {
+  console.log ('tengo tipo');
+  this.tipoDePreguntaSeleccionado = tipo.nombre;
+  this.tengoTipo = true;
+}
+
+
+EliminarPareja(i) {
+  this.emparejamientos.splice (i, 1);
+}
+NuevoEmparejamiento() {
+  this.emparejamientos.push ({
+    l: this.nuevaParejaL,
+    r: this.nuevaParejaR
+  });
+  this.nuevaParejaL = undefined;
+  this.nuevaParejaR = undefined;
 }
 
 }
