@@ -36,7 +36,7 @@ En la actualidad Classpip tiene 5 módulos:
     
 ## Dashboard
 
-Este repositorio contiene el código del módulo Dashboard, que es el cuadro de mandos desde el que el profesor gestiona alumnos, grupos, juegos y recursos para organizar juegos. Para poder ejecutar el Dashboard es necesario tener en marcha el módulo Services (que proporcionará al Dashboard los datos que necesite) y el módulo Server (que gestionará notificaciones y registros de actividad).
+Este repositorio contiene el código de la aplicación Classpip-dashboard, que es el cuadro de mandos desde el que el profesor gestiona alumnos, grupos, juegos y recursos para organizar juegos. Para poder ejecutar el Dashboard es necesario tener en marcha la aplicación Classpip-API (que proporcionará al Dashboard los datos que necesite) y la aplicación Classpip-servidor (que gestionará notificaciones y registros de actividad).
 
 ### NodeJS
 
@@ -54,7 +54,9 @@ https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
  
 https://github.com/
 
-
+Además tienes que crear una cuenta en GitHub (si no la tienes aún) en la que harás el fork de la aplicación, para poder hacer contribuciones en ella.
+ 
+ 
 ### Native addons en Linux (Ubuntu)
 
 ```
@@ -72,6 +74,12 @@ Instalar también con permisos de administrador
 ```
 npm install -g @angular/cli@7.0.6
 ```
+### Instalación de la aplicación
+
+Clona la aplicación en la carpeta de tu ordenador que actuará de repositorio local.
+```
+git clone URL DE LA APLICACIÓN
+```
 
 ### Dependencias locales
 
@@ -83,8 +91,8 @@ npm install
 ### Puesta en marcha
 
 ```
-npm install
+ng serve
 ```
 A partir de ese momento puede accederse al Dashboard conectandose a http://localhost:4200
 
-IMPORTANTE: Para poner en marcha el Dashboard es necesario tener en marcha el módulo Services y el módulo Server.
+IMPORTANTE: Para poner en marcha Classpip-dashboard es necesario tener en marcha Classpip-servidor y Classpip-API.
