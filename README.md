@@ -76,17 +76,8 @@ npm install -g @angular/cli@7.0.6
 ```
 ### Instalación de la aplicación
 
-Clona la aplicación en la carpeta de tu ordenador que actuará de repositorio local.
-```
-git clone URL DE LA APLICACIÓN
-```
+Para instalar la aplicación y organizar la información para futuras contribuciones hay que seguir los pasos del 1 al 6 del protocolo de instalación y contríbuciones que se encuentra aquí.
 
-### Dependencias locales
-
-Después de clonar el repositorio hay que instalar las dependencias locales
-```
-npm install
-```
 
 ### Puesta en marcha
 
