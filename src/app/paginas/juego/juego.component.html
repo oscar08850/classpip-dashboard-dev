@@ -1019,9 +1019,6 @@
               </div>
             </mat-step>
 
-
-
-
             <!--Ultimo paso, finalizamos-->
             <mat-step>
               <ng-template matStepLabel><div>Finalizar</div></ng-template>
@@ -1032,9 +1029,269 @@
               </div>
             </mat-step>
           </div>
-
           <!-- //////////////////////////////// -->
 
+            <!-- ///////////////JUEGO DE EVALUACION///////////////// -->
+            <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Evaluación' && tengoModo">
+              <mat-step *ngIf="modoDeJuegoSeleccionado === 'Equipos'">
+                <ng-template matStepLabel><div>Equipos</div></ng-template>
+
+                <div class = "colorsChips">
+                  <label class = "LabelStepper">Los equipos seran evaluados por:</label>
+                  <mat-chip-list class="mat-chip-list-stacked">
+                    <mat-chip *ngFor="let equipo of seleccionEquiposEvaluacion; let i = index" selected [color]="equipo.color"  selected="{{seleccionEquiposEvaluacion[i].selected}}"
+                              (click)="EquipoDeEvaluacionSeleccionado(seleccionEquiposEvaluacion[i])" [value]="equipo.nombre" [selectable]="true">
+                      {{equipo.nombre}}
+                    </mat-chip>
+                  </mat-chip-list>
+                  <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{equiposEvaluacionSeleccionado}}</span>
+
+                </div>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!tengoEquipoEvaluacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+              <mat-step>
+                <ng-template matStepLabel><div>Rúbrica</div></ng-template>
+                <mat-form-field appearance="fill">
+                  <mat-label>Selecciona una rúbrica</mat-label>
+                  <mat-select (selectionChange)="RubricaSeleccionChange($event.value)">
+                    <mat-option *ngFor="let rubrica of rubricas; let i = index" [value]="i">{{rubrica.Nombre}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!tengoRubrica" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+              <mat-step>
+                <ng-template matStepLabel><div>Evaluación</div></ng-template>
+
+                <div class = "colorsChips">
+                  <label class = "LabelStepper">Selecciona la forma de evaluación:</label>
+                  <mat-chip-list class="mat-chip-list-stacked">
+                    <mat-chip *ngFor="let tipo of seleccionTipoDeEvaluacion; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeEvaluacion[i].selected}}"
+                              (click)="TipoDeEvaluacionSeleccionado(seleccionTipoDeEvaluacion[i])" [value]="tipo.nombre" [selectable]="true">
+                      {{tipo.nombre}}
+                    </mat-chip>
+                  </mat-chip-list>
+                  <div *ngIf="tipoDeEvaluacionSeleccionado === '1 a N'">
+                    <label class = "LabelStepper">Selecciona cuántos evaluadores tendrá cada uno (1 a N): N = </label>
+                    <mat-slider
+                      class="members-slider"
+                      (change)="SliderChanged($event.value)"
+                      [max]="DameMaxSlider()"
+                      [value]="1"
+                      [thumbLabel]="true">
+                    </mat-slider>
+                  </div>
+                  <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoDeEvaluacionSeleccionado}}</span>
+
+                </div>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!tengoTipoDeEvaluacion || (tipoDeEvaluacionSeleccionado === '1 a N' && numeroDeMiembros == 0)" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+              <mat-step *ngIf="tipoDeEvaluacionSeleccionado === '1 a N'">
+                <ng-template matStepLabel><div>Relaciones</div></ng-template>
+
+                <div class = "colorsChips">
+                  <label class = "LabelStepper">Selecciona cómo hacer las relaciones:</label>
+                  <mat-chip-list class="mat-chip-list-stacked">
+                    <mat-chip *ngFor="let relacion of seleccionRelacionesEvaluacion; let i = index" selected [color]="relacion.color"  selected="{{seleccionRelacionesEvaluacion[i].selected}}"
+                              (click)="RelacionDeEvaluacionSeleccionado(seleccionRelacionesEvaluacion[i])" [value]="relacion.nombre" [selectable]="true">
+                      {{relacion.nombre}}
+                    </mat-chip>
+                  </mat-chip-list>
+                  <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{relacionesEvaluacionSeleccionado}}</span>
+                </div>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!tengoRelacionEvaluacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+              <!--PASO DE ELEGIR LAS RELACIONES MENUALMENTE-->
+              <mat-step>
+                <ng-template matStepLabel><div>Relaciones</div></ng-template>
+                <table>
+                  <tr *ngFor="let evaluado of DameEvaluados()">
+                    <td>
+                      <mat-label>{{evaluado.Nombre}}</mat-label>
+                    </td>
+                    <td>
+                      <mat-form-field appearance="fill">
+                        <mat-label *ngIf="relacionesEvaluacionSeleccionado !== 'Aleatorio'">Selecciona sus evaluadores</mat-label>
+                        <mat-label *ngIf="relacionesEvaluacionSeleccionado === 'Aleatorio'" style="color: green;">Evaluadores Asignados</mat-label>
+                        <mat-select *ngIf="modoDeJuegoSeleccionado !== 'Equipos' || equiposEvaluacionSeleccionado !== 'Individualmente'" multiple (selectionChange)="RelacionChanged(evaluado.id, $event.value)" [value]="this.relacionesMap.get(evaluado.id)">
+                          <!--<mat-select-trigger>
+                            <span>
+                              ({{this.relacionesMap.get(evaluado.id) ? this.relacionesMap.get(evaluado.id).length : 0}})
+                            </span>
+                          </mat-select-trigger>-->
+                          <mat-option *ngFor="let evaluador of DameEvaluadores() | exclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}} <span *ngIf="ContarEvaluadores(evaluador.id) > 0">({{ContarEvaluadores(evaluador.id)}})</span></mat-option>
+                        </mat-select>
+                        <mat-select *ngIf="modoDeJuegoSeleccionado === 'Equipos' && equiposEvaluacionSeleccionado === 'Individualmente'" multiple (selectionChange)="RelacionChanged(evaluado.id, $event.value)" [value]="this.relacionesMap.get(evaluado.id)">
+                          <mat-option *ngFor="let evaluador of DameEvaluadores() | teamExclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}} <span *ngIf="ContarEvaluadores(evaluador.id) > 0">({{ContarEvaluadores(evaluador.id)}})</span></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                </table>
+
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!(todosTienenEvaluador && comprobacionDeN)" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+              <mat-step>
+                <ng-template matStepLabel><div>Extras</div></ng-template>
+                <mat-list>
+
+                  <mat-list-item>
+                    <mat-checkbox (change)="AutoevaluacionChange($event.checked)">
+                      <b>Autoevaluación</b></mat-checkbox>
+                  </mat-list-item>
+
+                  <mat-list-item>
+                    <mat-checkbox (change)="ProfesorEvaluaChange($event.checked)">
+                      <b>Profesor Evalua</b></mat-checkbox>
+                  </mat-list-item>
+
+                  <mat-radio-group *ngIf="profesorEvalua" class="radBtnProf" aria-label="Select an option">
+                    <mat-radio-button value="normal" [checked]="profesorEvaluaModo === 'normal'" (change)="ProfesorEvaluaModoChange($event.value)"><b>Normal: La nota se cuenta como la de un evaluador más</b></mat-radio-button>
+                    <mat-radio-button value="dominante" [checked]="profesorEvaluaModo === 'dominante'" (change)="ProfesorEvaluaModoChange($event.value)"><b>Dominante: La nota del profesor es un 50% del total</b></mat-radio-button>
+                  </mat-radio-group>
+
+                </mat-list>
+
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+              <mat-step>
+                <ng-template matStepLabel><div>Criterio</div></ng-template>
+
+                <div class = "colorsChips">
+                  <label class = "LabelStepper">Selecciona con qué criterio se puntuará:</label>
+                  <mat-chip-list class="mat-chip-list-stacked">
+                    <mat-chip *ngFor="let criterio of seleccionCriterioEvaluacion; let i = index" selected [color]="criterio.color"  selected="{{seleccionCriterioEvaluacion[i].selected}}"
+                              (click)="CriterioDeEvaluacionSeleccionado(seleccionCriterioEvaluacion[i])" [value]="criterio.nombre" [selectable]="true">
+                      {{criterio.nombre}}
+                    </mat-chip>
+                  </mat-chip-list>
+                  <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{criterioEvaluacionSeleccionado}}</span>
+
+                </div>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!tengoCriterioEvaluacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+              <mat-step *ngIf="criterioEvaluacionSeleccionado === 'Por pesos'">
+                <ng-template matStepLabel><div>Pesos</div></ng-template>
+                <table *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
+                  <tr>
+                    <td>
+                      <b>{{criterio.Nombre}}</b>
+                    </td>
+                    <td>
+                      <mat-form-field>
+                        <input matInput type="number" name="{{c}}" (change)="PesosParentChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(rubricaElegida.Criterios.length)}}" min="0" max="100">
+                        <span matSuffix>%</span>
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let elemento of criterio.Elementos; let e = index">
+                    <td>
+                      {{elemento}}
+                    </td>
+                    <td>
+                      <mat-form-field>
+                        <input matInput type="number" name="{{c}}-{{e+1}}" (change)="PesosChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(criterio.Elementos.length)}}" min="0" max="100">
+                        <span matSuffix>%</span>
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                </table>
+                <!--
+                <mat-list *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
+                  <mat-list-item><b>{{criterio.Nombre}}</b></mat-list-item>
+                  <mat-list-item *ngFor="let elemento of criterio.Elementos; let e = index">
+                    <mat-form-field>
+                      <mat-label>{{elemento}}</mat-label>
+                      <input matInput type="number" name="{{c}}-{{e}}" (change)="PesosChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(criterio.Elementos.length)}}" min="0" max="100">
+                      <span matSuffix>%</span>
+                    </mat-form-field>
+                  </mat-list-item>
+                </mat-list>-->
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!pesosSuman100" type="button" class="btn Next" (click)="CrearJuegoEvaluacion()">Siguiente</button>
+                </div>
+              </mat-step>
+              <mat-step *ngIf="criterioEvaluacionSeleccionado === 'Por penalización'">
+                <ng-template matStepLabel><div>Penalización</div></ng-template>
+                <mat-list *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
+                  <mat-list-item><b>{{criterio.Nombre}}</b></mat-list-item>
+                  <mat-list-item *ngFor="let elemento of criterio.Elementos; let i = index">{{i+1}}. {{elemento}}</mat-list-item>
+                  <table><tr>
+                    <td><mat-form-field>
+                      <mat-label>Número de fallos</mat-label>
+                      <input matInput type="number" value="0" disabled>
+                      <span matSuffix>o más</span>
+                    </mat-form-field></td>
+                    <td><mat-form-field>
+                      <mat-label>Se quedará con un</mat-label>
+                      <input matInput type="number" value="100" disabled>
+                      <span matSuffix>%</span>
+                    </mat-form-field></td>
+                    <td><!--<button mat-mini-fab color="primary" value="0" >+</button></td>-->
+                  </tr><tr *ngIf="criterio.Elementos.length >= 1">
+                    <td><mat-form-field>
+                      <mat-label>Número de fallos</mat-label>
+                      <input matInput type="number" name="{{c}}-0-num" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="1" min="1" max="{{criterio.Elementos.length}}">
+                      <span matSuffix>o más</span>
+                    </mat-form-field></td>
+                    <td><mat-form-field>
+                      <mat-label>Se quedará con un</mat-label>
+                      <input matInput type="number" name="{{c}}-0-p" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="75" min="0" max="100">
+                      <span matSuffix>%</span>
+                    </mat-form-field></td>
+                  </tr><tr *ngIf="criterio.Elementos.length >= 2">
+                    <td><mat-form-field>
+                      <mat-label>Número de fallos</mat-label>
+                      <input matInput type="number" name="{{c}}-1-num" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="2" min="2" max="{{criterio.Elementos.length}}">
+                      <span matSuffix>o más</span>
+                    </mat-form-field></td>
+                    <td><mat-form-field>
+                      <mat-label>Se quedará con un</mat-label>
+                      <input matInput type="number" name="{{c}}-1-p" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="50" min="0" max="100">
+                      <span matSuffix>%</span>
+                    </mat-form-field></td>
+                    <tr *ngIf="criterio.Elementos.length >= 3">
+                      <td><mat-form-field>
+                        <mat-label>Número de fallos</mat-label>
+                        <input matInput type="number" name="{{c}}-2-num" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="3" min="3" max="{{criterio.Elementos.length}}">
+                        <span matSuffix>o más</span>
+                      </mat-form-field></td>
+                      <td><mat-form-field>
+                        <mat-label>Se quedará con un</mat-label>
+                        <input matInput type="number" name="{{c}}-2-p" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="0" min="0" max="100">
+                        <span matSuffix>%</span>
+                      </mat-form-field></td>
+                    </tr>
+                  </table>
+                </mat-list>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button type="button" class="btn Next" (click)="CrearJuegoEvaluacion()">Siguiente</button>
+                </div>
+              </mat-step>
+
+            </div>
 <!--
           <div *ngIf="tipoDeJuegoSeleccionado !== 'Juego De Competición' && tipoDeJuegoSeleccionado !== 'Juego De Cuestionario'">
 

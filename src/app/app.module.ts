@@ -34,6 +34,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 
 import { ListViewModule } from '@syncfusion/ej2-angular-lists';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSliderModule} from '@angular/material/slider';
 
 
 // IMPORTs COMPONENTES
@@ -239,9 +241,13 @@ import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-p
 
 import {MatSliderModule} from '@angular/material/slider';
 
+import { ExcludePipe } from './pipes/exclude.pipe';
+import { TeamExcludePipe } from './pipes/team-exclude.pipe';
+
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
+
 
 @NgModule({
   declarations: [
@@ -379,9 +385,12 @@ import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-act
     GuardarColeccionComponent,
     MostrarColeccionComponent,
     JuegoDeCogerTurnoRapidoComponent,
+    MisFamiliasImagenesPerfilComponent,
+    ExcludePipe,
+    TeamExcludePipe,
     ModificarPerfilComponent,
     JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
-    GestionPreguntaKahootComponent,
+    GestionPreguntaKahootComponent
 
   ],
   imports: [
@@ -418,7 +427,8 @@ import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-act
     MatDatepickerModule,
     MatNativeDateModule,
     MatRadioModule,
-
+    MatSelectModule,
+    MatSliderModule,
     HttpClientModule,
 
     NgxEchartsModule,

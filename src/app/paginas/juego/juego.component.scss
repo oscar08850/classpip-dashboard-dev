@@ -12,6 +12,19 @@ td {
   padding-right: 8px;
 }
 
+b {
+  color: black;
+}
+.mat-slider-horizontal {
+  min-width: 200px;
+}
+
+.radBtnProf {
+  display: flex; flex-direction: column;
+  /* display: inline-grid; */
+  /* display: grid; */
+  margin: 15px 0;
+}
 mat-chip {
   max-width: 500px;
 }
