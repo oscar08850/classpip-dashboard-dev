@@ -26,11 +26,17 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
   cuestionarioId: number;
   profesorId: number;
   Tipo: string;
+  Modalidad: string;
 
   // Se usará para el selector de modo de asignación de ganadores
   Presentaciones: string[] = ['Mismo orden para todos',
   'Preguntas desordenadas',
   'Preguntas y respuestas desordenadas'
+  ];
+
+  //Se usará para el selector de modo de asignación de modalidad
+  Modalidades: string[] = ['Test clásico',
+  'Kahoot'
   ];
 
   TituloCuestionario: string;
@@ -62,7 +68,7 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
     this.JuegoTerminado = this.juegoSeleccionado.JuegoTerminado;
     this.cuestionarioId = this.juegoSeleccionado.cuestionarioId;
     this.profesorId = this.juegoSeleccionado.profesorId;
-
+    this.Modalidad = this.juegoSeleccionado.Modalidad;
     this.myForm = this._formBuilder.group({
       NombreJuego: ['', Validators.required],
       PuntuacionCorrecta: ['', Validators.required],
@@ -78,7 +84,7 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
 
   // COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN EL JUEGO
   GuardarCambios() {
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.NombreJuego, this.Tipo, this.PuntuacionCorrecta,
+    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.NombreJuego, this.Tipo, this.Modalidad, this.PuntuacionCorrecta,
       this.PuntuacionIncorrecta, this.Presentacion, this.JuegoActivo, this.JuegoTerminado,
       this.profesorId, this.juegoSeleccionado.grupoId, this.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
       .subscribe(res => {
@@ -86,6 +92,7 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
         this.juegoSeleccionado.PuntuacionCorrecta = res.PuntuacionCorrecta;
         this.juegoSeleccionado.PuntuacionIncorrecta = res.PuntuacionIncorrecta;
         this.juegoSeleccionado.Presentacion = res.Presentacion;
+        this.juegoSeleccionado.Modalidad = res.Modalidad;
         this.sesion.TomaJuego(this.juegoSeleccionado);
         this.goBack();
       });

@@ -282,7 +282,27 @@
               </div>
             </mat-step>
 
-            <!--cuarto paso, establecemos la puntuacion-->
+           <!-- CUARTO PASO: ELEGIR TIPO DE CUESTIONARIO -->
+            <mat-step>
+              <ng-template matStepLabel><div>Modalidad</div></ng-template>
+
+                <div class = "colorsChips">
+
+                    <label class = "LabelStepper">Selecciona la modalidad del juego de cuestionario:</label>
+                    <mat-chip-list class="mat-chip-list-stacked">
+                      <mat-chip style = "width: 150px" *ngFor="let tipo of seleccionTipoDeJuegoDeCuestionario; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeJuegoDeCuestionario[i].selected}}"
+                         (click)="TipoDeJuegoDeCuestionarioSeleccionado(seleccionTipoDeJuegoDeCuestionario[i])" [value]="tipo.nombre" [selectable]="true">
+                          {{tipo.nombre}}
+                      </mat-chip>
+                    </mat-chip-list>
+                    <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoDeJuegoDeCuestionarioSeleccionado}}</span>
+                </div>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!tengoTipoJuegoCuestionario" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+            </mat-step>
+            <!--quinto paso, establecemos la puntuacion-->
             <mat-step>
               <ng-template matStepLabel><div>Puntuación</div></ng-template>
                 <!-- casilla para introducir puntuacion que sumamos -->
@@ -301,7 +321,7 @@
               </div>
             </mat-step>
 
-            <!--Quinto paso, escogemos la presentacion de preguntas y respuestas-->
+            <!--sexto paso, escogemos la presentacion de preguntas y respuestas-->
             <mat-step>
               <ng-template matStepLabel><div>Presentación</div></ng-template>
               <div>
@@ -321,7 +341,7 @@
               </div>
             </mat-step>
 
-             <!--Sexto paso, decidimos si hay un tiempo limite para responder-->
+             <!--Septimo paso, decidimos si hay un tiempo limite para responder-->
              <mat-step>
               <ng-template matStepLabel><div>Tiempo</div></ng-template>
 

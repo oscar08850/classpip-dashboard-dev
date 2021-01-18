@@ -240,6 +240,8 @@ import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-p
 import {MatSliderModule} from '@angular/material/slider';
 
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo.component';
+import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
 
 @NgModule({
   declarations: [
@@ -377,7 +379,9 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
     GuardarColeccionComponent,
     MostrarColeccionComponent,
     JuegoDeCogerTurnoRapidoComponent,
-    ModificarPerfilComponent
+    ModificarPerfilComponent,
+    JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
+    GestionPreguntaKahootComponent,
 
   ],
   imports: [

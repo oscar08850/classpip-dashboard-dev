@@ -136,6 +136,12 @@ export class JuegoComponent implements OnInit {
   'Preguntas desordenadas',
   'Preguntas y respuestas desordenadas'];
   tiempoLimite: number;
+  tipoDeJuegoDeCuestionarioSeleccionado: string;
+  tengoTipoJuegoCuestionario = false;
+  seleccionTipoDeJuegoDeCuestionario: ChipColor[] = [
+    {nombre: 'Test clásico', color: 'primary'},
+    {nombre: 'Kahoot', color: 'accent'},
+  ];
 
   // información para crear juego de avatares
   familiasElegidas: number[];
@@ -614,6 +620,10 @@ export class JuegoComponent implements OnInit {
     }
   }
 
+  TipoDeJuegoDeCuestionarioSeleccionado(tipoJuegoCuestionario: ChipColor) {
+    this.tipoDeJuegoDeCuestionarioSeleccionado = tipoJuegoCuestionario.nombre;
+    this.tengoTipoJuegoCuestionario = true;
+  }
 
   CrearJuegoDeCuestionario() {
 
@@ -623,7 +633,7 @@ export class JuegoComponent implements OnInit {
 
 
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.puntuacionCorrecta,
+    this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.tipoDeJuegoDeCuestionarioSeleccionado, this.puntuacionCorrecta,
       this.puntuacionIncorrecta, this.modoPresentacion,
       false, false, this.profesorId, this.grupo.id, this.cuestionario.id, this.tiempoLimite), this.grupo.id)
     .subscribe(juegoCreado => {

@@ -153,6 +153,35 @@ export class ComServerService {
 
   }
 
+  //Función para testeo conexión a servidor
+  public AvanzarPregunta(grupoDestinatarioId: number) {
+    // Cuando apretemos el boton, queremos que avance a la siguiente pregunta en el mv.
+    console.log ('voy a avanzar la pregunta');
+    this.socket.emit ('avanzarPregunta', {grupoId: grupoDestinatarioId});
+  }
+
+  //MÉTODOS NECESARIOS, PARA LA INTERACCIÓN DASHBOARD-SERVER, EN LA MODALIDAD KAHOOT
+
+  public EsperoRespuestasCuestionarioKahoot(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('respuestaAlumnoKahoot', (respuesta) => {
+            console.log ('ya tengo respuesta');
+            console.log (respuesta);
+            observer.next(respuesta);
+        });
+    });
+  }
+
+  //Método que espera recibir la conexión del alumno para reflejarlo en la tabla de resumen
+  public EsperoConexionesCuestionarioKahoot(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('conexionAlumnoKahoot', (respuesta) => {
+            console.log ('Alumno conectado al juego');
+            console.log (respuesta);
+            observer.next(respuesta);
+        });
+    });
+  }
 
 
 
