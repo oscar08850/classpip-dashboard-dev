@@ -644,24 +644,27 @@ export class CalculosService {
                               juegosInactivos.push(juegosCuestionarioSatisfaccion[i]);
                             }
                           }
-                          console.log('GET JuegoDeEvaluacion OF grupoID: ', grupoID);
-                          this.peticionesAPI.DameJuegosDeEvaluacion(grupoID)
-                            .subscribe(juegosDeEvaluacion => {
-                              console.log('GET RESPONSE JuegoDeEvaluacion', juegosDeEvaluacion);
-                              // tslint:disable-next-line:prefer-for-of
-                              for (let i = 0; i < juegosDeEvaluacion.length; i++) {
-                                if (juegosDeEvaluacion[i].JuegoActivo === true) {
-                                  juegosDeEvaluacion[i].Tipo = 'Evaluacion';
-                                  juegosActivos.push(juegosDeEvaluacion[i]);
-                                } else {
-                                  juegosDeEvaluacion[i].Tipo = 'Evaluacion';
-                                  juegosInactivos.push(juegosDeEvaluacion[i]);
-                                }
-                              }
-
                           const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
                           obs.next (resultado);
-                          });
+
+                          // console.log('GET JuegoDeEvaluacion OF grupoID: ', grupoID);
+                          // this.peticionesAPI.DameJuegosDeEvaluacion(grupoID)
+                          //   .subscribe(juegosDeEvaluacion => {
+                          //     console.log('GET RESPONSE JuegoDeEvaluacion', juegosDeEvaluacion);
+                          //     // tslint:disable-next-line:prefer-for-of
+                          //     for (let i = 0; i < juegosDeEvaluacion.length; i++) {
+                          //       if (juegosDeEvaluacion[i].JuegoActivo === true) {
+                          //         juegosDeEvaluacion[i].Tipo = 'Evaluacion';
+                          //         juegosActivos.push(juegosDeEvaluacion[i]);
+                          //       } else {
+                          //         juegosDeEvaluacion[i].Tipo = 'Evaluacion';
+                          //         juegosInactivos.push(juegosDeEvaluacion[i]);
+                          //       }
+                          //     }
+
+                          //   const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+                          //   obs.next (resultado);
+                          // });
                         });
                       });
                     });
