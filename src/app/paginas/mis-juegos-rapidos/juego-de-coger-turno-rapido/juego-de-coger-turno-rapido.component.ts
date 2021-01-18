@@ -13,6 +13,9 @@ import { of } from 'rxjs';
 import 'rxjs';
 
 
+import { NgxQrcodeElementTypes, NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
+
+
 
 @Component({
   selector: 'app-juego-de-coger-turno-rapido',
@@ -32,6 +35,10 @@ export class JuegoDeCogerTurnoRapidoComponent implements OnInit {
   displayedColumns: string[] = ['dia', 'hora', 'nombre', 'iconos'];
   ficheroGenerado = false;
   sonido = true;
+
+  elementType = NgxQrcodeElementTypes.URL;
+  correctionLevel = NgxQrcodeErrorCorrectionLevels.HIGH;
+  value = '147.83.118.92:8100/home';
 
   constructor(
     private calculos: CalculosService,
@@ -80,16 +87,24 @@ export class JuegoDeCogerTurnoRapidoComponent implements OnInit {
             contestado: false
           });
       });
-      this.comServer.EsperoTurnos(this.juegoSeleccionado.Clave)
+      this.comServer.EsperoTurnos()
       .subscribe((info) => {
           if (this.sonido) {
             sound.play();
             sound.volume (0.1);
           }
-          console.log ('ha contestado ' + info.nick);
-          console.log ('respuestas ' + info.turno);
-          // tslint:disable-next-line:max-line-length
-          this.juegoSeleccionado.Turnos.filter (turno => (turno.dia === info.turno.dia) && (turno.hora === info.turno.hora))[0].persona = info.nick;
+          if (info.turno.dia !== '*') {
+            // tslint:disable-next-line:max-line-length
+            this.juegoSeleccionado.Turnos.filter (turno => (turno.dia === info.turno.dia) && (turno.hora === info.turno.hora))[0].persona = info.nick;
+            this.comServer.NotificarTurnoCogido (this.juegoSeleccionado.Clave, info.turno );
+          } else {
+            this.juegoSeleccionado.Turnos.push ( {
+              dia: info.turno.dia,
+              hora: info.turno.hora,
+              persona: info.nick
+            });
+          }
+
           // tslint:disable-next-line:only-arrow-functions
           this.juegoSeleccionado.Turnos = this.juegoSeleccionado.Turnos.sort(function(a, b) {
 
@@ -104,11 +119,11 @@ export class JuegoDeCogerTurnoRapidoComponent implements OnInit {
             } else {
               return 0;
             }
-        });
-
-
+          });
+          console.log ('turnos preparados');
+          console.log (this.juegoSeleccionado.Turnos);
           this.dataSource = new MatTableDataSource(this.juegoSeleccionado.Turnos);
-          this.comServer.NotificarTurnoCogido (this.juegoSeleccionado.Clave, info.turno );
+
           this.participantes.filter (participante => participante.nickName === info.nick)[0].contestado = true;
           this.peticionesAPI.ModificarJuegoDeCogerTurnoRapido (this.juegoSeleccionado).subscribe();
       });
@@ -133,7 +148,7 @@ export class JuegoDeCogerTurnoRapidoComponent implements OnInit {
       }).then((result) => {
         if (result.value) {
            // tslint:disable-next-line:max-line-length
-            this.juegoSeleccionado.Turnos = this.juegoSeleccionado.Turnos.filter (turno => (turno.dia !== turnoEliminado.dia) || (turno.hora !== turnoEliminado.hora));
+            this.juegoSeleccionado.Turnos = this.juegoSeleccionado.Turnos.filter (turno => (turno.dia !== turnoEliminado.dia) || (turno.hora !== turnoEliminado.hora || (turnoEliminado.dia === '*') && (turnoEliminado.persona !== turno.persona)));
                   // tslint:disable-next-line:only-arrow-functions
             this.juegoSeleccionado.Turnos = this.juegoSeleccionado.Turnos.sort(function(a, b) {
 

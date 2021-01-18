@@ -11,6 +11,9 @@ import { Observable} from 'rxjs';
 import { of } from 'rxjs';
 import 'rxjs';
 
+import { NgxQrcodeElementTypes, NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
+
+
 @Component({
   selector: 'app-juego-de-votacion-rapida',
   templateUrl: './juego-de-votacion-rapida.component.html',
@@ -32,6 +35,10 @@ export class JuegoDeVotacionRapidaComponent implements OnInit {
   profesorId: number;
   sonido = true;
   ficheroGenerado = false;
+
+  elementType = NgxQrcodeElementTypes.URL;
+  correctionLevel = NgxQrcodeErrorCorrectionLevels.HIGH;
+  value = '147.83.118.92:8100/home';
 
   constructor(
     private calculos: CalculosService,
@@ -88,8 +95,8 @@ export class JuegoDeVotacionRapidaComponent implements OnInit {
           // tslint:disable-next-line:no-shadowed-variable
           let i;
           for (i = 0; i < respuesta.votos.length; i++) {
-            const index = this.datos.findIndex (entrada => entrada.concepto === respuesta.votos[i] );
-            this.datos [index].puntos =  this.datos [index].puntos + this.juegoSeleccionado.Puntos[i];
+            const index = this.datos.findIndex (entrada => entrada.concepto === respuesta.votos[i].c );
+            this.datos [index].puntos =  this.datos [index].puntos + respuesta.votos[i].puntos;
           }
           this.datos.sort((a, b) => b.puntos - a.puntos);
           this.dataSource = new MatTableDataSource(this.datos);
@@ -114,8 +121,8 @@ export class JuegoDeVotacionRapidaComponent implements OnInit {
       }
       this.respuestas.forEach (respuesta => {
         for (i = 0; i < respuesta.votos.length; i++) {
-          const index = this.datos.findIndex (entrada => entrada.concepto === respuesta.votos[i] );
-          this.datos [index].puntos =  this.datos [index].puntos + this.juegoSeleccionado.Puntos[i];
+          const index = this.datos.findIndex (entrada => entrada.concepto === respuesta.votos[i].c );
+          this.datos [index].puntos =  this.datos [index].puntos + respuesta.votos[i].puntos ;
         }
       });
       this.datos.sort((a, b) => b.puntos - a.puntos);

@@ -237,10 +237,16 @@ import { GuardarColeccionComponent } from './paginas/mis-colecciones/guardar-col
 import { MostrarColeccionComponent } from './paginas/mis-colecciones/mostrar-coleccion/mostrar-coleccion.component';
 import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 import { JuegoDeCogerTurnoRapidoComponent } from './paginas/mis-juegos-rapidos/juego-de-coger-turno-rapido/juego-de-coger-turno-rapido.component';
+import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-perfil.component';
 
+import {MatSliderModule} from '@angular/material/slider';
 
 import { ExcludePipe } from './pipes/exclude.pipe';
 import { TeamExcludePipe } from './pipes/team-exclude.pipe';
+
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo.component';
+import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
 
 
 @NgModule({
@@ -381,9 +387,10 @@ import { TeamExcludePipe } from './pipes/team-exclude.pipe';
     JuegoDeCogerTurnoRapidoComponent,
     MisFamiliasImagenesPerfilComponent,
     ExcludePipe,
-    TeamExcludePipe
-
-
+    TeamExcludePipe,
+    ModificarPerfilComponent,
+    JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
+    GestionPreguntaKahootComponent
 
   ],
   imports: [
@@ -427,7 +434,9 @@ import { TeamExcludePipe } from './pipes/team-exclude.pipe';
     NgxEchartsModule,
     ListViewModule,
     DragDropModule,
-    AngularDateTimePickerModule
+    AngularDateTimePickerModule,
+    MatSliderModule,
+    NgxQRCodeModule
 
   ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA

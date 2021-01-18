@@ -8,6 +8,7 @@ import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
 import { FieldsMapping } from '@syncfusion/ej2-angular-lists';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ import { FieldsMapping } from '@syncfusion/ej2-angular-lists';
 export class SesionService {
 
   profesor: Profesor;
+  profesorObservable = new ReplaySubject(1);
   grupo: Grupo;
   juego: Juego;
   juegoAvatar: JuegoDeAvatar;
@@ -83,6 +85,22 @@ export class SesionService {
   public  DameProfesor(): Profesor {
     return this.profesor;
   }
+
+  // uso un servicio de notificación de nuevo profesor
+  // basado en observables. El componente navbar se suscribirá
+  // para recibir los datos del profesor que se loguea o un profesor undefined
+  // cuando se haga el logout. Asi podrá actualizar inmediatamente la barra de navagación.
+  public EnviameProfesor(): any {
+    return this.profesorObservable;
+  }
+
+  public EnviaProfesor(profesor: Profesor) {
+    this.profesor = profesor;
+    this.profesorObservable.next(profesor);
+  }
+
+
+
   public TomaGrupo(grupo: Grupo) {
     this.grupo = grupo;
   }

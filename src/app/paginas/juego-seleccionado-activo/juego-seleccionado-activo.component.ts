@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 
 // Services
 import { SesionService } from '../../servicios/index';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-juego-seleccionado-activo',
@@ -15,11 +16,13 @@ import { SesionService } from '../../servicios/index';
 export class JuegoSeleccionadoActivoComponent implements OnInit {
 
   juegoSeleccionado: Juego;
+  modoKahootActivado: boolean;
 
   constructor( private sesion: SesionService,
-               private location: Location ) { }
+               private location: Location ) {}
 
   ngOnInit() {
+    
     this.juegoSeleccionado = this.sesion.DameJuego();
     console.log ('juego seleccionado: ' + this.juegoSeleccionado.Tipo);
 

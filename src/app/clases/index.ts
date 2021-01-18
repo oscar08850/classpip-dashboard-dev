@@ -76,6 +76,7 @@ export * from './JuegoDeVotacionRapida';
 export * from './FamiliaDeImagenesDePerfil';
 export * from './JuegoDeCuestionarioRapido';
 export * from './JuegoDeCogerTurnoRapido';
+export * from './JuegoDePuntos';
 
 
 

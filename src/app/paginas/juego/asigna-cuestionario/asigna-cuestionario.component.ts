@@ -53,9 +53,11 @@ export class AsignaCuestionarioComponent implements OnInit {
       .subscribe (profesores => {
         publicosDeOtros.forEach (publico => {
           const propietario = profesores.filter (profesor => profesor.id === publico.profesorId)[0];
-          publico.Titulo = publico.Titulo + '(' + propietario.Nombre + ' ' + propietario.Apellido + ')';
+          publico.Titulo = publico.Titulo + '(' + propietario.Nombre + ' ' + propietario.PrimerApellido + ')';
         });
         this.cuestionariosPublicos = publicosDeOtros;
+        console.log ('ya tengo los cuestionarios publicos');
+        console.log (this.cuestionariosPublicos);
       });
     });
   }
@@ -80,6 +82,8 @@ export class AsignaCuestionarioComponent implements OnInit {
 
   MostrarPublicos() {
     this.muestroPublicos = true;
+    console.log ('voy a mostrar los cuestionarios publicos');
+    console.log (this.cuestionariosPublicos);
     this.dataSourceMisCuestionarios = new MatTableDataSource(this.misCuestionarios.concat (this.cuestionariosPublicos));
   }
 

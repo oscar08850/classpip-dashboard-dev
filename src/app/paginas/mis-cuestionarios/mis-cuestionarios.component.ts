@@ -71,7 +71,7 @@ export class MisCuestionariosComponent implements OnInit {
           .subscribe ( profesores => {
             this.cuestionariosPublicos.forEach (cuestionario => {
               const propietario = profesores.filter (p => p.id === cuestionario.profesorId)[0];
-              this.propietarios.push (propietario.Nombre + ' ' + propietario.Apellido);
+              this.propietarios.push (propietario.Nombre + ' ' + propietario.PrimerApellido);
             });
           });
         }

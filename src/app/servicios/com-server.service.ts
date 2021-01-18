@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import * as URL from '../URLs/urls';
+import { Alumno, Profesor} from '../clases/index';
 
 @Injectable({
   providedIn: 'root'
@@ -14,16 +15,20 @@ export class ComServerService {
 
   constructor() {
   }
-  public Conectar() {
+  public Conectar(profesorId: number) {
     this.socket = io(URL.Servidor);
-    this.socket.emit ('dash');
+    this.socket.emit ('conectarDash', profesorId);
+  }
+
+  public Desonectar(profesorId: number) {
+    this.socket.emit ('desconectarDash', profesorId);
   }
 
   public EsperoRespuestasJuegoDeCuestionario (): any {
     return Observable.create((observer) => {
-        this.socket.on('respuestaJuegoDeCuestionario', (alumnoId) => {
-            console.log ('Respuesta cuestionaro ' + alumnoId);
-            observer.next(alumnoId);
+        this.socket.on('respuestaJuegoDeCuestionario', (respuesta) => {
+            console.log ('Respuesta cuestionaro ' + respuesta);
+            observer.next(respuesta);
         });
     });
   }
@@ -72,13 +77,20 @@ export class ComServerService {
     this.socket.emit ('notificacionGrupo' , {grupoId: grupoDestinatarioId, mensaje: mensajeAEnviar});
   }
 
-  public RecordarContrasena(emailRec: string, nombreRec: string, contrasenaRec: string) {
+  public RecordarContrasena(profesor: Profesor) {
     console.log ('dentro del servicio para recordar contraseña');
     // Me conecto momentaneamente para enviarle al servidor la contraseña que debe enviar por email
     this.socket = io(URL.Servidor);
-    this.socket.emit ('recordarContraseña' , {email: emailRec, nombre: nombreRec, contrasena: contrasenaRec});
+    this.socket.emit ('recordarContraseña' , {email: profesor.email, nombre: profesor.NombreUsuario, contrasena: profesor.Password});
     // Me desconecto
     this.socket.emit('forceDisconnect');
+  }
+
+  public EnviarInfoRegistroAlumno(profesor: Profesor, alumno: Alumno) {
+    // El profesor ha dado de alta a un alumno. Le enviamos un email para darle la información
+    console.log ('voy a enviar info al alumno ');
+    console.log (alumno);
+    this.socket.emit ('enviarInfoRegistroAlumno' , {p: profesor, a: alumno});
   }
 
   public EsperoNickNames(): any  {
@@ -93,6 +105,8 @@ export class ComServerService {
   public EsperoRespuestasEncuestaRapida(): any  {
     return Observable.create((observer) => {
         this.socket.on('respuestaEncuestaRapida', (respuesta) => {
+            console.log ('respuesta en comserver');
+            console.log (respuesta);
             observer.next(respuesta);
         });
     });
@@ -119,11 +133,9 @@ export class ComServerService {
     });
   }
 
-  public EsperoTurnos(clave: string): any  {
-    console.log ('voy a esperar turnos en');
-    console.log ('turnoElegido:' + clave);
+  public EsperoTurnos(): any  {
     return Observable.create((observer) => {
-        this.socket.on('turnoElegido:' + clave, (info) => {
+        this.socket.on('turnoElegido', (info) => {
             console.log ('ya tengo respuesta');
             console.log (info);
             observer.next(info);
@@ -141,6 +153,35 @@ export class ComServerService {
 
   }
 
+  //Función para testeo conexión a servidor
+  public AvanzarPregunta(grupoDestinatarioId: number) {
+    // Cuando apretemos el boton, queremos que avance a la siguiente pregunta en el mv.
+    console.log ('voy a avanzar la pregunta');
+    this.socket.emit ('avanzarPregunta', {grupoId: grupoDestinatarioId});
+  }
+
+  //MÉTODOS NECESARIOS, PARA LA INTERACCIÓN DASHBOARD-SERVER, EN LA MODALIDAD KAHOOT
+
+  public EsperoRespuestasCuestionarioKahoot(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('respuestaAlumnoKahoot', (respuesta) => {
+            console.log ('ya tengo respuesta');
+            console.log (respuesta);
+            observer.next(respuesta);
+        });
+    });
+  }
+
+  //Método que espera recibir la conexión del alumno para reflejarlo en la tabla de resumen
+  public EsperoConexionesCuestionarioKahoot(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('conexionAlumnoKahoot', (respuesta) => {
+            console.log ('Alumno conectado al juego');
+            console.log (respuesta);
+            observer.next(respuesta);
+        });
+    });
+  }
 
 
 

@@ -5,8 +5,21 @@
             <div class= "enColumna" *ngIf ="advertencia" style = "border-color: red;">
               <!-- para preservar los espacios y los tabs del texto -->
               <pre>
+                El fichero JSON debe tener el siguiente formato
               <br>
-              Instrucciones para crear los ficheros
+              {{'{'}}
+                    "Titulo": "Indicencias críticas",
+                    "Descripcion": "CUIC",
+                    "Afirmaciones": [
+                        "En este curso me estoy divirtiendo",
+                        "Estoy aprendiendo cosas valiosas"
+                      ],
+                    "PreguntasAbiertas": [
+                        "¿Cuál ha sido la incidencia crítica más positiva?",
+                        "¿Cuál ha sido la incidencia crítica más negativa?"
+                        ]
+              {{'}'}}
+
               </pre>
 
               <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">

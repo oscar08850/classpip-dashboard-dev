@@ -26,6 +26,7 @@
     "@ng-bootstrap/ng-bootstrap": "^4.2.2",
     "@syncfusion/ej2-angular-lists": "^18.3.47",
     "@syncfusion/ej2-grids": "^18.3.50",
+    "@techiediaries/ngx-qrcode": "^9.1.0",
     "angular2-datetimepicker": "^1.1.1",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.3",
