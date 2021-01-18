@@ -15,12 +15,12 @@ import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmac
 export class AgregarPreguntasDialogComponent implements OnInit {
 
   //COLUMNAS DE LA TABLA Y LA LISTA CON LA INFORMACION NECESARIA
-  displayedColumnsMisPreguntas: string[] = ['titulo', 'pregunta', 'tematica', ' '];
+  displayedColumnsMisPreguntas: string[] = ['titulo', 'pregunta', 'tematica', 'tipo', ' '];
   dataSourceMisPreguntas;
   misPreguntas: Pregunta[] = []
 
   //COLUMNAS DE LA TABLA Y LA LISTA CON LA INFORMACION NECESARIA
-  displayedColumnsPreguntasDelCuestionario: string[] = ['titulo', 'pregunta', 'tematica', ' '];
+  displayedColumnsPreguntasDelCuestionario: string[] = ['titulo', 'pregunta', 'tematica', 'tipo', ' '];
   dataSourcePreguntasDelCuestionario;
   preguntasDelCuestionario: Pregunta[] = []
 
