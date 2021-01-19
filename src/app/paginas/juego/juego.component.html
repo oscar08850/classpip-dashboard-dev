@@ -282,7 +282,27 @@
               </div>
             </mat-step>
 
-            <!--cuarto paso, establecemos la puntuacion-->
+           <!-- CUARTO PASO: ELEGIR TIPO DE CUESTIONARIO -->
+            <mat-step>
+              <ng-template matStepLabel><div>Modalidad</div></ng-template>
+
+                <div class = "colorsChips">
+
+                    <label class = "LabelStepper">Selecciona la modalidad del juego de cuestionario:</label>
+                    <mat-chip-list class="mat-chip-list-stacked">
+                      <mat-chip style = "width: 150px" *ngFor="let tipo of seleccionTipoDeJuegoDeCuestionario; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeJuegoDeCuestionario[i].selected}}"
+                         (click)="TipoDeJuegoDeCuestionarioSeleccionado(seleccionTipoDeJuegoDeCuestionario[i])" [value]="tipo.nombre" [selectable]="true">
+                          {{tipo.nombre}}
+                      </mat-chip>
+                    </mat-chip-list>
+                    <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoDeJuegoDeCuestionarioSeleccionado}}</span>
+                </div>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!tengoTipoJuegoCuestionario" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+            </mat-step>
+            <!--quinto paso, establecemos la puntuacion-->
             <mat-step>
               <ng-template matStepLabel><div>Puntuación</div></ng-template>
                 <!-- casilla para introducir puntuacion que sumamos -->
@@ -301,7 +321,7 @@
               </div>
             </mat-step>
 
-            <!--Quinto paso, escogemos la presentacion de preguntas y respuestas-->
+            <!--sexto paso, escogemos la presentacion de preguntas y respuestas-->
             <mat-step>
               <ng-template matStepLabel><div>Presentación</div></ng-template>
               <div>
@@ -321,7 +341,7 @@
               </div>
             </mat-step>
 
-             <!--Sexto paso, decidimos si hay un tiempo limite para responder-->
+             <!--Septimo paso, decidimos si hay un tiempo limite para responder-->
              <mat-step>
               <ng-template matStepLabel><div>Tiempo</div></ng-template>
 
@@ -359,7 +379,7 @@
 
                   <label class = "LabelStepper">Selecciona el tipo de votación</label>
                   <mat-chip-list class="mat-chip-list-stacked">
-                    <mat-chip *ngFor="let tipo of seleccionTipoDeVotacion; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeVotacion[i].selected}}"
+                    <mat-chip style = "width: 150px" *ngFor="let tipo of seleccionTipoDeVotacion; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeVotacion[i].selected}}"
                        (click)="TipoDeVotacionSeleccionado(seleccionTipoDeVotacion[i])" [value]="tipo.nombre" [selectable]="true">
                         {{tipo.nombre}}
                     </mat-chip>
@@ -373,9 +393,45 @@
               </div>
             </mat-step>
             <div *ngIf="tipoDeVotacionSeleccionado === 'Uno A Todos'">
-
-              <!--CUARTO PASO : INTRODUCIR PUNTUACIONES-->
+              <!-- Especificar modo de reparto de los puntos -->
               <mat-step>
+                <ng-template matStepLabel><div>Modo de reparto</div></ng-template>
+
+                <div class = "colorsChips">
+
+                    <label class = "LabelStepper">Selecciona el modo de reparto de los puntos</label>
+                    <mat-chip-list class="mat-chip-list-stacked">
+                      <div class = "enFila" *ngFor="let modo of seleccionModoReparto; let i = index" style = "width: 60%">
+                        <!-- <mat-chip style = "width: 250px" *ngFor="let modo of seleccionModoReparto; let i = index" selected [color]="modo.color"  selected="{{seleccionModoReparto[i].selected}}" -->
+                        <mat-chip style = "width: 250px" selected [color]="modo.color"  selected="{{seleccionModoReparto[i].selected}}"
+                          (click)="ModoDeRepartoSeleccionado(seleccionModoReparto[i])" [value]="modo.nombre" [selectable]="true">
+                            {{modo.nombre}}
+                        </mat-chip>
+                        <div  *ngIf = "(modoDeRepartoSeleccionado === 'Reparto libre') && (i===1)">
+                          <span style ="font-weight: bold;">Puntos a repartir:   </span>
+                          <mat-slider
+                              thumbLabel
+                              (change)="GuardaValor($event)"
+                              tickInterval="1"
+                              min="1"
+                              max="100">
+                          </mat-slider>
+                        </div>
+                      </div>
+                    </mat-chip-list>
+
+                    <span *ngIf = "(modoDeRepartoSeleccionado !== 'Reparto libre')" style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoDeVotacionSeleccionado}} ... {{modoDeRepartoSeleccionado}}</span>
+                    <span *ngIf = "(modoDeRepartoSeleccionado === 'Reparto libre')" style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoDeVotacionSeleccionado}} ... {{modoDeRepartoSeleccionado}} de {{puntosARepartir}} puntos</span>
+
+                </div>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button *ngIf = "(modoDeRepartoSeleccionado !== 'Reparto libre')" [disabled]="!tengoModoReparto" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  <button *ngIf = "(modoDeRepartoSeleccionado === 'Reparto libre')" [disabled]="!tengoModoReparto && puntosARepartir > 0" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+              <!--CUARTO PASO : INTRODUCIR PUNTUACIONES-->
+              <mat-step *ngIf="modoDeRepartoSeleccionado === 'Reparto fijo según posición'">
                   <ng-template matStepLabel><div>Puntuaciones</div></ng-template>
 
                   <div class="contenedor">
@@ -450,10 +506,10 @@
 
                   </div>
               </mat-step>
+
               <!-- ULTIMO PASO: CREAR EL JUEGO DE VOTACION UNO A TODOS -->
               <mat-step>
                 <ng-template matStepLabel><div>Finalizar</div></ng-template>
-
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                   <button style= "width: 60%" type="button" class="btn Aceptar" (click) = "CrearJuegoDeVotacionUnoATodos()">Crear juego de votación Uno A Todos</button>

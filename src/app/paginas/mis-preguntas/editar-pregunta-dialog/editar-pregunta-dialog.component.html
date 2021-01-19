@@ -3,67 +3,497 @@
 <br>
 <div class = "contenedor" >
   <div class = "enColumna">
-    <form [formGroup]="myForm">
+
         <mat-card class= "cardBorder">
-          <mat-card-content>
-                <mat-form-field style=  "width: 100%;">
-                  <mat-label>Título</mat-label>
-                  <input (keyup)="Disabled()" matInput formControlName="titulo" required [(ngModel)]="titulo">
-                </mat-form-field>
-                <div>
-                  <mat-form-field style=  "width: 100%;">
-                    <mat-label>Pregunta</mat-label>
-                      <input (keyup)="Disabled()" matInput formControlName="pregunta" required [(ngModel)]="pregunta">
-                  </mat-form-field>
+          <mat-card-content *ngIf = "preguntaEditar.Tipo === 'Cuatro opciones'">
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Titulo</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.Titulo">
+            </mat-form-field>
+            <br>
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Pregunta</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.Pregunta">
+            </mat-form-field>
+            <br>
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Temática</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.Tematica">
+            </mat-form-field>
+            <br>
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Respuesta correcta</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.RespuestaCorrecta">
+            </mat-form-field>
+            <br>
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Respuesta incorrecta 1</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.RespuestaIncorrecta1">
+            </mat-form-field>
+            <br>
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Respuesta incorrecta 2</strong></mat-label>
+              <input  (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.RespuestaIncorrecta2">
+            </mat-form-field>
+            <br>
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Respuesta incorrecta 3</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.RespuestaIncorrecta3">
+            </mat-form-field>
+            <br>
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Feedback correcto</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.FeedbackCorrecto">
+            </mat-form-field>
+            <br>
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Feedback incorrecto</strong> </mat-label>
+              <input (keyup)="ActivarGuardar()"  matInput [(ngModel)]="preguntaEditar.FeedbackIncorrecto">
+            </mat-form-field>
+            <br>
+            <div>
+              <mat-label style = "font-size: smaller;"><strong>Imagen</strong></mat-label>
+              <div class = "enColumna">
+                <div class ="enFila">
+                  <input  #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
+                  <!-- Cuando se cargue la imagen se activara la función que hara que se visualice con tamaño doble -->
+                  <img #img *ngIf="imagenPregunta" mat-card-image  [src]="imagenPregunta" style = "width: 200px">
+                  <button (click) = "ActivarInputImagen()" type="button" class="btn Agregar" style = "width: 100px; font-size: small;">
+                    Cambiar <br> Imagen
+                  </button>
                 </div>
-                <div>
-                  <mat-form-field style=  "width: 100%;">
-                    <mat-label>Tematica</mat-label>
-                      <input (keyup)="Disabled()" matInput formControlName="tematica" required [(ngModel)]="tematica">
-                  </mat-form-field>
-                </div>
-                <div>
-                  <mat-form-field style=  "width: 100%;">
-                    <mat-label>Respuesta Correcta</mat-label>
-                      <input (keyup)="Disabled()" matInput formControlName="respuestaCorrecta" required [(ngModel)]="respuestaCorrecta">
-                  </mat-form-field>
-                </div>
-                <div>
-                  <mat-form-field style=  "width: 100%;">
-                    <mat-label>Respuesta Incorrecta 1</mat-label>
-                      <input (keyup)="Disabled()" matInput formControlName="respuestaIncorrecta1" required [(ngModel)]="respuestaIncorrecta1">
-                  </mat-form-field>
-                </div>
-                <div>
-                  <mat-form-field style=  "width: 100%;">
-                    <mat-label>Respuesta Incorrecta 2</mat-label>
-                      <input (keyup)="Disabled()" matInput formControlName="respuestaIncorrecta2" required [(ngModel)]="respuestaIncorrecta2">
-                  </mat-form-field>
-                </div>
-                <div>
-                  <mat-form-field style=  "width: 100%;">
-                    <mat-label>Respuesta Incorrecta 3</mat-label>
-                      <input (keyup)="Disabled()" matInput formControlName="respuestaIncorrecta3" required [(ngModel)]="respuestaIncorrecta3">
-                  </mat-form-field>
-                </div>
-                <div>
-                  <mat-form-field style=  "width: 100%;">
-                    <mat-label>Feedback Correcto</mat-label>
-                      <input (keyup)="Disabled()" matInput formControlName="feedbackCorrecto" required [(ngModel)]="feedbackCorrecto">
-                  </mat-form-field>
-                </div>
-                <div>
-                  <mat-form-field style=  "width: 100%;">
-                    <mat-label>Feedback Incorrecto</mat-label>
-                      <input (keyup)="Disabled()" matInput formControlName="feedbackIncorrecto" required [(ngModel)]="feedbackIncorrecto">
-                  </mat-form-field>
-                </div>
-                <div class="btnCambiarStep">
-                  <button mat-raised-button class="btn Back" style="margin: 5px" (click) = "goBack();"> Cerrar </button>
-                  <button [disabled]="isDisabled" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "GuardarPregunta();"> Guardar </button>
-                </div>
+              </div>
+            </div>
+
+            <div>
+              <button mat-raised-button class="btn Back" style="margin: 5px" (click) = "goBack();"> Cerrar </button>
+              <button [disabled]="!hayCambios" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "GuardarPregunta();"> Guardar </button>
+            </div>
           </mat-card-content>
+          <mat-card-content *ngIf = "preguntaEditar.Tipo === 'Respuesta abierta'">
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Titulo</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.Titulo">
+            </mat-form-field>
+            <br>
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Pregunta</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.Pregunta">
+            </mat-form-field>
+            <br>
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Temática</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.Tematica">
+            </mat-form-field>
+            <br>
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Respuesta correcta</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.RespuestaCorrecta">
+            </mat-form-field>
+            <br>
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Feedback correcto</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.FeedbackCorrecto">
+            </mat-form-field>
+            <br>
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Feedback incorrecto</strong> </mat-label>
+              <input (keyup)="ActivarGuardar()"  matInput [(ngModel)]="preguntaEditar.FeedbackIncorrecto">
+            </mat-form-field>
+            <br>
+            <br>
+            <div>
+            <mat-label style = "font-size: smaller;"><strong>Imagen</strong></mat-label>
+            <div class = "enColumna">
+
+                <div class ="enFila">
+                  <input  #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
+                  <!-- Cuando se cargue la imagen se activara la función que hara que se visualice con tamaño doble -->
+                  <img #img *ngIf="imagenPregunta" mat-card-image  [src]="imagenPregunta" style = "width: 200px">
+                  <button (click) = "ActivarInputImagen()" type="button" class="btn Agregar" style = "width: 100px; font-size: small;">
+                    Cambiar <br> Imagen
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <button mat-raised-button class="btn Back" style="margin: 5px" (click) = "goBack();"> Cerrar </button>
+              <button [disabled]="!hayCambios" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "GuardarPregunta();"> Guardar </button>
+            </div>
+          </mat-card-content>
+          <mat-card-content *ngIf = "preguntaEditar.Tipo === 'Verdadero o falso'">
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Titulo</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.Titulo">
+            </mat-form-field>
+            <br>
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Pregunta</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.Pregunta">
+            </mat-form-field>
+            <br>
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Temática</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.Tematica">
+            </mat-form-field>
+            <br>
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Respuesta</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.RespuestaCorrecta">
+            </mat-form-field>
+            <br>
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Feedback correcto</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.FeedbackCorrecto">
+            </mat-form-field>
+            <br>
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Feedback incorrecto</strong> </mat-label>
+              <input (keyup)="ActivarGuardar()"  matInput [(ngModel)]="preguntaEditar.FeedbackIncorrecto">
+            </mat-form-field>
+            <br>
+             <br>
+            <div>
+              <mat-label style = "font-size: smaller;"><strong>Imagen</strong></mat-label>
+              <div class = "enColumna">
+                <div class ="enFila">
+                  <input  #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
+                  <!-- Cuando se cargue la imagen se activara la función que hara que se visualice con tamaño doble -->
+                  <img #img *ngIf="imagenPregunta" mat-card-image  [src]="imagenPregunta" style = "width: 200px">
+                  <button (click) = "ActivarInputImagen()" type="button" class="btn Agregar" style = "width: 100px; font-size: small;">
+                    Cambiar <br> Imagen
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <button mat-raised-button class="btn Back" style="margin: 5px" (click) = "goBack();"> Cerrar </button>
+              <button [disabled]="!hayCambios" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "GuardarPregunta();"> Guardar </button>
+            </div>
+          </mat-card-content>
+          <mat-card-content *ngIf = "preguntaEditar.Tipo === 'Emparejamiento'">
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Titulo</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.Titulo">
+            </mat-form-field>
+            <br>
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Pregunta</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.Pregunta">
+            </mat-form-field>
+            <br>
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Temática</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.Tematica">
+            </mat-form-field>
+            <br>
+
+
+            <mat-label style = "font-size: smaller;"><strong>Emparejamientos</strong></mat-label>
+
+            <div *ngFor = "let pareja of preguntaEditar.Emparejamientos; let i= index ">
+
+              <mat-form-field style=  "width: 40%;">
+                <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="pareja.l">
+              </mat-form-field>
+              <mat-form-field style=  "width: 40%; padding-left: 5%;">
+                <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="pareja.r">
+              </mat-form-field>
+              <button (click) = "EliminarPareja (i)" mat-icon-button matTooltip="Eliminar este emparejamiento">
+                <i class="material-icons red md-36">delete</i>
+              </button>
+            </div>
+            <div class= "enColumna">
+              <button mat-raised-button class="btn Aceptar"  (click) = "NuevoEmparejamiento();"> Añadir emparejamiento </button>
+            </div>
+            <br>
+            <br>
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Feedback correcto</strong></mat-label>
+              <input (keyup)="ActivarGuardar()" matInput [(ngModel)]="preguntaEditar.FeedbackCorrecto">
+            </mat-form-field>
+            <br>
+
+            <mat-form-field style = "width: 80%">
+              <mat-label><strong>Feedback incorrecto</strong> </mat-label>
+              <input (keyup)="ActivarGuardar()"  matInput [(ngModel)]="preguntaEditar.FeedbackIncorrecto">
+            </mat-form-field>
+            <br>
+            <div>
+              <mat-label style = "font-size: smaller;"><strong>Imagen</strong></mat-label>
+              <div class = "enColumna">
+                <div class ="enFila">
+                  <input  #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
+                  <!-- Cuando se cargue la imagen se activara la función que hara que se visualice con tamaño doble -->
+                  <img #img *ngIf="imagenPregunta" mat-card-image  [src]="imagenPregunta" style = "width: 200px">
+                  <button (click) = "ActivarInputImagen()" type="button" class="btn Agregar" style = "width: 100px; font-size: small;">
+                    Cambiar <br> Imagen
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <button mat-raised-button class="btn Back" style="margin: 5px" (click) = "goBack();"> Cerrar </button>
+              <button [disabled]="!hayCambios" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "GuardarPregunta();"> Guardar </button>
+            </div>
+          </mat-card-content>
+
+
         </mat-card>
-      </form>
+
+
+
+
+<!--
+    <form [formGroup]="myForm">
+      <mat-card class= "cardBorder">
+        <mat-card-content *ngIf = "preguntaEditar.Tipo === 'Cuatro opciones'">
+              <mat-form-field style=  "width: 100%;">
+                <mat-label>Título</mat-label>
+                <input (keyup)="Disabled()" matInput formControlName="titulo" required [(ngModel)]="preguntaEditar.Titulo">
+              </mat-form-field>
+              <div>
+                <mat-form-field style=  "width: 100%;">
+                  <mat-label>Pregunta</mat-label>
+                    <input (keyup)="Disabled()" matInput formControlName="pregunta" required [(ngModel)]="preguntaEditar.Pregunta">
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field style=  "width: 100%;">
+                  <mat-label>Tematica</mat-label>
+                    <input (keyup)="Disabled()" matInput formControlName="tematica" required [(ngModel)]="preguntaEditar.Tematica">
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field style=  "width: 100%;">
+                  <mat-label>Respuesta Correcta</mat-label>
+                    <input (keyup)="Disabled()" matInput formControlName="respuestaCorrecta" required [(ngModel)]="preguntaEditar.RespuestaCorrecta">
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field style=  "width: 100%;">
+                  <mat-label>Respuesta Incorrecta 1</mat-label>
+                    <input (keyup)="Disabled()" matInput formControlName="respuestaIncorrecta1" required [(ngModel)]="preguntaEditar.RespuestaIncorrecta1">
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field style=  "width: 100%;">
+                  <mat-label>Respuesta Incorrecta 2</mat-label>
+                    <input (keyup)="Disabled()" matInput formControlName="respuestaIncorrecta2" required [(ngModel)]="preguntaEditar.RespuestaIncorrecta2">
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field style=  "width: 100%;">
+                  <mat-label>Respuesta Incorrecta 3</mat-label>
+                    <input (keyup)="Disabled()" matInput formControlName="respuestaIncorrecta3" required [(ngModel)]="preguntaEditar.RespuestaIncorrecta3">
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field style=  "width: 100%;">
+                  <mat-label>Feedback Correcto</mat-label>
+                    <input (keyup)="Disabled()" matInput formControlName="feedbackCorrecto" required [(ngModel)]="preguntaEditar.FeedbackCorrecto">
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field style=  "width: 100%;">
+                  <mat-label>Feedback Incorrecto</mat-label>
+                    <input (keyup)="Disabled()" matInput formControlName="feedbackIncorrecto" required [(ngModel)]="preguntaEditar.FeedbackIncorrecto">
+                </mat-form-field>
+              </div>
+              <div>
+                  <mat-label>Imagen</mat-label>
+
+                  <input #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
+                   <img #img *ngIf="imagenPregunta" mat-card-image  [src]="imagenPregunta">
+                  <button (click) = "ActivarInputImagen()" type="button" class="btn Agregar">
+                    Cambiar Imagen
+                  </button>
+              </div>
+              <div class="btnCambiarStep">
+                <button mat-raised-button class="btn Back" style="margin: 5px" (click) = "goBack();"> Cerrar </button>
+                <button [disabled]="isDisabled" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "GuardarPregunta();"> Guardar </button>
+              </div>
+        </mat-card-content>
+        <mat-card-content *ngIf = "preguntaEditar.Tipo === 'Respuesta abierta'">
+          <mat-form-field style=  "width: 100%;">
+            <mat-label>Título</mat-label>
+            <input (keyup)="Disabled()" matInput  formControlName="titulo" required [(ngModel)]="preguntaEditar.Titulo">
+          </mat-form-field>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Pregunta</mat-label>
+                <input (keyup)="Disabled()" matInput formControlName="pregunta" required [(ngModel)]="preguntaEditar.Pregunta">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Tematica</mat-label>
+                <input (keyup)="Disabled()" matInput formControlName="tematica" required [(ngModel)]="preguntaEditar.Tematica">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Respuesta Correcta</mat-label>
+                <input (keyup)="Disabled()" matInput  formControlName="respuestaCorrecta" required [(ngModel)]="preguntaEditar.RespuestaCorrecta">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Feedback Correcto</mat-label>
+                <input (keyup)="Disabled()" matInput  formControlName="feedbackCorrecto" required [(ngModel)]="preguntaEditar.FeedbackCorrecto">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Feedback Incorrecto</mat-label>
+                <input (keyup)="Disabled()" matInput formControlName="feedbackIncorrecto" required [(ngModel)]="preguntaEditar.FeedbackIncorrecto">
+            </mat-form-field>
+          </div>
+          <div>
+              <mat-label>Imagen</mat-label>
+
+              <input #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
+              <img #img *ngIf="imagenPregunta" mat-card-image  [src]="imagenPregunta">
+              <button (click) = "ActivarInputImagen()" type="button" class="btn Agregar">
+                Cambiar Imagen
+              </button>
+          </div>
+          <div class="btnCambiarStep">
+            <button mat-raised-button class="btn Back" style="margin: 5px" (click) = "goBack();"> Cerrar </button>
+            <button [disabled]="isDisabled" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "GuardarPregunta();"> Guardar </button>
+          </div>
+
+        </mat-card-content>
+        <mat-card-content *ngIf = "preguntaEditar.Tipo === 'Emparejamiento'">
+          <mat-form-field style=  "width: 100%;">
+            <mat-label>Título</mat-label>
+            <input (keyup)="Disabled()" matInput  formControlName="titulo" required [(ngModel)]="preguntaEditar.Titulo">
+          </mat-form-field>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Pregunta</mat-label>
+                <input (keyup)="Disabled()" matInput formControlName="pregunta" required [(ngModel)]="preguntaEditar.Pregunta">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Tematica</mat-label>
+                <input (keyup)="Disabled()" matInput formControlName="tematica" required [(ngModel)]="preguntaEditar.Tematica">
+            </mat-form-field>
+          </div>
+          <mat-label>Emparejamientos</mat-label>
+          <div *ngFor = "let pareja of preguntaEditar.Emparejamientos; let i= index ">
+
+            <mat-form-field style=  "width: 50%;">
+                <input (keyup)="Disabled()" matInput  formControlName="izquierda[i].opcion" required [(ngModel)]="pareja.l">
+            </mat-form-field>
+            <mat-form-field style=  "width: 50%;">
+              <input (keyup)="Disabled()" matInput  formControlName="derecha[i].opcion" required [(ngModel)]="pareja.r">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Feedback Correcto</mat-label>
+                <input (keyup)="Disabled()" matInput  formControlName="feedbackCorrecto" required [(ngModel)]="preguntaEditar.FeedbackCorrecto">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Feedback Incorrecto</mat-label>
+                <input (keyup)="Disabled()" matInput formControlName="feedbackIncorrecto" required [(ngModel)]="preguntaEditar.FeedbackIncorrecto">
+            </mat-form-field>
+          </div>
+          <div>
+              <mat-label>Imagen</mat-label>
+
+              <input #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
+               <img #img *ngIf="imagenPregunta" mat-card-image  [src]="imagenPregunta">
+              <button (click) = "ActivarInputImagen()" type="button" class="btn Agregar">
+                Cambiar Imagen
+              </button>
+          </div>
+          <div class="btnCambiarStep">
+            <button mat-raised-button class="btn Back" style="margin: 5px" (click) = "goBack();"> Cerrar </button>
+            <button [disabled]="isDisabled" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "GuardarPregunta();"> Guardar </button>
+          </div>
+
+        </mat-card-content>
+        <mat-card-content *ngIf = "preguntaEditar.Tipo === 'Verdadero o falso'">
+          <mat-form-field style=  "width: 100%;">
+            <mat-label>Título</mat-label>
+            <input (keyup)="Disabled()" matInput  formControlName="titulo" required [(ngModel)]="preguntaEditar.Titulo">
+          </mat-form-field>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Pregunta</mat-label>
+                <input (keyup)="Disabled()" matInput formControlName="pregunta" required [(ngModel)]="preguntaEditar.Pregunta">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Tematica</mat-label>
+                <input (keyup)="Disabled()" matInput formControlName="tematica" required [(ngModel)]="preguntaEditar.Tematica">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Opción verdadera</mat-label>
+                <input (keyup)="Disabled()" matInput  formControlName="opcionVerdadera" required [(ngModel)]="preguntaEditar.OpcionVerdadera">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Opción falsa</mat-label>
+                <input (keyup)="Disabled()" matInput  formControlName="opcionFalsa" required [(ngModel)]="preguntaEditar.OpcionFalsa">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Feedback Correcto</mat-label>
+                <input (keyup)="Disabled()" matInput  formControlName="feedbackCorrecto" required [(ngModel)]="preguntaEditar.FeedbackCorrecto">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style=  "width: 100%;">
+              <mat-label>Feedback Incorrecto</mat-label>
+                <input (keyup)="Disabled()" matInput formControlName="feedbackIncorrecto" required [(ngModel)]="preguntaEditar.FeedbackIncorrecto">
+            </mat-form-field>
+          </div>
+          <div>
+              <mat-label>Imagen</mat-label>
+
+              <input #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
+               <img #img *ngIf="imagenPregunta" mat-card-image  [src]="imagenPregunta">
+              <button (click) = "ActivarInputImagen()" type="button" class="btn Agregar">
+                Cambiar Imagen
+              </button>
+          </div>
+          <div class="btnCambiarStep">
+            <button mat-raised-button class="btn Back" style="margin: 5px" (click) = "goBack();"> Cerrar </button>
+            <button [disabled]="isDisabled" mat-raised-button class="btn Aceptar" style="margin: 5px" (click) = "GuardarPregunta();"> Guardar </button>
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+  </form> -->
+
+
+
   </div>
 </div>

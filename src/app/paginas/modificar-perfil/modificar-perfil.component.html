@@ -1,0 +1,42 @@
+
+    <div class="titulo">Cambiar datos del perfil</div>
+    <mat-divider class="lineaDivisoria"></mat-divider>
+    <mat-card-content style="text-align: center; display: flex; align-items: center; flex-direction: column; ">
+      <br>
+      <h4>El identificador que debes dar a tus alumnos cuando se registren es:</h4>
+      <h3>{{profesor.Identificador}}</h3>
+
+
+      <br>
+      <br>
+
+        <div style= "width: 40%">
+          <mat-form-field style=" width: 80%">
+            <input matInput type="text" name="nombre" placeholder="Nombre" required [(ngModel)]="nombre" (ngModelChange)= "cambio = true">
+          </mat-form-field>
+          <mat-form-field style="width: 80%">
+
+            <input matInput type="text" name="primerApellido" placeholder="Primer Apellido" required [(ngModel)]="primerApellido" (ngModelChange)= "cambio = true">
+          </mat-form-field>
+          <mat-form-field style="width: 80%">
+            <input matInput type="text" name="segundoApellido" placeholder="Segundo Apellido" required [(ngModel)]="segundoApellido" (ngModelChange)= "cambio = true">
+          </mat-form-field>
+          <mat-form-field style=" width: 80%">
+            <input matInput type="text" name="username" placeholder="nombre de usuario" required [(ngModel)]="username" (ngModelChange)= "cambio = true">
+          </mat-form-field>
+          <mat-form-field style="width: 80%">
+            <input matInput type="text" name="email" placeholder="email" required [(ngModel)]="email" (ngModelChange)= "cambio = true">
+          </mat-form-field>
+          <mat-form-field style="width: 80%">
+            <input matInput type="text" name="contrasena" placeholder="Contraseña" required [(ngModel)]="contrasena" (ngModelChange)= "cambio = true; cambioPass = true">
+          </mat-form-field>
+          <mat-form-field  *ngIf = "cambioPass" style="width: 80%">
+            <input matInput type="text" name="contrasenaRepetida" placeholder="Repite contraseña" required [(ngModel)]="contrasenaRepetida">
+          </mat-form-field>
+        </div>
+
+        <mat-card-actions>
+          <button *ngIf = "cambio" class="btn IncioSesion" (click)= Registrar()>Registrar cambios</button>
+          <button class="btn Back" (click)= Volver()>Volver</button>
+        </mat-card-actions>
+   </mat-card-content>

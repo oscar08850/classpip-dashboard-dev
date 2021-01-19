@@ -7,7 +7,7 @@ import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHis
          AlumnoJuegoDeCompeticionLiga, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno,
          // tslint:disable-next-line:max-line-length
          TablaClasificacionJornada, TablaPuntosFormulaUno, AlumnoJuegoDeVotacionUnoATodos, TablaAlumnoJuegoDeVotacionUnoATodos,
-         AlumnoJuegoDeVotacionTodosAUno,TablaAlumnoJuegoDeVotacionTodosAUno, JuegoDeVotacionTodosAUno, FamiliaAvatares} from '../clases/index';
+         AlumnoJuegoDeVotacionTodosAUno,TablaAlumnoJuegoDeVotacionTodosAUno, JuegoDeVotacionTodosAUno, FamiliaAvatares, Pregunta} from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -1884,15 +1884,39 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
 
   // Elimina la pregunta (La pregunta se guarda previamente en sesión.
   // Lo hago con un observable para que el componente que muestra la lista de preguntas
-  // espere hasta que se haya acabado la operacion de borrar la pregunta de la base de datos
+  // espere hasta que se haya acabado la operacion de borrar la pregunta de la base de datos.
+  // La primera función elimina la imagen asociada a la pregunta, mientras que la segunda elimina el modelo de la pregunta.
   public EliminarPregunta(): any {
-    const eliminaObservable = new Observable ( obs => {
-          this.peticionesAPI.BorrarPregunta(
-                    this.sesion.DamePregunta().id)
-          .subscribe(() => {
-            this.EliminarPreguntasDelCuestionarioConPregunta();
-            obs.next ();
+    const eliminaObservable = new Observable ( obs =>
+      {
+        //Miramos si la imagen está asociada a más de una pregunta
+        var contador = 0;
+        //Recuperamos todas las preguntas que hay en la BD
+        this.peticionesAPI.DameTodasMisPreguntas(this.sesion.DameProfesor().id).subscribe( res =>
+          {
+            if (res[0] !== undefined){
+              //Comparamos cada una de las imágenes con la que queremos eliminar.
+              res.forEach( pregunta => {
+                if (pregunta.Imagen == this.sesion.DamePregunta().Imagen) {
+                  contador ++;
+                }
+              });
+
+              //Si el contador es dos o más, la imagen se usa en más de una Pregunta y, por lo tanto, no se puede borrar.
+              if (contador < 2){
+                this.peticionesAPI.BorrarImagenPregunta(this.sesion.DamePregunta().Imagen).subscribe();
+                console.log ("IMAGEN ELIMINADA");
+              }
+            }
           });
+
+          console.log ("IMAGEN EN USO")
+        this.peticionesAPI.BorrarPregunta(
+                      this.sesion.DamePregunta().id)
+            .subscribe(() => {
+              this.EliminarPreguntasDelCuestionarioConPregunta();
+              obs.next ();
+      });
     });
     return eliminaObservable;
   }
@@ -3286,7 +3310,9 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
 
   //////////////////////////////////////// JUEGO DE VOTACION UNO A TODOS ///////////////////////////////////
   public PrepararTablaRankingIndividualVotacionUnoATodos(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[],
-                                                         alumnosDelJuego: Alumno[], puntos: number[]): TablaAlumnoJuegoDeVotacionUnoATodos[] {
+                                                         alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeVotacionUnoATodos[] {
+    console.log (' EN CALCULOS');
+    console.log (listaAlumnosOrdenadaPorPuntos);
     const rankingJuegoDeVotacion: TablaAlumnoJuegoDeVotacionUnoATodos [] = [];
     // tslint:disable-next-line:prefer-for-oF
     for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
@@ -3308,9 +3334,10 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
         // Este alumno ya ha votado
         const alumno = listaAlumnosOrdenadaPorPuntos[i];
         // Asigno los puntos a los destinatorios
-        for (let j = 0; j < puntos.length; j++) {
-          const votado = rankingJuegoDeVotacion.filter (al => al.id === alumno.Votos[j])[0];
-          votado.puntos = votado.puntos + puntos[j];
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < alumno.Votos.length; j++) {
+          const votado = rankingJuegoDeVotacion.filter (al => al.id === alumno.Votos[j].alumnoId)[0];
+          votado.puntos = votado.puntos + alumno.Votos[j].puntos;
         }
         // Marque que el alumno ya ha votado
         rankingJuegoDeVotacion.filter (al => al.id === alumno.alumnoId)[0].votado = true;
@@ -3322,7 +3349,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
 
 public PrepararTablaRankingIndividualVotacionUnoATodosAcabado(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[],
                                                               // tslint:disable-next-line:max-line-length
-                                                              alumnosDelJuego: Alumno[], puntos: number[]): TablaAlumnoJuegoDeVotacionUnoATodos[] {
+                                                              alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeVotacionUnoATodos[] {
     const rankingJuegoDeVotacion: TablaAlumnoJuegoDeVotacionUnoATodos [] = [];
     // tslint:disable-next-line:prefer-for-oF
     for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
@@ -3907,5 +3934,52 @@ public VerificarFicherosColeccion(coleccion: any): any {
   return listaFicherosObservable;
 }
 
+
+public NombreFicheroImagenPreguntaRepetido (nombreFichero: string): any {
+  const verificarFicheroObservable = new Observable ( obs => {
+    this.peticionesAPI.DameImagenPregunta (nombreFichero)
+    .subscribe (
+          (imagen) => {
+            obs.next (true);
+          },
+          (error) => {
+            obs.next (false);
+        });
+    });
+  return verificarFicheroObservable;
+}
+
+
+public VerificarFicherosPreguntas(preguntas: any): any {
+  const listaFicherosObservable = new Observable ( obs => {
+    let numeroFicheros = 0;
+    preguntas.forEach (pregunta => {
+        if (pregunta.Imagen) {
+          numeroFicheros++;
+        }
+    });
+    const lista: string [] = [];
+
+    let cont = 0;
+    preguntas.forEach (pregunta => {
+        this.peticionesAPI.DameImagenPregunta (pregunta.Imagen)
+        .subscribe (
+          (imagen) => {
+            lista.push (pregunta.Imagen);
+            cont++;
+            if (cont === numeroFicheros) {
+              obs.next (lista);
+            }
+          },
+          (error) => {
+            cont++;
+            if (cont === numeroFicheros) {
+              obs.next (lista);
+            }
+        });
+    });
+  });
+  return listaFicherosObservable;
+}
 
 }

@@ -80,7 +80,7 @@ export class AsignarFamiliaImagenesPerfilComponent implements OnInit {
           .subscribe ( profesores => {
             familiasPublicas.forEach (familia => {
               const propietario = profesores.filter (p => p.id === familia.profesorId)[0];
-              this.propietarios.push (propietario.Nombre + ' ' + propietario.Apellido);
+              this.propietarios.push (propietario.Nombre + ' ' + propietario.PrimerApellido);
             });
             let i;
             for (i = 0; i < familiasPublicas.length; i++ ) {

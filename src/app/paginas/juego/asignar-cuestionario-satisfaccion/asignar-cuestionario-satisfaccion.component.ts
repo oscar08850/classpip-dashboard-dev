@@ -62,7 +62,7 @@ export class AsignarCuestionarioSatisfaccionComponent implements OnInit {
       .subscribe (profesores => {
         publicosDeOtros.forEach (publico => {
           const propietario = profesores.filter (profesor => profesor.id === publico.profesorId)[0];
-          publico.Titulo = publico.Titulo + '(' + propietario.Nombre + ' ' + propietario.Apellido + ')';
+          publico.Titulo = publico.Titulo + '(' + propietario.Nombre + ' ' + propietario.PrimerApellido + ')';
         });
         this.cuestionariosPublicos = publicosDeOtros;
         console.log ('ya tengo los cuestionarios de satisfaccion publicos');

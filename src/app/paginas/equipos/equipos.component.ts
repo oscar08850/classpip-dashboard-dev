@@ -124,38 +124,6 @@ export class EquiposComponent implements OnInit {
 
   // Le pasamos el equipo y buscamos el logo que tiene y sus alumnos
   AlumnosYLogoDelEquipo(equipo: Equipo) {
-    console.log ('dentro');
-
-    // // Si el equipo tiene una foto (recordemos que la foto no es obligatoria)
-    // if (equipo.FotoEquipo !== undefined) {
-    //   console.log ('vamos a por logo');
-    //   // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-    //  // Esto no consigo convertirlo en una funcion para los servicios
-    //   // this.peticionesAPI.DameLogoEquipo (equipo.FotoEquipo)
-    //   this.peticionesAPI.DameLogoEquipo (equipo.FotoEquipo)
-
-    //   .subscribe(response => {
-    //     const blob = new Blob([response.blob()], { type: 'image/jpg'});
-
-    //     const reader = new FileReader();
-    //     reader.addEventListener('load', () => {
-    //       this.imagenLogo = reader.result.toString();
-    //     }, false);
-
-    //     if (blob) {
-    //       reader.readAsDataURL(blob);
-    //     }
-    //   });
-
-    //   // Sino la imagenLogo será undefined para que no nos pinte la foto de otro equipo préviamente seleccionado
-    // } else {
-    //   this.imagenLogo = undefined;
-    // }
-
-
-    // Una vez tenemos el logo del equipo seleccionado, buscamos sus alumnos
-
-    // Busca los alumnos del equipo en la base de datos
     this.peticionesAPI.DameAlumnosEquipo(equipo.id)
     .subscribe(res => {
       if (res[0] !== undefined) {

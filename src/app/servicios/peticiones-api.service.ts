@@ -14,7 +14,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         RespuestaJuegoDeCuestionario, JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos, Rubrica,
         JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, FamiliaDeImagenesDePerfil,
         CuestionarioSatisfaccion, JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion,
-        JuegoDeEncuestaRapida, JuegoDeVotacionRapida, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido} from '../clases/index';
+        JuegoDeEncuestaRapida, JuegoDeVotacionRapida, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido, JuegoDePuntos} from '../clases/index';
 
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
@@ -30,6 +30,7 @@ import * as URL from '../URLs/urls';
   providedIn: 'root'
 })
 export class PeticionesAPIService {
+
 
 
   // private host = 'http://localhost';
@@ -114,6 +115,8 @@ export class PeticionesAPIService {
 
   private APIUrlCuestionariosSatisfaccion = this.host + ':3000/api/cuestionariosSatisfaccion';
 
+  private APIUrlImagenesPreguntas = this.host + ':3000/api/imagenes/ImagenesPreguntas';
+
   private APIUrlJuegoDeCuestionarioSatisfaccion = this.host + ':3000/api/juegosDeCuestionarioSatisfaccion';
   private APIUrlAlumnoJuegoDeCuestionarioSatisfaccion = this.host + ':3000/api/alumnosJuegoDeCuestionarioSatisfaccion';
   private APIUrlJuegoDeEncuestaRapida = this.host + ':3000/api/juegosDeEncuestaRapida';
@@ -161,9 +164,13 @@ export class PeticionesAPIService {
   */
 
 /////////////////////  GESTION DE PROFESORES Y ALUNNOS ///////////////////////////////
-  public DameProfesor(nombre: string, apellido: string): Observable<Profesor> {
-    console.log('Entro a mostrar a ' + nombre + ' ' + apellido);
-    return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][Nombre]=' + nombre + '&filter[where][PrimerApellido]=' + apellido);
+
+  public DameProfesor(nombre: string, pass: string): Observable<Profesor> {
+    return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][NombreUsuario]=' + nombre + '&filter[where][Password]=' + pass);
+  }
+
+  public BuscaNombreUsuario(username: string): Observable<Profesor> {
+    return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][NombreUsuario]=' + username);
   }
 
   public DameProfesores(): Observable<Profesor[]> {
@@ -174,13 +181,21 @@ export class PeticionesAPIService {
   // su nombre de usuario (de momento el nombre)
 
   public DameContrasena(nombre: string): Observable<Profesor> {
-    return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][Nombre]=' + nombre);
+    return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][NombreUsuario]=' + nombre );
   }
 
 
   public RegistraProfesor(profesor: Profesor): Observable<Profesor> {
     return this.http.post<Profesor>(this.APIUrlProfesores, profesor);
   }
+
+  public ModificaProfesor(profesor: Profesor): Observable<Profesor> {
+    const aaa = this.APIUrlProfesores + '/' + profesor.id;
+    console.log ('url');
+    console.log (aaa);
+    return this.http.put<Profesor>(this.APIUrlProfesores + '/' + profesor.id, profesor);
+  }
+
 
   public DameTodosMisAlumnos(profesorId: number): Observable<Alumno[]> {
     return this.http.get<Alumno[]>(this.APIUrlProfesores + '/' + profesorId + '/alumnos');
@@ -189,6 +204,12 @@ export class PeticionesAPIService {
   public DameAlumno(alumnoId: number): Observable<Alumno> {
     return this.http.get<Alumno>(this.APIUrlAlumnos + '/' + alumnoId);
   }
+
+  public DameTodosLosAlumnos(): Observable<Alumno[]> {
+    return this.http.get<Alumno[]>(this.APIUrlAlumnos);
+  }
+
+
 
   // Esta no se para que se usa habiendo DameTodosMisAlumnos
   public DameAlumnos(): Observable<Alumno[]> {
@@ -350,8 +371,12 @@ export class PeticionesAPIService {
 
   ////////////////////////////////// GESTION DE SESIONES DE CLASE //////////////////////
 
-  public CreaSesionClase(sesion: SesionClase, grupoId: number): Observable<Grupo> {
-    return this.http.post<Grupo>(this.APIUrlGrupos + '/' + grupoId + '/sesionesClase', sesion);
+  public CreaSesionClase(sesion: SesionClase, grupoId: number): Observable<SesionClase> {
+    return this.http.post<SesionClase>(this.APIUrlGrupos + '/' + grupoId + '/sesionesClase', sesion);
+  }
+
+  public ModificaSesionClase(sesion: SesionClase): Observable<SesionClase> {
+    return this.http.put<SesionClase>(this.APIUrlSesionesClase + '/' + sesion.id, sesion);
   }
 
   public RegistraAsistenciaAlumno(asistencia: AsistenciaClase): Observable<AsistenciaClase> {
@@ -489,8 +514,8 @@ export class PeticionesAPIService {
 
 ///////////////////////////////////////////// GESTION JUEGO DE PUNTOS //////////////////////////////////////////////
 
-  public CreaJuegoDePuntos(juego: Juego, grupoId: number): Observable<Juego> {
-    return this.http.post<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegoDePuntos', juego);
+  public CreaJuegoDePuntos(juego: JuegoDePuntos, grupoId: number): Observable<JuegoDePuntos> {
+    return this.http.post<JuegoDePuntos>(this.APIUrlGrupos + '/' + grupoId + '/juegoDePuntos', juego);
   }
 
   public AsignaPuntoJuego(asignacionPuntoJuego: AsignacionPuntosJuego) {
@@ -1019,6 +1044,20 @@ export class PeticionesAPIService {
   public ModificaPregunta(pregunta: Pregunta, profesorId: number, preguntaId: number): Observable<Pregunta> {
     return this.http.put<Pregunta>(this.APIUrlProfesores + '/' + profesorId + '/preguntas/' + preguntaId, pregunta);
   }
+
+  public PonImagenPregunta(formData: FormData): Observable<any> {
+    return this.http.post<any>(this.APIUrlImagenesPreguntas + '/upload', formData);
+  }
+
+  public BorrarImagenPregunta(imagen: string): Observable<any> {
+    return this.http.delete<any>(this.APIUrlImagenesPreguntas + '/files/' + imagen);
+  }
+
+  public DameImagenPregunta(imagen: string): Observable<any> {
+    return this.httpImagenes.get(this.APIUrlImagenesPreguntas + '/download/' + imagen,
+      { responseType: ResponseContentType.Blob });
+  }
+
 
   //////////////////////////// GESTION DE CUESTIONARIOS /////////////////////////////
   public CreaCuestionario(cuestionario: Cuestionario, profesorId: number): Observable<Cuestionario> {

@@ -85,6 +85,14 @@ export class CrearJuegoRapidoComponent implements OnInit {
 
   displayedColumnsConceptos: string[] = ['concepto', 'iconos'];
 
+  modoDeRepartoSeleccionado: string;
+  seleccionModoReparto: ChipColor[] = [
+    {nombre: 'Reparto fijo según posición', color: 'primary'},
+    {nombre: 'Reparto libre', color: 'warn'}
+  ];
+  tengoModoReparto = false;
+  puntosARepartir = 0;
+
   Puntuacion: number[] = [];
 
   TablaPuntuacion: TablaPuntosFormulaUno[];
@@ -296,6 +304,16 @@ MasterToggle() {
     this.dataSource.data.forEach(row => this.selection.select(row));
   }
 }
+
+ModoDeRepartoSeleccionado(modoReparto: ChipColor) {
+  this.modoDeRepartoSeleccionado = modoReparto.nombre;
+  this.tengoModoReparto = true;
+}
+GuardaValor(event) {
+  this.puntosARepartir = event.value;
+  this.Puntuacion[0] = this.puntosARepartir;
+}
+
 CrearJuegoDeVotacionRapida() {
   console.log ('voy a crear un juego de votacion rápida');
   const clave = Math.random().toString().substr(2, 8);
@@ -303,6 +321,7 @@ CrearJuegoDeVotacionRapida() {
     this.nombreDelJuego,
     this.tipoDeJuegoSeleccionado,
     clave,
+    this.modoDeRepartoSeleccionado,
     this.profesorId,
     this.listaConceptos,
     this.Puntuacion

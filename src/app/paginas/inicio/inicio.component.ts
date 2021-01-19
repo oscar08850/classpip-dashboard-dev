@@ -41,6 +41,7 @@ export class InicioComponent implements OnInit {
       format: 'dd-MM-yyyy-hh:mm',
       defaultOpen: true
   }
+  imagenSilueta = 'http://147.83.118.92:3000/api/imagenes/imagenColeccion/download/compositores.png';
 
   constructor(  private peticionesAPI: PeticionesAPIService,
                 private sesion: SesionService,
