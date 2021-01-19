@@ -38,8 +38,8 @@ import {AsignaEscenarioComponent} from './asigna-escenario/asigna-escenario.comp
 import {AsignaPreguntasComponent} from './asigna-preguntas/asigna-preguntas.component';
 import {JuegoDeEvaluacion} from '../../clases/JuegoDeEvaluacion';
 import {log} from 'util';
-import {EquipoJuegoEvaluado} from '../../clases/EquipoJuegoEvaluado';
-import {AlumnoJuegoEvaluado} from '../../clases/AlumnoJuegoEvaluado';
+import {EquipoJuegoDeEvaluacion} from '../../clases/EquipoJuegoDeEvaluacion';
+import {AlumnoJuegoDeEvaluacion} from '../../clases/AlumnoJuegoDeEvaluacion';
 
 
 export interface OpcionSeleccionada {
@@ -761,7 +761,7 @@ export class JuegoComponent implements OnInit {
       this.juegoCreado = true;
       this.relacionesMap.forEach( (value: number[], key: number) => {
         if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Por Equipos') {
-          const equipo: EquipoJuegoEvaluado = new EquipoJuegoEvaluado(
+          const equipo: EquipoJuegoDeEvaluacion = new EquipoJuegoDeEvaluacion(
             null,
             res.id,
             key,
@@ -771,7 +771,7 @@ export class JuegoComponent implements OnInit {
           );
           this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).subscribe(equipores => console.log('EquipoJuegoEvaluado', equipores));
         } else if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
-          const equipo: EquipoJuegoEvaluado = new EquipoJuegoEvaluado(
+          const equipo: EquipoJuegoDeEvaluacion = new EquipoJuegoDeEvaluacion(
             null,
             res.id,
             key,
@@ -781,7 +781,7 @@ export class JuegoComponent implements OnInit {
           );
           this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).subscribe(equipores => console.log('EquipoJuegoEvaluado', equipores));
         } else if (this.modoDeJuegoSeleccionado === 'Individual') {
-          const alumno: AlumnoJuegoEvaluado = new AlumnoJuegoEvaluado(
+          const alumno: AlumnoJuegoDeEvaluacion = new AlumnoJuegoDeEvaluacion(
             null,
             res.id,
             key,

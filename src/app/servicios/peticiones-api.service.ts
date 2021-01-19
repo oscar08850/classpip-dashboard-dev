@@ -21,8 +21,8 @@ import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
 import { JuegoDeGeocaching } from '../clases/JuegoDeGeocaching';
 import { AlumnoJuegoDeGeocaching } from '../clases/AlumnoJuegoDeGeocaching';
 import {JuegoDeEvaluacion} from '../clases/JuegoDeEvaluacion';
-import {EquipoJuegoEvaluado} from '../clases/EquipoJuegoEvaluado';
-import {AlumnoJuegoEvaluado} from '../clases/AlumnoJuegoEvaluado';
+import {EquipoJuegoDeEvaluacion} from '../clases/EquipoJuegoDeEvaluacion';
+import {AlumnoJuegoDeEvaluacion} from '../clases/AlumnoJuegoDeEvaluacion';
 // import {host} from '../URLs/urls';
 import * as URL from '../URLs/urls';
 
@@ -99,8 +99,8 @@ export class PeticionesAPIService {
   private APIUrlPuntosGeolocalizables = this.host + ':3000/api/PuntosGeolocalizables';
 
   private APIURLJuegoDeEvaluacion = this.host + ':3000/api/juegosDeEvaluacion';
-  private APIURLEquiposJuegoEvaluado = this.host + ':3000/api/equiposJuegoEvaluado';
-  private APIURLAlumnoJuegoEvaluado = this.host + ':3000/api/alumnosJuegoEvaluado';
+  private APIURLEquiposJuegoEvaluado = this.host + ':3000/api/equiposJuegoDeEvaluacion';
+  private APIURLAlumnoJuegoEvaluado = this.host + ':3000/api/alumnosJuegoDeEvaluacion';
 
   private APIUrlJuegoDeVotacionUnoATodos = this.host + ':3000/api/JuegosDeVotacionUnoATodos';
   private APIUrlAlumnoJuegoDeVotacionUnoATodos = this.host + ':3000/api/alumnosJuegoDeVotacionUnoATodos';
@@ -1625,11 +1625,11 @@ export class PeticionesAPIService {
     return this.http.post<JuegoDeEvaluacion>(this.APIURLJuegoDeEvaluacion, juego);
   }
 
-  public CrearEquipoJuegoDeEvaluacion(equipo: EquipoJuegoEvaluado): Observable<EquipoJuegoEvaluado> {
-    return this.http.post<EquipoJuegoEvaluado>(this.APIURLEquiposJuegoEvaluado, equipo);
+  public CrearEquipoJuegoDeEvaluacion(equipo: EquipoJuegoDeEvaluacion): Observable<EquipoJuegoDeEvaluacion> {
+    return this.http.post<EquipoJuegoDeEvaluacion>(this.APIURLEquiposJuegoEvaluado, equipo);
   }
 
-  public CrearAlumnoJuegoDeEvaluacion(alumno: AlumnoJuegoEvaluado): Observable<AlumnoJuegoEvaluado> {
-    return this.http.post<AlumnoJuegoEvaluado>(this.APIURLAlumnoJuegoEvaluado, alumno);
+  public CrearAlumnoJuegoDeEvaluacion(alumno: AlumnoJuegoDeEvaluacion): Observable<AlumnoJuegoDeEvaluacion> {
+    return this.http.post<AlumnoJuegoDeEvaluacion>(this.APIURLAlumnoJuegoEvaluado, alumno);
   }
 }
