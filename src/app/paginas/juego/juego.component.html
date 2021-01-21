@@ -1064,9 +1064,24 @@
                     <mat-option *ngFor="let rubrica of rubricas; let i = index" [value]="i">{{rubrica.Nombre}}</mat-option>
                   </mat-select>
                 </mat-form-field>
+                <div *ngIf="tengoRubrica">
+                <table *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
+                  <tr>
+                    <td>
+                      <b>{{criterio.Nombre}}</b>
+                    </td>
+                    <td>
+                      <mat-form-field class="input-porcentaje">
+                        <input matInput type="number" name="{{c}}" (keyup)="PesosParentChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(rubricaElegida.Criterios.length)}}" min="0" max="100">
+                        <span matSuffix>%</span>
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                </table>
+                </div>
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button [disabled]="!tengoRubrica || descripcionJuegoEvaluacion.length === 0" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  <button [disabled]="!tengoRubrica || descripcionJuegoEvaluacion.length === 0 || !ParentPesosSuman100()" type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
               <mat-step>

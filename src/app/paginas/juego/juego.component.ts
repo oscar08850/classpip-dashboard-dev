@@ -177,6 +177,7 @@ export class JuegoComponent implements OnInit {
   criterioEvaluacionSeleccionado: string;
   tengoCriterioEvaluacion = false;
   //
+  parentPesos = [];
   pesosArray = [];
   pesosSuman100 = true;
   penalizacionArray = [];
@@ -695,6 +696,11 @@ export class JuegoComponent implements OnInit {
     console.log('Rubrica seleccionada', this.rubricas[index]);
     this.rubricaElegida = this.rubricas[index];
     this.tengoRubrica = true;
+    this.parentPesos = [];
+    this.rubricaElegida.Criterios.forEach(() => {
+      this.parentPesos.push(this.PesoPorDefecto(this.rubricaElegida.Criterios.length));
+    });
+    console.log(this.parentPesos);
   }
   GuardarDescripcionEvaluacion() {
     this.descripcionJuegoEvaluacion = this.myForm.value.DescripcionJuegoEvaluacion;
@@ -711,10 +717,21 @@ export class JuegoComponent implements OnInit {
     this.pesosSuman100 = this.PesosSuman100();
   }
   PesosParentChanged(name: string, value: string): void {
+    /*
     console.log('Pesos parent changed', name, value);
     this.pesosArray[name][0] = parseFloat(value);
     console.log('pesos array changed', this.pesosArray);
     this.pesosSuman100 = this.PesosSuman100();
+    */
+    this.parentPesos[name] = parseFloat(value);
+    console.log(this.parentPesos);
+  }
+  ParentPesosSuman100(): boolean {
+    let c = 0;
+    for (let i = 0; i < this.parentPesos.length; i++) {
+      c += this.parentPesos[i];
+    }
+    return Math.round((c + Number.EPSILON) * 10) / 10 === 100;
   }
   PesosSuman100(): boolean {
     let c = 0;
@@ -732,6 +749,9 @@ export class JuegoComponent implements OnInit {
       }
     }
     return Math.round((c + Number.EPSILON) * 10) / 10 === 100;
+  }
+  PenalizacionPesoChanged(name: string, value: string): void {
+    console.log(name, value);
   }
   PenalizacionChanged(name: string, value: string): void {
     console.log('Penalizacion changed', name, value);
