@@ -145,6 +145,7 @@ export class JuegoComponent implements OnInit {
   tengoFamilias = false;
 
   // Información para crear juego de evaluación
+  descripcionJuegoEvaluacion = '';
   seleccionTipoDeEvaluacion: ChipColor[] = [
     {nombre: '1 a N', color: 'primary'},
     {nombre: 'Todos con todos', color: 'warn'}
@@ -366,6 +367,7 @@ export class JuegoComponent implements OnInit {
     // el usuario segun el tipo de juego
     this.myForm = this._formBuilder.group({
       NombreDelJuego: ['', Validators.required],
+      DescripcionJuegoEvaluacion: ['', Validators.required],
       PuntuacionCorrecta: ['', Validators.required],
       PuntuacionIncorrecta: ['', Validators.required],
       NumeroDeJornadas: ['', Validators.required],
@@ -694,6 +696,9 @@ export class JuegoComponent implements OnInit {
     this.rubricaElegida = this.rubricas[index];
     this.tengoRubrica = true;
   }
+  GuardarDescripcionEvaluacion() {
+    this.descripcionJuegoEvaluacion = this.myForm.value.DescripcionJuegoEvaluacion;
+  }
   PesoPorDefecto(total: number): number {
     return parseFloat((100 / total).toFixed(2));
   }
@@ -752,6 +757,7 @@ export class JuegoComponent implements OnInit {
     const juego: JuegoDeEvaluacion = new JuegoDeEvaluacion(
       null,
       this.nombreDelJuego,
+      this.descripcionJuegoEvaluacion,
       'Evaluacion',
       this.modoDeJuegoSeleccionado,
       true,
@@ -782,6 +788,7 @@ export class JuegoComponent implements OnInit {
             key,
             value,
             null,
+            null,
             null
           );
           this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).subscribe(equipores => console.log('EquipoJuegoEvaluado', equipores));
@@ -792,6 +799,7 @@ export class JuegoComponent implements OnInit {
             key,
             null,
             value,
+            null,
             null
           );
           this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).subscribe(equipores => console.log('EquipoJuegoEvaluado', equipores));
@@ -801,6 +809,7 @@ export class JuegoComponent implements OnInit {
             res.id,
             key,
             value,
+            null,
             null
           );
           this.peticionesAPI.CrearAlumnoJuegoDeEvaluacion(alumno).subscribe(alumnosres => console.log('AlumnoJuegoEvaluado', alumnosres));

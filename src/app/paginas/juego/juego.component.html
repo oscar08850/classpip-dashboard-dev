@@ -1054,6 +1054,10 @@
               </mat-step>
               <mat-step>
                 <ng-template matStepLabel><div>Rúbrica</div></ng-template>
+                <mat-form-field>
+                  <mat-label>Descripción del Juego</mat-label>
+                  <input matInput placeholder="Descripción" required formControlName="DescripcionJuegoEvaluacion" (keyup)="GuardarDescripcionEvaluacion()">
+                </mat-form-field>
                 <mat-form-field appearance="fill">
                   <mat-label>Selecciona una rúbrica</mat-label>
                   <mat-select (selectionChange)="RubricaSeleccionChange($event.value)">
@@ -1062,7 +1066,7 @@
                 </mat-form-field>
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button [disabled]="!tengoRubrica" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  <button [disabled]="!tengoRubrica || descripcionJuegoEvaluacion.length === 0" type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
               <mat-step>
@@ -1229,7 +1233,7 @@
                 </mat-list>-->
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button [disabled]="!pesosSuman100" type="button" class="btn Next" (click)="CrearJuegoEvaluacion()">Siguiente</button>
+                  <button [disabled]="!pesosSuman100" type="button" class="btn Aceptar" (click)="CrearJuegoEvaluacion()">Finalizar</button>
                 </div>
               </mat-step>
               <mat-step *ngIf="criterioEvaluacionSeleccionado === 'Por penalización'">
@@ -1287,7 +1291,7 @@
                 </mat-list>
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button type="button" class="btn Next" (click)="CrearJuegoEvaluacion()">Siguiente</button>
+                  <button type="button" class="btn Aceptar" (click)="CrearJuegoEvaluacion()">Finalizar</button>
                 </div>
               </mat-step>
 
