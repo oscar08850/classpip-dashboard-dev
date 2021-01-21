@@ -1211,16 +1211,15 @@
               </mat-step>
               <mat-step *ngIf="criterioEvaluacionSeleccionado === 'Por pesos'">
                 <ng-template matStepLabel><div>Pesos</div></ng-template>
-                <table *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
+                <mat-divider></mat-divider>
+                <div *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
+                <table>
                   <tr>
                     <td>
                       <b>{{criterio.Nombre}}</b>
                     </td>
                     <td>
-                      <mat-form-field>
-                        <input matInput type="number" name="{{c}}" (change)="PesosParentChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(rubricaElegida.Criterios.length)}}" min="0" max="100">
-                        <span matSuffix>%</span>
-                      </mat-form-field>
+                      <b class="input-porcentaje texto-izquierda">{{parentPesos[c]}} %</b>
                     </td>
                   </tr>
                   <tr *ngFor="let elemento of criterio.Elementos; let e = index">
@@ -1228,24 +1227,15 @@
                       {{elemento}}
                     </td>
                     <td>
-                      <mat-form-field>
-                        <input matInput type="number" name="{{c}}-{{e+1}}" (change)="PesosChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(criterio.Elementos.length)}}" min="0" max="100">
+                      <mat-form-field class="input-porcentaje">
+                        <input matInput type="number" name="{{c}}-{{e+1}}" (keyup)="PesosChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(criterio.Elementos.length)}}" min="0" max="100">
                         <span matSuffix>%</span>
                       </mat-form-field>
                     </td>
                   </tr>
                 </table>
-                <!--
-                <mat-list *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
-                  <mat-list-item><b>{{criterio.Nombre}}</b></mat-list-item>
-                  <mat-list-item *ngFor="let elemento of criterio.Elementos; let e = index">
-                    <mat-form-field>
-                      <mat-label>{{elemento}}</mat-label>
-                      <input matInput type="number" name="{{c}}-{{e}}" (change)="PesosChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(criterio.Elementos.length)}}" min="0" max="100">
-                      <span matSuffix>%</span>
-                    </mat-form-field>
-                  </mat-list-item>
-                </mat-list>-->
+                <mat-divider></mat-divider>
+                </div>
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                   <button [disabled]="!pesosSuman100" type="button" class="btn Aceptar" (click)="CrearJuegoEvaluacion()">Finalizar</button>

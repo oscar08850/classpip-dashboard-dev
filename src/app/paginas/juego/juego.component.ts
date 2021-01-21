@@ -617,7 +617,7 @@ export class JuegoComponent implements OnInit {
       this.pesosArray = [];
       for (let i = 0; i < this.rubricaElegida.Criterios.length; i++) {
         this.pesosArray.push([]);
-        this.pesosArray[i].push(this.PesoPorDefecto(this.rubricaElegida.Criterios.length));
+        this.pesosArray[i].push(this.parentPesos[i]);
         for (let j = 0; j < this.rubricaElegida.Criterios[i].Elementos.length; j++) {
           this.pesosArray[i].push(this.PesoPorDefecto(this.rubricaElegida.Criterios[i].Elementos.length));
         }
