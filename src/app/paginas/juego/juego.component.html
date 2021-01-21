@@ -1243,57 +1243,92 @@
               </mat-step>
               <mat-step *ngIf="criterioEvaluacionSeleccionado === 'Por penalización'">
                 <ng-template matStepLabel><div>Penalización</div></ng-template>
-                <mat-list *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
-                  <mat-list-item><b>{{criterio.Nombre}}</b></mat-list-item>
-                  <mat-list-item *ngFor="let elemento of criterio.Elementos; let i = index">{{i+1}}. {{elemento}}</mat-list-item>
-                  <table><tr>
-                    <td><mat-form-field>
-                      <mat-label>Número de fallos</mat-label>
-                      <input matInput type="number" value="0" disabled>
-                      <span matSuffix>o más</span>
-                    </mat-form-field></td>
-                    <td><mat-form-field>
-                      <mat-label>Se quedará con un</mat-label>
-                      <input matInput type="number" value="100" disabled>
-                      <span matSuffix>%</span>
-                    </mat-form-field></td>
-                    <td><!--<button mat-mini-fab color="primary" value="0" >+</button></td>-->
-                  </tr><tr *ngIf="criterio.Elementos.length >= 1">
-                    <td><mat-form-field>
-                      <mat-label>Número de fallos</mat-label>
-                      <input matInput type="number" name="{{c}}-0-num" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="1" min="1" max="{{criterio.Elementos.length}}">
-                      <span matSuffix>o más</span>
-                    </mat-form-field></td>
-                    <td><mat-form-field>
-                      <mat-label>Se quedará con un</mat-label>
-                      <input matInput type="number" name="{{c}}-0-p" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="75" min="0" max="100">
-                      <span matSuffix>%</span>
-                    </mat-form-field></td>
-                  </tr><tr *ngIf="criterio.Elementos.length >= 2">
-                    <td><mat-form-field>
-                      <mat-label>Número de fallos</mat-label>
-                      <input matInput type="number" name="{{c}}-1-num" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="2" min="2" max="{{criterio.Elementos.length}}">
-                      <span matSuffix>o más</span>
-                    </mat-form-field></td>
-                    <td><mat-form-field>
-                      <mat-label>Se quedará con un</mat-label>
-                      <input matInput type="number" name="{{c}}-1-p" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="50" min="0" max="100">
-                      <span matSuffix>%</span>
-                    </mat-form-field></td>
-                    <tr *ngIf="criterio.Elementos.length >= 3">
-                      <td><mat-form-field>
-                        <mat-label>Número de fallos</mat-label>
-                        <input matInput type="number" name="{{c}}-2-num" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="3" min="3" max="{{criterio.Elementos.length}}">
-                        <span matSuffix>o más</span>
-                      </mat-form-field></td>
-                      <td><mat-form-field>
-                        <mat-label>Se quedará con un</mat-label>
-                        <input matInput type="number" name="{{c}}-2-p" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="0" min="0" max="100">
-                        <span matSuffix>%</span>
-                      </mat-form-field></td>
+                <mat-divider></mat-divider>
+                <div *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
+                  <table>
+                    <tr>
+                      <td>
+                        <b>{{criterio.Nombre}}</b>
+                      </td>
+                      <td>
+                        <b class="input-porcentaje texto-izquierda">{{parentPesos[c]}} %</b>
+                      </td>
+                    </tr>
+                    <tr *ngFor="let elemento of criterio.Elementos; let e = index">
+                      <td>
+                        {{e+1}}. {{elemento}}
+                      </td>
+                      <td>
+                      </td>
                     </tr>
                   </table>
-                </mat-list>
+                  <table>
+                    <tr>
+                      <td>
+                        <mat-form-field>
+                          <mat-label>Número de fallos</mat-label>
+                          <input matInput type="number" value="0" disabled>
+                          <span matSuffix>o más</span>
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <mat-label>Se quedará con un</mat-label>
+                          <input matInput type="number" value="100" disabled>
+                          <span matSuffix>%</span>
+                        </mat-form-field>
+                      </td>
+                      <td>
+                    </tr>
+                    <tr *ngIf="criterio.Elementos.length >= 1">
+                      <td>
+                        <mat-form-field>
+                          <mat-label>Número de fallos</mat-label>
+                          <input matInput type="number" name="{{c}}-0-num" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="1" min="1" max="{{criterio.Elementos.length}}">
+                          <span matSuffix>o más</span>
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <mat-label>Se quedará con un</mat-label>
+                          <input matInput type="number" name="{{c}}-0-p" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="75" min="0" max="100">
+                          <span matSuffix>%</span>
+                        </mat-form-field>
+                      </td>
+                    </tr>
+                    <tr *ngIf="criterio.Elementos.length >= 2">
+                      <td>
+                        <mat-form-field>
+                          <mat-label>Número de fallos</mat-label>
+                          <input matInput type="number" name="{{c}}-1-num" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="2" min="2" max="{{criterio.Elementos.length}}">
+                          <span matSuffix>o más</span>
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <mat-label>Se quedará con un</mat-label>
+                          <input matInput type="number" name="{{c}}-1-p" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="50" min="0" max="100">
+                          <span matSuffix>%</span>
+                        </mat-form-field>
+                      </td>
+                    <tr *ngIf="criterio.Elementos.length >= 3">
+                      <td>
+                        <mat-form-field>
+                          <mat-label>Número de fallos</mat-label>
+                          <input matInput type="number" name="{{c}}-2-num" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="3" min="3" max="{{criterio.Elementos.length}}">
+                          <span matSuffix>o más</span>
+                        </mat-form-field></td>
+                      <td>
+                        <mat-form-field>
+                          <mat-label>Se quedará con un</mat-label>
+                          <input matInput type="number" name="{{c}}-2-p" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="0" min="0" max="100">
+                          <span matSuffix>%</span>
+                        </mat-form-field>
+                      </td>
+                    </tr>
+                  </table>
+                  <mat-divider></mat-divider>
+                </div>
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                   <button type="button" class="btn Aceptar" (click)="CrearJuegoEvaluacion()">Finalizar</button>

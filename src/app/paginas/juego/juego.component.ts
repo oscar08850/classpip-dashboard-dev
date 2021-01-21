@@ -750,9 +750,6 @@ export class JuegoComponent implements OnInit {
     }
     return Math.round((c + Number.EPSILON) * 10) / 10 === 100;
   }
-  PenalizacionPesoChanged(name: string, value: string): void {
-    console.log(name, value);
-  }
   PenalizacionChanged(name: string, value: string): void {
     console.log('Penalizacion changed', name, value);
     const criterio = name.split('-')[0];
