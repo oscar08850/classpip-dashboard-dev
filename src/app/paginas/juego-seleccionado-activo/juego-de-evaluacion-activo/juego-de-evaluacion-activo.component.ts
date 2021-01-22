@@ -48,17 +48,18 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     this.tmpDisplayedColumns = this.alumnos.map(item => [item.id, item.Nombre]);
     this.alumnos.forEach((alumno) => {
       const row = {
-        Name: undefined
+        Nombre: undefined
       };
       const evaluado = this.alumnosRelacion.find(item => item.alumnoId === alumno.id);
-      row.Name = this.alumnos.find(item => item.id === evaluado.alumnoId).Nombre;
+      row.Nombre = this.alumnos.find(item => item.id === evaluado.alumnoId).Nombre;
       this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
         row[item[1]] = evaluado.respuestas.find(res => res.alumnoId === item[0]) ? 'YES' : 'NO';
       });
       this.datosTablaIndividual.push(row);
     });
     this.displayedColumns = this.tmpDisplayedColumns.map(item => item[1]) as string[];
-    this.displayedColumns.unshift('Name');
+    this.displayedColumns.unshift('Nombre');
+    this.displayedColumns.push('Nota Media');
     console.log(this.tmpDisplayedColumns);
     console.log(this.displayedColumns);
     console.log(this.datosTablaIndividual);
