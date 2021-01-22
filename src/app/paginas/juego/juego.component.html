@@ -1072,7 +1072,7 @@
                     </td>
                     <td>
                       <mat-form-field class="input-porcentaje">
-                        <input matInput type="number" name="{{c}}" (keyup)="PesosParentChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(rubricaElegida.Criterios.length)}}" min="0" max="100">
+                        <input matInput type="number" name="{{c}}" (keyup)="PesosParentChanged($event.target.name, $event.target.value)" (change)="PesosParentChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(rubricaElegida.Criterios.length)}}" min="0" max="100">
                         <span matSuffix>%</span>
                       </mat-form-field>
                     </td>
@@ -1228,7 +1228,7 @@
                     </td>
                     <td>
                       <mat-form-field class="input-porcentaje">
-                        <input matInput type="number" name="{{c}}-{{e+1}}" (keyup)="PesosChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(criterio.Elementos.length)}}" min="0" max="100">
+                        <input matInput type="number" name="{{c}}-{{e+1}}" (keyup)="PesosChanged($event.target.name, $event.target.value)" (change)="PesosChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(criterio.Elementos.length)}}" min="0" max="100">
                         <span matSuffix>%</span>
                       </mat-form-field>
                     </td>
@@ -1284,14 +1284,14 @@
                       <td>
                         <mat-form-field>
                           <mat-label>Número de fallos</mat-label>
-                          <input matInput type="number" name="{{c}}-0-num" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="1" min="1" max="{{criterio.Elementos.length}}">
+                          <input matInput type="number" name="{{c}}-0-num" (keyup)="PenalizacionChanged($event.target.name, $event.target.value)" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="1" min="1" max="{{criterio.Elementos.length}}">
                           <span matSuffix>o más</span>
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
                           <mat-label>Se quedará con un</mat-label>
-                          <input matInput type="number" name="{{c}}-0-p" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="75" min="0" max="100">
+                          <input matInput type="number" name="{{c}}-0-p" (keyup)="PenalizacionChanged($event.target.name, $event.target.value)" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="75" min="0" max="100">
                           <span matSuffix>%</span>
                         </mat-form-field>
                       </td>
@@ -1300,14 +1300,14 @@
                       <td>
                         <mat-form-field>
                           <mat-label>Número de fallos</mat-label>
-                          <input matInput type="number" name="{{c}}-1-num" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="2" min="2" max="{{criterio.Elementos.length}}">
+                          <input matInput type="number" name="{{c}}-1-num" (keyup)="PenalizacionChanged($event.target.name, $event.target.value)" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="2" min="2" max="{{criterio.Elementos.length}}">
                           <span matSuffix>o más</span>
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
                           <mat-label>Se quedará con un</mat-label>
-                          <input matInput type="number" name="{{c}}-1-p" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="50" min="0" max="100">
+                          <input matInput type="number" name="{{c}}-1-p" (keyup)="PenalizacionChanged($event.target.name, $event.target.value)" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="50" min="0" max="100">
                           <span matSuffix>%</span>
                         </mat-form-field>
                       </td>
@@ -1315,13 +1315,13 @@
                       <td>
                         <mat-form-field>
                           <mat-label>Número de fallos</mat-label>
-                          <input matInput type="number" name="{{c}}-2-num" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="3" min="3" max="{{criterio.Elementos.length}}">
+                          <input matInput type="number" name="{{c}}-2-num" (keyup)="PenalizacionChanged($event.target.name, $event.target.value)" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="3" min="3" max="{{criterio.Elementos.length}}">
                           <span matSuffix>o más</span>
                         </mat-form-field></td>
                       <td>
                         <mat-form-field>
                           <mat-label>Se quedará con un</mat-label>
-                          <input matInput type="number" name="{{c}}-2-p" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="0" min="0" max="100">
+                          <input matInput type="number" name="{{c}}-2-p" (keyup)="PenalizacionChanged($event.target.name, $event.target.value)" (change)="PenalizacionChanged($event.target.name, $event.target.value)" value="0" min="0" max="100">
                           <span matSuffix>%</span>
                         </mat-form-field>
                       </td>

@@ -637,6 +637,7 @@ export class JuegoComponent implements OnInit {
           this.penalizacionArray[i].push({num: 3, p: 0});
         }
       }
+      this.penalizacionArray.push(this.parentPesos);
       console.log('penalizacion array', this.penalizacionArray);
     }
   }
