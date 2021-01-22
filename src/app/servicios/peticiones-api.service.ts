@@ -1671,4 +1671,10 @@ export class PeticionesAPIService {
   public CrearAlumnoJuegoDeEvaluacion(alumno: AlumnoJuegoDeEvaluacion): Observable<AlumnoJuegoDeEvaluacion> {
     return this.http.post<AlumnoJuegoDeEvaluacion>(this.APIURLAlumnoJuegoEvaluado, alumno);
   }
+  public DameRelacionAlumnosJuegoDeEvaluacion(juegoId: number): Observable<AlumnoJuegoDeEvaluacion[]> {
+    return this.http.get<AlumnoJuegoDeEvaluacion[]>(this.APIURLAlumnoJuegoEvaluado + '?filter[where][juegoDeEvaluacionId]=' + juegoId);
+  }
+  public DameAlumnosJuegoDeEvaluacion(juegoId: number): Observable<Alumno[]> {
+    return this.http.get<Alumno[]>(this.APIURLJuegoDeEvaluacion + '/' + juegoId + '/Alumnos');
+  }
 }
