@@ -1,0 +1,51 @@
+[
+		{
+			"Titulo": "Madrid",
+			"Tipo": "Cuatro opciones",
+    			"Pregunta": "¿Qué ciudad es?",
+    			"Tematica": "Ciudades",
+			"Imagen": "madrid.jpg",
+    			"RespuestaCorrecta": "Madrid",
+    			"RespuestaIncorrecta1": "Barcelona",
+    			"RespuestaIncorrecta2": "Sevilla",
+    			"RespuestaIncorrecta3": "Málaga",
+    			"FeedbackCorrecto": "Correcto.",
+    			"FeedbackIncorrecto": "No. A ver si viajas más."
+		},
+		{
+			"Titulo": "Barcelona",
+			"Tipo": "Respuesta abierta",
+    			"Pregunta": "¿Qué ciudad es?",
+    			"Tematica": "Ciudades",
+			"Imagen": "barcelona.jpg",
+    			"RespuestaCorrecta": "Barcelona",
+    			"FeedbackCorrecto": "Correcto.",
+    			"FeedbackIncorrecto": "No. A ver si viajas más."
+		},
+		{
+			"Titulo": "Sevilla",
+			"Tipo": "Verdadero o falso",
+    			"Pregunta": "Esta foto es de Barcelona",
+    			"Tematica": "Ciudades",
+			"Imagen": "sevilla.jpg",
+    			"RespuestaCorrecta": "falso",
+    			"FeedbackCorrecto": "Correcto.",
+    			"FeedbackIncorrecto": "No. A ver si viajas más."
+		},
+		{
+			"Titulo": "Empareja",
+			"Tipo": "Emparejamiento",
+    			"Pregunta": "Empareja paises con sus capitales",
+    			"Tematica": "Ciudades",
+			"Emparejamientos": [
+						{"l" : "Francia", "r" : "Parás"},
+						{"l" :"España", "r" : "Madrid"},
+						{"l" :"Italia", "r" :  "Roma"},
+						{"l" :"Portugal","r" :  "Lisboa"}
+					],
+    			"FeedbackCorrecto": "Correcto.",
+    			"FeedbackIncorrecto": "No. A ver si viajas más."
+		}
+]
+
+

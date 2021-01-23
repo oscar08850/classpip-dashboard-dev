@@ -39,7 +39,7 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
   // Orden conlumnas de la tabla
   displayedColumnsAlumnos: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'nota', ' '];
-  displayedColumnsAlumnosKahoot: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'conexion']; 
+  displayedColumnsAlumnosKahoot: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'conexion'];
 
   dataSourceAlumno;
   dataSourceAlumnosConectados;
@@ -73,12 +73,6 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
     console.log(this.juegoSeleccionado.Modalidad);
     this.AlumnosDelJuego();
 
-    //Nos suscribimos al método para que actualice el estado de la conexión al juego cuando un alumno entra
-      console.log("Esperando conexiones de alumnos");
-    this.comServer.EsperoConexionesCuestionarioKahoot().subscribe((respuesta) =>{
-      console.log("Se ha conectado un alumno");
-      this.MeConectoAKahoot(respuesta);
-    });
 
     this.comServer.EsperoRespuestasJuegoDeCuestionario()
     .subscribe((alumno: any) => {
@@ -141,7 +135,7 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
       this.alumnosDelJuego = alumnosJuego;
       this.alumnosDelJuego.forEach(al => {
         this.alumnosConectados.push({
-          alumno: al, 
+          alumno: al,
           conectado: false
         })
       })
@@ -242,7 +236,7 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
       }
     });
   }
-  
+
   AvanzarPregunta(){
     this.comServer.AvanzarPregunta(this.juegoSeleccionado.grupoId);
   }
@@ -250,23 +244,4 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
     this.dataSourceAlumno.filter = filterValue.trim().toLowerCase();
   }
 
-  //Método para gestionar la conexión de los alumnos en la modalidad Kahoot
-  MeConectoAKahoot(idAlumno: number){
-
-    this.alumnosConectados.filter(item => item.alumno.id === idAlumno)[0].conectado = true;
-    //Después de actualizar el item con la conexión, debemos volver a cargar la tabla.
-    this.dataSourceAlumnosConectados = new MatTableDataSource(this.alumnosConectados);
-  }
-  //Para abrir la ventana de juego de Kahoot
-
-  IniciarJuegoKahoot() {
-    const idGrupo = this.sesion.DameJuego().grupoId;
-    let juegoKahoot = new Juego;
-    juegoKahoot = this.juegoSeleccionado;
-    juegoKahoot.Tipo = "Juego De Cuestionario Kahoot";  
-    console.log("Iniciamos navegación");
-    //this.router.navigate(['/grupo/' + idGrupo + '/juegos/juegoSeleccionadoActivo/', {juego: juegoKahoot}]);
-    
-    this.router.navigate(['/grupo/' + idGrupo + '/juegos/juegoSeleccionadoActivo/'], { state: { juegoKahoot: true } });
-  }
 }

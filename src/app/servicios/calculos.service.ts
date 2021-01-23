@@ -86,7 +86,8 @@ export class CalculosService {
       this.DameListaJuegos(this.sesion.DameGrupo().id)
       .subscribe ( listas => {
               // Hago una lista con todos los juegos (activos e inactivos)
-              const juegos = listas.activos.concat (listas.inactivos);
+              let juegos = listas.activos.concat (listas.inactivos);
+              juegos = juegos.concat (listas.preparados);
               console.log ('Ya tengo los juegos');
               console.log (juegos);
               let cont = 0;
@@ -644,27 +645,26 @@ export class CalculosService {
                               juegosInactivos.push(juegosCuestionarioSatisfaccion[i]);
                             }
                           }
-                          const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-                          obs.next (resultado);
 
-                          // console.log('GET JuegoDeEvaluacion OF grupoID: ', grupoID);
-                          // this.peticionesAPI.DameJuegosDeEvaluacion(grupoID)
-                          //   .subscribe(juegosDeEvaluacion => {
-                          //     console.log('GET RESPONSE JuegoDeEvaluacion', juegosDeEvaluacion);
-                          //     // tslint:disable-next-line:prefer-for-of
-                          //     for (let i = 0; i < juegosDeEvaluacion.length; i++) {
-                          //       if (juegosDeEvaluacion[i].JuegoActivo === true) {
-                          //         juegosDeEvaluacion[i].Tipo = 'Evaluacion';
-                          //         juegosActivos.push(juegosDeEvaluacion[i]);
-                          //       } else {
-                          //         juegosDeEvaluacion[i].Tipo = 'Evaluacion';
-                          //         juegosInactivos.push(juegosDeEvaluacion[i]);
-                          //       }
-                          //     }
 
-                          //   const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-                          //   obs.next (resultado);
-                          // });
+                          console.log('GET JuegoDeEvaluacion OF grupoID: ', grupoID);
+                          this.peticionesAPI.DameJuegosDeEvaluacion(grupoID)
+                            .subscribe(juegosDeEvaluacion => {
+                              console.log('GET RESPONSE JuegoDeEvaluacion', juegosDeEvaluacion);
+                              // tslint:disable-next-line:prefer-for-of
+                              for (let i = 0; i < juegosDeEvaluacion.length; i++) {
+                                if (juegosDeEvaluacion[i].JuegoActivo === true) {
+                                  juegosDeEvaluacion[i].Tipo = 'Evaluacion';
+                                  juegosActivos.push(juegosDeEvaluacion[i]);
+                                } else {
+                                  juegosDeEvaluacion[i].Tipo = 'Evaluacion';
+                                  juegosInactivos.push(juegosDeEvaluacion[i]);
+                                }
+                              }
+
+                              const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+                              obs.next (resultado);
+                          });
                         });
                       });
                     });

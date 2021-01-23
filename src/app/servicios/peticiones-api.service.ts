@@ -1128,6 +1128,7 @@ export class PeticionesAPIService {
   }
 
   public BorrarJuegoDeCuestionario(juegoDeCuestionarioId: number): Observable<any> {
+    console.log ('voy a borrar el juego de cuestionario ' + juegoDeCuestionarioId);
     return this.http.delete<any>(this.APIUrlJuegoDeCuestionario + '/' + juegoDeCuestionarioId);
   }
 

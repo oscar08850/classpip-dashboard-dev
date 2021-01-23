@@ -54,6 +54,7 @@ export class PreguntaComponent implements OnInit {
   ficherosQueFaltan: string[];
   faltanFicheros = false;
   hayFicherosRepetidos = false;
+  hayTextosLargos = false;
   ficherosRepetidos: string[];
   seleccionTipoPregunta: ChipColor[] = [
     {nombre: 'Cuatro opciones', color: 'primary'},
@@ -72,7 +73,7 @@ export class PreguntaComponent implements OnInit {
   respuestaCorrecta: string;
   respuestaIncorrecta1: string;
   respuestaIncorrecta2: string;
-  respuestaIncorrecta3: string;;
+  respuestaIncorrecta3: string;
   feedbackCorrecto: string;
   feedbackIncorrecto: string;
   emparejamientos: any[] = [];
@@ -231,7 +232,26 @@ export class PreguntaComponent implements OnInit {
         this.infoPreguntas = JSON.parse(reader.result.toString());
         console.log ('Ya tengo las preguntas');
         console.log (this.infoPreguntas);
-        if (this.infoPreguntas.some (pregunta => pregunta.Imagen)) {
+        const preguntasEmparejamiento = this.infoPreguntas.filter (pregunta => pregunta.Tipo === 'Emparejamiento');
+        const textos = [];
+        console.log ('preguntas emparejamiento');
+        console.log (preguntasEmparejamiento);
+        preguntasEmparejamiento.forEach (pregunta => {
+          console.log (pregunta);
+          pregunta.Emparejamientos.forEach (pareja => {
+            console.log (pareja);
+            textos.push (pareja.l);
+            textos.push (pareja.r);
+          });
+        });
+        console.log ('texto');
+        console.log (textos);
+
+        let error = textos.some (texto => texto.length > 15);
+        if (error) {
+          this.hayTextosLargos = true;
+
+        } else if (this.infoPreguntas.some (pregunta => pregunta.Imagen)) {
         // hay imagenes en alguna de las preguntas
           this.calculos.VerificarFicherosPreguntas (this.infoPreguntas)
           .subscribe (lista => {

@@ -57,6 +57,8 @@ export class IntroducirAlumnosComponent implements OnInit {
     this.nombreAlumno = undefined;
     this.apellido1Alumno = undefined;
     this.apellido2Alumno = undefined;
+    this.nombreUsuario = undefined;
+    this.email = undefined;
     this.isDisabledAlumno = true;
   }
   LimpiarCamposTexto() {

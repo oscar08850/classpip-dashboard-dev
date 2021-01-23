@@ -8,26 +8,10 @@
         <!-- para preservar los espacios y los tabs del texto -->
         <pre>
         <br>
-        La información de las preguntas debe estar en un fichero <strong>JSON</strong>
-        con el contenido mostrado en el siguiente ejemplo. La imagen deben ser cuadrada.
-          [
-            {{'{'}}
-                "Titulo": "suma",
-                "Pregunta": "¿Cuánto es 7 + 9 ?",
-                "Tematica": "Mates",
-                "Imagen": "foto_pregunta.png",
-                "RespuestaCorrecta": "16",
-                "RespuestaIncorrecta1": "15",
-                "RespuestaIncorrecta2": "17",
-                "RespuestaIncorrecta3": "0",
-                "FeedbackCorrecto": "Muy bien",
-                "FeedbackIncorrecto": "Fatal",
-            {{'}'}},
-            {{'{'}}
-              ..... otras preguntas
-            {{'}'}}
-
-          ]
+        La información de las preguntas debe estar en un fichero <strong>JSON</strong>.<br>
+        Aquí puede descargarse un <a href="../assets/preguntasCuatroTipos.json">fichero ejemplo con preguntas de los 4 tipos posibles</a>.<br>
+        La imagen de la pregunta debe ser <strong>cuadrada</strong>.<br>
+        Los elementos en las parejas de las preguntas de emparejamiento <strong>no pueden tener más de 15 caracteres</strong>.<br>
         </pre>
 
         <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
@@ -47,6 +31,15 @@
 
           <h5 style = "padding: 5%;"> Ya hay ficheros en la base de datos con nombres iguales a algunos que quieres cargar</h5>
           <p *ngFor = "let fichero of ficherosRepetidos">{{fichero}}</p>
+
+          <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+              Cancelar
+          </button>
+        </div>
+        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "hayTextosLargos">
+          <h3 style = "color: red">ATENCION</h3>
+
+          <h5 style = "padding: 5%;"> Los textos en alguna pregunta de tipo 'Emparejamiento' son demasiado largos</h5>
 
           <button (click) = "Cancelar()" type="button" class="btn Eliminar">
               Cancelar
@@ -242,25 +235,28 @@
                           <ng-template matStepLabel>Definir emparejamientos</ng-template>
 
                           <mat-label style = "font-size: smaller;"><strong>Emparejamientos</strong></mat-label>
+                          <br>
+                          <mat-label style = "font-size: smaller;">No más de 15 caracteres para cada elemento de la pareja</mat-label>
 
-                          <div *ngFor = "let pareja of emparejamientos; let i= index ">
+                          <mat-list *ngFor = "let pareja of emparejamientos; let i= index ">
 
-                            <mat-form-field style=  "width: 40%;">
-                              <input  matInput [(ngModel)]="pareja.l">
-                            </mat-form-field>
-                            <mat-form-field style=  "width: 40%; padding-left: 5%;">
-                              <input  matInput [(ngModel)]="pareja.r">
-                            </mat-form-field>
-                            <button (click) = "EliminarPareja (i)" mat-icon-button matTooltip="Eliminar este emparejamiento">
-                              <i class="material-icons red md-36">delete</i>
-                            </button>
-                          </div>
+                            <mat-list-item>
+
+                              <mat-label style=  "width: 40%;">{{pareja.l}}</mat-label>
+                              <mat-label style=  "width: 40%; padding-left: 5%;">{{pareja.r}}</mat-label>
+                              <button (click) = "EliminarPareja (i)" mat-icon-button matTooltip="Eliminar este emparejamiento">
+                                <i class="material-icons red md-36">delete</i>
+                              </button>
+                            </mat-list-item>
+
+                          </mat-list>
+                          <br>
                           <div>
                             <mat-form-field style=  "width: 40%;">
-                              <input  matInput [(ngModel)]="nuevaParejaL">
+                              <input maxlength="15" placeholder="Parte izquierda" matInput [(ngModel)]="nuevaParejaL">
                             </mat-form-field>
                             <mat-form-field style=  "width: 40%; padding-left: 5%;">
-                              <input  matInput [(ngModel)]="nuevaParejaR">
+                              <input maxlength="15" placeholder="Parte derecha"  matInput [(ngModel)]="nuevaParejaR">
                             </mat-form-field>
                           </div>
                           <div class= "enColumna">
