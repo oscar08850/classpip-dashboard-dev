@@ -42,6 +42,28 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     }
   }
 
+  CalcularNota(respuesta: any[]): number {
+    console.log('respuesta', respuesta);
+    if (this.juego.metodoSubcriterios) {
+      console.log(this.juego.Pesos);
+      let finalNota = 0;
+      for (let i = 0; i < this.juego.Pesos.length; i++) {
+        let subNota = 0;
+        for (let j = 1; j < this.juego.Pesos[i].length; j++) {
+          if (respuesta[i][j - 1]) {
+            subNota += this.juego.Pesos[i][j] / 10;
+          }
+          console.log(this.juego.Pesos[i][j], respuesta[i][j - 1], subNota);
+        }
+        finalNota += subNota * this.juego.Pesos[i][0] / 100;
+        console.log(this.juego.Pesos[i][0], subNota, finalNota);
+      }
+      return Math.round((finalNota + Number.EPSILON) * 100) / 100;
+    } else {
+      return -1;
+    }
+  }
+
   ConstruirTablaIndividual() {
     if (!this.alumnos || !this.alumnosRelacion) {
       return;
@@ -54,7 +76,12 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       const evaluado = this.alumnosRelacion.find(item => item.alumnoId === alumno.id);
       row.Nombre = this.alumnos.find(item => item.id === evaluado.alumnoId).Nombre;
       this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
-        row[item[1]] = evaluado.respuestas.find(res => res.alumnoId === item[0]) ? 'YES' : 'NO';
+        const respuesta = evaluado.respuestas.find(res => res.alumnoId === item[0]);
+        if (respuesta) {
+          row[item[1]] = this.CalcularNota(respuesta.respuesta);
+        } else {
+          row[item[1]] = '-';
+        }
       });
       this.datosTablaIndividual.push(row);
     });
