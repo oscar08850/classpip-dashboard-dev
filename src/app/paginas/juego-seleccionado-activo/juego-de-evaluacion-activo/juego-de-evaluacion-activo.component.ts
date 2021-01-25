@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {PeticionesAPIService, SesionService} from '../../../servicios';
 import {JuegoDeEvaluacion} from '../../../clases/JuegoDeEvaluacion';
-import {Alumno} from '../../../clases';
+import {Alumno, Equipo} from '../../../clases';
 import {AlumnoJuegoDeEvaluacion} from '../../../clases/AlumnoJuegoDeEvaluacion';
+import {EquipoJuegoDeEvaluacion} from '../../../clases/EquipoJuegoDeEvaluacion';
 
 @Component({
   selector: 'app-juego-de-evaluacion-activo',
@@ -14,10 +15,13 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   juego: JuegoDeEvaluacion;
   alumnos: Alumno[];
   alumnosRelacion: AlumnoJuegoDeEvaluacion[];
+  equipos: Equipo[];
+  equiposRelacion: EquipoJuegoDeEvaluacion[];
+  alumnosDeEquipo = [];
   // Tabla
   displayedColumns: string[];
-  tmpDisplayedColumns: (number | string)[][];
-  datosTablaIndividual = [];
+  tmpDisplayedColumns = [];
+  datosTabla = [];
   hoverColumn = [];
 
   constructor(
@@ -38,6 +42,24 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         .subscribe((res: Alumno[]) => {
           this.alumnos = res;
           this.ConstruirTablaIndividual();
+        });
+    } else if (this.juego.Modo === 'Equipos') {
+      this.peticionesAPI.DameRelacionEquiposJuegoDeEvaluacion(this.juego.id)
+        .subscribe((res: EquipoJuegoDeEvaluacion[]) => {
+          this.equiposRelacion = res;
+          this.equiposRelacion.forEach((equipoRelacion: EquipoJuegoDeEvaluacion) => {
+            this.peticionesAPI.DameAlumnosEquipo(equipoRelacion.equipoId)
+              .subscribe((res2: Alumno[]) => {
+                const obj = {equipoId: equipoRelacion.equipoId, alumnos: res2};
+                this.alumnosDeEquipo.push(obj);
+                this.ConstruirTablaEquipos();
+              });
+          });
+        });
+      this.peticionesAPI.DameEquiposJuegoDeEvaluacion(this.juego.id)
+        .subscribe((res: Equipo[]) => {
+          this.equipos = res;
+          this.ConstruirTablaEquipos();
         });
     }
   }
@@ -60,7 +82,6 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
 
   CalcularNota(respuesta: any[]): number {
     if (this.juego.metodoSubcriterios) {
-      console.log(this.juego.Pesos);
       let finalNota = 0;
       for (let i = 0; i < this.juego.Pesos.length; i++) {
         let subNota = 0;
@@ -99,14 +120,75 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         }
       });
       row['Nota Media'] = this.CalcularNotaMedia(row);
-      this.datosTablaIndividual.push(row);
+      this.datosTabla.push(row);
     });
     this.displayedColumns = this.tmpDisplayedColumns.map(item => item[1]) as string[];
     this.displayedColumns.unshift('Nombre');
     this.displayedColumns.push('Nota Media');
     console.log(this.tmpDisplayedColumns);
     console.log(this.displayedColumns);
-    console.log(this.datosTablaIndividual);
+    console.log(this.datosTabla);
+    this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
+    console.log(this.hoverColumn);
+  }
+
+  ConstruirTablaEquipos() {
+    if (!this.equipos || !this.equiposRelacion) {
+      return;
+    }
+    if (this.alumnosDeEquipo.length !== this.equipos.length) {
+      return;
+    }
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.alumnosDeEquipo.length; i++) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let j = 0; j < this.alumnosDeEquipo[i].alumnos.length; j++) {
+        this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Nombre]);
+      }
+    }
+    if (this.equiposRelacion[0].alumnosEvaluadoresIds !== null) {
+      this.equipos.forEach((equipo) => {
+        const row = {
+          Nombre: undefined
+        };
+        const evaluado = this.equiposRelacion.find(item => item.equipoId === equipo.id);
+        row.Nombre = this.equipos.find(item => item.id === evaluado.equipoId).Nombre;
+        this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
+          if (evaluado.respuestas && evaluado.respuestas.find(res => res.alumnoId === item[0])) {
+            row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => res.alumnoId === item[0]).respuesta);
+          } else {
+            row[item[1]] = '-';
+          }
+        });
+        row['Nota Media'] = this.CalcularNotaMedia(row);
+        this.datosTabla.push(row);
+      });
+    } else {
+      this.tmpDisplayedColumns = this.equipos.map(item => [item.id, item.Nombre]);
+      this.equipos.forEach((equipo) => {
+        const row = {
+          Nombre: undefined
+        };
+        const evaluado = this.equiposRelacion.find(item => item.equipoId === equipo.id);
+        row.Nombre = this.equipos.find(item => item.id === evaluado.equipoId).Nombre;
+        const alumnosDeEquipo = this.alumnosDeEquipo.find(item => item.equipoId === equipo.id);
+        this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
+          if (evaluado.respuestas && evaluado.respuestas.find(res => alumnosDeEquipo.alumnos.includes(res.alumnoId))) {
+            row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => alumnosDeEquipo.alumnos.includes(res.alumnoId)).respuesta);
+          } else {
+            row[item[1]] = '-';
+          }
+        });
+        row['Nota Media'] = this.CalcularNotaMedia(row);
+        this.datosTabla.push(row);
+      });
+    }
+    this.displayedColumns = this.tmpDisplayedColumns.map(item => item[1]) as string[];
+    this.displayedColumns.unshift('Nombre');
+    this.displayedColumns.push('Nota Media');
+    console.log(this.tmpDisplayedColumns);
+    console.log(this.displayedColumns);
+    console.log(this.datosTabla);
     this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
     console.log(this.hoverColumn);
   }

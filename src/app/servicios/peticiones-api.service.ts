@@ -1659,15 +1659,12 @@ export class PeticionesAPIService {
   public DameJuegosDeEvaluacion(grupoId: number): Observable<JuegoDeEvaluacion[]> {
     return this.http.get<JuegoDeEvaluacion[]>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeEvaluacion');
   }
-
   public CrearJuegoDeEvaluacion(juego: JuegoDeEvaluacion): Observable<JuegoDeEvaluacion> {
     return this.http.post<JuegoDeEvaluacion>(this.APIURLJuegoDeEvaluacion, juego);
   }
-
   public CrearEquipoJuegoDeEvaluacion(equipo: EquipoJuegoDeEvaluacion): Observable<EquipoJuegoDeEvaluacion> {
     return this.http.post<EquipoJuegoDeEvaluacion>(this.APIURLEquiposJuegoEvaluado, equipo);
   }
-
   public CrearAlumnoJuegoDeEvaluacion(alumno: AlumnoJuegoDeEvaluacion): Observable<AlumnoJuegoDeEvaluacion> {
     return this.http.post<AlumnoJuegoDeEvaluacion>(this.APIURLAlumnoJuegoEvaluado, alumno);
   }
@@ -1676,5 +1673,14 @@ export class PeticionesAPIService {
   }
   public DameAlumnosJuegoDeEvaluacion(juegoId: number): Observable<Alumno[]> {
     return this.http.get<Alumno[]>(this.APIURLJuegoDeEvaluacion + '/' + juegoId + '/Alumnos');
+  }
+  public DameRelacionEquiposJuegoDeEvaluacion(juegoId: number): Observable<EquipoJuegoDeEvaluacion[]> {
+    return this.http.get<EquipoJuegoDeEvaluacion[]>(this.APIURLEquiposJuegoEvaluado + '?filter[where][juegoDeEvaluacionId]=' + juegoId);
+  }
+  public DameEquiposJuegoDeEvaluacion(juegoId: number): Observable<Equipo[]> {
+    return this.http.get<Equipo[]>(this.APIURLJuegoDeEvaluacion + '/' + juegoId + '/Equipos');
+  }
+  public DameEquipoConAlumnos(equipoId: number): Observable<Alumno[]> {
+    return this.http.get<Alumno[]>(this.APIUrlEquipos + '/' + equipoId + '/Alumnos');
   }
 }
