@@ -2,7 +2,7 @@
   overflow-y: scroll;
   overflow-x: scroll;
   max-width: 100%;
-  max-height: 270px;
+  max-height: 500px;
 }
 
 table {
@@ -15,4 +15,40 @@ table {
   color: white;
   font-weight: bold;
   font-size: 90%;
+}
+
+
+.hov-column {
+  background-color: #f2f2f2;
+}
+
+.head:hover {
+  background-color: #3f51b5 !important;
+}
+
+.row100:hover {
+  background-color: #f2f2f2;
+}
+
+.hov-column-head {
+  background-color: #2b367c !important;
+}
+
+.row100 td:hover {
+  background-color: #6c7ae0;
+  color: #fff;
+}
+
+.column100 {
+  width: 50px;
+}
+
+.column-0 {
+  background-color: #3f51b5;
+  color: white;
+  font-weight: bold;
+  font-size: 90%;
+  text-align: right;
+  padding-right: 10px;
+  padding-left: 10px !important;
 }

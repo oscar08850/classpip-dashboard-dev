@@ -18,6 +18,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   displayedColumns: string[];
   tmpDisplayedColumns: (number | string)[][];
   datosTablaIndividual = [];
+  hoverColumn = [];
 
   constructor(
     private sesion: SesionService,
@@ -63,6 +64,20 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     console.log(this.tmpDisplayedColumns);
     console.log(this.displayedColumns);
     console.log(this.datosTablaIndividual);
+    this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
+    console.log(this.hoverColumn);
+  }
+
+  MouseOver(event) {
+    const columnNum = event.target.className.match('\-([0-9]+)')[1];
+    this.hoverColumn[columnNum] = true;
+    // console.log(columnNum);
+    // console.log(this.hoverColumn);
+  }
+
+  MouseOut(event) {
+    const columnNum = event.target.className.match('\-([0-9]+)')[1];
+    this.hoverColumn[columnNum] = false;
   }
 
 }
