@@ -42,7 +42,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     }
   }
 
-  CalcularNotaMedia(row): number {
+  CalcularNotaMedia(row): number | string {
     let media = 0;
     let p = 0;
     for (const nombre in row) {
@@ -51,7 +51,11 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         p++;
       }
     }
-    return Math.round(((media / p) + Number.EPSILON) * 100) / 100;
+    if (p > 0) {
+      return Math.round(((media / p) + Number.EPSILON) * 100) / 100;
+    } else {
+      return '-';
+    }
   }
 
   CalcularNota(respuesta: any[]): number {

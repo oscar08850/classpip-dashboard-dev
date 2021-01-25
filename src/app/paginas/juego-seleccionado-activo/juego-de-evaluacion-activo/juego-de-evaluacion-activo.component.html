@@ -2,7 +2,7 @@
   <table *ngIf="alumnos && alumnosRelacion" mat-table [dataSource]="datosTablaIndividual">
     <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns; let i = index" [sticky]="i === 0" [stickyEnd]="i === displayedColumns.length - 1">
       <th mat-header-cell class="tituloTabla column100 column-{{i}}" (mouseover)="MouseOver($event)" (mouseout)="MouseOut($event)" *matHeaderCellDef> {{column}} </th>
-      <td mat-cell class="column100 column-{{i}}" (mouseover)="MouseOver($event)" (mouseout)="MouseOut($event)" [ngClass]="{'hov-column': hoverColumn[i]}" *matCellDef="let element"> {{element[column]}} </td>
+      <td mat-cell class="column100 column-{{i}}" (mouseover)="MouseOver($event)" (mouseout)="MouseOut($event)" [ngClass]="{'hov-column': hoverColumn[i], 'final-column': i === displayedColumns.length - 1}" *matCellDef="let element"> {{element[column]}} </td>
     </ng-container>
     <tr mat-header-row class="row100 head" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row class="row100" *matRowDef="let row; columns: displayedColumns;"></tr>
