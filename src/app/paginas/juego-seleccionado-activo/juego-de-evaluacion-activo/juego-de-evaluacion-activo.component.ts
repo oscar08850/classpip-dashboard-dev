@@ -91,9 +91,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       const evaluado = this.alumnosRelacion.find(item => item.alumnoId === alumno.id);
       row.Nombre = this.alumnos.find(item => item.id === evaluado.alumnoId).Nombre;
       this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
-        const respuesta = evaluado.respuestas.find(res => res.alumnoId === item[0]);
-        if (respuesta) {
-          row[item[1]] = this.CalcularNota(respuesta.respuesta);
+        // const respuesta = evaluado.respuestas.find(res => res.alumnoId === item[0]);
+        if (evaluado.respuestas && evaluado.respuestas.find(res => res.alumnoId === item[0])) {
+          row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => res.alumnoId === item[0]).respuesta);
         } else {
           row[item[1]] = '-';
         }
