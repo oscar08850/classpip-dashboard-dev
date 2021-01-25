@@ -42,8 +42,19 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     }
   }
 
+  CalcularNotaMedia(row): number {
+    let media = 0;
+    let p = 0;
+    for (const nombre in row) {
+      if (typeof row[nombre] === 'number') {
+        media += row[nombre];
+        p++;
+      }
+    }
+    return Math.round(((media / p) + Number.EPSILON) * 100) / 100;
+  }
+
   CalcularNota(respuesta: any[]): number {
-    console.log('respuesta', respuesta);
     if (this.juego.metodoSubcriterios) {
       console.log(this.juego.Pesos);
       let finalNota = 0;
@@ -53,10 +64,10 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           if (respuesta[i][j - 1]) {
             subNota += this.juego.Pesos[i][j] / 10;
           }
-          console.log(this.juego.Pesos[i][j], respuesta[i][j - 1], subNota);
+          // console.log(this.juego.Pesos[i][j], respuesta[i][j - 1], subNota);
         }
         finalNota += subNota * this.juego.Pesos[i][0] / 100;
-        console.log(this.juego.Pesos[i][0], subNota, finalNota);
+        // console.log(this.juego.Pesos[i][0], subNota, finalNota);
       }
       return Math.round((finalNota + Number.EPSILON) * 100) / 100;
     } else {
@@ -83,6 +94,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           row[item[1]] = '-';
         }
       });
+      row['Nota Media'] = this.CalcularNotaMedia(row);
       this.datosTablaIndividual.push(row);
     });
     this.displayedColumns = this.tmpDisplayedColumns.map(item => item[1]) as string[];
