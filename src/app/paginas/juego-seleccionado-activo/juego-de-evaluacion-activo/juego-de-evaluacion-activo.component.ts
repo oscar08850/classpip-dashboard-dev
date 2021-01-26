@@ -95,8 +95,35 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         // console.log(this.juego.Pesos[i][0], subNota, finalNota);
       }
       return Math.round((finalNota + Number.EPSILON) * 100) / 100;
-    } else {
-      return -1;
+    } else { // Penalizacion
+      console.log('Calcular nota por penalizacion', respuesta);
+      let finalNota = 0;
+      for (let i = 0; i < this.juego.Penalizacion.length - 1; i++) {
+        let subNota = 10;
+        const fallos = respuesta[i].filter(item => item === false).length;
+        console.log('fallos', fallos);
+        if (fallos > 0) {
+          let encontrado = false;
+          for (const criterio of this.juego.Penalizacion[i]) {
+            console.log('num', criterio.num);
+            if (fallos === criterio.num) {
+              console.log('le aplico una reduccion', criterio.p);
+              subNota = criterio.p / 10;
+              encontrado = true;
+              break;
+            }
+          }
+          if (!encontrado) {
+            console.log('Numero de fallos no encontrados, aplicamos la maxima restriccion');
+            const maximaRestriccion = Math.max.apply(Math, this.juego.Penalizacion[i].map(item => item.num));
+            console.log('maxima restriccion', maximaRestriccion);
+          }
+        }
+        console.log(i, this.juego.Penalizacion[this.juego.Penalizacion.length - 1][i]);
+        finalNota += subNota * this.juego.Penalizacion[this.juego.Penalizacion.length - 1][i] / 100;
+        console.log('finalnota', finalNota);
+      }
+      return Math.round((finalNota + Number.EPSILON) * 100) / 100;
     }
   }
 
