@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {PeticionesAPIService, SesionService} from '../../../servicios';
 import {JuegoDeEvaluacion} from '../../../clases/JuegoDeEvaluacion';
-import {Alumno, Equipo} from '../../../clases';
+import {Alumno, Equipo, Rubrica} from '../../../clases';
 import {AlumnoJuegoDeEvaluacion} from '../../../clases/AlumnoJuegoDeEvaluacion';
 import {EquipoJuegoDeEvaluacion} from '../../../clases/EquipoJuegoDeEvaluacion';
 import {MatDialog} from '@angular/material/dialog';
@@ -15,6 +15,7 @@ import {EvaluacionDialogoComponent} from './evaluacion-dialogo/evaluacion-dialog
 export class JuegoDeEvaluacionActivoComponent implements OnInit {
 
   juego: JuegoDeEvaluacion;
+  rubrica: Rubrica;
   alumnos: Alumno[];
   alumnosRelacion: AlumnoJuegoDeEvaluacion[];
   equipos: Equipo[];
@@ -35,6 +36,10 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   ngOnInit() {
     this.juego = this.sesion.DameJuego() as unknown as JuegoDeEvaluacion;
     console.log(this.juego);
+    this.peticionesAPI.DameRubrica(this.juego.rubricaId).subscribe((res: Rubrica) => {
+      this.rubrica = res;
+      console.log(this.rubrica);
+    });
     if (this.juego.Modo === 'Individual') {
       this.peticionesAPI.DameRelacionAlumnosJuegoDeEvaluacion(this.juego.id)
         .subscribe((res: AlumnoJuegoDeEvaluacion[]) => {
@@ -218,8 +223,18 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
 
   openDialog(i: number, c: number): void {
     this.dialog.open(EvaluacionDialogoComponent, {
-      width: '250px',
-      data: {evaluadorId: this.tmpDisplayedColumns[i - 1][0], evaluadoId: c}
+      width: '800px',
+      data: {
+        juego: this.juego,
+        rubrica: this.rubrica,
+        alumnos: this.alumnos,
+        alumnosRelacion: this.alumnosRelacion,
+        equipos: this.equipos,
+        equiposRelacion: this.equiposRelacion,
+        alumnosDeEquipo: this.alumnosDeEquipo,
+        evaluadorId: this.tmpDisplayedColumns[i - 1][0],
+        evaluadoId: c
+      }
     });
   }
 

@@ -1,3 +1,20 @@
-<p>
-  evaluacion-dialogo works!
-</p>
+<h1 mat-dialog-title>{{data.rubrica.Nombre}}</h1>
+<div mat-dialog-content>
+  <section *ngFor="let criterio of data.rubrica.Criterios; let i = index">
+    <h2 class="tituloCriterio">{{criterio.Nombre}}</h2>
+    <div *ngFor="let elemento of criterio.Elementos; let j = index">
+      <mat-divider></mat-divider>
+      <mat-checkbox class="example-margin" [(ngModel)]="respuestaEvaluacion[i][j]" disabled></mat-checkbox>
+      {{elemento}}
+    </div>
+  </section>
+  <section>
+    <mat-form-field class="example-full-width">
+      <mat-label>Comentario</mat-label>
+      <textarea matInput [(ngModel)]="this.respuestaEvaluacion[this.respuestaEvaluacion.length - 1]" disabled></textarea>
+    </mat-form-field>
+  </section>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="close()">OK</button>
+</div>

@@ -102,6 +102,7 @@ export class PeticionesAPIService {
   private APIURLJuegoDeEvaluacion = this.host + ':3000/api/juegosDeEvaluacion';
   private APIURLEquiposJuegoEvaluado = this.host + ':3000/api/equiposJuegoDeEvaluacion';
   private APIURLAlumnoJuegoEvaluado = this.host + ':3000/api/alumnosJuegoDeEvaluacion';
+  private APIURLRubricas = this.host + ':3000/api/Rubricas';
 
   private APIUrlJuegoDeVotacionUnoATodos = this.host + ':3000/api/JuegosDeVotacionUnoATodos';
   private APIUrlAlumnoJuegoDeVotacionUnoATodos = this.host + ':3000/api/alumnosJuegoDeVotacionUnoATodos';
@@ -1682,5 +1683,8 @@ export class PeticionesAPIService {
   }
   public DameEquipoConAlumnos(equipoId: number): Observable<Alumno[]> {
     return this.http.get<Alumno[]>(this.APIUrlEquipos + '/' + equipoId + '/Alumnos');
+  }
+  public DameRubrica(rubricaId: number): Observable<Rubrica> {
+    return this.http.get<Rubrica>(this.APIURLRubricas + '/' + rubricaId);
   }
 }
