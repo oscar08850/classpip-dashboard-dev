@@ -246,6 +246,7 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
 import { JuegoDeEvaluacionActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/juego-de-evaluacion-activo.component';
+import { EvaluacionDialogoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/evaluacion-dialogo/evaluacion-dialogo.component';
 
 
 @NgModule({
@@ -390,7 +391,8 @@ import { JuegoDeEvaluacionActivoComponent } from './paginas/juego-seleccionado-a
     ModificarPerfilComponent,
     JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
     GestionPreguntaKahootComponent,
-    JuegoDeEvaluacionActivoComponent
+    JuegoDeEvaluacionActivoComponent,
+    EvaluacionDialogoComponent
 
   ],
   imports: [
@@ -448,7 +450,7 @@ import { JuegoDeEvaluacionActivoComponent } from './paginas/juego-seleccionado-a
     InformacionJuegoDeCuestionarioDialogComponent, AsignaEscenarioComponent, AsignaPreguntasComponent, InformacionJuegoDeGeocachingDialogComponent,
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
     RespuestasAlumnoJuegoDeCuestionarioComponent,
-    AsignarFamiliaImagenesPerfilComponent
+    AsignarFamiliaImagenesPerfilComponent, EvaluacionDialogoComponent
   ],
   bootstrap: [AppComponent],
   providers: [

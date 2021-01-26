@@ -4,6 +4,8 @@ import {JuegoDeEvaluacion} from '../../../clases/JuegoDeEvaluacion';
 import {Alumno, Equipo} from '../../../clases';
 import {AlumnoJuegoDeEvaluacion} from '../../../clases/AlumnoJuegoDeEvaluacion';
 import {EquipoJuegoDeEvaluacion} from '../../../clases/EquipoJuegoDeEvaluacion';
+import {MatDialog} from '@angular/material/dialog';
+import {EvaluacionDialogoComponent} from './evaluacion-dialogo/evaluacion-dialogo.component';
 
 @Component({
   selector: 'app-juego-de-evaluacion-activo',
@@ -26,7 +28,8 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
 
   constructor(
     private sesion: SesionService,
-    private peticionesAPI: PeticionesAPIService
+    private peticionesAPI: PeticionesAPIService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -213,18 +216,19 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
   }
 
-  openDialog(i: number, c: any) {
-    console.log('open dialog', i);
-    console.log('evaluador', this.tmpDisplayedColumns[i - 1][0]);
-    console.log('evaluado', c.id);
+  openDialog(i: number, c: number): void {
+    this.dialog.open(EvaluacionDialogoComponent, {
+      width: '250px',
+      data: {evaluadorId: this.tmpDisplayedColumns[i - 1][0], evaluadoId: c}
+    });
   }
 
-  MouseOver(i: number) {
+  MouseOver(i: number): void {
     // const columnNum = event.target.className.match('\-([0-9]+)')[1];
     this.hoverColumn[i] = true;
   }
 
-  MouseOut(i: number) {
+  MouseOut(i: number): void {
     // const columnNum = event.target.className.match('\-([0-9]+)')[1];
     this.hoverColumn[i] = false;
   }
