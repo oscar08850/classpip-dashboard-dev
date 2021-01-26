@@ -1,8 +1,13 @@
 <div class="table-container mat-elevation-z8">
   <table mat-table [dataSource]="datosTabla">
     <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns; let i = index" [sticky]="i === 0" [stickyEnd]="i === displayedColumns.length - 1">
-      <th mat-header-cell class="tituloTabla column100 column-{{i}}" (mouseover)="MouseOver($event)" (mouseout)="MouseOut($event)" *matHeaderCellDef> {{column}} </th>
-      <td mat-cell class="column100 column-{{i}}" (mouseover)="MouseOver($event)" (mouseout)="MouseOut($event)" [ngClass]="{'hov-column': hoverColumn[i], 'final-column': i === displayedColumns.length - 1}" *matCellDef="let element"> {{element[column]}} </td>
+      <th mat-header-cell class="tituloTabla column100 column-{{i}}" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" *matHeaderCellDef> {{column}} </th>
+      <td mat-cell class="column100 column-{{i}}" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" [ngClass]="{'hov-column': hoverColumn[i], 'final-column': i === displayedColumns.length - 1}" *matCellDef="let element">
+        {{element[column]}}
+        <button *ngIf="isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element)" mat-icon-button aria-label="Info">
+          <mat-icon>remove_red_eye</mat-icon>
+        </button>
+      </td>
     </ng-container>
     <tr mat-header-row class="row100 head" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row class="row100" *matRowDef="let row; columns: displayedColumns;"></tr>

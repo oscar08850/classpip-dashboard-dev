@@ -68,7 +68,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     let media = 0;
     let p = 0;
     for (const nombre in row) {
-      if (typeof row[nombre] === 'number') {
+      if (typeof row[nombre] === 'number' && nombre !== 'id') {
         media += row[nombre];
         p++;
       }
@@ -126,10 +126,12 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     this.tmpDisplayedColumns = this.alumnos.map(item => [item.id, item.Nombre]);
     this.alumnos.forEach((alumno) => {
       const row = {
-        Nombre: undefined
+        Nombre: undefined,
+        id: undefined
       };
       const evaluado = this.alumnosRelacion.find(item => item.alumnoId === alumno.id);
       row.Nombre = this.alumnos.find(item => item.id === evaluado.alumnoId).Nombre;
+      row.id = alumno.id;
       this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
         // const respuesta = evaluado.respuestas.find(res => res.alumnoId === item[0]);
         if (evaluado.respuestas && evaluado.respuestas.find(res => res.alumnoId === item[0])) {
@@ -211,14 +213,22 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
   }
 
-  MouseOver(event) {
-    const columnNum = event.target.className.match('\-([0-9]+)')[1];
-    this.hoverColumn[columnNum] = true;
+  openDialog(i: number, c: any) {
+    console.log('open dialog', i);
+    console.log('evaluador', this.tmpDisplayedColumns[i - 1][0]);
+    console.log('evaluado', c.id);
   }
 
-  MouseOut(event) {
-    const columnNum = event.target.className.match('\-([0-9]+)')[1];
-    this.hoverColumn[columnNum] = false;
+  MouseOver(i: number) {
+    // const columnNum = event.target.className.match('\-([0-9]+)')[1];
+    this.hoverColumn[i] = true;
   }
+
+  MouseOut(i: number) {
+    // const columnNum = event.target.className.match('\-([0-9]+)')[1];
+    this.hoverColumn[i] = false;
+  }
+
+  isNumber(val): boolean { return typeof val === 'number'; }
 
 }
