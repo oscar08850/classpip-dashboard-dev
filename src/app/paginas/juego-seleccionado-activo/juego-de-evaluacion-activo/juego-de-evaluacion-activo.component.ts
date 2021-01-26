@@ -103,21 +103,13 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         const fallos = respuesta[i].filter(item => item === false).length;
         console.log('fallos', fallos);
         if (fallos > 0) {
-          let encontrado = false;
-          for (const criterio of this.juego.Penalizacion[i]) {
-            console.log('num', criterio.num);
-            if (fallos === criterio.num) {
-              console.log('le aplico una reduccion', criterio.p);
-              subNota = criterio.p / 10;
-              encontrado = true;
-              break;
-            }
-          }
-          if (!encontrado) {
-            console.log('Numero de fallos no encontrados, aplicamos la maxima restriccion');
-            const maximaRestriccion = Math.max.apply(Math, this.juego.Penalizacion[i].map(item => item.num));
-            console.log('maxima restriccion', maximaRestriccion);
-          }
+          const minimo = this.juego.Penalizacion[i].filter(item => item.num < fallos);
+          console.log('minimo', minimo);
+          const maximo = Math.max.apply(Math, minimo.map(item => item.num));
+          console.log('maximo', maximo);
+          const penalizacion = this.juego.Penalizacion[i].find(item => item.num === maximo).p;
+          console.log('penalizacion', penalizacion);
+          subNota = penalizacion / 10;
         }
         console.log(i, this.juego.Penalizacion[this.juego.Penalizacion.length - 1][i]);
         finalNota += subNota * this.juego.Penalizacion[this.juego.Penalizacion.length - 1][i] / 100;
