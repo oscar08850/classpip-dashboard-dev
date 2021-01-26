@@ -125,11 +125,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     this.displayedColumns = this.tmpDisplayedColumns.map(item => item[1]) as string[];
     this.displayedColumns.unshift('Nombre');
     this.displayedColumns.push('Nota Media');
-    console.log(this.tmpDisplayedColumns);
-    console.log(this.displayedColumns);
-    console.log(this.datosTabla);
     this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
-    console.log(this.hoverColumn);
   }
 
   ConstruirTablaEquipos() {
@@ -139,14 +135,17 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     if (this.alumnosDeEquipo.length !== this.equipos.length) {
       return;
     }
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.alumnosDeEquipo.length; i++) {
-      // tslint:disable-next-line:prefer-for-of
-      for (let j = 0; j < this.alumnosDeEquipo[i].alumnos.length; j++) {
-        this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Nombre]);
-      }
-    }
     if (this.equiposRelacion[0].alumnosEvaluadoresIds !== null) {
+      console.log('Equipos evaluados por alumnos');
+      console.log('Equipos Relacion', this.equiposRelacion);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.alumnosDeEquipo.length; i++) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < this.alumnosDeEquipo[i].alumnos.length; j++) {
+          this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Nombre]);
+        }
+      }
+      console.log('Columnas tmp', this.tmpDisplayedColumns);
       this.equipos.forEach((equipo) => {
         const row = {
           Nombre: undefined
@@ -165,16 +164,20 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       });
     } else {
       this.tmpDisplayedColumns = this.equipos.map(item => [item.id, item.Nombre]);
+      console.log('Equipos por equipos');
+      console.log('Columnas tmp', this.tmpDisplayedColumns);
       this.equipos.forEach((equipo) => {
         const row = {
           Nombre: undefined
         };
         const evaluado = this.equiposRelacion.find(item => item.equipoId === equipo.id);
+        console.log('evaluado', evaluado);
         row.Nombre = this.equipos.find(item => item.id === evaluado.equipoId).Nombre;
-        const alumnosDeEquipo = this.alumnosDeEquipo.find(item => item.equipoId === equipo.id);
+        const alumnosDeEquipo = this.alumnosDeEquipo.find(item => item.equipoId === equipo.id).alumnos.map(item => item.id);
+        console.log('alumnos de equipo', alumnosDeEquipo);
         this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
-          if (evaluado.respuestas && evaluado.respuestas.find(res => alumnosDeEquipo.alumnos.includes(res.alumnoId))) {
-            row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => alumnosDeEquipo.alumnos.includes(res.alumnoId)).respuesta);
+          if (evaluado.respuestas && evaluado.respuestas.find(res => alumnosDeEquipo.includes(res.alumnoId))) {
+            row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => alumnosDeEquipo.includes(res.alumnoId)).respuesta);
           } else {
             row[item[1]] = '-';
           }
@@ -186,18 +189,12 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     this.displayedColumns = this.tmpDisplayedColumns.map(item => item[1]) as string[];
     this.displayedColumns.unshift('Nombre');
     this.displayedColumns.push('Nota Media');
-    console.log(this.tmpDisplayedColumns);
-    console.log(this.displayedColumns);
-    console.log(this.datosTabla);
     this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
-    console.log(this.hoverColumn);
   }
 
   MouseOver(event) {
     const columnNum = event.target.className.match('\-([0-9]+)')[1];
     this.hoverColumn[columnNum] = true;
-    // console.log(columnNum);
-    // console.log(this.hoverColumn);
   }
 
   MouseOut(event) {
