@@ -29,6 +29,7 @@ export class VerTodosComponent implements OnInit {
   inscripcionesAlumnosJuegoDeAvatar: AlumnoJuegoDeAvatar[];
   alumnosJuegoDeAvatar: Alumno[];
   listaAvatares: any[] = [];
+  notavoz: HTMLAudioElement;
 
   sound;
 
@@ -58,7 +59,6 @@ constructor(
     private comServer: ComServerService ) { }
 
 ngOnInit() {
-
 
     this.sound = new Howl({
       src: ['/assets/got-it-done.mp3']
@@ -130,13 +130,17 @@ goBack() {
 
 
 Play(voz) {
-    const audio = new Audio();
-    audio.src = voz;
-    audio.load();
-    audio.play();
+  this.notavoz = new Audio();
+  this.notavoz.src = voz;
+  this.notavoz.load();
+  this.notavoz.play();
+}
+
+Stop() {
+  if(!this.notavoz.paused){
+    this.notavoz.pause();
   }
-
-
+}
 
   byte2Hex(n) {
     const nybHexString = '0123456789ABCDEF';
