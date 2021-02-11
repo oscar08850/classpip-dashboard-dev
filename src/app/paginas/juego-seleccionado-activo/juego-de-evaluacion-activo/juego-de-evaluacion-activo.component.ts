@@ -112,7 +112,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         const fallos = respuesta[i].filter(item => item === false).length;
         console.log('fallos', fallos);
         if (fallos > 0) {
-          const minimo = this.juego.Penalizacion[i].filter(item => item.num < fallos);
+          const minimo = this.juego.Penalizacion[i].filter(item => item.num <= fallos);
           console.log('minimo', minimo);
           const maximo = Math.max.apply(Math, minimo.map(item => item.num));
           console.log('maximo', maximo);

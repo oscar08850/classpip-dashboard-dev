@@ -47,22 +47,33 @@ export class EvaluacionDialogoComponent implements OnInit {
   }
 
   CalcularNotaCriterio(index: number): number {
+    let subNota: number;
     if (this.data.juego.metodoSubcriterios) {
-      let subNota = 0;
+      subNota = 0;
       for (let j = 1; j < this.data.juego.Pesos[index].length; j++) {
         if (this.respuestaEvaluacion[index][j - 1]) {
           subNota += this.data.juego.Pesos[index][j] / 10;
         }
       }
-      return Math.round((subNota + Number.EPSILON) * 100) / 100;
+    } else {
+      subNota = 10;
+      const fallos = this.respuestaEvaluacion[index].filter(item => item === false).length;
+      if (fallos > 0) {
+        const minimo = this.data.juego.Penalizacion[index].filter(item => item.num <= fallos);
+        const maximo = Math.max.apply(Math, minimo.map(item => item.num));
+        const penalizacion = this.data.juego.Penalizacion[index].find(item => item.num === maximo).p;
+        subNota = penalizacion / 10;
+      }
     }
+    return Math.round((subNota + Number.EPSILON) * 100) / 100;
   }
 
-  CalcularNotaFinal() {
+  CalcularNotaFinal(): number {
+    let finalNota = 0;
+    let subNota: number;
     if (this.data.juego.metodoSubcriterios) {
-      let finalNota = 0;
       for (let i = 0; i < this.data.juego.Pesos.length; i++) {
-        let subNota = 0;
+        subNota = 0;
         for (let j = 1; j < this.data.juego.Pesos[i].length; j++) {
           if (this.respuestaEvaluacion[i][j - 1]) {
             subNota += this.data.juego.Pesos[i][j] / 10;
@@ -70,8 +81,20 @@ export class EvaluacionDialogoComponent implements OnInit {
         }
         finalNota += subNota * this.data.juego.Pesos[i][0] / 100;
       }
-      return Math.round((finalNota + Number.EPSILON) * 100) / 100;
+    } else {
+      for (let i = 0; i < this.data.juego.Penalizacion.length - 1; i++) {
+        subNota = 10;
+        const fallos = this.respuestaEvaluacion[i].filter(item => item === false).length;
+        if (fallos > 0) {
+          const minimo = this.data.juego.Penalizacion[i].filter(item => item.num <= fallos);
+          const maximo = Math.max.apply(Math, minimo.map(item => item.num));
+          const penalizacion = this.data.juego.Penalizacion[i].find(item => item.num === maximo).p;
+          subNota = penalizacion / 10;
+        }
+        finalNota += subNota * this.data.juego.Penalizacion[this.data.juego.Penalizacion.length - 1][i] / 100;
+      }
     }
+    return Math.round((finalNota + Number.EPSILON) * 100) / 100;
   }
 
   close(): void {

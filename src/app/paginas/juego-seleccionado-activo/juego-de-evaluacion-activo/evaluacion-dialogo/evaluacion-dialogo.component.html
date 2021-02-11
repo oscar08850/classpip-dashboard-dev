@@ -3,8 +3,14 @@
   <mat-accordion multi>
     <mat-expansion-panel *ngFor="let criterio of data.rubrica.Criterios; let i = index" style="margin-top: 10px; margin-bottom: 10px;">
       <mat-expansion-panel-header>
-        <mat-panel-title *ngIf="data.juego.metodoSubcriterios">
-          {{criterio.Nombre}} ({{data.juego.Pesos[i][0]}}%)
+        <mat-panel-title>
+          {{criterio.Nombre}} &nbsp;
+          <i *ngIf="data.juego.metodoSubcriterios">
+            ({{data.juego.Pesos[i][0]}}%)
+          </i>
+          <i *ngIf="!data.juego.metodoSubcriterios">
+            ({{data.juego.Penalizacion[data.juego.Penalizacion.length - 1][i]}}%)
+          </i>
         </mat-panel-title>
         <mat-panel-description class="criterioDescripcion">
           Nota: {{CalcularNotaCriterio(i)}}
