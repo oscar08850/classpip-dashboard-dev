@@ -5,6 +5,7 @@
     </mat-expansion-panel-header>
     <p><strong>Descripcion: </strong> {{juego.Descripcion}}</p>
     <p><strong>Modo: </strong>{{juego.Modo}}</p>
+    <p><strong>Rúbrica: </strong>{{rubrica.Nombre}}</p>
     <p *ngIf="juego.metodoSubcriterios"><strong>Evaluación: </strong>Por pesos</p>
     <p *ngIf="!juego.metodoSubcriterios"><strong>Evaluación: </strong>Por penalización</p>
     <p *ngIf="juego.autoEvaluacion"><strong>Autoevaluable: </strong>Sí</p>
@@ -28,6 +29,9 @@
         {{element[column]}}
         <button *ngIf="isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id)" mat-icon-button aria-label="Info">
           <mat-icon>remove_red_eye</mat-icon>
+        </button>
+        <button *ngIf="isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="eliminarNota(i, element.id)" mat-icon-button aria-label="Delete">
+          <mat-icon style="color: red;">delete_forever</mat-icon>
         </button>
       </td>
     </ng-container>

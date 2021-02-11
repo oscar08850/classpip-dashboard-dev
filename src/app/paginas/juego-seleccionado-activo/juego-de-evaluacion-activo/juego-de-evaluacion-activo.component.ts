@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PeticionesAPIService, SesionService} from '../../../servicios';
 import {JuegoDeEvaluacion} from '../../../clases/JuegoDeEvaluacion';
 import {Alumno, Equipo, Rubrica} from '../../../clases';
@@ -6,6 +6,7 @@ import {AlumnoJuegoDeEvaluacion} from '../../../clases/AlumnoJuegoDeEvaluacion';
 import {EquipoJuegoDeEvaluacion} from '../../../clases/EquipoJuegoDeEvaluacion';
 import {MatDialog} from '@angular/material/dialog';
 import {EvaluacionDialogoComponent} from './evaluacion-dialogo/evaluacion-dialogo.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-juego-de-evaluacion-activo',
@@ -261,5 +262,10 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   }
 
   isNumber(val): boolean { return typeof val === 'number'; }
+
+  eliminarNota(i: number, evaluadoId: number): void {
+    const evaluadorId = this.tmpDisplayedColumns[i - 1][0];
+    console.log(evaluadorId, evaluadoId);
+  }
 
 }
