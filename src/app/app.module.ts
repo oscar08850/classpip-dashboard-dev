@@ -247,6 +247,7 @@ import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
 import { JuegoDeEvaluacionActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/juego-de-evaluacion-activo.component';
 import { EvaluacionDialogoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/evaluacion-dialogo/evaluacion-dialogo.component';
+import { EvaluacionBorrarDialogoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/evaluacion-borrar-dialogo/evaluacion-borrar-dialogo.component';
 
 
 @NgModule({
@@ -392,7 +393,8 @@ import { EvaluacionDialogoComponent } from './paginas/juego-seleccionado-activo/
     JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
     GestionPreguntaKahootComponent,
     JuegoDeEvaluacionActivoComponent,
-    EvaluacionDialogoComponent
+    EvaluacionDialogoComponent,
+    EvaluacionBorrarDialogoComponent
 
   ],
   imports: [
