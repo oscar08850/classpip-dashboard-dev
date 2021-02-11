@@ -90,6 +90,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
 
   CalcularNota(respuesta: any[]): number {
     if (this.juego.metodoSubcriterios) {
+      console.log('Calcular nota por pesos', respuesta);
       let finalNota = 0;
       for (let i = 0; i < this.juego.Pesos.length; i++) {
         let subNota = 0;
@@ -97,10 +98,10 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           if (respuesta[i][j - 1]) {
             subNota += this.juego.Pesos[i][j] / 10;
           }
-          // console.log(this.juego.Pesos[i][j], respuesta[i][j - 1], subNota);
+          console.log(this.juego.Pesos[i][j], respuesta[i][j - 1], subNota);
         }
         finalNota += subNota * this.juego.Pesos[i][0] / 100;
-        // console.log(this.juego.Pesos[i][0], subNota, finalNota);
+        console.log(this.juego.Pesos[i][0], subNota, finalNota);
       }
       return Math.round((finalNota + Number.EPSILON) * 100) / 100;
     } else { // Penalizacion

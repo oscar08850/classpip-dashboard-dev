@@ -46,6 +46,34 @@ export class EvaluacionDialogoComponent implements OnInit {
     }
   }
 
+  CalcularNotaCriterio(index: number): number {
+    if (this.data.juego.metodoSubcriterios) {
+      let subNota = 0;
+      for (let j = 1; j < this.data.juego.Pesos[index].length; j++) {
+        if (this.respuestaEvaluacion[index][j - 1]) {
+          subNota += this.data.juego.Pesos[index][j] / 10;
+        }
+      }
+      return Math.round((subNota + Number.EPSILON) * 100) / 100;
+    }
+  }
+
+  CalcularNotaFinal() {
+    if (this.data.juego.metodoSubcriterios) {
+      let finalNota = 0;
+      for (let i = 0; i < this.data.juego.Pesos.length; i++) {
+        let subNota = 0;
+        for (let j = 1; j < this.data.juego.Pesos[i].length; j++) {
+          if (this.respuestaEvaluacion[i][j - 1]) {
+            subNota += this.data.juego.Pesos[i][j] / 10;
+          }
+        }
+        finalNota += subNota * this.data.juego.Pesos[i][0] / 100;
+      }
+      return Math.round((finalNota + Number.EPSILON) * 100) / 100;
+    }
+  }
+
   close(): void {
     this.dialogRef.close();
   }
