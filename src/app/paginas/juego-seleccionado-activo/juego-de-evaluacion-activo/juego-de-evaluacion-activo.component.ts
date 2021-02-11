@@ -112,13 +112,24 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         const fallos = respuesta[i].filter(item => item === false).length;
         console.log('fallos', fallos);
         if (fallos > 0) {
-          const minimo = this.juego.Penalizacion[i].filter(item => item.num <= fallos);
+          let minimo: number;
+          let rangoMinimo;
+          let maximo: number;
+          minimo = Math.min.apply(Math, this.juego.Penalizacion[i].map(item => item.num));
           console.log('minimo', minimo);
-          const maximo = Math.max.apply(Math, minimo.map(item => item.num));
-          console.log('maximo', maximo);
-          const penalizacion = this.juego.Penalizacion[i].find(item => item.num === maximo).p;
-          console.log('penalizacion', penalizacion);
-          subNota = penalizacion / 10;
+          if (fallos >= minimo) {
+            rangoMinimo = this.juego.Penalizacion[i].filter(item => item.num <= fallos);
+            if (rangoMinimo.length === 0) {
+              maximo = Math.max.apply(Math, this.juego.Penalizacion[i].map(item => item.num));
+            } else {
+              maximo = Math.max.apply(Math, rangoMinimo.map(item => item.num));
+            }
+            console.log('rango minimo', rangoMinimo);
+            console.log('maximo', maximo);
+            const penalizacion = this.juego.Penalizacion[i].find(item => item.num === maximo).p;
+            console.log('penalizacion', penalizacion);
+            subNota = penalizacion / 10;
+          }
         }
         console.log(i, this.juego.Penalizacion[this.juego.Penalizacion.length - 1][i]);
         finalNota += subNota * this.juego.Penalizacion[this.juego.Penalizacion.length - 1][i] / 100;

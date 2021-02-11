@@ -59,10 +59,20 @@ export class EvaluacionDialogoComponent implements OnInit {
       subNota = 10;
       const fallos = this.respuestaEvaluacion[index].filter(item => item === false).length;
       if (fallos > 0) {
-        const minimo = this.data.juego.Penalizacion[index].filter(item => item.num <= fallos);
-        const maximo = Math.max.apply(Math, minimo.map(item => item.num));
-        const penalizacion = this.data.juego.Penalizacion[index].find(item => item.num === maximo).p;
-        subNota = penalizacion / 10;
+        let minimo: number;
+        let rangoMinimo;
+        let maximo: number;
+        minimo = Math.min.apply(Math, this.data.juego.Penalizacion[index].map(item => item.num));
+        if (fallos >= minimo) {
+          rangoMinimo = this.data.juego.Penalizacion[index].filter(item => item.num <= fallos);
+          if (rangoMinimo.length === 0) {
+            maximo = Math.max.apply(Math, this.data.juego.Penalizacion[index].map(item => item.num));
+          } else {
+            maximo = Math.max.apply(Math, rangoMinimo.map(item => item.num));
+          }
+          const penalizacion = this.data.juego.Penalizacion[index].find(item => item.num === maximo).p;
+          subNota = penalizacion / 10;
+        }
       }
     }
     return Math.round((subNota + Number.EPSILON) * 100) / 100;
@@ -86,15 +96,29 @@ export class EvaluacionDialogoComponent implements OnInit {
         subNota = 10;
         const fallos = this.respuestaEvaluacion[i].filter(item => item === false).length;
         if (fallos > 0) {
-          const minimo = this.data.juego.Penalizacion[i].filter(item => item.num <= fallos);
-          const maximo = Math.max.apply(Math, minimo.map(item => item.num));
-          const penalizacion = this.data.juego.Penalizacion[i].find(item => item.num === maximo).p;
-          subNota = penalizacion / 10;
+          let minimo: number;
+          let rangoMinimo;
+          let maximo: number;
+          minimo = Math.min.apply(Math, this.data.juego.Penalizacion[i].map(item => item.num));
+          if (fallos >= minimo) {
+            rangoMinimo = this.data.juego.Penalizacion[i].filter(item => item.num <= fallos);
+            if (rangoMinimo.length === 0) {
+              maximo = Math.max.apply(Math, this.data.juego.Penalizacion[i].map(item => item.num));
+            } else {
+              maximo = Math.max.apply(Math, rangoMinimo.map(item => item.num));
+            }
+            const penalizacion = this.data.juego.Penalizacion[i].find(item => item.num === maximo).p;
+            subNota = penalizacion / 10;
+          }
         }
         finalNota += subNota * this.data.juego.Penalizacion[this.data.juego.Penalizacion.length - 1][i] / 100;
       }
     }
     return Math.round((finalNota + Number.EPSILON) * 100) / 100;
+  }
+
+  numeroDeFallos(index: number): number {
+    return this.respuestaEvaluacion[index].filter(item => item === false).length;
   }
 
   close(): void {
