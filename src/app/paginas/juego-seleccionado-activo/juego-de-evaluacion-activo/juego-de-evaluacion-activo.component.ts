@@ -157,6 +157,8 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         // const respuesta = evaluado.respuestas.find(res => res.alumnoId === item[0]);
         if (evaluado.respuestas && evaluado.respuestas.find(res => res.alumnoId === item[0])) {
           row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => res.alumnoId === item[0]).respuesta);
+        } else if (!this.juego.autoEvaluacion && alumno.id === item[0]) {
+          row[item[1]] = 'X';
         } else {
           row[item[1]] = '-';
         }
@@ -197,8 +199,11 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         row.Nombre = this.equipos.find(item => item.id === evaluado.equipoId).Nombre;
         row.id = equipo.id;
         this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
+          const alumnosDeEquipo = this.alumnosDeEquipo.find(a => a.equipoId === equipo.id).alumnos.map(b => b.id);
           if (evaluado.respuestas && evaluado.respuestas.find(res => res.alumnoId === item[0])) {
             row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => res.alumnoId === item[0]).respuesta);
+          } else if (!this.juego.autoEvaluacion && alumnosDeEquipo.includes(item[0])) {
+            row[item[1]] = 'X';
           } else {
             row[item[1]] = '-';
           }
@@ -216,15 +221,14 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           id: undefined
         };
         const evaluado = this.equiposRelacion.find(item => item.equipoId === equipo.id);
-        console.log('relacion', evaluado);
         row.Nombre = this.equipos.find(item => item.id === evaluado.equipoId).Nombre;
         row.id = equipo.id;
         this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
           const alumnosDeEquipo = this.alumnosDeEquipo.find(a => a.equipoId === item[0]).alumnos.map(b => b.id);
-          console.log('alumnos de equipo', alumnosDeEquipo);
-          console.log('item', item);
           if (evaluado.respuestas && evaluado.respuestas.find(res => alumnosDeEquipo.includes(res.alumnoId))) {
             row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => alumnosDeEquipo.includes(res.alumnoId)).respuesta);
+          } else if (!this.juego.autoEvaluacion && equipo.id === item[0]) {
+            row[item[1]] = 'X';
           } else {
             row[item[1]] = '-';
           }

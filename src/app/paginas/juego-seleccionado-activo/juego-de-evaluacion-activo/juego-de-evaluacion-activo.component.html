@@ -25,7 +25,7 @@
           <div class="tag2">Evaluados</div>
         </div>
       </th>
-      <td mat-cell class="column100 column-{{i}}" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" [ngClass]="{'hov-column': hoverColumn[i], 'final-column': i === displayedColumns.length - 1}" *matCellDef="let element">
+      <td mat-cell class="column100 column-{{i}}" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" [ngClass]="{'hov-column': hoverColumn[i], 'final-column': i === displayedColumns.length - 1, 'shadowed': element[column] === 'X'}" *matCellDef="let element">
         {{element[column]}}
         <button *ngIf="isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id)" mat-icon-button aria-label="Info">
           <mat-icon>remove_red_eye</mat-icon>
