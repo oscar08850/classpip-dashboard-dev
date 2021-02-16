@@ -159,15 +159,23 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => res.alumnoId === item[0]).respuesta);
         } else if (!this.juego.autoEvaluacion && alumno.id === item[0]) {
           row[item[1]] = 'X';
+        } else if (alumno.id !== item[0] && !evaluado.alumnosEvaluadoresIds.includes(item[0] as number)) {
+          row[item[1]] = 'X';
         } else {
           row[item[1]] = '-';
         }
       });
+      if (this.juego.profesorEvalua) {
+        row['Profesor'] = '-';
+      }
       row['Nota Media'] = this.CalcularNotaMedia(row);
       this.datosTabla.push(row);
     });
     this.displayedColumns = this.tmpDisplayedColumns.map(item => item[1]) as string[];
     this.displayedColumns.unshift('Nombre');
+    if (this.juego.profesorEvalua) {
+      this.displayedColumns.push('Profesor');
+    }
     this.displayedColumns.push('Nota Media');
     this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
   }
@@ -204,10 +212,15 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
             row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => res.alumnoId === item[0]).respuesta);
           } else if (!this.juego.autoEvaluacion && alumnosDeEquipo.includes(item[0])) {
             row[item[1]] = 'X';
+          } else if (!alumnosDeEquipo.includes(item[0]) && !evaluado.alumnosEvaluadoresIds.includes(item[0] as number)) {
+            row[item[1]] = 'X';
           } else {
             row[item[1]] = '-';
           }
         });
+        if (this.juego.profesorEvalua) {
+          row['Profesor'] = '-';
+        }
         row['Nota Media'] = this.CalcularNotaMedia(row);
         this.datosTabla.push(row);
       });
@@ -229,16 +242,24 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
             row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => alumnosDeEquipo.includes(res.alumnoId)).respuesta);
           } else if (!this.juego.autoEvaluacion && equipo.id === item[0]) {
             row[item[1]] = 'X';
+          } else if (equipo.id !== item[0] && !evaluado.equiposEvaluadoresIds.includes(item[0] as number)) {
+            row[item[1]] = 'X';
           } else {
             row[item[1]] = '-';
           }
         });
+        if (this.juego.profesorEvalua) {
+          row['Profesor'] = '-';
+        }
         row['Nota Media'] = this.CalcularNotaMedia(row);
         this.datosTabla.push(row);
       });
     }
     this.displayedColumns = this.tmpDisplayedColumns.map(item => item[1]) as string[];
     this.displayedColumns.unshift('Nombre');
+    if (this.juego.profesorEvalua) {
+      this.displayedColumns.push('Profesor');
+    }
     this.displayedColumns.push('Nota Media');
     this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
   }
