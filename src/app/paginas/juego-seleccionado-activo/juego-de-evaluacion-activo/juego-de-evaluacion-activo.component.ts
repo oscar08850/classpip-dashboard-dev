@@ -6,7 +6,6 @@ import {AlumnoJuegoDeEvaluacion} from '../../../clases/AlumnoJuegoDeEvaluacion';
 import {EquipoJuegoDeEvaluacion} from '../../../clases/EquipoJuegoDeEvaluacion';
 import {MatDialog} from '@angular/material/dialog';
 import {EvaluacionDialogoComponent} from './evaluacion-dialogo/evaluacion-dialogo.component';
-import Swal from 'sweetalert2';
 import {EvaluacionBorrarDialogoComponent} from './evaluacion-borrar-dialogo/evaluacion-borrar-dialogo.component';
 
 @Component({
@@ -267,7 +266,14 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   eliminarNota(i: number, evaluadoId: number): void {
     const evaluadorId = this.tmpDisplayedColumns[i - 1][0];
     console.log(evaluadorId, evaluadoId);
-    this.dialog.open(EvaluacionBorrarDialogoComponent);
+    this.dialog.open(EvaluacionBorrarDialogoComponent, {
+      width: '300px',
+      data: {
+        juego: this.juego,
+        evaluadorId,
+        evaluadoId
+      }
+    });
   }
 
 }
