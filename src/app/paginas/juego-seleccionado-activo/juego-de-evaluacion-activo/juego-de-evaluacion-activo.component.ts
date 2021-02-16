@@ -190,10 +190,12 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       console.log('Columnas tmp', this.tmpDisplayedColumns);
       this.equipos.forEach((equipo) => {
         const row = {
-          Nombre: undefined
+          Nombre: undefined,
+          id: undefined
         };
         const evaluado = this.equiposRelacion.find(item => item.equipoId === equipo.id);
         row.Nombre = this.equipos.find(item => item.id === evaluado.equipoId).Nombre;
+        row.id = equipo.id;
         this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
           if (evaluado.respuestas && evaluado.respuestas.find(res => res.alumnoId === item[0])) {
             row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => res.alumnoId === item[0]).respuesta);
@@ -210,11 +212,13 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       console.log('Columnas tmp', this.tmpDisplayedColumns);
       this.equipos.forEach((equipo) => {
         const row = {
-          Nombre: undefined
+          Nombre: undefined,
+          id: undefined
         };
         const evaluado = this.equiposRelacion.find(item => item.equipoId === equipo.id);
         console.log('evaluado', evaluado);
         row.Nombre = this.equipos.find(item => item.id === evaluado.equipoId).Nombre;
+        row.id = equipo.id;
         const alumnosDeEquipo = this.alumnosDeEquipo.find(item => item.equipoId === equipo.id).alumnos.map(item => item.id);
         console.log('alumnos de equipo', alumnosDeEquipo);
         this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
