@@ -452,7 +452,7 @@ import { EvaluacionBorrarDialogoComponent } from './paginas/juego-seleccionado-a
     InformacionJuegoDeCuestionarioDialogComponent, AsignaEscenarioComponent, AsignaPreguntasComponent, InformacionJuegoDeGeocachingDialogComponent,
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
     RespuestasAlumnoJuegoDeCuestionarioComponent,
-    AsignarFamiliaImagenesPerfilComponent, EvaluacionDialogoComponent
+    AsignarFamiliaImagenesPerfilComponent, EvaluacionDialogoComponent, EvaluacionBorrarDialogoComponent
   ],
   bootstrap: [AppComponent],
   providers: [

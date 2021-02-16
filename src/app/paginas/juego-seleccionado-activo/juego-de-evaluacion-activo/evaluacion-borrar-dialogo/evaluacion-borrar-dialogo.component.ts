@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {DialogData} from '../evaluacion-dialogo/evaluacion-dialogo.component';
 
 @Component({
   selector: 'app-evaluacion-borrar-dialogo',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EvaluacionBorrarDialogoComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public dialogRef: MatDialogRef<EvaluacionBorrarDialogoComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) { }
 
   ngOnInit() {
+  }
+
+  close(): void {
+    this.dialogRef.close();
   }
 
 }
