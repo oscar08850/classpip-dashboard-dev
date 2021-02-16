@@ -91,7 +91,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
 
   CalcularNota(respuesta: any[]): number {
     if (this.juego.metodoSubcriterios) {
-      console.log('Calcular nota por pesos', respuesta);
+      // console.log('Calcular nota por pesos', respuesta);
       let finalNota = 0;
       for (let i = 0; i < this.juego.Pesos.length; i++) {
         let subNota = 0;
@@ -99,25 +99,25 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           if (respuesta[i][j - 1]) {
             subNota += this.juego.Pesos[i][j] / 10;
           }
-          console.log(this.juego.Pesos[i][j], respuesta[i][j - 1], subNota);
+          // console.log(this.juego.Pesos[i][j], respuesta[i][j - 1], subNota);
         }
         finalNota += subNota * this.juego.Pesos[i][0] / 100;
-        console.log(this.juego.Pesos[i][0], subNota, finalNota);
+        // console.log(this.juego.Pesos[i][0], subNota, finalNota);
       }
       return Math.round((finalNota + Number.EPSILON) * 100) / 100;
     } else { // Penalizacion
-      console.log('Calcular nota por penalizacion', respuesta);
+      // console.log('Calcular nota por penalizacion', respuesta);
       let finalNota = 0;
       for (let i = 0; i < this.juego.Penalizacion.length - 1; i++) {
         let subNota = 10;
         const fallos = respuesta[i].filter(item => item === false).length;
-        console.log('fallos', fallos);
+        // console.log('fallos', fallos);
         if (fallos > 0) {
           let minimo: number;
           let rangoMinimo;
           let maximo: number;
           minimo = Math.min.apply(Math, this.juego.Penalizacion[i].map(item => item.num));
-          console.log('minimo', minimo);
+          // console.log('minimo', minimo);
           if (fallos >= minimo) {
             rangoMinimo = this.juego.Penalizacion[i].filter(item => item.num <= fallos);
             if (rangoMinimo.length === 0) {
@@ -125,16 +125,16 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
             } else {
               maximo = Math.max.apply(Math, rangoMinimo.map(item => item.num));
             }
-            console.log('rango minimo', rangoMinimo);
-            console.log('maximo', maximo);
+            // console.log('rango minimo', rangoMinimo);
+            // console.log('maximo', maximo);
             const penalizacion = this.juego.Penalizacion[i].find(item => item.num === maximo).p;
-            console.log('penalizacion', penalizacion);
+            // console.log('penalizacion', penalizacion);
             subNota = penalizacion / 10;
           }
         }
-        console.log(i, this.juego.Penalizacion[this.juego.Penalizacion.length - 1][i]);
+        // console.log(i, this.juego.Penalizacion[this.juego.Penalizacion.length - 1][i]);
         finalNota += subNota * this.juego.Penalizacion[this.juego.Penalizacion.length - 1][i] / 100;
-        console.log('finalnota', finalNota);
+        // console.log('finalnota', finalNota);
       }
       return Math.round((finalNota + Number.EPSILON) * 100) / 100;
     }
@@ -209,19 +209,20 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     } else {
       this.tmpDisplayedColumns = this.equipos.map(item => [item.id, item.Nombre]);
       console.log('Equipos por equipos');
-      console.log('Columnas tmp', this.tmpDisplayedColumns);
+      console.log('Columnas', this.tmpDisplayedColumns);
       this.equipos.forEach((equipo) => {
         const row = {
           Nombre: undefined,
           id: undefined
         };
         const evaluado = this.equiposRelacion.find(item => item.equipoId === equipo.id);
-        console.log('evaluado', evaluado);
+        console.log('relacion', evaluado);
         row.Nombre = this.equipos.find(item => item.id === evaluado.equipoId).Nombre;
         row.id = equipo.id;
-        const alumnosDeEquipo = this.alumnosDeEquipo.find(item => item.equipoId === equipo.id).alumnos.map(item => item.id);
-        console.log('alumnos de equipo', alumnosDeEquipo);
         this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
+          const alumnosDeEquipo = this.alumnosDeEquipo.find(a => a.equipoId === item[0]).alumnos.map(b => b.id);
+          console.log('alumnos de equipo', alumnosDeEquipo);
+          console.log('item', item);
           if (evaluado.respuestas && evaluado.respuestas.find(res => alumnosDeEquipo.includes(res.alumnoId))) {
             row[item[1]] = this.CalcularNota(evaluado.respuestas.find(res => alumnosDeEquipo.includes(res.alumnoId)).respuesta);
           } else {
@@ -275,7 +276,8 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       data: {
         juego: this.juego,
         evaluadorId,
-        evaluadoId
+        evaluadoId,
+        alumnosDeEquipo: this.alumnosDeEquipo
       }
     });
     dialogRef.afterClosed().subscribe(result => {

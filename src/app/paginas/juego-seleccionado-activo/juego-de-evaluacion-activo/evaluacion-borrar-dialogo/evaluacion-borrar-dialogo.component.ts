@@ -10,6 +10,7 @@ export interface DialogData {
   juego: JuegoDeEvaluacion;
   evaluadorId: number;
   evaluadoId: number;
+  alumnosDeEquipo: [];
 }
 
 @Component({
@@ -55,7 +56,28 @@ export class EvaluacionBorrarDialogoComponent implements OnInit {
     } else if (this.data.juego.Modo === 'Equipos') {
       this.peticionesAPI.DameRelacionEquiposJuegoDeEvaluacion(this.data.juego.id)
         .subscribe((res: EquipoJuegoDeEvaluacion[]) => {
-          console.log(res);
+          const relacion = res.find(item => item.equipoId === this.data.evaluadoId);
+          if (typeof relacion === 'undefined' || relacion.respuestas === null) {
+            console.log('no se ha encontrado la nota', res);
+            this.dialogRef.close(res);
+            return;
+          }
+          console.log(relacion);
+          let respuestas: object;
+          if (relacion.alumnosEvaluadoresIds === null) {
+            const alumnos = this.data.alumnosDeEquipo.find(item => item.equipoId === this.data.evaluadorId).alumnos.map(item => item.id);
+            respuestas = relacion.respuestas.filter(item => !alumnos.includes(item.alumnoId));
+          } else {
+            respuestas = relacion.respuestas.filter(item => item.alumnoId !== this.data.evaluadorId);
+          }
+          this.peticionesAPI.EnviarRespuestaEquiposJuegoDeEvaluacion(relacion.id, {respuestas})
+            .subscribe((res2: EquipoJuegoDeEvaluacion) => {
+              console.log(res2);
+              console.log('Pre-change', res);
+              res = res.map((item) => item.id === res2.id ? res2 : item);
+              console.log('Post-change', res);
+              this.dialogRef.close(res);
+            });
         });
     }
   }

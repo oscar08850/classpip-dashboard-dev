@@ -1681,6 +1681,9 @@ export class PeticionesAPIService {
   public DameRelacionEquiposJuegoDeEvaluacion(juegoId: number): Observable<EquipoJuegoDeEvaluacion[]> {
     return this.http.get<EquipoJuegoDeEvaluacion[]>(this.APIURLEquiposJuegoEvaluado + '?filter[where][juegoDeEvaluacionId]=' + juegoId);
   }
+  public EnviarRespuestaEquiposJuegoDeEvaluacion(relacionId: number, respuesta: any): Observable<EquipoJuegoDeEvaluacion> {
+    return this.http.patch<EquipoJuegoDeEvaluacion>(this.APIURLEquiposJuegoEvaluado + '/' + relacionId, respuesta);
+  }
   public DameEquiposJuegoDeEvaluacion(juegoId: number): Observable<Equipo[]> {
     return this.http.get<Equipo[]>(this.APIURLJuegoDeEvaluacion + '/' + juegoId + '/Equipos');
   }
