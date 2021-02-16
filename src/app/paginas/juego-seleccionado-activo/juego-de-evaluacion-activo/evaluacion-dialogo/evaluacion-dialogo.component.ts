@@ -40,7 +40,8 @@ export class EvaluacionDialogoComponent implements OnInit {
       if (evaluado.alumnosEvaluadoresIds !== null) {
         this.respuestaEvaluacion = evaluado.respuestas.find(item => item.alumnoId === this.data.evaluadorId).respuesta;
       } else {
-        const alumnosDeEquipo = this.data.alumnosDeEquipo.find(item => item.equipoId === evaluado.equipoId).alumnos.map(item => item.id);
+        // tslint:disable-next-line:max-line-length
+        const alumnosDeEquipo = this.data.alumnosDeEquipo.find(item => item.equipoId === this.data.evaluadorId).alumnos.map(item => item.id);
         this.respuestaEvaluacion = evaluado.respuestas.find(item => alumnosDeEquipo.includes(item.alumnoId)).respuesta;
       }
     }
