@@ -266,12 +266,28 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   eliminarNota(i: number, evaluadoId: number): void {
     const evaluadorId = this.tmpDisplayedColumns[i - 1][0];
     console.log(evaluadorId, evaluadoId);
-    this.dialog.open(EvaluacionBorrarDialogoComponent, {
+    const dialogRef = this.dialog.open(EvaluacionBorrarDialogoComponent, {
       width: '300px',
       data: {
         juego: this.juego,
         evaluadorId,
         evaluadoId
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      if (typeof result === 'undefined') {
+        return;
+      }
+      this.tmpDisplayedColumns = [];
+      this.datosTabla = [];
+      this.hoverColumn = [];
+      if (this.juego.Modo === 'Individual') {
+        this.alumnosRelacion = result;
+        this.ConstruirTablaIndividual();
+      } else if (this.juego.Modo === 'Equipos') {
+        this.equiposRelacion = result;
+        this.ConstruirTablaEquipos();
       }
     });
   }
