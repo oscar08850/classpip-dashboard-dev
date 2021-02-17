@@ -11,6 +11,7 @@ export interface DialogData {
   evaluadorId: number;
   evaluadoId: number;
   alumnosDeEquipo: [];
+  profesor: boolean;
 }
 
 @Component({
@@ -43,7 +44,12 @@ export class EvaluacionBorrarDialogoComponent implements OnInit {
             this.dialogRef.close(res);
             return;
           }
-          const respuestas = relacion.respuestas.filter(item => item.alumnoId !== this.data.evaluadorId);
+          let respuestas: object;
+          if (this.data.profesor) {
+            respuestas = relacion.respuestas.filter(item => !item.profesorId);
+          } else {
+            respuestas = relacion.respuestas.filter(item => item.alumnoId !== this.data.evaluadorId);
+          }
           this.peticionesAPI.EnviarRespuestaAlumnosJuegoDeEvaluacion(relacion.id, {respuestas})
             .subscribe((res2: AlumnoJuegoDeEvaluacion) => {
               console.log(res2);
@@ -64,7 +70,9 @@ export class EvaluacionBorrarDialogoComponent implements OnInit {
           }
           console.log(relacion);
           let respuestas: object;
-          if (relacion.alumnosEvaluadoresIds === null) {
+          if (this.data.profesor) {
+            respuestas = relacion.respuestas.filter(item => !item.profesorId);
+          } else if (relacion.alumnosEvaluadoresIds === null) {
             const alumnos = this.data.alumnosDeEquipo.find(item => item.equipoId === this.data.evaluadorId).alumnos.map(item => item.id);
             respuestas = relacion.respuestas.filter(item => !alumnos.includes(item.alumnoId));
           } else {

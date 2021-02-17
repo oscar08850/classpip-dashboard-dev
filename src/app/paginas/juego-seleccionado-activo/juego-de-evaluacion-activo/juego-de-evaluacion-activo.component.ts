@@ -342,16 +342,21 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
 
   isNumber(val): boolean { return typeof val === 'number'; }
 
-  eliminarNota(i: number, evaluadoId: number): void {
-    const evaluadorId = this.tmpDisplayedColumns[i - 1][0];
-    console.log(evaluadorId, evaluadoId);
+  eliminarNota(i: number, evaluadoId: number, profesor: boolean = false): void {
+    let evaluadorId;
+    if (!profesor) {
+      evaluadorId = this.tmpDisplayedColumns[i - 1][0];
+    } else {
+      evaluadorId = this.sesion.DameProfesor().id;
+    }
     const dialogRef = this.dialog.open(EvaluacionBorrarDialogoComponent, {
       width: '300px',
       data: {
         juego: this.juego,
         evaluadorId,
         evaluadoId,
-        alumnosDeEquipo: this.alumnosDeEquipo
+        alumnosDeEquipo: this.alumnosDeEquipo,
+        profesor
       }
     });
     dialogRef.afterClosed().subscribe(result => {

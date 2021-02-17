@@ -39,7 +39,7 @@
         <button *ngIf="column === 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id, true, false)" mat-icon-button aria-label="Info">
           <mat-icon>remove_red_eye</mat-icon>
         </button>
-        <button *ngIf="column === 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="eliminarNota(i, element.id)" mat-icon-button aria-label="Delete">
+        <button *ngIf="column === 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="eliminarNota(i, element.id, true)" mat-icon-button aria-label="Delete">
           <mat-icon style="color: red;">delete_forever</mat-icon>
         </button>
       </td>
