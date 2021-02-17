@@ -27,14 +27,20 @@
       </th>
       <td mat-cell class="column100 column-{{i}}" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" [ngClass]="{'hov-column': hoverColumn[i], 'final-column': i === displayedColumns.length - 1, 'shadowed': element[column] === 'X'}" *matCellDef="let element">
         {{element[column]}}
-        <button *ngIf="isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id)" mat-icon-button aria-label="Info">
+        <button *ngIf="column !== 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id)" mat-icon-button aria-label="Info">
           <mat-icon>remove_red_eye</mat-icon>
         </button>
-        <button *ngIf="isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="eliminarNota(i, element.id)" mat-icon-button aria-label="Delete">
+        <button *ngIf="column !== 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="eliminarNota(i, element.id)" mat-icon-button aria-label="Delete">
           <mat-icon style="color: red;">delete_forever</mat-icon>
         </button>
         <button *ngIf="column === 'Profesor' && !isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id, true, true)" mat-icon-button aria-label="Create">
           <mat-icon>create</mat-icon>
+        </button>
+        <button *ngIf="column === 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id, true, false)" mat-icon-button aria-label="Info">
+          <mat-icon>remove_red_eye</mat-icon>
+        </button>
+        <button *ngIf="column === 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="eliminarNota(i, element.id)" mat-icon-button aria-label="Delete">
+          <mat-icon style="color: red;">delete_forever</mat-icon>
         </button>
       </td>
     </ng-container>

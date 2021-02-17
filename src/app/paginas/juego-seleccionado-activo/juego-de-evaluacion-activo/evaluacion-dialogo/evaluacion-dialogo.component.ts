@@ -53,10 +53,16 @@ export class EvaluacionDialogoComponent implements OnInit {
     }
     if (this.data.juego.Modo === 'Individual') {
       const evaluado = this.data.alumnosRelacion.find(item => item.alumnoId === this.data.evaluadoId);
-      this.respuestaEvaluacion = evaluado.respuestas.find(item => item.alumnoId === this.data.evaluadorId).respuesta;
+      if (this.data.profesor) {
+        this.respuestaEvaluacion = evaluado.respuestas.find(item => item.profesorId).respuesta;
+      } else {
+        this.respuestaEvaluacion = evaluado.respuestas.find(item => item.alumnoId === this.data.evaluadorId).respuesta;
+      }
     } else if (this.data.juego.Modo === 'Equipos') {
       const evaluado = this.data.equiposRelacion.find(item => item.equipoId === this.data.evaluadoId);
-      if (evaluado.alumnosEvaluadoresIds !== null) {
+      if (this.data.profesor) {
+        this.respuestaEvaluacion = evaluado.respuestas.find(item => item.profesorId).respuesta;
+      } else if (evaluado.alumnosEvaluadoresIds !== null) {
         this.respuestaEvaluacion = evaluado.respuestas.find(item => item.alumnoId === this.data.evaluadorId).respuesta;
       } else {
         // tslint:disable-next-line:max-line-length

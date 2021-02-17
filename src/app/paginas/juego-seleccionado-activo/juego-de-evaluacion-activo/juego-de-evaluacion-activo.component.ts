@@ -166,7 +166,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         }
       });
       if (this.juego.profesorEvalua) {
-        if (evaluado.respuestas.find(item => item.profesorId)) {
+        if (evaluado.respuestas && evaluado.respuestas.find(item => item.profesorId)) {
           row['Profesor'] = this.CalcularNota(evaluado.respuestas.find(item => item.profesorId).respuesta);
         } else {
           row['Profesor'] = '-';
@@ -223,7 +223,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           }
         });
         if (this.juego.profesorEvalua) {
-          if (evaluado.respuestas.find(item => item.profesorId)) {
+          if (evaluado.respuestas && evaluado.respuestas.find(item => item.profesorId)) {
             row['Profesor'] = this.CalcularNota(evaluado.respuestas.find(item => item.profesorId).respuesta);
           } else {
             row['Profesor'] = '-';
@@ -256,7 +256,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
             row[item[1]] = '-';
           }
         });
-        if (this.juego.profesorEvalua) {
+        if (evaluado.respuestas && this.juego.profesorEvalua) {
           if (evaluado.respuestas.find(item => item.profesorId)) {
             row['Profesor'] = this.CalcularNota(evaluado.respuestas.find(item => item.profesorId).respuesta);
           } else {
