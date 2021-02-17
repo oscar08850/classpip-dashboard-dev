@@ -76,14 +76,30 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   CalcularNotaMedia(row): number | string {
     let media = 0;
     let p = 0;
-    for (const nombre in row) {
-      if (typeof row[nombre] === 'number' && nombre !== 'id') {
-        media += row[nombre];
-        p++;
+    console.log('calcular media', row);
+    if (this.juego.notaProfesorNormal) {
+      for (const nombre in row) {
+        if (typeof row[nombre] === 'number' && nombre !== 'id') {
+          console.log('media, p, nombre', media, p, nombre, row[nombre]);
+          media += row[nombre];
+          p++;
+        }
+      }
+    } else {
+      for (const nombre in row) {
+        if (typeof row[nombre] === 'number' && nombre !== 'id' && nombre !== 'Profesor') {
+          console.log('D/media, p, nombre', media, p, nombre, row[nombre]);
+          media += row[nombre];
+          p++;
+        }
       }
     }
     if (p > 0) {
-      return Math.round(((media / p) + Number.EPSILON) * 100) / 100;
+      if (this.juego.notaProfesorNormal || (this.juego.profesorEvalua && typeof row['Profesor'] !== 'number')) {
+        return Math.round(((media / p) + Number.EPSILON) * 100) / 100;
+      } else {
+        return Math.round(((((media / p) + row['Profesor']) / 2) + Number.EPSILON) * 100) / 100;
+      }
     } else {
       return '-';
     }
