@@ -16,27 +16,27 @@ import { Observable, of } from 'rxjs';
 })
 export class CrearCuestionarioComponent implements OnInit {
 
-  //ID del Profesor
+  // ID del Profesor
   profesorId: number;
 
-  //Cuestionario que hemos creado
+  // Cuestionario que hemos creado
   cuestionario: Cuestionario;
 
   // Para el stepper
   myForm: FormGroup;
 
-  //URL del inicio
+  // URL del inicio
   URLVueltaInicio: string;
 
   // Para saber si el botón está habilitado o no
   // tslint:disable-next-line:ban-types
   isDisabled: Boolean = true;
 
-  //Ver el estado de si el cuestionario esta creado o aun no
+  // Ver el estado de si el cuestionario esta creado o aun no
   cuestionarioYaCreado: Boolean = false;
 
   finalizar: Boolean = false;
-    
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               public dialog: MatDialog,
@@ -47,15 +47,15 @@ export class CrearCuestionarioComponent implements OnInit {
 
   ngOnInit() {
 
-    //Cogemos el ID del Profesor de la URL
+    // Cogemos el ID del Profesor de la URL
     this.profesorId = this.sesion.DameProfesor().id;
 
-    this.URLVueltaInicio = this.route.snapshot.queryParams['URLVueltaInicio'] || '/inicio';
+    this.URLVueltaInicio = this.route.snapshot.queryParams.URLVueltaInicio || '/inicio';
 
     this.myForm = this._formBuilder.group({
       tituloCuestionario: ['', Validators.required],
       descripcionCuestionario: ['', Validators.required]
-    })
+    });
 
     this.peticionesAPI.DameTodosMisCuestionarios (this.profesorId)
     .subscribe (lista => this.sesion.TomaListaCuestionarios(lista));
@@ -72,8 +72,8 @@ export class CrearCuestionarioComponent implements OnInit {
     }
   }
 
-  //CREACION DEL GRUPO CON EL TITULO Y LA DESCRIPCION QUE HAYAMOS ESTABLECIDO
-  CrearCuestionario(){
+  // CREACION DEL GRUPO CON EL TITULO Y LA DESCRIPCION QUE HAYAMOS ESTABLECIDO
+  CrearCuestionario() {
     let tituloCuestionario: string;
     let descripcionCuestionario: string;
 
@@ -82,31 +82,32 @@ export class CrearCuestionarioComponent implements OnInit {
 
     this.peticionesAPI.CreaCuestionario(new Cuestionario(tituloCuestionario, descripcionCuestionario), this.profesorId)
     .subscribe((res) => {
-      if (res != null){
+      if (res != null) {
         this.cuestionarioYaCreado = true;
         this.cuestionario = res;
-      }else{
+      } else {
         Swal.fire('Se ha producido un error creando el cuestionario', 'ERROR', 'error');
       }
     });
   }
 
-  //NOS PERMITE HACER MODIFICACIONES EN LAS CARACTERISTICAS DEL CUESTIONARIO
-  EditarCuestionario(){
+  // NOS PERMITE HACER MODIFICACIONES EN LAS CARACTERISTICAS DEL CUESTIONARIO
+  EditarCuestionario() {
     let tituloCuestionario: string;
     let descripcionCuestionario: string;
 
     tituloCuestionario = this.myForm.value.tituloCuestionario;
     descripcionCuestionario = this.myForm.value.descripcionCuestionario;
 
+    // tslint:disable-next-line:max-line-length
     this.peticionesAPI.ModificaCuestionario(new Cuestionario(tituloCuestionario, descripcionCuestionario), this.profesorId, this.cuestionario.id)
     .subscribe((res) => {
-      if (res != null){
+      if (res != null) {
         this.cuestionario = res;
-      }else{
+      } else {
         Swal.fire('Se ha producido un error editando el cuestionario', 'ERROR', 'error');
       }
-      
+
     });
   }
 
@@ -117,7 +118,7 @@ export class CrearCuestionarioComponent implements OnInit {
       position: {
         top: '0%'
       },
-      //Pasamos los parametros necesarios
+      // Pasamos los parametros necesarios
       data: {
         cuestionarioId: this.cuestionario.id,
         profesorId: this.profesorId
@@ -139,8 +140,8 @@ export class CrearCuestionarioComponent implements OnInit {
     this.goBack();
   }
 
-  //Aqui establecemos la guarda por si el usuario quiere abandonar la creacion del 
-  //cuestionario antes de tiempo
+  // Aqui establecemos la guarda por si el usuario quiere abandonar la creacion del
+  // cuestionario antes de tiempo
   canExit(): Observable <boolean> {
     if (!this.cuestionarioYaCreado || this.finalizar) {
       return of (true);

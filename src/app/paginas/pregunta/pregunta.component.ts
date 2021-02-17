@@ -9,6 +9,7 @@ import { SesionService, PeticionesAPIService } from 'src/app/servicios';
 
 //Clases
 import { Pregunta } from 'src/app/clases';
+//import { Console } from 'console';
 
 @Component({
   selector: 'app-pregunta',
@@ -40,10 +41,21 @@ export class PreguntaComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   finalizar: Boolean = false;
 
+  existeImagen: Boolean = false;
+
 
   infoPreguntas: any;
+  ficherosPreguntas;
   advertencia = true;
   ficheroCargado = false;
+  imagenCargado: Boolean = false;
+  
+  // variables necesarias para la carga de la foto
+  filePregunta: File;
+  imagenPregunta: string;
+  nombreFicheroImagen: string;
+
+  misPreguntas: Pregunta[];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -54,8 +66,6 @@ export class PreguntaComponent implements OnInit {
 
   ngOnInit() {
 
-    // REALMENTE LA APP FUNCIONARÁ COGIENDO AL PROFESOR DEL SERVICIO, NO OBSTANTE AHORA LO RECOGEMOS DE LA URL
-    // this.profesorId = this.profesorService.RecibirProfesorIdDelServicio();
     this.profesorId = this.sesion.DameProfesor().id;
 
     // tslint:disable-next-line:no-string-literal
@@ -99,16 +109,39 @@ export class PreguntaComponent implements OnInit {
     feedbackCorrecto = this.myForm2.value.feedbackCorrecto;
     feedbackIncorrecto = this.myForm2.value.feedbackIncorrecto;
 
+    //Añadimos al final del constructor el nombre de la imagen nombreFicheroImagen
     const pregunta = new Pregunta(tituloPregunta, preguntaPregunta,
       tematicaPregunta, respuestaCorrecta, respuestaIncorrecta1,
       respuestaIncorrecta2, respuestaIncorrecta3, feedbackCorrecto,
-      feedbackIncorrecto);
+      feedbackIncorrecto, this.nombreFicheroImagen);
+    
     console.log ('vamos a crear pregunta');
+    
+    //Creamos y guardamos el modelo de Pregunta
     this.peticionesAPI.CreaPregunta(pregunta, this.profesorId)
       .subscribe((res) => {
         if (res != null) {
           console.log('Pregunta creada correctamente' + res);
           this.pregunta = res;
+          
+          /*El modelo Pregunta y la imagen son independientes, por eso, 
+          una vez creado el modelo de la pregunta, necesitamos guardar la imagen
+          a la que hace referencia el nombreFicheroImagen dentro de la API.*/
+
+          //No queremos duplicidades en la BD, por eso, antes de añadir la imagen comprobaremos que no esté ya guardada en ella.
+          
+          this.ExisteImagen();
+         
+          //Finalmente, añadimos la imagen a la BD.
+          if (!this.existeImagen && this.filePregunta != null){
+            const imagenPreguntaData: FormData = new FormData();
+            console.log(this.filePregunta.name);
+            console.log(this.filePregunta);
+            imagenPreguntaData.append(this.filePregunta.name, this.filePregunta);
+            this.peticionesAPI.PonImagenPregunta(imagenPreguntaData)
+                .subscribe();
+          }
+
           this.aceptarGoBack();
         } else {
           console.log('Fallo en la creacion de la pregunta');
@@ -157,19 +190,19 @@ export class PreguntaComponent implements OnInit {
     }
   }
 
- // Activa la función SeleccionarFicheroPreguntas
+ // Activa la función SeleccionarInfoPreguntas
  ActivarInputInfo() {
   console.log('Activar input');
   document.getElementById('inputInfo').click();
 }
 
 
-   // Par abuscar el fichero JSON que contiene la info de la colección que se va
-  // a cargar desde ficheros
-  SeleccionarFicheroPreguntas($event) {
+   // Par abuscar el fichero JSON que contiene la info de las preguntas que se van
+  // a cargar desde fichero
+  SeleccionarInfoPreguntas($event) {
     const fileInfo = $event.target.files[0];
     const reader = new FileReader();
-    reader.readAsText(fileInfo);
+    reader.readAsText(fileInfo, 'ISO-8859-1');
     reader.onload = () => {
       try {
         this.infoPreguntas = JSON.parse(reader.result.toString());
@@ -177,28 +210,47 @@ export class PreguntaComponent implements OnInit {
         console.log (this.infoPreguntas);
         Swal.fire('Las pregunta se han cargado correctamente', '', 'success');
         this.ficheroCargado = true;
+         
+        // Activamos la función SeleccionarFicherosPreguntas
+         document.getElementById('inputImagenes').click();
       } catch (e) {
         Swal.fire('Error en el formato del fichero', '', 'error');
       }
     };
   }
 
-
+  SeleccionarFicherosPreguntas($event) {
+    this.ficherosPreguntas = Array.from($event.target.files);
+  }
 
   RegistrarPreguntas() {
     let cont = 0;
+
     this.infoPreguntas.forEach (pregunta => {
       this.peticionesAPI.CreaPregunta(pregunta, this.profesorId)
       .subscribe((res) => {
         if (res != null) {
           cont++;
+          this.pregunta = res;     
+          //Si la pregunta se registra correctamente, enviamos también la imagen (si es que la hay)
+          if (this.infoPreguntas.Imagen !== '') {
+            console.log ('Si que registro');
+            //guardamos la imagen de la pregunta
+            const ImagenPregunta = this.ficherosPreguntas.filter (f => f.name === this.pregunta.Imagen.toUpperCase())[0];
+            const formDataImagen = new FormData();
+            formDataImagen.append(this.pregunta.Imagen, ImagenPregunta);
+            this.peticionesAPI.PonImagenPregunta (formDataImagen)
+            .subscribe(() => console.log('Imagen cargado'));
+           }
+  
           if (cont === this.infoPreguntas.length) {
-            Swal.fire('Las pregunta se han registrado correctamente', '', 'success');
+            Swal.fire('Las preguntas se han registrado correctamente', '', 'success');
             this.finalizar = true;
             this.goBack();
           }
         } else {
           console.log('Fallo en la creacion de la pregunta');
+          Swal.fire('Error en la creación de las preguntas', '', 'error');
         }
       });
     });
@@ -207,4 +259,41 @@ export class PreguntaComponent implements OnInit {
   Cancelar() {
     this.router.navigate(['/inicio/' + this.profesorId]);
   }
+
+  
+  ActivarInputImagen() {
+    document.getElementById('inputImagenPregunta').click();
+  }
+
+  //Evento que nos permite cargar una imagen y guardarla en el atributo imagenPregunta
+  CargarImagenPregunta($event) {
+    this.filePregunta = $event.target.files[0];
+    this.nombreFicheroImagen = this.filePregunta.name;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.filePregunta);
+    reader.onload = () => {
+      this.imagenPregunta = reader.result.toString();
+
+    };
+}
+
+ExisteImagen(){
+  console.log("EMPEZAMOS GUARDADO");
+  console.log("RECUPERAMOS LAS PREGUNTAS EXISTENTES");
+  this.peticionesAPI.DameTodasMisPreguntas (this.profesorId)
+  .subscribe( res => {
+    if (res[0] !== undefined) {
+      this.misPreguntas = res;
+      console.log("PREGUNTAS RECUPERADAS");
+      console.log(this.misPreguntas);
+    }})
+  
+  if (this.misPreguntas != null) {
+  this.misPreguntas.forEach( pregunta => {
+    if (pregunta.Imagen == this.imagenPregunta) { 
+        this.existeImagen = true} });
+  }
+}
+
 }

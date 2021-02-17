@@ -67,7 +67,7 @@ export class VotacionescuentoComponent implements OnInit {
     this.obtenerlibrosconcurso();
 
 
-    this.comServerService.Conectar();
+    this.comServerService.ConectarCuentos();
     console.log("ESTOY CONECTANDOME DESDE EL DASHBOARD");
 
     this.comServerService.Esperovotacionconcurso()

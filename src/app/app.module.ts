@@ -33,7 +33,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 
-
+import { ListViewModule } from '@syncfusion/ej2-angular-lists';
 
 
 // IMPORTs COMPONENTES
@@ -134,9 +134,6 @@ import { DesarrolladoresComponent } from './desarrolladores/desarrolladores.comp
 import { DialogoComponent } from './desarrolladores/dialogo/dialogo.component';
 import { EstilosComponent } from './estilos/estilos.component';
 
-// tslint:disable-next-line:max-line-length
-import { AlumnosSeleccionadoJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/alumnos-seleccionado-juego-de-competicion-liga/alumnos-seleccionado-juego-de-competicion-liga.component';
-
 import { EditarCromoDialogComponent } from './paginas/mis-colecciones/editar-cromo-dialog/editar-cromo-dialog.component';
 import { MisAlumnosComponent } from './paginas/mis-alumnos/mis-alumnos.component';
 import { IntroducirAlumnosComponent} from './paginas/introducir-alumnos/introducir-alumnos.component';
@@ -202,7 +199,47 @@ import { InformacionRespuestasJuegoDeCuestionarioDialogComponent } from './pagin
 // tslint:disable-next-line:max-line-length
 import { RespuestasAlumnoJuegoDeCuestionarioComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/respuestas-alumno-juego-de-cuestionario/respuestas-alumno-juego-de-cuestionario.component';
 import { VerTodosComponent } from './paginas/juego-seleccionado-activo/juego-de-avatar-seleccionado-activo/ver-todos/ver-todos.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeVotacionUnoATodosSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-votacion-uno-atodos-seleccionado-activo/juego-de-votacion-uno-atodos-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-votacion-uno-atodos-seleccionado-inactivo/juego-de-votacion-uno-atodos-seleccionado-inactivo.component';
+import { CrearRubricaComponent } from './paginas/crear-rubrica/crear-rubrica.component';
+import { MisRubricasComponent } from './paginas/mis-rubricas/mis-rubricas.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeAvatarSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-avatar-seleccionado-inactivo/juego-de-avatar-seleccionado-inactivo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-votacion-todos-auno-seleccionado-activo/juego-de-votacion-todos-auno-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-votacion-todos-auno-seleccionado-inactivo/juego-de-votacion-todos-auno-seleccionado-inactivo.component';
+import { GuardarFamiliaComponent } from './paginas/mis-familias-avatares/guardar-familia/guardar-familia.component';
+import { CrearFamiliaImagenesPerfilComponent } from './paginas/crear-familia-imagenes-perfil/crear-familia-imagenes-perfil.component';
+// tslint:disable-next-line:max-line-length
+import { AsignarFamiliaImagenesPerfilComponent } from './paginas/mis-alumnos/asignar-familia-imagenes-perfil/asignar-familia-imagenes-perfil.component';
+import { MisFamiliasImagenesPerfilComponent } from './paginas/mis-familias-imagenes-perfil/mis-familias-imagenes-perfil.component';
+// tslint:disable-next-line:max-line-length
+import { CrearCuestionarioSatisfaccionComponent } from './paginas/crear-cuestionario-satisfaccion/crear-cuestionario-satisfaccion.component';
+import {MisCuestionariosSatisfaccionComponent} from './paginas/mis-cuestionarios-satisfaccion/mis-cuestionarios-satisfaccion.component';
+import { AsignarCuestionarioSatisfaccionComponent } from './paginas/juego/asignar-cuestionario-satisfaccion/asignar-cuestionario-satisfaccion.component';
+import { JuegoDeCuestionarioSatisfaccionActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-satisfaccion-activo/juego-de-cuestionario-satisfaccion-activo.component';
+import { JuegoDeCuestionarioSatisfaccionInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-satisfaccion-inactivo/juego-de-cuestionario-satisfaccion-inactivo.component';
+import { MisJuegosRapidosComponent } from './paginas/mis-juegos-rapidos/mis-juegos-rapidos.component';
+import { CrearJuegoRapidoComponent } from './paginas/crear-juego-rapido/crear-juego-rapido.component';
+import { JuegoDeEncuestaRapidaComponent } from './paginas/mis-juegos-rapidos/juego-de-encuesta-rapida/juego-de-encuesta-rapida.component';
+import { JuegoDeVotacionRapidaComponent } from './paginas/mis-juegos-rapidos/juego-de-votacion-rapida/juego-de-votacion-rapida.component';
+import { EditarCuestionarioSatisfaccionComponent } from './paginas/editar-cuestionario-satisfaccion/editar-cuestionario-satisfaccion.component';
 
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import { JuegoDeCuestionarioRapidoComponent } from './paginas/mis-juegos-rapidos/juego-de-cuestionario-rapido/juego-de-cuestionario-rapido.component';
+import { MostrarFamiliaComponent } from './paginas/mis-familias-avatares/mostrar-familia/mostrar-familia.component';
+import { GuardarColeccionComponent } from './paginas/mis-colecciones/guardar-coleccion/guardar-coleccion.component';
+import { MostrarColeccionComponent } from './paginas/mis-colecciones/mostrar-coleccion/mostrar-coleccion.component';
+import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
+import { JuegoDeCogerTurnoRapidoComponent } from './paginas/mis-juegos-rapidos/juego-de-coger-turno-rapido/juego-de-coger-turno-rapido.component';
+import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-perfil.component';
+
+import {MatSliderModule} from '@angular/material/slider';
+
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
 import { MisRecursosLibroComponent } from './paginas/mis-recursos-libro/mis-recursos-libro.component';
@@ -272,7 +309,7 @@ import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/
     JuegoDeCompeticionSeleccionadoInactivoComponent,
     InformacionJuegoDeCompeticionComponent,
     EditarJornadasJuegoDeCompeticionComponent,
-    AlumnosSeleccionadoJuegoDeCompeticionLigaComponent,
+
     InformacionJuegoDeCompeticionInactivoComponent,
 
     EditarCromoDialogComponent,
@@ -332,9 +369,34 @@ import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/
     ListadoCuentosComponent,
     ReproductorCuentoComponent,
     VotacionescuentoComponent,
-    ListadoCuentosComponent
-
-
+    ListadoCuentosComponent,
+    JuegoDeVotacionUnoATodosSeleccionadoActivoComponent,
+    JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent,
+    CrearRubricaComponent,
+    MisRubricasComponent,
+    JuegoDeAvatarSeleccionadoInactivoComponent,
+    JuegoDeVotacionTodosAUnoSeleccionadoActivoComponent,
+    JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent,
+    GuardarFamiliaComponent,
+    CrearFamiliaImagenesPerfilComponent,
+    AsignarFamiliaImagenesPerfilComponent,
+    MisFamiliasImagenesPerfilComponent,
+    CrearCuestionarioSatisfaccionComponent,
+    MisCuestionariosSatisfaccionComponent,
+    AsignarCuestionarioSatisfaccionComponent,
+    JuegoDeCuestionarioSatisfaccionActivoComponent,
+    JuegoDeCuestionarioSatisfaccionInactivoComponent,
+    MisJuegosRapidosComponent,
+    CrearJuegoRapidoComponent,
+    JuegoDeEncuestaRapidaComponent,
+    JuegoDeVotacionRapidaComponent,
+    EditarCuestionarioSatisfaccionComponent,
+    JuegoDeCuestionarioRapidoComponent,
+    MostrarFamiliaComponent,
+    GuardarColeccionComponent,
+    MostrarColeccionComponent,
+    JuegoDeCogerTurnoRapidoComponent,
+    ModificarPerfilComponent
 
   ],
   imports: [
@@ -374,7 +436,13 @@ import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/
 
     HttpClientModule,
 
-    NgxEchartsModule
+    NgxEchartsModule,
+    ListViewModule,
+    DragDropModule,
+    AngularDateTimePickerModule,
+    MatSliderModule,
+    NgxQRCodeModule
+
   ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
@@ -384,7 +452,8 @@ import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/
     // tslint:disable-next-line:max-line-length
     InformacionJuegoDeCuestionarioDialogComponent, AsignaEscenarioComponent, AsignaPreguntasComponent, InformacionJuegoDeGeocachingDialogComponent,
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
-    RespuestasAlumnoJuegoDeCuestionarioComponent
+    RespuestasAlumnoJuegoDeCuestionarioComponent,
+    AsignarFamiliaImagenesPerfilComponent
   ],
   bootstrap: [AppComponent],
   providers: [

@@ -15,6 +15,8 @@ import { Cromo, Coleccion } from '../../../clases/index';
 import { SesionService, PeticionesAPIService } from '../../../servicios/index';
 
 import * as URL from '../../../URLs/urls';
+import { AnonymousSubject } from 'rxjs/internal/Subject';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 @Component({
   selector: 'app-editar-coleccion',
@@ -48,6 +50,10 @@ export class EditarColeccionComponent implements OnInit {
   cambios: Boolean = false;
   // tslint:disable-next-line:ban-types
   voltear: Boolean = false;
+  // tslint:disable-next-line:ban-types
+  mostrarTextoGuardar: Boolean = false;
+
+  interval;
 
 
   constructor(
@@ -62,6 +68,8 @@ export class EditarColeccionComponent implements OnInit {
     this.coleccion = this.sesion.DameColeccion();
     this.nombreColeccion = this.coleccion.Nombre;
     this.cromosColeccion = this.sesion.DameCromos();
+    console.log ('cromos');
+    console.log (this.cromosColeccion);
     // Me traigo la imagen de la colección y las imagenes de cada cromo
     this.TraeImagenColeccion(this.coleccion);
     // Cargo el imagen de la coleccion
@@ -108,40 +116,6 @@ export class EditarColeccionComponent implements OnInit {
       this.imagenesCromosDelante[i] = URL.ImagenesCromo + this.cromo.ImagenDelante;
       this.imagenesCromosDetras[i] = URL.ImagenesCromo + this.cromo.ImagenDetras;
 
-      // if (this.cromo.ImagenDelante !== undefined ) {
-      //   // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-      //   this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDelante)
-      //   .subscribe(response => {
-      //     const blob = new Blob([response.blob()], { type: 'image/jpg'});
-
-      //     const reader = new FileReader();
-      //     reader.addEventListener('load', () => {
-      //       this.imagenesCromosDelante[i] = reader.result.toString();
-      //     }, false);
-
-      //     if (blob) {
-      //       reader.readAsDataURL(blob);
-      //     }
-      //   });
-      // }
-
-
-      // if (this.cromo.ImagenDetras !== undefined ) {
-      //   // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-      //   this.peticionesAPI.DameImagenCromo (this.cromo.ImagenDetras)
-      //   .subscribe(response => {
-      //     const blob = new Blob([response.blob()], { type: 'image/jpg'});
-
-      //     const reader = new FileReader();
-      //     reader.addEventListener('load', () => {
-      //       this.imagenesCromosDetras[i] = reader.result.toString();
-      //     }, false);
-
-      //     if (blob) {
-      //       reader.readAsDataURL(blob);
-      //     }
-      //   });
-      // }
     }
   }
 
@@ -287,26 +261,6 @@ export class EditarColeccionComponent implements OnInit {
 
 
 
-
-    // this.peticionesAPI.BorrarCromo(cromo.id)
-    // .subscribe(() => {
-    //   // Eliminamos el cromo de la colección
-    //   console.log ('coleccion:' + this.coleccion);
-    //   const i = this.cromosColeccion.indexOf(cromo);
-    //   console.log ('posicion ' + i);
-    //   this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
-    //   this.TraeImagenesCromos();
-    //   // En teoria debería poder ahorrarme traer otra vez los cromos
-    //   // de la base de datos, eliminando la imagen del vector de imagenes
-    //   // con la sentencia siguiente:
-    //   // this.imagenesCromos = this.imagenesCromos.slice(i, 1);
-    //   // Sin embargo, no funciona.
-
-    // });
-    // this.peticionesAPI.BorrarImagenCromo(cromo.).subscribe(() => {
-    //   this.cromosColeccion = this.cromosColeccion.filter(c => c.id !== cromo.id);
-    //   this.TraeImagenesCromos();
-    // });
   }
 
 
@@ -317,21 +271,6 @@ export class EditarColeccionComponent implements OnInit {
   console.log(coleccion.ImagenColeccion);
   // Si la coleccion tiene una foto (recordemos que la foto no es obligatoria)
   if (coleccion.ImagenColeccion !== undefined) {
-
-    // Busca en la base de datos la imágen con el nombre registrado en equipo.FotoEquipo y la recupera
-    // this.peticionesAPI.DameImagenColeccion (coleccion.ImagenColeccion)
-    // .subscribe(response => {
-    //   const blob = new Blob([response.blob()], { type: 'image/jpg'});
-
-    //   const reader = new FileReader();
-    //   reader.addEventListener('load', () => {
-    //     this.imagenColeccion = reader.result.toString();
-    //   }, false);
-
-    //   if (blob) {
-    //     reader.readAsDataURL(blob);
-    //   }
-    // });
 
     this.imagenColeccion = URL.ImagenesColeccion + coleccion.ImagenColeccion ;
 
@@ -370,4 +309,5 @@ export class EditarColeccionComponent implements OnInit {
   Voltear() {
     this.voltear = !this.voltear;
   }
+
 }

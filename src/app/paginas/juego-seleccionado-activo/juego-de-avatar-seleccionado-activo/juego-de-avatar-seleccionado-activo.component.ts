@@ -156,12 +156,15 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
   MasterToggle(n) {
 
       if (n === 1) {
+        console.log ('ha cambiado C1');
         if (this.IsAllSelected(1)) {
+          console.log ('Borro todos');
           // Si todos los elementos del selector estan activos hay que desactivarlos todos
           this.selection1.clear(); // Desactivamos todos
           // y quitar el privilegio correspondiente a todos los alumnos
           this.inscripcionesAlumnosJuegodeAvatar.forEach (inscripcion => inscripcion.Privilegios[0] = false);
         } else {
+          console.log ('activo todos');
           // Tengo que activar todos los elementos del selector
           this.datasourceAlumnos.data.forEach(row => this.selection1.select(row));
           // y conceder el privilegio correspondiente a todos los alumnos
@@ -214,7 +217,8 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
         }
       }
       this.hayCambios = true;
-      this.haCambiado.forEach (valor => valor = true);
+      this.haCambiado = Array(this.inscripcionesAlumnosJuegodeAvatar.length).fill (true);
+      console.log (this.haCambiado);
   }
   HaCambiado(n ,i) {
     // Cuando hago click sobre el privilegio n del alumno i debo cambiar el estado de ese privilegio
@@ -224,6 +228,8 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
   }
 
   RegistrarCambios() {
+    console.log ('voy a guardar');
+    console.log (this.haCambiado);
     for (let i = 0; i < this.inscripcionesAlumnosJuegodeAvatar.length; i++) {
       // Solo reflejo los cambios si ha habido cambios
       if (this.haCambiado[i]) {
@@ -245,5 +251,31 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
     this.sesion.TomaJuegoAvatar (this.juegoSeleccionado);
     console.log ('Vamos a ver todos los avatares');
   }
+
+  DesactivarJuego() {
+    Swal.fire({
+      title: '¿Seguro que quieres desactivar el juego de avatar?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then((result) => {
+      if (result.value) {
+
+        this.juegoSeleccionado.JuegoActivo = false;
+        this.peticionesAPI.CambiaEstadoJuegoDeAvatar (this.juegoSeleccionado)
+        .subscribe(res => {
+            if (res !== undefined) {
+              console.log(res);
+              console.log('juego desactivado');
+              Swal.fire('El juego se ha desactivado correctamente');
+              this.location.back();
+            }
+        });
+      }
+    });
+  }
+
 
 }

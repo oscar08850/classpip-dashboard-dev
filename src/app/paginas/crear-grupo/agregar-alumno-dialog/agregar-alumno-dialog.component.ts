@@ -68,6 +68,20 @@ export class AgregarAlumnoDialogComponent implements OnInit {
 
                           this.dataSourceAlumnosDelGrupo = new MatTableDataSource (this.alumnosDelGrupo);
 
+                          // Ahora vamos a por todos los alumnos del profesor
+                          this.peticionesAPI.DameTodosMisAlumnos (this.profesorId )
+                          .subscribe ( alumnos => {
+                            // Me quedo solo con los alumnos del profesor que no están ya en elgrupo
+                            this.misAlumnos = alumnos.filter (al => !this.alumnosDelGrupo.some (a => a.id === al.id));
+
+                            this.misAlumnos.sort((a, b) => a.PrimerApellido.localeCompare(b.PrimerApellido));
+
+                            this.dataSourceMisAlumnos = new MatTableDataSource (this.misAlumnos);
+
+                          }
+    );
+
+
                         }
     );
 
@@ -85,7 +99,7 @@ export class AgregarAlumnoDialogComponent implements OnInit {
 
   AsignarAlumno(alumno: Alumno) {
     // tslint:disable-next-line:max-line-length
-    const found = this.alumnosDelGrupo.find (a => a.Nombre === alumno.Nombre &&  a.PrimerApellido === alumno.PrimerApellido && a.SegundoApellido === alumno.SegundoApellido);
+    const found = this.alumnosDelGrupo.find (a => a.id === alumno.id);
     if (found === undefined) {
 
       this.peticionesAPI.MatriculaAlumnoEnGrupo(new Matricula (alumno.id, this.grupoId))
@@ -99,7 +113,8 @@ export class AgregarAlumnoDialogComponent implements OnInit {
       this.dataSourceAlumnosDelGrupo = new MatTableDataSource (this.alumnosDelGrupo);
 
       // tslint:disable-next-line:max-line-length
-      this.misAlumnos = this.misAlumnos.filter (a => a.Nombre !== alumno.Nombre &&  a.PrimerApellido !== alumno.PrimerApellido && a.SegundoApellido !== alumno.SegundoApellido);
+      this.misAlumnos = this.misAlumnos.filter (a => a.id !== alumno.id);
+
       this.dataSourceMisAlumnos = new MatTableDataSource (this.misAlumnos);
 
     } else {
@@ -158,7 +173,7 @@ export class AgregarAlumnoDialogComponent implements OnInit {
         this.peticionesAPI.BorraMatricula (matricula[0].id).subscribe( () => {
             console.log ('Borrada');
             // tslint:disable-next-line:max-line-length
-            this.alumnosDelGrupo = this.alumnosDelGrupo.filter (a => a.Nombre !== alumno.Nombre &&  a.PrimerApellido !== alumno.PrimerApellido && a.SegundoApellido !== alumno.SegundoApellido);
+            this.alumnosDelGrupo = this.alumnosDelGrupo.filter (a => a.id !== alumno.id);
             this.dataSourceAlumnosDelGrupo = new MatTableDataSource (this.alumnosDelGrupo);
             this.misAlumnos.push (alumno);
             this.misAlumnos.sort((a, b) => a.PrimerApellido.localeCompare(b.PrimerApellido));

@@ -1,0 +1,75 @@
+<div class="titulo">Crear nueva rúbrica</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class = "contenedor">
+  <mat-tab-group>
+
+    <mat-tab label="Cargar rubrica desde fichero">
+      <div class= "enColumna" *ngIf ="advertencia" style = "border-color: red;">
+        <!-- para preservar los espacios y los tabs del texto -->
+        <pre>
+        <br>
+
+        El fichero <strong>JSON</strong>
+        con la información sobre la rúbrica debe tener el formato mostrado en el siguiente ejemplo.
+
+        {{'{'}}
+          "Nombre": "Presentacion oral",
+          "Descripcion": "Para evaluar presentaciones orales",
+          "Criterios": [
+                          {{'{'}}
+                            "Nombre": "Lenguaje corporal",
+                            "Elementos": [  "Mira a toda la audiencia",
+                                            "No permanece inmóvil"
+                                          ]
+                          {{'}'}},
+                          {{'{'}}
+                            OTROS CRITERIOS
+                          {{'}'}}
+                        ]
+
+        {{'}'}}
+
+
+        </pre>
+
+        <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
+          Ocultar advertencia
+        </button>
+      </div>
+      <div class = "enFila">
+        <div style = "width: 40%">
+          <input #file id = "inputInfo" type="file" accept= 'application/JSON;' accept-charset="UTF-8" (change)="SeleccionarFicheroRubrica($event)" style="display:none">
+          <button style = "height:100px; width:80%" (click) = "ActivarInputInfo()" type="button" class="btn Agregar">
+            Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
+          </button>
+        </div>
+        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "rubricaCargada">
+          <h3>Datos de la rúbrica</h3>
+          <div class = "enFila" style = "width: 90%">
+            <div>
+              <p> Nombre: <strong>{{rubrica.Nombre}}</strong></p>
+              <p> Descripción: <strong>{{rubrica.Descripcion}}</strong></p>
+              <p> Número de criterios: <strong>{{rubrica.Criterios.length}}</strong></p>
+              <br>
+            </div>
+          </div>
+          <div class = "enFila" style = "width:50%">
+            <button (click) = "RegistrarRubrica()" type="button" class="btn Agregar">
+              Guardar
+            </button>
+            <button (click) = "goBack()" type="button" class="btn Eliminar">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Crear rubrica paso a paso">
+      EN OBRAS
+
+    </mat-tab>
+
+
+  </mat-tab-group>
+</div>

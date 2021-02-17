@@ -12,7 +12,7 @@
       </mat-form-field>
     </div>
 
-    <table align="center"  *ngIf="misCuestionarios[0]" mat-table [dataSource]="dataSourceMisCuestionarios" class="example-container mat-elevation-z8">
+    <table align="center"   mat-table [dataSource]="dataSourceMisCuestionarios" class="example-container mat-elevation-z8">
 
       <!-- Titulo Cuestionario Column -->
       <ng-container matColumnDef="titulo">
@@ -40,6 +40,10 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumnsMisCuestionarios;"></tr>
 
     </table>
+    <div class="enColumna">
+      <button style= "width: 50%" *ngIf ="!muestroPublicos" type="button" (click) = "MostrarPublicos()" class="btn Agregar">Mostrar también cuestionarios púlicos</button>
+      <button style= "width: 50%" *ngIf ="muestroPublicos" type="button" (click) = "QuitarPublicos()" class="btn Agregar">Quitar cuestionarios púlicos</button>
+    </div>
     <mat-divider class="lineaDivisoria"></mat-divider>
     <br>
     <mat-dialog-actions align= "center">

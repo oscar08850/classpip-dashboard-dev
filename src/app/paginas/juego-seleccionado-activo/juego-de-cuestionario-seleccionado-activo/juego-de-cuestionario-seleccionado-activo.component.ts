@@ -70,11 +70,42 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
         sound.play();
         console.log ('Ya ha contestado: ' + alumno.id);
         console.log ('La nota es: ' + alumno.nota);
+        // busco al alumno que ha contestado
+        // const al = this.listaAlumnosOrdenadaPorNota.filter (a => a.id === alumno.id)[0];
+        // al.Nota = alumno.nota;
+        // al.Contestado = true;
+        // al.TiempoEmpleado = alumno.tiempo;
+        // // tslint:disable-next-line:only-arrow-functions
+        // this.listaAlumnosOrdenadaPorNota = this.listaAlumnosOrdenadaPorNota.sort(function(a, b) {
+        //   if (b.Nota !== a.Nota) {
+        //     return b.Nota - a.Nota;
+        //   } else {
+        //     // en caso de empate en la nota, gana el que empleó menos tiempo
+        //     return a.TiempoEmpleado - b.TiempoEmpleado;
+        //   }
+        // });
+        // this.TablaClasificacionTotal();
+
         // this.alumnosQueHanContestado.push (alumno);
         // console.log (this.alumnosQueHanContestado);
         // this.sesion.TomaAlumnosQueHanContestadoCuestionario (this.alumnosQueHanContestado);
-        this.rankingAlumnosPorNota.filter (a => a.id === alumno.id )[0].nota = alumno.nota;
-        this.rankingAlumnosPorNota.filter (a => a.id === alumno.id )[0].contestado = true;
+        const al = this.rankingAlumnosPorNota.filter (a => a.id === alumno.id )[0];
+        al.nota = alumno.nota;
+        al.tiempoEmpleado = alumno.tiempo;
+        al.contestado = true;
+
+        console.log ('tabla');
+        console.log (this.rankingAlumnosPorNota);
+
+        // tslint:disable-next-line:only-arrow-functions
+        this.rankingAlumnosPorNota = this.rankingAlumnosPorNota.sort(function(a, b) {
+          if (b.nota !== a.nota) {
+            return b.nota - a.nota;
+          } else {
+            // en caso de empate en la nota, gana el que empleó menos tiempo
+            return a.tiempoEmpleado - b.tiempoEmpleado;
+          }
+        });
         this.dataSourceAlumno = new MatTableDataSource(this.rankingAlumnosPorNota);
     });
   }
@@ -103,7 +134,12 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
       this.listaAlumnosOrdenadaPorNota = inscripciones;
       // tslint:disable-next-line:only-arrow-functions
       this.listaAlumnosOrdenadaPorNota = this.listaAlumnosOrdenadaPorNota.sort(function(a, b) {
-        return b.Nota - a.Nota;
+        if (b.Nota !== a.Nota) {
+          return b.Nota - a.Nota;
+        } else {
+          // en caso de empate en la nota, gana el que empleó menos tiempo
+          return a.TiempoEmpleado - b.TiempoEmpleado;
+        }
       });
       console.log ('inscripciones');
       console.log (this.listaAlumnosOrdenadaPorNota);

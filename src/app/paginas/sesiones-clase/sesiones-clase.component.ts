@@ -104,8 +104,12 @@ export class SesionesClaseComponent implements OnInit {
       this.peticionesAPI.DameSesionesClaseGrupo (this.grupoSeleccionado.id).
       subscribe (sesiones => {
         this.sesiones = sesiones;
+        console.log ('ya tengo las sesiones');
+        console.log (this.sesiones);
         this.sesiones.forEach (sesion => this.peticionesAPI.DameAsistenciasClase (sesion.id).
           subscribe ( asistencias => {
+                console.log ('asistencias a la sesion ' + sesion.Descripcion);
+                console.log (asistencias);
                 this.asistencias.push ({s: sesion, a: asistencias});
                 cont++;
                 if (cont === this.sesiones.length) {

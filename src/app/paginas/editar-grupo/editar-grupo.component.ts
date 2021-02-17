@@ -4,9 +4,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { AgregarAlumnoDialogComponent } from '../crear-grupo/agregar-alumno-dialog/agregar-alumno-dialog.component';
 import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
-
 // Clases
-import { Grupo, Alumno } from '../../clases/index';
+import { Grupo, Alumno, FamiliaDeImagenesDePerfil } from '../../clases/index';
 
 
 // Servicios
@@ -17,6 +16,7 @@ import { SesionService, PeticionesAPIService } from '../../servicios/index';
 import { MatDialog } from '@angular/material';
 import { DialogoConfirmacionComponent } from '../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 
+import * as URL from '../../URLs/urls';
 
 
 @Component({
@@ -37,7 +37,7 @@ export class EditarGrupoComponent implements OnInit {
 
   // PARÁMETROS PARA LA TABLA (FUENTE DE DATOS, COLUMNAS Y SELECCIÓN)
   dataSource;
-  displayedColumns: string[] = ['select', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'alumnoId'];
+  displayedColumns: string[] = ['select', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'alumnoId', 'imagen'];
   selection = new SelectionModel<any>(true, []);
 
 
@@ -63,6 +63,13 @@ export class EditarGrupoComponent implements OnInit {
     this.peticionesAPI.DameAlumnosGrupo (this.grupoSeleccionado.id)
     .subscribe (res => {
                           this.alumnosGrupoSeleccionado = res;
+                          // this.alumnosGrupoSeleccionado.forEach (alumno => {
+                          //   if (alumno.ImagenPerfil) {
+                          //     // añado la url para poder visualizar la imagen de perfil
+                          //     alumno.ImagenPerfil = URL.ImagenesPerfil + alumno.ImagenPerfil;
+                          //   }
+                          // });
+
                           this.dataSource = new MatTableDataSource(this.alumnosGrupoSeleccionado);
                         }
                 );
@@ -141,11 +148,12 @@ export class EditarGrupoComponent implements OnInit {
       }
     });
 
-    dialogRef.beforeClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       // Cuando vuelvo de agragar alumnos vuelvo a traer los alumnos del grupo
       this.peticionesAPI.DameAlumnosGrupo (this.grupoSeleccionado.id)
       .subscribe (res => {
                             this.alumnosGrupoSeleccionado = res;
+
                             console.log ('Grupo: ' + this.alumnosGrupoSeleccionado);
                             this.dataSource = new MatTableDataSource(this.alumnosGrupoSeleccionado);
                           }
@@ -198,6 +206,7 @@ export class EditarGrupoComponent implements OnInit {
     this.selection.clear();
     this.botonTablaDesactivado = true;
   }
+
 
   // NOS DEVOLVERÁ AL INICIO
   goBack() {

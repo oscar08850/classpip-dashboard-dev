@@ -56,6 +56,10 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
     this.coleccion = this.sesion.DameColeccion();
     this.juegoSeleccionado = this.sesion.DameJuego();
     this.inscripcionEquipo = this.sesion.DameInscripcionEquipo();
+    console.log ('equipo');
+    console.log (this.equipo);
+    console.log ('inscripcion');
+    console.log (this.inscripcionEquipo);
     this.CromosDelEquipo();
     this.GET_ImagenPerfil();
   }
@@ -91,13 +95,13 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
 
       this.sesion.TomaCromos(this.listaCromos);
       this.listaCromos.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
-      this.GET_ImagenesCromos();
+      this.DameImagenesCromos();
 
     });
   }
 
 
-  GET_ImagenesCromos() {
+  DameImagenesCromos() {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.listaCromosSinRepetidos.length; i++) {

@@ -8,8 +8,8 @@
 
           <div class="enColumna">
               <span style="font-weight: bold;">Mapa y descripción del escenario: </span>
-              <input style="background-color: transparent" type="text" name="mapa" placeholder="Escribe el nombre del mapa" (change) = "cambios=true" requiered [(ngModel)]="mapaEscenario">
-              <input style="background-color: transparent" type="text" name="descripcion" placeholder="Escribe la descripcion" (change) = "cambios=true" requiered [(ngModel)]="descripcionEscenario">
+              <input style="background-color: transparent; width: 60%" type="text" name="mapa" placeholder="Escribe el nombre del mapa" (change) = "Cambio()" requiered [(ngModel)]="mapaEscenario">
+              <input style="background-color: transparent;  width: 60%" type="text" name="descripcion" placeholder="Escribe la descripcion" (change) = "Cambio()" requiered [(ngModel)]="descripcionEscenario">
               <br>
               <br>
               <button *ngIf = "cambios" type="button" class="btn Aceptar"  (click)= "EditarEscenario()">Aceptar Cambios <i class="material-icons">
@@ -22,12 +22,12 @@
     <br>
     <mat-divider class="lineaDivisoria"></mat-divider>
 
-    <div>
-      <form *ngIf="puntosgeolocalizablesEscenario; else Aviso_no_puntosgeolocalizables">
 
-        <div>
+      <form style = "width: 60%"  *ngIf="puntosgeolocalizablesEscenario; else Aviso_no_puntosgeolocalizables">
+
+        <div align="center">
           <p style="margin: 10px">
-            <span style="font-weight: bold;">PuntosGeolocalizables del escenario</span>
+            <span style="font-weight: bold;">Puntos Geolocalizables del escenario</span>
           </p>
         </div>
 
@@ -47,6 +47,8 @@
             </td>
         </ng-container>
 
+
+
           <ng-container matColumnDef=" ">
             <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
             <td mat-cell *matCellDef="let puntogeolocalizable">
@@ -62,11 +64,10 @@
         </table>
       </form>
       <ng-template #Aviso_no_puntosgeolocalizables>No hay puntos geolocalizables en este escenario</ng-template>
-      
-    </div>
 
 
-    
+
+
     <button type="button" class="btn Agregar" (click) = AbrirDialogoAgregarPuntoGeolocalizableEscenario()>
         Agregar PuntoGeolocalizable <i class="material-icons">library_add</i>
     </button>

@@ -17,9 +17,11 @@ export class AsignaCuestionarioComponent implements OnInit {
   displayedColumnsMisCuestionarios: string[] = ['titulo', 'descripcion', ' '];
   dataSourceMisCuestionarios;
   misCuestionarios: Cuestionario[] = [];
+  cuestionariosPublicos: Cuestionario[] = [];
 
   profesorId: number;
   mensaje = 'Confirmar que quieres escoger el cuestionario: ';
+  muestroPublicos = false;
 
   constructor(public dialog: MatDialog,
               private sesion: SesionService,
@@ -33,15 +35,30 @@ export class AsignaCuestionarioComponent implements OnInit {
     this.DameTodosMisCuestionarios();
   }
 
+
   DameTodosMisCuestionarios() {
     this.peticionesAPI.DameTodosMisCuestionarios(this.profesorId)
     .subscribe ( res => {
       if (res[0] !== undefined) {
         this.misCuestionarios = res;
         this.dataSourceMisCuestionarios = new MatTableDataSource(this.misCuestionarios);
-      } else {
-        Swal.fire('Alerta', 'Aun no tiene ningun cuestionario', 'warning');
       }
+    });
+
+    this.peticionesAPI.DameCuestionariosPublicos()
+    .subscribe (publicos => {
+      // me quedo con los públicos de los demás
+      const publicosDeOtros = publicos.filter (cuestionario => cuestionario.profesorId !== Number(this.profesorId));
+      this.peticionesAPI.DameProfesores ()
+      .subscribe (profesores => {
+        publicosDeOtros.forEach (publico => {
+          const propietario = profesores.filter (profesor => profesor.id === publico.profesorId)[0];
+          publico.Titulo = publico.Titulo + '(' + propietario.Nombre + ' ' + propietario.PrimerApellido + ')';
+        });
+        this.cuestionariosPublicos = publicosDeOtros;
+        console.log ('ya tengo los cuestionarios publicos');
+        console.log (this.cuestionariosPublicos);
+      });
     });
   }
 
@@ -63,4 +80,15 @@ export class AsignaCuestionarioComponent implements OnInit {
     });
   }
 
+  MostrarPublicos() {
+    this.muestroPublicos = true;
+    console.log ('voy a mostrar los cuestionarios publicos');
+    console.log (this.cuestionariosPublicos);
+    this.dataSourceMisCuestionarios = new MatTableDataSource(this.misCuestionarios.concat (this.cuestionariosPublicos));
+  }
+
+  QuitarPublicos() {
+    this.muestroPublicos = false;
+    this.dataSourceMisCuestionarios = new MatTableDataSource(this.misCuestionarios);
+  }
 }

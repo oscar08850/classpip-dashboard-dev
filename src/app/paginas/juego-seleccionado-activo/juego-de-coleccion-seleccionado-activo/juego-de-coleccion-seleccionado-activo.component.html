@@ -2,16 +2,16 @@
 <div class="enColumna">
 
   <div class= "enFila" style="width:50%">
-    <button type="button" class="btn Info" routerLink = "informacionJuegoColeccion">Información<i class="material-icons">info</i></button>
+    <button type="button" class="btn Info" (click) = "MostrarInformacion()">Información<i class="material-icons">info</i></button>
 
 
-    <button type="button" class="btn Agregar" routerLink = "asignarCromos">Asignar Cromos<i class="material-icons">add</i></button>
+    <button type="button" class="btn Agregar" (click) = "AsignarCromos()">Asignar Cromos<i class="material-icons">add</i></button>
 
     <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionDesactivar()"> Desactivar<i class="material-icons">history</i></button>
 
 </div>
 
-<form style= "width:80%" *ngIf="alumnosDelJuego">
+<form style= "width:80%" *ngIf="HayQueMostrarAlumnos()">
 
   <div class = "filter" style= "width:60%">
     <mat-form-field style=" width: 95% !important;">
@@ -57,9 +57,12 @@
     <ng-container matColumnDef=" ">
       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 10%"></th>
       <td mat-cell *matCellDef="let alumno">
-          <button (click) = "AccederAlumno(alumno)" routerLink = "informacionAlumnoJuegoColeccion" mat-icon-button matTooltip="Ver progreso de {{alumno.Nombre}} en el juego">
+          <button *ngIf="juegoSeleccionado.Modo === 'Individual'" (click) = "AccederAlumno(alumno)" mat-icon-button matTooltip="Ver cromos de {{alumno.Nombre}}">
               <i class="material-icons">more_horiz</i>
           </button>
+          <button *ngIf="juegoSeleccionado.Modo === 'Equipos'" (click) = "AccederAlumno(alumno)" mat-icon-button matTooltip="Ver cromos del equipo de {{alumno.Nombre}}">
+            <i class="material-icons">more_horiz</i>
+        </button>
       </td>
     </ng-container>
 
@@ -69,7 +72,7 @@
   </table>
 </form>
 
-<form style= "width:80%"   *ngIf="equiposDelJuego">
+<form style= "width:80%"   *ngIf="HayQueMostrarEquipos()">
 
   <div class = "filter" style= "width:60%">
     <mat-form-field  style=" width: 95% !important;">
@@ -120,7 +123,7 @@
     <ng-container matColumnDef=" ">
       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"></th>
       <td mat-cell *matCellDef="let equipo">
-          <button (click) = "AccederEquipo(equipo)" routerLink = "informacionEquipoJuegoColeccion" mat-icon-button matTooltip="Ver progreso de {{equipo.nombre}} en el juego">
+          <button (click) = "AccederEquipo(equipo)" routerLink = "informacionEquipoJuegoColeccion" mat-icon-button matTooltip="Ver cromos del equipo {{equipo.Nombre}}">
               <i class="material-icons">more_horiz</i>
           </button>
       </td>

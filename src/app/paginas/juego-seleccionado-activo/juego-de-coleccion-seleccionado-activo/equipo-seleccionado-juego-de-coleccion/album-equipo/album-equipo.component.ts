@@ -33,6 +33,10 @@ export class AlbumEquipoComponent implements OnInit {
 
   voltear = false;
 
+
+  // Numero de columnas para mostrar el album del alumno
+  ncol = 3;
+
   constructor(  private sesion: SesionService,
                 private peticionesAPI: PeticionesAPIService,
                 public location: Location,

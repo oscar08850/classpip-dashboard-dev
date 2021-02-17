@@ -1,4 +1,4 @@
-<form class="contenedorNavbar">
+<form class="contenedorNavbar" *ngIf = "profesor">
 
   <div>
     <button routerLink = aboutClasspip mat-button [matMenuTriggerFor]="Classpip" >
@@ -21,30 +21,7 @@
       <button mat-menu-item routerLink= {{URLMisGrupos}}> Mis Grupos </button>
       <button mat-menu-item routerLink= {{URLCrearGrupo}} > Crear Grupo </button>
     </mat-menu>
-<!--
-    <button mat-button [matMenuTriggerFor]="Preguntas" class="btnNavbar"> Preguntas </button>
-    <mat-menu #Preguntas="matMenu" >
-      <button mat-menu-item routerLink= {{URLMisPreguntas}}> Mis Preguntas </button>
-      <button mat-menu-item routerLink= {{URLCrearPregunta}}> Crear Pregunta </button>
-    </mat-menu>
 
-    <button mat-button [matMenuTriggerFor]="Cuestionarios" class="btnNavbar"> Cuestionarios </button>
-    <mat-menu #Cuestionarios="matMenu" >
-      <button mat-menu-item routerLink= {{URLMisCuestionarios}}> Mis Cuestionarios </button>
-      <button mat-menu-item routerLink= {{URLCrearCuestionario}}> Crear Cuestionario </button>
-    </mat-menu>
-
-    <button mat-button [matMenuTriggerFor]="Coleccion" class="btnNavbar"> Colecciones </button>
-    <mat-menu #Coleccion="matMenu" class="mat-menu">
-      <button mat-menu-item routerLink= {{URLMisColecciones}}> Mis Colecciones </button>
-      <button mat-menu-item routerLink = {{URLCrearColeccion}}> Crear Colecciones </button>
-    </mat-menu>
-
-    <button mat-button [matMenuTriggerFor]="PuntosInsignias" class="btnNavbar"> Puntos e Insignias </button>
-    <mat-menu #PuntosInsignias="matMenu">
-      <button mat-menu-item routerLink= "{{URLMisPuntos}}"> Tipos de Puntos e Insignias </button>
-      <button mat-menu-item routerLink= "{{URLCrearPuntos}}"> Crear Puntos e Insignias </button>
-    </mat-menu> -->
 
     <button mat-button [matMenuTriggerFor]="Alumnos" class="btnNavbar">  <p style="font-size:30px">Alumnos</p>  </button>
     <mat-menu #Alumnos="matMenu">
@@ -52,22 +29,18 @@
       <button mat-menu-item routerLink= "{{URLIntroducirAlumnos}}"> Introducir nuevos alumnos </button>
     </mat-menu>
 
-<!--
-    <button mat-button [matMenuTriggerFor]="Escenarios" class="btnNavbar"> Escenarios </button>
-    <mat-menu #Escenarios="matMenu" class="mat-menu">
-      <button mat-menu-item routerLink = {{URLCrearEscenario}}> Crear Escenarios </button>
-      <button mat-menu-item routerLink= {{URLMisEscenarios}}> Mis Escenarios </button>
-    </mat-menu> -->
+    <button mat-button [matMenuTriggerFor]="JuegosRapidos" class="btnNavbar">  <p style="font-size:30px">Juegos Rápidos</p>  </button>
+    <mat-menu #JuegosRapidos="matMenu">
+      <button mat-menu-item routerLink= "{{URLMisJuegosRapidos}}"> Mis juegos rápidos </button>
+      <button mat-menu-item routerLink= "{{URLCrearJuegoRapido}}"> Crear un juego rápido </button>
+    </mat-menu>
 
 
     <button mat-button [matMenuTriggerFor]="Recursos" class="btnNavbar"> <p style="font-size:30px">Recursos</p> </button>
     <mat-menu #Recursos="matMenu">
-      <button mat-menu-item routerLink= "{{URLRecursos}}"> Mis recursos </button>
+      <button mat-menu-item routerLink= "{{URLRecursos}}"> Mis recursos y recursos públicos </button>
     </mat-menu>
-<!--
-    <button routerLink = {{URLRecursos}} mat-button [matMenuTriggerFor]="Recursos" class="btnNavbar"> Recursos </button>
-    <mat-menu  #Recursos="matMenu">
-    </mat-menu> -->
+
 
     <button routerLink = {{URLDesarrolladores}} mat-button [matMenuTriggerFor]="Desarrollo" class="btnNavbarAmarillo"> Para desarrolladores </button>
     <mat-menu  #Desarrollo="matMenu">
@@ -80,13 +53,14 @@
 
   </div>
 
-  <div>
-    <button mat-button [matMenuTriggerFor]="NombreProfesor" class="btnNavbar"> {{profesor.Nombre}} {{profesor.Apellido}} </button>
+
+
+    <button mat-button [matMenuTriggerFor]="NombreProfesor" class="btnNavbar"> {{profesor.Nombre}} {{profesor.PrimerApellido}} </button>
     <mat-menu #NombreProfesor="matMenu">
-      <button mat-menu-item routerLink= "{{URLConfiguracionn}}"> Configuración </button>
-      <button mat-menu-item> Cerrar sesión </button>
+      <button mat-menu-item routerLink= "{{URLConfiguracion}}"> Configuración </button>
+      <button mat-menu-item (click) = "CerrarSesion()"> Cerrar sesión </button>
     </mat-menu>
-  </div>
+
 
 </form>
 
