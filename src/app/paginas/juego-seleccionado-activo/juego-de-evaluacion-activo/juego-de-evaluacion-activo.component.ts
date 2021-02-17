@@ -166,7 +166,11 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         }
       });
       if (this.juego.profesorEvalua) {
-        row['Profesor'] = '-';
+        if (evaluado.respuestas.find(item => item.profesorId)) {
+          row['Profesor'] = this.CalcularNota(evaluado.respuestas.find(item => item.profesorId).respuesta);
+        } else {
+          row['Profesor'] = '-';
+        }
       }
       row['Nota Media'] = this.CalcularNotaMedia(row);
       this.datosTabla.push(row);
@@ -219,7 +223,11 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           }
         });
         if (this.juego.profesorEvalua) {
-          row['Profesor'] = '-';
+          if (evaluado.respuestas.find(item => item.profesorId)) {
+            row['Profesor'] = this.CalcularNota(evaluado.respuestas.find(item => item.profesorId).respuesta);
+          } else {
+            row['Profesor'] = '-';
+          }
         }
         row['Nota Media'] = this.CalcularNotaMedia(row);
         this.datosTabla.push(row);
@@ -249,7 +257,11 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           }
         });
         if (this.juego.profesorEvalua) {
-          row['Profesor'] = '-';
+          if (evaluado.respuestas.find(item => item.profesorId)) {
+            row['Profesor'] = this.CalcularNota(evaluado.respuestas.find(item => item.profesorId).respuesta);
+          } else {
+            row['Profesor'] = '-';
+          }
         }
         row['Nota Media'] = this.CalcularNotaMedia(row);
         this.datosTabla.push(row);
@@ -266,7 +278,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
 
   openDialog(i: number, c: number, profesor: boolean = false, editar: boolean = false): void {
     if (profesor) {
-      this.dialog.open(EvaluacionDialogoComponent, {
+      const dialogRef = this.dialog.open(EvaluacionDialogoComponent, {
         width: '800px',
         data: {
           juego: this.juego,
@@ -280,6 +292,22 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           evaluadoId: c,
           profesor: true,
           editable: editar
+        }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed', result);
+        if (typeof result === 'undefined') {
+          return;
+        }
+        this.tmpDisplayedColumns = [];
+        this.datosTabla = [];
+        this.hoverColumn = [];
+        if (this.juego.Modo === 'Individual') {
+          this.alumnosRelacion = result;
+          this.ConstruirTablaIndividual();
+        } else if (this.juego.Modo === 'Equipos') {
+          this.equiposRelacion = result;
+          this.ConstruirTablaEquipos();
         }
       });
     } else {
