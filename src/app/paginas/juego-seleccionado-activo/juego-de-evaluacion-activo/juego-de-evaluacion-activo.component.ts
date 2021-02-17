@@ -94,9 +94,11 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         }
       }
     }
-    if (p > 0) {
+    if (p > 0 || typeof row['Profesor'] === 'number') {
       if (this.juego.notaProfesorNormal || (this.juego.profesorEvalua && typeof row['Profesor'] !== 'number')) {
         return Math.round(((media / p) + Number.EPSILON) * 100) / 100;
+      } else if (p === 0) {
+        return Math.round(((row['Profesor']) + Number.EPSILON) * 100) / 100;
       } else {
         return Math.round(((((media / p) + row['Profesor']) / 2) + Number.EPSILON) * 100) / 100;
       }
