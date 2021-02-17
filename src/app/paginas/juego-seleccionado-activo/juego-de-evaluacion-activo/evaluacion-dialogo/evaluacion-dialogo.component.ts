@@ -4,6 +4,7 @@ import {JuegoDeEvaluacion} from '../../../../clases/JuegoDeEvaluacion';
 import {Alumno, Equipo, Rubrica} from '../../../../clases';
 import {AlumnoJuegoDeEvaluacion} from '../../../../clases/AlumnoJuegoDeEvaluacion';
 import {EquipoJuegoDeEvaluacion} from '../../../../clases/EquipoJuegoDeEvaluacion';
+import {PeticionesAPIService} from '../../../../servicios';
 
 export interface DialogData {
   juego: JuegoDeEvaluacion;
@@ -31,10 +32,12 @@ export class EvaluacionDialogoComponent implements OnInit {
   allCompleted: Array<boolean>;
   indeterminated: Array<boolean>;
   comentario = '';
+  isLoading = false;
 
   constructor(
     public dialogRef: MatDialogRef<EvaluacionDialogoComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    public peticionesAPI: PeticionesAPIService
   ) { }
 
   ngOnInit() {
@@ -164,6 +167,75 @@ export class EvaluacionDialogoComponent implements OnInit {
     } else {
       this.indeterminated[i] = false;
       this.allCompleted[i] = false;
+    }
+  }
+
+  async EnviarRespuesta() {
+
+    this.isLoading = true;
+    this.respuestaEvaluacion[this.respuestaEvaluacion.length - 1] = this.comentario;
+    console.log('enviando respuesta evaluacion', this.respuestaEvaluacion);
+
+    if (this.data.juego.Modo === 'Individual') {
+      this.peticionesAPI.DameRelacionAlumnosJuegoDeEvaluacion(this.data.juego.id).subscribe((res) => {
+        const tmp = res.find(item => item.alumnoId === this.data.evaluadoId);
+        if (typeof tmp === 'undefined') {
+          console.log('no se ha encontrado la relacion', res);
+          this.dialogRef.close(res);
+          return;
+        } else {
+          let respuestas: any[];
+          if (tmp.respuestas === null) {
+            respuestas = [];
+          } else {
+            if (tmp.respuestas.find(item => item.profesorId === this.data.evaluadorId)) {
+              console.log('Ya he votado', res);
+              this.dialogRef.close(res);
+              return;
+            }
+            respuestas = tmp.respuestas;
+          }
+          respuestas.push({profesorId: this.data.evaluadorId, respuesta: this.respuestaEvaluacion});
+          this.peticionesAPI.EnviarRespuestaAlumnosJuegoDeEvaluacion(tmp.id, {respuestas})
+            .subscribe((res2) => {
+              console.log(res2);
+              console.log('Pre-change', res);
+              res = res.map((item) => item.id === res2.id ? res2 : item);
+              console.log('Post-change', res);
+              this.dialogRef.close(res);
+            });
+        }
+      });
+    } else if (this.data.juego.Modo === 'Equipos') {
+      this.peticionesAPI.DameRelacionEquiposJuegoDeEvaluacion(this.data.juego.id).subscribe((res) => {
+        const tmp = res.find(item => item.equipoId === this.data.evaluadoId);
+        console.log(tmp);
+        if (typeof tmp === 'undefined') {
+          console.log('no se ha encontrado la relacion', res);
+          this.dialogRef.close(res);
+          return;
+        }
+        let respuestas: any[];
+        if (tmp.respuestas === null) {
+          respuestas = [];
+        } else {
+          if (tmp.respuestas.find(item => item.profesorId === this.data.evaluadorId)) {
+            console.log('Ya he votado', res);
+            this.dialogRef.close(res);
+            return;
+          }
+          respuestas = tmp.respuestas;
+        }
+        respuestas.push({profesorId: this.data.evaluadorId, respuesta: this.respuestaEvaluacion});
+        this.peticionesAPI.EnviarRespuestaEquiposJuegoDeEvaluacion(tmp.id, {respuestas})
+          .subscribe((res2) => {
+            console.log(res2);
+            console.log('Pre-change', res);
+            res = res.map((item) => item.id === res2.id ? res2 : item);
+            console.log('Post-change', res);
+            this.dialogRef.close(res);
+          });
+      });
     }
   }
 
