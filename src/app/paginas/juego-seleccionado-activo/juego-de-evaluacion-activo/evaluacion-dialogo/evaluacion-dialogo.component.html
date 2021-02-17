@@ -12,16 +12,21 @@
             ({{data.juego.Penalizacion[data.juego.Penalizacion.length - 1][i]}}%)
           </i>
         </mat-panel-title>
-        <mat-panel-description class="criterioDescripcion">
+        <mat-panel-description *ngIf="!data.editable" class="criterioDescripcion">
           Nota: {{CalcularNotaCriterio(i)}}
         </mat-panel-description>
       </mat-expansion-panel-header>
+      <div *ngIf="data.editable">
+        <mat-checkbox class="example-margin" [(ngModel)]="allCompleted[i]" [indeterminate]="indeterminated[i]" (click)="SetAll(i)" color="primary"></mat-checkbox>
+        <strong> Marcar todo</strong>
+        <mat-divider></mat-divider>
+      </div>
       <div *ngFor="let elemento of criterio.Elementos; let j = index">
-        <mat-checkbox class="example-margin" [(ngModel)]="respuestaEvaluacion[i][j]" disabled></mat-checkbox>
+        <mat-checkbox class="example-margin" [(ngModel)]="respuestaEvaluacion[i][j]" [disabled]="!data.editable" (change)="CheckboxChanged(i)"></mat-checkbox>
         <i *ngIf="data.juego.metodoSubcriterios"> ({{data.juego.Pesos[i][j + 1]}}%)</i> {{elemento}}
         <mat-divider></mat-divider>
       </div>
-      <mat-expansion-panel *ngIf="!data.juego.metodoSubcriterios" style="margin-top: 10px; margin-bottom: 10px;">
+      <mat-expansion-panel *ngIf="!data.juego.metodoSubcriterios && !data.editable" style="margin-top: 10px; margin-bottom: 10px;">
         <mat-expansion-panel-header>
           <mat-panel-title><i>Cálculo</i></mat-panel-title>
           <mat-panel-description class="criterioDescripcion">
@@ -34,20 +39,25 @@
         </p>
       </mat-expansion-panel>
     </mat-expansion-panel>
-    <mat-expansion-panel [disabled]="this.respuestaEvaluacion[this.respuestaEvaluacion.length - 1] === ''" style="margin-top: 10px; margin-bottom: 10px;">
+    <mat-expansion-panel [disabled]="!data.editable && this.respuestaEvaluacion[this.respuestaEvaluacion.length - 1] === ''" style="margin-top: 10px; margin-bottom: 10px;">
       <mat-expansion-panel-header>
         <mat-panel-title><i>Observaciones</i></mat-panel-title>
-        <mat-panel-description *ngIf="this.respuestaEvaluacion[this.respuestaEvaluacion.length - 1] === ''" class="criterioDescripcion">
+        <mat-panel-description *ngIf="!data.editable && this.respuestaEvaluacion[this.respuestaEvaluacion.length - 1] === ''" class="criterioDescripcion">
           <i>No hay observaciones</i>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <p>{{this.respuestaEvaluacion[this.respuestaEvaluacion.length - 1]}}</p>
+      <p *ngIf="!data.editable">{{this.respuestaEvaluacion[this.respuestaEvaluacion.length - 1]}}</p>
+      <textarea *ngIf="data.editable" matInput [(ngModel)]="comentario" placeholder="Dejar algún comentario..."></textarea>
     </mat-expansion-panel>
   </mat-accordion>
-  <mat-card style="margin-top: 10px; margin-bottom: 10px;">
+  <mat-card *ngIf="!data.editable" style="margin-top: 10px; margin-bottom: 10px;">
     <strong>Nota Final: {{CalcularNotaFinal()}}</strong>
   </mat-card>
 </div>
-<div mat-dialog-actions>
+<div *ngIf="!data.editable" mat-dialog-actions>
   <button mat-button (click)="close()">Listo</button>
+</div>
+<div *ngIf="data.editable" mat-dialog-actions>
+  <button mat-button (click)="close()">Salir</button>
+  <button mat-raised-button color="primary" (click)="close()">Guardar</button>
 </div>

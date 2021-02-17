@@ -264,21 +264,42 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
   }
 
-  openDialog(i: number, c: number): void {
-    this.dialog.open(EvaluacionDialogoComponent, {
-      width: '800px',
-      data: {
-        juego: this.juego,
-        rubrica: this.rubrica,
-        alumnos: this.alumnos,
-        alumnosRelacion: this.alumnosRelacion,
-        equipos: this.equipos,
-        equiposRelacion: this.equiposRelacion,
-        alumnosDeEquipo: this.alumnosDeEquipo,
-        evaluadorId: this.tmpDisplayedColumns[i - 1][0],
-        evaluadoId: c
-      }
-    });
+  openDialog(i: number, c: number, profesor: boolean = false, editar: boolean = false): void {
+    if (profesor) {
+      this.dialog.open(EvaluacionDialogoComponent, {
+        width: '800px',
+        data: {
+          juego: this.juego,
+          rubrica: this.rubrica,
+          alumnos: this.alumnos,
+          alumnosRelacion: this.alumnosRelacion,
+          equipos: this.equipos,
+          equiposRelacion: this.equiposRelacion,
+          alumnosDeEquipo: this.alumnosDeEquipo,
+          evaluadorId: this.sesion.DameProfesor().id,
+          evaluadoId: c,
+          profesor: true,
+          editable: editar
+        }
+      });
+    } else {
+      this.dialog.open(EvaluacionDialogoComponent, {
+        width: '800px',
+        data: {
+          juego: this.juego,
+          rubrica: this.rubrica,
+          alumnos: this.alumnos,
+          alumnosRelacion: this.alumnosRelacion,
+          equipos: this.equipos,
+          equiposRelacion: this.equiposRelacion,
+          alumnosDeEquipo: this.alumnosDeEquipo,
+          evaluadorId: this.tmpDisplayedColumns[i - 1][0],
+          evaluadoId: c,
+          profesor: false,
+          editable: false
+        }
+      });
+    }
   }
 
   MouseOver(i: number): void {

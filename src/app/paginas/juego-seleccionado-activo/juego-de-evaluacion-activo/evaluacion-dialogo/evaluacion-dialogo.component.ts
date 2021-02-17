@@ -15,6 +15,8 @@ export interface DialogData {
   alumnosDeEquipo;
   evaluadorId: number;
   evaluadoId: number;
+  profesor: boolean;
+  editable: boolean;
 }
 
 @Component({
@@ -24,7 +26,11 @@ export interface DialogData {
 })
 export class EvaluacionDialogoComponent implements OnInit {
 
-  respuestaEvaluacion: any[];
+  respuestaEvaluacion: Array<any>;
+  // Form elements
+  allCompleted: Array<boolean>;
+  indeterminated: Array<boolean>;
+  comentario = '';
 
   constructor(
     public dialogRef: MatDialogRef<EvaluacionDialogoComponent>,
@@ -32,6 +38,16 @@ export class EvaluacionDialogoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    if (this.data.editable) {
+      this.respuestaEvaluacion = new Array<any>(this.data.rubrica.Criterios.length);
+      this.data.rubrica.Criterios.forEach((item, index) => {
+        this.respuestaEvaluacion[index] = new Array<boolean>(this.data.rubrica.Criterios[index].Elementos.length).fill(false);
+      });
+      this.respuestaEvaluacion.push('');
+      this.allCompleted = new Array<boolean>(this.data.rubrica.Criterios.length).fill(false);
+      this.indeterminated = new Array<boolean>(this.data.rubrica.Criterios.length).fill(false);
+      return;
+    }
     if (this.data.juego.Modo === 'Individual') {
       const evaluado = this.data.alumnosRelacion.find(item => item.alumnoId === this.data.evaluadoId);
       this.respuestaEvaluacion = evaluado.respuestas.find(item => item.alumnoId === this.data.evaluadorId).respuesta;
@@ -120,6 +136,35 @@ export class EvaluacionDialogoComponent implements OnInit {
 
   numeroDeFallos(index: number): number {
     return this.respuestaEvaluacion[index].filter(item => item === false).length;
+  }
+
+  SetAll(i: number): void {
+    if (this.respuestaEvaluacion[i] == null) {
+      return;
+    }
+    setTimeout(() => {
+      for (let j = 0; j < this.respuestaEvaluacion[i].length; j++) {
+        this.respuestaEvaluacion[i][j] = this.allCompleted[i];
+      }
+    });
+  }
+
+  CheckboxChanged(i: number): void {
+    if (this.respuestaEvaluacion[i] == null) {
+      return;
+    }
+    const allItems = this.respuestaEvaluacion[i].length;
+    const selectedItems = this.respuestaEvaluacion[i].filter(item => item === true).length;
+    if (selectedItems > 0 && selectedItems < allItems) {
+      this.indeterminated[i] = true;
+      this.allCompleted[i] = false;
+    } else if (selectedItems === allItems) {
+      this.indeterminated[i] = false;
+      this.allCompleted[i] = true;
+    } else {
+      this.indeterminated[i] = false;
+      this.allCompleted[i] = false;
+    }
   }
 
   close(): void {
