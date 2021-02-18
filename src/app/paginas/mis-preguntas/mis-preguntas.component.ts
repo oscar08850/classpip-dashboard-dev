@@ -18,7 +18,7 @@ export class MisPreguntasComponent implements OnInit {
   misPreguntas: Pregunta[];
   dataSource;
   profesor: Profesor;
-  displayedColumns: string[] = ['titulo', 'pregunta', 'tematica', 'edit', ' '];
+  displayedColumns: string[] = ['titulo', 'pregunta', 'tematica', 'tipo', 'edit', ' '];
 
   mensaje = 'Confirmar que quieres eliminar la pregunta: ';
 

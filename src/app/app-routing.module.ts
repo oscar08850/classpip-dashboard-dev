@@ -15,6 +15,8 @@ import { MisPuntosComponent } from './paginas/mis-puntos/mis-puntos.component';
 import { CrearPuntoComponent } from './paginas/crear-punto/crear-punto.component';
 import { JuegoComponent } from './paginas/juego/juego.component';
 import { JuegoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-seleccionado-activo.component';
+//import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo\juego-de-cuestionario-kahoot-seleccionado-activo';
+
 // tslint:disable-next-line:max-line-length
 import { AsignarPuntosComponent } from './paginas/juego-seleccionado-activo/juego-de-puntos-seleccionado-activo/asignar-puntos/asignar-puntos.component';
 // tslint:disable-next-line:max-line-length
@@ -155,6 +157,7 @@ import { DeactivateGuardCogerTurnoRapido } from './guardas/canExitCogerTurnoRapi
 import { DeactivateGuardCuestionarioRapido } from './guardas/canExitCuestionarioRapido.guard';
 import { DeactivateGuardVotacionRapida } from './guardas/canExitVotacionRapida.guard';
 import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-perfil.component';
+import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
 
 const routes: Routes = [
 
@@ -276,8 +279,8 @@ const routes: Routes = [
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionJuegoDeCompeticionFormulaUnoInactivo', component: InformacionJuegoDeCompeticionFormulaUnoInactivoComponent },
 
-
-
+// GRUPOS --> JUEGOS --> JUEGO DE CUESTIONARIO
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/gestionarPreguntaKahoot', component: GestionPreguntaKahootComponent},
 
   // COLECCIÓN
   { path: 'inicio/:id/misColecciones/editarColeccion', component: EditarColeccionComponent },
@@ -299,6 +302,7 @@ const routes: Routes = [
   { path: 'inicio/:id/crearCuestionario', component: CrearCuestionarioComponent, canDeactivate: [DeactivateGuardCrearCuestionario] },
   { path: 'inicio/:id/misCuestionarios', component: MisCuestionariosComponent},
   { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent},
+  
 
   // escenarios
   { path: 'inicio/:id/crearEscenario', component: CrearEscenarioComponent, canDeactivate: [DeactivateGuardCrearEscenario] },

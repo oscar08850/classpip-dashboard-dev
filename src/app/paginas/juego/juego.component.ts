@@ -22,7 +22,7 @@ import {
   EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable, concursoLibro, ImagenToBackend, RecursoLibroJuego, RecursoLibro,
   JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
   JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, CuestionarioSatisfaccion,
-  JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion
+  JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion, Rubrica
 } from '../../clases/index';
 
 
@@ -43,13 +43,12 @@ import { JuegoDeCuestionario } from 'src/app/clases/JuegoDeCuestionario';
 import { AlumnoJuegoDeCuestionario } from 'src/app/clases/AlumnoJuegoDeCuestionario';
 import { Router } from '@angular/router';
 
-import { AsignaEscenarioComponent } from './asigna-escenario/asigna-escenario.component';
-import { AsignaPreguntasComponent } from './asigna-preguntas/asigna-preguntas.component';
-
-
-
-
-
+import {AsignaEscenarioComponent} from './asigna-escenario/asigna-escenario.component';
+import {AsignaPreguntasComponent} from './asigna-preguntas/asigna-preguntas.component';
+import {JuegoDeEvaluacion} from '../../clases/JuegoDeEvaluacion';
+import {log} from 'util';
+import {EquipoJuegoEvaluado} from '../../clases/EquipoJuegoEvaluado';
+import {AlumnoJuegoEvaluado} from '../../clases/AlumnoJuegoEvaluado';
 
 
 export interface OpcionSeleccionada {
@@ -119,16 +118,16 @@ export class JuegoComponent implements OnInit {
   tengoModo = false;
   seleccionTipoJuego: ChipColor[] = [
 
-    { nombre: 'Juego De Geocaching', color: 'warn' },
     { nombre: 'Juego De Cuentos', color: 'primary' },
-    { nombre: 'Juego De Puntos', color: 'primary' },
-    { nombre: 'Juego De Colección', color: 'accent' },
-    { nombre: 'Juego De Competición', color: 'warn' },
+     { nombre: 'Juego De Competición', color: 'warn' },
     { nombre: 'Juego De Avatar', color: 'primary' },
     { nombre: 'Juego De Cuestionario', color: 'accent' },
     { nombre: 'Juego De Geocaching', color: 'warn' },
     { nombre: 'Juego De Votación', color: 'primary' },
     { nombre: 'Juego De Cuestionario de Satisfacción', color: 'accent' },
+    {nombre: 'Juego De Puntos', color: 'primary'},
+    {nombre: 'Juego De Colección', color: 'accent'},
+    {nombre: 'Juego De Evaluación', color: 'accent'},
   ];
   seleccionModoJuego: ChipColor[] = [
     { nombre: 'Individual', color: 'primary' },
@@ -161,6 +160,12 @@ export class JuegoComponent implements OnInit {
     'Preguntas desordenadas',
     'Preguntas y respuestas desordenadas'];
   tiempoLimite: number;
+  tipoDeJuegoDeCuestionarioSeleccionado: string;
+  tengoTipoJuegoCuestionario = false;
+  seleccionTipoDeJuegoDeCuestionario: ChipColor[] = [
+    {nombre: 'Test clásico', color: 'primary'},
+    {nombre: 'Kahoot', color: 'accent'},
+  ];
 
   // información para crear juego de avatares
   familiasElegidas: number[];
@@ -178,6 +183,52 @@ export class JuegoComponent implements OnInit {
   recursoCargadoParaGuardar: RecursoLibro;
   recursoParaLibro: RecursoLibroJuego;
 
+  // Información para crear juego de evaluación
+  seleccionTipoDeEvaluacion: ChipColor[] = [
+    {nombre: '1 a N', color: 'primary'},
+    {nombre: 'Todos con todos', color: 'warn'}
+  ];
+  tipoDeEvaluacionSeleccionado: string;
+  tengoTipoDeEvaluacion = false;
+  //
+  seleccionRelacionesEvaluacion: ChipColor[] = [
+    {nombre: 'A elegir', color: 'primary'},
+    {nombre: 'Aleatorio', color: 'warn'}
+  ];
+  relacionesEvaluacionSeleccionado: string;
+  tengoRelacionEvaluacion = false;
+  relacionesMap = new Map();
+  numeroDeMiembros = 1;
+  //
+  profesorEvalua = false;
+  profesorEvaluaModo = 'normal';
+  autoevaluacion = false;
+  //
+  tengoRubrica = false;
+  rubricaElegida: Rubrica;
+  rubricas: Rubrica[];
+  //
+  seleccionCriterioEvaluacion: ChipColor[] = [
+    {nombre: 'Por pesos', color: 'primary'},
+    {nombre: 'Por penalización', color: 'warn'}
+  ];
+  criterioEvaluacionSeleccionado: string;
+  tengoCriterioEvaluacion = false;
+  //
+  pesosArray = [];
+  pesosSuman100 = true;
+  penalizacionArray = [];
+  //
+  seleccionEquiposEvaluacion: ChipColor[] = [
+    {nombre: 'Individualmente', color: 'primary'},
+    {nombre: 'Por Equipos', color: 'warn'}
+  ];
+  equiposEvaluacionSeleccionado: string;
+  tengoEquipoEvaluacion = false;
+  //
+  relacionAlumnosEquipos = [];
+  comprobacionDeN = false;
+  todosTienenEvaluador = false;
   // Información para crear juego de competicion
 
   tipoDeCompeticionSeleccionado: string;
@@ -299,17 +350,23 @@ export class JuegoComponent implements OnInit {
     // La lista de equipos del grupo no esta en el servicio sesión. Asi que hay que
     // ir a buscarla
     this.peticionesAPI.DameEquiposDelGrupo(this.grupo.id)
-      .subscribe(equipos => {
-        if (equipos[0] !== undefined) {
-          console.log('Hay equipos');
-          this.equiposGrupo = equipos;
-          console.log(this.equiposGrupo);
-        } else {
-          // mensaje al usuario
-          console.log('Este grupo aun no tiene equipos');
-          this.equiposGrupo = undefined;
+    .subscribe(equipos => {
+      if (equipos[0] !== undefined) {
+        console.log('Hay equipos');
+        this.equiposGrupo = equipos;
+        console.log(this.equiposGrupo);
+        for (const equipo of equipos) {
+          this.peticionesAPI.DameAlumnosEquipo(equipo.id).subscribe((alumnos: Alumno[]) => {
+            this.relacionAlumnosEquipos.push({equipoId: equipo.id, alumnos});
+            console.log('relacion alumnos equipos', this.relacionAlumnosEquipos);
+          });
         }
-      });
+      } else {
+        // mensaje al usuario
+        console.log('Este grupo aun no tiene equipos');
+        this.equiposGrupo = undefined;
+      }
+    });
 
     // Ahora traemos la lista de juegos
     // esta operacion es complicada. Por eso está en calculos
@@ -341,6 +398,14 @@ export class JuegoComponent implements OnInit {
         }
 
       });
+ 
+    // Peticion API Juego de Evaluacion
+    this.peticionesAPI.DameRubricasProfesor(this.profesorId).subscribe(rubricas => {
+      console.log('Tengo rubricas', rubricas);
+      this.rubricas = rubricas;
+    });
+    // Fin Peticion API Juego de Evaluacion
+    //
     // Es este formulario recogeremos la información que vaya introduciendo
     // el usuario segun el tipo de juego
     this.myForm = this._formBuilder.group({
@@ -502,6 +567,333 @@ export class JuegoComponent implements OnInit {
         }
       }
     }
+  }
+
+  // FUNCIONES PARA LA CREACION DE JUEGO DE EVALUACION
+  TipoDeEvaluacionSeleccionado(tipoEvaluacion: ChipColor) {
+    this.tipoDeEvaluacionSeleccionado = tipoEvaluacion.nombre;
+    if (this.tipoDeEvaluacionSeleccionado === 'Todos con todos') {
+      this.numeroDeMiembros = this.DameMaxSlider();
+      this.HacerRelaciones(true);
+    }
+    this.tengoTipoDeEvaluacion = true;
+  }
+
+  RelacionDeEvaluacionSeleccionado(relacionEvaluacion: ChipColor) {
+    this.relacionesEvaluacionSeleccionado = relacionEvaluacion.nombre;
+    if (relacionEvaluacion.nombre === 'Aleatorio') {
+      this.HacerRelaciones(true);
+    } else {
+      this.HacerRelaciones(false);
+    }
+    this.tengoRelacionEvaluacion = true;
+  }
+  Shuffle(a) {
+    let j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      x = a[i];
+      a[i] = a[j];
+      a[j] = x;
+    }
+    return a;
+  }
+  HacerRelaciones(fill: boolean) {
+    const evaluados = this.DameEvaluados().map(item => item.id);
+    this.relacionesMap = new Map();
+    do {
+      for (let i = 0; i < evaluados.length; i++) {
+        if (!fill) {
+          this.relacionesMap.set(evaluados[i], []);
+        } else {
+          let evaluadores = [];
+          if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
+            for (const equipo of this.relacionAlumnosEquipos) {
+              if (equipo.equipoId === evaluados[i]) {
+                evaluadores = this.DameEvaluadores()
+                  .filter(({id: id1}) => !equipo.alumnos.some(({id: id2}) => id1 === id2))
+                  .map(item => item.id);
+              }
+            }
+          } else {
+            evaluadores = this.DameEvaluadores().filter(item => item.id !== evaluados[i]).map(item => item.id);
+          }
+          evaluadores = this.Shuffle(evaluadores);
+          if (this.modoDeJuegoSeleccionado === 'Equipos'
+            && this.equiposEvaluacionSeleccionado === 'Individualmente'
+            && this.tipoDeEvaluacionSeleccionado === 'Todos con todos') {
+            evaluadores.length = this.alumnosGrupo.length;
+          } else {
+            evaluadores.length = this.numeroDeMiembros;
+          }
+          this.relacionesMap.set(evaluados[i], evaluadores.filter(item => !isNaN(item)));
+        }
+      }
+    } while (this.ComprobarSiTodosTienenEvaluadores() === false && fill === true);
+    console.log('Relaciones object', this.relacionesMap);
+    console.log('Todos tienen evaluadores', this.todosTienenEvaluador);
+  }
+  RelacionChanged(id: number, value: string[]) {
+    console.log('Relaciones changed', id, value);
+    this.relacionesMap.set(id, value);
+    console.log('Relaciones object', this.relacionesMap);
+    this.ComprobarSiTodosTienenEvaluadores();
+  }
+  ComprobarSiTodosTienenEvaluadores() {
+    let encontrado1 = false;
+    let encontrado2 = false;
+    if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
+      this.relacionesMap.forEach((value, key) => {
+        if (value.length < this.numeroDeMiembros) {
+          this.comprobacionDeN = false;
+          encontrado2 = true;
+        }
+        value.forEach(item => {
+          if (this.ContarEvaluadores(item) === 0) {
+            this.todosTienenEvaluador = false;
+            encontrado1 = true;
+          }
+        });
+      });
+    } else {
+      this.relacionesMap.forEach((value, key) => {
+        if (this.ContarEvaluadores(key) === 0) {
+          this.todosTienenEvaluador = false;
+          encontrado1 = true;
+        }
+        if (value.length < this.numeroDeMiembros) {
+          this.comprobacionDeN = false;
+          encontrado2 = true;
+        }
+      });
+    }
+    if (!encontrado1) {
+      this.todosTienenEvaluador = true;
+    }
+    if (!encontrado2) {
+      this.comprobacionDeN = true;
+    }
+    return this.todosTienenEvaluador;
+  }
+    ContarEvaluadores(idEvaluado: number): number {
+    let suma = 0;
+    this.relacionesMap.forEach((value, key) => {
+      if (value.includes(idEvaluado)) {
+        suma++;
+      }
+    });
+    return suma;
+  }
+    CriterioDeEvaluacionSeleccionado(criterioEvaluacion: ChipColor) {
+    this.criterioEvaluacionSeleccionado = criterioEvaluacion.nombre;
+    this.tengoCriterioEvaluacion = true;
+    if (this.criterioEvaluacionSeleccionado === 'Por pesos') {
+      this.pesosArray = [];
+      for (let i = 0; i < this.rubricaElegida.Criterios.length; i++) {
+        this.pesosArray.push([]);
+        this.pesosArray[i].push(this.PesoPorDefecto(this.rubricaElegida.Criterios.length));
+        for (let j = 0; j < this.rubricaElegida.Criterios[i].Elementos.length; j++) {
+          this.pesosArray[i].push(this.PesoPorDefecto(this.rubricaElegida.Criterios[i].Elementos.length));
+        }
+      }
+      console.log('pesos array', this.pesosArray);
+    } else {
+      this.penalizacionArray = [];
+      for (let i = 0; i < this.rubricaElegida.Criterios.length; i++) {
+        this.penalizacionArray.push([]);
+        if (this.rubricaElegida.Criterios[i].Elementos.length >= 1) {
+          this.penalizacionArray[i].push({num: 1, p: 75});
+        }
+        if (this.rubricaElegida.Criterios[i].Elementos.length >= 2) {
+          this.penalizacionArray[i].push({num: 2, p: 50});
+        }
+        if (this.rubricaElegida.Criterios[i].Elementos.length >= 3) {
+          this.penalizacionArray[i].push({num: 3, p: 0});
+        }
+      }
+      console.log('penalizacion array', this.penalizacionArray);
+    }
+  }
+    EquipoDeEvaluacionSeleccionado(equipoEvaluacion: ChipColor) {
+    this.equiposEvaluacionSeleccionado = equipoEvaluacion.nombre;
+    this.tengoEquipoEvaluacion = true;
+  }
+    AutoevaluacionChange(isChecked: boolean) {
+    this.autoevaluacion = isChecked;
+  }
+    ProfesorEvaluaChange(isChecked: boolean) {
+    this.profesorEvalua = isChecked;
+  }
+    ProfesorEvaluaModoChange(value: string) {
+    this.profesorEvaluaModo = value;
+  }
+    DameMaxSlider(): number {
+    if (this.modoDeJuegoSeleccionado === 'Individual') {
+      return this.alumnosGrupo.length - 1;
+    } else if (this.modoDeJuegoSeleccionado === 'Equipos') {
+      if (this.equiposEvaluacionSeleccionado === 'Por Equipos') {
+        return this.equiposGrupo.length - 1;
+      } else if (this.equiposEvaluacionSeleccionado === 'Individualmente') {
+        let min = this.alumnosGrupo.length;
+        for (let i = 0; i < this.relacionAlumnosEquipos.length; i++) {
+          if (this.relacionAlumnosEquipos[i].alumnos.length < min) {
+            min = this.relacionAlumnosEquipos[i].alumnos.length;
+          }
+        }
+        return min;
+      }
+    }
+  }
+
+    DameEvaluados(): any {
+    if (this.modoDeJuegoSeleccionado === 'Individual') {
+      return this.alumnosGrupo;
+    } else {
+      return this.equiposGrupo;
+    }
+  }
+    DameEvaluadores(): any {
+    if (this.equiposEvaluacionSeleccionado === 'Por Equipos') {
+      return this.equiposGrupo;
+    } else {
+      return this.alumnosGrupo;
+    }
+  }
+  public DameRelacionesAlumnoEquipos() {
+    return this.relacionAlumnosEquipos;
+  }
+  SliderChanged(value: number) {
+    console.log('Slider changed to', value);
+    this.numeroDeMiembros = value;
+  }
+  RubricaSeleccionChange(index: number) {
+    console.log('Rubrica seleccionada', this.rubricas[index]);
+    this.rubricaElegida = this.rubricas[index];
+    this.tengoRubrica = true;
+  }
+  PesoPorDefecto(total: number): number {
+    return parseFloat((100 / total).toFixed(2));
+  }
+  PesosChanged(name: string, value: string): void {
+    console.log('Pesos changed', name, value);
+    const criterio = name.split('-')[0];
+    const elemento = name.split('-')[1];
+    this.pesosArray[criterio][elemento] = parseFloat(value);
+    console.log('pesos array changed', this.pesosArray);
+    this.pesosSuman100 = this.PesosSuman100();
+  }
+  PesosParentChanged(name: string, value: string): void {
+    console.log('Pesos parent changed', name, value);
+    this.pesosArray[name][0] = parseFloat(value);
+    console.log('pesos array changed', this.pesosArray);
+    this.pesosSuman100 = this.PesosSuman100();
+  }
+  PesosSuman100(): boolean {
+    let c = 0;
+    for (let i = 0; i < this.pesosArray.length; i++) {
+      let p = 0;
+      for (let j = 0; j < this.pesosArray[i].length; j++) {
+        if  (j === 0) {
+          c += this.pesosArray[i][j];
+        } else {
+          p += this.pesosArray[i][j];
+        }
+      }
+      if (Math.round((p + Number.EPSILON) * 10) / 10 !== 100) {
+        return false;
+      }
+    }
+    return Math.round((c + Number.EPSILON) * 10) / 10 === 100;
+  }
+  PenalizacionChanged(name: string, value: string): void {
+    console.log('Penalizacion changed', name, value);
+    const criterio = name.split('-')[0];
+    const elemento = name.split('-')[1];
+    const tipo = name.split('-')[2];
+    if (tipo === 'num') {
+      const tmp = this.penalizacionArray[criterio][elemento].p;
+      this.penalizacionArray[criterio][elemento] = {num: parseInt(value, 10), p: tmp};
+    } else if (tipo === 'p') {
+      const tmp = this.penalizacionArray[criterio][elemento].num;
+      this.penalizacionArray[criterio][elemento] = {num: tmp, p: parseInt(value, 10)};
+    }
+    console.log('penalizacion array', this.penalizacionArray);
+  }
+  CrearJuegoEvaluacion() {
+    let evaluadores: number;
+    if (this.tipoDeEvaluacionSeleccionado === 'Todos con todos') {
+      evaluadores = 0;
+    } else {
+      evaluadores = this.numeroDeMiembros;
+    }
+    const juego: JuegoDeEvaluacion = new JuegoDeEvaluacion(
+      null,
+      this.nombreDelJuego,
+      'Evaluacion',
+      this.modoDeJuegoSeleccionado,
+      true,
+      false,
+      this.profesorEvalua,
+      this.profesorEvaluaModo === 'normal',
+      this.autoevaluacion,
+      evaluadores,
+      this.pesosArray,
+      this.criterioEvaluacionSeleccionado === 'Por pesos',
+      this.penalizacionArray,
+      this.rubricaElegida.id,
+      this.profesorId,
+      this.grupo.id
+    );
+    console.log('Creando Juego de Evaluacion', juego);
+    this.peticionesAPI.CrearJuegoDeEvaluacion(juego).subscribe(res => {
+      console.log('JuegoDeEvaluacionCreado', res);
+      Swal.fire('Juego de Evaluación creado correctamente', ' ', 'success');
+      this.juego = res;
+      this.sesion.TomaJuego(this.juego);
+      this.juegoCreado = true;
+      this.relacionesMap.forEach( (value: number[], key: number) => {
+        if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Por Equipos') {
+          const equipo: EquipoJuegoEvaluado = new EquipoJuegoEvaluado(
+            null,
+            res.id,
+            key,
+            value,
+            null,
+            null
+          );
+          this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).subscribe(equipores => console.log('EquipoJuegoEvaluado', equipores));
+        } else if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Individualmente') {
+          const equipo: EquipoJuegoEvaluado = new EquipoJuegoEvaluado(
+            null,
+            res.id,
+            key,
+            null,
+            value,
+            null
+          );
+          this.peticionesAPI.CrearEquipoJuegoDeEvaluacion(equipo).subscribe(equipores => console.log('EquipoJuegoEvaluado', equipores));
+        } else if (this.modoDeJuegoSeleccionado === 'Individual') {
+          const alumno: AlumnoJuegoEvaluado = new AlumnoJuegoEvaluado(
+            null,
+            res.id,
+            key,
+            value,
+            null
+          );
+          this.peticionesAPI.CrearAlumnoJuegoDeEvaluacion(alumno).subscribe(alumnosres => console.log('AlumnoJuegoEvaluado', alumnosres));
+        }
+      });
+
+      // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+      if (this.juegosActivos === undefined) {
+        // Si la lista aun no se ha creado no podre hacer el push
+        this.juegosActivos = [];
+      }
+      this.juegosActivos.push(this.juego);
+      this.Limpiar();
+      // Regresamos a la lista de equipos (mat-tab con índice 0)
+      this.tabGroup.selectedIndex = 0;
+    });
   }
 
   // FUNCIONES PARA LA CREACION DE JUEGO DE PUNTOS
@@ -690,6 +1082,10 @@ export class JuegoComponent implements OnInit {
     }
   }
 
+  TipoDeJuegoDeCuestionarioSeleccionado(tipoJuegoCuestionario: ChipColor) {
+    this.tipoDeJuegoDeCuestionarioSeleccionado = tipoJuegoCuestionario.nombre;
+    this.tengoTipoJuegoCuestionario = true;
+  }
 
   CrearJuegoDeCuestionario() {
 
@@ -699,7 +1095,7 @@ export class JuegoComponent implements OnInit {
 
 
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario(this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.puntuacionCorrecta,
+    this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.tipoDeJuegoDeCuestionarioSeleccionado, this.puntuacionCorrecta,
       this.puntuacionIncorrecta, this.modoPresentacion,
       false, false, this.profesorId, this.grupo.id, this.cuestionario.id, this.tiempoLimite), this.grupo.id)
       .subscribe(juegoCreado => {
@@ -1292,20 +1688,20 @@ export class JuegoComponent implements OnInit {
       false,
       this.grupo.id);
     this.peticionesAPI.CreaJuegoDeVotacionUnoATodos(juegoDeVotacion, this.grupo.id)
-      .subscribe(juegoCreado => {
+      .subscribe((juegoCreado) => {
         this.juego = juegoCreado;
         this.sesion.TomaJuego(this.juego);
         this.juegoCreado = true;
 
         if (this.modoDeJuegoSeleccionado === 'Individual') {
 
-          // tslint:disable-next-line:prefer-for-of
-          for (let i = 0; i < this.alumnosGrupo.length; i++) {
-            // tslint:disable-next-line:max-line-length
-            this.peticionesAPI.InscribeAlumnoJuegoDeVotacionUnoATodos(
-              new AlumnoJuegoDeVotacionUnoATodos(this.alumnosGrupo[i].id, this.juego.id))
-              .subscribe();
-          }
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < this.alumnosGrupo.length; i++) {
+          // tslint:disable-next-line:max-line-length
+          this.peticionesAPI.InscribeAlumnoJuegoDeVotacionUnoATodos(
+            // tslint:disable-next-line:indent
+		          new AlumnoJuegoDeVotacionUnoATodos(this.alumnosGrupo[i].id, this.juego.id))
+          .subscribe();
         }
 
         Swal.fire('Juego de votación tipo Uno A Todos creado correctamente', ' ', 'success');
@@ -1321,7 +1717,7 @@ export class JuegoComponent implements OnInit {
         // Regresamos a la lista de equipos (mat-tab con índice 0)
         this.tabGroup.selectedIndex = 0;
 
-      });
+      }});
 
   }
 

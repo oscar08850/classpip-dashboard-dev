@@ -113,7 +113,7 @@ export class CrearCuestionarioComponent implements OnInit {
 
   AbrirDialogoAgregarPreguntas(): void {
     const dialogRef = this.dialog.open(AgregarPreguntasDialogComponent, {
-      width: '50%',
+      width: '80%',
       height: '80%',
       position: {
         top: '0%'

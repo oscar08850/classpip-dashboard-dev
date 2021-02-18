@@ -39,10 +39,6 @@ export class JuegoDeCuestionarioSatisfaccionActivoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // const doc = new jsPDF();
-
-    // doc.text('Hello world', 20, 20);
-    // doc.save('Test.pdf');
 
 
     this.juegoSeleccionado = this.sesion.DameJuego();

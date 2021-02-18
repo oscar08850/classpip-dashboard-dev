@@ -1,0 +1,22 @@
+<div class="titulo">Classpip. Modalidad Kahoot</div>
+<div class = "contenedor">
+  <div class = "enColumna">
+    <div *ngIf = "preguntaCargada">
+      <!--TITULO PREGUNTA-->
+      <div>{{preguntaCargada.Pregunta}}</div>
+      <!--IMAGEN PREGUNTA-->
+      <img #img *ngIf="imagenPregunta" mat-card-image [src]="imagenPregunta">
+      <!--DOS PRIMERAS RESPUESTAS-->
+      <div class = "enFila">
+        <button type="button"  class="btn Eliminar" >{{preguntaCargada.RespuestaCorrecta}}</button>
+        <button type="button"  class="btn Aceptar">{{preguntaCargada.RespuestaIncorrecta1}}</button>
+      </div>
+      <!--DOS RESPUESTAS RESTANTES-->
+      <div class = "enFila">
+        <button type="button"  class="btn Eliminar" >{{preguntaCargada.RespuestaIncorrecta2}}</button>
+        <button type="button"  class="btn Aceptar">{{preguntaCargada.RespuestaIncorrecta3}}</button>
+      </div>
+    </div>
+    <button (click)="Siguiente()">Siguiente Pregunta</button>
+  </div>
+</div>

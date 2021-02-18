@@ -12,8 +12,7 @@ import { Location } from '@angular/common';
 import { InformacionJuegoDeCuestionarioDialogComponent } from './informacion-juego-de-cuestionario-dialog/informacion-juego-de-cuestionario-dialog.component';
 
 import { Howl } from 'howler';
-
-
+import { ActivatedRoute,NavigationExtras, Router} from '@angular/router';
 
 @Component({
   selector: 'app-juego-de-cuestionario-seleccionado-activo',
@@ -40,12 +39,19 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
   // Orden conlumnas de la tabla
   displayedColumnsAlumnos: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'nota', ' '];
+  displayedColumnsAlumnosKahoot: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'conexion']; 
 
   dataSourceAlumno;
+  dataSourceAlumnosConectados;
 
   // tslint:disable-next-line:no-inferrable-types
   respuestas: number = 0;
   alumnosQueHanContestado: any[];
+  alumnoIdKahoot: number;
+  conexionKahoot: boolean = false;
+
+  //Lista para tratado de conexiones
+  alumnosConectados: any[];
 
 
   constructor(  public dialog: MatDialog,
@@ -53,18 +59,27 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
                 public peticionesAPI: PeticionesAPIService,
                 public calculos: CalculosService,
                 public comServer: ComServerService,
-                private location: Location) { }
+                private location: Location,
+                private router: Router) { }
 
   ngOnInit() {
+
+    this.alumnosConectados = [];
+
     const sound = new Howl({
       src: ['/assets/got-it-done.mp3']
     });
     this.juegoSeleccionado = this.sesion.DameJuego();
+    console.log(this.juegoSeleccionado.Modalidad);
     this.AlumnosDelJuego();
-    // this.alumnosQueHanContestado = this.sesion.DameAlumnosQueHanContestadoCuestionario();
-    // if (this.alumnosQueHanContestado === undefined) {
-    //   this.alumnosQueHanContestado = [];
-    // }
+
+    //Nos suscribimos al método para que actualice el estado de la conexión al juego cuando un alumno entra
+      console.log("Esperando conexiones de alumnos");
+    this.comServer.EsperoConexionesCuestionarioKahoot().subscribe((respuesta) =>{
+      console.log("Se ha conectado un alumno");
+      this.MeConectoAKahoot(respuesta);
+    });
+
     this.comServer.EsperoRespuestasJuegoDeCuestionario()
     .subscribe((alumno: any) => {
         sound.play();
@@ -124,6 +139,13 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
     this.peticionesAPI.DameAlumnosJuegoDeCuestionario(this.juegoSeleccionado.id)
     .subscribe(alumnosJuego => {
       this.alumnosDelJuego = alumnosJuego;
+      this.alumnosDelJuego.forEach(al => {
+        this.alumnosConectados.push({
+          alumno: al, 
+          conectado: false
+        })
+      })
+      this.dataSourceAlumnosConectados = new MatTableDataSource(this.alumnosConectados);
       this.RecuperarInscripcionesAlumnoJuego();
     });
   }
@@ -155,7 +177,7 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
   DesactivarJuego() {
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.PuntuacionCorrecta,
+    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modalidad, this.juegoSeleccionado.PuntuacionCorrecta,
       this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, false, this.juegoSeleccionado.JuegoTerminado,
       // tslint:disable-next-line:max-line-length
       this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
@@ -187,7 +209,7 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
   FinalizarJuego() {
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.PuntuacionCorrecta,
+    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modalidad, this.juegoSeleccionado.PuntuacionCorrecta,
       this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, false, true,
       // tslint:disable-next-line:max-line-length
       this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
@@ -225,8 +247,31 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
       }
     });
   }
+  
+  AvanzarPregunta(){
+    this.comServer.AvanzarPregunta(this.juegoSeleccionado.grupoId);
+  }
   applyFilter(filterValue: string) {
     this.dataSourceAlumno.filter = filterValue.trim().toLowerCase();
   }
 
+  //Método para gestionar la conexión de los alumnos en la modalidad Kahoot
+  MeConectoAKahoot(idAlumno: number){
+
+    this.alumnosConectados.filter(item => item.alumno.id === idAlumno)[0].conectado = true;
+    //Después de actualizar el item con la conexión, debemos volver a cargar la tabla.
+    this.dataSourceAlumnosConectados = new MatTableDataSource(this.alumnosConectados);
+  }
+  //Para abrir la ventana de juego de Kahoot
+
+  IniciarJuegoKahoot() {
+    const idGrupo = this.sesion.DameJuego().grupoId;
+    let juegoKahoot = new Juego;
+    juegoKahoot = this.juegoSeleccionado;
+    juegoKahoot.Tipo = "Juego De Cuestionario Kahoot";  
+    console.log("Iniciamos navegación");
+    //this.router.navigate(['/grupo/' + idGrupo + '/juegos/juegoSeleccionadoActivo/', {juego: juegoKahoot}]);
+    
+    this.router.navigate(['/grupo/' + idGrupo + '/juegos/juegoSeleccionadoActivo/'], { state: { juegoKahoot: true } });
+  }
 }

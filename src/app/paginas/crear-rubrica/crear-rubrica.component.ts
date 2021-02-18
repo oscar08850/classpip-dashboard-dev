@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 //Servicios
 import { SesionService, PeticionesAPIService } from 'src/app/servicios';
 import { Rubrica } from 'src/app/clases';
+import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-crear-rubrica',
@@ -11,6 +12,12 @@ import { Rubrica } from 'src/app/clases';
   styleUrls: ['./crear-rubrica.component.scss']
 })
 export class CrearRubricaComponent implements OnInit {
+
+  // Stepper
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
+  isDisabled = true;
+
   advertencia = true;
   rubrica: Rubrica;
   rubricaCargada = false;
@@ -26,8 +33,30 @@ export class CrearRubricaComponent implements OnInit {
 
   ngOnInit() {
     this.profesorId = this.sesion.DameProfesor().id;
+    console.log(this.firstFormGroup.value);
   }
 
+  // Habilita el botón del paso 1
+  BotonPaso1() {
+    this.isDisabled = this.firstFormGroup.value.nombreRubrica === '' || this.firstFormGroup.value.descripcionRubrica === '';
+  }
+
+  CrearRubrica() {
+    const nombreRubrica: string = this.firstFormGroup.value.nombreRubrica;
+    const descripcionRubrica: string = this.firstFormGroup.value.descripcionRubrica;
+
+    this.peticionesAPI.CreaRubrica(
+      new Rubrica(nombreRubrica, descripcionRubrica, null, this.profesorId), this.profesorId)
+      .subscribe((res: Rubrica) => {
+      if (res != null) {
+        console.log('Rubrica:');
+        console.log(res);
+      } else {
+        Swal.fire('Se ha producido un error creando la rúbrica', 'ERROR', 'error');
+      }
+    });
+
+  }
 
  // Activa la función SeleccionarFicheroPreguntas
  ActivarInputInfo() {
