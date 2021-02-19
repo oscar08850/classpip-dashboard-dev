@@ -136,7 +136,7 @@ export class JuegoComponent implements OnInit {
   tipoDeJuegoDeCuestionarioSeleccionado: string;
   tengoTipoJuegoCuestionario = false;
   seleccionTipoDeJuegoDeCuestionario: ChipColor[] = [
-    {nombre: 'Test clásico', color: 'primary'},
+    {nombre: 'Clásico', color: 'primary'},
     {nombre: 'Kahoot', color: 'accent'},
   ];
 

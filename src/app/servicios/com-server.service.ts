@@ -183,6 +183,34 @@ export class ComServerService {
     });
   }
 
+  public EsperoConfirmacionPreparadoKahoot(): any {
+    return Observable.create((observer) => {
+      this.socket.on('confirmacionPreparadoParaKahoot', (nick) => {
+          console.log ('recibo nick: ' + nick);
+          observer.next(nick);
+      });
+    });
+  }
+
+  public NotificarLanzarSiguientePregunta(claveJuego: string, info: any) {
+    this.socket.emit ('lanzarSiguientePregunta' , {clave: claveJuego, opcionesDesordenadas: info});
+
+  }
+
+  public NotificarResultadoFinalKahoot(claveJuego: string, res: any) {
+    this.socket.emit ('resultadoFinalKahoot' , {clave: claveJuego, resultado: res});
+
+  }
+  public EsperoRespuestasCuestionarioKahootRapido(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('respuestaAlumnoKahootRapido', (respuesta) => {
+            console.log ('recibo respuesta kahoot ');
+            console.log (respuesta);
+            observer.next(respuesta);
+        });
+    });
+  }
+
 
 
 

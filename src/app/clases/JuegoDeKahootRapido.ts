@@ -1,12 +1,9 @@
-export class JuegoDeCuestionarioRapido {
+export class JuegoDeKahootRapido {
 
     NombreJuego: string;
     Tipo: string;
-    Modalidad: string; //"Clasico" o "Kahoot"
     Clave: string;
-    PuntuacionCorrecta: number;
-    PuntuacionIncorrecta: number;
-    TiempoLimite: number;
+    TiempoPorPregunta: number;
     Presentacion: string;
     JuegoActivo: boolean;
     JuegoTerminado: boolean;
@@ -16,21 +13,18 @@ export class JuegoDeCuestionarioRapido {
     Respuestas: any;
 
     // tslint:disable-next-line:max-line-length
-    constructor(NombreJuego?: string, Tipo?: string, Modalidad?: string,  Clave?: string, PuntuacionCorrecta?: number, PuntuacionIncorrecta?: number, Presentacion?: string, JuegoActivo?: boolean, JuegoTerminado?: boolean,
+    constructor(NombreJuego?: string, Tipo?: string,  Clave?: string, Presentacion?: string, JuegoActivo?: boolean, JuegoTerminado?: boolean,
                 profesorId?: number, cuestionarioId?: number,
-                TiempoLimite?: number) {
+                TiempoPorPregunta?: number) {
         this.NombreJuego = NombreJuego;
         this.Tipo = Tipo;
-        this.Modalidad = Modalidad;
         this.Clave = Clave;
-        this.PuntuacionCorrecta = PuntuacionCorrecta;
-        this.PuntuacionIncorrecta = PuntuacionIncorrecta;
         this.Presentacion = Presentacion;
         this.JuegoActivo = JuegoActivo;
         this.JuegoTerminado = JuegoTerminado;
         this.profesorId = profesorId;
         this.cuestionarioId = cuestionarioId;
-        this.TiempoLimite = TiempoLimite;
+        this.TiempoPorPregunta = TiempoPorPregunta;
         this.Respuestas = [];
     }
 }

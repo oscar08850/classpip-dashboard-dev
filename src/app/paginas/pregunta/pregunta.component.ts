@@ -232,6 +232,8 @@ export class PreguntaComponent implements OnInit {
         this.infoPreguntas = JSON.parse(reader.result.toString());
         console.log ('Ya tengo las preguntas');
         console.log (this.infoPreguntas);
+
+        // ahora voy a verificar que los textos de las preguntas de emparejamoemto no son demasiado largos
         const preguntasEmparejamiento = this.infoPreguntas.filter (pregunta => pregunta.Tipo === 'Emparejamiento');
         const textos = [];
         console.log ('preguntas emparejamiento');
@@ -247,7 +249,7 @@ export class PreguntaComponent implements OnInit {
         console.log ('texto');
         console.log (textos);
 
-        let error = textos.some (texto => texto.length > 15);
+        const error = textos.some (texto => texto.length > 15);
         if (error) {
           this.hayTextosLargos = true;
 

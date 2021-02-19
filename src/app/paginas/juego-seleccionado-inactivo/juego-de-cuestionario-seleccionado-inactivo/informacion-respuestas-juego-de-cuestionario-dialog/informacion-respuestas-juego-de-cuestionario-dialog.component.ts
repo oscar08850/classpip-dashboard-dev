@@ -10,41 +10,6 @@ RespuestaJuegoDeCuestionario} from 'src/app/clases';
   styleUrls: ['./informacion-respuestas-juego-de-cuestionario-dialog.component.scss']
 })
 export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements OnInit {
-  donut = {
-    tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b}: {c} ({d}%)'
-    },
-    series: [
-        {
-            name: '',
-            type: 'pie',
-            radius: ['50%', '70%'],
-            avoidLabelOverlap: false,
-            label: {
-                show: false,
-                position: 'center'
-            },
-            emphasis: {
-                label: {
-                    show: true,
-                    fontSize: '30',
-                    fontWeight: 'bold'
-                }
-            },
-            labelLine: {
-                show: false
-            },
-            data: [
-                {value: 5, name: 'respuesta A'},
-                {value: 7, name: 'respuesta B'},
-                {value: 2, name: 'respuesta C'},
-                {value: 0, name: 'respuesta D'}
-            ]
-        }
-    ]
-  };
-
 
   datos: any[] = [];
   donuts: any[] = [];
@@ -280,9 +245,9 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
         ];
         const  donut = {
           title: {
-            text: 'Pregunta ' + i++,
-            subtext: 'Respuesta correcta: ' + miDonut[1].respuesta ,
-            left: 'center'
+            // text: 'Pregunta ' + i++,
+            // subtext: 'Respuesta correcta: ' + miDonut[1].respuesta ,
+            // left: 'center'
           },
           tooltip: {
               trigger: 'item',
@@ -322,9 +287,9 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
         ];
         const  donut = {
           title: {
-            text: 'Pregunta ' + i++,
-            subtext: 'Respuesta correcta: ' + miDonut[1].respuesta ,
-            left: 'center'
+            // text: 'Pregunta ' + i++,
+            // subtext: 'Respuesta correcta: ' + miDonut[1].respuesta ,
+            // left: 'center'
           },
           tooltip: {
               trigger: 'item',
@@ -364,9 +329,9 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
         ];
         const  donut = {
           title: {
-            text: 'Pregunta ' + i++,
-            subtext: 'Respuesta correcta: ' + miDonut[1].respuesta ,
-            left: 'center'
+            // text: 'Pregunta ' + i++,
+            // subtext: 'Respuesta correcta: ' + miDonut[1].respuesta ,
+            // left: 'center'
           },
           tooltip: {
               trigger: 'item',
@@ -406,9 +371,9 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
         ];
         const  donut = {
           title: {
-            text: 'Pregunta ' + i++,
-            subtext: 'Respuesta correcta: ' + miDonut[1].respuesta ,
-            left: 'center'
+            // text: 'Pregunta ' + i++,
+            // subtext: 'Respuesta correcta: ' + miDonut[1].respuesta ,
+            // left: 'center'
           },
           tooltip: {
               trigger: 'item',
