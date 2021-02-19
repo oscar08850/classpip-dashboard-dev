@@ -144,6 +144,13 @@ export class MisCuestionariosSatisfaccionComponent implements OnInit {
     this.peticionesAPI.ModificaCuestionarioSatisfaccion (cuestionario).subscribe();
   }
 
+  Mostrar(cuestionario: CuestionarioSatisfaccion) {
+
+    this.sesion.TomaCuestionarioSatisfaccion(cuestionario);
+    this.router.navigate(['/inicio/' + this.profesor.id + '/misCuestionariosDeSatisfaccion/mostrarCuestionarioDeSatisfaccion']);
+  
+  }
+
   // CrearCopiaPrivada(cuestionario: CuestionarioSatisfaccion) {
   //   const copia = new CuestionarioSatisfaccion (
   //     cuestionario.Titulo + '(copia)',

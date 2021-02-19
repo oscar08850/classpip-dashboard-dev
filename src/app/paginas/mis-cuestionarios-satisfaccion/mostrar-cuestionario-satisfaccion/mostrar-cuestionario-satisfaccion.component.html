@@ -1,0 +1,38 @@
+<div class="titulo">Cuestionario de Satisfacción</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div class="contenedor">
+  <div class="enColumna">
+  <br>
+    <div class="enColumna">
+      <div class="texto" style=" text-align: left;">
+        <p>
+          <span style="font-weight: bold;">Titulo: </span>
+          <input style="background-color: transparent" type="text" name="nombre" requiered [(ngModel)]="cuestionarioSeleccionado.Titulo">
+        </p>
+      </div>
+      <div class="texto" style=" text-align: left;">
+        <p>
+            <span  style="font-weight: bold;">Descripción: </span>
+            <input style="background-color: transparent; width: 450px;" type="text" name="descripcion"  requiered [(ngModel)]="cuestionarioSeleccionado.Descripcion">
+        </p>
+      </div>
+    </div>
+    <div class = "enColumna" *ngIf= "cuestionarioSeleccionado">
+      <h4><strong>Afirmaciones</strong></h4>
+      <div cdkDropList class="example-list" (cdkDropListDropped)="dropAfirmacion($event)">
+        <div class="example-box" *ngFor="let afirmacion of cuestionarioSeleccionado.Afirmaciones; let i=index" cdkDrag>
+          {{afirmacion}}
+        </div>
+      </div>
+      <h4><strong>Preguntas abiertas</strong></h4>
+      <div cdkDropList class="example-list" (cdkDropListDropped)="dropPregunta($event)">
+        <div class="example-box" *ngFor="let pregunta of cuestionarioSeleccionado.PreguntasAbiertas; let i=index" cdkDrag>
+          {{pregunta}}
+        </div>
+      </div>
+    </div>
+  <br>
+  <button *ngIf = "cuestionarioModificado" type="button"  class="btn Aceptar" (click)= "ModificarCuestionario()"> Aceptar Cambios  </button>
+  <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+  </div>
+</div>

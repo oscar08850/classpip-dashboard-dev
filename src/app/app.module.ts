@@ -247,6 +247,7 @@ import { TeamExcludePipe } from './pipes/team-exclude.pipe';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
+import { MostrarCuestionarioComponent } from './paginas/mis-cuestionarios/mostrar-cuestionario/mostrar-cuestionario.component';
 
 
 import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
@@ -409,7 +410,8 @@ import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/
     TeamExcludePipe,
     ModificarPerfilComponent,
     JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
-    GestionPreguntaKahootComponent
+    GestionPreguntaKahootComponent,
+    MostrarCuestionarioComponent
 
   ],
   imports: [

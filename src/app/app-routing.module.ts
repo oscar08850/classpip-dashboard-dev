@@ -158,6 +158,7 @@ import { DeactivateGuardCuestionarioRapido } from './guardas/canExitCuestionario
 import { DeactivateGuardVotacionRapida } from './guardas/canExitVotacionRapida.guard';
 import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-perfil.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
+import { MostrarCuestionarioComponent } from './paginas/mis-cuestionarios/mostrar-cuestionario/mostrar-cuestionario.component';
 
 const routes: Routes = [
 
@@ -301,6 +302,7 @@ const routes: Routes = [
   // CUESTIONARIOS
   { path: 'inicio/:id/crearCuestionario', component: CrearCuestionarioComponent, canDeactivate: [DeactivateGuardCrearCuestionario] },
   { path: 'inicio/:id/misCuestionarios', component: MisCuestionariosComponent},
+  { path: 'inicio/:id/misCuestionarios/mostrarCuestionario', component: MostrarCuestionarioComponent},
   { path: 'inicio/:id/editarCuestionario', component: EditarCuestionarioComponent},
   
 
