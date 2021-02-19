@@ -566,6 +566,7 @@ export class CalculosService {
 
 
                     // ahora toca los juegos de creacion de cuentos
+                /*
                 console.log ('vamos a por los juegos de cuento del grupo: ' + grupoID);
                 this.peticionesAPI.DamejuegosdeCuento(grupoID)
                 .subscribe(juegosdecuento => {
@@ -579,6 +580,8 @@ export class CalculosService {
                       juegosInactivos.push(juegosdecuento[i]);
                     }
                   }
+
+                 */
                 // Ahora recogemos los juegos de cuestionario
                 // console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
                 console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
@@ -687,7 +690,7 @@ export class CalculosService {
                   });
                 });
               });
-            });
+            // });
           });
         });
       });
