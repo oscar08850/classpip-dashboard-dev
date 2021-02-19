@@ -563,6 +563,22 @@ export class CalculosService {
                     juegosInactivos.push(juegosAvatar[i]);
                   }
                 }
+
+
+                    // ahora toca los juegos de creacion de cuentos
+                console.log ('vamos a por los juegos de cuento del grupo: ' + grupoID);
+                this.peticionesAPI.DamejuegosdeCuento(grupoID)
+                .subscribe(juegosdecuento => {
+                  console.log('He recibido los juegos de cuento');
+                  console.log(juegosdecuento);
+                  // tslint:disable-next-line:prefer-for-of
+                  for (let i = 0; i < juegosdecuento.length; i++) {
+                    if (juegosdecuento[i].JuegoActivo === true) {
+                      juegosActivos.push(juegosdecuento[i]);
+                    } else {
+                      juegosInactivos.push(juegosdecuento[i]);
+                    }
+                  }
                 // Ahora recogemos los juegos de cuestionario
                 // console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
                 console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
@@ -675,6 +691,7 @@ export class CalculosService {
           });
         });
       });
+    });
     });
 
     return listasObservables;

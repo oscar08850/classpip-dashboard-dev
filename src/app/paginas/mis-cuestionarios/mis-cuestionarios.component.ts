@@ -85,17 +85,27 @@ export class MisCuestionariosComponent implements OnInit {
   }
 
   AbrirDialogoConfirmacionEliminarCuestionario(cuestionario: Cuestionario): void {
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        titulo: cuestionario.Titulo,
+
+
+
+    Swal.fire({
+      title: 'Eliminar',
+      text: "Estas segura/o de que quieres eliminar el cuestionario llamado: " +cuestionario.Titulo,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
+
+    }).then((result) => {
+      if (result.value) {
+        this.EliminarCuestionario(cuestionario);
+        Swal.fire('Eliminado', 'Cuestionario: ' + cuestionario.Titulo + ' eliminado correctamente', 'success');
+
       }
-    });
-    dialogRef.afterClosed().subscribe((confirmed:boolean) => {
-      this.EliminarCuestionario(cuestionario);
-      Swal.fire('Eliminado', 'Cuestionario: ' + cuestionario.Titulo + ' eliminado correctamente', 'success');
-    });
+    })
+
   }
 
   EliminarCuestionario(cuestionario: Cuestionario){

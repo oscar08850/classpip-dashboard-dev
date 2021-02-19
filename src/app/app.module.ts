@@ -249,6 +249,16 @@ import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
 
 
+import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
+import { MisRecursosLibroComponent } from './paginas/mis-recursos-libro/mis-recursos-libro.component';
+import { JuegoDeCuentoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-seleccionado-activo.component';
+import { AsignarRecursosJuegoLibrosComponent } from './paginas/juego/asignar-recursos-juego-libros/asignar-recursos-juego-libros.component';
+import { AsignaEspecialJuegoLibrosComponent } from './paginas/juego/asigna-especial-juego-libros/asigna-especial-juego-libros.component';
+import { VotacionescuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-votaciones/votacionescuento/votacionescuento.component';
+import { ListadoCuentosComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
+import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -359,6 +369,15 @@ import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-act
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
     RespuestasAlumnoJuegoDeCuestionarioComponent,
     VerTodosComponent,
+    CrearRecursosLibroComponent,
+    MisRecursosLibroComponent,
+    JuegoDeCuentoSeleccionadoActivoComponent,
+    AsignarRecursosJuegoLibrosComponent,
+    AsignaEspecialJuegoLibrosComponent,
+    ListadoCuentosComponent,
+    ReproductorCuentoComponent,
+    VotacionescuentoComponent,
+    ListadoCuentosComponent,
     JuegoDeVotacionUnoATodosSeleccionadoActivoComponent,
     JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent,
     CrearRubricaComponent,

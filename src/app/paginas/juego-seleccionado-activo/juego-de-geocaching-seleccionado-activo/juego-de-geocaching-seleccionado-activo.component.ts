@@ -94,20 +94,24 @@ export class JuegoDeGeocachingSeleccionadoActivoComponent implements OnInit {
 
   AbrirDialogoConfirmacionDesactivar(): void {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        nombre: this.juegoSeleccionado.Tipo,
-      }
-    });
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    Swal.fire({
+      title: 'Desactivar',
+      text: "Estas segura/o de que quieres desactivar: " + this.juegoSeleccionado.Tipo,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
+
+    }).then((result) => {
+      if (result.value) {
         this.DesactivarJuego();
         Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' Desactivado correctamente', 'success');
       }
-    });
+    })
+
   }
 
   FinalizarJuego() {
@@ -124,20 +128,22 @@ export class JuegoDeGeocachingSeleccionadoActivoComponent implements OnInit {
 
   AbrirDialogoConfirmacionFinalizar(): void {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensajeFinalizar,
-        nombre: this.juegoSeleccionado.Tipo,
-      }
-    });
+    Swal.fire({
+      title: 'Finalizar',
+      text: "Estas segura/o de que quieres finalizar: " + this.juegoSeleccionado.Tipo,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    }).then((result) => {
+      if (result.value) {
         this.FinalizarJuego();
-        Swal.fire('Finalizado', this.juegoSeleccionado.Tipo + ' Finalizado correctamente', 'success');
+        Swal.fire('Finalizar', this.juegoSeleccionado.Tipo + ' Finalizar correctamente', 'success');
       }
-    });
+    })
   }
 
   AbrirDialogoInformacionJuego(): void {

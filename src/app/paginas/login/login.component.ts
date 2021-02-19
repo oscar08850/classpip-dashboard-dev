@@ -1,16 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-
-
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
-
 import { Pregunta, Profesor } from 'src/app/clases';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { PeticionesAPIService, SesionService, CalculosService, ComServerService} from './../../servicios';
-
-
-
 import { Observable } from 'rxjs';
 import { Location } from '@angular/common';
 
