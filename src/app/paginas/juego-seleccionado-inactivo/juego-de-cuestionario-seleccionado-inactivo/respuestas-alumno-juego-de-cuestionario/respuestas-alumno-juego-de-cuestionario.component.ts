@@ -56,18 +56,44 @@ barras: any[];
                 this.barras = [];
                 respuestas.sort((a , b) => (a.preguntaId > b.preguntaId) ? 1 : -1);
                 respuestas.forEach (respuesta => {
-                  // tslint:disable-next-line:max-line-length
-                  const respuestaCorrecta = this.preguntas.filter (pregunta => pregunta.id === respuesta.preguntaId)[0].RespuestaCorrecta;
-                  if (respuestaCorrecta === respuesta.Respuesta) {
-                    // la respuesta es correcta: barra verde
-                    this.barras.push (
-                      {value: 1, respuesta: respuesta.Respuesta, itemStyle: {color: 'green'}}
-                    );
+                  const pregunta = this.preguntas.filter (p => p.id === respuesta.preguntaId)[0];
+                  if (pregunta.Tipo === 'Emparejamiento') {
+
+                    if (respuesta.Respuesta === undefined) {
+                      this.barras.push (
+                        {value: -1, respuesta: '-', label: {position: 'right'}, itemStyle: {color: 'red'}}
+                      );
+                    } else {
+                      let cont = 0;
+                      for (let i = 0; i < pregunta.Emparejamientos.length; i++) {
+                        if (pregunta.Emparejamientos[i].r === respuesta.Respuesta[i]) {
+                          cont++;
+                        }
+                      }
+                      if (cont === pregunta.Emparejamientos.length) {
+                        this.barras.push (
+                          {value: 1, respuesta: respuesta.Respuesta, itemStyle: {color: 'green'}}
+                        );
+                      } else {
+                        this.barras.push (
+                          {value: -1, respuesta: respuesta.Respuesta, label: {position: 'right'}, itemStyle: {color: 'red'}}
+                        );
+                      }
+                    }
+
                   } else {
-                    // la respuesta es incorrecta: barra roja
-                    this.barras.push (
-                      {value: -1, respuesta: respuesta.Respuesta, label: {position: 'right'}, itemStyle: {color: 'red'}}
-                    );
+                    const respuestaCorrecta = pregunta.RespuestaCorrecta;
+                    if (respuestaCorrecta === respuesta.Respuesta[0]) {
+                      // la respuesta es correcta: barra verde
+                      this.barras.push (
+                        {value: 1, respuesta: respuesta.Respuesta[0], itemStyle: {color: 'green'}}
+                      );
+                    } else {
+                      // la respuesta es incorrecta: barra roja
+                      this.barras.push (
+                        {value: -1, respuesta: respuesta.Respuesta[0], label: {position: 'right'}, itemStyle: {color: 'red'}}
+                      );
+                    }
                   }
                 });
 

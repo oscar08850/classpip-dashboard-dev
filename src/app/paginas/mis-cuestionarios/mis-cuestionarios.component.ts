@@ -106,7 +106,12 @@ export class MisCuestionariosComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.misCuestionarios )
     })
   }
+  Mostrar(cuestionario: Cuestionario) {
 
+    this.sesion.TomaCuestionario(cuestionario);
+    this.router.navigate(['/inicio/' + this.profesor.id + '/misCuestionarios/mostrarCuestionario']);
+  
+  }
   EditarCuestionario(cuestionario: Cuestionario) {
     this.sesion.TomaCuestionario(cuestionario);
     this.router.navigate(['/inicio/' + this.profesor.id + '/editarCuestionario']);

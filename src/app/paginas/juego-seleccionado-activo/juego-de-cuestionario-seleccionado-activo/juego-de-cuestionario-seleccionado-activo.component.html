@@ -1,71 +1,131 @@
-<div class="contenedor">
-  <div class="enColumna">
-    <div class="enFila" style= "width:50%">
-      <button type="button" class="btn Info" (click) = "AbrirDialogoInformacionJuego()">Información<i class="material-icons">info</i></button>
-      <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionDesactivar()">Desactivar<i class="material-icons">history</i></button>
-      <button type="button" class="btn Aceptar" (click) = "AbrirDialogoConfirmacionFinalizar()">Finalizar<i class="material-icons">done_all</i></button>
-    </div>
-
-    <!-- ////////////////////////////////////// CLASIFICACIÓN ////////////////////////////////////////////////////-->
-
-    <form style="width: 100%">
-      <div class="filter">
-        <mat-form-field style = "width: 100%;">
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar pregunta...">
-          <i class="material-icons" matSuffix>search</i>
-      </mat-form-field>
+<div *ngIf = "juegoSeleccionado.Modalidad === 'Test clásico'; else elseBlock" class="contenedor">
+  <div class="contenedor">
+    <div class="enColumna">
+      <div class="enFila" style= "width:50%">
+        <button type="button" class="btn Info" (click) = "AbrirDialogoInformacionJuego()">Información<i class="material-icons">info</i></button>
+        <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionDesactivar()">Desactivar<i class="material-icons">history</i></button>
+        <button type="button" class="btn Aceptar" (click) = "AbrirDialogoConfirmacionFinalizar()">Finalizar<i class="material-icons">done_all</i></button>
       </div>
-
-      <table align="center"  mat-table [dataSource]="dataSourceAlumno" class="example-container mat-elevation-z8">
-        <!--- Note that these columns can be defined in any order.
-                The actual rendered columns are set as a property on the row definition" -->
-
-          <!-- Nombre Alumno Column -->
-          <ng-container matColumnDef="nombreAlumno">
-            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  align="center">Nombre</th>
-            <td mat-cell  *matCellDef="let alumno">
-              <p>{{alumno.nombre}} </p>
-            </td>
-
-          </ng-container>
-
-          <!-- Primer Apellido Column -->
-          <ng-container matColumnDef="primerApellido">
-              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Primer Apellido</th>
+  
+      <!-- ////////////////////////////////////// CLASIFICACIÓN ////////////////////////////////////////////////////-->
+  
+      <form style="width: 100%">
+        <div class="filter">
+          <mat-form-field style = "width: 100%;">
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar pregunta...">
+            <i class="material-icons" matSuffix>search</i>
+        </mat-form-field>
+        </div>
+  
+        <table align="center"  mat-table [dataSource]="dataSourceAlumno" class="example-container mat-elevation-z8">
+          <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+  
+            <!-- Nombre Alumno Column -->
+            <ng-container matColumnDef="nombreAlumno">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  align="center">Nombre</th>
               <td mat-cell  *matCellDef="let alumno">
-                <p >{{alumno.primerApellido}} </p>
+                <p>{{alumno.nombre}} </p>
               </td>
-          </ng-container>
-
-          <!-- Segundo Apellido Column -->
-          <ng-container matColumnDef="segundoApellido">
-              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Segundo Apellido</th>
-              <td mat-cell  *matCellDef="let alumno">
-                <p >{{alumno.segundoApellido}} </p>
+  
+            </ng-container>
+  
+            <!-- Primer Apellido Column -->
+            <ng-container matColumnDef="primerApellido">
+                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Primer Apellido</th>
+                <td mat-cell  *matCellDef="let alumno">
+                  <p >{{alumno.primerApellido}} </p>
+                </td>
+            </ng-container>
+  
+            <!-- Segundo Apellido Column -->
+            <ng-container matColumnDef="segundoApellido">
+                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Segundo Apellido</th>
+                <td mat-cell  *matCellDef="let alumno">
+                  <p >{{alumno.segundoApellido}} </p>
+                </td>
+            </ng-container>
+  
+            <!-- Puntos Column -->
+            <ng-container matColumnDef="nota">
+                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Nota</th>
+                <td mat-cell  *matCellDef="let alumno">
+                  <p *ngIf = "alumno.contestado" style = "color: green; font-size:20px">{{alumno.nota}} </p>
+                </td>
+            </ng-container>
+  
+  
+            <ng-container matColumnDef=" ">
+              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+              <td mat-cell style= "text-align: right" *matCellDef="let alumno">
+                <p *ngIf = "alumno.contestado" style = "color: green;">
+                  <i class="material-icons green md-36">done</i> </p>
               </td>
-          </ng-container>
-
-          <!-- Puntos Column -->
-          <ng-container matColumnDef="nota">
-              <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Nota</th>
-              <td mat-cell  *matCellDef="let alumno">
-                <p *ngIf = "alumno.contestado" style = "color: green; font-size:20px">{{alumno.nota}} </p>
-              </td>
-          </ng-container>
-
-
-          <ng-container matColumnDef=" ">
-            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
-            <td mat-cell style= "text-align: right" *matCellDef="let alumno">
-              <p *ngIf = "alumno.contestado" style = "color: green;">
-                <i class="material-icons green md-36">done</i> </p>
-            </td>
-          </ng-container>
-
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnos; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnos;"></tr>
-      </table>
-    </form>
+            </ng-container>
+  
+  
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnos; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnos;"></tr>
+        </table>
+      </form>
+    </div>
   </div>
+</div>  
+
+<!-- VENTANA A VISUAIZAR EN DASHBOARD SI EL JUEGO ES MODALIDAD KAHOOT-->
+<div *ngIf = "juegoSeleccionado.Modalidad === 'Kahoot';" class="contenedor">
+ 
+  <!--    En esta tabla queremos mostrar los alumnos conectados-->
+  <table align="center"  mat-table [dataSource]="dataSourceAlumnosConectados" class="mat-elevation-z8">
+    <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Nombre Alumno Column -->
+      <ng-container matColumnDef="nombreAlumno">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  align="center">Nombre</th>
+        <td mat-cell  *matCellDef="let item">
+          <p>{{item.alumno.Nombre}} </p>
+        </td>
+
+      </ng-container>
+
+      <!-- Primer Apellido Column -->
+      <ng-container matColumnDef="primerApellido">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Primer Apellido</th>
+          <td mat-cell  *matCellDef="let item">
+            <p >{{item.alumno.PrimerApellido}} </p>
+          </td>
+      </ng-container>
+
+      <!-- Segundo Apellido Column -->
+      <ng-container matColumnDef="segundoApellido">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Segundo Apellido</th>
+          <td mat-cell  *matCellDef="let item">
+            <p >{{item.alumno.SegundoApellido}} </p>
+          </td>
+      </ng-container>
+
+      <!-- Puntos Column 
+      <ng-container matColumnDef="conexion">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Conectado</th>
+          <td mat-cell  *matCellDef="let item">
+            <p *ngIf = "item.conectado" style = "color: green; font-size:20px">Sí </p>
+          </td>
+      </ng-container>-->
+
+
+      <ng-container matColumnDef="conexion">
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+        <td mat-cell style= "text-align: right" *matCellDef="let item">
+          <p *ngIf = "item.conectado" style = "color: green;">
+            <i class="material-icons green md-36">done</i> </p>
+        </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnosKahoot; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnosKahoot;"></tr>
+  </table>
+
+  <button type="button"  (click) = "IniciarJuegoKahoot()" class="btn Eliminar" >Ver</button>
 </div>

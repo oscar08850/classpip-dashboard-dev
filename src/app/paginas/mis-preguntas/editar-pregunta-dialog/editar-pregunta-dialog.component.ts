@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
-import { PeticionesAPIService } from 'src/app/servicios';
+import { CalculosService, PeticionesAPIService } from 'src/app/servicios';
 import { Location } from '@angular/common';
 import { Coleccion, Pregunta } from 'src/app/clases';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
 import * as URL from '../../../URLs/urls';
+import { FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-editar-pregunta-dialog',
@@ -18,10 +19,10 @@ export class EditarPreguntaDialogComponent implements OnInit {
 
   preguntaEditar: Pregunta;
   profesorId: number;
-  //Para comprovar valor de cada uno de los campos
+  // Para comprovar valor de cada uno de los campos
   myForm: FormGroup;
 
-  //PROPIEDADES PREGUNTA
+  // PROPIEDADES PREGUNTA
   titulo: string;
   pregunta: string;
   tematica: string;
@@ -36,66 +37,64 @@ export class EditarPreguntaDialogComponent implements OnInit {
   // variables necesarias para la carga de la foto
   filePregunta: File;
   nombreFicheroImagen: string;
+  imagenAnterior: string;
 
 
-  //PARA SABER SI TENEMOS TODOS LOS CAMPOS RELLENADOS
-  isDisabled: Boolean = true;
+  // PARA SABER SI TENEMOS TODOS LOS CAMPOS RELLENADOS
+  hayCambios: Boolean = false;
 
   constructor(public dialog: MatDialog,
               private router: Router,
               public location: Location,
               private peticionesAPI: PeticionesAPIService,
+              private calculos: CalculosService,
               private _formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<EditarPreguntaDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
-    this.myForm = this._formBuilder.group({
-      titulo: ['', Validators.required],
-      pregunta: ['', Validators.required],
-      tematica: ['', Validators.required],
-      respuestaCorrecta: ['', Validators.required],
-      respuestaIncorrecta1: ['', Validators.required],
-      respuestaIncorrecta2: ['', Validators.required],
-      respuestaIncorrecta3: ['', Validators.required],
-      feedbackCorrecto: ['', Validators.required],
-      feedbackIncorrecto: ['', Validators.required],
-    })
-
     this.preguntaEditar = this.data.pregunta;
+
     this.profesorId = this.data.profesorId;
+    console.log ("ya tengo la pregunta");
+    console.log (this.preguntaEditar);
+    if (this.preguntaEditar.Imagen !== undefined) {
+      this.imagenPregunta = URL.ImagenesPregunta + this.preguntaEditar.Imagen ;
+      // Sino la imagenColeccion será undefined para que no nos pinte la foto de otro equipo préviamente seleccionado
+    } else {
+      this.imagenPregunta = undefined;
+    }
 
-    this.titulo = this.data.pregunta.Titulo;
-    this.pregunta = this.data.pregunta.Pregunta;
-    this.tematica = this.data.pregunta.Tematica;
-    this.respuestaCorrecta = this.data.pregunta.RespuestaCorrecta;
-    this.respuestaIncorrecta1 = this.data.pregunta.RespuestaIncorrecta1;
-    this.respuestaIncorrecta2 = this.data.pregunta.RespuestaIncorrecta2;
-    this.respuestaIncorrecta3 = this.data.pregunta.RespuestaIncorrecta3;
-    this.feedbackCorrecto = this.data.pregunta.FeedbackCorrecto;
-    this.feedbackIncorrecto = this.data.pregunta.FeedbackIncorrecto;
-    this.imagenPregunta = this.data.pregunta.Imagen;
-
-    this.TraeImagenPregunta(this.preguntaEditar);
+  }
+  ActivarGuardar () {
+    this.hayCambios = true;
   }
 
-  //COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN LA PREGUNTA
+
+
+  // COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN LA PREGUNTA
   GuardarPregunta() {
-    this.peticionesAPI.ModificaPregunta(new Pregunta (this.titulo, this.pregunta, this.tematica, this.respuestaCorrecta, this.respuestaIncorrecta1, this.respuestaIncorrecta2, this.respuestaIncorrecta3, this.feedbackCorrecto, this.feedbackIncorrecto, this.nombreFicheroImagen), this.profesorId, this.preguntaEditar.id )
+    // tslint:disable-next-line:max-line-length
+    this.peticionesAPI.ModificaPregunta(this.preguntaEditar, this.profesorId, this.preguntaEditar.id )
     .subscribe((res) => {
       if (res != null) {
-       //Añadimos la imagen a la BD
-        const imagenPreguntaData: FormData = new FormData();
+        // si hemos cambiado la imagen de la pregunta, borramos la anterior y guardamos la nueva
+        if (this.filePregunta) {
+          const imagenPreguntaData: FormData = new FormData();
           imagenPreguntaData.append(this.filePregunta.name, this.filePregunta);
           this.peticionesAPI.PonImagenPregunta(imagenPreguntaData)
-            .subscribe();
+          .subscribe();
+          this.peticionesAPI.BorrarImagenPregunta (this.imagenAnterior)
+          .subscribe();
 
+        }
         Swal.fire('Pregunta editada correctamente', 'Bien hecho', 'success');
+        this.hayCambios = false;
         this.goBack();
       } else {
         Swal.fire('Alerta', 'Hay algun problema con el servidor intentelo mas tarde', 'error');
       }
-    })
+    });
 
   }
 
@@ -104,57 +103,70 @@ export class EditarPreguntaDialogComponent implements OnInit {
     this.location.back();
   }
 
-  //CUANDO PULSAMOS EN EL BOTON CANCELAR
+  // CUANDO PULSAMOS EN EL BOTON CANCELAR
   goBack() {
-    this.dialogRef.close();
-  }
+    if (this.hayCambios) {
+      Swal.fire({
+        title: '¿Seguro que quieres salir?',
+        text: 'Hay cambios que no has salvado',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, estoy seguro'
+      }).then((result) => {
+        if (result.value) {
+          this.dialogRef.close();
+        }
+      });
 
-  // MIRO SI TODOS LOS PARAMETROS DE PREGUNTA ESTAN RELLENADOS
-  Disabled() {
-    if (this.myForm.value.titulo === '' || this.myForm.value.pregunta === '' || this.myForm.value.tematica === '' ||
-    this.myForm.value.respuestaCorrecta === '' || this.myForm.value.respuestaIncorrecta1 === '' ||
-     this.myForm.value.respuestaIncorrecta2 === '' || this.myForm.value.respuestaIncorrecta3 === '' ||
-      this.myForm.value.feedbackCorrecto === '' || this.myForm.value.feedbackIncorrecto === '') {
-      // Si alguno de los valores es igual a nada, entonces estará desactivado
-      this.isDisabled = true;
     } else {
-      // Si ambos son diferentes a nulo, estará activado.
-      this.isDisabled = false;
+    this.dialogRef.close();
     }
   }
+
+  EliminarPareja(i) {
+    this.preguntaEditar.Emparejamientos.splice (i, 1);
+    this.hayCambios = true;
+  }
+  NuevoEmparejamiento () {
+    this.preguntaEditar.Emparejamientos.push ({
+      l: '',
+      r: ''
+    });
+    this.hayCambios = true;
+  }
+
 
   ActivarInputImagen() {
     document.getElementById('inputImagenPregunta').click();
   }
 
-  //Evento que nos permite cargar una imagen y guardarla en el atributo imagenPregunta
+  // Evento que nos permite cargar una imagen y guardarla en el atributo imagenPregunta
   CargarImagenPregunta($event) {
     this.filePregunta = $event.target.files[0];
-    this.nombreFicheroImagen = this.filePregunta.name;
 
-    const reader = new FileReader();
-    reader.readAsDataURL(this.filePregunta);
-    reader.onload = () => {
-      this.imagenPregunta = reader.result.toString();
+    this.calculos.NombreFicheroImagenPreguntaRepetido ( this.filePregunta.name)
+    .subscribe (repetido => {
+      if (repetido) {
+        Swal.fire('Error', 'Ya hay un fichero en la base de datos con el mismo nombre', 'error');
+      } else {
+        this.imagenAnterior =  this.preguntaEditar.Imagen;
+        this.preguntaEditar.Imagen = this.filePregunta.name;
+        this.hayCambios = true;
+        const imagenPreguntaData: FormData = new FormData();
+        imagenPreguntaData.append(this.filePregunta.name, this.filePregunta);
+        this.peticionesAPI.PonImagenPregunta(imagenPreguntaData)
+        .subscribe(res => {
+          this.imagenPregunta = URL.ImagenesPregunta +  this.preguntaEditar.Imagen ;
+        });
+        console.log ('voy a borrar la imagen anterior');
+        console.log (this.imagenAnterior);
+        this.peticionesAPI.BorrarImagenPregunta (this.imagenAnterior)
+        .subscribe();
 
-    };
-}
-
-  // Le pasamos la pregunta y buscamos la imagen que tiene.
- TraeImagenPregunta(pregunta: Pregunta) {
-
-  console.log('entro a buscar pregunta y foto');
-  console.log(pregunta.Imagen);
-  // Si la coleccion tiene una foto (recordemos que la foto no es obligatoria)
-  if (pregunta.Imagen !== undefined) {
-
-    this.imagenPregunta = URL.ImagenesPregunta + pregunta.Imagen ;
-    console.log (this.imagenPregunta);
-
-    // Sino la imagenColeccion será undefined para que no nos pinte la foto de otro equipo préviamente seleccionado
-  } else {
-    this.imagenPregunta = undefined;
+      }
+    });
   }
 
-  }
 }

@@ -644,9 +644,27 @@ export class CalculosService {
                               juegosInactivos.push(juegosCuestionarioSatisfaccion[i]);
                             }
                           }
-
                           const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
                           obs.next (resultado);
+
+                          // console.log('GET JuegoDeEvaluacion OF grupoID: ', grupoID);
+                          // this.peticionesAPI.DameJuegosDeEvaluacion(grupoID)
+                          //   .subscribe(juegosDeEvaluacion => {
+                          //     console.log('GET RESPONSE JuegoDeEvaluacion', juegosDeEvaluacion);
+                          //     // tslint:disable-next-line:prefer-for-of
+                          //     for (let i = 0; i < juegosDeEvaluacion.length; i++) {
+                          //       if (juegosDeEvaluacion[i].JuegoActivo === true) {
+                          //         juegosDeEvaluacion[i].Tipo = 'Evaluacion';
+                          //         juegosActivos.push(juegosDeEvaluacion[i]);
+                          //       } else {
+                          //         juegosDeEvaluacion[i].Tipo = 'Evaluacion';
+                          //         juegosInactivos.push(juegosDeEvaluacion[i]);
+                          //       }
+                          //     }
+
+                          //   const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+                          //   obs.next (resultado);
+                          // });
                         });
                       });
                     });
@@ -1872,29 +1890,29 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
   // espere hasta que se haya acabado la operacion de borrar la pregunta de la base de datos.
   // La primera función elimina la imagen asociada a la pregunta, mientras que la segunda elimina el modelo de la pregunta.
   public EliminarPregunta(): any {
-    const eliminaObservable = new Observable ( obs => 
+    const eliminaObservable = new Observable ( obs =>
       {
         //Miramos si la imagen está asociada a más de una pregunta
         var contador = 0;
         //Recuperamos todas las preguntas que hay en la BD
-        this.peticionesAPI.DameTodasMisPreguntas(this.sesion.DameProfesor().id).subscribe( res => 
+        this.peticionesAPI.DameTodasMisPreguntas(this.sesion.DameProfesor().id).subscribe( res =>
           {
-            if (res[0] !== undefined){ 
+            if (res[0] !== undefined){
               //Comparamos cada una de las imágenes con la que queremos eliminar.
               res.forEach( pregunta => {
-                if (pregunta.Imagen == this.sesion.DamePregunta().Imagen) { 
+                if (pregunta.Imagen == this.sesion.DamePregunta().Imagen) {
                   contador ++;
                 }
               });
-              
+
               //Si el contador es dos o más, la imagen se usa en más de una Pregunta y, por lo tanto, no se puede borrar.
               if (contador < 2){
-                this.peticionesAPI.BorrarImagenPregunta(this.sesion.DamePregunta().Imagen).subscribe(); 
+                this.peticionesAPI.BorrarImagenPregunta(this.sesion.DamePregunta().Imagen).subscribe();
                 console.log ("IMAGEN ELIMINADA");
               }
             }
           });
-        
+
           console.log ("IMAGEN EN USO")
         this.peticionesAPI.BorrarPregunta(
                       this.sesion.DamePregunta().id)
@@ -1905,7 +1923,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
     });
     return eliminaObservable;
   }
-  
+
   // tslint:disable-next-line:max-line-length
   // ESTA FUNCIÓN RECUPERA TODOS LOS CUESTINARIOS QUE CONTIENEN ESA PREGUNTA Y DESPUÉS LA BORRA DE PREGUNTASDELCUESTIONARIO. ESTO LO HACEMOS PARA NO
   // DEJAR MATRICULAS QUE NO NOS SIRVEN EN LA BASE DE DATOS
@@ -3919,5 +3937,52 @@ public VerificarFicherosColeccion(coleccion: any): any {
   return listaFicherosObservable;
 }
 
+
+public NombreFicheroImagenPreguntaRepetido (nombreFichero: string): any {
+  const verificarFicheroObservable = new Observable ( obs => {
+    this.peticionesAPI.DameImagenPregunta (nombreFichero)
+    .subscribe (
+          (imagen) => {
+            obs.next (true);
+          },
+          (error) => {
+            obs.next (false);
+        });
+    });
+  return verificarFicheroObservable;
+}
+
+
+public VerificarFicherosPreguntas(preguntas: any): any {
+  const listaFicherosObservable = new Observable ( obs => {
+    let numeroFicheros = 0;
+    preguntas.forEach (pregunta => {
+        if (pregunta.Imagen) {
+          numeroFicheros++;
+        }
+    });
+    const lista: string [] = [];
+
+    let cont = 0;
+    preguntas.forEach (pregunta => {
+        this.peticionesAPI.DameImagenPregunta (pregunta.Imagen)
+        .subscribe (
+          (imagen) => {
+            lista.push (pregunta.Imagen);
+            cont++;
+            if (cont === numeroFicheros) {
+              obs.next (lista);
+            }
+          },
+          (error) => {
+            cont++;
+            if (cont === numeroFicheros) {
+              obs.next (lista);
+            }
+        });
+    });
+  });
+  return listaFicherosObservable;
+}
 
 }

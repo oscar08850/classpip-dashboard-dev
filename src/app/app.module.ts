@@ -34,6 +34,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 
 import { ListViewModule } from '@syncfusion/ej2-angular-lists';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSliderModule} from '@angular/material/slider';
 
 
 // IMPORTs COMPONENTES
@@ -237,9 +239,16 @@ import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 import { JuegoDeCogerTurnoRapidoComponent } from './paginas/mis-juegos-rapidos/juego-de-coger-turno-rapido/juego-de-coger-turno-rapido.component';
 import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-perfil.component';
 
-import {MatSliderModule} from '@angular/material/slider';
+
+
+import { ExcludePipe } from './pipes/exclude.pipe';
+import { TeamExcludePipe } from './pipes/team-exclude.pipe';
 
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo.component';
+import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
+import { MostrarCuestionarioComponent } from './paginas/mis-cuestionarios/mostrar-cuestionario/mostrar-cuestionario.component';
+
 
 @NgModule({
   declarations: [
@@ -377,7 +386,13 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
     GuardarColeccionComponent,
     MostrarColeccionComponent,
     JuegoDeCogerTurnoRapidoComponent,
-    ModificarPerfilComponent
+    MisFamiliasImagenesPerfilComponent,
+    ExcludePipe,
+    TeamExcludePipe,
+    ModificarPerfilComponent,
+    JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
+    GestionPreguntaKahootComponent,
+    MostrarCuestionarioComponent
 
   ],
   imports: [
@@ -414,7 +429,8 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
     MatDatepickerModule,
     MatNativeDateModule,
     MatRadioModule,
-
+    MatSelectModule,
+    MatSliderModule,
     HttpClientModule,
 
     NgxEchartsModule,

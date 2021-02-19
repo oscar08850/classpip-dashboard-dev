@@ -30,6 +30,12 @@
                 </div>
                 <div>
                   <p style="font-size: medium;">
+                    <span style="font-weight: bold; font-size: medium;">Modalidad: </span>
+                    {{Modalidad}}
+                  </p>
+                </div>
+                <div>
+                  <p style="font-size: medium;">
                     <span style="font-weight: bold; font-size: medium;">Juego Activo: </span>
                     {{JuegoActivo}}
                   </p>
@@ -80,6 +86,16 @@
                     <select (click)="Disabled()" matNativeControl formControlName="Presentacion" [(ngModel)]="Presentacion">
                       <option *ngFor="let presentacion of Presentaciones" [value]="presentacion">
                         {{presentacion}}
+                      </option>
+                    </select>
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field style="width: 100%;">
+                    <mat-label>Modalidad</mat-label>
+                    <select (click)="Disabled()" matNativeControl formControlName="Modalidad" [(ngModel)]="Modalidad">
+                      <option *ngFor="let modalidad of Modalidades" [value]="modalidad">
+                        {{modalidad}}
                       </option>
                     </select>
                   </mat-form-field>

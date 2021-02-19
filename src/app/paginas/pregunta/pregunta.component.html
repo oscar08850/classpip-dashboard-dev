@@ -9,7 +9,7 @@
         <pre>
         <br>
         La información de las preguntas debe estar en un fichero <strong>JSON</strong>
-        con el contenido mostrado en el siguiente ejemplo.
+        con el contenido mostrado en el siguiente ejemplo. La imagen deben ser cuadrada.
           [
             {{'{'}}
                 "Titulo": "suma",
@@ -42,6 +42,26 @@
             Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
           </button>
         </div>
+        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "hayFicherosRepetidos">
+          <h3 style = "color: red">ATENCION</h3>
+
+          <h5 style = "padding: 5%;"> Ya hay ficheros en la base de datos con nombres iguales a algunos que quieres cargar</h5>
+          <p *ngFor = "let fichero of ficherosRepetidos">{{fichero}}</p>
+
+          <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+              Cancelar
+          </button>
+        </div>
+        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "faltanFicheros">
+          <h3 style = "color: red">ATENCION</h3>
+
+          <h5 style = "padding: 5%;"> Necesitas los siguientes ficheros, que no están entre los seleccionados</h5>
+          <p *ngFor = "let fichero of ficherosQueFaltan">{{fichero}}</p>
+
+          <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+              Cancelar
+          </button>
+        </div>
         <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "ficheroCargado">
           <h3>Nuevas preguntas</h3>
           <div class = "enFila" style = "width: 90%">
@@ -59,7 +79,6 @@
       </div>
     </mat-tab>
     <mat-tab label="Introducir nueva pregunta">
-      <form [formGroup]="myForm">
 
           <mat-card class="panel">
 
@@ -67,41 +86,53 @@
                   <mat-horizontal-stepper #linearHorizontalStepper="matHorizontalStepper" [linear]="true" style="width:100%">
 
                       <!-- PRIMER PASO -->
-                      <mat-step [stepControl]="myForm">
+                      <mat-step>
                         <ng-template matStepLabel>Pregunta</ng-template>
+
                         <mat-form-field style=  "width: 50%;">
                           <mat-label>Titulo</mat-label>
-                          <input (keyup)="Disabled()" matInput formControlName="tituloPregunta" required>
+                          <input matInput [(ngModel)] = "titulo">
                         </mat-form-field>
+
+
+                        <div class = "colorsChips">
+
+                          <mat-label style = "font-size: smaller;">Tipo de pregunta*    {{tipoDePreguntaSeleccionado}}</mat-label>
+                          <mat-chip-list class="mat-chip-list-stacked">
+                              <mat-chip style= "width: 300px" *ngFor="let tipo of seleccionTipoPregunta; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoPregunta[i].selected}}"
+                              (click)="TipoDePreguntaSeleccionado(seleccionTipoPregunta[i])" [value]="tipo.nombre" [selectable]="true">
+                                {{tipo.nombre}}
+                              </mat-chip>
+                          </mat-chip-list>
+                        </div>
+                        <br>
 
                         <div>
                           <mat-form-field style=  "width: 100%;">
                             <mat-label>Pregunta</mat-label>
-                              <input (keyup)="Disabled()" matInput formControlName="preguntaPregunta" required>
+                            <input matInput [(ngModel)] = "pregunta">
                           </mat-form-field>
                         </div>
 
                         <div>
                           <mat-form-field style=  "width: 50%;">
                             <mat-label>Temática</mat-label>
-                              <input (keyup)="Disabled()" matInput formControlName="tematicaPregunta" required>
+                            <input matInput [(ngModel)] = "tematica">
                           </mat-form-field>
                         </div>
 
                         <div class="btnCambiarStep">
-                          <!-- <button [disabled]="isDisabled" *ngIf="preguntaYaCreada === false" mat-raised-button class="btn Next"  (click)= CrearGrupo() matStepperNext>Siguiente</button>
-                          <button [disabled]="isDisabled" *ngIf="preguntaYaCreada === true" mat-raised-button class="btn Next"  (click)= EditarGrupo() matStepperNext>Siguiente</button> -->
-                          <button [disabled]="isDisabled" mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                           <button  mat-raised-button class="btn Back" style="margin: 5px; display: none" matStepperPrevious>
                             Atrás</button>
-                        <button  [disabled]="isDisabled" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
-                            Siguiente
-                        </button>
+                          <button  [disabled]="!tengoDatosBasicos()" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                              Siguiente
+                          </button>
                         </div>
 
                       </mat-step>
 
                       <!-- SEGUNDO PASO; AÑADIDO PARA LA INSERCIÓN DE IMAGEN EN LA PREGUNTA (OPCIONAL)-->
-                      <mat-step> 
+                      <mat-step>
                         <ng-template matStepLabel>Imagen</ng-template>
                         <input #file id = "inputImagenPregunta" type="file" accept= 'image/*' (change)="CargarImagenPregunta($event)" style="display:none">
                         <!-- Cuando se cargue la imagen se activara la función que hara que se visualice con tamaño doble -->
@@ -124,59 +155,155 @@
 
 
                       <!-- TERCER PASO -->
-                      <mat-step  [stepControl]="myForm2">
-                        <form [formGroup]='myForm2'>
-                        <ng-template matStepLabel>Añadir Respuestas</ng-template>
+                      <mat-step *ngIf = "tipoDePreguntaSeleccionado === 'Cuatro opciones'" [stepControl]="myForm2">
+
+                        <ng-template matStepLabel>Definir opciones</ng-template>
                         <mat-form-field style=  "width: 100%;">
                           <mat-label>Respuesta Correcta</mat-label>
-                          <input (keyup)="Disabled2()" matInput formControlName="respuestaCorrecta" required>
+                          <input matInput [(ngModel)] = "respuestaCorrecta">
                         </mat-form-field>
 
                         <div>
                           <mat-form-field style=  "width: 100%;">
                             <mat-label>Respuesta Incorrecta 1</mat-label>
-                              <input (keyup)="Disabled2()" matInput formControlName="respuestaIncorrecta1" required>
+                            <input matInput [(ngModel)] = "respuestaIncorrecta1">
                           </mat-form-field>
                         </div>
 
                         <div>
                           <mat-form-field style=  "width: 100%;">
                             <mat-label>Respuesta Incorrecta 2</mat-label>
-                              <input (keyup)="Disabled2()" matInput formControlName="respuestaIncorrecta2" required>
+                            <input matInput [(ngModel)] = "respuestaIncorrecta2">
                           </mat-form-field>
                         </div>
 
                         <div>
                           <mat-form-field style=  "width: 100%;">
                             <mat-label>Respuesta Incorrecta 3</mat-label>
-                              <input (keyup)="Disabled2()" matInput formControlName="respuestaIncorrecta3" required>
+                            <input matInput [(ngModel)] = "respuestaIncorrecta3">
                           </mat-form-field>
                         </div>
+
+                        <div class="btnCambiarStep">
+                          <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                            Atrás</button>
+                          <button [disabled]="!tengoCuatroOpciones ()" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                            Siguiente
+                          </button>
+                        </div>
+                      </mat-step>
+
+                         <!-- TERCER PASO -->
+                      <mat-step *ngIf = "tipoDePreguntaSeleccionado === 'Respuesta abierta'">
+                          <ng-template matStepLabel>Definir respuesta</ng-template>
+                          <mat-form-field style=  "width: 100%;">
+                            <mat-label>Respuesta Correcta</mat-label>
+                            <input matInput [(ngModel)] = "respuestaCorrecta">
+                          </mat-form-field>
+
+
+
+                          <div class="btnCambiarStep">
+                            <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                              Atrás</button>
+                            <button [disabled]="!tengoRespuestaCorrecta()" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                              Siguiente
+                            </button>
+                          </div>
+                      </mat-step>
+
+                           <!-- TERCER PASO -->
+                      <mat-step *ngIf = "tipoDePreguntaSeleccionado === 'Verdadero o falso'">
+                        <ng-template matStepLabel>Definir la respuesta</ng-template>
+
+
+                        <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
+                          <mat-radio-button (click)="respuestaCorrecta = 'verdadero'" class="radio-button">
+                            <label style="color: black;">Verdadero</label>
+                          </mat-radio-button>
+                          <mat-radio-button (click)="respuestaCorrecta = 'falso'" class="radio-button">
+                            <label style="color: black;">Falso</label>
+                          </mat-radio-button>
+                        </mat-radio-group>
+
+
+
+                        <div class="btnCambiarStep">
+                          <button mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                            Atrás</button>
+                          <button [disabled]="!tengoOpcionesVerdaderoFalso()" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                            Siguiente
+                          </button>
+                        </div>
+                      </mat-step>
+
+                         <!-- TERCER PASO -->
+                      <mat-step *ngIf = "tipoDePreguntaSeleccionado === 'Emparejamiento'">
+                          <ng-template matStepLabel>Definir emparejamientos</ng-template>
+
+                          <mat-label style = "font-size: smaller;"><strong>Emparejamientos</strong></mat-label>
+
+                          <div *ngFor = "let pareja of emparejamientos; let i= index ">
+
+                            <mat-form-field style=  "width: 40%;">
+                              <input  matInput [(ngModel)]="pareja.l">
+                            </mat-form-field>
+                            <mat-form-field style=  "width: 40%; padding-left: 5%;">
+                              <input  matInput [(ngModel)]="pareja.r">
+                            </mat-form-field>
+                            <button (click) = "EliminarPareja (i)" mat-icon-button matTooltip="Eliminar este emparejamiento">
+                              <i class="material-icons red md-36">delete</i>
+                            </button>
+                          </div>
+                          <div>
+                            <mat-form-field style=  "width: 40%;">
+                              <input  matInput [(ngModel)]="nuevaParejaL">
+                            </mat-form-field>
+                            <mat-form-field style=  "width: 40%; padding-left: 5%;">
+                              <input  matInput [(ngModel)]="nuevaParejaR">
+                            </mat-form-field>
+                          </div>
+                          <div class= "enColumna">
+                            <button [disabled]="!hayNuevaPareja ()" mat-raised-button class="btn Aceptar"  (click) = "NuevoEmparejamiento();"> Añadir emparejamiento </button>
+                          </div>
+                          <br>
+                          <br>
+
+                          <div class="btnCambiarStep">
+                            <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                              Atrás</button>
+                            <button [disabled]="!tengoEmparejamientos()" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                              Siguiente
+                            </button>
+                          </div>
+                      </mat-step>
+
+                      <mat-step>
+                        <ng-template matStepLabel>Configurar feedback</ng-template>
+
 
                         <div>
                           <mat-form-field style=  "width: 100%;">
                             <mat-label>Feedback Correcto</mat-label>
-                              <input (keyup)="Disabled2()" matInput formControlName="feedbackCorrecto" required>
+                            <input matInput [(ngModel)] = "feedbackCorrecto">
                           </mat-form-field>
                         </div>
 
                         <div>
                           <mat-form-field style=  "width: 100%;">
                             <mat-label>Feedback Incorrecto</mat-label>
-                              <input (keyup)="Disabled2()" matInput formControlName="feedbackIncorrecto" required>
+                            <input matInput [(ngModel)] = "feedbackIncorrecto">
                           </mat-form-field>
                         </div>
 
                         <div class="btnCambiarStep">
-                          <button [disabled]="isDisabled2" mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
+                          <button  mat-raised-button class="btn Back" style="margin: 5px" matStepperPrevious>
                             Atrás</button>
-                          <button [disabled]="isDisabled2" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
+                          <button [disabled]="!tengoFeedback()" mat-raised-button class="btn Next" style="margin: 5px" matStepperNext>
                             Siguiente
                           </button>
                         </div>
-                      </form>
                       </mat-step>
-
                       <mat-step>
                         <ng-template matStepLabel>Finalizar</ng-template>
                         <div style="margin: 5px;">
@@ -196,7 +323,6 @@
 
             <br>
 
-      </form>
     </mat-tab>
   </mat-tab-group>
 
