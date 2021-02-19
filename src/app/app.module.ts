@@ -15,7 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatInputModule, MatProgressSpinnerModule, MatRadioModule} from '@angular/material';
+import {MatBadgeModule, MatInputModule, MatProgressSpinnerModule, MatRadioModule} from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
@@ -441,7 +441,8 @@ import { EvaluacionBorrarDialogoComponent } from './paginas/juego-seleccionado-a
         AngularDateTimePickerModule,
         MatSliderModule,
         NgxQRCodeModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatBadgeModule
 
     ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA

@@ -294,7 +294,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
   }
 
-  openDialog(i: number, c: number, profesor: boolean = false, editar: boolean = false): void {
+  openDialog(i: number, c: number, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
     if (profesor) {
       const dialogRef = this.dialog.open(EvaluacionDialogoComponent, {
         width: '800px',
@@ -309,7 +309,8 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           evaluadorId: this.sesion.DameProfesor().id,
           evaluadoId: c,
           profesor: true,
-          editable: editar
+          editable: editar,
+          global: false
         }
       });
       dialogRef.afterClosed().subscribe(result => {
@@ -339,10 +340,11 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           equipos: this.equipos,
           equiposRelacion: this.equiposRelacion,
           alumnosDeEquipo: this.alumnosDeEquipo,
-          evaluadorId: this.tmpDisplayedColumns[i - 1][0],
+          evaluadorId: global ? 0 : this.tmpDisplayedColumns[i - 1][0],
           evaluadoId: c,
           profesor: false,
-          editable: false
+          editable: false,
+          global
         }
       });
     }

@@ -18,6 +18,7 @@ export interface DialogData {
   evaluadoId: number;
   profesor: boolean;
   editable: boolean;
+  global: boolean;
 }
 
 @Component({
@@ -55,6 +56,8 @@ export class EvaluacionDialogoComponent implements OnInit {
       const evaluado = this.data.alumnosRelacion.find(item => item.alumnoId === this.data.evaluadoId);
       if (this.data.profesor) {
         this.respuestaEvaluacion = evaluado.respuestas.find(item => item.profesorId).respuesta;
+      } else if (this.data.global) {
+        this.respuestaEvaluacion = evaluado.respuestas.map(item => item.respuesta);
       } else {
         this.respuestaEvaluacion = evaluado.respuestas.find(item => item.alumnoId === this.data.evaluadorId).respuesta;
       }
@@ -62,6 +65,8 @@ export class EvaluacionDialogoComponent implements OnInit {
       const evaluado = this.data.equiposRelacion.find(item => item.equipoId === this.data.evaluadoId);
       if (this.data.profesor) {
         this.respuestaEvaluacion = evaluado.respuestas.find(item => item.profesorId).respuesta;
+      } else if (this.data.global) {
+        this.respuestaEvaluacion = evaluado.respuestas.map(item => item.respuesta);
       } else if (evaluado.alumnosEvaluadoresIds !== null) {
         this.respuestaEvaluacion = evaluado.respuestas.find(item => item.alumnoId === this.data.evaluadorId).respuesta;
       } else {
@@ -70,6 +75,7 @@ export class EvaluacionDialogoComponent implements OnInit {
         this.respuestaEvaluacion = evaluado.respuestas.find(item => alumnosDeEquipo.includes(item.alumnoId)).respuesta;
       }
     }
+    console.log(this.respuestaEvaluacion);
   }
 
   CalcularNotaCriterio(index: number): number {
@@ -147,6 +153,38 @@ export class EvaluacionDialogoComponent implements OnInit {
     return this.respuestaEvaluacion[index].filter(item => item === false).length;
   }
 
+  CalcularNotasCriterios(index: number): number {
+    let subNota = 0;
+    if (this.data.juego.metodoSubcriterios) {
+      let notaCriterio = 0;
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.respuestaEvaluacion.length; i++) {
+        for (let j = 1; j < this.data.juego.Pesos[index].length; j++) {
+          if (this.respuestaEvaluacion[i][index][j - 1]) {
+            subNota += this.data.juego.Pesos[index][j] / 10;
+          }
+          notaCriterio += subNota / this.respuestaEvaluacion.length;
+          subNota = 0;
+        }
+      }
+      return Math.round((notaCriterio + Number.EPSILON) * 100) / 100;
+    } else {
+    }
+  }
+
+  CalcularNotaFinalTotal() {
+    let nota = 0;
+    for (let i = 0; i < this.data.rubrica.Criterios.length; i++) {
+      nota += this.CalcularNotasCriterios(i) * this.data.juego.Pesos[i][0] / 100;
+    }
+    return Math.round((nota + Number.EPSILON) * 100) / 100;
+  }
+
+  numeroMarcados(i: number, j: number): number {
+    console.log(i, j, this.respuestaEvaluacion);
+    return this.respuestaEvaluacion.map(item => item[i][j]).filter(item => item === true).length;
+  }
+
   SetAll(i: number): void {
     if (this.respuestaEvaluacion[i] == null) {
       return;
@@ -177,7 +215,9 @@ export class EvaluacionDialogoComponent implements OnInit {
   }
 
   async EnviarRespuesta() {
-
+    if (!this.data.editable) {
+      return;
+    }
     this.isLoading = true;
     this.respuestaEvaluacion[this.respuestaEvaluacion.length - 1] = this.comentario;
     console.log('enviando respuesta evaluacion', this.respuestaEvaluacion);

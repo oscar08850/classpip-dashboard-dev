@@ -47,6 +47,9 @@
         <button *ngIf="column === 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="eliminarNota(i, element.id, true)" mat-icon-button aria-label="Delete">
           <mat-icon style="color: red;">delete_forever</mat-icon>
         </button>
+        <button *ngIf="column === 'Nota Media' && isNumber(element[column])" (click)="openDialog(i, element.id, false, false, true)" mat-icon-button aria-label="Info">
+          <mat-icon>remove_red_eye</mat-icon>
+        </button>
       </td>
     </ng-container>
     <tr mat-header-row class="row100 head" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
