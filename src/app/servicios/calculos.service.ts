@@ -86,7 +86,8 @@ export class CalculosService {
       this.DameListaJuegos(this.sesion.DameGrupo().id)
       .subscribe ( listas => {
               // Hago una lista con todos los juegos (activos e inactivos)
-              const juegos = listas.activos.concat (listas.inactivos);
+              let juegos = listas.activos.concat (listas.inactivos);
+              juegos = juegos.concat (listas.preparados);
               console.log ('Ya tengo los juegos');
               console.log (juegos);
               let cont = 0;
@@ -562,6 +563,22 @@ export class CalculosService {
                     juegosInactivos.push(juegosAvatar[i]);
                   }
                 }
+
+
+                    // ahora toca los juegos de creacion de cuentos
+                console.log ('vamos a por los juegos de cuento del grupo: ' + grupoID);
+                this.peticionesAPI.DamejuegosdeCuento(grupoID)
+                .subscribe(juegosdecuento => {
+                  console.log('He recibido los juegos de cuento');
+                  console.log(juegosdecuento);
+                  // tslint:disable-next-line:prefer-for-of
+                  for (let i = 0; i < juegosdecuento.length; i++) {
+                    if (juegosdecuento[i].JuegoActivo === true) {
+                      juegosActivos.push(juegosdecuento[i]);
+                    } else {
+                      juegosInactivos.push(juegosdecuento[i]);
+                    }
+                  }
                 // Ahora recogemos los juegos de cuestionario
                 // console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
                 console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
@@ -644,6 +661,8 @@ export class CalculosService {
                               juegosInactivos.push(juegosCuestionarioSatisfaccion[i]);
                             }
                           }
+
+
                           console.log('GET JuegoDeEvaluacion OF grupoID: ', grupoID);
                           this.peticionesAPI.DameJuegosDeEvaluacion(grupoID)
                             .subscribe(juegosDeEvaluacion => {
@@ -659,8 +678,8 @@ export class CalculosService {
                                 }
                               }
 
-                          const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-                          obs.next (resultado);
+                              const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+                              obs.next (resultado);
                           });
                         });
                       });
@@ -672,6 +691,7 @@ export class CalculosService {
           });
         });
       });
+    });
     });
 
     return listasObservables;

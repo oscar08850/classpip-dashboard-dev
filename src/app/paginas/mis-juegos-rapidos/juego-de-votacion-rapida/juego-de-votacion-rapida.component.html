@@ -75,7 +75,14 @@
               <td mat-cell style= "text-align: left"  *matCellDef="let dato"> {{dato.concepto}} </td>
             </ng-container>
 
-            <!-- Descripcion Column -->
+
+            <ng-container matColumnDef="incremento" >
+              <th mat-header-cell  *matHeaderCellDef class="tituloColumnaTabla"> </th>
+              <td mat-cell  style= "text-align: left; color: red"  *matCellDef="let dato">
+                <span *ngIf = "dato.incremento > 0"> {{dato.incremento}} </span>
+              </td>
+            </ng-container>
+
             <ng-container matColumnDef="puntos" >
               <!-- La clase header-align-right esta definida en el css local -->
               <th mat-header-cell  *matHeaderCellDef class="tituloColumnaTabla header-align-right"> Puntos </th>

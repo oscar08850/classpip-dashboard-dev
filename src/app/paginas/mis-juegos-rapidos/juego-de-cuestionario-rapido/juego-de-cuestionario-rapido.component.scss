@@ -3,3 +3,29 @@
   padding: 21px 0;
   justify-content: flex-end;
 }
+
+
+.box {
+  box-sizing: border-box;
+  float: left;
+  width: 50%;
+  height: 50%;
+}
+
+/* This is one way of adding borders,
+ if you *always* know that you have exactly 4 cells
+ aligned like this */
+.box:first-child {
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+}
+.box:nth-child(2) {
+  border-bottom: 1px solid black;
+}
+.box:nth-child(3) {
+  border-right: 1px solid black;
+}
+span.donuts2col {
+  display: inline-block;
+  width: 50%;
+}

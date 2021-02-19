@@ -144,13 +144,15 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       // ordena la lista por puntos
       // tslint:disable-next-line:only-arrow-functions
       // tslint:disable-next-line:max-line-length
-      // tslint:disable-next-line:only-arrow-functions
-      // tslint:disable-next-line:max-line-length
-      // tslint:disable-next-line:only-arrow-functions
-      // tslint:disable-next-line:max-line-length
       this.listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario = this.listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario.sort(function(obj1, obj2) {
-        return obj2.Nota - obj1.Nota;
+        if (obj1.Nota !== obj2.Nota) {
+          return obj2.Nota - obj1.Nota;
+        } else {
+          // en caso de empate en la nota, gana el que empleó menos tiempo
+          return obj1.TiempoEmpleado - obj2.TiempoEmpleado;
+        }
       });
+
     });
   }
 

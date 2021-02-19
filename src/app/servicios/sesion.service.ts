@@ -75,6 +75,8 @@ export class SesionService {
   inscripcionAlumnoJuegoDeCuestionario: AlumnoJuegoDeCuestionario;
   alumnoJuegoDeCuestionario: TablaAlumnoJuegoDeCuestionario;
 
+  idLibro: any;
+
   familia: FamiliaAvatares;
   cuestionarioDeSatiafaccion: CuestionarioSatisfaccion;
 
@@ -570,4 +572,15 @@ public DameCuestionarioSatisfaccion(): CuestionarioSatisfaccion {
   return this.cuestionarioDeSatiafaccion;
 }
 
+//cuentos
+
+public setIdLibro(id)
+{
+  this.idLibro = id;
+}
+
+public getIdLibro()
+{
+  return this.idLibro;
+}
 }
