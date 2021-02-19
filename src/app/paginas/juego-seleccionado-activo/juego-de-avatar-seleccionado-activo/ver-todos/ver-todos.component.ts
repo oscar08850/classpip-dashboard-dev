@@ -77,8 +77,9 @@ ngOnInit() {
         // que el getElement
         this.interval1 = setInterval(() => {
           this.listaAvatares[pos].insc = res.inscripcion;
+          this.listaAvatares[pos].voz =  URL.AudiosAvatares + res.inscripcion.Voz;
           console.log (this.listaAvatares);
-          this.sound.play();
+          // this.sound.play();
           // hago que la imagen parpadee 5 segundos
           const imagen = document.getElementById(pos.toString());
           imagen.setAttribute('class', 'parpadea');
@@ -130,11 +131,13 @@ goBack() {
 
 
 Play(voz) {
+
   this.notavoz = new Audio();
   this.notavoz.src = voz;
   this.notavoz.load();
   this.notavoz.play();
 }
+
 
 Stop() {
   if(!this.notavoz.paused){

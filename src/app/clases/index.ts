@@ -83,6 +83,7 @@ export * from './FamiliaDeImagenesDePerfil';
 export * from './JuegoDeCuestionarioRapido';
 export * from './JuegoDeCogerTurnoRapido';
 export * from './JuegoDePuntos';
+export * from './JuegoDeKahootRapido';
 
 
 

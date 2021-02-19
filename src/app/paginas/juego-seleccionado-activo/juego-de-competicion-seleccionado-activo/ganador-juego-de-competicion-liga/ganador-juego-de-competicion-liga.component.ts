@@ -560,6 +560,14 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
           resultados.push (2);
           this.selectionDos.select(this.dataSourceTablaGanadorIndividual.data[i]);
 
+        } else  if (JugadorUno.TiempoEmpleado < JugadorDos.TiempoEmpleado) {
+          resultados.push (1);
+          this.selectionUno.select(this.dataSourceTablaGanadorIndividual.data[i]);
+
+        } else  if (JugadorUno.TiempoEmpleado > JugadorDos.TiempoEmpleado) {
+          resultados.push (2);
+          this.selectionDos.select(this.dataSourceTablaGanadorIndividual.data[i]);
+
         } else {
           resultados.push (0);
           this.selectionTres.select(this.dataSourceTablaGanadorIndividual.data[i]);

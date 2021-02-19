@@ -111,13 +111,22 @@ export class CrearJuegoRapidoComponent implements OnInit {
   // información para crear un juego de cuestionario
   cuestionario: Cuestionario;
   tengoCuestionario = false;
-  puntuacionCorrecta: number;
-  puntuacionIncorrecta: number;
+  puntuacionCorrecta = 0;
+  puntuacionIncorrecta = 0;
   modoPresentacion: string;
   tengoModoPresentacion = false;
+  modalidadSeleccionada: string;
+  tengoModalidad = false;
+  seleccionModalidadJuegoCuestionario: ChipColor[] = [
+    {nombre: 'Clásico', color: 'primary'},
+    {nombre: 'Kahoot', color: 'warn'}
+  ];
   seleccionModoPresentacion: string[] = ['Mismo orden para todos',
   'Preguntas desordenadas',
   'Preguntas y respuestas desordenadas'];
+
+  seleccionModoPresentacionKahoot: string[] = ['Mostrar pregunta',
+  'No mostrar pregunta'];
   tiempoLimite: number;
 
 
@@ -171,6 +180,7 @@ export class CrearJuegoRapidoComponent implements OnInit {
       this.tipoDeJuegoSeleccionado = tipo.nombre;
       this.tengoTipo = true;
   }
+
 
 
   RecibeCuestionarioSatisfaccionElegido($event) {
@@ -372,6 +382,13 @@ CrearJuegoDeVotacionRapida() {
     this.puntuacionCorrecta = this.myForm.value.PuntuacionCorrecta;
     this.puntuacionIncorrecta = this.myForm.value.PuntuacionIncorrecta;
   }
+
+  ModalidadDeJuegoSeleccionada(modalidad: ChipColor) {
+    this.modalidadSeleccionada = modalidad.nombre;
+    this.tengoModalidad = true;
+  }
+
+
   GuardarModoPresentacion(modoPresentacion) {
     this.modoPresentacion = modoPresentacion;
     this.tengoModoPresentacion = true;
@@ -391,12 +408,16 @@ CrearJuegoDeVotacionRapida() {
     // anteriores. La razón es que no están bien organizado el tema de que los modelos de los diferentes juegos
     // tomen como base el modelo Juego genérico. De momento se queda así.
     const clave = Math.random().toString().substr(2, 8);
+
     const juegoDeCuestionarioRapido = new JuegoDeCuestionarioRapido (
       this.nombreDelJuego, this.tipoDeJuegoSeleccionado,
+      this.modalidadSeleccionada,
       clave,
       this.puntuacionCorrecta,
       this.puntuacionIncorrecta, this.modoPresentacion,
       false, false, this.profesorId, this.cuestionario.id, this.tiempoLimite);
+    console.log ('voy a crear juego');
+    console.log (juegoDeCuestionarioRapido);
 
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.CreaJuegoDeCuestionarioRapido(juegoDeCuestionarioRapido)
