@@ -34,10 +34,10 @@ export class PeticionesAPIService {
 
 
 
- private host = 'http://localhost';
+ // private host = 'http://localhost';
 
 //  private host = 'http://147.83.118.92';
- //private host = URL.host;
+  private host = URL.host;
 
 
 
@@ -1410,7 +1410,7 @@ export class PeticionesAPIService {
 }
 
 
-  public crearCarpeta(nombre: any):Observable<any>{
+  public crearCarpeta(nombre: any): Observable<any>{
     return this.http.post<any>(this.APIurlImagenesLibros, nombre);
   }
 
