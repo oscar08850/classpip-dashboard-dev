@@ -63,7 +63,7 @@
     <strong>Nota Final: {{CalcularNotaFinal()}}</strong>
   </mat-card>
   <mat-card *ngIf="data.global" style="margin-top: 10px; margin-bottom: 10px;">
-    <strong>Nota Final: {{CalcularNotaFinalTotal()}}</strong>
+    <strong>Nota Final: {{this.data.notaMedia}}</strong>
   </mat-card>
 </div>
 <div *ngIf="!data.editable" mat-dialog-actions>

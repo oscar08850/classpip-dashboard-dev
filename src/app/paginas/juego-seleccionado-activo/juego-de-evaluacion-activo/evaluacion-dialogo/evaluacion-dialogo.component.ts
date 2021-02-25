@@ -19,6 +19,7 @@ export interface DialogData {
   profesor: boolean;
   editable: boolean;
   global: boolean;
+  notaMedia: number | string;
 }
 
 @Component({
@@ -194,14 +195,6 @@ export class EvaluacionDialogoComponent implements OnInit {
       }
       return Math.round((notaCriterio + Number.EPSILON) * 100) / 100;
     }
-  }
-
-  CalcularNotaFinalTotal() {
-    let nota = 0;
-    for (let i = 0; i < this.data.rubrica.Criterios.length; i++) {
-      nota += this.CalcularNotasCriterios(i) * this.data.juego.Pesos[i][0] / 100;
-    }
-    return Math.round((nota + Number.EPSILON) * 100) / 100;
   }
 
   numeroMarcados(i: number, j: number): number {
