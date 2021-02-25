@@ -75,7 +75,7 @@ export class EvaluacionDialogoComponent implements OnInit {
         this.respuestaEvaluacion = evaluado.respuestas.find(item => alumnosDeEquipo.includes(item.alumnoId)).respuesta;
       }
     }
-    console.log(this.respuestaEvaluacion);
+    console.log('respuesta evaluacion', this.respuestaEvaluacion);
   }
 
   CalcularNotaCriterio(index: number): number {
@@ -154,9 +154,10 @@ export class EvaluacionDialogoComponent implements OnInit {
   }
 
   CalcularNotasCriterios(index: number): number {
-    let subNota = 0;
+    let subNota;
+    let notaCriterio = 0;
     if (this.data.juego.metodoSubcriterios) {
-      let notaCriterio = 0;
+      subNota = 0;
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.respuestaEvaluacion.length; i++) {
         for (let j = 1; j < this.data.juego.Pesos[index].length; j++) {
@@ -169,6 +170,29 @@ export class EvaluacionDialogoComponent implements OnInit {
       }
       return Math.round((notaCriterio + Number.EPSILON) * 100) / 100;
     } else {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.respuestaEvaluacion.length; i++) {
+        subNota = 10;
+        const fallos = this.respuestaEvaluacion[i][index].filter(item => item === false).length;
+        if (fallos > 0) {
+          let minimo: number;
+          let rangoMinimo;
+          let maximo: number;
+          minimo = Math.min.apply(Math, this.data.juego.Penalizacion[index].map(item => item.num));
+          if (fallos >= minimo) {
+            rangoMinimo = this.data.juego.Penalizacion[index].filter(item => item.num <= fallos);
+            if (rangoMinimo.length === 0) {
+              maximo = Math.max.apply(Math, this.data.juego.Penalizacion[index].map(item => item.num));
+            } else {
+              maximo = Math.max.apply(Math, rangoMinimo.map(item => item.num));
+            }
+            const penalizacion = this.data.juego.Penalizacion[index].find(item => item.num === maximo).p;
+            subNota = penalizacion / 10;
+          }
+        }
+        notaCriterio += subNota / this.respuestaEvaluacion.length;
+      }
+      return Math.round((notaCriterio + Number.EPSILON) * 100) / 100;
     }
   }
 
@@ -181,7 +205,7 @@ export class EvaluacionDialogoComponent implements OnInit {
   }
 
   numeroMarcados(i: number, j: number): number {
-    console.log(i, j, this.respuestaEvaluacion);
+    // console.log(i, j, this.respuestaEvaluacion);
     return this.respuestaEvaluacion.map(item => item[i][j]).filter(item => item === true).length;
   }
 
