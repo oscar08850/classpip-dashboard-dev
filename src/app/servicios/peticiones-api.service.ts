@@ -10,7 +10,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
         Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario, Cuestionario, AlumnoJuegoDeCompeticionFormulaUno,
         EquipoJuegoDeCompeticionFormulaUno, SesionClase, AsistenciaClase, FamiliaAvatares, JuegoDeAvatar,
-        AlumnoJuegoDeAvatar, AlumnoJuegoDeLibro,JuegoDeLibros, JuegoDeCuestionario, AlumnoJuegoDeCuestionario,
+        AlumnoJuegoDeAvatar, AlumnoJuegoDeLibro, JuegoDeLibros, JuegoDeCuestionario, AlumnoJuegoDeCuestionario,
         RespuestaJuegoDeCuestionario, RecursoLibro,  JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos, Rubrica,
         JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, FamiliaDeImagenesDePerfil,
         CuestionarioSatisfaccion, JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion,
@@ -32,14 +32,7 @@ import * as URL from '../URLs/urls';
 })
 export class PeticionesAPIService {
 
-
-
- private host = 'http://localhost';
-
-//  private host = 'http://147.83.118.92';
- //private host = URL.host;
-
-
+  private host = URL.host;
 
   private APIUrlProfesores = this.host + ':3000/api/Profesores';
   private APIUrlAlumnos = this.host + ':3000/api/Alumnos';
@@ -103,11 +96,11 @@ export class PeticionesAPIService {
   private APIUrlEscenarios = this.host + ':3000/api/Escenarios';
   private APIUrlPuntosGeolocalizables = this.host + ':3000/api/PuntosGeolocalizables';
 
-  //API Libros
+  // API Libros
 
   private APIurlImagenesLibros = this.host + ':3000/api/imagenes';
   private APIurlRecursosLibros = this.host + ':3000/api/recursosLibros';
-  private APIUrlConcursoLibros = this.host + ':3000/api/juegoLibroConcursos';    
+  private APIUrlConcursoLibros = this.host + ':3000/api/juegoLibroConcursos';
   private urlalumnojuego = this.host + ':3000/api/alumnojuegodecuento';
   private urllibro = this.host + ':3000/api/libro';
   private urlParaEscena = this.host + ':3000/api/escenas';
@@ -1382,26 +1375,26 @@ export class PeticionesAPIService {
 
   /////////////////////////////// GESTION LIBROS //////////////////////////////////
 
-  
 
-  public InscribeAlumnojuegoDelibro(alumnoJuegoDeLibro: AlumnoJuegoDeLibro, id){
+
+  public InscribeAlumnojuegoDelibro(alumnoJuegoDeLibro: AlumnoJuegoDeLibro, id) {
     return this.http.post<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id  + '/alumnojuegodecuento',
       alumnoJuegoDeLibro);
-    
+
   }
   public crearjuegolibro(juego: JuegoDeLibros, grupoId: number) {
-  
+
     return this.http.post<JuegoDeLibros>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro', juego);
   }
-  
-  
-   public DamejuegosdeCuento (grupoId: number): Observable<Juego[]> {
+
+
+   public DamejuegosdeCuento(grupoId: number): Observable<Juego[]> {
     return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro');
   }
-  
+
   public DameAlumnosJuegoLibro(id): Observable<any>  {
   return this.http.get<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento');
-  
+
  }
 
 
@@ -1410,26 +1403,26 @@ export class PeticionesAPIService {
 }
 
 
-  public crearCarpeta(nombre: any):Observable<any>{
+  public crearCarpeta(nombre: any): Observable<any> {
     return this.http.post<any>(this.APIurlImagenesLibros, nombre);
   }
 
-  public guardarImagenRecursoLibro(nombre: any, file: FormData):Observable<any>{
-    return this.http.post<any>(this.APIurlImagenesLibros +'/'+ nombre + '/upload', file);
+  public guardarImagenRecursoLibro(nombre: any, file: FormData): Observable<any> {
+    return this.http.post<any>(this.APIurlImagenesLibros + '/' + nombre + '/upload', file);
   }
   // public guardarRecursoLibro(recurso: any):Observable<any>{
   //   return this.http.post<any>(this.APIurlRecursosLibros, recurso);
   // }
 
-  public guardarRecursoLibro(recurso: any, profesorId):Observable<any>{
-    return this.http.post<any>(  this.APIUrlProfesores +'/'+ profesorId + '/recursosLibros', recurso);
+  public guardarRecursoLibro(recurso: any, profesorId): Observable<any> {
+    return this.http.post<any>(  this.APIUrlProfesores + '/' + profesorId + '/recursosLibros', recurso);
 
   }
    /////////////////////////////////////// GESTION JUEGOS DE VOTACION: UNO A TODOS /////////////////////////////////
 
 
 
-   //public CreaJuegoDeVotacionUnoATodos(juego: JuegoDeVotacionUnoATodos, grupoId: number): Observable<JuegoDeVotacionUnoATodos> {
+   // public CreaJuegoDeVotacionUnoATodos(juego: JuegoDeVotacionUnoATodos, grupoId: number): Observable<JuegoDeVotacionUnoATodos> {
   /////////////////////////////////////// GESTION JUEGOS DE VOTACION: UNO A TODOS /////////////////////////////////
 
   public CreaJuegoDeVotacionUnoATodos(juego: JuegoDeVotacionUnoATodos, grupoId: number): Observable<JuegoDeVotacionUnoATodos> {
@@ -1478,31 +1471,31 @@ export class PeticionesAPIService {
     return this.http.put<AlumnoJuegoDeVotacionUnoATodos>(this.APIUrlAlumnoJuegoDeVotacionUnoATodos + '/' + inscripcion.id, inscripcion);
   }
 
-/////////////////recurosos libros////////////////////////////////////////
+///////////////// recurosos libros////////////////////////////////////////
 
-  public recuperarListaRecursos(profesorId):Observable<RecursoLibro[]>{
-    return this.http.get<RecursoLibro[]>(this.APIUrlProfesores  +'/'+profesorId + '/recursosLibros');
+  public recuperarListaRecursos(profesorId): Observable<RecursoLibro[]> {
+    return this.http.get<RecursoLibro[]>(this.APIUrlProfesores  + '/' + profesorId + '/recursosLibros');
   }
 
-  public recuperarRecursosLibro(profesorId, recurosId):Observable<RecursoLibro>{
-    return this.http.get<RecursoLibro>(this.APIUrlProfesores  +'/'+profesorId + '/recursosLibros' + '/' + recurosId);
+  public recuperarRecursosLibro(profesorId, recurosId): Observable<RecursoLibro> {
+    return this.http.get<RecursoLibro>(this.APIUrlProfesores  + '/' + profesorId + '/recursosLibros' + '/' + recurosId);
   }
 
-  public crearRecursosJuegoLibro(idLibro, recurso):Observable<any>{
-    return this.http.post<any>(this.APIUrlJuegodeLibro  +'/'+ idLibro + '/recursosJuegoLibro' , recurso);
+  public crearRecursosJuegoLibro(idLibro, recurso): Observable<any> {
+    return this.http.post<any>(this.APIUrlJuegodeLibro  + '/' + idLibro + '/recursosJuegoLibro' , recurso);
   }
 
-  public getImagenesRecurso(containerName, fileName):Observable<any>{
+  public getImagenesRecurso(containerName, fileName): Observable<any> {
     return this.httpImagenes.get(this.APIurlImagenesLibros  + '/' + containerName + '/download/' + fileName, { responseType: ResponseContentType.Blob });
   }
 
 
-  public crearConcurso(idLibro: any, concurso: any):Observable<any>{
+  public crearConcurso(idLibro: any, concurso: any): Observable<any> {
     return this.http.post<any>(this.APIUrlJuegodeLibro + '/' + idLibro + '/' + 'juegoLibroConcurso', concurso);
   }
 
-  public dameLibro(idJuegoAlumnoLibro):Observable<any>{
-    return this.http.get<any>(this.urlalumnojuego+ '/' + idJuegoAlumnoLibro + '/Libro');
+  public dameLibro(idJuegoAlumnoLibro): Observable<any> {
+    return this.http.get<any>(this.urlalumnojuego + '/' + idJuegoAlumnoLibro + '/Libro');
 
   }
 
@@ -1515,7 +1508,7 @@ export class PeticionesAPIService {
     return this.http.get<any>(this.urllibro + '/' + idlibro + '/escenas');
   }
 
-  
+
   public getFramesByEscenaId(id): Observable<any> {
     return this.http.get<any>(this.urlParaEscena + '/' + id + '/frames');
   }
@@ -1524,13 +1517,13 @@ export class PeticionesAPIService {
       { responseType: ResponseContentType.Blob });
   }
 
-  public dameConcurso(idjuegoLibro):Observable<any>{
+  public dameConcurso(idjuegoLibro): Observable<any> {
     return this.http.get<any>(this.APIUrlJuegodeLibro + '/' + idjuegoLibro + '/juegoLibroConcurso');
 
 }
 
 public modificarConcurso(id, concurso): Observable<any> {
-  return this.http.put<any>(this.APIUrlConcursoLibros+ '/' + id, concurso);
+  return this.http.put<any>(this.APIUrlConcursoLibros + '/' + id, concurso);
 }
   /////////////////////////////////////// GESTION JUEGOS DE VOTACION: TODOS A UNO  /////////////////////////////////
 

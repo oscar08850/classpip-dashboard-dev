@@ -25,13 +25,15 @@
         <mat-divider></mat-divider>
       </div>
       <div *ngFor="let elemento of criterio.Elementos; let j = index">
-        <strong *ngIf="data.global"> &#8594; </strong>
+        <div *ngIf="data.global" class="badge-count">
+          <span matBadge="{{numeroMarcados(i, j)}}" matBadgePosition="below" matBadgeOverlap="false"></span>
+        </div>
+        <div>
+        <strong *ngIf="data.global" style="margin-left: 25px"> &#8594; </strong>
         <mat-checkbox *ngIf="!data.global" class="example-margin" [(ngModel)]="respuestaEvaluacion[i][j]" [disabled]="!data.editable" (change)="CheckboxChanged(i)"></mat-checkbox>
         <i *ngIf="data.juego.metodoSubcriterios"> ({{data.juego.Pesos[i][j + 1]}}%)</i> {{elemento}}
-        <div *ngIf="data.global" class="badge-count">
-          <span matBadge="{{numeroMarcados(i, j)}}" matBadgeOverlap="false"></span>
+        <mat-divider style="margin-top: 10px; margin-bottom: 10px"></mat-divider>
         </div>
-        <mat-divider></mat-divider>
       </div>
       <mat-expansion-panel *ngIf="!data.juego.metodoSubcriterios && !data.editable && !data.global" style="margin-top: 10px; margin-bottom: 10px;">
         <mat-expansion-panel-header>
@@ -61,7 +63,7 @@
     <strong>Nota Final: {{CalcularNotaFinal()}}</strong>
   </mat-card>
   <mat-card *ngIf="data.global" style="margin-top: 10px; margin-bottom: 10px;">
-    <strong>Nota Final: {{CalcularNotaFinalTotal()}}</strong>
+    <strong>Nota Final: {{this.data.notaMedia}}</strong>
   </mat-card>
 </div>
 <div *ngIf="!data.editable" mat-dialog-actions>

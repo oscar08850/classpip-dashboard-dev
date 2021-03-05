@@ -162,14 +162,14 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     if (!this.alumnos || !this.alumnosRelacion) {
       return;
     }
-    this.tmpDisplayedColumns = this.alumnos.map(item => [item.id, item.Nombre]);
+    this.tmpDisplayedColumns = this.alumnos.map(item => [item.id, item.Username]);
     this.alumnos.forEach((alumno) => {
       const row = {
         Nombre: undefined,
         id: undefined
       };
       const evaluado = this.alumnosRelacion.find(item => item.alumnoId === alumno.id);
-      row.Nombre = this.alumnos.find(item => item.id === evaluado.alumnoId).Nombre;
+      row.Nombre = this.alumnos.find(item => item.id === evaluado.alumnoId).Username;
       row.id = alumno.id;
       this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
         // const respuesta = evaluado.respuestas.find(res => res.alumnoId === item[0]);
@@ -216,7 +216,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       for (let i = 0; i < this.alumnosDeEquipo.length; i++) {
         // tslint:disable-next-line:prefer-for-of
         for (let j = 0; j < this.alumnosDeEquipo[i].alumnos.length; j++) {
-          this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Nombre]);
+          this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Username]);
         }
       }
       console.log('Columnas tmp', this.tmpDisplayedColumns);
@@ -294,7 +294,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
   }
 
-  openDialog(i: number, c: number, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
+  openDialog(i: number, c: any, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
     if (profesor) {
       const dialogRef = this.dialog.open(EvaluacionDialogoComponent, {
         width: '800px',
@@ -307,10 +307,11 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           equiposRelacion: this.equiposRelacion,
           alumnosDeEquipo: this.alumnosDeEquipo,
           evaluadorId: this.sesion.DameProfesor().id,
-          evaluadoId: c,
+          evaluadoId: c.id,
           profesor: true,
           editable: editar,
-          global: false
+          global: false,
+          notaMedia: null
         }
       });
       dialogRef.afterClosed().subscribe(result => {
@@ -341,10 +342,11 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           equiposRelacion: this.equiposRelacion,
           alumnosDeEquipo: this.alumnosDeEquipo,
           evaluadorId: global ? 0 : this.tmpDisplayedColumns[i - 1][0],
-          evaluadoId: c,
+          evaluadoId: c.id,
           profesor: false,
           editable: false,
-          global
+          global,
+          notaMedia: c['Nota Media']
         }
       });
     }
