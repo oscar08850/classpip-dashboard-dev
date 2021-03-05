@@ -182,6 +182,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     if (!this.alumnos || !this.alumnosRelacion) {
       return;
     }
+
     if (this.juego.rubricaId > 0) {
      // this.tmpDisplayedColumns = this.alumnos.map(item => [item.id, item.Nombre]);
       this.tmpDisplayedColumns = this.alumnos.map(item => [item.id, item.Username]);
@@ -273,6 +274,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     console.log ('ya tengo las columnas');
     console.log (this.displayedColumns);
   }
+
 
   ConstruirTablaEquipos() {
     if (!this.equipos || !this.equiposRelacion) {
@@ -460,6 +462,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   } 
 
   openDialog(i: number, c: number, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
+
     if (profesor) {
       const dialogRef = this.dialog.open(EvaluacionDialogoComponent, {
         width: '800px',
@@ -472,10 +475,11 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           equiposRelacion: this.equiposRelacion,
           alumnosDeEquipo: this.alumnosDeEquipo,
           evaluadorId: this.sesion.DameProfesor().id,
-          evaluadoId: c,
+          evaluadoId: c.id,
           profesor: true,
           editable: editar,
-          global: false
+          global: false,
+          notaMedia: null
         }
       });
       dialogRef.afterClosed().subscribe(result => {
@@ -506,10 +510,11 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           equiposRelacion: this.equiposRelacion,
           alumnosDeEquipo: this.alumnosDeEquipo,
           evaluadorId: global ? 0 : this.tmpDisplayedColumns[i - 1][0],
-          evaluadoId: c,
+          evaluadoId: c.id,
           profesor: false,
           editable: false,
-          global
+          global,
+          notaMedia: c['Nota Media']
         }
       });
     }
