@@ -33,7 +33,8 @@ export class CrearRubricaComponent implements OnInit {
 
   ngOnInit() {
     this.profesorId = this.sesion.DameProfesor().id;
-    console.log(this.firstFormGroup.value);
+    console.log ('estoy en crear rubrica');
+    //console.log(this.firstFormGroup.value);
   }
 
   // Habilita el botón del paso 1
@@ -70,6 +71,9 @@ export class CrearRubricaComponent implements OnInit {
     const fileInfo = $event.target.files[0];
     const reader = new FileReader();
     reader.readAsText(fileInfo, 'ISO-8859-1');
+    //reader.readAsText(fileInfo);
+ 
+
     reader.onload = () => {
       try {
         this.rubrica = JSON.parse(reader.result.toString());

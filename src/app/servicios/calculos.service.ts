@@ -19,6 +19,9 @@ import { AlumnoJuegoDeCuestionario } from '../clases/AlumnoJuegoDeCuestionario';
 import { TablaAlumnoJuegoDeCuestionario } from '../clases/TablaAlumnoJuegoDeCuestionario';
 import { AlumnoJuegoDeGeocaching } from '../clases/AlumnoJuegoDeGeocaching';
 import { TablaAlumnoJuegoDeGeocaching } from '../clases/TablaAlumnoJuegoDeGeocaching';
+import { JuegoDeEvaluacion } from '../clases/JuegoDeEvaluacion';
+import { AlumnoJuegoDeEvaluacion } from '../clases/AlumnoJuegoDeEvaluacion';
+import { EquipoJuegoDeEvaluacion } from '../clases/EquipoJuegoDeEvaluacion';
 
 
 
@@ -4003,6 +4006,44 @@ public VerificarFicherosPreguntas(preguntas: any): any {
     });
   });
   return listaFicherosObservable;
+}
+
+
+public EliminarJuegoDeEvaluacion(juego: JuegoDeEvaluacion) {
+  const eliminaObservable = new Observable ( obs => {
+    if (juego.Modo === 'Individual') {
+      this.peticionesAPI.DameRelacionAlumnosJuegoDeEvaluacion(juego.id)
+        .subscribe((res: AlumnoJuegoDeEvaluacion[]) => {
+          let cont = 0;
+          res.forEach (alumnoJuegoDeEvaluacion => {
+            this.peticionesAPI.BorrarAlumnoJuegoDeEvaluacion (alumnoJuegoDeEvaluacion.id)
+            .subscribe ( () => {
+              cont = cont + 1;
+              if (cont === res.length) {
+                this.peticionesAPI.BorrarJuegoDeEvaluacion (juego.id)
+                .subscribe(() => obs.next());
+              }
+            });
+          });
+        });
+    } else {
+      this.peticionesAPI.DameRelacionEquiposJuegoDeEvaluacion(juego.id)
+        .subscribe((res: EquipoJuegoDeEvaluacion[]) => {
+          let cont = 0;
+          res.forEach (equipoJuegoDeEvaluacion => {
+            this.peticionesAPI.BorrarEquipoJuegoDeEvaluacion (equipoJuegoDeEvaluacion.id)
+            .subscribe ( () => {
+              cont = cont + 1;
+              if (cont === res.length) {
+                this.peticionesAPI.BorrarJuegoDeEvaluacion (juego.id)
+                .subscribe(() => obs.next());
+              }
+            });
+          });
+        });
+    }
+  });
+  return eliminaObservable;
 }
 
 }

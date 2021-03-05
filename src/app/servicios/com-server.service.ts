@@ -13,7 +13,7 @@ export class ComServerService {
 
   notificacionconectar = 'dash conectado';
   private socket;
-  private url = 'http://localhost:8080';
+  private url = URL.Servidor;
   constructor() {
   }
 

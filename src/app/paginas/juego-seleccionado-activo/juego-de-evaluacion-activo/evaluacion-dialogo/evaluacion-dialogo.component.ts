@@ -19,6 +19,7 @@ export interface DialogData {
   profesor: boolean;
   editable: boolean;
   global: boolean;
+
 }
 
 @Component({
@@ -29,11 +30,15 @@ export interface DialogData {
 export class EvaluacionDialogoComponent implements OnInit {
 
   respuestaEvaluacion: Array<any>;
+  respuestaProfesor: Array<any>;
   // Form elements
   allCompleted: Array<boolean>;
   indeterminated: Array<boolean>;
   comentario = '';
   isLoading = false;
+  evaluadores = [];
+  respuestasPreguntasAbiertas;
+  nombreEquipoEvaluado;
 
   constructor(
     public dialogRef: MatDialogRef<EvaluacionDialogoComponent>,
@@ -42,7 +47,12 @@ export class EvaluacionDialogoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (this.data.editable) {
+    console.log ('datos');
+    console.log (this.data);
+
+    if (this.data.juego.rubricaId === 0) {
+      this.respuestasPreguntasAbiertas = Array(this.data.juego.PreguntasAbiertas.length).fill(undefined);
+    } else if (this.data.editable) {
       this.respuestaEvaluacion = new Array<any>(this.data.rubrica.Criterios.length);
       this.data.rubrica.Criterios.forEach((item, index) => {
         this.respuestaEvaluacion[index] = new Array<boolean>(this.data.rubrica.Criterios[index].Elementos.length).fill(false);
@@ -54,29 +64,128 @@ export class EvaluacionDialogoComponent implements OnInit {
     }
     if (this.data.juego.Modo === 'Individual') {
       const evaluado = this.data.alumnosRelacion.find(item => item.alumnoId === this.data.evaluadoId);
-      if (this.data.profesor) {
-        this.respuestaEvaluacion = evaluado.respuestas.find(item => item.profesorId).respuesta;
-      } else if (this.data.global) {
-        this.respuestaEvaluacion = evaluado.respuestas.map(item => item.respuesta);
+      console.log ('alumno evaluado');
+      console.log (evaluado);
+    //  this.nombreEquipoEvaluado = this.data.equipos.find (equipo => equipo.id === this.data.evaluadoId).Nombre;
+      if (this.data.global) {
+        const respuestasAlumnos = evaluado.respuestas.filter (item => item.alumnoId);
+        this.respuestaEvaluacion = respuestasAlumnos.map(item => item.respuesta);
+        // puede que haya también respuesta del profeesor
+        const respuestaProfesor = evaluado.respuestas.filter (item => item.profesorId);
+        this.respuestaProfesor = respuestaProfesor.map(item => item.respuesta);
+        // Eso me da un vector con una sola posición. La respuesta es el contenido de esa posición
+        this.respuestaProfesor =  this.respuestaProfesor [0];
+        console.log ('repsuesta profesor');
+        console.log (this.respuestaProfesor);
+        // preparo los nombres de los evaluadores
+        let evaluadoresId = evaluado.respuestas.map(item => item.alumnoId);
+        // Si entre los evaluadores esta el profesor entonces mete un undefined que lo elimino a continuación
+        evaluadoresId = evaluadoresId.filter (evaluador => evaluador !== undefined);
+
+        evaluadoresId.forEach (id => {
+          this.evaluadores.push (this.data.alumnos.find (alumno => alumno.id === Number(id)));
+        });
+
+      } else if (this.data.profesor) {
+        if (!this.data.editable) {
+          this.respuestaEvaluacion = evaluado.respuestas.find(item => item.profesorId).respuesta;
+        } else {
+          this.respuestasPreguntasAbiertas = Array(this.data.juego.PreguntasAbiertas.length).fill(undefined);
+        }
+
       } else {
         this.respuestaEvaluacion = evaluado.respuestas.find(item => item.alumnoId === this.data.evaluadorId).respuesta;
       }
     } else if (this.data.juego.Modo === 'Equipos') {
       const evaluado = this.data.equiposRelacion.find(item => item.equipoId === this.data.evaluadoId);
-      if (this.data.profesor) {
-        this.respuestaEvaluacion = evaluado.respuestas.find(item => item.profesorId).respuesta;
-      } else if (this.data.global) {
-        this.respuestaEvaluacion = evaluado.respuestas.map(item => item.respuesta);
-      } else if (evaluado.alumnosEvaluadoresIds !== null) {
-        this.respuestaEvaluacion = evaluado.respuestas.find(item => item.alumnoId === this.data.evaluadorId).respuesta;
+     
+
+      if (this.data.global) {
+        console.log ('evaluado');
+        console.log (evaluado);
+        // Las respuestas de los equipos vienen identificadas con el id del alumno que respondió
+        const respuestasEquipos = evaluado.respuestas.filter (item => item.alumnoId);
+        this.respuestaEvaluacion = respuestasEquipos.map(item => item.respuesta);
+        
+        // puede que haya también respuesta del profeesor
+        const respuestaProfesor = evaluado.respuestas.filter (item => item.profesorId);
+        this.respuestaProfesor = respuestaProfesor.map(item => item.respuesta);
+        // Eso me da un vector con una sola posición. La respuesta es el contenido de esa posición
+        this.respuestaProfesor =  this.respuestaProfesor [0];
+        console.log ('repsuesta profesor');
+        console.log (this.respuestaProfesor);
+        // preparo los nombres de los evaluadores
+        let evaluadoresId = evaluado.respuestas.map(item => item.alumnoId);
+        // Si entre los evaluadores esta el profesor entonces mete un undefined que lo elimino a continuación
+        evaluadoresId = evaluadoresId.filter (evaluador => evaluador !== undefined);
+        console.log ('ID de equipos evaluadores');
+        console.log (evaluadoresId);
+
+        //// ESTO ES LO QUE HAY QUE HACER PARA PREPARAR LOS NOMBRES DE LOS EVALUADORES SI LOS EVALUADORES SON EQUIPOS
+        // A partir de los id de los alumnos evaluadores creo la lista de los nombres de los equipos a los que pertenecen.
+        if (this.data.equiposRelacion[0].alumnosEvaluadoresIds === null) {
+          console.log('Equipos evaluados por equipos');
+          evaluadoresId.forEach (id => {
+            const equipoId = this.data.alumnosDeEquipo.find (equipo => equipo.alumnos.some (alumno => alumno.id === id)).equipoId;
+            const nombreEquipo = this.data.equipos.find (equipo => equipo.id === equipoId).Nombre;
+            this.evaluadores.push (nombreEquipo);
+          });
+        } else {
+          //// ESTO ES LO QUE HAY QUE HACER PARA PREPARAR LOS NOMBRES DE LOS EVALUADORES SI LOS EVALUADORES SON ALUMNOS
+          evaluadoresId.forEach (id => {
+            this.evaluadores.push (this.data.alumnos.find (alumno => alumno.id === Number(id)));
+          });
+        }
+
+
+        console.log ('nombre de evaluadores');
+        console.log (this.evaluadores);
+
+      } else if (this.data.profesor) {
+        if (!this.data.editable) {
+          this.respuestaEvaluacion = evaluado.respuestas.find(item => item.profesorId).respuesta;
+        } else {
+          this.respuestasPreguntasAbiertas = Array(this.data.juego.PreguntasAbiertas.length).fill(undefined);
+        }
+
       } else {
+        //Aqui tengo que distinguir entre evaluación por equipos y evaluación por individuos
+        // lo que hay aqui es para evaluación por equipos
+          console.log ('equipos evaluados por equipos');
+          // Recojo los id de los alumnos que pertenecen al equipo evaluador
         // tslint:disable-next-line:max-line-length
-        const alumnosDeEquipo = this.data.alumnosDeEquipo.find(item => item.equipoId === this.data.evaluadorId).alumnos.map(item => item.id);
-        this.respuestaEvaluacion = evaluado.respuestas.find(item => alumnosDeEquipo.includes(item.alumnoId)).respuesta;
+        ///ESTO ES LO QUE HAY QUE HACER SI EQUIPOS POR EQUIPOS
+          if (this.data.equiposRelacion[0].alumnosEvaluadoresIds === null) {
+            // tslint:disable-next-line:max-line-length
+            const alumnosDeEquipo = this.data.alumnosDeEquipo.find(item => item.equipoId === this.data.evaluadorId).alumnos.map(item => item.id);
+            // Ahora cojo la respuesta del alumno cuyo id esta en la lista de alumnosDeEquipo
+            this.respuestaEvaluacion = evaluado.respuestas.find(item => alumnosDeEquipo.includes(item.alumnoId)).respuesta;
+          } else {
+            ///ESTO ES LO QUE HAY QUE HACER SI EQUIPOS POR ALUMNOS
+            this.respuestaEvaluacion = evaluado.respuestas.find(item => item.alumnoId === this.data.evaluadorId).respuesta;
+          }
+          console.log ('respuestasEvaluacion');
+          console.log (this.respuestaEvaluacion);
       }
+  
+      // if (this.data.profesor) {
+      //   this.respuestaEvaluacion = evaluado.respuestas.find(item => item.profesorId).respuesta;
+      // } else if (this.data.global) {
+      //   this.respuestaEvaluacion = evaluado.respuestas.map(item => item.respuesta);
+      // } else if (evaluado.alumnosEvaluadoresIds !== null) {
+      //   this.respuestaEvaluacion = evaluado.respuestas.find(item => item.alumnoId === this.data.evaluadorId).respuesta;
+      // } else {
+      //   // tslint:disable-next-line:max-line-length
+      //   const alumnosDeEquipo = this.data.alumnosDeEquipo.find(item => item.equipoId === this.data.evaluadorId).alumnos.map(item => item.id);
+      //   this.respuestaEvaluacion = evaluado.respuestas.find(item => alumnosDeEquipo.includes(item.alumnoId)).respuesta;
+      // }
     }
+    console.log ("Respuestas");
     console.log(this.respuestaEvaluacion);
+    console.log ("Evaluadores");
+    console.log(this.evaluadores);
   }
+
 
   CalcularNotaCriterio(index: number): number {
     let subNota: number;
@@ -219,8 +328,11 @@ export class EvaluacionDialogoComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.respuestaEvaluacion[this.respuestaEvaluacion.length - 1] = this.comentario;
-    console.log('enviando respuesta evaluacion', this.respuestaEvaluacion);
+    if (this.data.juego.rubricaId === 0) {
+      this.respuestaEvaluacion = this.respuestasPreguntasAbiertas;
+    } else {
+      this.respuestaEvaluacion[this.respuestaEvaluacion.length - 1] = this.comentario;
+    }
 
     if (this.data.juego.Modo === 'Individual') {
       this.peticionesAPI.DameRelacionAlumnosJuegoDeEvaluacion(this.data.juego.id).subscribe((res) => {

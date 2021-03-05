@@ -46,6 +46,16 @@ mat-slider {
   width: 300px;
 }
 
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.radio-button {
+  margin: 5px;
+  color: black;
+}
 // /* Colores de iconos */
 // .material-icons.red { color: rgb(212, 57, 52); }
 // .material-icons.green { color: rgb(92, 184, 92); }

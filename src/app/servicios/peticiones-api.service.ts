@@ -1585,6 +1585,10 @@ public modificarConcurso(id, concurso): Observable<any> {
   public CreaRubrica(rubrica: Rubrica, profesorId: number): Observable<Rubrica> {
     return this.http.post<Rubrica>(this.APIUrlProfesores + '/' + profesorId + '/rubricas', rubrica);
   }
+  public BorrarRubrica(rubricaId: number) {
+    // tslint:disable-next-line:max-line-length
+    return this.http.delete<Rubrica>(this.APIURLRubricas + '/' + rubricaId);
+  }
 
   public DameRubricasProfesor(profesorId: number): Observable<Rubrica[]> {
     return this.http.get<Rubrica[]>(this.APIUrlProfesores + '/' + profesorId + '/rubricas');
@@ -1791,11 +1795,20 @@ public modificarConcurso(id, concurso): Observable<any> {
   public CrearJuegoDeEvaluacion(juego: JuegoDeEvaluacion): Observable<JuegoDeEvaluacion> {
     return this.http.post<JuegoDeEvaluacion>(this.APIURLJuegoDeEvaluacion, juego);
   }
+  public BorrarJuegoDeEvaluacion(juegoId: number): Observable<JuegoDeEvaluacion> {
+    return this.http.delete<JuegoDeEvaluacion>(this.APIURLJuegoDeEvaluacion + '/' + juegoId);
+  }
   public CrearEquipoJuegoDeEvaluacion(equipo: EquipoJuegoDeEvaluacion): Observable<EquipoJuegoDeEvaluacion> {
     return this.http.post<EquipoJuegoDeEvaluacion>(this.APIURLEquiposJuegoEvaluado, equipo);
   }
+  public BorrarEquipoJuegoDeEvaluacion(equipoJuegoDeEvaluacionId: number): Observable<EquipoJuegoDeEvaluacion> {
+    return this.http.delete<EquipoJuegoDeEvaluacion>(this.APIURLEquiposJuegoEvaluado + '/' + equipoJuegoDeEvaluacionId);
+  }
   public CrearAlumnoJuegoDeEvaluacion(alumno: AlumnoJuegoDeEvaluacion): Observable<AlumnoJuegoDeEvaluacion> {
     return this.http.post<AlumnoJuegoDeEvaluacion>(this.APIURLAlumnoJuegoEvaluado, alumno);
+  }
+  public BorrarAlumnoJuegoDeEvaluacion(alumnoJuegoDeEvaluacionId: number): Observable<AlumnoJuegoDeEvaluacion> {
+    return this.http.delete<AlumnoJuegoDeEvaluacion>(this.APIURLAlumnoJuegoEvaluado + '/' + alumnoJuegoDeEvaluacionId);
   }
   public DameRelacionAlumnosJuegoDeEvaluacion(juegoId: number): Observable<AlumnoJuegoDeEvaluacion[]> {
     return this.http.get<AlumnoJuegoDeEvaluacion[]>(this.APIURLAlumnoJuegoEvaluado + '?filter[where][juegoDeEvaluacionId]=' + juegoId);
