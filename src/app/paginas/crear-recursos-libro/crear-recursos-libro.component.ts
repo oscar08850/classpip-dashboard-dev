@@ -315,8 +315,11 @@ export class CrearRecursosLibroComponent implements OnInit {
     {
       'name': this.nameFolder
     }
+    console.log ('voy a crear carpeta');
+    console.log (postfolder);
     this.API.crearCarpeta(postfolder).subscribe((res) => {
 
+      console.log ('voy a guardar las fotos');
       this.guardarLasFotos();
 
     }, (err) => {
@@ -336,6 +339,7 @@ export class CrearRecursosLibroComponent implements OnInit {
 
 
       formData.append(fileNew.name, fileNew);
+      console.log ('voy a guardar imagenes 1');
 
 
       this.API.guardarImagenRecursoLibro(this.nameFolder, formData).subscribe((res) => {
@@ -362,6 +366,7 @@ export class CrearRecursosLibroComponent implements OnInit {
             "carpeta": this.nameFolder,
             "imagenes": this.listaGuardarUrl
           }
+          console.log ('voy a guardar imagenes 2');
 
           this.API.guardarRecursoLibro(recursoSave, this.sesion.DameProfesor().id)
           .subscribe((res)=>{

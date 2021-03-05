@@ -20,9 +20,17 @@
     <br>
 
     <div *ngIf = "rubricaElegida" style = "width:60%">
+      <div class = "enFila">
+        <div>
+          <h2>{{rubricaElegida.Nombre}}</h2>
+          <h3>{{rubricaElegida.Descripcion}}</h3>
+        </div>
+        <button (click) = "EliminarRubrica()" type="button" class="btn Eliminar">
+          Eliminar
+        </button>
+      </div>
 
-      <h2>{{rubricaElegida.Nombre}}</h2>
-      <h3>{{rubricaElegida.Descripcion}}</h3>
+     
       <br>
       <mat-accordion>
         <h5 style="color: rgb(197, 15, 15)">   Criterios</h5>

@@ -32,7 +32,16 @@ import * as URL from '../URLs/urls';
 })
 export class PeticionesAPIService {
 
+
+
+
+ // private host = 'http://localhost';
+
+//  private host = 'http://147.83.118.92';
   private host = URL.host;
+
+
+
 
   private APIUrlProfesores = this.host + ':3000/api/Profesores';
   private APIUrlAlumnos = this.host + ':3000/api/Alumnos';
@@ -1403,7 +1412,9 @@ export class PeticionesAPIService {
 }
 
 
+
   public crearCarpeta(nombre: any): Observable<any> {
+
     return this.http.post<any>(this.APIurlImagenesLibros, nombre);
   }
 
@@ -1577,6 +1588,10 @@ public modificarConcurso(id, concurso): Observable<any> {
   // Gestion de rubricas
   public CreaRubrica(rubrica: Rubrica, profesorId: number): Observable<Rubrica> {
     return this.http.post<Rubrica>(this.APIUrlProfesores + '/' + profesorId + '/rubricas', rubrica);
+  }
+  public BorrarRubrica(rubricaId: number) {
+    // tslint:disable-next-line:max-line-length
+    return this.http.delete<Rubrica>(this.APIURLRubricas + '/' + rubricaId);
   }
 
   public DameRubricasProfesor(profesorId: number): Observable<Rubrica[]> {
@@ -1784,11 +1799,20 @@ public modificarConcurso(id, concurso): Observable<any> {
   public CrearJuegoDeEvaluacion(juego: JuegoDeEvaluacion): Observable<JuegoDeEvaluacion> {
     return this.http.post<JuegoDeEvaluacion>(this.APIURLJuegoDeEvaluacion, juego);
   }
+  public BorrarJuegoDeEvaluacion(juegoId: number): Observable<JuegoDeEvaluacion> {
+    return this.http.delete<JuegoDeEvaluacion>(this.APIURLJuegoDeEvaluacion + '/' + juegoId);
+  }
   public CrearEquipoJuegoDeEvaluacion(equipo: EquipoJuegoDeEvaluacion): Observable<EquipoJuegoDeEvaluacion> {
     return this.http.post<EquipoJuegoDeEvaluacion>(this.APIURLEquiposJuegoEvaluado, equipo);
   }
+  public BorrarEquipoJuegoDeEvaluacion(equipoJuegoDeEvaluacionId: number): Observable<EquipoJuegoDeEvaluacion> {
+    return this.http.delete<EquipoJuegoDeEvaluacion>(this.APIURLEquiposJuegoEvaluado + '/' + equipoJuegoDeEvaluacionId);
+  }
   public CrearAlumnoJuegoDeEvaluacion(alumno: AlumnoJuegoDeEvaluacion): Observable<AlumnoJuegoDeEvaluacion> {
     return this.http.post<AlumnoJuegoDeEvaluacion>(this.APIURLAlumnoJuegoEvaluado, alumno);
+  }
+  public BorrarAlumnoJuegoDeEvaluacion(alumnoJuegoDeEvaluacionId: number): Observable<AlumnoJuegoDeEvaluacion> {
+    return this.http.delete<AlumnoJuegoDeEvaluacion>(this.APIURLAlumnoJuegoEvaluado + '/' + alumnoJuegoDeEvaluacionId);
   }
   public DameRelacionAlumnosJuegoDeEvaluacion(juegoId: number): Observable<AlumnoJuegoDeEvaluacion[]> {
     return this.http.get<AlumnoJuegoDeEvaluacion[]>(this.APIURLAlumnoJuegoEvaluado + '?filter[where][juegoDeEvaluacionId]=' + juegoId);

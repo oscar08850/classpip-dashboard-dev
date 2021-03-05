@@ -1465,6 +1465,7 @@
 
             <!-- ///////////////JUEGO DE EVALUACION///////////////// -->
             <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Evaluación' && tengoModo">
+              <!-- Modo de evaluación en caso de equipos -->
               <mat-step *ngIf="modoDeJuegoSeleccionado === 'Equipos'">
                 <ng-template matStepLabel><div>Equipos</div></ng-template>
 
@@ -1484,12 +1485,47 @@
                   <button [disabled]="!tengoEquipoEvaluacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
+              <!-- Descripcion y formato de evaluacion ('con rúbrica' o 'solo preguntas abiertas') -->
               <mat-step>
-                <ng-template matStepLabel><div>Rúbrica</div></ng-template>
+                <ng-template matStepLabel><div>Descripción</div></ng-template>
                 <mat-form-field>
                   <mat-label>Descripción del Juego</mat-label>
                   <input matInput placeholder="Descripción" required formControlName="DescripcionJuegoEvaluacion" (keyup)="GuardarDescripcionEvaluacion()">
                 </mat-form-field>
+
+                <br>
+                <br>
+               
+                  <mat-label><b>Formato de la evaluación</b></mat-label>
+
+                  
+                  <mat-radio-group  class="radBtnProf" aria-label="Select an option">
+                    <mat-radio-button value="'con rúbrica'" [checked]="formatoEvaluacion === 'con rúbrica'" (change)="formatoEvaluacion = 'con rúbrica'"><b>Evaluación con rúbrica</b></mat-radio-button>
+                    <mat-radio-button value="'solo preguntas abiertas'" [checked]="formatoEvaluacion === 'solo preguntas abiertas'" (change)="formatoEvaluacion = 'solo preguntas abiertas'"><b>Solo preguntas abiertas</b></mat-radio-button>
+                  </mat-radio-group>
+
+                  <!-- <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
+                    <mat-radio-button (click)="formatoEvaluacion = 'con rúbrica'" class="radio-button" [value] = "'con rúbrica'" >
+                      <label style="color: black;">Evaluación con rúbrica</label>
+                    </mat-radio-button>
+                    <mat-radio-button (click)="formatoEvaluacion = 'solo preguntas abiertas'" class="radio-button"  [value] = "'solo preguntas abiertas'">
+                      <label style="color: black;">Solo preguntas abiertas</label>
+                    </mat-radio-button>
+                  </mat-radio-group> -->
+
+
+                  <span style="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ...
+                    {{modoDeJuegoSeleccionado}} ... {{formatoEvaluacion}} </span>
+             
+               
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!formatoEvaluacion || descripcionJuegoEvaluacion.length === 0 " type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+              <!-- Seleccion de rubrica -->
+              <mat-step *ngIf = "formatoEvaluacion === 'con rúbrica'">
+                <ng-template matStepLabel><div>Rúbrica</div></ng-template>
                 <mat-form-field appearance="fill">
                   <mat-label>Selecciona una rúbrica</mat-label>
                   <mat-select (selectionChange)="RubricaSeleccionChange($event.value)">
@@ -1516,6 +1552,73 @@
                   <button [disabled]="!tengoRubrica || descripcionJuegoEvaluacion.length === 0 || !ParentPesosSuman100()" type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
+
+              <!-- Seleccion de preguntas abiertas -->
+              <mat-step *ngIf = "formatoEvaluacion === 'solo preguntas abiertas'">
+         
+                  <ng-template matStepLabel><div>Preguntas abiertas</div></ng-template>
+  
+  
+  
+                  <div class="contenedor">
+                    <div class="enColumna">
+                      <div class = "enFila" style="width: 130%">
+                        <mat-form-field style = 'width: 40%; margin-right: 5%;'>
+                          <mat-label>Pregunta</mat-label>
+                          <input matInput required formControlName="PreguntaAbierta">
+                        </mat-form-field>
+                        <br>
+                      
+  
+                        <button type="button"class="btn Agregar"  (click) = "PonPreguntaAbierta()">Añade pregunta</button>
+  
+                        <button type="button" class="btn Aceptar" (click) = "AsignarPreguntasAbiertas()"> Asignar preguntas </button>
+                      </div>
+  
+                      <h2>Lista de preguntas abiertas</h2>
+                      <form style="width: 100%">
+  
+                      <table style="width: 100%" align="left" mat-table [dataSource]="dataSourcePreguntasAbiertas"  class="mat-elevation-z8">
+  
+                        <ng-container matColumnDef="pregunta" style= "width: 60%">
+                          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Pregunta </th>
+                          <td mat-cell  *matCellDef="let pregunta"> {{pregunta}} </td>
+                          <td mat-footer-cell *matFooterCellDef></td>
+                        </ng-container>
+  
+  
+                        <ng-container matColumnDef=" " style= "width: 20%; text-align: right;">
+                          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                          <td mat-cell *matCellDef="let pregunta">
+                            <button (click) = "BorraPreguntaAbierta(pregunta)" mat-icon-button>
+                              <i class="material-icons red md-36">delete</i>
+                            </button>
+                          </td>
+                          <td mat-footer-cell *matFooterCellDef></td>
+                        </ng-container>
+  
+  
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsPreguntasAbiertas"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsPreguntasAbiertas;"></tr>
+                        <mat-footer-row class="sticky-footer" *matFooterRowDef="['pregunta', ' ']"></mat-footer-row>
+  
+  
+                      </table>
+                      </form>
+  
+  
+                    </div>
+                </div>
+  
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!preguntasAbiertasAsignadas" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+
+
+              </mat-step>
+
+              <!-- Evaluacion todos a todos o 1 a N -->
               <mat-step>
                 <ng-template matStepLabel><div>Evaluación</div></ng-template>
 
@@ -1545,6 +1648,7 @@
                   <button [disabled]="!tengoTipoDeEvaluacion || (tipoDeEvaluacionSeleccionado === '1 a N' && numeroDeMiembros == 0)" type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
+              <!-- Relaciones aleatorias o a mano -->
               <mat-step *ngIf="tipoDeEvaluacionSeleccionado === '1 a N'">
                 <ng-template matStepLabel><div>Relaciones</div></ng-template>
 
@@ -1596,6 +1700,7 @@
                   <button [disabled]="!(todosTienenEvaluador && comprobacionDeN)" type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
+              <!-- Evaluacion por parte del profe y/o autoevaluacion -->
               <mat-step>
                 <ng-template matStepLabel><div>Extras</div></ng-template>
                 <mat-list>
@@ -1610,19 +1715,28 @@
                       <b>Profesor Evalua</b></mat-checkbox>
                   </mat-list-item>
 
-                  <mat-radio-group *ngIf="profesorEvalua" class="radBtnProf" aria-label="Select an option">
+                  <mat-radio-group *ngIf="profesorEvalua && formatoEvaluacion === 'con rúbrica'" class="radBtnProf" aria-label="Select an option">
                     <mat-radio-button value="normal" [checked]="profesorEvaluaModo === 'normal'" (change)="ProfesorEvaluaModoChange($event.value)"><b>Normal: La nota se cuenta como la de un evaluador más</b></mat-radio-button>
                     <mat-radio-button value="dominante" [checked]="profesorEvaluaModo === 'dominante'" (change)="ProfesorEvaluaModoChange($event.value)"><b>Dominante: La nota del profesor es un 50% del total</b></mat-radio-button>
                   </mat-radio-group>
 
                 </mat-list>
 
-                <div class="btnCambiarStep">
+                <div *ngIf = "formatoEvaluacion === 'con rúbrica'" class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                   <button type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
+
+                <div *ngIf = "formatoEvaluacion === 'solo preguntas abiertas'" class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button type="button" class="btn Aceptar" (click)="CrearJuegoEvaluacion()">Finalizar</button>
+                </div>
+
+
+
               </mat-step>
-              <mat-step>
+              <!-- Forma de puntuar en caso de rubrica -->
+              <mat-step *ngIf = "formatoEvaluacion === 'con rúbrica'">
                 <ng-template matStepLabel><div>Criterio</div></ng-template>
 
                 <div class = "colorsChips">
@@ -1641,7 +1755,8 @@
                   <button [disabled]="!tengoCriterioEvaluacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
-              <mat-step *ngIf="criterioEvaluacionSeleccionado === 'Por pesos'">
+              <!-- Mas sobre forma de puntuar en caso de rubrica -->
+              <mat-step *ngIf="(formatoEvaluacion === 'con rúbrica') && (criterioEvaluacionSeleccionado === 'Por pesos')">
                 <ng-template matStepLabel><div>Pesos</div></ng-template>
                 <mat-divider></mat-divider>
                 <div *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
@@ -1673,7 +1788,8 @@
                   <button [disabled]="!pesosSuman100" type="button" class="btn Aceptar" (click)="CrearJuegoEvaluacion()">Finalizar</button>
                 </div>
               </mat-step>
-              <mat-step *ngIf="criterioEvaluacionSeleccionado === 'Por penalización'">
+              <!-- Mas sobre forma de puntuar en caso de rubrica -->
+              <mat-step *ngIf="(formatoEvaluacion === 'con rúbrica') && (criterioEvaluacionSeleccionado === 'Por penalización')">
                 <ng-template matStepLabel><div>Penalización</div></ng-template>
                 <mat-divider></mat-divider>
                 <div *ngFor="let criterio of rubricaElegida.Criterios; let c = index">

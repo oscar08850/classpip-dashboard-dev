@@ -1,8 +1,9 @@
 .table-container {
-  overflow-y: scroll;
-  overflow-x: scroll;
-  max-width: 100%;
+  // overflow-y: scroll;
+  // overflow-x: scroll;
+  max-width:200%;
   max-height: 500px;
+  overflow: auto;
 }
 
 .mat-icon-button {
@@ -22,9 +23,9 @@ table {
 table th:first-child {
   background-image: linear-gradient(
       to top right,
-      #3f51b5 calc(50% - 1px),
+      #2b367c calc(50% - 1px),
       white,
-      #3f51b5 calc(50% + 1px)
+      #2b367c calc(50% + 1px)
   );
 }
 
@@ -49,7 +50,7 @@ table th:first-child {
 }
 
 .head:hover {
-  background-color: #3f51b5 !important;
+  background-color: #2b367c !important;
 }
 
 .row100:hover {
@@ -61,16 +62,26 @@ table th:first-child {
 }
 
 .row100 td:hover {
-  background-color: #6c7ae0;
+  background-color:#2b367c;
   color: #fff;
 }
 
 .column100 {
   width: 50px;
 }
+.head {
+  background-color: #2b367c !important;
+  color: white;
+  font-weight: bold;
+  font-size: 90%;
+  text-align: right;
+  padding-right: 10px;
+  padding-left: 10px !important;
+  padding-bottom: 10px !important;
+}
 
 .column-0 {
-  background-color: #3f51b5;
+  background-color: #2b367c !important;
   color: white;
   font-weight: bold;
   font-size: 90%;
@@ -78,6 +89,8 @@ table th:first-child {
   padding-right: 10px;
   padding-left: 10px !important;
 }
+
+
 
 .final-column {
   background-color: #dfe6e9;
@@ -93,3 +106,55 @@ table th:first-child {
 .col-profesor {
   background-color: #f7f1e3;
 }
+
+
+
+
+.example-container {
+  // overflow-y: scroll;
+  // overflow-x: scroll;
+  overflow: auto;
+
+  max-height: 500px;
+}
+
+.mat-table-sticky {
+  background:  midnightblue;
+  opacity: 1;
+}
+
+.example-sticky-toggle-group {
+  margin: 8px;
+}
+
+.mat-column-filler {
+  padding: 0 8px;
+  font-size: 10px;
+  text-align: center;
+}
+
+.mat-header-cell, .mat-footer-cell, .mat-cell {
+  min-width: 80px;
+  box-sizing: border-box;
+}
+
+.mat-header-row, .mat-footer-row, .mat-row {
+  min-width: 1920px; /* 24 columns, 80px each */
+}
+
+.mat-table-sticky-border-elem-top {
+  border-bottom: 2px solid midnightblue;
+}
+
+.mat-table-sticky-border-elem-right {
+  border-left: 2px solid midnightblue;
+}
+
+.mat-table-sticky-border-elem-bottom {
+  border-top: 2px solid midnightblue;
+}
+
+.mat-table-sticky-border-elem-left {
+  border-right: 2px solid midnightblue;
+}
+

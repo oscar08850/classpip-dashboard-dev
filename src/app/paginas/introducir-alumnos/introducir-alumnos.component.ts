@@ -72,7 +72,7 @@ export class IntroducirAlumnosComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       Swal.fire('Error', 'El email no es correcto', 'error');
     } else if (this.UsernameUsado (this.nombreUsuario)) {
-      Swal.fire('Error', 'Ya existe otro alumno en Classpip con ese nombre de usuario', 'error');
+      Swal.fire('Error', 'Ya existe otro alumno en Classpip (o vas a registrar uno) con ese nombre de usuario', 'error');
     } else {
       // genero un pasword aleatorio de 8 caracteres
       const password = Math.random().toString(36).substr(2, 8);
@@ -88,21 +88,28 @@ export class IntroducirAlumnosComponent implements OnInit {
     this.nuevosAlumnos = this.nuevosAlumnos.filter (a => a.Nombre !== alumno.Nombre && a.PrimerApellido !== alumno.PrimerApellido && a.SegundoApellido !== alumno.SegundoApellido);
     this.dataSource = new MatTableDataSource (this.nuevosAlumnos);
   }
-  RegistraAlumnos() {
+  Delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+  async RegistraAlumnos() {
     console.log ('Registra');
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.nuevosAlumnos.length; i++) {
-      const alumno = this.nuevosAlumnos[i];
-      console.log ('voy a registrar al alumno');
-      console.log (alumno);
-      alumno.profesorId = this.profesor.id;
-      this.peticionesAPI.CreaAlumno (alumno)
-      // tslint:disable-next-line:no-shadowed-variable
-      .subscribe( alumno => {
-        // enviarle un email al alumno comunicandole su nombre de usuario y su contraseña
-        // y diciendole que la cambie lo antes posible
-        this.comServer.EnviarInfoRegistroAlumno (this.profesor, alumno);
-      });
+        const alumno = this.nuevosAlumnos[i];
+        console.log ('voy a registrar al alumno');
+        console.log (alumno);
+        alumno.profesorId = this.profesor.id;
+        this.peticionesAPI.CreaAlumno (alumno)
+        // tslint:disable-next-line:no-shadowed-variable
+        .subscribe( alumno => {
+          // enviarle un email al alumno comunicandole su nombre de usuario y su contraseña
+          // y diciendole que la cambie lo antes posible
+          this.comServer.EnviarInfoRegistroAlumno (this.profesor, alumno);
+          this.alumnosEnClasspip.push (alumno);
+        });
+        // Espero un tiempo para no provocar una avalancha de e,alis que parece
+        // saturar al servidor
+        await this.Delay(1000);
     }
     // tslint:disable-next-line:max-line-length
     Swal.fire('Añadidos', this.nuevosAlumnos.length + ' nuevos alumnos añadidos correctamente. Se les ha enviado un email con sus datos e instandoles a que modifiquen lo antes posible su contraseña.', 'success');
@@ -123,9 +130,13 @@ export class IntroducirAlumnosComponent implements OnInit {
     return re.test(email);
   }
 
-  UsernameUsado(username: string) {
+  UsernameUsado(username: string): boolean {
+    console.log ('usuarios en classpip');
+    console.log (this.alumnosEnClasspip);
+    let usado = this.alumnosEnClasspip.some (alumno => alumno.Username === username);
+    usado = usado || this.nuevosAlumnos.some (alumno => alumno.Username === username);
 
-    return this.alumnosEnClasspip.some (alumno => alumno.Username === username);
+    return usado;
 
 
   }
@@ -135,12 +146,17 @@ export class IntroducirAlumnosComponent implements OnInit {
 
     const lineas: string[] = this.textoAlumnosNuevos.split('\n');
     console.log ('Numero de lineas ' + lineas.length);
+    console.log ('lineas ');
+    console.log (lineas);
     this.textoAlumnosErroneos = null;
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < lineas.length; i++) {
+      if (lineas[i] !== '') {
         const trozos: string[] = lineas[i].split(';');
-        if ((trozos.length !== 5) || (!this.emailValido(trozos[4])) || this.UsernameUsado(trozos[3])) {
+        if ((trozos.length !== 5) || (!this.emailValido(trozos[4].trim())) || this.UsernameUsado(trozos[3].trim())) {
+    
+
           if (this.textoAlumnosErroneos === null) {
              this.textoAlumnosErroneos = lineas[i];
           } else {
@@ -149,8 +165,10 @@ export class IntroducirAlumnosComponent implements OnInit {
         } else {
           // genero un pasword aleatorio de 8 caracteres
           const password = Math.random().toString(36).substr(2, 8);
-          this.nuevosAlumnos.push (new Alumno (trozos[0], trozos[1], trozos[2], trozos[3], password, trozos[4]));
+          // tslint:disable-next-line:max-line-length
+          this.nuevosAlumnos.push (new Alumno (trozos[0].trim(), trozos[1].trim(), trozos[2].trim(), trozos[3].trim(), password, trozos[4].trim()));
         }
+      }
     }
     this.dataSource = new MatTableDataSource (this.nuevosAlumnos);
     this.LimpiarCamposTexto();
