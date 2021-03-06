@@ -5,7 +5,7 @@
     <button type="button" class="btn Eliminar" (click) = "Eliminar()"> Eliminar<i class="material-icons">delete</i></button>
   </div>
 
-  
+
 
   <div style = "width:150%" *ngIf = "juego.rubricaId > 0">
     <mat-accordion>
@@ -27,7 +27,7 @@
     </mat-accordion>
     <div class="table-container mat-elevation-z8" style="margin-top: 10px;">
       <table mat-table [dataSource]="datosTabla">
-        <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns; let i = index" [sticky]="i === 0" [stickyEnd]="i === displayedColumns.length - 1">
+        <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns; let i = index" [sticky]="i === 0" [stickyEnd]="i === displayedColumns.length - 1 || column === 'Profesor'">
           <th mat-header-cell class="tituloTabla column100 column-0" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" *matHeaderCellDef>
             <div *ngIf="column != 'Nombre'">
               {{column}}
@@ -82,19 +82,19 @@
         <p *ngIf="juego.profesorEvalua"><strong>Profesor: </strong>Sí evalua</p>
       </mat-expansion-panel>
     </mat-accordion>
-  
-  
-  
+
+
+
     <!-- <div class="table-container mat-elevation-z8" style="margin-top: 10px;"> -->
     <div class="table-container mat-elevation-z8" >
       <table mat-table [dataSource]="datosTabla" style="height: 200px;">
         <!-- <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns; let i = index" [sticky]="i === 0" [stickyEnd]="i === displayedColumns.length - 1"> -->
-       
-  
-        <ng-container *ngFor="let column of displayedColumns; let i = index" [matColumnDef]="column"  [sticky]="(i===0)" [stickyEnd]="i === displayedColumns.length - 1">
-          
+
+
+        <ng-container *ngFor="let column of displayedColumns; let i = index" [matColumnDef]="column"  [sticky]="(i===0)" [stickyEnd]="i === displayedColumns.length - 1 || column === 'Profesor'">
+
           <div *ngIf = "(i===0) || (i===displayedColumns.length - 1) " >
-          
+
             <th mat-header-cell class="tituloTabla column100 column-0" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" *matHeaderCellDef>
               <div *ngIf="column != 'Nombre'">
                 {{column}}
@@ -165,11 +165,11 @@
             </td>
             </div>
         </ng-container>
-  
-      
-     
+
+
+
         <!-- <tr mat-header-row  *matHeaderRowDef="displayedColumns; sticky: true"></tr> -->
-      
+
         <tr mat-header-row class="row100 head" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row class="row100" *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
