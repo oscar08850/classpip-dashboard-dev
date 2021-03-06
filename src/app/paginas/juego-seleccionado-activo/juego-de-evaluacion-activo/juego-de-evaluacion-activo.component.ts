@@ -461,7 +461,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     }
   } 
 
-  openDialog(i: number, c: any, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
+  openDialog1(i: number, c: any, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
 
     if (profesor) {
       const dialogRef = this.dialog.open(EvaluacionDialogoComponent, {
@@ -512,7 +512,83 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           equiposRelacion: this.equiposRelacion,
           alumnosDeEquipo: this.alumnosDeEquipo,
           evaluadorId: global ? 0 : this.tmpDisplayedColumns[i - 1][0],
+          evaluadoId: c.id,
+          profesor: false,
+          editable: false,
+          global,
+          notaMedia: c['Nota Media']
+        }
+      });
+    }
+  }
+  openDialog(i: number, c: any, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
+    if (profesor) {
+      const dialogRef = this.dialog.open(EvaluacionDialogoComponent, {
+        width: '800px',
+        data: {
+          juego: this.juego,
+          rubrica: this.rubrica,
+          alumnos: this.alumnos,
+          alumnosRelacion: this.alumnosRelacion,
+          equipos: this.equipos,
+          equiposRelacion: this.equiposRelacion,
+          alumnosDeEquipo: this.alumnosDeEquipo,
+          evaluadorId: this.sesion.DameProfesor().id,
           evaluadoId: c,
+          profesor: true,
+          editable: editar,
+          global: false,
+          notaMedia: null
+        }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed', result);
+        if (typeof result === 'undefined') {
+          return;
+        }
+        this.tmpDisplayedColumns = [];
+        this.datosTabla = [];
+        this.hoverColumn = [];
+        if (this.juego.Modo === 'Individual') {
+          this.alumnosRelacion = result;
+          this.ConstruirTablaIndividual();
+        } else if (this.juego.Modo === 'Equipos') {
+          this.equiposRelacion = result;
+          this.ConstruirTablaEquipos();
+        }
+      });
+    } else if (!global) {
+      this.dialog.open(EvaluacionDialogoComponent, {
+        width: '800px',
+        data: {
+          juego: this.juego,
+          rubrica: this.rubrica,
+          alumnos: this.alumnos,
+          alumnosRelacion: this.alumnosRelacion,
+          equipos: this.equipos,
+          equiposRelacion: this.equiposRelacion,
+          alumnosDeEquipo: this.alumnosDeEquipo,
+          evaluadorId: this.tmpDisplayedColumns[i - 1][0],
+          evaluadoId: c,
+          profesor: false,
+          editable: false,
+          global: false,
+          notaMedia: null
+        }
+      });
+    } else {
+      this.dialog.open(EvaluacionDialogoComponent, {
+        width: '800px',
+        data: {
+          juego: this.juego,
+          rubrica: this.rubrica,
+          alumnos: this.alumnos,
+          alumnosRelacion: this.alumnosRelacion,
+          equipos: this.equipos,
+          equiposRelacion: this.equiposRelacion,
+          alumnosDeEquipo: this.alumnosDeEquipo,
+          evaluadorId: global ? 0 : this.tmpDisplayedColumns[i - 1][0],
+          evaluadoId: c.id,
           profesor: false,
           editable: false,
           global,

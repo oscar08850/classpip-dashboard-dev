@@ -93,9 +93,16 @@ table th:first-child {
 
 
 .final-column {
-  background-color: #dfe6e9;
+  // background-color: #dfe6e9;
+  // font-weight: bold;
+  // font-size: 90%;
+  background-color: #2b367c !important;
+  color: white;
   font-weight: bold;
   font-size: 90%;
+  text-align: right;
+  padding-right: 10px;
+  padding-left: 10px !important;
 }
 
 .shadowed {
