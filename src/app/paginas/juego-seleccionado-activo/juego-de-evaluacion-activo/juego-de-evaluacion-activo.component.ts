@@ -42,8 +42,6 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     private dialog: MatDialog,
     private location: Location
   ) { }
-  
-  
 
   ngOnInit() {
     this.juego = this.sesion.DameJuego() as unknown as JuegoDeEvaluacion;
@@ -99,7 +97,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     console.log('calcular media', row);
     if (this.juego.notaProfesorNormal) {
       for (const nombre in row) {
-        if (typeof row[nombre] === 'number' && nombre !== 'id') {
+        if (typeof row[nombre] === 'number' && nombre !== 'id' && !nombre.startsWith('criterio_')) {
           console.log('media, p, nombre', media, p, nombre, row[nombre]);
           media += row[nombre];
           p++;
@@ -107,7 +105,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       }
     } else {
       for (const nombre in row) {
-        if (typeof row[nombre] === 'number' && nombre !== 'id' && nombre !== 'Profesor') {
+        if (typeof row[nombre] === 'number' && nombre !== 'id' && nombre !== 'Profesor' && !nombre.startsWith('criterio_')) {
           console.log('D/media, p, nombre', media, p, nombre, row[nombre]);
           media += row[nombre];
           p++;
@@ -215,6 +213,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
             row['Profesor'] = '-';
           }
         }
+        this.rubrica.Criterios.forEach((criterio, index) => {
+          row['criterio_' + index] = 0;
+        });
         row['Nota Media'] = this.CalcularNotaMedia(row);
         this.datosTabla.push(row);
       });
@@ -223,6 +224,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       if (this.juego.profesorEvalua) {
         this.displayedColumns.push('Profesor');
       }
+      this.rubrica.Criterios.forEach((criterio, index) => {
+        this.displayedColumns.push('criterio_' + index);
+      });
       this.displayedColumns.push('Nota Media');
       this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
     } else {
@@ -459,7 +463,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
 
     }
-  } 
+  }
 
   openDialog1(i: number, c: any, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
 
@@ -645,6 +649,10 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     });
   }
 
+  NombreCriterio(column: string): string {
+    const index = parseInt(column.split('_')[1], 10);
+    return this.rubrica.Criterios[index].Nombre;
+  }
 
   Eliminar(): void {
 
