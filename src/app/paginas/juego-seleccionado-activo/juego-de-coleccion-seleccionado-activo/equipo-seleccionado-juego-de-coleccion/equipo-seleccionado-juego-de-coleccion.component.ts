@@ -67,7 +67,9 @@ export class EquipoSeleccionadoJuegoDeColeccionComponent implements OnInit {
   GET_ImagenPerfil() {
 
     if (this.equipo.FotoEquipo !== undefined ) {
-      this.http.get('http://localhost:3000/api/imagenes/LogosEquipos/download/' + this.equipo.FotoEquipo,
+      this.http.get(URL.LogosEquipos + this.equipo.FotoEquipo,
+    
+      //this.http.get('http://localhost:3000/api/imagenes/LogosEquipos/download/' + this.equipo.FotoEquipo,
       { responseType: ResponseContentType.Blob })
       .subscribe(response => {
 
