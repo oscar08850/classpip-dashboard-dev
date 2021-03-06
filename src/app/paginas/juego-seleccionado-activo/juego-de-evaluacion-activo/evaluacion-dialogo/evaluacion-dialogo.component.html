@@ -138,8 +138,10 @@
           <mat-panel-title><i>Observaciones</i></mat-panel-title>
         </mat-expansion-panel-header>
         <div *ngFor="let respuesta of respuestaEvaluacion; let n = index;">
-          <p>{{MostrarComentario(n)}}</p>
-          <mat-divider style="margin-top: 10px; margin-bottom: 10px"></mat-divider>
+          <div *ngIf="MostrarComentario(n) !== null">
+            <p>{{MostrarComentario(n)}}</p>
+            <mat-divider style="margin-top: 10px; margin-bottom: 10px"></mat-divider>
+          </div>
         </div>
       </mat-expansion-panel>
     </mat-accordion>

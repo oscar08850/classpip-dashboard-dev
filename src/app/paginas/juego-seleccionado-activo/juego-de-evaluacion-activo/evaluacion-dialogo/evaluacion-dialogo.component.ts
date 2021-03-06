@@ -333,6 +333,10 @@ export class EvaluacionDialogoComponent implements OnInit {
 
   MostrarComentario(i: number): string {
     const evaluado = this.data.alumnosRelacion.find(item => item.alumnoId === this.data.evaluadoId);
+    const comentario = evaluado.respuestas[i].respuesta[evaluado.respuestas[i].respuesta.length - 1];
+    if (comentario === '') {
+      return null;
+    }
     let autor: string;
     if (evaluado.respuestas[i].profesorId && evaluado.respuestas[i].profesorId === this.data.juego.profesorId) {
       autor = 'Profesor';
@@ -341,7 +345,6 @@ export class EvaluacionDialogoComponent implements OnInit {
     } else {
       return null;
     }
-    const comentario = evaluado.respuestas[i].respuesta[evaluado.respuestas[i].respuesta.length - 1];
     return autor + ': ' + comentario;
   }
 
