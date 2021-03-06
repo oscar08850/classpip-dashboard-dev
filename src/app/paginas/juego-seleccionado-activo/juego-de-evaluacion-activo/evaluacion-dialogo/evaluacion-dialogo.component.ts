@@ -48,8 +48,6 @@ export class EvaluacionDialogoComponent implements OnInit {
     public peticionesAPI: PeticionesAPIService
   ) { }
 
- 
-
   ngOnInit() {
     console.log ('datos');
     console.log (this.data);
@@ -96,7 +94,7 @@ export class EvaluacionDialogoComponent implements OnInit {
     } else {
       // juego con preguntas abiertas
       this.respuestasPreguntasAbiertas = Array(this.data.juego.PreguntasAbiertas.length).fill(undefined);
-  
+
       if (this.data.juego.Modo === 'Individual') {
         const evaluado = this.data.alumnosRelacion.find(item => item.alumnoId === this.data.evaluadoId);
         console.log ('alumno evaluado');
@@ -139,7 +137,7 @@ export class EvaluacionDialogoComponent implements OnInit {
           // Las respuestas de los equipos vienen identificadas con el id del alumno que respondió
           const respuestasEquipos = evaluado.respuestas.filter (item => item.alumnoId);
           this.respuestaEvaluacion = respuestasEquipos.map(item => item.respuesta);
-          
+
           // puede que haya también respuesta del profeesor
           const respuestaProfesor = evaluado.respuestas.filter (item => item.profesorId);
           this.respuestaProfesor = respuestaProfesor.map(item => item.respuesta);
@@ -331,6 +329,20 @@ export class EvaluacionDialogoComponent implements OnInit {
   numeroMarcados(i: number, j: number): number {
     // console.log(i, j, this.respuestaEvaluacion);
     return this.respuestaEvaluacion.map(item => item[i][j]).filter(item => item === true).length;
+  }
+
+  MostrarComentario(i: number): string {
+    const evaluado = this.data.alumnosRelacion.find(item => item.alumnoId === this.data.evaluadoId);
+    let autor: string;
+    if (evaluado.respuestas[i].profesorId && evaluado.respuestas[i].profesorId === this.data.juego.profesorId) {
+      autor = 'Profesor';
+    } else if (evaluado.respuestas[i].alumnoId) {
+      autor = this.data.alumnos.find(alumno => alumno.id === evaluado.respuestas[i].alumnoId).Username;
+    } else {
+      return null;
+    }
+    const comentario = evaluado.respuestas[i].respuesta[evaluado.respuestas[i].respuesta.length - 1];
+    return autor + ': ' + comentario;
   }
 
   SetAll(i: number): void {
