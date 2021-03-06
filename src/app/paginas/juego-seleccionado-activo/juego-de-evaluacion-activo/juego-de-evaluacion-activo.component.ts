@@ -91,6 +91,59 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     }
   }
 
+  CalcularNotaCriterio(evaluadoId: number, index: number): number {
+    let evaluado;
+    if (this.juego.Modo === 'Individual') {
+      evaluado = this.alumnosRelacion.find(item => item.alumnoId === evaluadoId);
+    } else if (this.juego.Modo === 'Equipos') {
+      evaluado = this.equiposRelacion.find(item => item.equipoId === evaluadoId);
+    }
+    if (!evaluado || evaluado.respuestas === null) {
+      return 0;
+    }
+    const respuestas = evaluado.respuestas;
+    console.log('respuestas', respuestas);
+    let subNota: number;
+    let notaCriterio = 0;
+    if (this.juego.metodoSubcriterios) {
+      subNota = 0;
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < respuestas.length; i++) {
+        for (let j = 1; j < this.juego.Pesos[index].length; j++) {
+          if (respuestas[i].respuesta[index][j - 1]) {
+            subNota += this.juego.Pesos[index][j] / 10;
+          }
+          notaCriterio += subNota / respuestas.length;
+          subNota = 0;
+        }
+      }
+    } else {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < respuestas.length; i++) {
+        subNota = 10;
+        const fallos = respuestas[i].respuesta[index].filter(item => item === false).length;
+        if (fallos > 0) {
+          let minimo: number;
+          let rangoMinimo;
+          let maximo: number;
+          minimo = Math.min.apply(Math, this.juego.Penalizacion[index].map(item => item.num));
+          if (fallos >= minimo) {
+            rangoMinimo = this.juego.Penalizacion[index].filter(item => item.num <= fallos);
+            if (rangoMinimo.length === 0) {
+              maximo = Math.max.apply(Math, this.juego.Penalizacion[index].map(item => item.num));
+            } else {
+              maximo = Math.max.apply(Math, rangoMinimo.map(item => item.num));
+            }
+            const penalizacion = this.juego.Penalizacion[index].find(item => item.num === maximo).p;
+            subNota = penalizacion / 10;
+          }
+        }
+        notaCriterio += subNota / respuestas.length;
+      }
+    }
+    return Math.round((notaCriterio + Number.EPSILON) * 100) / 100;
+  }
+
   CalcularNotaMedia(row): number | string {
     let media = 0;
     let p = 0;
@@ -214,7 +267,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           }
         }
         this.rubrica.Criterios.forEach((criterio, index) => {
-          row['criterio_' + index] = 0;
+          row['criterio_' + index] = this.CalcularNotaCriterio(alumno.id, index);
         });
         row['Nota Media'] = this.CalcularNotaMedia(row);
         this.datosTabla.push(row);
@@ -327,6 +380,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
               row['Profesor'] = '-';
             }
           }
+          this.rubrica.Criterios.forEach((criterio, index) => {
+            row['criterio_' + index] = this.CalcularNotaCriterio(equipo.id, index);
+          });
           row['Nota Media'] = this.CalcularNotaMedia(row);
           this.datosTabla.push(row);
         });
@@ -361,6 +417,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
               row['Profesor'] = '-';
             }
           }
+          this.rubrica.Criterios.forEach((criterio, index) => {
+            row['criterio_' + index] = this.CalcularNotaCriterio(equipo.id, index);
+          });
           row['Nota Media'] = this.CalcularNotaMedia(row);
           this.datosTabla.push(row);
         });
@@ -370,6 +429,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       if (this.juego.profesorEvalua) {
         this.displayedColumns.push('Profesor');
       }
+      this.rubrica.Criterios.forEach((criterio, index) => {
+        this.displayedColumns.push('criterio_' + index);
+      });
       this.displayedColumns.push('Nota Media');
       this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
     } else {
