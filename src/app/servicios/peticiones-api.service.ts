@@ -89,10 +89,10 @@ export class PeticionesAPIService {
 
 
   // Para cargar y descargar imagenes
-  private APIUrlImagenAlumno = this.host + ':3000/api/imagenes/imagenAlumno';
+  private APIUrlImagenAlumno = this.host + ':3000/api/imagenes/ImagenAlumno';
   private APIUrlImagenColeccion = this.host + ':3000/api/imagenes/ImagenColeccion';
   private APIUrlImagenCromo = this.host + ':3000/api/imagenes/ImagenCromo';
-  private APIUrlImagenNivel = this.host + ':3000/api/imagenes/imagenNivel';
+  private APIUrlImagenNivel = this.host + ':3000/api/imagenes/ImagenNivel';
   private APIUrlImagenInsignia = this.host + ':3000/api/imagenes/ImagenInsignia';
   private APIUrlLogosEquipos = this.host + ':3000/api/imagenes/LogosEquipos';
 
