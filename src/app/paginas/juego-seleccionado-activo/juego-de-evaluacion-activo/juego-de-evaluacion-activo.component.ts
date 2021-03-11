@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {PeticionesAPIService, SesionService, CalculosService} from '../../../servicios';
 import {JuegoDeEvaluacion} from '../../../clases/JuegoDeEvaluacion';
 import {Alumno, Equipo, Rubrica} from '../../../clases';
@@ -9,7 +9,8 @@ import {EvaluacionDialogoComponent} from './evaluacion-dialogo/evaluacion-dialog
 import {EvaluacionBorrarDialogoComponent} from './evaluacion-borrar-dialogo/evaluacion-borrar-dialogo.component';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
-
+import { MatSort } from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-juego-de-evaluacion-activo',
@@ -33,7 +34,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   datosTabla = [];
   hoverColumn = [];
 
-
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private sesion: SesionService,
@@ -165,13 +166,13 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         }
       }
     }
-    if (p > 0 || typeof row['Profesor'] === 'number') {
-      if (this.juego.notaProfesorNormal || (this.juego.profesorEvalua && typeof row['Profesor'] !== 'number')) {
+    if (p > 0 || typeof row.Profesor === 'number') {
+      if (this.juego.notaProfesorNormal || (this.juego.profesorEvalua && typeof row.Profesor !== 'number')) {
         return Math.round(((media / p) + Number.EPSILON) * 100) / 100;
       } else if (p === 0) {
-        return Math.round(((row['Profesor']) + Number.EPSILON) * 100) / 100;
+        return Math.round(((row.Profesor) + Number.EPSILON) * 100) / 100;
       } else {
-        return Math.round(((((media / p) + row['Profesor']) / 2) + Number.EPSILON) * 100) / 100;
+        return Math.round(((((media / p) + row.Profesor) / 2) + Number.EPSILON) * 100) / 100;
       }
     } else {
       return '-';
@@ -310,7 +311,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         });
         if (this.juego.profesorEvalua) {
           if (evaluado.respuestas && evaluado.respuestas.find(item => item.profesorId)) {
-            row['Profesor'] = -1; //doy un valor numeroco para provocar que se muestren los iconos de ver y borrar
+            row['Profesor'] = -1; // doy un valor numeroco para provocar que se muestren los iconos de ver y borrar
           } else {
             row['Profesor'] = '-';
           }
@@ -330,6 +331,8 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     }
     console.log ('ya tengo las columnas');
     console.log (this.displayedColumns);
+    // @ts-ignore
+    this.datosTabla.sort = this.sort;
   }
 
 
@@ -348,7 +351,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         for (let i = 0; i < this.alumnosDeEquipo.length; i++) {
           // tslint:disable-next-line:prefer-for-of
           for (let j = 0; j < this.alumnosDeEquipo[i].alumnos.length; j++) {
-            //this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Nombre]);
+            // this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Nombre]);
             this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Username]);
           }
         }
@@ -443,7 +446,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           // tslint:disable-next-line:prefer-for-of
           for (let j = 0; j < this.alumnosDeEquipo[i].alumnos.length; j++) {
             this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Username]);
-            //this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Nombre]);
+            // this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Nombre]);
           }
         }
         console.log('Columnas tmp', this.tmpDisplayedColumns);
@@ -525,6 +528,8 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
 
     }
+    // @ts-ignore
+    this.datosTabla.sort = this.sort;
   }
 
   openDialog1(i: number, c: any, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
