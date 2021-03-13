@@ -33,6 +33,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   tmpDisplayedColumns = [];
   datosTabla = [];
   hoverColumn = [];
+  mostrarCriterios: boolean;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -736,6 +737,18 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         });
       }
     });
+  }
+
+  MostrarCriterios(checked) {
+    if (checked) {
+      this.displayedColumns.pop();
+      this.rubrica.Criterios.forEach((criterio, index) => {
+        this.displayedColumns.push('criterio_' + index);
+      });
+      this.displayedColumns.push('Nota Media');
+    } else {
+      this.displayedColumns = this.displayedColumns.filter((column) => !column.startsWith('criterio_'));
+    }
   }
 
 }
