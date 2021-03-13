@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {PeticionesAPIService, SesionService, CalculosService} from '../../../servicios';
 import {JuegoDeEvaluacion} from '../../../clases/JuegoDeEvaluacion';
 import {Alumno, Equipo, Rubrica} from '../../../clases';
@@ -9,7 +9,8 @@ import {EvaluacionDialogoComponent} from './evaluacion-dialogo/evaluacion-dialog
 import {EvaluacionBorrarDialogoComponent} from './evaluacion-borrar-dialogo/evaluacion-borrar-dialogo.component';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
-
+import { MatSort } from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-juego-de-evaluacion-activo',
@@ -32,8 +33,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   tmpDisplayedColumns = [];
   datosTabla = [];
   hoverColumn = [];
+  mostrarCriterios: boolean;
 
-
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private sesion: SesionService,
@@ -42,8 +44,6 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     private dialog: MatDialog,
     private location: Location
   ) { }
-  
-  
 
   ngOnInit() {
     this.juego = this.sesion.DameJuego() as unknown as JuegoDeEvaluacion;
@@ -93,13 +93,66 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     }
   }
 
+  CalcularNotaCriterio(evaluadoId: number, index: number): number {
+    let evaluado;
+    if (this.juego.Modo === 'Individual') {
+      evaluado = this.alumnosRelacion.find(item => item.alumnoId === evaluadoId);
+    } else if (this.juego.Modo === 'Equipos') {
+      evaluado = this.equiposRelacion.find(item => item.equipoId === evaluadoId);
+    }
+    if (!evaluado || evaluado.respuestas === null) {
+      return 0;
+    }
+    const respuestas = evaluado.respuestas;
+    console.log('respuestas', respuestas);
+    let subNota: number;
+    let notaCriterio = 0;
+    if (this.juego.metodoSubcriterios) {
+      subNota = 0;
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < respuestas.length; i++) {
+        for (let j = 1; j < this.juego.Pesos[index].length; j++) {
+          if (respuestas[i].respuesta[index][j - 1]) {
+            subNota += this.juego.Pesos[index][j] / 10;
+          }
+          notaCriterio += subNota / respuestas.length;
+          subNota = 0;
+        }
+      }
+    } else {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < respuestas.length; i++) {
+        subNota = 10;
+        const fallos = respuestas[i].respuesta[index].filter(item => item === false).length;
+        if (fallos > 0) {
+          let minimo: number;
+          let rangoMinimo;
+          let maximo: number;
+          minimo = Math.min.apply(Math, this.juego.Penalizacion[index].map(item => item.num));
+          if (fallos >= minimo) {
+            rangoMinimo = this.juego.Penalizacion[index].filter(item => item.num <= fallos);
+            if (rangoMinimo.length === 0) {
+              maximo = Math.max.apply(Math, this.juego.Penalizacion[index].map(item => item.num));
+            } else {
+              maximo = Math.max.apply(Math, rangoMinimo.map(item => item.num));
+            }
+            const penalizacion = this.juego.Penalizacion[index].find(item => item.num === maximo).p;
+            subNota = penalizacion / 10;
+          }
+        }
+        notaCriterio += subNota / respuestas.length;
+      }
+    }
+    return Math.round((notaCriterio + Number.EPSILON) * 100) / 100;
+  }
+
   CalcularNotaMedia(row): number | string {
     let media = 0;
     let p = 0;
     console.log('calcular media', row);
     if (this.juego.notaProfesorNormal) {
       for (const nombre in row) {
-        if (typeof row[nombre] === 'number' && nombre !== 'id') {
+        if (typeof row[nombre] === 'number' && nombre !== 'id' && !nombre.startsWith('criterio_')) {
           console.log('media, p, nombre', media, p, nombre, row[nombre]);
           media += row[nombre];
           p++;
@@ -107,20 +160,20 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       }
     } else {
       for (const nombre in row) {
-        if (typeof row[nombre] === 'number' && nombre !== 'id' && nombre !== 'Profesor') {
+        if (typeof row[nombre] === 'number' && nombre !== 'id' && nombre !== 'Profesor' && !nombre.startsWith('criterio_')) {
           console.log('D/media, p, nombre', media, p, nombre, row[nombre]);
           media += row[nombre];
           p++;
         }
       }
     }
-    if (p > 0 || typeof row['Profesor'] === 'number') {
-      if (this.juego.notaProfesorNormal || (this.juego.profesorEvalua && typeof row['Profesor'] !== 'number')) {
+    if (p > 0 || typeof row.Profesor === 'number') {
+      if (this.juego.notaProfesorNormal || (this.juego.profesorEvalua && typeof row.Profesor !== 'number')) {
         return Math.round(((media / p) + Number.EPSILON) * 100) / 100;
       } else if (p === 0) {
-        return Math.round(((row['Profesor']) + Number.EPSILON) * 100) / 100;
+        return Math.round(((row.Profesor) + Number.EPSILON) * 100) / 100;
       } else {
-        return Math.round(((((media / p) + row['Profesor']) / 2) + Number.EPSILON) * 100) / 100;
+        return Math.round(((((media / p) + row.Profesor) / 2) + Number.EPSILON) * 100) / 100;
       }
     } else {
       return '-';
@@ -215,6 +268,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
             row['Profesor'] = '-';
           }
         }
+        this.rubrica.Criterios.forEach((criterio, index) => {
+          row['criterio_' + index] = this.CalcularNotaCriterio(alumno.id, index);
+        });
         row['Nota Media'] = this.CalcularNotaMedia(row);
         this.datosTabla.push(row);
       });
@@ -223,6 +279,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       if (this.juego.profesorEvalua) {
         this.displayedColumns.push('Profesor');
       }
+      this.rubrica.Criterios.forEach((criterio, index) => {
+        this.displayedColumns.push('criterio_' + index);
+      });
       this.displayedColumns.push('Nota Media');
       this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
     } else {
@@ -253,7 +312,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         });
         if (this.juego.profesorEvalua) {
           if (evaluado.respuestas && evaluado.respuestas.find(item => item.profesorId)) {
-            row['Profesor'] = -1; //doy un valor numeroco para provocar que se muestren los iconos de ver y borrar
+            row['Profesor'] = -1; // doy un valor numeroco para provocar que se muestren los iconos de ver y borrar
           } else {
             row['Profesor'] = '-';
           }
@@ -273,6 +332,8 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     }
     console.log ('ya tengo las columnas');
     console.log (this.displayedColumns);
+    // @ts-ignore
+    this.datosTabla.sort = this.sort;
   }
 
 
@@ -291,7 +352,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         for (let i = 0; i < this.alumnosDeEquipo.length; i++) {
           // tslint:disable-next-line:prefer-for-of
           for (let j = 0; j < this.alumnosDeEquipo[i].alumnos.length; j++) {
-            //this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Nombre]);
+            // this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Nombre]);
             this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Username]);
           }
         }
@@ -323,6 +384,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
               row['Profesor'] = '-';
             }
           }
+          this.rubrica.Criterios.forEach((criterio, index) => {
+            row['criterio_' + index] = this.CalcularNotaCriterio(equipo.id, index);
+          });
           row['Nota Media'] = this.CalcularNotaMedia(row);
           this.datosTabla.push(row);
         });
@@ -357,6 +421,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
               row['Profesor'] = '-';
             }
           }
+          this.rubrica.Criterios.forEach((criterio, index) => {
+            row['criterio_' + index] = this.CalcularNotaCriterio(equipo.id, index);
+          });
           row['Nota Media'] = this.CalcularNotaMedia(row);
           this.datosTabla.push(row);
         });
@@ -366,6 +433,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       if (this.juego.profesorEvalua) {
         this.displayedColumns.push('Profesor');
       }
+      this.rubrica.Criterios.forEach((criterio, index) => {
+        this.displayedColumns.push('criterio_' + index);
+      });
       this.displayedColumns.push('Nota Media');
       this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
     } else {
@@ -377,7 +447,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           // tslint:disable-next-line:prefer-for-of
           for (let j = 0; j < this.alumnosDeEquipo[i].alumnos.length; j++) {
             this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Username]);
-            //this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Nombre]);
+            // this.tmpDisplayedColumns.push([this.alumnosDeEquipo[i].alumnos[j].id, this.alumnosDeEquipo[i].alumnos[j].Nombre]);
           }
         }
         console.log('Columnas tmp', this.tmpDisplayedColumns);
@@ -459,7 +529,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       this.hoverColumn = new Array(this.displayedColumns.length).fill(false);
 
     }
-  } 
+    // @ts-ignore
+    this.datosTabla.sort = this.sort;
+  }
 
   openDialog1(i: number, c: any, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
 
@@ -645,6 +717,10 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     });
   }
 
+  NombreCriterio(column: string): string {
+    const index = parseInt(column.split('_')[1], 10);
+    return this.rubrica.Criterios[index].Nombre;
+  }
 
   Eliminar(): void {
 
@@ -661,6 +737,18 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         });
       }
     });
+  }
+
+  MostrarCriterios(checked) {
+    if (checked) {
+      this.displayedColumns.pop();
+      this.rubrica.Criterios.forEach((criterio, index) => {
+        this.displayedColumns.push('criterio_' + index);
+      });
+      this.displayedColumns.push('Nota Media');
+    } else {
+      this.displayedColumns = this.displayedColumns.filter((column) => !column.startsWith('criterio_'));
+    }
   }
 
 }

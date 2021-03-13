@@ -32,16 +32,7 @@ import * as URL from '../URLs/urls';
 })
 export class PeticionesAPIService {
 
-
-
-
- // private host = 'http://localhost';
-
-//  private host = 'http://147.83.118.92';
   private host = URL.host;
-
-
-
 
   private APIUrlProfesores = this.host + ':3000/api/Profesores';
   private APIUrlAlumnos = this.host + ':3000/api/Alumnos';
@@ -184,6 +175,7 @@ export class PeticionesAPIService {
 /////////////////////  GESTION DE PROFESORES Y ALUNNOS ///////////////////////////////
 
   public DameProfesor(nombre: string, pass: string): Observable<Profesor> {
+    console.log(this.APIUrlProfesores);
     return this.http.get<Profesor>(this.APIUrlProfesores + '?filter[where][NombreUsuario]=' + nombre + '&filter[where][Password]=' + pass);
   }
 

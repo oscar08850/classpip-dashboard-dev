@@ -90,7 +90,8 @@ export class LoginComponent implements OnInit {
         }
       },
       (err) => {
-        console.log ('ERROR');
+        console.log('ERROR');
+        console.error(err);
         Swal.fire('Error', 'Fallo en la conexion con la base de datos', 'error');
       }
     );

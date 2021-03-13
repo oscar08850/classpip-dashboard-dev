@@ -1,12 +1,6 @@
 
 <div class = "contenedor">
 <div class="enColumna">
-  <div class="enFila" style="width:40%">
-    <button type="button" class="btn Eliminar" (click) = "Eliminar()"> Eliminar<i class="material-icons">delete</i></button>
-  </div>
-
-  
-
   <div style = "width:150%" *ngIf = "juego.rubricaId > 0">
     <mat-accordion>
       <mat-expansion-panel>
@@ -25,11 +19,12 @@
         <p *ngIf="juego.profesorEvalua && !juego.notaProfesorNormal"><strong>Profesor: </strong>Su nota es un 50% del total</p>
       </mat-expansion-panel>
     </mat-accordion>
+    <mat-checkbox (change)="MostrarCriterios($event.checked)" [checked]="true"><span style="color: black">Mostrar criterios</span></mat-checkbox>
     <div class="table-container mat-elevation-z8" style="margin-top: 10px;">
-      <table mat-table [dataSource]="datosTabla">
-        <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns; let i = index" [sticky]="i === 0" [stickyEnd]="i === displayedColumns.length - 1">
-          <th mat-header-cell class="tituloTabla column100 column-0" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" *matHeaderCellDef>
-            <div *ngIf="column != 'Nombre'">
+      <table mat-table [dataSource]="datosTabla" matSort>
+        <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns; let i = index" [sticky]="i === 0" [stickyEnd]="i === displayedColumns.length - 1 || column === 'Profesor' || column.startsWith('criterio_')">
+          <th mat-header-cell class="tituloTabla column100 column-0" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" *matHeaderCellDef [mat-sort-header]="column.startsWith('criterio_') ? column : null" [disabled]="!column.startsWith('criterio_')">
+            <div *ngIf="column != 'Nombre' && !column.startsWith('criterio_')">
               {{column}}
               <strong *ngIf="column === 'Profesor' && !juego.notaProfesorNormal" style="color: #e74c3c;">
                 (50%)
@@ -39,27 +34,32 @@
               <div class="tag1">Evaluadores</div>
               <div class="tag2">Evaluados</div>
             </div>
+            <div *ngIf="column.startsWith('criterio_')">
+              {{NombreCriterio(column)}}
+            </div>
           </th>
-          <td mat-cell class="column100 column-{{i}}" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" [ngClass]="{'hov-column': hoverColumn[i], 'final-column': i === displayedColumns.length - 1, 'shadowed': element[column] === 'X', 'col-profesor': column === 'Profesor'}" *matCellDef="let element">
+          <td mat-cell class="column100 column-{{i}}" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" [ngClass]="{'hov-column': hoverColumn[i], 'final-column': i === displayedColumns.length - 1, 'shadowed': element[column] === 'X', 'col-profesor': column === 'Profesor', 'col-criterio': column.startsWith('criterio_')}" *matCellDef="let element">
             {{element[column]}}
-            <button *ngIf="column !== 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id)" mat-icon-button aria-label="Info">
-              <mat-icon>remove_red_eye</mat-icon>
-            </button>
-            <button *ngIf="column !== 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="eliminarNota(i, element.id)" mat-icon-button aria-label="Delete">
-              <mat-icon style="color: red;">delete_forever</mat-icon>
-            </button>
-            <button *ngIf="column === 'Profesor' && !isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id, true, true)" mat-icon-button aria-label="Create">
-              <mat-icon>create</mat-icon>
-            </button>
-            <button *ngIf="column === 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id, true, false)" mat-icon-button aria-label="Info">
-              <mat-icon>remove_red_eye</mat-icon>
-            </button>
-            <button *ngIf="column === 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="eliminarNota(i, element.id, true)" mat-icon-button aria-label="Delete">
-              <mat-icon style="color: red;">delete_forever</mat-icon>
-            </button>
-            <button *ngIf="column === 'Nota Media' && isNumber(element[column])" (click)="openDialog(i, element, false, false, true)" mat-icon-button aria-label="Info">
-              <mat-icon>remove_red_eye</mat-icon>
-            </button>
+            <div *ngIf="!column.startsWith('criterio_')">
+              <button *ngIf="column !== 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id)" mat-icon-button aria-label="Info">
+                <mat-icon>remove_red_eye</mat-icon>
+              </button>
+              <button *ngIf="column !== 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="eliminarNota(i, element.id)" mat-icon-button aria-label="Delete">
+                <mat-icon style="color: red;">delete_forever</mat-icon>
+              </button>
+              <button *ngIf="column === 'Profesor' && !isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id, true, true)" mat-icon-button aria-label="Create">
+                <mat-icon>create</mat-icon>
+              </button>
+              <button *ngIf="column === 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="openDialog(i, element.id, true, false)" mat-icon-button aria-label="Info">
+                <mat-icon>remove_red_eye</mat-icon>
+              </button>
+              <button *ngIf="column === 'Profesor' && isNumber(element[column]) && i > 0 && i < displayedColumns.length - 1" (click)="eliminarNota(i, element.id, true)" mat-icon-button aria-label="Delete">
+                <mat-icon style="color: red;">delete_forever</mat-icon>
+              </button>
+              <button *ngIf="column === 'Nota Media' && isNumber(element[column])" (click)="openDialog(i, element, false, false, true)" mat-icon-button aria-label="Info">
+                <mat-icon>remove_red_eye</mat-icon>
+              </button>
+            </div>
           </td>
         </ng-container>
         <tr mat-header-row class="row100 head" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
@@ -82,19 +82,19 @@
         <p *ngIf="juego.profesorEvalua"><strong>Profesor: </strong>Sí evalua</p>
       </mat-expansion-panel>
     </mat-accordion>
-  
-  
-  
+
+
+
     <!-- <div class="table-container mat-elevation-z8" style="margin-top: 10px;"> -->
     <div class="table-container mat-elevation-z8" >
       <table mat-table [dataSource]="datosTabla" style="height: 200px;">
         <!-- <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns; let i = index" [sticky]="i === 0" [stickyEnd]="i === displayedColumns.length - 1"> -->
-       
-  
-        <ng-container *ngFor="let column of displayedColumns; let i = index" [matColumnDef]="column"  [sticky]="(i===0)" [stickyEnd]="i === displayedColumns.length - 1">
-          
+
+
+        <ng-container *ngFor="let column of displayedColumns; let i = index" [matColumnDef]="column"  [sticky]="(i===0)" [stickyEnd]="i === displayedColumns.length - 1 || column === 'Profesor'">
+
           <div *ngIf = "(i===0) || (i===displayedColumns.length - 1) " >
-          
+
             <th mat-header-cell class="tituloTabla column100 column-0" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" *matHeaderCellDef>
               <div *ngIf="column != 'Nombre'">
                 {{column}}
@@ -165,15 +165,18 @@
             </td>
             </div>
         </ng-container>
-  
-      
-     
+
+
+
         <!-- <tr mat-header-row  *matHeaderRowDef="displayedColumns; sticky: true"></tr> -->
-      
+
         <tr mat-header-row class="row100 head" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row class="row100" *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </div>
+  </div>
+  <div class="enFila" style="width:40%">
+    <button type="button" class="btn Eliminar" (click) = "Eliminar()"> Eliminar<i class="material-icons">delete</i></button>
   </div>
 </div>
 </div>

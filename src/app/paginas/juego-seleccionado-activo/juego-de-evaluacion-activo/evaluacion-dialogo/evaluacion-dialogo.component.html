@@ -133,6 +133,17 @@
         <p *ngIf="!data.editable">{{this.respuestaEvaluacion[this.respuestaEvaluacion.length - 1]}}</p>
         <textarea *ngIf="data.editable" matInput [(ngModel)]="comentario" placeholder="Dejar algún comentario..."></textarea>
       </mat-expansion-panel>
+      <mat-expansion-panel *ngIf="data.global" style="margin-top: 10px; margin-bottom: 10px;">
+        <mat-expansion-panel-header>
+          <mat-panel-title><i>Observaciones</i></mat-panel-title>
+        </mat-expansion-panel-header>
+        <div *ngFor="let respuesta of respuestaEvaluacion; let n = index;">
+          <div *ngIf="MostrarComentario(n) !== null">
+            <p>{{MostrarComentario(n)}}</p>
+            <mat-divider style="margin-top: 10px; margin-bottom: 10px"></mat-divider>
+          </div>
+        </div>
+      </mat-expansion-panel>
     </mat-accordion>
     <mat-card *ngIf="!data.editable && !data.global" style="margin-top: 10px; margin-bottom: 10px;">
       <strong>Nota Final: {{CalcularNotaFinal()}}</strong>
@@ -172,33 +183,33 @@
     <div *ngIf ="data.global">
       <div *ngFor = "let pregunta of data.juego.PreguntasAbiertas; let i = index">
           <b>{{pregunta}}</b>
-          <div *ngFor = "let respuesta of respuestaEvaluacion; let j = index"> 
-            {{respuestaEvaluacion[j][i]}} 
+          <div *ngFor = "let respuesta of respuestaEvaluacion; let j = index">
+            {{respuestaEvaluacion[j][i]}}
 
-            <span *ngIf = "(data.juego.Modo === 'Individual') && (evaluadores[j].id !== data.evaluadoId)" style ="color:green; font-size: x-small"> 
+            <span *ngIf = "(data.juego.Modo === 'Individual') && (evaluadores[j].id !== data.evaluadoId)" style ="color:green; font-size: x-small">
               ({{evaluadores[j].Nombre}} {{evaluadores[j].PrimerApellido}} {{evaluadores[j].SegundoApellido}})
             </span>
-            <span *ngIf = "(data.juego.Modo === 'Individual') && (evaluadores[j].id === data.evaluadoId)" style ="color:rgb(104, 15, 15); font-size: x-small"> 
+            <span *ngIf = "(data.juego.Modo === 'Individual') && (evaluadores[j].id === data.evaluadoId)" style ="color:rgb(104, 15, 15); font-size: x-small">
               (autoevaluación)
             </span>
 
             <!-- Equipos evaluados por equipos. En evaluadores tengo el nombre de los equipos -->
-            <span *ngIf = "data.juego.Modo === 'Equipos' && data.equiposRelacion[0].alumnosEvaluadoresIds === null && evaluadores[j] === nombreEquipoEvaluado"  style ="color:rgb(104, 15, 15); font-size: x-small"> 
+            <span *ngIf = "data.juego.Modo === 'Equipos' && data.equiposRelacion[0].alumnosEvaluadoresIds === null && evaluadores[j] === nombreEquipoEvaluado"  style ="color:rgb(104, 15, 15); font-size: x-small">
               (autoevaluación {{evaluadores[j]}})
             </span>
-            <span *ngIf = "data.juego.Modo === 'Equipos' && data.equiposRelacion[0].alumnosEvaluadoresIds === null && evaluadores[j] !== nombreEquipoEvaluado"  style ="color:green; font-size: x-small"> 
+            <span *ngIf = "data.juego.Modo === 'Equipos' && data.equiposRelacion[0].alumnosEvaluadoresIds === null && evaluadores[j] !== nombreEquipoEvaluado"  style ="color:green; font-size: x-small">
               ({{evaluadores[j]}})
             </span>
 
-         
+
             <!-- Equipos evaluados por alumnos. En evaluadores tengo a los alumnos -->
-            <span *ngIf = "data.juego.Modo === 'Equipos' && data.equiposRelacion[0].alumnosEvaluadoresIds !== null" style ="color:green; font-size: x-small"> 
+            <span *ngIf = "data.juego.Modo === 'Equipos' && data.equiposRelacion[0].alumnosEvaluadoresIds !== null" style ="color:green; font-size: x-small">
               ({{evaluadores[j].Nombre}} {{evaluadores[j].PrimerApellido}} {{evaluadores[j].SegundoApellido}})
             </span>
-     
+
           </div>
           <div *ngIf = "data.juego.profesorEvalua && respuestaProfesor">
-            {{respuestaProfesor[i]}} <span style ="color:rgb(31, 47, 194); font-size: x-small"> 
+            {{respuestaProfesor[i]}} <span style ="color:rgb(31, 47, 194); font-size: x-small">
             (profesor)</span>
           </div>
           <br>
