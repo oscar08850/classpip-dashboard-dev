@@ -108,7 +108,7 @@ export class ComServerService {
     console.log('dentro del servicio para recordar contraseña');
     // Me conecto momentaneamente para enviarle al servidor la contraseña que debe enviar por email
     this.socket = io(URL.Servidor);
-    this.socket.emit('recordarContraseña', { email: profesor.email, nombre: profesor.NombreUsuario, contrasena: profesor.Password });
+    this.socket.emit('recordarPassword', { email: profesor.email, nombre: profesor.NombreUsuario, contrasena: profesor.Password });
     // Me desconecto
     this.socket.emit('forceDisconnect');
   }
