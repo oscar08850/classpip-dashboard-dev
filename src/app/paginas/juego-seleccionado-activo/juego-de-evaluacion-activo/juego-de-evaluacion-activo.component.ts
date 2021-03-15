@@ -32,8 +32,15 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   displayedColumns: string[] = [];
   tmpDisplayedColumns = [];
   datosTabla = [];
+  dataSource;
   hoverColumn = [];
   mostrarCriterios: boolean;
+  tablaDiscrepancias;
+  tablaLista = false;
+  numEvaluadores;
+  numRespuestas;
+
+  evaluados;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -46,11 +53,14 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    /* Instrucciones necesarias para la ordenación y la paginación */
+
     this.juego = this.sesion.DameJuego() as unknown as JuegoDeEvaluacion;
     console.log(this.juego);
     if (this.juego.rubricaId > 0) {
       this.peticionesAPI.DameRubrica(this.juego.rubricaId).subscribe((res: Rubrica) => {
         this.rubrica = res;
+        console.log ('Rubrica');
         console.log(this.rubrica);
       });
     }
@@ -59,7 +69,10 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
         .subscribe((res: AlumnoJuegoDeEvaluacion[]) => {
           this.alumnosRelacion = res;
           console.log ('vamos a construir la tabla');
+          console.log ('Alumnos relacion ooooooooooooooooo');
+          console.log (this.alumnosRelacion);
           this.ConstruirTablaIndividual();
+          console.log ('VAMOS A PREPARAR ANALISIS');
         });
       this.peticionesAPI.DameAlumnosJuegoDeEvaluacion(this.juego.id)
         .subscribe((res: Alumno[]) => {
@@ -333,7 +346,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     console.log ('ya tengo las columnas');
     console.log (this.displayedColumns);
     // @ts-ignore
-    this.datosTabla.sort = this.sort;
+    this.dataSource = new MatTableDataSource (this.datosTabla);
+    this.dataSource.sort = this.sort;
+    console.log ('listo');
   }
 
 
@@ -530,7 +545,8 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
 
     }
     // @ts-ignore
-    this.datosTabla.sort = this.sort;
+    this.dataSource = new MatTableDataSource (this.datosTabla);
+    this.dataSource.sort = this.sort;
   }
 
   openDialog1(i: number, c: any, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
@@ -750,6 +766,95 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       this.displayedColumns = this.displayedColumns.filter((column) => !column.startsWith('criterio_'));
     }
   }
+
+  PrepararAnalisisDiscrepancia () {
+    this.tablaLista = false;
+
+    // En esta tabla guardaremos todos los indices de coincidencia (uno por cada elemento de cada criterio)
+
+    this.tablaDiscrepancias = [];
+    this.rubrica.Criterios.forEach (criterio => {
+      this.tablaDiscrepancias.push (Array(criterio.Elementos.length).fill (0));
+    });
+
+
+    this.numRespuestas = 0;
+    let numEvaluaciones = 0;
+    if (this.juego.Modo === 'Individual') {
+      this.evaluados = this.alumnosRelacion;
+      this.numEvaluadores = this.alumnosRelacion[0].alumnosEvaluadoresIds.length;
+    } else {
+      this.evaluados = this.equiposRelacion;
+      if (this.equiposRelacion[0].equiposEvaluadoresIds) {
+        this.numEvaluadores = this.equiposRelacion[0].equiposEvaluadoresIds.length;
+      } else {
+        // Juego de equipo con evaluación individual
+        this.numEvaluadores = this.equiposRelacion[0].alumnosEvaluadoresIds.length;
+      }
+    }
+    if (this.juego.profesorEvalua) {
+      this.numEvaluadores++;
+    }
+    if (this.juego.autoEvaluacion) {
+      this.numEvaluadores++;
+    }
+    console.log ('numero de evaluadores');
+    console.log (this.numEvaluadores);
+    this.evaluados.forEach (evaluado => {
+      console.log ('Nuevo evaluado');
+      console.log (evaluado);
+      // Vemos si el evaluado ha recibido respuestas
+      if (evaluado.respuestas !== null) {
+        // en principio todos los evaluados han recibido el mismo número de evaluaciones
+        //this.numEvaluadores = evaluado.alumnosEvaluadoresIds.length;
+        numEvaluaciones++;
+        // Aquí guardaremos los indices de coincidencia de las evaluaciones recibidas por este evaluado
+        let discrepanciasEvaluado = [];
+        this.rubrica.Criterios.forEach (criterio => {
+          discrepanciasEvaluado.push (Array(criterio.Elementos.length).fill (0));
+        });
+        // Recorremos las respuestas y contamos cuantas veces está a cierto cada uno de los elementos de la rúbrica
+        for (let k = 0; k < evaluado.respuestas.length; k++) {
+          this.numRespuestas++;
+          let respuestas = evaluado.respuestas[k].respuesta;
+          // Recorremos los elementos de la rúbrica
+          for (let i = 0; i < discrepanciasEvaluado.length; i++)
+            for (let j = 0; j < discrepanciasEvaluado[i].length; j++)
+              if (respuestas[i][j]) {
+                discrepanciasEvaluado[i][j]++;
+              }
+        }
+        // Para cada elemento de la rúbrica calculamos su indice de coincidencia
+        for (let i = 0; i < discrepanciasEvaluado.length; i++)
+          for (let j = 0; j < discrepanciasEvaluado[i].length; j++) {
+            // Ejemplo de calculo de indice de coincidencia:
+            // El evaluado recibió 5 evaluaciones y el elemento en cuestión recibió 4 ciertos y un falso
+            // Entonces el indice de coincidencia es |5 - 2*4| / 5 = 3/5
+            // El indice sería igual si hubiese recibido 1 cierto y 4 falsos
+            // El indice seria 1 si hubiese recibido 5 ciertos o 5 falsos.
+            let N = evaluado.respuestas.length;
+            let indice = Math.abs(N - 2*discrepanciasEvaluado[i][j])/N;
+            // Acumulamos el indice calculado a la tabla global
+            this.tablaDiscrepancias [i][j] =  this.tablaDiscrepancias [i][j] + indice;
+          }
+      }
+    });
+    // Ahora calculamos la media de los índices acumulados para cada elemento
+    for (let i = 0; i < this.tablaDiscrepancias.length; i++)
+      for (let j = 0; j < this.tablaDiscrepancias[i].length; j++) {
+        this.tablaDiscrepancias [i][j] = this.tablaDiscrepancias [i][j]/numEvaluaciones;
+      }
+    console.log ('DISCREPANCIAS');
+    console.log (this.tablaDiscrepancias);
+    this.tablaLista = true;
+  }
+  onTabChanged($event) {
+    if ($event.index === 1) {
+      this.PrepararAnalisisDiscrepancia();
+    }
+   
+  }
+
 
 }
 

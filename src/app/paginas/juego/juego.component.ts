@@ -627,7 +627,7 @@ export class JuegoComponent implements OnInit {
       console.log (this.relacionAlumnosEquipos);
       
       this.relacionesMap = new Map();
-
+      let j=0;
       for (let i = 0; i < evaluados.length; i++) {
           if (!fill) {
             this.relacionesMap.set(evaluados[i], []);
@@ -638,7 +638,7 @@ export class JuegoComponent implements OnInit {
             console.log (equipoEvaluado);
             const evaluadoresElegidos = [];
             let cont = 0;
-            let j = i;
+            //let j = i;
             while ( cont < this.numeroDeMiembros) {
               console.log ('veamos que pasa con ' + evaluadoresDesordenados[j]);
               // Si el posible evaluador pertenece al equipo evaluado entonces no lo cogemos
