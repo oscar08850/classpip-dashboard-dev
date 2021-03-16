@@ -1673,7 +1673,7 @@
                 <table>
                   <tr *ngFor="let evaluado of DameEvaluados()">
                     <td>
-                      <mat-label>{{evaluado.Nombre}}</mat-label>
+                      <mat-label>{{evaluado.Nombre}} {{evaluado.PrimerApellido}}</mat-label>
                     </td>
                     <td>
                       <mat-form-field appearance="fill">
@@ -1685,10 +1685,10 @@
                               ({{this.relacionesMap.get(evaluado.id) ? this.relacionesMap.get(evaluado.id).length : 0}})
                             </span>
                           </mat-select-trigger>-->
-                          <mat-option *ngFor="let evaluador of DameEvaluadores() | exclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}} <span *ngIf="ContarEvaluadores(evaluador.id) > 0">({{ContarEvaluadores(evaluador.id)}})</span></mat-option>
+                          <mat-option *ngFor="let evaluador of DameEvaluadores() | exclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}} {{evaluador.PrimerApellido}} <span *ngIf="ContarEvaluadores(evaluador.id) > 0">({{ContarEvaluadores(evaluador.id)}})</span></mat-option>
                         </mat-select>
                         <mat-select *ngIf="modoDeJuegoSeleccionado === 'Equipos' && equiposEvaluacionSeleccionado === 'Individualmente'" multiple (selectionChange)="RelacionChanged(evaluado.id, $event.value)" [value]="this.relacionesMap.get(evaluado.id)">
-                          <mat-option *ngFor="let evaluador of DameEvaluadores() | teamExclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}} <span *ngIf="ContarEvaluadores(evaluador.id) > 0">({{ContarEvaluadores(evaluador.id)}})</span></mat-option>
+                          <mat-option *ngFor="let evaluador of DameEvaluadores() | teamExclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}} {{evaluador.PrimerApellido}}<span *ngIf="ContarEvaluadores(evaluador.id) > 0">({{ContarEvaluadores(evaluador.id)}})</span></mat-option>
                         </mat-select>
                       </mat-form-field>
                     </td>
