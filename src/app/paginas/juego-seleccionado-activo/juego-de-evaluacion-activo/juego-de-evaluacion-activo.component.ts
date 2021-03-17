@@ -260,7 +260,9 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
           id: undefined
         };
         const evaluado = this.alumnosRelacion.find(item => item.alumnoId === alumno.id);
-        row.Nombre = this.alumnos.find(item => item.id === evaluado.alumnoId).Nombre;
+        const tmp = this.alumnos.find(item => item.id === evaluado.alumnoId);
+        row.Nombre = tmp.Nombre + ' ' + tmp.PrimerApellido;
+       // row.Nombre = this.alumnos.find(item => item.id === evaluado.alumnoId).Nombre;
         row.id = alumno.id;
         this.tmpDisplayedColumns.forEach((item: (number|string)[]) => {
           // const respuesta = evaluado.respuestas.find(res => res.alumnoId === item[0]);
