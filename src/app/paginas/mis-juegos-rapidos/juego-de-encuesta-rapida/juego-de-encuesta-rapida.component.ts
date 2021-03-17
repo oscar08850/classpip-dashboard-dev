@@ -93,11 +93,13 @@ export class JuegoDeEncuestaRapidaComponent implements OnInit {
     });
     this.comServer.EsperoRespuestasEncuestaRapida()
     .subscribe((respuesta) => {
+        console.log ('respuesta nueva');
+        console.log (respuesta);
         if (this.sonido) {
           sound.volume (0.1);
           sound.play();
         }
-        if (!respuesta.RespuestasAfirmaciones.some (elemento => elemento === null)) {
+        if (!respuesta.respuestas.RespuestasAfirmaciones.some (elemento => elemento === null)) {
           // tomo nota de que hay respuestas sin guardar en el pdf
           this.todoGuardado = false;
           this.numeroRespuestas++;
