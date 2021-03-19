@@ -11,22 +11,23 @@
   <mat-tab-group (selectedTabChange)="tabChanged($event)">
     <mat-tab  *ngIf = "juegoSeleccionado" label="Información para la conexión y participantes">
       <div class = "enFila">
-        <div style = 'width: 50%' class = "enColumna">
+        <div style = 'width: 50%'  class = "enColumna">
           <br>
           <br>
           <h3> Enlace para la conexión</h3>
-          <h1><strong>147.83.118.92:8100/home</strong></h1>
+          <h1><strong>classpip.upc.edu:8101</strong></h1>
           <br>
-          <img src="../assets/QR.png" style = "width: 200px"/>
+          <img src="../assets/QRExpress.png" style = "width: 200px"/>
           <br>
           <h3> Clave</h3>
           <h1><strong>{{juegoSeleccionado.Clave}}</strong></h1>
           <br>
           <br>
-          <img src="../assets/ImagenLogin.png" style = "width: 500px"/>
+          <img src="../assets/loginExpress.png" style = "width: 500px"/>
           <!-- <button  *ngIf = "mostrarParticipantes" type="button"  (click) = "Toogle()" class="btn Aceptar" style = "width: 20%">Mostrar resultados</button>
           <button  *ngIf = "!mostrarParticipantes" type="button"  (click) = "Toogle()" class="btn Aceptar" style = "width: 20%">Mostrar participantes</button> -->
         </div>
+  
         <div style = 'width: 50%'>
           <br>
           <br>
