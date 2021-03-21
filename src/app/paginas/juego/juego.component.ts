@@ -49,6 +49,7 @@ import {JuegoDeEvaluacion} from '../../clases/JuegoDeEvaluacion';
 import {log} from 'util';
 import {EquipoJuegoDeEvaluacion} from '../../clases/EquipoJuegoDeEvaluacion';
 import {AlumnoJuegoDeEvaluacion} from '../../clases/AlumnoJuegoDeEvaluacion';
+import { EquipoJuegoDeVotacionUnoATodos } from 'src/app/clases/EquipoJuegoDeVotacionUnoATodos';
 
 
 export interface OpcionSeleccionada {
@@ -554,8 +555,8 @@ export class JuegoComponent implements OnInit {
 
     else if ((this.tipoDeJuegoSeleccionado === 'Juego De Geocaching') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de geocaching en equipo', 'warning');
-    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Votación') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
-      Swal.fire('Alerta', 'Aún no es posible el juego de votación en equipo', 'warning');
+   // } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Votación') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+     // Swal.fire('Alerta', 'Aún no es posible el juego de votación en equipo', 'warning');
     } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuestionario de Satisfacción') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'No existe el juego de cuestionario de satisfacción en equipo', 'warning');
     } else {
@@ -1842,8 +1843,12 @@ export class JuegoComponent implements OnInit {
   // junto con las funciones asociadas, porque lo que hay que hacer es exactamente lo mismo
 
   TipoDeVotacionSeleccionado(tipoVotacion: ChipColor) {
-    this.tipoDeVotacionSeleccionado = tipoVotacion.nombre;
-    this.tengoTipoDeVotacion = true;
+    if ((this.modoDeJuegoSeleccionado === 'Equipos') && (tipoVotacion.nombre === 'Todos A Uno')) {
+      Swal.fire('Alerta', 'Aún no es posible el juego de votación Todos A Uno en equipo', 'warning');
+    } else {
+      this.tipoDeVotacionSeleccionado = tipoVotacion.nombre;
+      this.tengoTipoDeVotacion = true;
+    }
   }
 
   ModoDeRepartoSeleccionado(modoReparto: ChipColor) {
@@ -1883,13 +1888,24 @@ export class JuegoComponent implements OnInit {
 
         if (this.modoDeJuegoSeleccionado === 'Individual') {
 
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < this.alumnosGrupo.length; i++) {
-          // tslint:disable-next-line:max-line-length
-          this.peticionesAPI.InscribeAlumnoJuegoDeVotacionUnoATodos(
-            // tslint:disable-next-line:indent
-		          new AlumnoJuegoDeVotacionUnoATodos(this.alumnosGrupo[i].id, this.juego.id))
-          .subscribe();
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.alumnosGrupo.length; i++) {
+            // tslint:disable-next-line:max-line-length
+            this.peticionesAPI.InscribeAlumnoJuegoDeVotacionUnoATodos(
+              // tslint:disable-next-line:indent
+                new AlumnoJuegoDeVotacionUnoATodos(this.alumnosGrupo[i].id, this.juego.id))
+            .subscribe();
+          }
+        } else {
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < this.equiposGrupo.length; i++) {
+              // tslint:disable-next-line:max-line-length
+              this.peticionesAPI.InscribeEquipoJuegoDeVotacionUnoATodos(
+                // tslint:disable-next-line:indent
+                  new EquipoJuegoDeVotacionUnoATodos(this.equiposGrupo[i].id, this.juego.id))
+              .subscribe();
+            }
+
         }
 
         Swal.fire('Juego de votación tipo Uno A Todos creado correctamente', ' ', 'success');
@@ -1905,7 +1921,7 @@ export class JuegoComponent implements OnInit {
         // Regresamos a la lista de equipos (mat-tab con índice 0)
         this.tabGroup.selectedIndex = 0;
 
-      }});
+      });
 
   }
 
