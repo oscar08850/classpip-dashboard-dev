@@ -620,11 +620,28 @@
 
                   <label class = "LabelStepper">Selecciona el tipo de votación</label>
                   <mat-chip-list class="mat-chip-list-stacked">
+                    <div  style ="width: 70%">
+                      <mat-chip style = "width: 150px" selected [color]="seleccionTipoDeVotacion[0].color"  selected="{{seleccionTipoDeVotacion[0].selected}}"
+                        (click)="TipoDeVotacionSeleccionado(seleccionTipoDeVotacion[0])" [value]="seleccionTipoDeVotacion[0].nombre" [selectable]="true">
+                          {{seleccionTipoDeVotacion[0].nombre}}
+                      </mat-chip>
+                      <label>Cada participante <strong style="color:red">reparte puntos entre todos </strong> los demás</label>
+                    </div>
+                    <br>
+                    <div style ="width: 70%">
+                      <mat-chip style = "width: 150px" selected [color]="seleccionTipoDeVotacion[1].color"  selected="{{seleccionTipoDeVotacion[1].selected}}"
+                      (click)="TipoDeVotacionSeleccionado(seleccionTipoDeVotacion[1])" [value]="seleccionTipoDeVotacion[1].nombre" [selectable]="true">
+                      {{seleccionTipoDeVotacion[1].nombre}}
+                      </mat-chip>
+                      <label>Cada participante <strong style="color:red">valora a cada uno </strong>de los demás</label>
+                    </div>
+<!-- 
                     <mat-chip style = "width: 150px" *ngFor="let tipo of seleccionTipoDeVotacion; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeVotacion[i].selected}}"
-                       (click)="TipoDeVotacionSeleccionado(seleccionTipoDeVotacion[i])" [value]="tipo.nombre" [selectable]="true">
-                        {{tipo.nombre}}
-                    </mat-chip>
+                    (click)="TipoDeVotacionSeleccionado(seleccionTipoDeVotacion[i])" [value]="tipo.nombre" [selectable]="true">
+                     {{tipo.nombre}}
+                    </mat-chip> -->
                   </mat-chip-list>
+                  <br>
                   <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoDeVotacionSeleccionado}}</span>
 
               </div>

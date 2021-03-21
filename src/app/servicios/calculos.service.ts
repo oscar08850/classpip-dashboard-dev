@@ -22,6 +22,8 @@ import { TablaAlumnoJuegoDeGeocaching } from '../clases/TablaAlumnoJuegoDeGeocac
 import { JuegoDeEvaluacion } from '../clases/JuegoDeEvaluacion';
 import { AlumnoJuegoDeEvaluacion } from '../clases/AlumnoJuegoDeEvaluacion';
 import { EquipoJuegoDeEvaluacion } from '../clases/EquipoJuegoDeEvaluacion';
+import { EquipoJuegoDeVotacionUnoATodos } from '../clases/EquipoJuegoDeVotacionUnoATodos';
+import { TablaEquipoJuegoDeVotacionUnoATodos } from '../clases/TablaEquipoJuegoDeVotacionUnoATodos';
 
 
 
@@ -587,8 +589,8 @@ export class CalculosService {
                  
                 // Ahora recogemos los juegos de cuestionario
                 // console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
-                console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
-                this.peticionesAPI.DameJuegoDeCuestionario(grupoID)
+                  console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
+                  this.peticionesAPI.DameJuegoDeCuestionario(grupoID)
                 .subscribe(juegosCuestionario => {
                   console.log('He recibido los juegos de cuestionario');
                   console.log(juegosCuestionario);
@@ -1936,7 +1938,7 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
             }
           });
 
-          console.log ("IMAGEN EN USO")
+        console.log ("IMAGEN EN USO")
         this.peticionesAPI.BorrarPregunta(
                       this.sesion.DamePregunta().id)
             .subscribe(() => {
@@ -3371,7 +3373,45 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
     }
 
     return rankingJuegoDeVotacion;
+  }
+
+  public PrepararTablaRankingEquipoVotacionUnoATodos(listaEquiposOrdenadaPorPuntos: EquipoJuegoDeVotacionUnoATodos[],
+                                                     equiposDelJuego: Equipo[]): TablaEquipoJuegoDeVotacionUnoATodos[] {
+    console.log (' EN CALCULOS');
+    console.log (listaEquiposOrdenadaPorPuntos);
+    const rankingJuegoDeVotacion: TablaEquipoJuegoDeVotacionUnoATodos [] = [];
+    // tslint:disable-next-line:prefer-for-oF
+    for (let i = 0; i < listaEquiposOrdenadaPorPuntos.length; i++) {
+      let equipo: Equipo;
+      const equipoId = listaEquiposOrdenadaPorPuntos[i].equipoId;
+      equipo = equiposDelJuego.filter(res => res.id === equipoId)[0];
+      // tslint:disable-next-line:max-line-length
+
+      const elem = new TablaEquipoJuegoDeVotacionUnoATodos(i + 1, equipo.Nombre, 0, equipoId);
+      rankingJuegoDeVotacion[i] = elem;
+    }
+
+    // Ahora voy a ver qué equipos ya han votado para acumular sus votos y marcarlos
+    // como que ya han votado
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < listaEquiposOrdenadaPorPuntos.length; i++) {
+      if (listaEquiposOrdenadaPorPuntos[i].Votos) {
+        // Este equipo ya ha votado
+        const equipo = listaEquiposOrdenadaPorPuntos[i];
+        // Asigno los puntos a los destinatorios
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < equipo.Votos.length; j++) {
+          const votado = rankingJuegoDeVotacion.filter (eq => eq.id === equipo.Votos[j].equipoId)[0];
+          votado.puntos = votado.puntos + equipo.Votos[j].puntos;
+        }
+        // Marque que el alumno ya ha votado
+        rankingJuegoDeVotacion.filter (eq => eq.id === equipo.equipoId)[0].votado = true;
+      }
+    }
+
+    return rankingJuegoDeVotacion;
 }
+
 
 public PrepararTablaRankingIndividualVotacionUnoATodosAcabado(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[],
                                                               // tslint:disable-next-line:max-line-length
@@ -3390,6 +3430,25 @@ public PrepararTablaRankingIndividualVotacionUnoATodosAcabado(listaAlumnosOrdena
     }
 
     return rankingJuegoDeVotacion;
+}
+
+public PrepararTablaRankingEquipoVotacionUnoATodosAcabado(listaEquiposOrdenadaPorPuntos: EquipoJuegoDeVotacionUnoATodos[],
+  // tslint:disable-next-line:max-line-length
+                                                          equiposDelJuego: Equipo[]): TablaEquipoJuegoDeVotacionUnoATodos[] {
+  const rankingJuegoDeVotacion: TablaEquipoJuegoDeVotacionUnoATodos [] = [];
+  // tslint:disable-next-line:prefer-for-oF
+  for (let i = 0; i < listaEquiposOrdenadaPorPuntos.length; i++) {
+    let equipo: Equipo;
+    const equipoId = listaEquiposOrdenadaPorPuntos[i].equipoId;
+    equipo = equiposDelJuego.filter(res => res.id === equipoId)[0];
+    // tslint:disable-next-line:max-line-length
+
+    const elem = new TablaEquipoJuegoDeVotacionUnoATodos(i + 1, equipo.Nombre,
+    listaEquiposOrdenadaPorPuntos[i].puntosTotales, equipoId);
+    rankingJuegoDeVotacion[i] = elem;
+  }
+
+  return rankingJuegoDeVotacion;
 }
 
 
