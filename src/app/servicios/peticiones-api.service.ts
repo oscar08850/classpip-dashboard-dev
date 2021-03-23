@@ -1478,7 +1478,7 @@ export class PeticionesAPIService {
   }
 
 
-////////////////////////////////// GESTION VOTACION UNO A TODOS EQUIPOA /////////////////////////////////////////////////////////
+////////////////////////////////// GESTION VOTACION UNO A TODOS EQUIPOS /////////////////////////////////////////////////////////
 
 public DameEquiposJuegoDeVotacionUnoATodos(juegoId: number): Observable<Equipo[]> {
   return this.http.get<Equipo[]>(this.APIUrlJuegoDeVotacionUnoATodos + '/' + juegoId + '/equipos');

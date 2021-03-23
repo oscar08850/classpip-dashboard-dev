@@ -384,34 +384,36 @@ export class JuegoComponent implements OnInit {
 
     // Ahora traemos la lista de juegos
     // esta operacion es complicada. Por eso está en calculos
-    this.calculos.DameListaJuegos(this.grupo.id)
-      .subscribe(listas => {
-        console.log('He recibido los juegos');
-        console.log(listas);
-        this.juegosActivos = listas.activos;
-        // Si la lista aun esta vacia la dejo como indefinida para que me
-        // salga el mensaje de que aun no hay juegos
-        if (listas.activos[0] === undefined) {
-          this.juegosActivos = undefined;
-          console.log('No hay inactivos');
-        } else {
-          this.juegosActivos = listas.activos;
-          console.log('hay activos');
-        }
-        if (listas.inactivos[0] === undefined) {
-          this.juegosInactivos = undefined;
-          console.log('No hay inactivos');
-        } else {
-          this.juegosInactivos = listas.inactivos;
-          console.log('hay inactivos');
-        }
-        if (listas.preparados[0] === undefined) {
-          this.juegosPreparados = undefined;
-        } else {
-          this.juegosPreparados = listas.preparados;
-        }
+    // this.calculos.DameListaJuegos(this.grupo.id)
+    //   .subscribe(listas => {
+    //     console.log('He recibido los juegos');
+    //     console.log(listas);
+    //     this.juegosActivos = listas.activos;
+    //     // Si la lista aun esta vacia la dejo como indefinida para que me
+    //     // salga el mensaje de que aun no hay juegos
+    //     if (listas.activos[0] === undefined) {
+    //       this.juegosActivos = undefined;
+    //       console.log('No hay inactivos');
+    //     } else {
+    //       this.juegosActivos = listas.activos;
+    //       console.log('hay activos');
+    //     }
+    //     if (listas.inactivos[0] === undefined) {
+    //       this.juegosInactivos = undefined;
+    //       console.log('No hay inactivos');
+    //     } else {
+    //       this.juegosInactivos = listas.inactivos;
+    //       console.log('hay inactivos');
+    //     }
+    //     if (listas.preparados[0] === undefined) {
+    //       this.juegosPreparados = undefined;
+    //     } else {
+    //       this.juegosPreparados = listas.preparados;
+    //     }
 
-      });
+    //   });
+
+    this.DameListaJuegos();
  
     // Peticion API Juego de Evaluacion
     this.peticionesAPI.DameRubricasProfesor(this.profesorId).subscribe(rubricas => {
@@ -472,6 +474,33 @@ export class JuegoComponent implements OnInit {
     this.listaConceptos = [];
     this.totalPesos = 0;
 
+  }
+  
+  async DameListaJuegos() {
+    
+    const listas =  await this.calculos.DameListaJuegos(this.grupo.id);
+    this.juegosActivos = listas.activos;
+    // Si la lista aun esta vacia la dejo como indefinida para que me
+    // salga el mensaje de que aun no hay juegos
+    if (listas.activos[0] === undefined) {
+          this.juegosActivos = undefined;
+          console.log('No hay inactivos');
+    } else {
+          this.juegosActivos = listas.activos;
+          console.log('hay activos');
+    }
+    if (listas.inactivos[0] === undefined) {
+          this.juegosInactivos = undefined;
+          console.log('No hay inactivos');
+    } else {
+          this.juegosInactivos = listas.inactivos;
+          console.log('hay inactivos');
+    }
+    if (listas.preparados[0] === undefined) {
+          this.juegosPreparados = undefined;
+    } else {
+          this.juegosPreparados = listas.preparados;
+    }
   }
 
   //////////////////////////////////////// FUNCIONES PARA LISTAR JUEGOS ///////////////////////////////////////////////
@@ -570,9 +599,6 @@ export class JuegoComponent implements OnInit {
         }
 
       }
-
-
-
       else {
         if (this.equiposGrupo === undefined) {
           Swal.fire('Alerta', 'No hay ningún equipo en este grupo', 'warning');

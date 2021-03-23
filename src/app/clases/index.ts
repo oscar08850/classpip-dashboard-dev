@@ -66,9 +66,13 @@ export * from './clasesParaLibros/imagenGuardada';
 export * from './clasesParaLibros/concursoLibro';
 export * from './clasesParaLibros/imagenGuardada';
 export * from './clasesParaLibros/recurosLibroJuego';
+
 export * from './JuegoDeVotacionUnoATodos';
 export * from './AlumnoJuegoDeVotacionUnoATodos';
 export * from './TablaAlumnoJuegoDeVotacionUnoATodos';
+export * from './AlumnoJuegoDeVotacionTodosAUno';
+export * from './TablaEquipoJuegoDeVotacionUnoATodos';
+
 export * from './AlumnoJuegoDeVotacionTodosAUno';
 export * from './JuegoDeVotacionTodosAUno';
 export * from './TablaAlumnoJuegoDeVotacionTodosAUno';
