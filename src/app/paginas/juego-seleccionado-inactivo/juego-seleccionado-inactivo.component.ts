@@ -22,6 +22,7 @@ export class JuegoSeleccionadoInactivoComponent implements OnInit {
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
+    console.log ('juego ', this.juegoSeleccionado);
   }
 
   goBack() {

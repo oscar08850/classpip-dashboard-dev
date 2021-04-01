@@ -211,10 +211,11 @@ export class ComServerService {
   }
 
   public EsperoConfirmacionPreparadoKahoot(): any {
+    // Si es un juego rapido el id es el nickname. Si es un juego normal entonces es el id del alumno
     return Observable.create((observer) => {
-      this.socket.on('confirmacionPreparadoParaKahoot', (nick) => {
-          console.log ('recibo nick: ' + nick);
-          observer.next(nick);
+      this.socket.on('confirmacionPreparadoParaKahoot', (id) => {
+          console.log ('recibo nick: ' + id);
+          observer.next(id);
       });
     });
   }
@@ -223,14 +224,33 @@ export class ComServerService {
     this.socket.emit ('lanzarSiguientePregunta' , {clave: claveJuego, opcionesDesordenadas: info});
 
   }
+  public NotificarLanzarSiguientePreguntaGrupo(gId: number, info: any) {
+    this.socket.emit ('lanzarSiguientePreguntaGrupo' , {grupoId: gId, opcionesDesordenadas: info});
+
+  }
 
   public NotificarResultadoFinalKahoot(claveJuego: string, res: any) {
     this.socket.emit ('resultadoFinalKahoot' , {clave: claveJuego, resultado: res});
 
   }
+
+  public NotificarResultadoFinalKahootGrupo(gId: number, res: any) {
+    this.socket.emit ('resultadoFinalKahootGrupo' , {grupoId: gId, resultado: res});
+  } 
+
   public EsperoRespuestasCuestionarioKahootRapido(): any  {
     return Observable.create((observer) => {
         this.socket.on('respuestaAlumnoKahootRapido', (respuesta) => {
+            console.log ('recibo respuesta kahoot ');
+            console.log (respuesta);
+            observer.next(respuesta);
+        });
+    });
+  }
+
+  public EsperoRespuestasCuestionarioKahootGrupo(): any  {
+    return Observable.create((observer) => {
+        this.socket.on('respuestaAlumnoKahootGrupo', (respuesta) => {
             console.log ('recibo respuesta kahoot ');
             console.log (respuesta);
             observer.next(respuesta);

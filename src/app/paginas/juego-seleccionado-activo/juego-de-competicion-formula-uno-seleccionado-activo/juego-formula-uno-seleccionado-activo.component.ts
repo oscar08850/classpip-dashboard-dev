@@ -43,6 +43,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   juegosPuntos: Juego[] = [];
   juegosCuestionariosTerminados: Juego[] = [];
   juegosDeVotacionUnoATodosTerminados: any[] = [];
+  juegosDeEvaluacionTerminados: any[] = [];
   botoneditarPuntosDesactivado = true;
   datasourceAlumno;
   datasourceEquipo;
@@ -73,6 +74,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     this.DameJuegosdePuntos();
     this.DameJuegosdeCuestionariosAcabados();
     this.DameJuegosdeVotacionUnoATodosAcabados();
+    this.DameJuegosdeEvaluacionAcabados();
   }
 
   // Recupera los alumnos que pertenecen al juego
@@ -242,6 +244,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     this.sesion.TomaJuegosDePuntos(this.juegosPuntos);
     this.sesion.TomaJuegosDeCuestionario (this.juegosCuestionariosTerminados);
     this.sesion.TomaJuegosDeVotacionUnoATodos (this.juegosDeVotacionUnoATodosTerminados);
+    this.sesion.TomaJuegosDeEvaluacion (this.juegosDeEvaluacionTerminados);
   }
 
   editarjornadas() {
@@ -346,6 +349,23 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
 
   }
 
+  
+  DameJuegosdeEvaluacionAcabados() {
+    console.log ('vamos a por los juegos de evaluacion acabados' + this.juegoSeleccionado.grupoId);
+    this.peticionesAPI.DameJuegosDeEvaluacion(this.juegoSeleccionado.grupoId)
+    .subscribe(juegos => {
+      console.log ('Ya tengo los juegos de evaluacion');
+      console.log (juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if ((juegos[i].JuegoActivo === false) && (juegos[i].rubricaId > 0)) {
+          this.juegosDeEvaluacionTerminados.push(juegos[i]);
+        }
+      }
+    });
+
+
+  }
 
   DameJuegosdeVotacionUnoATodosAcabados() {
     console.log ('vamos a por los juegos de votacion Uno A Todos ' + this.juegoSeleccionado.grupoId);

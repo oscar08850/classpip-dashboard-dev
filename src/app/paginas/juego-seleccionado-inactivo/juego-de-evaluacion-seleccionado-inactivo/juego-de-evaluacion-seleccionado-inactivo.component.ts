@@ -5,21 +5,21 @@ import {Alumno, Equipo, Rubrica} from '../../../clases';
 import {AlumnoJuegoDeEvaluacion} from '../../../clases/AlumnoJuegoDeEvaluacion';
 import {EquipoJuegoDeEvaluacion} from '../../../clases/EquipoJuegoDeEvaluacion';
 import {MatDialog} from '@angular/material/dialog';
-import {EvaluacionDialogoComponent} from './evaluacion-dialogo/evaluacion-dialogo.component';
-import {EvaluacionBorrarDialogoComponent} from './evaluacion-borrar-dialogo/evaluacion-borrar-dialogo.component';
+// import {EvaluacionDialogoComponent} from './evaluacion-dialogo/evaluacion-dialogo.component';
+// import {EvaluacionBorrarDialogoComponent} from './evaluacion-borrar-dialogo/evaluacion-borrar-dialogo.component';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
 import { MatSort } from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import { EvaluacionDialogoComponent } from '../../juego-seleccionado-activo/juego-de-evaluacion-activo/evaluacion-dialogo/evaluacion-dialogo.component';
+
 
 @Component({
-  selector: 'app-juego-de-evaluacion-activo',
-  templateUrl: './juego-de-evaluacion-activo.component.html',
-  styleUrls: ['./juego-de-evaluacion-activo.component.scss']
+  selector: 'app-juego-de-evaluacion-seleccionado-inactivo',
+  templateUrl: './juego-de-evaluacion-seleccionado-inactivo.component.html',
+  styleUrls: ['./juego-de-evaluacion-seleccionado-inactivo.component.scss']
 })
-
-
-export class JuegoDeEvaluacionActivoComponent implements OnInit {
+export class JuegoDeEvaluacionSeleccionadoInactivoComponent implements OnInit {
 
   juego: JuegoDeEvaluacion;
   rubrica: Rubrica;
@@ -51,12 +51,11 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     private dialog: MatDialog,
     private location: Location
   ) { }
-
   ngOnInit() {
     /* Instrucciones necesarias para la ordenación y la paginación */
 
     this.juego = this.sesion.DameJuego() as unknown as JuegoDeEvaluacion;
-    console.log(this.juego);
+    console.log('Estoy dentro ', this.juego);
     if (this.juego.rubricaId > 0) {
       this.peticionesAPI.DameRubrica(this.juego.rubricaId).subscribe((res: Rubrica) => {
         this.rubrica = res;
@@ -551,66 +550,66 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  openDialog1(i: number, c: any, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
+  // openDialog1(i: number, c: any, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
 
-    if (profesor) {
-      const dialogRef = this.dialog.open(EvaluacionDialogoComponent, {
-        width: '800px',
-        data: {
-          juego: this.juego,
-          rubrica: this.rubrica,
-          alumnos: this.alumnos,
-          alumnosRelacion: this.alumnosRelacion,
-          equipos: this.equipos,
-          equiposRelacion: this.equiposRelacion,
-          alumnosDeEquipo: this.alumnosDeEquipo,
-          evaluadorId: this.sesion.DameProfesor().id,
-          evaluadoId: c,
-          profesor: true,
-          editable: editar,
-          global: false,
-          notaMedia: null
-        }
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed', result);
-        if (typeof result === 'undefined') {
-          return;
-        }
-        this.tmpDisplayedColumns = [];
-        this.datosTabla = [];
-        this.hoverColumn = [];
-        if (this.juego.Modo === 'Individual') {
-          this.alumnosRelacion = result;
-          this.ConstruirTablaIndividual();
-        } else if (this.juego.Modo === 'Equipos') {
-          this.equiposRelacion = result;
-          this.ConstruirTablaEquipos();
-        }
-      });
-    } else {
-      console.log ('OOOOOOOOOOOO ');
-      console.log (c);
-      this.dialog.open(EvaluacionDialogoComponent, {
-        width: '800px',
-        data: {
-          juego: this.juego,
-          rubrica: this.rubrica,
-          alumnos: this.alumnos,
-          alumnosRelacion: this.alumnosRelacion,
-          equipos: this.equipos,
-          equiposRelacion: this.equiposRelacion,
-          alumnosDeEquipo: this.alumnosDeEquipo,
-          evaluadorId: global ? 0 : this.tmpDisplayedColumns[i - 1][0],
-          evaluadoId: c.id,
-          profesor: false,
-          editable: false,
-          global,
-          notaMedia: c['Nota Media']
-        }
-      });
-    }
-  }
+  //   if (profesor) {
+  //     const dialogRef = this.dialog.open(EvaluacionDialogoComponent, {
+  //       width: '800px',
+  //       data: {
+  //         juego: this.juego,
+  //         rubrica: this.rubrica,
+  //         alumnos: this.alumnos,
+  //         alumnosRelacion: this.alumnosRelacion,
+  //         equipos: this.equipos,
+  //         equiposRelacion: this.equiposRelacion,
+  //         alumnosDeEquipo: this.alumnosDeEquipo,
+  //         evaluadorId: this.sesion.DameProfesor().id,
+  //         evaluadoId: c,
+  //         profesor: true,
+  //         editable: editar,
+  //         global: false,
+  //         notaMedia: null
+  //       }
+  //     });
+  //     dialogRef.afterClosed().subscribe(result => {
+  //       console.log('The dialog was closed', result);
+  //       if (typeof result === 'undefined') {
+  //         return;
+  //       }
+  //       this.tmpDisplayedColumns = [];
+  //       this.datosTabla = [];
+  //       this.hoverColumn = [];
+  //       if (this.juego.Modo === 'Individual') {
+  //         this.alumnosRelacion = result;
+  //         this.ConstruirTablaIndividual();
+  //       } else if (this.juego.Modo === 'Equipos') {
+  //         this.equiposRelacion = result;
+  //         this.ConstruirTablaEquipos();
+  //       }
+  //     });
+  //   } else {
+  //     console.log ('OOOOOOOOOOOO ');
+  //     console.log (c);
+  //     this.dialog.open(EvaluacionDialogoComponent, {
+  //       width: '800px',
+  //       data: {
+  //         juego: this.juego,
+  //         rubrica: this.rubrica,
+  //         alumnos: this.alumnos,
+  //         alumnosRelacion: this.alumnosRelacion,
+  //         equipos: this.equipos,
+  //         equiposRelacion: this.equiposRelacion,
+  //         alumnosDeEquipo: this.alumnosDeEquipo,
+  //         evaluadorId: global ? 0 : this.tmpDisplayedColumns[i - 1][0],
+  //         evaluadoId: c.id,
+  //         profesor: false,
+  //         editable: false,
+  //         global,
+  //         notaMedia: c['Nota Media']
+  //       }
+  //     });
+  //   }
+  // }
   openDialog(i: number, c: any, profesor: boolean = false, editar: boolean = false, global: boolean = false): void {
     if (profesor) {
       const dialogRef = this.dialog.open(EvaluacionDialogoComponent, {
@@ -700,112 +699,49 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
 
   isNumber(val): boolean { return typeof val === 'number'; }
 
-  eliminarNota(i: number, evaluadoId: number, profesor: boolean = false): void {
-    let evaluadorId;
-    if (!profesor) {
-      evaluadorId = this.tmpDisplayedColumns[i - 1][0];
-    } else {
-      evaluadorId = this.sesion.DameProfesor().id;
-    }
-    const dialogRef = this.dialog.open(EvaluacionBorrarDialogoComponent, {
-      width: '300px',
-      data: {
-        juego: this.juego,
-        evaluadorId,
-        evaluadoId,
-        alumnosDeEquipo: this.alumnosDeEquipo,
-        profesor
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
-      if (typeof result === 'undefined') {
-        return;
-      }
-      this.tmpDisplayedColumns = [];
-      this.datosTabla = [];
-      this.hoverColumn = [];
-      if (this.juego.Modo === 'Individual') {
-        this.alumnosRelacion = result;
-        this.ConstruirTablaIndividual();
-      } else if (this.juego.Modo === 'Equipos') {
-        this.equiposRelacion = result;
-        this.ConstruirTablaEquipos();
-      }
-    });
-  }
+  // eliminarNota(i: number, evaluadoId: number, profesor: boolean = false): void {
+  //   let evaluadorId;
+  //   if (!profesor) {
+  //     evaluadorId = this.tmpDisplayedColumns[i - 1][0];
+  //   } else {
+  //     evaluadorId = this.sesion.DameProfesor().id;
+  //   }
+  //   const dialogRef = this.dialog.open(EvaluacionBorrarDialogoComponent, {
+  //     width: '300px',
+  //     data: {
+  //       juego: this.juego,
+  //       evaluadorId,
+  //       evaluadoId,
+  //       alumnosDeEquipo: this.alumnosDeEquipo,
+  //       profesor
+  //     }
+  //   });
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     console.log('The dialog was closed', result);
+  //     if (typeof result === 'undefined') {
+  //       return;
+  //     }
+  //     this.tmpDisplayedColumns = [];
+  //     this.datosTabla = [];
+  //     this.hoverColumn = [];
+  //     if (this.juego.Modo === 'Individual') {
+  //       this.alumnosRelacion = result;
+  //       this.ConstruirTablaIndividual();
+  //     } else if (this.juego.Modo === 'Equipos') {
+  //       this.equiposRelacion = result;
+  //       this.ConstruirTablaEquipos();
+  //     }
+  //   });
+  // }
 
   NombreCriterio(column: string): string {
     const index = parseInt(column.split('_')[1], 10);
     return this.rubrica.Criterios[index].Nombre;
   }
 
-  Eliminar(): void {
 
-    Swal.fire({
-      title: 'Confirma que quieres eliminar el juego <b>' + this.juego.NombreJuego + '</b>',
-      showCancelButton: true,
-      confirmButtonText: 'Confirmar',
-    }).then((result) => {
-      if (result.value) {
-        this.calculos.EliminarJuegoDeEvaluacion(this.juego)
-        .subscribe(() => {
-          this.location.back();
-          Swal.fire('Juego eliminado correctamente', ' ', 'success');
-        });
-      }
-    });
-  }
-
-  GuardarNotasFinales () {
-    if (this.juego.Modo === 'Individual') {
-      this.datosTabla.forEach (dato => {
-        this.alumnosRelacion.find (alumno => alumno.alumnoId === dato.id).notaFinal = dato['Nota Media'];
-      });
-      this.alumnosRelacion.forEach (alumno => {
-        this.peticionesAPI.PonNotaFinalAlumnoJuegoDeEvaluacion (alumno).subscribe();
-      });
-    } else {
-      this.datosTabla.forEach (dato => {
-        this.equiposRelacion.find (equipo => equipo.equipoId === dato.id).notaFinal = dato['Nota Media'];
-      });
-      this.equiposRelacion.forEach (equipo => {
-        this.peticionesAPI.PonNotaFinalEquipoJuegoDeEvaluacion (equipo).subscribe();
-      });
-
-    }
-  }
-
+ 
   
-  DesactivarJuego() {
-  
-   
-    
-    Swal.fire({
-      title: '¿Seguro que quieres desactivar el juego de evaluación?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, estoy seguro'
-    }).then((result) => {
-      if (result.value) {
-        this.GuardarNotasFinales();
-
-        this.juego.JuegoActivo = false;
-        this.peticionesAPI.CambiaEstadoJuegoDeEvaluacion (this.juego)
-        .subscribe(res => {
-            if (res !== undefined) {
-              console.log(res);
-              console.log('juego desactivado');
-              Swal.fire('El juego se ha desactivado correctamente');
-              this.location.back();
-            }
-        });
-      }
-    });
-  }
-
 
   MostrarCriterios(checked) {
     if (checked) {
@@ -908,5 +844,50 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
   }
 
 
-}
 
+  Eliminar(): void {
+
+    Swal.fire({
+      title: 'Confirma que quieres eliminar el juego <b>' + this.juego.NombreJuego + '</b>',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+    }).then((result) => {
+      if (result.value) {
+        this.calculos.EliminarJuegoDeEvaluacion(this.juego)
+        .subscribe(() => {
+          this.location.back();
+          Swal.fire('Juego eliminado correctamente', ' ', 'success');
+        });
+      }
+    });
+  }
+
+  
+  
+  Reactivar() {
+    Swal.fire({
+      title: '¿Seguro que quieres desactivar el juego de evaluación?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then((result) => {
+      if (result.value) {
+
+        this.juego.JuegoActivo = true;
+        this.peticionesAPI.CambiaEstadoJuegoDeEvaluacion (this.juego)
+        .subscribe(res => {
+            if (res !== undefined) {
+              console.log(res);
+              console.log('juego desactivado');
+              Swal.fire('El juego se ha desactivado correctamente');
+              this.location.back();
+            }
+        });
+      }
+    });
+  }
+
+
+}

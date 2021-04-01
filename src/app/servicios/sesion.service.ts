@@ -58,6 +58,7 @@ export class SesionService {
   JuegosDePuntos: Juego[];
   JuegosDeCuestionariosAcabados: Juego[];
   juegosDeVotacionUnoATodosAcabados: Juego[];
+  juegosDeEvaluacionTerminados: Juego[];
   // listaEquiposGrupo: any;
 
   pregunta: Pregunta;
@@ -521,6 +522,13 @@ public DameJuegosDePuntos(): Juego[] {
    this.JuegosDeCuestionariosAcabados = juegosCuestionarios;
  }
 
+ public TomaJuegosDeEvaluacion(juegosEvaluacion: Juego[]) {
+   this.juegosDeEvaluacionTerminados = juegosEvaluacion;
+ }
+
+ public DameJuegosDeEvaluacionTerminados(): Juego[] {
+  return this.juegosDeEvaluacionTerminados;
+}
  public DameJuegosDeCuestionariosAcabados(): Juego[] {
   return this.JuegosDeCuestionariosAcabados;
 }

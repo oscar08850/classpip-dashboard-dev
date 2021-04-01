@@ -50,6 +50,7 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
                public dialog: MatDialog) { }
 
   ngOnInit() {
+    console.log ('onInit de ASIGNACION');
 
     this.profesorId = this.sesion.DameProfesor().id;
     this.grupoId = this.sesion.DameGrupo().id;
@@ -83,6 +84,7 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
   }
 
   TraeListaDeColecciones() {
+    console.log ('voy a traer colecciones');
     this.peticionesAPI.DameColeccionesDelProfesor(this.profesorId)
     .subscribe(colecciones => {
       if (colecciones !== undefined) {
@@ -99,8 +101,10 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
 
   TraeColeccionesPublicas() {
 
+
     this.peticionesAPI.DameColeccionesPublicas()
     .subscribe (publicas => {
+     
       // me quedo con los públicos de los demás
       const publicasDeOtros = publicas.filter (coleccion => coleccion.profesorId !== Number(this.profesorId));
       // traigo los profesores para añadir a los publicos el nombre del propietario
@@ -108,7 +112,9 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
       .subscribe (profesores => {
         publicasDeOtros.forEach (coleccion => {
           const propietario = profesores.filter (profesor => profesor.id === coleccion.profesorId)[0];
-          coleccion.Nombre = coleccion.Nombre + '(' + propietario.Nombre + ' ' + propietario.PrimerApellido + ')';
+          if (propietario) {
+            coleccion.Nombre = coleccion.Nombre + '(' + propietario.Nombre + ' ' + propietario.PrimerApellido + ')';
+          }
         });
         this.coleccionesPublicas = publicasDeOtros;
 
