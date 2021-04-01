@@ -152,21 +152,26 @@ export class JuegoComponent implements OnInit {
   // información para crear un juego de cuestionario
   cuestionario: Cuestionario;
   tengoCuestionario = false;
-  puntuacionCorrecta: number;
-  puntuacionIncorrecta: number;
+  // tslint:disable-next-line:max-line-length
+  puntuacionCorrecta = 0; // le doy un valor porque si elojo kahoot esto no entre en juego pero debe estar definido para que se cree el juego
+  puntuacionIncorrecta = 0;
   modoPresentacion: string;
   tengoModoPresentacion = false;
   seleccionModoPresentacion: string[] = ['Mismo orden para todos',
-
     'Preguntas desordenadas',
     'Preguntas y respuestas desordenadas'];
   tiempoLimite: number;
   tipoDeJuegoDeCuestionarioSeleccionado: string;
   tengoTipoJuegoCuestionario = false;
-  seleccionTipoDeJuegoDeCuestionario: ChipColor[] = [
+  seleccionModalidadJuegoCuestionario: ChipColor[] = [
     {nombre: 'Clásico', color: 'primary'},
-    {nombre: 'Kahoot', color: 'accent'},
+    {nombre: 'Kahoot', color: 'warn'}
   ];
+  modalidadSeleccionada: string;
+  tengoModalidad = false;
+
+  seleccionModoPresentacionKahoot: string[] = ['Mostrar pregunta',
+  'No mostrar pregunta'];
 
   // información para crear juego de avatares
   familiasElegidas: number[];
@@ -1296,6 +1301,10 @@ export class JuegoComponent implements OnInit {
       this.tiempoLimite = 0;
     }
   }
+  ModalidadDeJuegoSeleccionada(modalidad: ChipColor) {
+    this.modalidadSeleccionada = modalidad.nombre;
+    this.tengoModalidad = true;
+  }
 
   TipoDeJuegoDeCuestionarioSeleccionado(tipoJuegoCuestionario: ChipColor) {
     this.tipoDeJuegoDeCuestionarioSeleccionado = tipoJuegoCuestionario.nombre;
@@ -1310,9 +1319,13 @@ export class JuegoComponent implements OnInit {
 
 
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.tipoDeJuegoDeCuestionarioSeleccionado, this.puntuacionCorrecta,
+
+    // tslint:disable-next-line:max-line-length
+    const juego = new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.modalidadSeleccionada, this.puntuacionCorrecta,
       this.puntuacionIncorrecta, this.modoPresentacion,
-      false, false, this.profesorId, this.grupo.id, this.cuestionario.id, this.tiempoLimite), this.grupo.id)
+      false, false, this.profesorId, this.grupo.id, this.cuestionario.id, this.tiempoLimite);
+    console.log ('voy a crear juego ', juego);
+    this.peticionesAPI.CreaJuegoDeCuestionario(juego, this.grupo.id)
       .subscribe(juegoCreado => {
         this.juegoDeCuestionario = juegoCreado;
         // Inscribimos a los alumnos (de momento no hay juego de cuestionario por equipos)

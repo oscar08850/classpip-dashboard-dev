@@ -1131,7 +1131,7 @@ export class CalculosService {
 
 
     console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegoDeAvatarGrupo(grupoID).toPromise();
+    juegos = await this.peticionesAPI.DameJuegoDeCuestionario(grupoID).toPromise();
     console.log('He recibido los juegos de cuestionario');
     console.log(juegos);
     // tslint:disable-next-line:prefer-for-of

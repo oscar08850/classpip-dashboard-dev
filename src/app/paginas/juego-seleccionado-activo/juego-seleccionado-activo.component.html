@@ -28,13 +28,17 @@
   <app-juego-de-avatar-seleccionado-activo></app-juego-de-avatar-seleccionado-activo>
 </div>
 
-<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuestionario' && juegoSeleccionado.Modalidad === 'Clásico'">
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuestionario'">
+  <app-juego-de-cuestionario-seleccionado-activo></app-juego-de-cuestionario-seleccionado-activo>
+</div>
+
+<!-- <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuestionario' && juegoSeleccionado.Modalidad === 'Clásico'">
   <app-juego-de-cuestionario-seleccionado-activo></app-juego-de-cuestionario-seleccionado-activo>
 </div>
 
 <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuestionario' && juegoSeleccionado.Modalidad === 'Kahoot'">
   <app-juego-de-cuestionario-kahoot-seleccionado-activo></app-juego-de-cuestionario-kahoot-seleccionado-activo>
-</div>
+</div> -->
 
 <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Geocaching'">
   <app-juego-de-geocaching-seleccionado-activo></app-juego-de-geocaching-seleccionado-activo>
