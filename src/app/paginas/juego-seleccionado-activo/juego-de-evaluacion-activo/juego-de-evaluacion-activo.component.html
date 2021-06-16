@@ -23,7 +23,7 @@
     <div class="table-container mat-elevation-z8" style="margin-top: 10px;">
       <table mat-table [dataSource]="datosTabla" matSort>
         <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns; let i = index" [sticky]="i === 0" [stickyEnd]="i === displayedColumns.length - 1 || column === 'Profesor' || column.startsWith('criterio_')">
-          <th mat-header-cell class="tituloTabla column100 column-0" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" *matHeaderCellDef [mat-sort-header]="column.startsWith('criterio_') ? column : null" [disabled]="!column.startsWith('criterio_')">
+          <th mat-header-cell class="tituloTabla column100 column-0" (mouseover)="MouseOver(i)" (mouseout)="MouseOut(i)" *matHeaderCellDef [mat-sort-header]="column.startsWith('criterio_') ? column : null" [disabled]="!column.startsWith('criterio_') && column !== 'Nota Media'">
             <div *ngIf="column != 'Nombre' && !column.startsWith('criterio_')">
               {{column}}
               <strong *ngIf="column === 'Profesor' && !juego.notaProfesorNormal" style="color: #e74c3c;">

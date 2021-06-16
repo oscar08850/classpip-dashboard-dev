@@ -17,7 +17,7 @@ export class ComServerService {
   constructor() {
   }
 
- 
+
 
   public Conectar(profesorId) {
     this.socket = io(this.url);
@@ -28,7 +28,7 @@ export class ComServerService {
   public ConectarCuentos() {
     this.socket = io(this.url);
     this.socket.emit('dash', this.notificacionconectar);
-    
+
   }
 
 
@@ -41,7 +41,7 @@ export class ComServerService {
       });
 
     });
-  }  
+  }
 
   public Desonectar(profesorId: number) {
     this.socket.emit('desconectarDash', profesorId);
@@ -238,6 +238,16 @@ export class ComServerService {
     });
   }
 
+  /* JUEGO DE EVALUACION */
+  public EsperoResultadosJuegoEvaluacion(): any {
+    return Observable.create((observer) => {
+      this.socket.on('respuestaEvaluacion', (respuesta) => {
+        console.log('Respuesta de Evaluacion', respuesta);
+        observer.next(respuesta);
+      });
+    });
+  }
+  /* FIN JUEGO DE EVALUACION */
 
 
 

@@ -332,7 +332,12 @@ export class EvaluacionDialogoComponent implements OnInit {
   }
 
   MostrarComentario(i: number): string {
-    const evaluado = this.data.alumnosRelacion.find(item => item.alumnoId === this.data.evaluadoId);
+    let evaluado;
+    if (this.data.juego.Modo === 'Individual') {
+      evaluado = this.data.alumnosRelacion.find(item => item.alumnoId === this.data.evaluadoId);
+    } else if (this.data.juego.Modo === 'Equipos') {
+      evaluado = this.data.equiposRelacion.find(item => item.equipoId === this.data.evaluadoId);
+    }
     const comentario = evaluado.respuestas[i].respuesta[evaluado.respuestas[i].respuesta.length - 1];
     if (comentario === '') {
       return null;
