@@ -93,8 +93,19 @@ export class IntroducirAlumnosComponent implements OnInit {
   }
   async RegistraAlumnos() {
     console.log ('Registra');
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.nuevosAlumnos.length; i++) {
+ 
+    Swal.fire({
+      title: 'Vamos a registrar a ' + this.nuevosAlumnos.length + ' nuevos alumnos.',
+      text: 'La operación tardará unos segundos. No desesperes.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'OK'
+    }).then(async (result) => {
+      if (result.value) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < this.nuevosAlumnos.length; i++) {
         const alumno = this.nuevosAlumnos[i];
         console.log ('voy a registrar al alumno');
         console.log (alumno);
@@ -110,10 +121,12 @@ export class IntroducirAlumnosComponent implements OnInit {
         // Espero un tiempo para no provocar una avalancha de e,alis que parece
         // saturar al servidor
         await this.Delay(1000);
-    }
-    // tslint:disable-next-line:max-line-length
-    Swal.fire('Añadidos', this.nuevosAlumnos.length + ' nuevos alumnos añadidos correctamente. Se les ha enviado un email con sus datos e instandoles a que modifiquen lo antes posible su contraseña.', 'success');
-    this.nuevosAlumnos = [];
+        }
+        // tslint:disable-next-line:max-line-length
+        Swal.fire('Añadidos', this.nuevosAlumnos.length + ' nuevos alumnos añadidos correctamente. Se les ha enviado un email con sus datos e instandoles a que modifiquen lo antes posible su contraseña.', 'success');
+        this.nuevosAlumnos = [];
+      }
+    });
   }
 
   DisabledTexto() {
