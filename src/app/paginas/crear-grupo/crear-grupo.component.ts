@@ -175,25 +175,24 @@ export class CrearGrupoComponent implements OnInit {
     if (!this.grupoYaCreado || this.finalizar) {
       return of (true);
     } else {
-      const confirmacionObservable = new Observable <boolean>( obs => {
-          const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-            height: '150px',
-            data: {
-              mensaje: 'Confirma que quieres abandonar el proceso de creación de grupo',
-            }
-          });
-
-          dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-            if (confirmed) {
-              // Si confirma que quiere salir entonces eliminamos el grupo que se ha creado
-              this.sesion.TomaGrupo (this.grupo);
-              this.calculos.EliminarGrupo().subscribe ( () => obs.next(confirmed));
-
-            } else {
-              obs.next (confirmed);
-            }
-          });
-      });
+      
+   const confirmacionObservable = new Observable <boolean>(obs =>  {Swal.fire({
+        title: 'Abandonar',
+        text: "Confirma que quieres abandonar el proceso de creación de grupo",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar'
+  
+      }).then((result) => {
+        if (result.value) {
+          this.sesion.TomaGrupo (this.grupo);
+         this.calculos.EliminarGrupo().subscribe ( () => obs.next(result.value));
+        }else{obs.next(result.value);}
+      })
+    });
       return confirmacionObservable;
     }
   }

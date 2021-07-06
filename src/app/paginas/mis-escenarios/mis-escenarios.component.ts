@@ -115,21 +115,24 @@ export class MisEscenariosComponent implements OnInit {
   }
 
   AbrirDialogoConfirmacionBorrarEscenario(escenario: Escenario): void {
+    Swal.fire({
+      title: 'Eliminar',
+      text: "Estas segura/o de que quieres eliminar el escenario llamado: " +escenario.Mapa,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        nombre: escenario.Mapa,
-      }
-    });
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    }).then((result) => {
+      if (result.value) {
         this.BorrarEscenario(escenario);
         Swal.fire('Eliminado', escenario.Mapa + ' eliminado correctamente', 'success');
+
       }
-    });
+    })
+
   }
 
 

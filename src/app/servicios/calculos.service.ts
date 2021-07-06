@@ -19,6 +19,9 @@ import { AlumnoJuegoDeCuestionario } from '../clases/AlumnoJuegoDeCuestionario';
 import { TablaAlumnoJuegoDeCuestionario } from '../clases/TablaAlumnoJuegoDeCuestionario';
 import { AlumnoJuegoDeGeocaching } from '../clases/AlumnoJuegoDeGeocaching';
 import { TablaAlumnoJuegoDeGeocaching } from '../clases/TablaAlumnoJuegoDeGeocaching';
+import { JuegoDeEvaluacion } from '../clases/JuegoDeEvaluacion';
+import { AlumnoJuegoDeEvaluacion } from '../clases/AlumnoJuegoDeEvaluacion';
+import { EquipoJuegoDeEvaluacion } from '../clases/EquipoJuegoDeEvaluacion';
 
 
 
@@ -86,7 +89,8 @@ export class CalculosService {
       this.DameListaJuegos(this.sesion.DameGrupo().id)
       .subscribe ( listas => {
               // Hago una lista con todos los juegos (activos e inactivos)
-              const juegos = listas.activos.concat (listas.inactivos);
+              let juegos = listas.activos.concat (listas.inactivos);
+              juegos = juegos.concat (listas.preparados);
               console.log ('Ya tengo los juegos');
               console.log (juegos);
               let cont = 0;
@@ -562,6 +566,25 @@ export class CalculosService {
                     juegosInactivos.push(juegosAvatar[i]);
                   }
                 }
+
+
+                    // ahora toca los juegos de creacion de cuentos
+                
+                console.log ('vamos a por los juegos de cuento del grupo: ' + grupoID);
+                this.peticionesAPI.DamejuegosdeCuento(grupoID)
+                .subscribe(juegosdecuento => {
+                  console.log('He recibido los juegos de cuento');
+                  console.log(juegosdecuento);
+                  // tslint:disable-next-line:prefer-for-of
+                  for (let i = 0; i < juegosdecuento.length; i++) {
+                    if (juegosdecuento[i].JuegoActivo === true) {
+                      juegosActivos.push(juegosdecuento[i]);
+                    } else {
+                      juegosInactivos.push(juegosdecuento[i]);
+                    }
+                  }
+
+                 
                 // Ahora recogemos los juegos de cuestionario
                 // console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
                 console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
@@ -644,27 +667,26 @@ export class CalculosService {
                               juegosInactivos.push(juegosCuestionarioSatisfaccion[i]);
                             }
                           }
-                          const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-                          obs.next (resultado);
 
-                          // console.log('GET JuegoDeEvaluacion OF grupoID: ', grupoID);
-                          // this.peticionesAPI.DameJuegosDeEvaluacion(grupoID)
-                          //   .subscribe(juegosDeEvaluacion => {
-                          //     console.log('GET RESPONSE JuegoDeEvaluacion', juegosDeEvaluacion);
-                          //     // tslint:disable-next-line:prefer-for-of
-                          //     for (let i = 0; i < juegosDeEvaluacion.length; i++) {
-                          //       if (juegosDeEvaluacion[i].JuegoActivo === true) {
-                          //         juegosDeEvaluacion[i].Tipo = 'Evaluacion';
-                          //         juegosActivos.push(juegosDeEvaluacion[i]);
-                          //       } else {
-                          //         juegosDeEvaluacion[i].Tipo = 'Evaluacion';
-                          //         juegosInactivos.push(juegosDeEvaluacion[i]);
-                          //       }
-                          //     }
 
-                          //   const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-                          //   obs.next (resultado);
-                          // });
+                          console.log('GET JuegoDeEvaluacion OF grupoID: ', grupoID);
+                          this.peticionesAPI.DameJuegosDeEvaluacion(grupoID)
+                            .subscribe(juegosDeEvaluacion => {
+                              console.log('GET RESPONSE JuegoDeEvaluacion', juegosDeEvaluacion);
+                              // tslint:disable-next-line:prefer-for-of
+                              for (let i = 0; i < juegosDeEvaluacion.length; i++) {
+                                if (juegosDeEvaluacion[i].JuegoActivo === true) {
+                                  juegosDeEvaluacion[i].Tipo = 'Evaluacion';
+                                  juegosActivos.push(juegosDeEvaluacion[i]);
+                                } else {
+                                  juegosDeEvaluacion[i].Tipo = 'Evaluacion';
+                                  juegosInactivos.push(juegosDeEvaluacion[i]);
+                                }
+                              }
+
+                              const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+                              obs.next (resultado);
+                          });
                         });
                       });
                     });
@@ -675,6 +697,7 @@ export class CalculosService {
           });
         });
       });
+    });
     });
 
     return listasObservables;
@@ -3983,6 +4006,44 @@ public VerificarFicherosPreguntas(preguntas: any): any {
     });
   });
   return listaFicherosObservable;
+}
+
+
+public EliminarJuegoDeEvaluacion(juego: JuegoDeEvaluacion) {
+  const eliminaObservable = new Observable ( obs => {
+    if (juego.Modo === 'Individual') {
+      this.peticionesAPI.DameRelacionAlumnosJuegoDeEvaluacion(juego.id)
+        .subscribe((res: AlumnoJuegoDeEvaluacion[]) => {
+          let cont = 0;
+          res.forEach (alumnoJuegoDeEvaluacion => {
+            this.peticionesAPI.BorrarAlumnoJuegoDeEvaluacion (alumnoJuegoDeEvaluacion.id)
+            .subscribe ( () => {
+              cont = cont + 1;
+              if (cont === res.length) {
+                this.peticionesAPI.BorrarJuegoDeEvaluacion (juego.id)
+                .subscribe(() => obs.next());
+              }
+            });
+          });
+        });
+    } else {
+      this.peticionesAPI.DameRelacionEquiposJuegoDeEvaluacion(juego.id)
+        .subscribe((res: EquipoJuegoDeEvaluacion[]) => {
+          let cont = 0;
+          res.forEach (equipoJuegoDeEvaluacion => {
+            this.peticionesAPI.BorrarEquipoJuegoDeEvaluacion (equipoJuegoDeEvaluacion.id)
+            .subscribe ( () => {
+              cont = cont + 1;
+              if (cont === res.length) {
+                this.peticionesAPI.BorrarJuegoDeEvaluacion (juego.id)
+                .subscribe(() => obs.next());
+              }
+            });
+          });
+        });
+    }
+  });
+  return eliminaObservable;
 }
 
 }

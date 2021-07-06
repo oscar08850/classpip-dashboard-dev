@@ -35,7 +35,7 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
   ];
 
   //Se usará para el selector de modo de asignación de modalidad
-  Modalidades: string[] = ['Test clásico',
+  Modalidades: string[] = ['Clásico',
   'Kahoot'
   ];
 

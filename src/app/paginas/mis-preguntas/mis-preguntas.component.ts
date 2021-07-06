@@ -69,19 +69,25 @@ export class MisPreguntasComponent implements OnInit {
   }
 
   AbrirDialogoConfirmacionEliminarPregunta(pregunta: Pregunta): void {
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        pregunta: pregunta.Pregunta,
-      }
-    });
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+
+    Swal.fire({
+      title: 'Eliminar',
+      text: "Confirma que quieres eliminar la pregunta: " + pregunta.Pregunta,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
+
+    }).then((result) => {
+      if (result.value) {
         this.EliminarPregunta(pregunta);
-        Swal.fire('Eliminado', 'Pregunta: ' + pregunta.Pregunta + ' eliminada correctamente', 'success');
+        Swal.fire('Eliminado', pregunta.Pregunta + ' eliminada correctamente', 'success');
       }
-    });
+    })
+
+
   }
 
   EliminarPregunta(pregunta: Pregunta) {

@@ -15,7 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule, MatRadioModule } from '@angular/material';
+import {MatBadgeModule, MatInputModule, MatProgressSpinnerModule, MatRadioModule} from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
@@ -239,15 +239,28 @@ import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 import { JuegoDeCogerTurnoRapidoComponent } from './paginas/mis-juegos-rapidos/juego-de-coger-turno-rapido/juego-de-coger-turno-rapido.component';
 import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-perfil.component';
 
-
-
 import { ExcludePipe } from './pipes/exclude.pipe';
 import { TeamExcludePipe } from './pipes/team-exclude.pipe';
 
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
+
+import { JuegoDeEvaluacionActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/juego-de-evaluacion-activo.component';
+import { EvaluacionDialogoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/evaluacion-dialogo/evaluacion-dialogo.component';
+import { EvaluacionBorrarDialogoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/evaluacion-borrar-dialogo/evaluacion-borrar-dialogo.component';
 import { MostrarCuestionarioComponent } from './paginas/mis-cuestionarios/mostrar-cuestionario/mostrar-cuestionario.component';
+
+
+import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
+import { MisRecursosLibroComponent } from './paginas/mis-recursos-libro/mis-recursos-libro.component';
+import { JuegoDeCuentoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-seleccionado-activo.component';
+import { AsignarRecursosJuegoLibrosComponent } from './paginas/juego/asignar-recursos-juego-libros/asignar-recursos-juego-libros.component';
+import { AsignaEspecialJuegoLibrosComponent } from './paginas/juego/asigna-especial-juego-libros/asigna-especial-juego-libros.component';
+import { VotacionescuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-votaciones/votacionescuento/votacionescuento.component';
+import { ListadoCuentosComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
+import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
+
 
 
 @NgModule({
@@ -360,6 +373,15 @@ import { MostrarCuestionarioComponent } from './paginas/mis-cuestionarios/mostra
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
     RespuestasAlumnoJuegoDeCuestionarioComponent,
     VerTodosComponent,
+    CrearRecursosLibroComponent,
+    MisRecursosLibroComponent,
+    JuegoDeCuentoSeleccionadoActivoComponent,
+    AsignarRecursosJuegoLibrosComponent,
+    AsignaEspecialJuegoLibrosComponent,
+    ListadoCuentosComponent,
+    ReproductorCuentoComponent,
+    VotacionescuentoComponent,
+    ListadoCuentosComponent,
     JuegoDeVotacionUnoATodosSeleccionadoActivoComponent,
     JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent,
     CrearRubricaComponent,
@@ -392,55 +414,60 @@ import { MostrarCuestionarioComponent } from './paginas/mis-cuestionarios/mostra
     ModificarPerfilComponent,
     JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
     GestionPreguntaKahootComponent,
+    JuegoDeEvaluacionActivoComponent,
+    EvaluacionDialogoComponent,
+    EvaluacionBorrarDialogoComponent,
     MostrarCuestionarioComponent
 
   ],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
-    NgbModule,
-    HttpModule,
+        BrowserModule,
+        AppRoutingModule,
+        NgbModule,
+        HttpModule,
 
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatButtonModule,
-    MatChipsModule,
-    MatCardModule,
-    MatMenuModule,
-    MatStepperModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTabsModule,
-    MatExpansionModule,
-    MatTooltipModule,
-    MatTableModule,
-    MatListModule,
-    MatIconModule,
-    MatDialogModule,
-    MatDividerModule,
-    MatCheckboxModule,
-    MatSnackBarModule,
-    MatToolbarModule,
-    MatGridListModule,
-    MdePopoverModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSliderModule,
-    HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatChipsModule,
+        MatCardModule,
+        MatMenuModule,
+        MatStepperModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTabsModule,
+        MatExpansionModule,
+        MatTooltipModule,
+        MatTableModule,
+        MatListModule,
+        MatIconModule,
+        MatDialogModule,
+        MatDividerModule,
+        MatCheckboxModule,
+        MatSnackBarModule,
+        MatToolbarModule,
+        MatGridListModule,
+        MdePopoverModule,
+        MatSortModule,
+        MatPaginatorModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatRadioModule,
+        MatSelectModule,
+        MatSliderModule,
+        HttpClientModule,
 
-    NgxEchartsModule,
-    ListViewModule,
-    DragDropModule,
-    AngularDateTimePickerModule,
-    MatSliderModule,
-    NgxQRCodeModule
+        NgxEchartsModule,
+        ListViewModule,
+        DragDropModule,
+        AngularDateTimePickerModule,
+        MatSliderModule,
+        NgxQRCodeModule,
+        MatProgressSpinnerModule,
+        MatBadgeModule
 
-  ],
+    ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
@@ -450,7 +477,7 @@ import { MostrarCuestionarioComponent } from './paginas/mis-cuestionarios/mostra
     InformacionJuegoDeCuestionarioDialogComponent, AsignaEscenarioComponent, AsignaPreguntasComponent, InformacionJuegoDeGeocachingDialogComponent,
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
     RespuestasAlumnoJuegoDeCuestionarioComponent,
-    AsignarFamiliaImagenesPerfilComponent
+    AsignarFamiliaImagenesPerfilComponent, EvaluacionDialogoComponent, EvaluacionBorrarDialogoComponent
   ],
   bootstrap: [AppComponent],
   providers: [

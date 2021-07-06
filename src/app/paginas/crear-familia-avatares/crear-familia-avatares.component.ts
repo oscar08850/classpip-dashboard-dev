@@ -311,14 +311,19 @@ export class CrearFamiliaAvataresComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, estoy seguro'
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
         // guardamos la imagen de la silueta
         const siluetaData: FormData = new FormData();
         siluetaData.append(this.fileSilueta.name, this.fileSilueta);
         this.peticionesAPI.PonImagenAvatar(siluetaData)
-          .subscribe();
+          .subscribe((res)=>{
+            console.log(res);
+          }, (err)=>{
+            console.log(err);
+          });
 
         // ahora guardamos las imagenes de los complementos
         for (let i = 0; i < 4 ; i++) {
