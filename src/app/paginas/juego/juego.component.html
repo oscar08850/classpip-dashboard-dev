@@ -504,6 +504,27 @@
 
               <!--/////////////////////// SI ESCOGEMOS EL JUEGO DE TIPO CUESTIONARIO //////////////////////////////////-->
               <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Cuestionario' && tengoModo">
+                <!-- primero elijo la modalidad-->
+                <mat-step>
+                  <ng-template matStepLabel><div>Modalidad</div></ng-template>
+                  <div>
+                    <label class = "LabelStepper">Selecciona la modalidad del juego:</label>
+    
+                    <mat-chip-list class="mat-chip-list-stacked">
+                      <mat-chip  style = 'width: 300px' *ngFor="let modalidad of seleccionModalidadJuegoCuestionario; let i = index" selected [color]="modalidad.color"  selected="{{seleccionModalidadJuegoCuestionario[i].selected}}"
+                      (click)="ModalidadDeJuegoSeleccionada(seleccionModalidadJuegoCuestionario[i])" [value]="modalidad.nombre" [selectable]="true">
+                        {{modalidad.nombre}}
+                      </mat-chip>
+                    </mat-chip-list>
+    
+                    <span *ngIf = "modalidadSeleccionada" style ="font-weight: bold;color:green;"> Has elegido ... {{modalidadSeleccionada}}</span>
+    
+                  </div>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button [disabled]="!tengoModalidad" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>
 
                 <!-- TERCER PASO: ELEGIR CUESTIONARIO -->
                  <mat-step>
@@ -520,7 +541,7 @@
                  </mat-step>
      
                 <!-- CUARTO PASO: ELEGIR TIPO DE CUESTIONARIO -->
-                 <mat-step>
+                 <!-- <mat-step>
                    <ng-template matStepLabel><div>Modalidad</div></ng-template>
      
                      <div class = "colorsChips">
@@ -539,15 +560,37 @@
                        <button [disabled]="!tengoTipoJuegoCuestionario" type="button" class="btn Next" matStepperNext>Siguiente</button>
                      </div>
                  </mat-step>
+ -->
+
+                 <!-- <mat-step>
+                  <ng-template matStepLabel><div>Modalidad</div></ng-template>
+                  <div>
+                    <label class = "LabelStepper">Selecciona la modalidad del juego:</label>
+    
+                    <mat-chip-list class="mat-chip-list-stacked">
+                      <mat-chip  style = 'width: 300px' *ngFor="let modalidad of seleccionModalidadJuegoCuestionario; let i = index" selected [color]="modalidad.color"  selected="{{seleccionModalidadJuegoCuestionario[i].selected}}"
+                      (click)="ModalidadDeJuegoSeleccionada(seleccionModalidadJuegoCuestionario[i])" [value]="modalidad.nombre" [selectable]="true">
+                        {{modalidad.nombre}}
+                      </mat-chip>
+                    </mat-chip-list>
+    
+                    <span *ngIf = "modalidadSeleccionada" style ="font-weight: bold;color:green;"> Has elegido ... {{modalidadSeleccionada}}</span>
+    
+                  </div>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button [disabled]="!tengoModalidad" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>
+     -->
                  <!--quinto paso, establecemos la puntuacion-->
-                 <mat-step>
+                 <!-- <mat-step>
                    <ng-template matStepLabel><div>Puntuación</div></ng-template>
-                     <!-- casilla para introducir puntuacion que sumamos -->
+   
                      <mat-form-field>
                        <mat-label>Introduzca los puntos a sumar por respuesta correcta</mat-label>
                        <input  matInput formControlName="PuntuacionCorrecta" placeholder="Escriba puntos a sumar" requiered>
                      </mat-form-field>
-                     <!-- casilla para introducir puntuacion que restamos -->
                      <mat-form-field>
                        <mat-label>Introduzca los puntos a restar por respuesta incorrecta</mat-label>
                        <input  matInput formControlName="PuntuacionIncorrecta" placeholder="Escriba puntos a restar" requiered>
@@ -556,10 +599,30 @@
                      <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                      <button [disabled]="!TengoPuntuaciones()" (click) = "GuardarPuntuacion()" type="button" class="btn Next" matStepperNext>Siguiente</button>
                    </div>
-                 </mat-step>
+                 </mat-step> -->
+
+
+                 <mat-step *ngIf ="modalidadSeleccionada === 'Clásico'">
+                  <ng-template matStepLabel><div>Puntuación</div></ng-template>
+                    <!-- casilla para introducir puntuacion que sumamos -->
+                    <mat-form-field>
+                      <mat-label>Introduzca los puntos a sumar por respuesta correcta</mat-label>
+                      <input  matInput formControlName="PuntuacionCorrecta" placeholder="Escriba puntos a sumar" requiered>
+                    </mat-form-field>
+                    <!-- casilla para introducir puntuacion que restamos -->
+                    <mat-form-field>
+                      <mat-label>Introduzca los puntos a restar por respuesta incorrecta</mat-label>
+                      <input  matInput formControlName="PuntuacionIncorrecta" placeholder="Escriba puntos a restar" requiered>
+                    </mat-form-field>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button [disabled]="!TengoPuntuaciones()" (click) = "GuardarPuntuacion()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>
+
      
                  <!--sexto paso, escogemos la presentacion de preguntas y respuestas-->
-                 <mat-step>
+                 <!-- <mat-step>
                    <ng-template matStepLabel><div>Presentación</div></ng-template>
                    <div>
                      <label class = "LabelStepper">Selecciona un modo de presentacion:</label>
@@ -577,9 +640,51 @@
                      <button [disabled]="!tengoModoPresentacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
                    </div>
                  </mat-step>
+
+ -->
+
+                 <mat-step *ngIf ="modalidadSeleccionada === 'Clásico'">
+                  <ng-template matStepLabel><div>Presentación</div></ng-template>
+                  <div>
+                    <label class = "LabelStepper">Selecciona un modo de presentacion:</label>
+                    <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
+                        <mat-radio-button (click)="GuardarModoPresentacion(presentacion)" class="radio-button" *ngFor="let presentacion of seleccionModoPresentacion" [value]="presentacion">
+                          <label style="color: black;">{{presentacion}}</label>
+                        </mat-radio-button>
+                    </mat-radio-group>
+    
+                    <span *ngIf = "modoPresentacion" style ="font-weight: bold;color:green;"> Has elegido ... {{modoPresentacion}}</span>
+    
+                  </div>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button [disabled]="!tengoModoPresentacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>
+                <mat-step *ngIf ="modalidadSeleccionada === 'Kahoot'">
+                  <ng-template matStepLabel><div>Presentación</div></ng-template>
+                  <div>
+                    <label class = "LabelStepper">Selecciona un modo de presentacion:</label>
+                    <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
+                        <mat-radio-button (click)="GuardarModoPresentacion(presentacion)" class="radio-button" *ngFor="let presentacion of seleccionModoPresentacionKahoot" [value]="presentacion">
+                          <label style="color: black;">{{presentacion}}</label>
+                        </mat-radio-button>
+                    </mat-radio-group>
+    
+                    <span *ngIf = "modoPresentacion" style ="font-weight: bold;color:green;"> Has elegido ... {{modoPresentacion}}</span>
+    
+                  </div>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button [disabled]="!tengoModoPresentacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>
+    
+
+
      
                   <!--Septimo paso, decidimos si hay un tiempo limite para responder-->
-                  <mat-step>
+                  <!-- <mat-step>
                    <ng-template matStepLabel><div>Tiempo</div></ng-template>
      
                    <mat-form-field>
@@ -591,7 +696,42 @@
                      <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                      <button  type="button" (click) = "GuardarTiempoLimite()" class="btn Next" matStepperNext>Siguiente</button>
                    </div>
-                 </mat-step>
+                 </mat-step> -->
+
+
+
+                 <mat-step *ngIf ="modalidadSeleccionada === 'Clásico'">
+                  <ng-template matStepLabel><div>Tiempo</div></ng-template>
+    
+                  <mat-form-field>
+                    <mat-label >Introduzca el tiempo límite para responder el cuestionario (en segundos)</mat-label>
+               
+                    <input  matInput formControlName="TiempoLimite" placeholder="Introduzca el tiempo limite" requiered>
+                  </mat-form-field>
+    
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button  type="button" (click) = "GuardarTiempoLimite()" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>
+
+                
+
+                <mat-step *ngIf ="modalidadSeleccionada === 'Kahoot'">
+                  <ng-template matStepLabel><div>Tiempo</div></ng-template>
+    
+                  <mat-form-field>
+                      <mat-label>Introduzca el tiempo límite para responder cada pregunta (en segundos)</mat-label>
+    
+                    <input  matInput formControlName="TiempoLimite" placeholder="Introduzca el tiempo limite" requiered>
+                  </mat-form-field>
+    
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button  type="button" (click) = "GuardarTiempoLimite()" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>
+
      
                  <!--Ultimo paso, finalizamos-->
                  <mat-step>
@@ -620,11 +760,28 @@
 
                   <label class = "LabelStepper">Selecciona el tipo de votación</label>
                   <mat-chip-list class="mat-chip-list-stacked">
+                    <div  style ="width: 70%">
+                      <mat-chip style = "width: 150px" selected [color]="seleccionTipoDeVotacion[0].color"  selected="{{seleccionTipoDeVotacion[0].selected}}"
+                        (click)="TipoDeVotacionSeleccionado(seleccionTipoDeVotacion[0])" [value]="seleccionTipoDeVotacion[0].nombre" [selectable]="true">
+                          {{seleccionTipoDeVotacion[0].nombre}}
+                      </mat-chip>
+                      <label>Cada participante <strong style="color:red">reparte puntos entre todos </strong> los demás</label>
+                    </div>
+                    <br>
+                    <div style ="width: 70%">
+                      <mat-chip style = "width: 150px" selected [color]="seleccionTipoDeVotacion[1].color"  selected="{{seleccionTipoDeVotacion[1].selected}}"
+                      (click)="TipoDeVotacionSeleccionado(seleccionTipoDeVotacion[1])" [value]="seleccionTipoDeVotacion[1].nombre" [selectable]="true">
+                      {{seleccionTipoDeVotacion[1].nombre}}
+                      </mat-chip>
+                      <label>Cada participante <strong style="color:red">valora a cada uno </strong>de los demás</label>
+                    </div>
+<!-- 
                     <mat-chip style = "width: 150px" *ngFor="let tipo of seleccionTipoDeVotacion; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeVotacion[i].selected}}"
-                       (click)="TipoDeVotacionSeleccionado(seleccionTipoDeVotacion[i])" [value]="tipo.nombre" [selectable]="true">
-                        {{tipo.nombre}}
-                    </mat-chip>
+                    (click)="TipoDeVotacionSeleccionado(seleccionTipoDeVotacion[i])" [value]="tipo.nombre" [selectable]="true">
+                     {{tipo.nombre}}
+                    </mat-chip> -->
                   </mat-chip-list>
+                  <br>
                   <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoDeVotacionSeleccionado}}</span>
 
               </div>
@@ -1673,7 +1830,7 @@
                 <table>
                   <tr *ngFor="let evaluado of DameEvaluados()">
                     <td>
-                      <mat-label>{{evaluado.Nombre}}</mat-label>
+                      <mat-label>{{evaluado.Nombre}} {{evaluado.PrimerApellido}}</mat-label>
                     </td>
                     <td>
                       <mat-form-field appearance="fill">
@@ -1685,10 +1842,10 @@
                               ({{this.relacionesMap.get(evaluado.id) ? this.relacionesMap.get(evaluado.id).length : 0}})
                             </span>
                           </mat-select-trigger>-->
-                          <mat-option *ngFor="let evaluador of DameEvaluadores() | exclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}} <span *ngIf="ContarEvaluadores(evaluador.id) > 0">({{ContarEvaluadores(evaluador.id)}})</span></mat-option>
+                          <mat-option *ngFor="let evaluador of DameEvaluadores() | exclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}} {{evaluador.PrimerApellido}} <span *ngIf="ContarEvaluadores(evaluador.id) > 0">({{ContarEvaluadores(evaluador.id)}})</span></mat-option>
                         </mat-select>
                         <mat-select *ngIf="modoDeJuegoSeleccionado === 'Equipos' && equiposEvaluacionSeleccionado === 'Individualmente'" multiple (selectionChange)="RelacionChanged(evaluado.id, $event.value)" [value]="this.relacionesMap.get(evaluado.id)">
-                          <mat-option *ngFor="let evaluador of DameEvaluadores() | teamExclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}} <span *ngIf="ContarEvaluadores(evaluador.id) > 0">({{ContarEvaluadores(evaluador.id)}})</span></mat-option>
+                          <mat-option *ngFor="let evaluador of DameEvaluadores() | teamExclude:evaluado" [value]="evaluador.id">{{evaluador.Nombre}} {{evaluador.PrimerApellido}}<span *ngIf="ContarEvaluadores(evaluador.id) > 0">({{ContarEvaluadores(evaluador.id)}})</span></mat-option>
                         </mat-select>
                       </mat-form-field>
                     </td>

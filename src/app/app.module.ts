@@ -260,6 +260,7 @@ import { AsignaEspecialJuegoLibrosComponent } from './paginas/juego/asigna-espec
 import { VotacionescuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-votaciones/votacionescuento/votacionescuento.component';
 import { ListadoCuentosComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
 import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
+import { JuegoDeEvaluacionSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-evaluacion-seleccionado-inactivo/juego-de-evaluacion-seleccionado-inactivo.component';
 
 
 
@@ -417,7 +418,8 @@ import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/
     JuegoDeEvaluacionActivoComponent,
     EvaluacionDialogoComponent,
     EvaluacionBorrarDialogoComponent,
-    MostrarCuestionarioComponent
+    MostrarCuestionarioComponent,
+    JuegoDeEvaluacionSeleccionadoInactivoComponent
 
   ],
   imports: [

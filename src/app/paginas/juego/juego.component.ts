@@ -49,6 +49,7 @@ import {JuegoDeEvaluacion} from '../../clases/JuegoDeEvaluacion';
 import {log} from 'util';
 import {EquipoJuegoDeEvaluacion} from '../../clases/EquipoJuegoDeEvaluacion';
 import {AlumnoJuegoDeEvaluacion} from '../../clases/AlumnoJuegoDeEvaluacion';
+import { EquipoJuegoDeVotacionUnoATodos } from 'src/app/clases/EquipoJuegoDeVotacionUnoATodos';
 
 
 export interface OpcionSeleccionada {
@@ -151,21 +152,26 @@ export class JuegoComponent implements OnInit {
   // información para crear un juego de cuestionario
   cuestionario: Cuestionario;
   tengoCuestionario = false;
-  puntuacionCorrecta: number;
-  puntuacionIncorrecta: number;
+  // tslint:disable-next-line:max-line-length
+  puntuacionCorrecta = 0; // le doy un valor porque si elojo kahoot esto no entre en juego pero debe estar definido para que se cree el juego
+  puntuacionIncorrecta = 0;
   modoPresentacion: string;
   tengoModoPresentacion = false;
   seleccionModoPresentacion: string[] = ['Mismo orden para todos',
-
     'Preguntas desordenadas',
     'Preguntas y respuestas desordenadas'];
   tiempoLimite: number;
   tipoDeJuegoDeCuestionarioSeleccionado: string;
   tengoTipoJuegoCuestionario = false;
-  seleccionTipoDeJuegoDeCuestionario: ChipColor[] = [
+  seleccionModalidadJuegoCuestionario: ChipColor[] = [
     {nombre: 'Clásico', color: 'primary'},
-    {nombre: 'Kahoot', color: 'accent'},
+    {nombre: 'Kahoot', color: 'warn'}
   ];
+  modalidadSeleccionada: string;
+  tengoModalidad = false;
+
+  seleccionModoPresentacionKahoot: string[] = ['Mostrar pregunta',
+  'No mostrar pregunta'];
 
   // información para crear juego de avatares
   familiasElegidas: number[];
@@ -383,34 +389,36 @@ export class JuegoComponent implements OnInit {
 
     // Ahora traemos la lista de juegos
     // esta operacion es complicada. Por eso está en calculos
-    this.calculos.DameListaJuegos(this.grupo.id)
-      .subscribe(listas => {
-        console.log('He recibido los juegos');
-        console.log(listas);
-        this.juegosActivos = listas.activos;
-        // Si la lista aun esta vacia la dejo como indefinida para que me
-        // salga el mensaje de que aun no hay juegos
-        if (listas.activos[0] === undefined) {
-          this.juegosActivos = undefined;
-          console.log('No hay inactivos');
-        } else {
-          this.juegosActivos = listas.activos;
-          console.log('hay activos');
-        }
-        if (listas.inactivos[0] === undefined) {
-          this.juegosInactivos = undefined;
-          console.log('No hay inactivos');
-        } else {
-          this.juegosInactivos = listas.inactivos;
-          console.log('hay inactivos');
-        }
-        if (listas.preparados[0] === undefined) {
-          this.juegosPreparados = undefined;
-        } else {
-          this.juegosPreparados = listas.preparados;
-        }
+    // this.calculos.DameListaJuegos(this.grupo.id)
+    //   .subscribe(listas => {
+    //     console.log('He recibido los juegos');
+    //     console.log(listas);
+    //     this.juegosActivos = listas.activos;
+    //     // Si la lista aun esta vacia la dejo como indefinida para que me
+    //     // salga el mensaje de que aun no hay juegos
+    //     if (listas.activos[0] === undefined) {
+    //       this.juegosActivos = undefined;
+    //       console.log('No hay inactivos');
+    //     } else {
+    //       this.juegosActivos = listas.activos;
+    //       console.log('hay activos');
+    //     }
+    //     if (listas.inactivos[0] === undefined) {
+    //       this.juegosInactivos = undefined;
+    //       console.log('No hay inactivos');
+    //     } else {
+    //       this.juegosInactivos = listas.inactivos;
+    //       console.log('hay inactivos');
+    //     }
+    //     if (listas.preparados[0] === undefined) {
+    //       this.juegosPreparados = undefined;
+    //     } else {
+    //       this.juegosPreparados = listas.preparados;
+    //     }
 
-      });
+    //   });
+
+    this.DameListaJuegos();
  
     // Peticion API Juego de Evaluacion
     this.peticionesAPI.DameRubricasProfesor(this.profesorId).subscribe(rubricas => {
@@ -471,6 +479,33 @@ export class JuegoComponent implements OnInit {
     this.listaConceptos = [];
     this.totalPesos = 0;
 
+  }
+  
+  async DameListaJuegos() {
+    
+    const listas =  await this.calculos.DameListaJuegos(this.grupo.id);
+    this.juegosActivos = listas.activos;
+    // Si la lista aun esta vacia la dejo como indefinida para que me
+    // salga el mensaje de que aun no hay juegos
+    if (listas.activos[0] === undefined) {
+          this.juegosActivos = undefined;
+          console.log('No hay inactivos');
+    } else {
+          this.juegosActivos = listas.activos;
+          console.log('hay activos');
+    }
+    if (listas.inactivos[0] === undefined) {
+          this.juegosInactivos = undefined;
+          console.log('No hay inactivos');
+    } else {
+          this.juegosInactivos = listas.inactivos;
+          console.log('hay inactivos');
+    }
+    if (listas.preparados[0] === undefined) {
+          this.juegosPreparados = undefined;
+    } else {
+          this.juegosPreparados = listas.preparados;
+    }
   }
 
   //////////////////////////////////////// FUNCIONES PARA LISTAR JUEGOS ///////////////////////////////////////////////
@@ -554,8 +589,8 @@ export class JuegoComponent implements OnInit {
 
     else if ((this.tipoDeJuegoSeleccionado === 'Juego De Geocaching') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de geocaching en equipo', 'warning');
-    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Votación') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
-      Swal.fire('Alerta', 'Aún no es posible el juego de votación en equipo', 'warning');
+   // } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Votación') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+     // Swal.fire('Alerta', 'Aún no es posible el juego de votación en equipo', 'warning');
     } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuestionario de Satisfacción') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'No existe el juego de cuestionario de satisfacción en equipo', 'warning');
     } else {
@@ -569,9 +604,6 @@ export class JuegoComponent implements OnInit {
         }
 
       }
-
-
-
       else {
         if (this.equiposGrupo === undefined) {
           Swal.fire('Alerta', 'No hay ningún equipo en este grupo', 'warning');
@@ -627,7 +659,7 @@ export class JuegoComponent implements OnInit {
       console.log (this.relacionAlumnosEquipos);
       
       this.relacionesMap = new Map();
-
+      let j=0;
       for (let i = 0; i < evaluados.length; i++) {
           if (!fill) {
             this.relacionesMap.set(evaluados[i], []);
@@ -638,7 +670,7 @@ export class JuegoComponent implements OnInit {
             console.log (equipoEvaluado);
             const evaluadoresElegidos = [];
             let cont = 0;
-            let j = i;
+            //let j = i;
             while ( cont < this.numeroDeMiembros) {
               console.log ('veamos que pasa con ' + evaluadoresDesordenados[j]);
               // Si el posible evaluador pertenece al equipo evaluado entonces no lo cogemos
@@ -1269,6 +1301,10 @@ export class JuegoComponent implements OnInit {
       this.tiempoLimite = 0;
     }
   }
+  ModalidadDeJuegoSeleccionada(modalidad: ChipColor) {
+    this.modalidadSeleccionada = modalidad.nombre;
+    this.tengoModalidad = true;
+  }
 
   TipoDeJuegoDeCuestionarioSeleccionado(tipoJuegoCuestionario: ChipColor) {
     this.tipoDeJuegoDeCuestionarioSeleccionado = tipoJuegoCuestionario.nombre;
@@ -1283,9 +1319,13 @@ export class JuegoComponent implements OnInit {
 
 
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CreaJuegoDeCuestionario(new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.tipoDeJuegoDeCuestionarioSeleccionado, this.puntuacionCorrecta,
+
+    // tslint:disable-next-line:max-line-length
+    const juego = new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.modalidadSeleccionada, this.puntuacionCorrecta,
       this.puntuacionIncorrecta, this.modoPresentacion,
-      false, false, this.profesorId, this.grupo.id, this.cuestionario.id, this.tiempoLimite), this.grupo.id)
+      false, false, this.profesorId, this.grupo.id, this.cuestionario.id, this.tiempoLimite);
+    console.log ('voy a crear juego ', juego);
+    this.peticionesAPI.CreaJuegoDeCuestionario(juego, this.grupo.id)
       .subscribe(juegoCreado => {
         this.juegoDeCuestionario = juegoCreado;
         // Inscribimos a los alumnos (de momento no hay juego de cuestionario por equipos)
@@ -1842,8 +1882,12 @@ export class JuegoComponent implements OnInit {
   // junto con las funciones asociadas, porque lo que hay que hacer es exactamente lo mismo
 
   TipoDeVotacionSeleccionado(tipoVotacion: ChipColor) {
-    this.tipoDeVotacionSeleccionado = tipoVotacion.nombre;
-    this.tengoTipoDeVotacion = true;
+    if ((this.modoDeJuegoSeleccionado === 'Equipos') && (tipoVotacion.nombre === 'Todos A Uno')) {
+      Swal.fire('Alerta', 'Aún no es posible el juego de votación Todos A Uno en equipo', 'warning');
+    } else {
+      this.tipoDeVotacionSeleccionado = tipoVotacion.nombre;
+      this.tengoTipoDeVotacion = true;
+    }
   }
 
   ModoDeRepartoSeleccionado(modoReparto: ChipColor) {
@@ -1883,13 +1927,24 @@ export class JuegoComponent implements OnInit {
 
         if (this.modoDeJuegoSeleccionado === 'Individual') {
 
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < this.alumnosGrupo.length; i++) {
-          // tslint:disable-next-line:max-line-length
-          this.peticionesAPI.InscribeAlumnoJuegoDeVotacionUnoATodos(
-            // tslint:disable-next-line:indent
-		          new AlumnoJuegoDeVotacionUnoATodos(this.alumnosGrupo[i].id, this.juego.id))
-          .subscribe();
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.alumnosGrupo.length; i++) {
+            // tslint:disable-next-line:max-line-length
+            this.peticionesAPI.InscribeAlumnoJuegoDeVotacionUnoATodos(
+              // tslint:disable-next-line:indent
+                new AlumnoJuegoDeVotacionUnoATodos(this.alumnosGrupo[i].id, this.juego.id))
+            .subscribe();
+          }
+        } else {
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < this.equiposGrupo.length; i++) {
+              // tslint:disable-next-line:max-line-length
+              this.peticionesAPI.InscribeEquipoJuegoDeVotacionUnoATodos(
+                // tslint:disable-next-line:indent
+                  new EquipoJuegoDeVotacionUnoATodos(this.equiposGrupo[i].id, this.juego.id))
+              .subscribe();
+            }
+
         }
 
         Swal.fire('Juego de votación tipo Uno A Todos creado correctamente', ' ', 'success');
@@ -1905,7 +1960,7 @@ export class JuegoComponent implements OnInit {
         // Regresamos a la lista de equipos (mat-tab con índice 0)
         this.tabGroup.selectedIndex = 0;
 
-      }});
+      });
 
   }
 

@@ -26,6 +26,7 @@ import {EquipoJuegoDeEvaluacion} from '../clases/EquipoJuegoDeEvaluacion';
 import {AlumnoJuegoDeEvaluacion} from '../clases/AlumnoJuegoDeEvaluacion';
 // import {host} from '../URLs/urls';
 import * as URL from '../URLs/urls';
+import { EquipoJuegoDeVotacionUnoATodos } from '../clases/EquipoJuegoDeVotacionUnoATodos';
 
 @Injectable({
   providedIn: 'root'
@@ -114,6 +115,8 @@ export class PeticionesAPIService {
 
   private APIUrlJuegoDeVotacionUnoATodos = this.host + ':3000/api/JuegosDeVotacionUnoATodos';
   private APIUrlAlumnoJuegoDeVotacionUnoATodos = this.host + ':3000/api/alumnosJuegoDeVotacionUnoATodos';
+  private APIUrlEquipoJuegoDeVotacionUnoATodos = this.host + ':3000/api/equiposJuegoDeVotacionUnoATodos';
+
 
   private APIUrlJuegoDeVotacionTodosAUno = this.host + ':3000/api/JuegosDeVotacionTodosAUno';
   private APIUrlAlumnoJuegoDeVotacionTodosAUno = this.host + ':3000/api/alumnosJuegoDeVotacionTodosAUno';
@@ -1474,7 +1477,38 @@ export class PeticionesAPIService {
     return this.http.put<AlumnoJuegoDeVotacionUnoATodos>(this.APIUrlAlumnoJuegoDeVotacionUnoATodos + '/' + inscripcion.id, inscripcion);
   }
 
-///////////////// recurosos libros////////////////////////////////////////
+
+////////////////////////////////// GESTION VOTACION UNO A TODOS EQUIPOS /////////////////////////////////////////////////////////
+
+public DameEquiposJuegoDeVotacionUnoATodos(juegoId: number): Observable<Equipo[]> {
+  return this.http.get<Equipo[]>(this.APIUrlJuegoDeVotacionUnoATodos + '/' + juegoId + '/equipos');
+}
+
+public InscribeEquipoJuegoDeVotacionUnoATodos(equipoJuegoDeVotacionUnoATodos: EquipoJuegoDeVotacionUnoATodos) {
+  return this.http.post<EquipoJuegoDeVotacionUnoATodos>(this.APIUrlEquipoJuegoDeVotacionUnoATodos,
+    equipoJuegoDeVotacionUnoATodos);
+}
+
+
+// tslint:disable-next-line:max-line-length
+public DameInscripcionesEquipoJuegoDeVotacionUnoATodos(juegoId: number): Observable<EquipoJuegoDeVotacionUnoATodos[]> {
+  return this.http.get<EquipoJuegoDeVotacionUnoATodos[]>(this.APIUrlEquipoJuegoDeVotacionUnoATodos
+    + '?filter[where][juegoDeVotacionUnoATodosId]=' + juegoId);
+}
+
+public BorraInscripcionEquipoJuegoDeVotacionUnoATodos(equipoJuegoDeVotacionUnoATodosId: number) {
+  // tslint:disable-next-line:max-line-length
+  return this.http.delete<EquipoJuegoDeVotacionUnoATodos>(this.APIUrlEquipoJuegoDeVotacionUnoATodos + '/' + equipoJuegoDeVotacionUnoATodosId);
+}
+
+
+// tslint:disable-next-line:max-line-length
+public ModificaInscripcionEquipoJuegoDeVotacionUnoATodos(inscripcion: EquipoJuegoDeVotacionUnoATodos): Observable<EquipoJuegoDeVotacionUnoATodos> {
+  return this.http.put<EquipoJuegoDeVotacionUnoATodos>(this.APIUrlEquipoJuegoDeVotacionUnoATodos + '/' + inscripcion.id, inscripcion);
+}
+
+
+//////////////// recurosos libros////////////////////////////////////////
 
   public recuperarListaRecursos(profesorId): Observable<RecursoLibro[]> {
     return this.http.get<RecursoLibro[]>(this.APIUrlProfesores  + '/' + profesorId + '/recursosLibros');
@@ -1794,6 +1828,11 @@ public modificarConcurso(id, concurso): Observable<any> {
   public BorrarJuegoDeEvaluacion(juegoId: number): Observable<JuegoDeEvaluacion> {
     return this.http.delete<JuegoDeEvaluacion>(this.APIURLJuegoDeEvaluacion + '/' + juegoId);
   }
+
+  public CambiaEstadoJuegoDeEvaluacion(juego: JuegoDeEvaluacion): Observable<JuegoDeEvaluacion> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.put<JuegoDeEvaluacion>(this.APIURLJuegoDeEvaluacion + '/' + juego.id , juego);
+  }
   public CrearEquipoJuegoDeEvaluacion(equipo: EquipoJuegoDeEvaluacion): Observable<EquipoJuegoDeEvaluacion> {
     return this.http.post<EquipoJuegoDeEvaluacion>(this.APIURLEquiposJuegoEvaluado, equipo);
   }
@@ -1812,6 +1851,10 @@ public modificarConcurso(id, concurso): Observable<any> {
   public EnviarRespuestaAlumnosJuegoDeEvaluacion(relacionId: number, respuesta: any): Observable<AlumnoJuegoDeEvaluacion> {
     return this.http.patch<AlumnoJuegoDeEvaluacion>(this.APIURLAlumnoJuegoEvaluado + '/' + relacionId, respuesta);
   }
+  public PonNotaFinalAlumnoJuegoDeEvaluacion(alumnoJuegoDeEvaluacion: AlumnoJuegoDeEvaluacion): Observable<AlumnoJuegoDeEvaluacion> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.put<AlumnoJuegoDeEvaluacion>(this.APIURLAlumnoJuegoEvaluado + '/' + alumnoJuegoDeEvaluacion.id, alumnoJuegoDeEvaluacion);
+  }
   public DameAlumnosJuegoDeEvaluacion(juegoId: number): Observable<Alumno[]> {
     return this.http.get<Alumno[]>(this.APIURLJuegoDeEvaluacion + '/' + juegoId + '/Alumnos');
   }
@@ -1820,6 +1863,10 @@ public modificarConcurso(id, concurso): Observable<any> {
   }
   public EnviarRespuestaEquiposJuegoDeEvaluacion(relacionId: number, respuesta: any): Observable<EquipoJuegoDeEvaluacion> {
     return this.http.patch<EquipoJuegoDeEvaluacion>(this.APIURLEquiposJuegoEvaluado + '/' + relacionId, respuesta);
+  }
+  public PonNotaFinalEquipoJuegoDeEvaluacion(equipoJuegoDeEvaluacion: EquipoJuegoDeEvaluacion): Observable<EquipoJuegoDeEvaluacion> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.put<EquipoJuegoDeEvaluacion>(this.APIURLEquiposJuegoEvaluado + '/' + equipoJuegoDeEvaluacion.id, equipoJuegoDeEvaluacion);
   }
   public DameEquiposJuegoDeEvaluacion(juegoId: number): Observable<Equipo[]> {
     return this.http.get<Equipo[]>(this.APIURLJuegoDeEvaluacion + '/' + juegoId + '/Equipos');

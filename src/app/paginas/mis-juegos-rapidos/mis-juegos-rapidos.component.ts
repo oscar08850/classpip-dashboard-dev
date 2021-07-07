@@ -32,14 +32,17 @@ export class MisJuegosRapidosComponent implements OnInit {
 
   }
 
-  ObtenJuegosRapidos() {
-    this.calculos.DameJuegosRapidos(this.profesor.id)
-    .subscribe(juegos => {
-      this.juegosRapidos = juegos;
-      console.log ('ya tengo los juegos rapidos');
-      console.log (this.juegosRapidos);
-      this.dataSource = new MatTableDataSource(this.juegosRapidos);
-    });
+  async ObtenJuegosRapidos() {
+    this.juegosRapidos = await this.calculos.DameJuegosRapidos(this.profesor.id);
+    this.dataSource = new MatTableDataSource(this.juegosRapidos);
+ 
+    // this.calculos.DameJuegosRapidos(this.profesor.id)
+    // .subscribe(juegos => {
+    //   this.juegosRapidos = juegos;
+    //   console.log ('ya tengo los juegos rapidos');
+    //   console.log (this.juegosRapidos);
+    //   this.dataSource = new MatTableDataSource(this.juegosRapidos);
+    // });
   }
   MostrarJuegoRapido(juego) {
     console.log ('Juego rapido');
