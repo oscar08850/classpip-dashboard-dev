@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import {PeticionesAPIService, SesionService, CalculosService} from '../../../servicios';
+import {PeticionesAPIService, SesionService, CalculosService, ComServerService} from '../../../servicios';
 import {JuegoDeEvaluacion} from '../../../clases/JuegoDeEvaluacion';
 import {Alumno, Equipo, Rubrica} from '../../../clases';
 import {AlumnoJuegoDeEvaluacion} from '../../../clases/AlumnoJuegoDeEvaluacion';
@@ -49,12 +49,61 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     private peticionesAPI: PeticionesAPIService,
     private calculos: CalculosService,
     private dialog: MatDialog,
-    private location: Location
+    private location: Location,
+    private comServer: ComServerService
   ) { }
 
   ngOnInit() {
-    /* Instrucciones necesarias para la ordenación y la paginación */
 
+    this.comServer.EsperoResultadosJuegoEvaluacion()
+        .subscribe((data) => {
+          if (data.profesorId !== this.sesion.profesor.id || data.juegoId !== this.juego.id) {
+            return;
+          }
+          const fila = this.datosTabla.find((item) => item.id === data.evaluadoId);
+          if (this.juego.Modo === 'Individual') {
+            const username = this.alumnos.find((item) => item.id === data.alumnoId).Username;
+            if (this.juego.rubricaId > 0) {
+              fila[username] = this.CalcularNota(data.respuesta);
+            } else {
+              fila[username] = -1;
+            }
+            const alumnoEvaluado = this.alumnosRelacion.find((item) => item.alumnoId === data.evaluadoId);
+            if (alumnoEvaluado.respuestas === null) {
+              alumnoEvaluado.respuestas = [];
+            }
+            alumnoEvaluado.respuestas.push({alumnoId: data.alumnoId, respuesta: data.respuesta});
+            console.log('alumnoEvaluado', alumnoEvaluado);
+          } else if (this.juego.Modo === 'Equipos') {
+            if (this.equiposRelacion[0].alumnosEvaluadoresIds !== null) {
+              const username = this.alumnos.find((item) => item.id === data.alumnoId).Username;
+              fila[username] = this.CalcularNota(data.respuesta);
+            } else {
+              const equipo = this.alumnosDeEquipo.find((item) => {
+                return item.alumnos.map(alumno => alumno.id).includes(data.alumnoId);
+              });
+              const nombre = this.equipos.find((item) => item.id === equipo.equipoId).Nombre;
+              if (this.juego.rubricaId > 0) {
+                fila[nombre] = this.CalcularNota(data.respuesta);
+              } else {
+                fila[nombre] = -1;
+              }
+            }
+            const equipoEvaluado = this.equiposRelacion.find((item) => item.equipoId === data.evaluadoId);
+            if (equipoEvaluado.respuestas === null) {
+              equipoEvaluado.respuestas = [];
+            }
+            equipoEvaluado.respuestas.push({alumnoId: data.alumnoId, respuesta: data.respuesta});
+          }
+          if (this.juego.rubricaId > 0) {
+            this.rubrica.Criterios.forEach((criterio, index) => {
+              fila['criterio_' + index] = this.CalcularNotaCriterio(data.evaluadoId, index);
+            });
+            fila['Nota Media'] = this.CalcularNotaMedia(fila);
+          } else {
+            fila['Resumen'] = -1;
+          }
+        });
     this.juego = this.sesion.DameJuego() as unknown as JuegoDeEvaluacion;
     console.log(this.juego);
     if (this.juego.rubricaId > 0) {
@@ -165,7 +214,7 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     console.log('calcular media', row);
     if (this.juego.notaProfesorNormal) {
       for (const nombre in row) {
-        if (typeof row[nombre] === 'number' && nombre !== 'id' && !nombre.startsWith('criterio_')) {
+        if (typeof row[nombre] === 'number' && nombre !== 'id' && !nombre.startsWith('criterio_') && nombre !== 'Nota Media') {
           console.log('media, p, nombre', media, p, nombre, row[nombre]);
           media += row[nombre];
           p++;
@@ -173,7 +222,8 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       }
     } else {
       for (const nombre in row) {
-        if (typeof row[nombre] === 'number' && nombre !== 'id' && nombre !== 'Profesor' && !nombre.startsWith('criterio_')) {
+        // tslint:disable-next-line:max-line-length
+        if (typeof row[nombre] === 'number' && nombre !== 'id' && nombre !== 'Profesor' && !nombre.startsWith('criterio_') && nombre !== 'Nota Media') {
           console.log('D/media, p, nombre', media, p, nombre, row[nombre]);
           media += row[nombre];
           p++;
@@ -352,7 +402,6 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     this.dataSource.sort = this.sort;
     console.log ('listo');
   }
-
 
   ConstruirTablaEquipos() {
     if (!this.equipos || !this.equiposRelacion) {
