@@ -261,6 +261,9 @@ import { VotacionescuentoComponent } from './paginas/juego-seleccionado-activo/j
 import { ListadoCuentosComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
 import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
 import { JuegoDeEvaluacionSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-evaluacion-seleccionado-inactivo/juego-de-evaluacion-seleccionado-inactivo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-control-de-trabajo-en-equipo-seleccionado-activo/juego-de-control-de-trabajo-en-equipo-seleccionado-activo.component';
+import { JuegoDeControlDeTrabajoEnEquipoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-control-de-trabajo-en-equipo-seleccionado-inactivo/juego-de-control-de-trabajo-en-equipo-seleccionado-inactivo.component';
 
 
 
@@ -419,7 +422,9 @@ import { JuegoDeEvaluacionSeleccionadoInactivoComponent } from './paginas/juego-
     EvaluacionDialogoComponent,
     EvaluacionBorrarDialogoComponent,
     MostrarCuestionarioComponent,
-    JuegoDeEvaluacionSeleccionadoInactivoComponent
+    JuegoDeEvaluacionSeleccionadoInactivoComponent,
+    JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent,
+    JuegoDeControlDeTrabajoEnEquipoSeleccionadoInactivoComponent
 
   ],
   imports: [

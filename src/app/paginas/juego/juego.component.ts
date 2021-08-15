@@ -22,7 +22,8 @@ import {
   EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable, concursoLibro, ImagenToBackend, RecursoLibroJuego, RecursoLibro,
   JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
   JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, CuestionarioSatisfaccion,
-  JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion, Rubrica
+  JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion, Rubrica,
+  JuegoDeControlDeTrabajoEnEquipo, AlumnoJuegoDeControlDeTrabajoEnEquipo
 } from '../../clases/index';
 
 
@@ -129,6 +130,7 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Puntos', color: 'primary'},
     {nombre: 'Juego De Colección', color: 'accent'},
     {nombre: 'Juego De Evaluación', color: 'accent'},
+    {nombre: 'Control de trabajo en equipo', color: 'primary'},
   ];
   seleccionModoJuego: ChipColor[] = [
     { nombre: 'Individual', color: 'primary' },
@@ -339,9 +341,11 @@ export class JuegoComponent implements OnInit {
   opcionSeleccionada: string = 'todosLosJuegos';
 
 
-  // criterioComplemento1: string;
-
-  //////////////////////////////////// PARÁMETROS PARA PÁGINA DE CREAR JUEGO //////////////////////////////////////
+  // Controles de trabajo en equipo
+  numeroDeControles: number;
+  tengoNumeroDeControles = false;
+  verRespuestasControl = false;
+  tengoModoRespuestas = false;
 
 
 
@@ -463,7 +467,8 @@ export class JuegoComponent implements OnInit {
       NombreDelConcepto: ['', Validators.required],
       PesoDelConcepto: ['', Validators.required],
       TiempoLimite: ['', Validators.required],
-      PreguntaAbierta:  ['', Validators.required]
+      PreguntaAbierta:  ['', Validators.required],
+      NumeroDeControles: ['', Validators.required],
     });
 
 
@@ -492,7 +497,7 @@ export class JuegoComponent implements OnInit {
           console.log('No hay inactivos');
     } else {
           this.juegosActivos = listas.activos;
-          console.log('hay activos');
+          console.log('hay activos', this.juegosActivos);
     }
     if (listas.inactivos[0] === undefined) {
           this.juegosInactivos = undefined;
@@ -558,12 +563,16 @@ export class JuegoComponent implements OnInit {
 
 
   TipoDeJuegoSeleccionado(tipo: ChipColor) {
-    this.tipoDeJuegoSeleccionado = tipo.nombre;
-    console.log(' tengo tipo ' + this.tipoDeJuegoSeleccionado);
-    this.tengoTipo = true;
-    // if (this.tipoDeJuegoSeleccionado === 'Juego De Competición') {
-    //     this.NumeroDeVueltas();
-    // }
+    if ((tipo.nombre === 'Control de trabajo en equipo') && (!this.equiposGrupo)) {
+      Swal.fire('Alerta', 'No ha equipos en este grupo', 'warning');
+    } else {
+      this.tipoDeJuegoSeleccionado = tipo.nombre;
+      console.log(' tengo tipo ' + this.tipoDeJuegoSeleccionado);
+      this.tengoTipo = true;
+      // if (this.tipoDeJuegoSeleccionado === 'Juego De Competición') {
+      //     this.NumeroDeVueltas();
+      // }
+    }
   }
 
 
@@ -2228,6 +2237,60 @@ export class JuegoComponent implements OnInit {
     this.listaConceptos = [];
     this.totalPesos = 0;
     this.tengoModoReparto = true;
+
+  }
+
+  /// Para los controles de trabajo en equipo
+  GuardarNumeroDeControles() {
+    this.numeroDeControles = this.myForm.value.NumeroDeControles;
+    if (this.numeroDeControles === undefined || isNaN(this.numeroDeControles)) {
+      this.tengoNumeroDeControles = false;
+      Swal.fire('Introduzca un número de controles válido', 'Le recordamos que debe ser un número', 'error');
+    } else {
+      this.tengoNumeroDeControles = true;
+    }
+  }
+  CrearJuegoDeControlDeTrabajoEnEquipo() {
+    const juegoDeControlDeTrabajoEnEquipo = new JuegoDeControlDeTrabajoEnEquipo(
+      this.nombreDelJuego,
+      this.tipoDeJuegoSeleccionado,
+      this.numeroDeControles,
+      this.verRespuestasControl,
+      true,
+      false,
+      this.grupo.id,
+      this.profesorId
+    );
+    this.peticionesAPI.CreaJuegoDeControlDeTrabajoEnEquipo(juegoDeControlDeTrabajoEnEquipo, this.grupo.id)
+    .subscribe((juegoCreado) => {
+      this.juego = juegoCreado;
+      this.sesion.TomaJuego(this.juego);
+      this.juegoCreado = true;
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.alumnosGrupo.length; i++) {
+            // tslint:disable-next-line:max-line-length
+            this.peticionesAPI.InscribeAlumnoJuegoDeControlDeTrabajoEnEquipo(
+              // tslint:disable-next-line:indent
+                new AlumnoJuegoDeControlDeTrabajoEnEquipo(this.alumnosGrupo[i].id, this.juego.id))
+            .subscribe();
+      }
+
+      Swal.fire('Juego de control de trabajo en equipo creado correctamente', ' ', 'success');
+
+      // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+      if (this.juegosActivos === undefined) {
+        // Si la lista aun no se ha creado no podre hacer el push
+        this.juegosActivos = [];
+      }
+      this.juegosActivos.push(this.juego);
+      // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
+      this.Limpiar();
+      // Regresamos a la lista de equipos (mat-tab con índice 0)
+      this.tabGroup.selectedIndex = 0;
+
+    });
+
 
   }
 }

@@ -1227,6 +1227,25 @@ export class CalculosService {
         juegosInactivos.push(juegos[i]);
       }
     }
+    console.log ('asi esta la lista de juegos activos ', juegosActivos);
+
+    console.log ('Vamos a por los juegos de control de trabajo en equipo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegosDeControlDeTrabajoEnEquipo(grupoID).toPromise();
+    console.log('He recibido los juegos de control de trabajo en equipo');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      console.log ('entro ', juegos[i]);
+      if (juegos[i].JuegoActivo === true) {
+        console.log ('es activo');
+        juegosActivos.push(juegos[i]);
+      } else {
+        console.log ('es inactivo');
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+    console.log ('asi esta la lista de juegos activos ', juegosActivos);
+
 
     const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
     return (resultado);

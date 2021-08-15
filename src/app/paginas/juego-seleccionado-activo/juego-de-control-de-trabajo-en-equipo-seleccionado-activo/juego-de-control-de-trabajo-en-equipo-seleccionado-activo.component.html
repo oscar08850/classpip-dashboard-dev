@@ -1,0 +1,86 @@
+<div class="contenedor">
+
+  <div class="enColumna" style="width: 100%">
+    <button type="button" class="btn Eliminar" (click) = "DesactivarJuego()"> Desactivar<i class="material-icons">history</i></button>
+ </div>
+
+ <br>
+   
+  <div *ngIf = "tablaPreparada" style="width: 100%">
+    <i class="material-icons" style = "color:green"> done</i>  indica que todos los miembros del equipo han completado el control <br>
+    <i class="material-icons" style = "color:red"> done</i>  indica que todos han completado el control y alguno ha recibido una calificación especialmente baja (menos de la mitad de lo correspondiente a un reparto equipobrado) <br>
+    <i class="material-icons" style = "color: black"> hourglass_bottom</i>  indica que solo algunos miembros del equipo han completado el control <br>
+    <br>
+    <h3 style= "text-align: center" >Haz click sobre el control que quieres examinar</h3>
+        <table mat-table [dataSource]="dataSource"  style = "width: 100%" >
+  
+                <ng-container matColumnDef="equipo">
+                  <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef> Equipo </th>
+                  <td mat-cell style= "text-align: left" *matCellDef="let element"> {{element.equipo.Nombre}} </td>
+                </ng-container>
+        
+                <ng-container [matColumnDef]="control" *ngFor="let control of controles; let i = index">
+                  <th mat-header-cell  class= "tituloColumnaTabla"  *matHeaderCellDef> Control {{i+1}} </th>
+                  <td mat-cell style= "text-align: left" *matCellDef="let element; let j = index" > 
+                    <i *ngIf = "controlTerminado[j][i] === 1" (click)="MouseOver(i, element)" class="material-icons" style = "color:green"> done</i> 
+                    <i *ngIf = "controlTerminado[j][i] === 2" (click)="MouseOver(i, element)" class="material-icons" style = "color:red"> done</i> 
+                    <i *ngIf = "controlTerminado[j][i] === 3" (click)="MouseOver(i, element)" class="material-icons" style = "color: black"> hourglass_bottom</i> 
+             
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        
+        </table>
+  </div>
+
+  <div *ngIf = "tablaControlPreparada" style="width: 100%">
+    <br>    
+    <br> 
+    <h2 align = "center">
+      Control <span style = "color: red;">{{numeroDeControl}}</span> del equipo <span style = "color: red;">{{nombreDelEquipo}}</span>
+    </h2>
+    <br>
+    <div class="enFila">
+          <table mat-table [dataSource]="dataSourceControl"  style = "width: 50%" >
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="alumno">
+                    <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef>  </th>
+                    <td mat-cell style= "text-align: left" *matCellDef="let alumno"> 
+                      {{alumno.Nombre}} {{alumno.PrimerApellido}}
+                      <i class="material-icons" style = "color:green">forward</i>      
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef style= "text-align: left; font-size:large; font-weight: bold ;"> Total </td>
+                  </ng-container>
+      
+                  <ng-container [matColumnDef]="nombre" *ngFor="let nombre of nombresMiembros; let i = index">
+                    <th mat-header-cell class= "tituloColumnaTabla" *matHeaderCellDef style= "text-align: center" > {{nombre}} </th>
+                    <td mat-cell style= "text-align: center" *matCellDef="let element; let j = index" > 
+                      <span *ngIf = "datosControl[j]"> {{datosControl[j].puntuaciones[i].puntos}}</span>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef style= "text-align: center; font-size:large; font-weight: bold ;">
+                      {{ Suma (i)}} 
+                    </td>
+                  </ng-container> 
+
+          <!-- Aquí indicamos de donde saca los identificadores de las columnas-->
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsControl"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsControl;"></tr>
+                  <tr mat-footer-row *matFooterRowDef="displayedColumnsControl"></tr>
+               
+          
+          </table>
+          <div style = "width: 50%; padding-left: 10%;">
+            <p align = "center" style= " font-size:x-large; font-weight: bold ;"> Comentarios </p>
+            <mat-list>
+              <mat-list-item *ngFor="let elemento of comentarios">
+                <p  matLine style = "font-size: small; color: green; font-weight: bold;"> {{elemento.nombre}} </p>
+                <p matLine > {{elemento.comentario}} </p>
+              </mat-list-item>
+            </mat-list>
+          </div>
+    </div>
+  </div>
+
+</div>

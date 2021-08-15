@@ -88,6 +88,8 @@ export * from './JuegoDeCuestionarioRapido';
 export * from './JuegoDeCogerTurnoRapido';
 export * from './JuegoDePuntos';
 export * from './JuegoDeKahootRapido';
+export * from './JuegoDeControlDeTrabajoEnEquipo';
+export * from './AlumnoJuegoDeControlDeTrabajoEnEquipo';
 
 
 

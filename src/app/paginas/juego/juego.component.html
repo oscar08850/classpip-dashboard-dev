@@ -145,36 +145,91 @@
               </mat-step>
 
               <!-- //////////////////////// SEGUNDO PASO: SELECCIÓN DEL MODO DE JUEGO ///////////////////////// -->
+              <!-- /// NO HAY QUE HACERLO EN CASO DE CONTROL DE TRABAJO EN EQUIPO ///////-->
+              <div *ngIf="tipoDeJuegoSeleccionado !== 'Control de trabajo en equipo'">
+                <mat-step>
+                  <ng-template matStepLabel>
+                    <div>Modo</div>
+                  </ng-template>
 
-              <mat-step>
-                <ng-template matStepLabel>
-                  <div>Modo</div>
-                </ng-template>
+                  <div class="colorsChips">
 
-                <div class="colorsChips">
+                    <label class="LabelStepper">Selecciona un modo de juego:</label>
+                    <mat-chip-list class="mat-chip-list-stacked">
+                      <mat-chip *ngFor="let tipo of seleccionModoJuego; let i = index" selected [color]="tipo.color"
+                        selected="{{seleccionModoJuego[i].selected}}"
+                        (click)="ModoDeJuegoSeleccionado(seleccionModoJuego[i])" [value]="tipo.nombre"
+                        [selectable]="true">
+                        {{tipo.nombre}}
+                      </mat-chip>
+                    </mat-chip-list>
+                    <span style="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ...
+                      {{modoDeJuegoSeleccionado}} </span>
 
-                  <label class="LabelStepper">Selecciona un modo de juego:</label>
-                  <mat-chip-list class="mat-chip-list-stacked">
-                    <mat-chip *ngFor="let tipo of seleccionModoJuego; let i = index" selected [color]="tipo.color"
-                      selected="{{seleccionModoJuego[i].selected}}"
-                      (click)="ModoDeJuegoSeleccionado(seleccionModoJuego[i])" [value]="tipo.nombre"
-                      [selectable]="true">
-                      {{tipo.nombre}}
-                    </mat-chip>
-                  </mat-chip-list>
-                  <span style="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ...
-                    {{modoDeJuegoSeleccionado}} </span>
-
-                </div>
+                  </div>
 
 
 
-                <div class="btnCambiarStep">
-                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button type="button" class="btn Next" [disabled]="!tengoModo" matStepperNext>Siguiente</button>
-                </div>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button type="button" class="btn Next" [disabled]="!tengoModo" matStepperNext>Siguiente</button>
+                  </div>
 
-              </mat-step>
+                </mat-step>
+              </div>
+
+              <div *ngIf="tipoDeJuegoSeleccionado === 'Control de trabajo en equipo'">
+                <!-- //// Número de controles /////-->
+                <mat-step>
+                  <ng-template matStepLabel>
+                    <div>Numero de controles</div>
+                  </ng-template>
+
+                  <!-- casilla para introducir número de controles -->
+                  <mat-form-field>
+                    <mat-label>Introduzca el número de controles</mat-label>
+                    <input matInput formControlName="NumeroDeControles" placeholder="Escriba el número de controles"
+                      requiered (keyup)="GuardarNumeroDeControles()">
+                  </mat-form-field>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button type="button" class="btn Next" [disabled]="!tengoNumeroDeControles"
+                      matStepperNext>Siguiente</button>
+                  </div>
+
+
+                </mat-step>
+                <!-- INFORMACIÓN QUE SE DARÁ AL ALUMNO-->
+               
+                <mat-step>
+                  <ng-template matStepLabel><div>Información al alumno</div></ng-template>
+                  <mat-radio-group  class="radBtnProf" aria-label="Select an option">
+                    <mat-radio-button value="'false'" [checked]="verRespuestasControl === 'false'" (change)="verRespuestasControl = 'false'; tengoModoRespuestas = 'true'"><b>Cada alumno verá solo los puntos que él ha asignado y sus comentarios</b></mat-radio-button>
+                    <mat-radio-button value="'true'" [checked]="verRespuestasControl === 'true'" (change)="verRespuestasControl = 'true'; tengoModoRespuestas = 'true'"><b>Los alumnos verán los puntos y comentarios de todos sus compañeros de equipo</b></mat-radio-button>
+                  </mat-radio-group>
+
+                 
+                 
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button [disabled]="!tengoModoRespuestas" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>  
+
+
+
+                <!-- ULTIMO PASO: CREACIÓN DEl JUEGO DE CONTROL DE TRABAJO EN EQUIPO-->
+                <mat-step>
+                  <ng-template matStepLabel>Fin</ng-template>
+                  <span style="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}} </span>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button style="width: 60%" type="button" class="btn Aceptar" (click)="CrearJuegoDeControlDeTrabajoEnEquipo();">Crear
+                      juego de control de trabajo en equipo</button>
+                  </div>
+                </mat-step>
+
+              </div>
 
               <!-- ////////////////////////////SI ESCOGEMOS EL JUEGO DE TIPO DE PUNTOS ////////////////////////////////-->
 
@@ -493,13 +548,6 @@
                   </div>
                 </mat-step>
               </div>
-
-
-
-
-
-
-
 
 
               <!--/////////////////////// SI ESCOGEMOS EL JUEGO DE TIPO CUESTIONARIO //////////////////////////////////-->

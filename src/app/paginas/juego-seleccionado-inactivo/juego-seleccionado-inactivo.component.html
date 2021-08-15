@@ -47,5 +47,10 @@
   <app-juego-de-evaluacion-seleccionado-inactivo></app-juego-de-evaluacion-seleccionado-inactivo>
 </div>
 
+
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Control de trabajo en equipo'">
+  <app-juego-de-control-de-trabajo-en-equipo-seleccionado-inactivo></app-juego-de-control-de-trabajo-en-equipo-seleccionado-inactivo>
+</div>
+
 <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
 </div>

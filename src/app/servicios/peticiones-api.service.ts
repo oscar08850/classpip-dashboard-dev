@@ -14,7 +14,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         RespuestaJuegoDeCuestionario, RecursoLibro,  JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos, Rubrica,
         JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, FamiliaDeImagenesDePerfil,
         CuestionarioSatisfaccion, JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion,
-        JuegoDeEncuestaRapida, JuegoDeVotacionRapida, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido, JuegoDePuntos} from '../clases/index';
+        JuegoDeEncuestaRapida, JuegoDeVotacionRapida, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido, JuegoDePuntos, JuegoDeControlDeTrabajoEnEquipo, AlumnoJuegoDeControlDeTrabajoEnEquipo} from '../clases/index';
 
 
 import { Escenario } from '../clases/Escenario';
@@ -135,6 +135,9 @@ export class PeticionesAPIService {
   private APIUrlJuegoDeVotacionRapida = this.host + ':3000/api/juegosDeVotacionRapida';
   private APIUrlJuegoDeCuestionarioRapido = this.host + ':3000/api/juegosDeCuestionarioRapido';
   private APIUrlJuegoDeCogerTurnoRapido = this.host + ':3000/api/juegosDeCogerTurnoRapido';
+
+  private APIUrlJuegoDeControlDeTrabajoEnEquipo = this.host + ':3000/api/juegosDeControlDeTrabajoEnEquipo';
+  private APIUrlAlumnoJuegoDeControlDeTrabajoEnEquipo = this.host + ':3000/api/alumnosJuegoDeControlDeTrabajoEnEquipo';
 
   constructor(
     private http: HttpClient,
@@ -1877,4 +1880,48 @@ public modificarConcurso(id, concurso): Observable<any> {
   public DameRubrica(rubricaId: number): Observable<Rubrica> {
     return this.http.get<Rubrica>(this.APIURLRubricas + '/' + rubricaId);
   }
+
+  // JUEGO DE CONTROL DE TRABAJO EN EQUIPO
+  // tslint:disable-next-line:max-line-length
+  public CreaJuegoDeControlDeTrabajoEnEquipo(juego: JuegoDeControlDeTrabajoEnEquipo, grupoId: number): Observable<JuegoDeControlDeTrabajoEnEquipo> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.post<JuegoDeControlDeTrabajoEnEquipo>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeControlDeTrabajoEnEquipo', juego);
+  }
+
+
+  
+  public InscribeAlumnoJuegoDeControlDeTrabajoEnEquipo(alumno: AlumnoJuegoDeControlDeTrabajoEnEquipo) {
+    return this.http.post<AlumnoJuegoDeControlDeTrabajoEnEquipo>(this.APIUrlAlumnoJuegoDeControlDeTrabajoEnEquipo, alumno);
+  }
+
+  public DameJuegosDeControlDeTrabajoEnEquipo(grupoId: number): Observable<JuegoDeControlDeTrabajoEnEquipo[]> {
+    return this.http.get<JuegoDeControlDeTrabajoEnEquipo[]>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeControlDeTrabajoEnEquipo');
+  }
+
+  
+  // tslint:disable-next-line:max-line-length
+  public DameInscripcionesAlumnosJuegoDeControlDeTrabajoEnEquipo(juegoId: number): Observable<AlumnoJuegoDeControlDeTrabajoEnEquipo[]> {
+    return this.http.get<AlumnoJuegoDeControlDeTrabajoEnEquipo[]>(this.APIUrlAlumnoJuegoDeControlDeTrabajoEnEquipo
+      + '?filter[where][juegoDeControlDeTrabajoEnEquipoId]=' + juegoId);
+  }
+
+  public BorrarInscripcionAlumnoJuegoDeControlDeTrabajoEnEquipo(inscripcionId: number): Observable<AlumnoJuegoDeControlDeTrabajoEnEquipo> {
+    return this.http.delete<AlumnoJuegoDeControlDeTrabajoEnEquipo>(this.APIUrlAlumnoJuegoDeControlDeTrabajoEnEquipo + '/' + inscripcionId);
+  }
+
+  public BorrarJuegoDeControlDeTrabajoEnEquipo(juegoId: number): Observable<JuegoDeControlDeTrabajoEnEquipo> {
+    return this.http.delete<JuegoDeControlDeTrabajoEnEquipo>(this.APIUrlJuegoDeControlDeTrabajoEnEquipo + '/' + juegoId);
+  }
+
+  public CambiaEstadoJuegoDeControlDeTrabajoEnEquipo(juego: JuegoDeControlDeTrabajoEnEquipo): Observable<JuegoDeControlDeTrabajoEnEquipo> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.put<JuegoDeControlDeTrabajoEnEquipo>(this.APIUrlJuegoDeControlDeTrabajoEnEquipo + '/' + juego.id , juego);
+  }
+
+   // tslint:disable-next-line:max-line-length
+   public DameInscripcionAlumnoJuegoDeControlDeTrabajoEnEquipo(juegoId: number, alumnoId: number): Observable<AlumnoJuegoDeControlDeTrabajoEnEquipo[]> {
+    return this.http.get<AlumnoJuegoDeControlDeTrabajoEnEquipo[]>(this.APIUrlAlumnoJuegoDeControlDeTrabajoEnEquipo
+        + '?filter[where][juegoDeControlDeTrabajoEnEquipoId]=' + juegoId +  '&filter[where][alumnoId]=' + alumnoId);
+  }
+
 }
