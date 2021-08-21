@@ -1,11 +1,21 @@
 <div class="contenedor">
+  <!-- Muestro primero los botones que toca, según esté el juego activo o inactivo -->
 
-  <div class="enColumna" style="width: 100%">
+  <div  *ngIf = "juegoSeleccionado.JuegoActivo" class="enColumna" style="width: 100%">
     <button type="button" class="btn Eliminar" (click) = "DesactivarJuego()"> Desactivar<i class="material-icons">history</i></button>
- </div>
+  </div>
+
+  <div *ngIf = "!juegoSeleccionado.JuegoActivo" class="enColumna">
+    <div class="enFila" style="width:40%">
+      <button type="button" class="btn Aceptar" (click) = "Reactivar()">Reactivar<i class="material-icons">check_circle_outline</i></button>
+      <button type="button" class="btn Eliminar" (click) = "Eliminar()"> Eliminar<i class="material-icons">delete</i></button>
+    </div>
+  </div>
 
  <br>
    
+ <!-- El resto del componente es igual tanto si está activo como si está inactivo. -->
+
   <div *ngIf = "tablaPreparada" style="width: 100%">
     <i class="material-icons" style = "color:green"> done</i>  indica que todos los miembros del equipo han completado el control <br>
     <i class="material-icons" style = "color:red"> done</i>  indica que todos han completado el control y alguno ha recibido una calificación especialmente baja (menos de la mitad de lo correspondiente a un reparto equipobrado) <br>

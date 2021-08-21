@@ -263,8 +263,6 @@ import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/
 import { JuegoDeEvaluacionSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-evaluacion-seleccionado-inactivo/juego-de-evaluacion-seleccionado-inactivo.component';
 // tslint:disable-next-line:max-line-length
 import { JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-control-de-trabajo-en-equipo-seleccionado-activo/juego-de-control-de-trabajo-en-equipo-seleccionado-activo.component';
-import { JuegoDeControlDeTrabajoEnEquipoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-control-de-trabajo-en-equipo-seleccionado-inactivo/juego-de-control-de-trabajo-en-equipo-seleccionado-inactivo.component';
-
 
 
 @NgModule({
@@ -423,8 +421,7 @@ import { JuegoDeControlDeTrabajoEnEquipoSeleccionadoInactivoComponent } from './
     EvaluacionBorrarDialogoComponent,
     MostrarCuestionarioComponent,
     JuegoDeEvaluacionSeleccionadoInactivoComponent,
-    JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent,
-    JuegoDeControlDeTrabajoEnEquipoSeleccionadoInactivoComponent
+    JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent
 
   ],
   imports: [

@@ -268,4 +268,61 @@ export class JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent implemen
     });
   }
 
+  // Funciones para cuando el juego no está activo
+  
+  Eliminar() {
+    Swal.fire({
+      title: '¿Seguro que quieres eliminar el juego?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then((result) => {
+      if (result.value) {
+        // Primero elimino las inscripciones
+        let cont = 0;
+        this.inscripciones.forEach (inscripcion => {
+          this.peticionesAPI.BorrarInscripcionAlumnoJuegoDeControlDeTrabajoEnEquipo(inscripcion.id)
+          .subscribe(() => {
+            cont++;
+            if (cont === this.inscripciones.length) {
+              // Ya están todas las inscripciones eliminadas
+              // ahora elimino el juego
+              this.peticionesAPI.BorrarJuegoDeControlDeTrabajoEnEquipo (this.juegoSeleccionado.id)
+              .subscribe(() => {
+                Swal.fire('El juego se ha eliminado correctamente');
+                this.location.back();
+              });
+            }
+          });
+        });
+      }
+    });
+  }
+
+  Reactivar() {
+    Swal.fire({
+      title: '¿Seguro que quieres activar el juego?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then((result) => {
+      if (result.value) {
+
+        this.juegoSeleccionado.JuegoActivo = true;
+        this.peticionesAPI.CambiaEstadoJuegoDeControlDeTrabajoEnEquipo (this.juegoSeleccionado)
+        .subscribe(res => {
+            if (res !== undefined) {
+              Swal.fire('El juego se ha activado correctamente');
+              this.location.back();
+            }
+        });
+      }
+    });
+  }
+
+
 }
