@@ -562,12 +562,26 @@ export class JuegoComponent implements OnInit {
   }
 
 
-  TipoDeJuegoSeleccionado(tipo: ChipColor) {
-    if ((tipo.nombre === 'Control de trabajo en equipo') && (!this.equiposGrupo)) {
+  // TipoDeJuegoSeleccionado(tipo: ChipColor) {
+  //   if ((tipo.nombre === 'Control de trabajo en equipo') && (!this.equiposGrupo)) {
+  //     Swal.fire('Alerta', 'No ha equipos en este grupo', 'warning');
+  //   } else {
+  //     this.tipoDeJuegoSeleccionado = tipo.nombre;
+  //     console.log(' tengo tipo ' + this.tipoDeJuegoSeleccionado);
+  //     this.tengoTipo = true;
+  //     // if (this.tipoDeJuegoSeleccionado === 'Juego De Competición') {
+  //     //     this.NumeroDeVueltas();
+  //     // }
+  //   }
+  // }
+  
+
+  TipoDeJuegoSeleccionado(tipo: string) {
+    if ((tipo === 'Control de trabajo en equipo') && (!this.equiposGrupo)) {
       Swal.fire('Alerta', 'No ha equipos en este grupo', 'warning');
     } else {
-      this.tipoDeJuegoSeleccionado = tipo.nombre;
-      console.log(' tengo tipo ' + this.tipoDeJuegoSeleccionado);
+      this.tipoDeJuegoSeleccionado = tipo;
+      console.log(' tengo tipo ' + tipo);
       this.tengoTipo = true;
       // if (this.tipoDeJuegoSeleccionado === 'Juego De Competición') {
       //     this.NumeroDeVueltas();

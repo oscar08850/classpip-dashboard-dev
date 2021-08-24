@@ -119,7 +119,7 @@
               <mat-step>
                 <ng-template matStepLabel>Tipo</ng-template>
 
-
+<!-- 
                 <div class="colorsChips">
 
                   <label class="LabelStepper">Selecciona un tipo de juego:</label>
@@ -133,7 +133,114 @@
                   </mat-chip-list>
                   <span style="font-weight: bold;color:green;" color="secundary">Has elegido ...
                     {{tipoDeJuegoSeleccionado}} </span>
+                </div> -->
+
+                              
+                <div class = "enColumna">
+                  <span style="font-weight: bold;color:green;" color="secundary">Has elegido ...
+                    {{tipoDeJuegoSeleccionado}} </span>
+                    <br>
+                  <div class = "enFila" style = "height: 20%">
+
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Puntos')" style = "background: rgb(242, 215, 213); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Puntos</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/puntosicon.svg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Colección')" style = "background: rgb(50, 155, 94); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Colección</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/collectionicon.svg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Competición')" style = "background: rgb(168, 119, 85); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Competición</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/f1icon.svg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Cuestionario')" style = "background: rgb(111, 147, 177); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Cuestionario</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/cuestionariosicon.svg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class = "enFila" style = "height: 20%">
+
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Avatar')" style = "background: rgb(199, 107, 184); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Avatar</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/avataricon.svg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Geocaching')" style = "background: rgb(224, 180, 84); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Geocaching</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/location_icon.svg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Votación')" style = "background: rgb(82, 172, 179); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Votación</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/votaciones.jpg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Cuestionario de Satisfacción')" style = "background: rgb(194, 188, 176); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Cuestionario de Satisfacción</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/satisfaccion.png" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+
+                  </div>
+                  
+                  <div class = "enFila" style = "height: 20%">
+
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Evaluación')" style = "background: rgb(93, 199, 181); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Evaluación</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/evaluacion.png" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Control de trabajo en equipo')" style = "background: rgb(185, 93, 128); width:22%">
+                      <div style = "height: 10%"><strong>Control de trabajo en equipo</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/TrabajoEnEquipo.png" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna"  style = " width:22%">
+                      <div style = "height: 10%"><strong></strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                      </div>
+                    </div>
+                    <div class = "enColumna"  style = " width:22%">
+                      <div style = "height: 10%"><strong></strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                      </div>
+                    </div>
+               
+
+                  </div>
+            
+                  
                 </div>
+
 
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
