@@ -84,23 +84,17 @@ export class JuegoDeCuestionarioSeleccionadoInactivoComponent implements OnInit 
   }
 
 
-  EliminarJuego() {
-    this.calculos.EliminarJuegoDeCuestionario()
-      .subscribe(() => {
-        this.location.back();
-      });
-  }
-
   AbrirDialogoConfirmacionEliminar(): void {
 
     Swal.fire({
       title: 'Confirma que quieres eliminar el juego <b>' + this.juegoSeleccionado.NombreJuego + '</b>',
       showCancelButton: true,
       confirmButtonText: 'Confirmar',
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.value) {
-        this.EliminarJuego();
+        await this.calculos.EliminarJuegoDeCuestionario(this.juegoSeleccionado);
         Swal.fire('Juego eliminado correctamente', ' ', 'success');
+        this.location.back();
       }
     });
   }

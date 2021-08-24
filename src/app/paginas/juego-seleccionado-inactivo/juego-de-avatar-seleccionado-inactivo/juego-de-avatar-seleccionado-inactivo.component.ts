@@ -56,40 +56,21 @@ RecuperarInscripcionesAlumnoJuego() {
 }
 
 
-  Eliminar() {
-    Swal.fire({
-      title: '¿Seguro que quieres eliminar el juego de avatar?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, estoy seguro'
-    }).then((result) => {
-      if (result.value) {
-        // Primero elimino las inscripciones
-        let cont = 0;
-        this.inscripcionesAlumnosJuegodeAvatar.forEach (inscripcion => {
-          // Si hay un fichero de voz lo borro
-          if (inscripcion.Voz) {
-            this.peticionesAPI.BorraAudioAvatar (inscripcion.Voz).subscribe();
-          }
-          this.peticionesAPI.BorraInscripcionAlumnoJuegoDeAvatar (inscripcion.id)
-          .subscribe(() => {
-            cont++;
-            if (cont === this.inscripcionesAlumnosJuegodeAvatar.length) {
-              // Ya están todas las inscripciones eliminadas
-              // ahora elimino el juego
-              this.peticionesAPI.BorraJuegoDeAvatar (this.juegoSeleccionado.id)
-              .subscribe(() => {
-                Swal.fire('El juego se ha eliminado correctamente');
-                this.location.back();
-              });
-            }
-          });
-        });
-      }
-    });
-  }
+Eliminar(): void {
+
+  Swal.fire({
+    title: 'Confirma que quieres eliminar el juego <b>' + this.juegoSeleccionado.NombreJuego + '</b>',
+    showCancelButton: true,
+    confirmButtonText: 'Confirmar',
+  }).then(async (result) => {
+    if (result.value) {
+      await this.calculos.EliminarJuegoDeAvatar(this.juegoSeleccionado);
+      Swal.fire('El juego ha sido eliminado correctamente', ' ', 'success');
+      this.location.back();
+    }
+  });
+}
+
 
   Reactivar() {
     Swal.fire({

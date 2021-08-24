@@ -81,14 +81,12 @@ export class GrupoComponent implements OnInit {
       }
     });
   }
-  EliminarGrupo() {
+  async EliminarGrupo() {
     // Para eliminar grupo hay muchas cosas que hacer. Estar en el servicio de calculos
-    this.calculos.EliminarGrupo ().subscribe (() => {
-      Swal.fire('Grupo borrado', 'success');
-      this.goBack();
-    }
-    );
-   // this.goBack();
+    await this.calculos.EliminarGrupo ();
+    Swal.fire('Grupo borrado', 'success');
+    this.goBack();
+
   }
 
   // SI QUEREMOS BORRA UN GRUPO, ANTES NOS SALDRÁ UN AVISO PARA CONFIRMAR LA ACCIÓN COMO MEDIDA DE SEGURIDAD. ESTO SE HARÁ

@@ -19,7 +19,7 @@ import { InformacionJuegoDeCuestionarioDialogComponent } from '../../juego-selec
 export class JuegoDeCuestionarioSeleccionadoPreparadoComponent implements OnInit {
 
   // Juego de Cuestionario saleccionado
-  juegoSeleccionado: Juego;
+  juegoSeleccionado: any;
 
   // Recuperamos la informacion del juego
   alumnosDelJuego: Alumno[];
@@ -82,54 +82,55 @@ export class JuegoDeCuestionarioSeleccionadoPreparadoComponent implements OnInit
     this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modalidad, this.juegoSeleccionado.PuntuacionCorrecta,
       this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, true, this.juegoSeleccionado.JuegoTerminado,
       // tslint:disable-next-line:max-line-length
-      this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
+      this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id)
       .subscribe(res => {
         this.location.back();
       });
   }
 
-  AbrirDialogoConfirmacionActivar(): void {
+ 
+  
+  Activar() {
+    Swal.fire({
+      title: '¿Seguro que quieres activar el juego?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then((result) => {
+      if (result.value) {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        nombre: this.juegoSeleccionado.Tipo,
-      }
-    });
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.ActivarJuego();
-        Swal.fire('Activado', this.juegoSeleccionado.Tipo + ' activado correctamente', 'success');
+        this.juegoSeleccionado.JuegoActivo = true;
+        this.peticionesAPI.ModificaJuegoDeCuestionario (this.juegoSeleccionado, this.juegoSeleccionado.id)
+        .subscribe(res => {
+            if (res !== undefined) {
+              Swal.fire('El juego se ha activado correctamente');
+              this.location.back();
+            }
+        });
       }
     });
   }
 
-  EliminarJuego() {
-    this.calculos.EliminarJuegoDeCuestionario()
-      .subscribe(() => {
-        this.location.back();
-      });
-  }
 
+
+  
   AbrirDialogoConfirmacionEliminar(): void {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensajeEliminar,
-        nombre: this.juegoSeleccionado.Tipo,
-      }
-    });
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.EliminarJuego();
-        Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
+    Swal.fire({
+      title: 'Confirma que quieres eliminar el juego <b>' + this.juegoSeleccionado.NombreJuego + '</b>',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+    }).then(async (result) => {
+      if (result.value) {
+        await this.calculos.EliminarJuegoDeCuestionario(this.juegoSeleccionado);
+        Swal.fire('Juego eliminado correctamente', ' ', 'success');
+        this.location.back();
       }
     });
   }
+
 
   AbrirDialogoInformacionJuego(): void {
     const dialogRef = this.dialog.open(InformacionJuegoDeCuestionarioDialogComponent, {

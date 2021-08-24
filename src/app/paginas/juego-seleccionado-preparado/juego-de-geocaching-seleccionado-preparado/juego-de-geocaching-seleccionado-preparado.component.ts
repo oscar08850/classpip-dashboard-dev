@@ -115,30 +115,42 @@ export class JuegoDeGeocachingSeleccionadoPreparadoComponent implements OnInit {
     });
   }
 
-  EliminarJuego() {
-    this.calculos.EliminarJuegoDeGeocaching()
-      .subscribe(() => {
-        this.location.back();
-      });
-  }
-
   AbrirDialogoConfirmacionEliminar(): void {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensajeEliminar,
-        nombre: this.juegoSeleccionado.Tipo,
-      }
-    });
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.EliminarJuego();
-        Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
+    Swal.fire({
+      title: 'Confirma que quieres eliminar el juego <b>' + this.juegoSeleccionado.NombreJuego + '</b>',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+    }).then(async (result) => {
+      if (result.value) {
+        console.log ('Vamos a eliminar');
+        await this.calculos.EliminarJuegoDeGeocaching(this.juegoSeleccionado);
+        Swal.fire('Juego eliminado correctamente', ' ', 'success');
+        this.location.back();
       }
     });
   }
+
+
+
+
+    // const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+    //   height: '150px',
+    //   data: {
+    //     mensaje: this.mensajeEliminar,
+    //     nombre: this.juegoSeleccionado.Tipo,
+    //   }
+    // });
+
+    // dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    //   if (confirmed) {
+    //     this.EliminarJuego();
+    //     Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
+    //   }
+    // });
+  
+
+
 
   AbrirDialogoInformacionJuego(): void {
     const dialogRef = this.dialog.open(InformacionJuegoDeGeocachingDialogComponent, {
@@ -148,7 +160,7 @@ export class JuegoDeGeocachingSeleccionadoPreparadoComponent implements OnInit {
         top: '0%'
       }
     });
-  }
+  };
 
   applyFilter(filterValue: string) {
     this.dataSourceAlumno.filter = filterValue.trim().toLowerCase();

@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 
 import {MatTableDataSource} from '@angular/material/table';
 import { MisPuntosComponent } from '../../mis-puntos/mis-puntos.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-juego-de-control-de-trabajo-en-equipo-seleccionado-activo',
@@ -270,36 +271,39 @@ export class JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent implemen
 
   // Funciones para cuando el juego no está activo
   
-  Eliminar() {
+  // Eliminar() {
+  //   Swal.fire({
+  //     title: '¿Seguro que quieres eliminar el juego?',
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Si, estoy seguro'
+  //   }).then(  (result) => {
+  //     if (result.value) {
+  //       this.calculos.EliminarJuegoControlDeTrabajoEnEquipo(this.juegoSeleccionado);
+  //       Swal.fire('El juego se ha eliminado correctamente');
+  //       this.location.back();
+  //     }
+  //   });
+  // }
+
+  
+  Eliminar(): void {
+
     Swal.fire({
-      title: '¿Seguro que quieres eliminar el juego?',
-      icon: 'warning',
+      title: 'Confirma que quieres eliminar el juego <b>' + this.juegoSeleccionado.NombreJuego + '</b>',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, estoy seguro'
+      confirmButtonText: 'Confirmar',
     }).then((result) => {
       if (result.value) {
-        // Primero elimino las inscripciones
-        let cont = 0;
-        this.inscripciones.forEach (inscripcion => {
-          this.peticionesAPI.BorrarInscripcionAlumnoJuegoDeControlDeTrabajoEnEquipo(inscripcion.id)
-          .subscribe(() => {
-            cont++;
-            if (cont === this.inscripciones.length) {
-              // Ya están todas las inscripciones eliminadas
-              // ahora elimino el juego
-              this.peticionesAPI.BorrarJuegoDeControlDeTrabajoEnEquipo (this.juegoSeleccionado.id)
-              .subscribe(() => {
-                Swal.fire('El juego se ha eliminado correctamente');
-                this.location.back();
-              });
-            }
-          });
-        });
+        this.calculos.EliminarJuegoControlDeTrabajoEnEquipo(this.juegoSeleccionado);
+        Swal.fire('El juego ha sido eliminado correctamente', ' ', 'success');
+        this.location.back();
       }
     });
   }
+
 
   Reactivar() {
     Swal.fire({
