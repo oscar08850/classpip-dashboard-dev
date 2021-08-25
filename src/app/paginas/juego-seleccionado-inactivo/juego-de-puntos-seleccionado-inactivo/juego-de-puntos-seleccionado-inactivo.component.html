@@ -14,8 +14,8 @@
 
     <div class="enFila" style="width:40%">
           <button type="button" class="btn Info" (click) = Informacion(); routerLink = "informacionJuego">Información<i class="material-icons">info</i></button>
-          <button type="button" class="btn Aceptar" (click) = "AbrirDialogoConfirmacionReactivar()">Reactivar<i class="material-icons">check_circle_outline</i></button>
-          <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionEliminar()"> Eliminar<i class="material-icons">delete</i></button>
+          <button type="button" class="btn Aceptar" (click) = "Reactivar()">Reactivar<i class="material-icons">check_circle_outline</i></button>
+          <button type="button" class="btn Eliminar" (click) = "Eliminar()"> Eliminar<i class="material-icons">delete</i></button>
       </div>
 
   <form style="width: 70%" *ngIf="juegoSeleccionado.Modo === 'Individual'">

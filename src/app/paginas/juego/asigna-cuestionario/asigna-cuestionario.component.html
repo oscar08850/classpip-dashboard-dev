@@ -1,55 +1,49 @@
-<div class="subtitulo" align="center">Cuestionarios</div>
-<mat-divider class="lineaDivisoria"></mat-divider>
-<br>
+
+<form>
+
+  <table align="center" mat-table [dataSource]="dataSourceMisCuestionarios" class="example-container mat-elevation-z8">
+
+   <!--    La primera columna será un checkbox -->
+   <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+    
+    </th>
+
+    <td mat-cell  style= "text-align: left" *matCellDef="let row">
+      <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="Marcar (row) "
+          [checked]="selection.isSelected(row)">
+      </mat-checkbox> 
+    </td>
+    </ng-container>
 
 
+    <ng-container matColumnDef="titulo">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="text-align: left !important;"> Titulo </th>
+      <td mat-cell *matCellDef="let cuestionario" > {{cuestionario.Titulo}} </td>
+    </ng-container>
+    <ng-container matColumnDef="descripcion">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="text-align: left !important;"> Descripción </th>
+      <td mat-cell *matCellDef="let cuestionario" > {{cuestionario.Descripcion}} </td>
+    </ng-container>
+
+   
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        (click)="selection.toggle(row)">
+    </tr>
+
+  </table>
+  <div class="enColumna">
+    <button style= "width: 50%" *ngIf ="!muestroPublicos" type="button" (click) = "MostrarPublicos()" class="btn Agregar">Mostrar también cuestionarios de satisfacción púlicos</button>
+    <button style= "width: 50%" *ngIf ="muestroPublicos" type="button" (click) = "QuitarPublicos()" class="btn Agregar">Quitar cuestionarios de satisfacción púlicos</button>
+  </div>
+
+</form>
 <div class="enColumna">
- <form style="width: 100%">
-    <div class = "filter">
-      <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar cuestionarios...">
-        <i class="material-icons" matSuffix>search</i>
-      </mat-form-field>
-    </div>
-
-    <table align="center"   mat-table [dataSource]="dataSourceMisCuestionarios" class="example-container mat-elevation-z8">
-
-      <!-- Titulo Cuestionario Column -->
-      <ng-container matColumnDef="titulo">
-        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Titulo </th>
-        <td mat-cell *matCellDef="let cuestionario"> {{cuestionario.Titulo}} </td>
-      </ng-container>
-
-      <!-- Descripcion Cuestionario Column -->
-      <ng-container matColumnDef="descripcion">
-        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" > Pregunta </th>
-        <td mat-cell *matCellDef="let cuestionario"> {{cuestionario.Descripcion}} </td>
-      </ng-container>
-
-
-
-      <!-- Add Column -->
-      <ng-container matColumnDef=" ">
-          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
-          <td mat-cell *matCellDef="let cuestionario">
-              <button (click) = "AbrirDialogoConfirmacionAsignarCuestionario(cuestionario)" mat-icon-button matTooltip = "Añadir a {{cuestionario.Titulo}} al juego">
-                  <i class="material-icons green md-36">add_circle_outline</i>
-              </button>
-          </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumnsMisCuestionarios;"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumnsMisCuestionarios;"></tr>
-
-    </table>
-    <div class="enColumna">
-      <button style= "width: 50%" *ngIf ="!muestroPublicos" type="button" (click) = "MostrarPublicos()" class="btn Agregar">Mostrar también cuestionarios púlicos</button>
-      <button style= "width: 50%" *ngIf ="muestroPublicos" type="button" (click) = "QuitarPublicos()" class="btn Agregar">Quitar cuestionarios púlicos</button>
-    </div>
-    <mat-divider class="lineaDivisoria"></mat-divider>
-    <br>
-    <mat-dialog-actions align= "center">
-      <button type="button" (click) = "goBack()" class="btn Back">Cerrar </button>
-    </mat-dialog-actions>
-  </form>
+  <button [disabled]="!HaSeleccionado()" type="button" (click) = "AcabarSeleccion()" class="btn Aceptar">Asignar cuestionario</button>
 </div>
+
+
+

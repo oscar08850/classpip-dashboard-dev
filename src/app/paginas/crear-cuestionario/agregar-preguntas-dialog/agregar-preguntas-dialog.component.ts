@@ -3,7 +3,6 @@ import { Pregunta, PreguntaDelCuestionario } from 'src/app/clases';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { PeticionesAPIService } from 'src/app/servicios';
 import Swal from 'sweetalert2';
-import { DialogMostrarCromosComponent } from '../../juego/asignacion-coleccion-juego/dialog-mostrar-cromos/dialog-mostrar-cromos.component';
 import { Location } from '@angular/common';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
 

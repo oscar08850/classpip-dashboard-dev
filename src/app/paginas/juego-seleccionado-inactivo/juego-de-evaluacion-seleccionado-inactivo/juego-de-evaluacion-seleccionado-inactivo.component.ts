@@ -851,13 +851,11 @@ export class JuegoDeEvaluacionSeleccionadoInactivoComponent implements OnInit {
       title: 'Confirma que quieres eliminar el juego <b>' + this.juego.NombreJuego + '</b>',
       showCancelButton: true,
       confirmButtonText: 'Confirmar',
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.value) {
-        this.calculos.EliminarJuegoDeEvaluacion(this.juego)
-        .subscribe(() => {
-          this.location.back();
-          Swal.fire('Juego eliminado correctamente', ' ', 'success');
-        });
+        await this.calculos.EliminarJuegoDeEvaluacion(this.juego);
+        Swal.fire('El juego ha sido eliminado correctamente', ' ', 'success');
+        this.location.back();
       }
     });
   }

@@ -24,7 +24,7 @@ import * as URL from '../../../URLs/urls';
 export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
   // Juego de Cuestionario saleccionado
-  juegoSeleccionado: Juego;
+  juegoSeleccionado: any;
 
   // Recuperamos la informacion del juego
   alumnosDelJuego: Alumno[];
@@ -317,16 +317,16 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
   
 
-  DesactivarJuego() {
-    // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modalidad, this.juegoSeleccionado.PuntuacionCorrecta,
-      this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, false, this.juegoSeleccionado.JuegoTerminado,
-      // tslint:disable-next-line:max-line-length
-      this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
-      .subscribe(res => {
-        this.location.back();
-      });
-  }
+  // DesactivarJuego() {
+  //   // tslint:disable-next-line:max-line-length
+  //   this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modalidad, this.juegoSeleccionado.PuntuacionCorrecta,
+  //     this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, false, this.juegoSeleccionado.JuegoTerminado,
+  //     // tslint:disable-next-line:max-line-length
+  //     this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
+  //     .subscribe(res => {
+  //       this.location.back();
+  //     });
+  // }
 
   AbrirDialogoConfirmacionDesactivar(): void {
 
@@ -342,24 +342,18 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
     }).then((result) => {
       if (result.value) {
-        this.DesactivarJuego();
-        Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' Desactivado correctamente', 'success'); 
+        this.juegoSeleccionado.JuegoActivo = false;
+        this.peticionesAPI.ModificaJuegoDeCuestionario (this.juegoSeleccionado, this.juegoSeleccionado.id)
+        .subscribe (() => {
+          Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' Desactivado correctamente', 'success');
+          this.location.back();
+        })
+
       }
-    })
-
+    });
   }
 
-  FinalizarJuego() {
-    // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modalidad, this.juegoSeleccionado.PuntuacionCorrecta,
-      this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, false, true,
-      // tslint:disable-next-line:max-line-length
-      this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
-      .subscribe(res => {
-        this.location.back();
-      });
-  }
-
+ 
   AbrirDialogoConfirmacionFinalizar(): void {
 
     Swal.fire({
@@ -374,10 +368,15 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
     }).then((result) => {
       if (result.value) {
-        this.FinalizarJuego();
-        Swal.fire('Finalizado', this.juegoSeleccionado.Tipo + ' Finalizado correctamente', 'success');
+        this.juegoSeleccionado.JuegoActivo = false;
+        this.juegoSeleccionado.JuegoTerminado = true;
+        this.peticionesAPI.ModificaJuegoDeCuestionario (this.juegoSeleccionado, this.juegoSeleccionado.id)
+        .subscribe (() => {
+          Swal.fire('Finalizado', this.juegoSeleccionado.Tipo + ' Finalizado correctamente', 'success');
+          this.location.back();
+        });
       }
-    })
+    });
   }
 
   AbrirDialogoInformacionJuego(): void {

@@ -84,9 +84,10 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
 
   // COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN EL JUEGO
   GuardarCambios() {
+    // tslint:disable-next-line:max-line-length
     this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.NombreJuego, this.Tipo, this.Modalidad, this.PuntuacionCorrecta,
       this.PuntuacionIncorrecta, this.Presentacion, this.JuegoActivo, this.JuegoTerminado,
-      this.profesorId, this.juegoSeleccionado.grupoId, this.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
+      this.profesorId, this.juegoSeleccionado.grupoId, this.cuestionarioId), this.juegoSeleccionado.id)
       .subscribe(res => {
         this.juegoSeleccionado.NombreJuego = res.NombreJuego;
         this.juegoSeleccionado.PuntuacionCorrecta = res.PuntuacionCorrecta;

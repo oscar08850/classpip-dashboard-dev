@@ -189,8 +189,8 @@ export class CrearGrupoComponent implements OnInit {
       }).then((result) => {
         if (result.value) {
           this.sesion.TomaGrupo (this.grupo);
-         this.calculos.EliminarGrupo().subscribe ( () => obs.next(result.value));
-        }else{obs.next(result.value);}
+          this.calculos.EliminarGrupo().then ( () => obs.next(result.value));
+        } else {obs.next(result.value);}
       })
     });
       return confirmacionObservable;

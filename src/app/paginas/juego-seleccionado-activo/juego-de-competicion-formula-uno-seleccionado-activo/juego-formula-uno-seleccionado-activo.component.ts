@@ -278,39 +278,65 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   }
 
 
-  DesactivarJuego() {
-    console.log(this.juegoSeleccionado);
-    this.peticionesAPI.CambiaEstadoJuegoDeCompeticionFormulaUno(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
-      this.juegoSeleccionado.Asignacion,
-      undefined, false), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
-        if (res !== undefined) {
-          console.log(res);
-          console.log('juego desactivado');
-          this.location.back();
-        }
-      });
-  }
+  // DesactivarJuego() {
+  //   console.log(this.juegoSeleccionado);
+  //   this.peticionesAPI.CambiaEstadoJuegoDeCompeticionFormulaUno(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
+  //     this.juegoSeleccionado.Asignacion,
+  //     undefined, false), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
+  //       if (res !== undefined) {
+  //         console.log(res);
+  //         console.log('juego desactivado');
+  //         this.location.back();
+  //       }
+  //     });
+  // }
 
-  AbrirDialogoConfirmacionDesactivar(): void {
+  // AbrirDialogoConfirmacionDesactivar(): void {
 
 
+  //   Swal.fire({
+  //     title: 'Desactivar',
+  //     text: "Estas segura/o de que quieres desactivar: " + this.juegoSeleccionado.Tipo,
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Aceptar',
+  //     cancelButtonText: 'Cancelar'
+
+  //   }).then((result) => {
+  //     if (result.value) {
+  //       this.DesactivarJuego();
+  //       Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' Desactivado correctamente', 'success');
+  //     }
+  //   })
+  // }
+
+    
+  Desactivar() {
     Swal.fire({
-      title: 'Desactivar',
-      text: "Estas segura/o de que quieres desactivar: " + this.juegoSeleccionado.Tipo,
+      title: '¿Seguro que quieres desactivar el juego?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Aceptar',
-      cancelButtonText: 'Cancelar'
-
+      confirmButtonText: 'Si, estoy seguro'
     }).then((result) => {
       if (result.value) {
-        this.DesactivarJuego();
-        Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' Desactivado correctamente', 'success');
+        this.juegoSeleccionado.JuegoActivo = false;
+        this.peticionesAPI.CambiaEstadoJuegoDeCompeticionFormulaUno (this.juegoSeleccionado)
+        .subscribe(res => {
+            if (res !== undefined) {
+              Swal.fire('El juego se ha desactivado correctamente');
+              this.location.back();
+            }
+        });
       }
-    })
+    });
   }
+
+
+
   applyFilter(filterValue: string) {
     this.datasourceAlumno.filter = filterValue.trim().toLowerCase();
   }

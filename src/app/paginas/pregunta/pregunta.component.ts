@@ -309,6 +309,7 @@ export class PreguntaComponent implements OnInit {
     let cont = 0;
 
     this.infoPreguntas.forEach (pregunta => {
+      console.log ('voy a poner pregunta ', pregunta);
       this.peticionesAPI.CreaPregunta(pregunta, this.profesorId)
       .subscribe((res) => {
         if (res != null) {

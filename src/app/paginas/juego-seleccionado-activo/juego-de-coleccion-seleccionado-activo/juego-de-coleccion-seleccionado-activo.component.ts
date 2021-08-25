@@ -218,15 +218,10 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
 
   DesactivarJuego() {
     console.log(this.juegoSeleccionado);
+    this.juegoSeleccionado.JuegoActivo = false;
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CambiaEstadoJuegoDeColeccion(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo, this.juegoSeleccionado.Asignacion,
-      undefined, false, this.juegoSeleccionado.NumeroTotalJornadas, this.juegoSeleccionado.TipoJuegoCompeticion,
-      this.juegoSeleccionado.NumeroParticipantesPuntuan, this.juegoSeleccionado.Puntos, this.juegoSeleccionado.NombreJuego),
-      this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
+    this.peticionesAPI.CambiaEstadoJuegoDeColeccion(this.juegoSeleccionado).subscribe(res => {
         if (res !== undefined) {
-          console.log('juego desactivado');
-          console.log(res);
-          console.log('juego desactivado');
           this.location.back();
         }
       });

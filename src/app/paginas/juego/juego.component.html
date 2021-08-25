@@ -119,7 +119,7 @@
               <mat-step>
                 <ng-template matStepLabel>Tipo</ng-template>
 
-
+<!-- 
                 <div class="colorsChips">
 
                   <label class="LabelStepper">Selecciona un tipo de juego:</label>
@@ -133,7 +133,114 @@
                   </mat-chip-list>
                   <span style="font-weight: bold;color:green;" color="secundary">Has elegido ...
                     {{tipoDeJuegoSeleccionado}} </span>
+                </div> -->
+
+                              
+                <div class = "enColumna">
+                  <span style="font-weight: bold;color:green;" color="secundary">Has elegido ...
+                    {{tipoDeJuegoSeleccionado}} </span>
+                    <br>
+                  <div class = "enFila" style = "height: 20%">
+
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Puntos')" style = "background: rgb(242, 215, 213); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Puntos</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/puntosicon.svg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Colección')" style = "background: rgb(50, 155, 94); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Colección</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/collectionicon.svg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Competición')" style = "background: rgb(168, 119, 85); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Competición</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/f1icon.svg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Cuestionario')" style = "background: rgb(111, 147, 177); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Cuestionario</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/cuestionariosicon.svg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class = "enFila" style = "height: 20%">
+
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Avatar')" style = "background: rgb(199, 107, 184); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Avatar</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/avataricon.svg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Geocaching')" style = "background: rgb(224, 180, 84); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Geocaching</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/location_icon.svg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Votación')" style = "background: rgb(82, 172, 179); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Votación</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/votaciones.jpg" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Cuestionario de Satisfacción')" style = "background: rgb(194, 188, 176); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Cuestionario de Satisfacción</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/satisfaccion.png" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+
+                  </div>
+                  
+                  <div class = "enFila" style = "height: 20%">
+
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Evaluación')" style = "background: rgb(93, 199, 181); width:22%">
+                      <div style = "height: 10%"><strong>Juego de Evaluación</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/evaluacion.png" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Control de trabajo en equipo')" style = "background: rgb(185, 93, 128); width:22%">
+                      <div style = "height: 10%"><strong>Control de trabajo en equipo</strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                        <img src="../assets/TrabajoEnEquipo.png" class = "imagenPanelJuegos" />
+                      </div>
+                    </div>
+                    <div class = "enColumna"  style = " width:22%">
+                      <div style = "height: 10%"><strong></strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                      </div>
+                    </div>
+                    <div class = "enColumna"  style = " width:22%">
+                      <div style = "height: 10%"><strong></strong></div>
+                      <br>
+                      <div style = "height: 40%" >
+                      </div>
+                    </div>
+               
+
+                  </div>
+            
+                  
                 </div>
+
 
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
@@ -145,36 +252,91 @@
               </mat-step>
 
               <!-- //////////////////////// SEGUNDO PASO: SELECCIÓN DEL MODO DE JUEGO ///////////////////////// -->
+              <!-- /// NO HAY QUE HACERLO EN CASO DE CONTROL DE TRABAJO EN EQUIPO ///////-->
+              <div *ngIf="tipoDeJuegoSeleccionado !== 'Control de trabajo en equipo'">
+                <mat-step>
+                  <ng-template matStepLabel>
+                    <div>Modo</div>
+                  </ng-template>
 
-              <mat-step>
-                <ng-template matStepLabel>
-                  <div>Modo</div>
-                </ng-template>
+                  <div class="colorsChips">
 
-                <div class="colorsChips">
+                    <label class="LabelStepper">Selecciona un modo de juego:</label>
+                    <mat-chip-list class="mat-chip-list-stacked">
+                      <mat-chip *ngFor="let tipo of seleccionModoJuego; let i = index" selected [color]="tipo.color"
+                        selected="{{seleccionModoJuego[i].selected}}"
+                        (click)="ModoDeJuegoSeleccionado(seleccionModoJuego[i])" [value]="tipo.nombre"
+                        [selectable]="true">
+                        {{tipo.nombre}}
+                      </mat-chip>
+                    </mat-chip-list>
+                    <span style="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ...
+                      {{modoDeJuegoSeleccionado}} </span>
 
-                  <label class="LabelStepper">Selecciona un modo de juego:</label>
-                  <mat-chip-list class="mat-chip-list-stacked">
-                    <mat-chip *ngFor="let tipo of seleccionModoJuego; let i = index" selected [color]="tipo.color"
-                      selected="{{seleccionModoJuego[i].selected}}"
-                      (click)="ModoDeJuegoSeleccionado(seleccionModoJuego[i])" [value]="tipo.nombre"
-                      [selectable]="true">
-                      {{tipo.nombre}}
-                    </mat-chip>
-                  </mat-chip-list>
-                  <span style="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ...
-                    {{modoDeJuegoSeleccionado}} </span>
-
-                </div>
+                  </div>
 
 
 
-                <div class="btnCambiarStep">
-                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button type="button" class="btn Next" [disabled]="!tengoModo" matStepperNext>Siguiente</button>
-                </div>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button type="button" class="btn Next" [disabled]="!tengoModo" matStepperNext>Siguiente</button>
+                  </div>
 
-              </mat-step>
+                </mat-step>
+              </div>
+
+              <div *ngIf="tipoDeJuegoSeleccionado === 'Control de trabajo en equipo'">
+                <!-- //// Número de controles /////-->
+                <mat-step>
+                  <ng-template matStepLabel>
+                    <div>Numero de controles</div>
+                  </ng-template>
+
+                  <!-- casilla para introducir número de controles -->
+                  <mat-form-field>
+                    <mat-label>Introduzca el número de controles</mat-label>
+                    <input matInput formControlName="NumeroDeControles" placeholder="Escriba el número de controles"
+                      requiered (keyup)="GuardarNumeroDeControles()">
+                  </mat-form-field>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button type="button" class="btn Next" [disabled]="!tengoNumeroDeControles"
+                      matStepperNext>Siguiente</button>
+                  </div>
+
+
+                </mat-step>
+                <!-- INFORMACIÓN QUE SE DARÁ AL ALUMNO-->
+               
+                <mat-step>
+                  <ng-template matStepLabel><div>Información al alumno</div></ng-template>
+                  <mat-radio-group  class="radBtnProf" aria-label="Select an option">
+                    <mat-radio-button value="'false'" [checked]="verRespuestasControl === 'false'" (change)="verRespuestasControl = 'false'; tengoModoRespuestas = 'true'"><b>Cada alumno verá solo los puntos que él ha asignado y sus comentarios</b></mat-radio-button>
+                    <mat-radio-button value="'true'" [checked]="verRespuestasControl === 'true'" (change)="verRespuestasControl = 'true'; tengoModoRespuestas = 'true'"><b>Los alumnos verán los puntos y comentarios de todos sus compañeros de equipo</b></mat-radio-button>
+                  </mat-radio-group>
+
+                 
+                 
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button [disabled]="!tengoModoRespuestas" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>  
+
+
+
+                <!-- ULTIMO PASO: CREACIÓN DEl JUEGO DE CONTROL DE TRABAJO EN EQUIPO-->
+                <mat-step>
+                  <ng-template matStepLabel>Fin</ng-template>
+                  <span style="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}} </span>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button style="width: 60%" type="button" class="btn Aceptar" (click)="CrearJuegoDeControlDeTrabajoEnEquipo();">Crear
+                      juego de control de trabajo en equipo</button>
+                  </div>
+                </mat-step>
+
+              </div>
 
               <!-- ////////////////////////////SI ESCOGEMOS EL JUEGO DE TIPO DE PUNTOS ////////////////////////////////-->
 
@@ -187,7 +349,7 @@
                     <div>Puntos</div>
                   </ng-template>
 
-                  <label class="LabelStepper">Selecciona los tipos de puntos</label>
+                  <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona los tipos de puntos</label>
                   <!-- Saltamos al componente de asignación -->
                   <app-asignacion-punto-juego (emisorTiposDePuntos)="RecibeTiposDePuntos ($event)">
                   </app-asignacion-punto-juego>
@@ -265,7 +427,9 @@
                     <div>Colección</div>
                   </ng-template>
 
-                  <label class="LabelStepper">Selecciona una colección para el juego</label>
+                  
+                  <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona una colección</label>
+                
                   <!-- Nos vamos al componente para asignar la colección -->
                   <app-asignacion-coleccion-juego (emisorColeccion)="RecibeColeccion ($event)">
                   </app-asignacion-coleccion-juego>
@@ -495,13 +659,6 @@
               </div>
 
 
-
-
-
-
-
-
-
               <!--/////////////////////// SI ESCOGEMOS EL JUEGO DE TIPO CUESTIONARIO //////////////////////////////////-->
               <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Cuestionario' && tengoModo">
                 <!-- primero elijo la modalidad-->
@@ -527,80 +684,25 @@
                 </mat-step>
 
                 <!-- TERCER PASO: ELEGIR CUESTIONARIO -->
-                 <mat-step>
-                   <ng-template matStepLabel><div>Cuestionario</div></ng-template>
-                   <div>
-                     <span *ngIf = "tengoCuestionario" style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}:  {{cuestionario.Titulo}} ... {{modoDeJuegoSeleccionado}} </span>
-                     <button type="button" class="btn Agregar" (click)= "AbrirDialogoAgregarCuestionario()" style="width: auto;">Añadir cuestionario<i class="material-icons">
-                         post_add </i></button>
-                     </div>
-                   <div class="btnCambiarStep">
-                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                     <button [disabled]="!tengoCuestionario" type="button" class="btn Next" matStepperNext>Siguiente</button>
-                   </div>
-                 </mat-step>
-     
-                <!-- CUARTO PASO: ELEGIR TIPO DE CUESTIONARIO -->
-                 <!-- <mat-step>
-                   <ng-template matStepLabel><div>Modalidad</div></ng-template>
-     
-                     <div class = "colorsChips">
-     
-                         <label class = "LabelStepper">Selecciona la modalidad del juego de cuestionario:</label>
-                         <mat-chip-list class="mat-chip-list-stacked">
-                           <mat-chip style = "width: 150px" *ngFor="let tipo of seleccionTipoDeJuegoDeCuestionario; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeJuegoDeCuestionario[i].selected}}"
-                              (click)="TipoDeJuegoDeCuestionarioSeleccionado(seleccionTipoDeJuegoDeCuestionario[i])" [value]="tipo.nombre" [selectable]="true">
-                               {{tipo.nombre}}
-                           </mat-chip>
-                         </mat-chip-list>
-                         <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoDeJuegoDeCuestionarioSeleccionado}}</span>
-                     </div>
-                     <div class="btnCambiarStep">
-                       <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                       <button [disabled]="!tengoTipoJuegoCuestionario" type="button" class="btn Next" matStepperNext>Siguiente</button>
-                     </div>
-                 </mat-step>
- -->
+       
+                  
 
-                 <!-- <mat-step>
-                  <ng-template matStepLabel><div>Modalidad</div></ng-template>
-                  <div>
-                    <label class = "LabelStepper">Selecciona la modalidad del juego:</label>
+                 <mat-step>
+                  <ng-template matStepLabel><div>Cuestionario</div></ng-template>
     
-                    <mat-chip-list class="mat-chip-list-stacked">
-                      <mat-chip  style = 'width: 300px' *ngFor="let modalidad of seleccionModalidadJuegoCuestionario; let i = index" selected [color]="modalidad.color"  selected="{{seleccionModalidadJuegoCuestionario[i].selected}}"
-                      (click)="ModalidadDeJuegoSeleccionada(seleccionModalidadJuegoCuestionario[i])" [value]="modalidad.nombre" [selectable]="true">
-                        {{modalidad.nombre}}
-                      </mat-chip>
-                    </mat-chip-list>
-    
-                    <span *ngIf = "modalidadSeleccionada" style ="font-weight: bold;color:green;"> Has elegido ... {{modalidadSeleccionada}}</span>
-    
-                  </div>
+                  <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona el cuestionario</label>
+                
+             
+                  <app-asigna-cuestionario
+                  (emisorCuestionarioElegido) = "RecibeCuestionarioElegido ($event)"
+                  ></app-asigna-cuestionario>
+                  <span *ngIf = "tengoCuestionario" style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}:  {{cuestionario.Titulo}} ... {{modoDeJuegoSeleccionado}} </span>
                   <div class="btnCambiarStep">
                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                    <button [disabled]="!tengoModalidad" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                    <button *ngIf = "tengoCuestionario" type="button" class="btn Next"  matStepperNext>Siguiente</button>
                   </div>
                 </mat-step>
-     -->
-                 <!--quinto paso, establecemos la puntuacion-->
-                 <!-- <mat-step>
-                   <ng-template matStepLabel><div>Puntuación</div></ng-template>
-   
-                     <mat-form-field>
-                       <mat-label>Introduzca los puntos a sumar por respuesta correcta</mat-label>
-                       <input  matInput formControlName="PuntuacionCorrecta" placeholder="Escriba puntos a sumar" requiered>
-                     </mat-form-field>
-                     <mat-form-field>
-                       <mat-label>Introduzca los puntos a restar por respuesta incorrecta</mat-label>
-                       <input  matInput formControlName="PuntuacionIncorrecta" placeholder="Escriba puntos a restar" requiered>
-                     </mat-form-field>
-                   <div class="btnCambiarStep">
-                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                     <button [disabled]="!TengoPuntuaciones()" (click) = "GuardarPuntuacion()" type="button" class="btn Next" matStepperNext>Siguiente</button>
-                   </div>
-                 </mat-step> -->
-
+    
 
                  <mat-step *ngIf ="modalidadSeleccionada === 'Clásico'">
                   <ng-template matStepLabel><div>Puntuación</div></ng-template>
@@ -621,28 +723,7 @@
                 </mat-step>
 
      
-                 <!--sexto paso, escogemos la presentacion de preguntas y respuestas-->
-                 <!-- <mat-step>
-                   <ng-template matStepLabel><div>Presentación</div></ng-template>
-                   <div>
-                     <label class = "LabelStepper">Selecciona un modo de presentacion:</label>
-                     <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
-                         <mat-radio-button (click)="GuardarModoPresentacion(presentacion)" class="radio-button" *ngFor="let presentacion of seleccionModoPresentacion" [value]="presentacion">
-                           <label style="color: black;">{{presentacion}}</label>
-                         </mat-radio-button>
-                     </mat-radio-group>
-     
-                     <span *ngIf = "modoPresentacion" style ="font-weight: bold;color:green;"> Has elegido ... {{modoPresentacion}}</span>
-     
-                   </div>
-                   <div class="btnCambiarStep">
-                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                     <button [disabled]="!tengoModoPresentacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
-                   </div>
-                 </mat-step>
-
- -->
-
+      
                  <mat-step *ngIf ="modalidadSeleccionada === 'Clásico'">
                   <ng-template matStepLabel><div>Presentación</div></ng-template>
                   <div>
@@ -683,22 +764,6 @@
 
 
      
-                  <!--Septimo paso, decidimos si hay un tiempo limite para responder-->
-                  <!-- <mat-step>
-                   <ng-template matStepLabel><div>Tiempo</div></ng-template>
-     
-                   <mat-form-field>
-                     <mat-label>Introduzca el tiempo límite para responder al cuestionario (en segundos)</mat-label>
-                     <input  matInput formControlName="TiempoLimite" placeholder="Introduzca el tiempo limite" requiered>
-                   </mat-form-field>
-     
-                   <div class="btnCambiarStep">
-                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                     <button  type="button" (click) = "GuardarTiempoLimite()" class="btn Next" matStepperNext>Siguiente</button>
-                   </div>
-                 </mat-step> -->
-
-
 
                  <mat-step *ngIf ="modalidadSeleccionada === 'Clásico'">
                   <ng-template matStepLabel><div>Tiempo</div></ng-template>
@@ -1200,7 +1265,8 @@
                     <div>Familias</div>
                   </ng-template>
 
-                  <label class="LabelStepper">Selecciona las familias de avatares para el juego</label>
+                  <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona las familias de avatares para el juego</label>
+                
                   <!-- Nos vamos al componente para asignar la colección -->
                   <app-asignar-familias-juego-avatares (emisorFamiliasElegidas)="RecibeFamiliasElegidas ($event)">
                   </app-asignar-familias-juego-avatares>
@@ -1338,159 +1404,19 @@
           </mat-step>
           </div>
 
+       
           <!-- ////////////////////// SI ESCOGEMOS JUEGO DE GEOCACHING ////////////////////////////////-->
           <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Geocaching' && tengoModo">
-              <!--Escogemos el escenario-->
-              <mat-step>
-                <ng-template matStepLabel><div>Escenario</div></ng-template>
-                <div>
-                  <button type="button" class="btn Agregar" (click)= "AbrirDialogoAgregarEscenario()" style="width: auto;">Añadir escenario<i class="material-icons">
-                      post_add </i></button>
-                </div>
-                <span *ngIf = "tengoEscenario" style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}... {{tipoJuegoCompeticionSeleccionado}} ... {{modoDeJuegoSeleccionado}} ... {{escenario.Mapa}} </span>
-                <div class="btnCambiarStep">
-                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button [disabled]="!tengoEscenario" type="button" class="btn Next" matStepperNext>Siguiente</button>
-                </div>
-              </mat-step>
-
-                <!-- QUINTO PASO: ESTABLECER CRITERIO PARA OBTENER PRIVILEGIO DE CAMBIAR COMPLEMENTO 2 -->
-
-                <mat-step>
-                  <ng-template matStepLabel>
-                    <div>Complemento 2</div>
-                  </ng-template>
-
-                  <div>
-
-                    <label class="LabelStepper">Introduzca el criterio para obtener el privilegio de <strong>cambiar el
-                        segundo complemento</strong></label>
-                    <mat-form-field>
-                      <input matInput formControlName="criterioPrivilegioComplemento2" placeholder="Escriba el criterio"
-                        requiered>
-                    </mat-form-field>
-                  </div>
-
-                  <div class="btnCambiarStep">
-                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                    <button type="button" class="btn Next" matStepperNext>Siguiente</button>
-                  </div>
-                </mat-step>
-
-
-                <!-- SEXTO PASO: ESTABLECER CRITERIO PARA OBTENER PRIVILEGIO DE CAMBIAR COMPLEMENTO 3 -->
-                <mat-step>
-                  <ng-template matStepLabel>
-                    <div>Complemento 3</div>
-                  </ng-template>
-
-                  <div>
-
-                    <label class="LabelStepper">Introduzca el criterio para obtener el privilegio de <strong>cambiar el
-                        tercer complemento</strong></label>
-                    <mat-form-field>
-                      <input matInput formControlName="criterioPrivilegioComplemento3" placeholder="Escriba el criterio"
-                        requiered>
-                    </mat-form-field>
-                  </div>
-
-                  <div class="btnCambiarStep">
-                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                    <button type="button" class="btn Next" matStepperNext>Siguiente</button>
-                  </div>
-                </mat-step>
-
-                <!-- SEPTIMO PASO: ESTABLECER CRITERIO PARA OBTENER PRIVILEGIO DE CAMBIAR COMPLEMENTO 4 -->
-                <mat-step>
-                  <ng-template matStepLabel>
-                    <div>Complemento 4</div>
-                  </ng-template>
-
-                  <div>
-
-                    <label class="LabelStepper">Introduzca el criterio para obtener el privilegio de <strong>cambiar el
-                        cuarto complemento</strong></label>
-                    <mat-form-field>
-                      <input matInput formControlName="criterioPrivilegioComplemento4" placeholder="Escriba el criterio"
-                        requiered>
-                    </mat-form-field>
-                  </div>
-
-                  <div class="btnCambiarStep">
-                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                    <button type="button" class="btn Next" matStepperNext>Siguiente</button>
-                  </div>
-                </mat-step>
-
-                <!-- OCTAVO PASO: ESTABLECER CRITERIO PARA OBTENER PRIVILEGIO DE AGREGAR VOZ -->
-                <mat-step>
-                  <ng-template matStepLabel>
-                    <div>Voz</div>
-                  </ng-template>
-
-                  <div>
-
-                    <label class="LabelStepper">Introduzca el criterio para obtener el privilegio de <strong> agragar
-                        voz </strong></label>
-                    <mat-form-field>
-                      <input matInput formControlName="criterioPrivilegioVoz" placeholder="Escriba el criterio"
-                        requiered>
-                    </mat-form-field>
-                  </div>
-
-                  <div class="btnCambiarStep">
-                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                    <button type="button" class="btn Next" matStepperNext>Siguiente</button>
-                  </div>
-                </mat-step>
-
-                <!-- NOVENO PASO: ESTABLECER CRITERIO PARA OBTENER PRIVILEGIO DE VER AVATARES DE COMPAÑEROS -->
-                <mat-step>
-                  <ng-template matStepLabel>
-                    <div>Ver avatares</div>
-                  </ng-template>
-
-                  <div>
-
-                    <label class="LabelStepper">Introduzca el criterio para obtener el privilegio de <strong>ver los
-                        avatares de los compañeros</strong></label>
-                    <mat-form-field>
-                      <input matInput formControlName="criterioPrivilegioVerTodos" placeholder="Escriba el criterio"
-                        requiered>
-                    </mat-form-field>
-                  </div>
-
-                  <div class="btnCambiarStep">
-                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                    <button type="button" class="btn Next" matStepperNext>Siguiente</button>
-                  </div>
-                </mat-step>
-                <!-- FINALIZAR  -->
-                <mat-step>
-                  <ng-template matStepLabel>Finalizar</ng-template>
-
-                  <span style="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}...
-                    {{tipoJuegoCompeticionSeleccionado}} ... {{modoDeJuegoSeleccionado}} </span>
-                  <div class="btnCambiarStep">
-                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                    <button style="width: 60%" type="button" class="btn Aceptar" (click)="CrearJuegoDeAvatar()">Crear
-                      juego de avatar</button>
-                  </div>
-                </mat-step>
-              </div>
-
-              <!-- ////////////////////// SI ESCOGEMOS JUEGO DE GEOCACHING ////////////////////////////////-->
-              <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Geocaching' && tengoModo">
                 <!--Escogemos el escenario-->
                 <mat-step>
                   <ng-template matStepLabel>
                     <div>Escenario</div>
                   </ng-template>
-                  <div>
-                    <button type="button" class="btn Agregar" (click)="AbrirDialogoAgregarEscenario()"
-                      style="width: auto;">Añadir escenario<i class="material-icons">
-                        post_add </i></button>
-                  </div>
+                  <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona el escenario</label>
+                
+                  <app-asigna-escenario (emisorEscenario)="RecibeEscenario ($event)">
+                  </app-asigna-escenario>
+                
                   <span *ngIf="tengoEscenario" style="font-weight: bold;color:green;"> Has elegido ...
                     {{tipoDeJuegoSeleccionado}}... {{tipoJuegoCompeticionSeleccionado}} ... {{modoDeJuegoSeleccionado}}
                     ... {{escenario.Mapa}} </span>
@@ -1570,7 +1496,7 @@
                   </div>
                 </mat-step>
 
-              </div>
+          </div>
 
           <!--/////////////////////// SI ESCOGEMOS EL JUEGO DE TIPO CUESTIONARIO DE SATISFACCION /////////-->
           <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Cuestionario de Satisfacción' && tengoModo">
@@ -1578,8 +1504,8 @@
             <!-- TERCER PASO: ELEGIR CUESTIONARIO -->
             <mat-step>
               <ng-template matStepLabel><div>Cuestionario</div></ng-template>
-
-              <label class = "LabelStepper">Selecciona el cuestionario de satisfacción</label>
+              <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona el cuestionario de satisfacción</label>
+                
               <app-asignar-cuestionario-satisfaccion
               (emisorCuestionarioSatisfaccionElegido) = "RecibeCuestionarioSatisfaccionElegido ($event)"
               ></app-asignar-cuestionario-satisfaccion>
@@ -1683,27 +1609,35 @@
               <!-- Seleccion de rubrica -->
               <mat-step *ngIf = "formatoEvaluacion === 'con rúbrica'">
                 <ng-template matStepLabel><div>Rúbrica</div></ng-template>
-                <mat-form-field appearance="fill">
-                  <mat-label>Selecciona una rúbrica</mat-label>
-                  <mat-select (selectionChange)="RubricaSeleccionChange($event.value)">
-                    <mat-option *ngFor="let rubrica of rubricas; let i = index" [value]="i">{{rubrica.Nombre}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <div *ngIf="tengoRubrica">
-                <table *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
-                  <tr>
-                    <td>
-                      <b>{{criterio.Nombre}}</b>
-                    </td>
-                    <td>
-                      <mat-form-field class="input-porcentaje">
-                        <input matInput type="number" name="{{c}}" (keyup)="PesosParentChanged($event.target.name, $event.target.value)" (change)="PesosParentChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(rubricaElegida.Criterios.length)}}" min="0" max="100">
-                        <span matSuffix>%</span>
-                      </mat-form-field>
-                    </td>
-                  </tr>
-                </table>
+                <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona la rúbrica</label>
+                <div class = "enColumna">
+                  <app-asignar-rubrica
+                  (emisorRubricaElegida) = "RecibeRubricaElegida ($event)"
+                  style = "width: 100%"
+                  ></app-asignar-rubrica>
+                    
+                  <div class = "enColumna" *ngIf="tengoRubrica" style = "width: 40%">
+                    <br>
+                      <span style = "font-size: larger; color:darkred;">Ajusta el peso de cada criterio</span>
+                    <br>
+                    <table *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
+                      <tr>
+                        <td>
+                          <b>{{criterio.Nombre}}</b>
+                        </td>
+                        <td>
+                          <mat-form-field class="input-porcentaje">
+                            <input matInput type="number" name="{{c}}" (keyup)="PesosParentChanged($event.target.name, $event.target.value)" (change)="PesosParentChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(rubricaElegida.Criterios.length)}}" min="0" max="100">
+                            <span matSuffix>%</span>
+                          </mat-form-field>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+
                 </div>
+              
+             
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                   <button [disabled]="!tengoRubrica || descripcionJuegoEvaluacion.length === 0 || !ParentPesosSuman100()" type="button" class="btn Next" matStepperNext>Siguiente</button>
@@ -2041,17 +1975,7 @@
               </mat-step>
 
             </div>
-<!--
-          <div *ngIf="tipoDeJuegoSeleccionado !== 'Juego De Competición' && tipoDeJuegoSeleccionado !== 'Juego De Cuestionario'">
-            <mat-step>
-              <ng-template matStepLabel>Finalizar</ng-template>
-                <span *ngIf="tipoDeJuegoSeleccionado === 'Juego De Colección'" style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}}: {{nombreColeccionSeleccionada}} ... {{modoDeJuegoSeleccionado}} </span>
-                <span *ngIf="tipoDeJuegoSeleccionado === 'Juego De Puntos'" style ="font-weight: bold;color:green;"> Has creado ... {{tipoDeJuegoSeleccionado}} ... {{modoDeJuegoSeleccionado}} </span>
-                    <div class="btnCambiarStep">
-                      <button type="button" class="btn Aceptar" (click) = "Finalizar();">Finalizar</button>
-                    </div>
-            </mat-step>
-          </div> -->
+
 
             </mat-horizontal-stepper>
           </mat-card-content>
