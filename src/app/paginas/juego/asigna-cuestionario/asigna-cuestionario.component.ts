@@ -1,10 +1,11 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, EventEmitter, Output } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { Location } from '@angular/common';
 import { PeticionesAPIService, SesionService } from 'src/app/servicios';
 import { Cuestionario } from 'src/app/clases';
 import Swal from 'sweetalert2';
 import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-asigna-cuestionario',
@@ -12,10 +13,13 @@ import { DialogoConfirmacionComponent } from '../../COMPARTIDO/dialogo-confirmac
   styleUrls: ['./asigna-cuestionario.component.scss']
 })
 export class AsignaCuestionarioComponent implements OnInit {
+// Para comunicar el cuestionario de satisfaccion elegido al componente padre
+@Output() emisorCuestionarioElegido = new EventEmitter <number []>();
 
   // COLUMNAS DE LA TABLA DE LOS CUESTIONARIOS
-  displayedColumnsMisCuestionarios: string[] = ['titulo', 'descripcion', ' '];
+  displayedColumns: string[] = ['select', 'titulo', 'descripcion'];
   dataSourceMisCuestionarios;
+  selection = new SelectionModel<any>(true, []);
   misCuestionarios: Cuestionario[] = [];
   cuestionariosPublicos: Cuestionario[] = [];
 
@@ -23,15 +27,12 @@ export class AsignaCuestionarioComponent implements OnInit {
   mensaje = 'Confirmar que quieres escoger el cuestionario: ';
   muestroPublicos = false;
 
-  constructor(public dialog: MatDialog,
+  constructor(
               private sesion: SesionService,
-              public location: Location,
-              private peticionesAPI: PeticionesAPIService,
-              public dialogRef: MatDialogRef<AsignaCuestionarioComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) { }
+              private peticionesAPI: PeticionesAPIService) { }
 
   ngOnInit() {
-    this.profesorId = this.data.profesorId;
+    this.profesorId = this.sesion.DameProfesor().id;
     this.DameTodosMisCuestionarios();
   }
 
@@ -66,19 +67,19 @@ export class AsignaCuestionarioComponent implements OnInit {
     this.dataSourceMisCuestionarios.filter = filterValue.trim().toLowerCase();
   }
 
-  AbrirDialogoConfirmacionAsignarCuestionario(cuestionario: Cuestionario): void {
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje + cuestionario.Titulo,
-        titulo: cuestionario.Titulo,
-      }
-    });
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      this.sesion.TomaCuestionario(cuestionario);
-      this.dialogRef.close();
-    });
-  }
+  // AbrirDialogoConfirmacionAsignarCuestionario(cuestionario: Cuestionario): void {
+  //   const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+  //     height: '150px',
+  //     data: {
+  //       mensaje: this.mensaje + cuestionario.Titulo,
+  //       titulo: cuestionario.Titulo,
+  //     }
+  //   });
+  //   dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+  //     this.sesion.TomaCuestionario(cuestionario);
+  //     this.dialogRef.close();
+  //   });
+  // }
 
   MostrarPublicos() {
     this.muestroPublicos = true;
@@ -91,4 +92,31 @@ export class AsignaCuestionarioComponent implements OnInit {
     this.muestroPublicos = false;
     this.dataSourceMisCuestionarios = new MatTableDataSource(this.misCuestionarios);
   }
+
+
+  
+  
+  HaSeleccionado() {
+    if (this.selection.selected.length === 0) {
+     return false;
+    } else {
+      return true;
+    }
+  }
+  Marcar(row) {
+    if (this.selection.isSelected(row)) {
+      this.selection.deselect(row);
+    } else {
+      this.selection.clear();
+      this.selection.select(row);
+    }
+  }
+
+  AcabarSeleccion() {
+    console.log ('voy a cogerlo');
+    const cuestionario = this.dataSourceMisCuestionarios.data.filter (row => this.selection.isSelected(row))[0];
+    console.log (cuestionario);
+    this.emisorCuestionarioElegido.emit (cuestionario);
+  }
+ 
 }

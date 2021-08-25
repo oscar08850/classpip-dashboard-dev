@@ -3,13 +3,13 @@ import { MatTableDataSource } from '@angular/material/table';
 
 // Imports para abrir diálogo mostrar cromos
 import { MatDialog } from '@angular/material';
-import { DialogMostrarCromosComponent } from './dialog-mostrar-cromos/dialog-mostrar-cromos.component';
 
 import { Coleccion, Juego, Alumno, Equipo} from 'src/app/clases/index';
 // Services
 
    // Services
 import { SesionService, PeticionesAPIService } from '../../../servicios/index';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-asignacion-coleccion-juego',
@@ -32,7 +32,9 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   isDisabled: Boolean = true;
 
-  displayedColumns: string[] = ['nombreColeccion', ' '];
+  
+  displayedColumns: string[] = ['select', 'nombreColeccion'];
+  selection = new SelectionModel<Coleccion>(true, []);
 
 
   juego: Juego;
@@ -122,25 +124,6 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
     });
   }
 
-  ColeccionSeleccionada(coleccion: Coleccion) {
-    // Comunico el nombre de la colección seleccionada al padre
-    this.coleccionSeleccionada = coleccion;
-    this.emisorColeccion.emit (coleccion);
-    this.isDisabled = false;
-    console.log(this.coleccionSeleccionada);
-  }
-
-
-  AbrirDialogoMostrarCromos(coleccionSeleccionada: Coleccion): void {
-
-    const dialogRef = this.dialog.open(DialogMostrarCromosComponent, {
-      width: '1000px',
-      maxHeight: '600px',
-      data: {
-        coleccion: coleccionSeleccionada
-      }
-    });
-  }
 
   MostrarPublicas() {
     this.muestroPublicas = true;
@@ -151,6 +134,44 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
     this.muestroPublicas = false;
     this.datasourceColecciones = new MatTableDataSource(this.colecciones);
   }
+
+ 
+  HaSeleccionado() {
+    if (this.selection.selected.length === 0) {
+     return false;
+    } else {
+      return true;
+    }
+  }
+  Marcar(row) {
+    if (this.selection.isSelected(row)) {
+      this.selection.deselect(row);
+    } else {
+      this.selection.clear();
+      this.selection.select(row);
+    }
+  }
+
+  AsignarColeccionAlJuego() {
+    let coleccionSeleccionada;
+    console.log ('Vamos a agregar LOS PUNTOS');
+    const tiposDePuntosSeleccionados = [];
+    this.datasourceColecciones.data.forEach ( row => {
+      if (this.selection.isSelected(row)) {
+        // tiposDePuntosSeleccionados.push (row);
+        console.log ('hemos elegido ', row);
+        coleccionSeleccionada = row;
+
+      }
+    });
+    
+    this.emisorColeccion.emit (coleccionSeleccionada);
+    //   this.isDisabled = false;
+
+ 
+
+  }
+
 
 
  }

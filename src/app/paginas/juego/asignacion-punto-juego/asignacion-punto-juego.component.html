@@ -23,7 +23,7 @@
 
       <!-- Nombre Punto Column -->
       <ng-container matColumnDef="nombrePunto">
-        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 35%"> Nombre </th>
+        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 35%"> Tipo de punto </th>
         <td mat-cell *matCellDef="let punto;"> {{punto.Nombre}} </td>
       </ng-container>
 
@@ -43,9 +43,9 @@
     <div class="contenedor">
       <ng-template #Aviso_no_puntos> <div class="texto">Todavía no tienes puntos creados.</div></ng-template>
     </div>
-  </form>
+</form>
 
-  <div class = "enColumna">
-    <button style = "width: 60%" (click)="AgregarTiposPuntosAlJuego()" [disabled]="!HaSeleccionado()" type="button" class="btn Aceptar">Añadir tipos de puntos</button>
-  </div>
+<div class = "enColumna">
+    <button style = "width: 20%" (click)="AgregarTiposPuntosAlJuego()" [disabled]="!HaSeleccionado()" type="button" class="btn Aceptar">Añadir tipos de puntos</button>
+</div>
 

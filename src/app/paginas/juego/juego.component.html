@@ -349,7 +349,7 @@
                     <div>Puntos</div>
                   </ng-template>
 
-                  <label class="LabelStepper">Selecciona los tipos de puntos</label>
+                  <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona los tipos de puntos</label>
                   <!-- Saltamos al componente de asignación -->
                   <app-asignacion-punto-juego (emisorTiposDePuntos)="RecibeTiposDePuntos ($event)">
                   </app-asignacion-punto-juego>
@@ -427,7 +427,9 @@
                     <div>Colección</div>
                   </ng-template>
 
-                  <label class="LabelStepper">Selecciona una colección para el juego</label>
+                  
+                  <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona una colección</label>
+                
                   <!-- Nos vamos al componente para asignar la colección -->
                   <app-asignacion-coleccion-juego (emisorColeccion)="RecibeColeccion ($event)">
                   </app-asignacion-coleccion-juego>
@@ -682,80 +684,25 @@
                 </mat-step>
 
                 <!-- TERCER PASO: ELEGIR CUESTIONARIO -->
-                 <mat-step>
-                   <ng-template matStepLabel><div>Cuestionario</div></ng-template>
-                   <div>
-                     <span *ngIf = "tengoCuestionario" style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}:  {{cuestionario.Titulo}} ... {{modoDeJuegoSeleccionado}} </span>
-                     <button type="button" class="btn Agregar" (click)= "AbrirDialogoAgregarCuestionario()" style="width: auto;">Añadir cuestionario<i class="material-icons">
-                         post_add </i></button>
-                     </div>
-                   <div class="btnCambiarStep">
-                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                     <button [disabled]="!tengoCuestionario" type="button" class="btn Next" matStepperNext>Siguiente</button>
-                   </div>
-                 </mat-step>
-     
-                <!-- CUARTO PASO: ELEGIR TIPO DE CUESTIONARIO -->
-                 <!-- <mat-step>
-                   <ng-template matStepLabel><div>Modalidad</div></ng-template>
-     
-                     <div class = "colorsChips">
-     
-                         <label class = "LabelStepper">Selecciona la modalidad del juego de cuestionario:</label>
-                         <mat-chip-list class="mat-chip-list-stacked">
-                           <mat-chip style = "width: 150px" *ngFor="let tipo of seleccionTipoDeJuegoDeCuestionario; let i = index" selected [color]="tipo.color"  selected="{{seleccionTipoDeJuegoDeCuestionario[i].selected}}"
-                              (click)="TipoDeJuegoDeCuestionarioSeleccionado(seleccionTipoDeJuegoDeCuestionario[i])" [value]="tipo.nombre" [selectable]="true">
-                               {{tipo.nombre}}
-                           </mat-chip>
-                         </mat-chip-list>
-                         <span style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}} ... {{tipoDeJuegoDeCuestionarioSeleccionado}}</span>
-                     </div>
-                     <div class="btnCambiarStep">
-                       <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                       <button [disabled]="!tengoTipoJuegoCuestionario" type="button" class="btn Next" matStepperNext>Siguiente</button>
-                     </div>
-                 </mat-step>
- -->
+       
+                  
 
-                 <!-- <mat-step>
-                  <ng-template matStepLabel><div>Modalidad</div></ng-template>
-                  <div>
-                    <label class = "LabelStepper">Selecciona la modalidad del juego:</label>
+                 <mat-step>
+                  <ng-template matStepLabel><div>Cuestionario</div></ng-template>
     
-                    <mat-chip-list class="mat-chip-list-stacked">
-                      <mat-chip  style = 'width: 300px' *ngFor="let modalidad of seleccionModalidadJuegoCuestionario; let i = index" selected [color]="modalidad.color"  selected="{{seleccionModalidadJuegoCuestionario[i].selected}}"
-                      (click)="ModalidadDeJuegoSeleccionada(seleccionModalidadJuegoCuestionario[i])" [value]="modalidad.nombre" [selectable]="true">
-                        {{modalidad.nombre}}
-                      </mat-chip>
-                    </mat-chip-list>
-    
-                    <span *ngIf = "modalidadSeleccionada" style ="font-weight: bold;color:green;"> Has elegido ... {{modalidadSeleccionada}}</span>
-    
-                  </div>
+                  <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona el cuestionario</label>
+                
+             
+                  <app-asigna-cuestionario
+                  (emisorCuestionarioElegido) = "RecibeCuestionarioElegido ($event)"
+                  ></app-asigna-cuestionario>
+                  <span *ngIf = "tengoCuestionario" style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}:  {{cuestionario.Titulo}} ... {{modoDeJuegoSeleccionado}} </span>
                   <div class="btnCambiarStep">
                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                    <button [disabled]="!tengoModalidad" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                    <button *ngIf = "tengoCuestionario" type="button" class="btn Next"  matStepperNext>Siguiente</button>
                   </div>
                 </mat-step>
-     -->
-                 <!--quinto paso, establecemos la puntuacion-->
-                 <!-- <mat-step>
-                   <ng-template matStepLabel><div>Puntuación</div></ng-template>
-   
-                     <mat-form-field>
-                       <mat-label>Introduzca los puntos a sumar por respuesta correcta</mat-label>
-                       <input  matInput formControlName="PuntuacionCorrecta" placeholder="Escriba puntos a sumar" requiered>
-                     </mat-form-field>
-                     <mat-form-field>
-                       <mat-label>Introduzca los puntos a restar por respuesta incorrecta</mat-label>
-                       <input  matInput formControlName="PuntuacionIncorrecta" placeholder="Escriba puntos a restar" requiered>
-                     </mat-form-field>
-                   <div class="btnCambiarStep">
-                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                     <button [disabled]="!TengoPuntuaciones()" (click) = "GuardarPuntuacion()" type="button" class="btn Next" matStepperNext>Siguiente</button>
-                   </div>
-                 </mat-step> -->
-
+    
 
                  <mat-step *ngIf ="modalidadSeleccionada === 'Clásico'">
                   <ng-template matStepLabel><div>Puntuación</div></ng-template>
@@ -776,28 +723,7 @@
                 </mat-step>
 
      
-                 <!--sexto paso, escogemos la presentacion de preguntas y respuestas-->
-                 <!-- <mat-step>
-                   <ng-template matStepLabel><div>Presentación</div></ng-template>
-                   <div>
-                     <label class = "LabelStepper">Selecciona un modo de presentacion:</label>
-                     <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
-                         <mat-radio-button (click)="GuardarModoPresentacion(presentacion)" class="radio-button" *ngFor="let presentacion of seleccionModoPresentacion" [value]="presentacion">
-                           <label style="color: black;">{{presentacion}}</label>
-                         </mat-radio-button>
-                     </mat-radio-group>
-     
-                     <span *ngIf = "modoPresentacion" style ="font-weight: bold;color:green;"> Has elegido ... {{modoPresentacion}}</span>
-     
-                   </div>
-                   <div class="btnCambiarStep">
-                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                     <button [disabled]="!tengoModoPresentacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
-                   </div>
-                 </mat-step>
-
- -->
-
+      
                  <mat-step *ngIf ="modalidadSeleccionada === 'Clásico'">
                   <ng-template matStepLabel><div>Presentación</div></ng-template>
                   <div>
@@ -838,22 +764,6 @@
 
 
      
-                  <!--Septimo paso, decidimos si hay un tiempo limite para responder-->
-                  <!-- <mat-step>
-                   <ng-template matStepLabel><div>Tiempo</div></ng-template>
-     
-                   <mat-form-field>
-                     <mat-label>Introduzca el tiempo límite para responder al cuestionario (en segundos)</mat-label>
-                     <input  matInput formControlName="TiempoLimite" placeholder="Introduzca el tiempo limite" requiered>
-                   </mat-form-field>
-     
-                   <div class="btnCambiarStep">
-                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                     <button  type="button" (click) = "GuardarTiempoLimite()" class="btn Next" matStepperNext>Siguiente</button>
-                   </div>
-                 </mat-step> -->
-
-
 
                  <mat-step *ngIf ="modalidadSeleccionada === 'Clásico'">
                   <ng-template matStepLabel><div>Tiempo</div></ng-template>
@@ -1355,7 +1265,8 @@
                     <div>Familias</div>
                   </ng-template>
 
-                  <label class="LabelStepper">Selecciona las familias de avatares para el juego</label>
+                  <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona las familias de avatares para el juego</label>
+                
                   <!-- Nos vamos al componente para asignar la colección -->
                   <app-asignar-familias-juego-avatares (emisorFamiliasElegidas)="RecibeFamiliasElegidas ($event)">
                   </app-asignar-familias-juego-avatares>
@@ -1501,11 +1412,11 @@
                   <ng-template matStepLabel>
                     <div>Escenario</div>
                   </ng-template>
-                  <div>
-                    <button type="button" class="btn Agregar" (click)="AbrirDialogoAgregarEscenario()"
-                      style="width: auto;">Añadir escenario<i class="material-icons">
-                        post_add </i></button>
-                  </div>
+                  <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona el escenario</label>
+                
+                  <app-asigna-escenario (emisorEscenario)="RecibeEscenario ($event)">
+                  </app-asigna-escenario>
+                
                   <span *ngIf="tengoEscenario" style="font-weight: bold;color:green;"> Has elegido ...
                     {{tipoDeJuegoSeleccionado}}... {{tipoJuegoCompeticionSeleccionado}} ... {{modoDeJuegoSeleccionado}}
                     ... {{escenario.Mapa}} </span>
@@ -1593,8 +1504,8 @@
             <!-- TERCER PASO: ELEGIR CUESTIONARIO -->
             <mat-step>
               <ng-template matStepLabel><div>Cuestionario</div></ng-template>
-
-              <label class = "LabelStepper">Selecciona el cuestionario de satisfacción</label>
+              <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona el cuestionario de satisfacción</label>
+                
               <app-asignar-cuestionario-satisfaccion
               (emisorCuestionarioSatisfaccionElegido) = "RecibeCuestionarioSatisfaccionElegido ($event)"
               ></app-asignar-cuestionario-satisfaccion>
@@ -1698,27 +1609,35 @@
               <!-- Seleccion de rubrica -->
               <mat-step *ngIf = "formatoEvaluacion === 'con rúbrica'">
                 <ng-template matStepLabel><div>Rúbrica</div></ng-template>
-                <mat-form-field appearance="fill">
-                  <mat-label>Selecciona una rúbrica</mat-label>
-                  <mat-select (selectionChange)="RubricaSeleccionChange($event.value)">
-                    <mat-option *ngFor="let rubrica of rubricas; let i = index" [value]="i">{{rubrica.Nombre}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <div *ngIf="tengoRubrica">
-                <table *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
-                  <tr>
-                    <td>
-                      <b>{{criterio.Nombre}}</b>
-                    </td>
-                    <td>
-                      <mat-form-field class="input-porcentaje">
-                        <input matInput type="number" name="{{c}}" (keyup)="PesosParentChanged($event.target.name, $event.target.value)" (change)="PesosParentChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(rubricaElegida.Criterios.length)}}" min="0" max="100">
-                        <span matSuffix>%</span>
-                      </mat-form-field>
-                    </td>
-                  </tr>
-                </table>
+                <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona la rúbrica</label>
+                <div class = "enColumna">
+                  <app-asignar-rubrica
+                  (emisorRubricaElegida) = "RecibeRubricaElegida ($event)"
+                  style = "width: 100%"
+                  ></app-asignar-rubrica>
+                    
+                  <div class = "enColumna" *ngIf="tengoRubrica" style = "width: 40%">
+                    <br>
+                      <span style = "font-size: larger; color:darkred;">Ajusta el peso de cada criterio</span>
+                    <br>
+                    <table *ngFor="let criterio of rubricaElegida.Criterios; let c = index">
+                      <tr>
+                        <td>
+                          <b>{{criterio.Nombre}}</b>
+                        </td>
+                        <td>
+                          <mat-form-field class="input-porcentaje">
+                            <input matInput type="number" name="{{c}}" (keyup)="PesosParentChanged($event.target.name, $event.target.value)" (change)="PesosParentChanged($event.target.name, $event.target.value)" value="{{PesoPorDefecto(rubricaElegida.Criterios.length)}}" min="0" max="100">
+                            <span matSuffix>%</span>
+                          </mat-form-field>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+
                 </div>
+              
+             
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                   <button [disabled]="!tengoRubrica || descripcionJuegoEvaluacion.length === 0 || !ParentPesosSuman100()" type="button" class="btn Next" matStepperNext>Siguiente</button>

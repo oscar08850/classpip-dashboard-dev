@@ -80,8 +80,6 @@ import { EditarColeccionComponent } from './paginas/mis-colecciones/editar-colec
 import { AgregarCromoDialogComponent } from './paginas/mis-colecciones/agregar-cromo-dialog/agregar-cromo-dialog.component';
 import { AsignacionColeccionJuegoComponent } from './paginas/juego/asignacion-coleccion-juego/asignacion-coleccion-juego.component';
 // tslint:disable-next-line:max-line-length
-import { DialogMostrarCromosComponent } from './paginas/juego/asignacion-coleccion-juego/dialog-mostrar-cromos/dialog-mostrar-cromos.component';
-// tslint:disable-next-line:max-line-length
 import { JuegoDeColeccionSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/juego-de-coleccion-seleccionado-activo.component';
 // tslint:disable-next-line:max-line-length
 import { AsignarCromosComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/asignar-cromos/asignar-cromos.component';
@@ -222,6 +220,7 @@ import { MisFamiliasImagenesPerfilComponent } from './paginas/mis-familias-image
 import { CrearCuestionarioSatisfaccionComponent } from './paginas/crear-cuestionario-satisfaccion/crear-cuestionario-satisfaccion.component';
 import {MisCuestionariosSatisfaccionComponent} from './paginas/mis-cuestionarios-satisfaccion/mis-cuestionarios-satisfaccion.component';
 import { AsignarCuestionarioSatisfaccionComponent } from './paginas/juego/asignar-cuestionario-satisfaccion/asignar-cuestionario-satisfaccion.component';
+
 import { JuegoDeCuestionarioSatisfaccionActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-satisfaccion-activo/juego-de-cuestionario-satisfaccion-activo.component';
 import { JuegoDeCuestionarioSatisfaccionInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-satisfaccion-inactivo/juego-de-cuestionario-satisfaccion-inactivo.component';
 import { MisJuegosRapidosComponent } from './paginas/mis-juegos-rapidos/mis-juegos-rapidos.component';
@@ -263,6 +262,7 @@ import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/
 import { JuegoDeEvaluacionSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-evaluacion-seleccionado-inactivo/juego-de-evaluacion-seleccionado-inactivo.component';
 // tslint:disable-next-line:max-line-length
 import { JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-control-de-trabajo-en-equipo-seleccionado-activo/juego-de-control-de-trabajo-en-equipo-seleccionado-activo.component';
+import { AsignarRubricaComponent } from './paginas/juego/asignar-rubrica/asignar-rubrica.component';
 
 
 @NgModule({
@@ -302,7 +302,6 @@ import { JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent } from './pa
     EditarColeccionComponent,
     AgregarCromoDialogComponent,
     AsignacionColeccionJuegoComponent,
-    DialogMostrarCromosComponent,
     JuegoDeColeccionSeleccionadoActivoComponent,
     AsignarCromosComponent,
     InformacionJuegoColeccionComponent,
@@ -421,7 +420,8 @@ import { JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent } from './pa
     EvaluacionBorrarDialogoComponent,
     MostrarCuestionarioComponent,
     JuegoDeEvaluacionSeleccionadoInactivoComponent,
-    JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent
+    JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent,
+    AsignarRubricaComponent
 
   ],
   imports: [
@@ -473,10 +473,10 @@ import { JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent } from './pa
 
     ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
-  entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
+  entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
     // tslint:disable-next-line:max-line-length
-    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AgregarPuntoGeolocalizableDialogComponent, EditarPuntoGeolocalizableDialogComponent, AsignaCuestionarioComponent,
+    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AgregarPuntoGeolocalizableDialogComponent, EditarPuntoGeolocalizableDialogComponent, 
     // tslint:disable-next-line:max-line-length
     InformacionJuegoDeCuestionarioDialogComponent, AsignaEscenarioComponent, AsignaPreguntasComponent, InformacionJuegoDeGeocachingDialogComponent,
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
