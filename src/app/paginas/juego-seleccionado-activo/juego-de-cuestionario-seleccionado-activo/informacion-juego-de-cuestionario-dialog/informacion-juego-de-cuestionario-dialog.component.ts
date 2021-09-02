@@ -27,6 +27,7 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
   profesorId: number;
   Tipo: string;
   Modalidad: string;
+  Modo: string;
 
   // Se usará para el selector de modo de asignación de ganadores
   Presentaciones: string[] = ['Mismo orden para todos',
@@ -69,6 +70,7 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
     this.cuestionarioId = this.juegoSeleccionado.cuestionarioId;
     this.profesorId = this.juegoSeleccionado.profesorId;
     this.Modalidad = this.juegoSeleccionado.Modalidad;
+    this.Modo = this.juegoSeleccionado.Modo;
     this.myForm = this._formBuilder.group({
       NombreJuego: ['', Validators.required],
       PuntuacionCorrecta: ['', Validators.required],
@@ -85,7 +87,7 @@ export class InformacionJuegoDeCuestionarioDialogComponent implements OnInit {
   // COGEMOS LOS VALORES NUEVOS Y LOS GUARDAMOS EN EL JUEGO
   GuardarCambios() {
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.NombreJuego, this.Tipo, this.Modalidad, this.PuntuacionCorrecta,
+    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.NombreJuego, this.Tipo, this.Modo, this.Modalidad, this.PuntuacionCorrecta,
       this.PuntuacionIncorrecta, this.Presentacion, this.JuegoActivo, this.JuegoTerminado,
       this.profesorId, this.juegoSeleccionado.grupoId, this.cuestionarioId), this.juegoSeleccionado.id)
       .subscribe(res => {

@@ -20,6 +20,7 @@ export class ComServerService {
 
 
   public Conectar(profesorId) {
+    console.log ('voy a conectar ', this.url);
     this.socket = io(this.url);
     this.socket.emit('dash', this.notificacionconectar);
     this.socket.emit ('conectarDash', profesorId);
@@ -35,9 +36,18 @@ export class ComServerService {
 
   public EsperoRespuestasJuegoDeCuestionario(): any {
     return Observable.create((observer) => {
-      this.socket.on('respuestaJuegoDeCuestionario', (alumnoId) => {
-        console.log('Respuesta cuestionaro ' + alumnoId);
-        observer.next(alumnoId);
+      this.socket.on('respuestaJuegoDeCuestionario', (alumno) => {
+        console.log('Respuesta cuestionaro ' + alumno);
+        observer.next(alumno);
+      });
+
+    });
+  }
+  public EsperoRespuestasEquipoJuegoDeCuestionario(): any {
+    return Observable.create((observer) => {
+      this.socket.on('respuestaEquipoJuegoDeCuestionario', (equipo) => {
+        console.log('Respuesta cuestionaro ' + equipo);
+        observer.next(equipo);
       });
 
     });

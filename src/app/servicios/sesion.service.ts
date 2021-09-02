@@ -3,7 +3,7 @@ import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insign
          // tslint:disable-next-line:max-line-length
          TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeCuestionario,
          TablaAlumnoJuegoDeCuestionario,
-         FamiliaAvatares, CuestionarioSatisfaccion} from '../clases';
+         FamiliaAvatares, CuestionarioSatisfaccion, TablaEquipoJuegoDeCuestionario, EquipoJuegoDeCuestionario} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
@@ -75,6 +75,9 @@ export class SesionService {
 
   inscripcionAlumnoJuegoDeCuestionario: AlumnoJuegoDeCuestionario;
   alumnoJuegoDeCuestionario: TablaAlumnoJuegoDeCuestionario;
+
+  inscripcionEquipoJuegoDeCuestionario: EquipoJuegoDeCuestionario;
+  equipoJuegoDeCuestionario: TablaEquipoJuegoDeCuestionario;
 
   idLibro: any;
 
@@ -559,13 +562,29 @@ public TomaAlumnoJuegoDeCuestionario(alumno: TablaAlumnoJuegoDeCuestionario) {
   this.alumnoJuegoDeCuestionario = alumno;
 }
 
+public TomaInscripcionEquipoJuegoDeCuestionario(inscripcion: EquipoJuegoDeCuestionario) {
+  this.inscripcionEquipoJuegoDeCuestionario = inscripcion;
+}
+
+public TomaEquipoJuegoDeCuestionario(alumno: TablaEquipoJuegoDeCuestionario) {
+  this.equipoJuegoDeCuestionario = alumno;
+}
+
 public DameAlumnoJuegoDeCuestionario(): TablaAlumnoJuegoDeCuestionario {
   return this.alumnoJuegoDeCuestionario;
+}
+
+public DameEquipoJuegoDeCuestionario(): TablaEquipoJuegoDeCuestionario {
+  return this.equipoJuegoDeCuestionario;
 }
 
 public DameInscripcionAlumnoJuegoDeCuestionario(): AlumnoJuegoDeCuestionario {
   return this.inscripcionAlumnoJuegoDeCuestionario;
 }
+public DameInscripcionEquipoJuegoDeCuestionario(): EquipoJuegoDeCuestionario {
+  return this.inscripcionEquipoJuegoDeCuestionario;
+}
+
 public TomaFamilia(familia: FamiliaAvatares) {
   this.familia = familia;
 }

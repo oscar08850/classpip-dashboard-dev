@@ -23,7 +23,7 @@ import {
   JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
   JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, CuestionarioSatisfaccion,
   JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion, Rubrica,
-  JuegoDeControlDeTrabajoEnEquipo, AlumnoJuegoDeControlDeTrabajoEnEquipo
+  JuegoDeControlDeTrabajoEnEquipo, AlumnoJuegoDeControlDeTrabajoEnEquipo, EquipoJuegoDeCuestionario
 } from '../../clases/index';
 
 
@@ -157,7 +157,7 @@ export class JuegoComponent implements OnInit {
   // tslint:disable-next-line:max-line-length
   puntuacionCorrecta = 0; // le doy un valor porque si elojo kahoot esto no entre en juego pero debe estar definido para que se cree el juego
   puntuacionIncorrecta = 0;
-  modoPresentacion: string;
+  modoPresentacion = ' '; // Le pongo algo porque en caso de clasico en equipo no pongo nada aqui y el campo es obligatorio
   tengoModoPresentacion = false;
   seleccionModoPresentacion: string[] = ['Mismo orden para todos',
     'Preguntas desordenadas',
@@ -596,9 +596,11 @@ export class JuegoComponent implements OnInit {
     this.modoDeJuegoSeleccionado = modo.nombre;
     console.log(' tengo modo ' + this.modoDeJuegoSeleccionado);
     console.log(' tengo tipo ' + this.tipoDeJuegoSeleccionado);
-    if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuestionario') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
-      Swal.fire('Alerta', 'Aún no es posible el juego de cuestionario en equipo', 'warning');
-    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Avatar') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+    // if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuestionario') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+    //   Swal.fire('Alerta', 'Aún no es posible el juego de cuestionario en equipo', 'warning');
+    // } else 
+    
+    if ((this.tipoDeJuegoSeleccionado === 'Juego De Avatar') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de avatares en equipo', 'warning');
     }
 
@@ -1340,8 +1342,12 @@ export class JuegoComponent implements OnInit {
     }
   }
   ModalidadDeJuegoSeleccionada(modalidad: ChipColor) {
-    this.modalidadSeleccionada = modalidad.nombre;
-    this.tengoModalidad = true;
+    if (this.modoDeJuegoSeleccionado === 'Equipos' && modalidad.nombre === 'Kahoot') {
+      Swal.fire('Atención', 'La modalidad Kahoot no está implementada para los juegos de cuestionario en equipo', 'error');
+    } else {
+      this.modalidadSeleccionada = modalidad.nombre;
+      this.tengoModalidad = true;
+    }
   }
 
   TipoDeJuegoDeCuestionarioSeleccionado(tipoJuegoCuestionario: ChipColor) {
@@ -1359,19 +1365,29 @@ export class JuegoComponent implements OnInit {
     // tslint:disable-next-line:max-line-length
 
     // tslint:disable-next-line:max-line-length
-    const juego = new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.modalidadSeleccionada, this.puntuacionCorrecta,
+    const juego = new JuegoDeCuestionario (this.nombreDelJuego, this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.modalidadSeleccionada, this.puntuacionCorrecta,
       this.puntuacionIncorrecta, this.modoPresentacion,
       false, false, this.profesorId, this.grupo.id, this.cuestionario.id, this.tiempoLimite);
     console.log ('voy a crear juego ', juego);
     this.peticionesAPI.CreaJuegoDeCuestionario(juego, this.grupo.id)
       .subscribe(juegoCreado => {
         this.juegoDeCuestionario = juegoCreado;
-        // Inscribimos a los alumnos (de momento no hay juego de cuestionario por equipos)
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < this.alumnosGrupo.length; i++) {
-          // tslint:disable-next-line:max-line-length
-          this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, false, this.juegoDeCuestionario.id, this.alumnosGrupo[i].id))
-            .subscribe();
+        console.log ('Modo de juego ', this.modoDeJuegoSeleccionado);
+        if (this.modoDeJuegoSeleccionado === 'Individual') {
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.alumnosGrupo.length; i++) {
+            // tslint:disable-next-line:max-line-length
+            this.peticionesAPI.InscribeAlumnoJuegoDeCuestionario(new AlumnoJuegoDeCuestionario(0, false, this.juegoDeCuestionario.id, this.alumnosGrupo[i].id))
+              .subscribe();
+          }
+        } else {
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.equiposGrupo.length; i++) {
+            // tslint:disable-next-line:max-line-length
+            this.peticionesAPI.InscribeEquipoJuegoDeCuestionario(new EquipoJuegoDeCuestionario(0, false, this.juegoDeCuestionario.id, this.equiposGrupo[i].id))
+              .subscribe();
+          }
+
         }
         Swal.fire('Juego de cuestionario creado correctamente', ' ', 'success');
 
@@ -2174,21 +2190,43 @@ export class JuegoComponent implements OnInit {
       return of(true);
     } else {
       const confirmacionObservable = new Observable<boolean>(obs => {
-        const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-          height: '150px',
-          data: {
-            mensaje: 'Confirma que quieres abandonar el proceso de creación del juego',
-          }
-        });
+        // const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+        //   height: '150px',
+        //   data: {
+        //     mensaje: 'Confirma que quieres abandonar el proceso de creación del juego',
+        //   }
+        // });
 
-        dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-          if (confirmed) {
+        // dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+        //   if (confirmed) {
+        //     this.Limpiar();
+        //   }
+        //   obs.next(confirmed);
+        // });
+
+
+
+        Swal.fire({
+          title: '¿Seguro que quieres abandonar el proceso de creación del juego?',
+          text: 'La operación no podrá deshaceerse',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, estoy seguro',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.value) {
             this.Limpiar();
           }
-          obs.next(confirmed);
+          obs.next(result.value);
         });
+
       });
       return confirmacionObservable;
+
+
+
     }
   }
 

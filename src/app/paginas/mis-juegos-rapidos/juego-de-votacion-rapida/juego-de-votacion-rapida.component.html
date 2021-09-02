@@ -39,7 +39,7 @@
           <br>
           <div style ="display: inline-block; padding: 10px;" *ngFor="let participante of participantes; let i=index">
                   <h2 *ngIf = "!participante.contestado" style="color: red"> {{participante.nickName}}  </h2>
-                  <h2 *ngIf = "participante.contestado" style="color: green"> {{participante.nickName}}  </h2>
+                  <h2 *ngIf = "participante.contestado" style="color: green">{{participante.nickName}}  </h2>
           </div>
         </div>
       </div>

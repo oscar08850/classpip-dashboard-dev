@@ -1,0 +1,16 @@
+{
+  
+    "*/api/*":{
+        "target":"http://147.83.118.92:3000",
+        "secure": false,
+        "logLevel": "debug"
+    },
+    "/": {
+        "target": "http://localhost:8200",
+        "secure": false,
+        "ws":true,
+        "logLevel": "debug"
+  }
+    
+  
+}
