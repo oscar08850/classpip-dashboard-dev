@@ -3,7 +3,9 @@ import { Location } from '@angular/common';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { SesionService, PeticionesAPIService, CalculosService } from 'src/app/servicios';
 import { Juego, Alumno , Cuestionario, Pregunta, AlumnoJuegoDeCuestionario,
-RespuestaJuegoDeCuestionario} from 'src/app/clases';
+RespuestaJuegoDeCuestionario,
+EquipoJuegoDeCuestionario} from 'src/app/clases';
+import { RespuestaEquipoJuegoDeCuestionario } from 'src/app/clases/RespuestaEquipoJuegoDeCuestionario';
 @Component({
   selector: 'app-informacion-respuestas-juego-de-cuestionario-dialog',
   templateUrl: './informacion-respuestas-juego-de-cuestionario-dialog.component.html',
@@ -24,6 +26,8 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
   preguntas: Pregunta[];
   inscripcionesAlumnosJuegoDeCuestionario: AlumnoJuegoDeCuestionario[];
   respuestasJuegoDeCuestionario: RespuestaJuegoDeCuestionario[];
+  inscripcionesEquiposJuegoDeCuestionario: EquipoJuegoDeCuestionario[];
+  respuestasEquipoJuegoDeCuestionario: RespuestaEquipoJuegoDeCuestionario[];
   categoriasEjeX;
 
   constructor(public location: Location,
@@ -32,13 +36,15 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
               public dialogRef: MatDialogRef<InformacionRespuestasJuegoDeCuestionarioDialogComponent>) { }
 
   ngOnInit() {
-
-    this.TraeInfo();
-
+    this.juegoSeleccionado = this.sesion.DameJuego();
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      this.TraeInfoAlumnos();
+    } else {
+      this.TraeInfoEquipos ();
+    }
   }
 
-  TraeInfo() {
-    this.juegoSeleccionado = this.sesion.DameJuego();
+  TraeInfoAlumnos() {
     this.peticionesApi.DameCuestionario (this.juegoSeleccionado.cuestionarioId)
     .subscribe (cuestionario => {
             this.cuestionario = cuestionario;
@@ -101,12 +107,82 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
     });
 
   }
+  
+  TraeInfoEquipos() {
+ 
+    this.peticionesApi.DameCuestionario (this.juegoSeleccionado.cuestionarioId)
+    .subscribe (cuestionario => {
+            this.cuestionario = cuestionario;
+
+            this.peticionesApi.DamePreguntasCuestionario (this.cuestionario.id)
+            .subscribe ( preguntas => {
+              this.preguntas = preguntas;
+              // voy a hacer el histograma de alumnos x número de aciertos
+              this.histogramaAciertos = Array(this.preguntas.length + 1).fill(0);
+              this.peticionesApi.DameInscripcionesEquipoJuegoDeCuestionario (this.juegoSeleccionado.id)
+              .subscribe (equipos => {
+                    this.inscripcionesEquiposJuegoDeCuestionario = equipos;
+                    // aqui guardare las respuestas de todos los alumnos
+                    this.respuestasEquipoJuegoDeCuestionario = [];
+                    let cont = 0;
+                    this.inscripcionesEquiposJuegoDeCuestionario.forEach (equipo => {
+                      this.peticionesApi.DameRespuestasEquipoJuegoDeCuestionario (equipo.id)
+                      .subscribe (respuestas => {
+
+                        let aciertos = 0;
+                        // voy a contar los aciertos de este alumno
+                        respuestas.forEach (respuesta => {
+                          const pregunta = this.preguntas.filter (p => p.id === respuesta.preguntaId)[0];
+                          if (pregunta.Tipo === 'Emparejamiento') {
+                            if (respuesta.Respuesta !== undefined) {
+                              let n = 0;
+                              for (let i = 0; i < pregunta.Emparejamientos.length; i++) {
+                                if (pregunta.Emparejamientos[i].r === respuesta.Respuesta[i]) {
+                                  n++;
+                                }
+                              }
+                              if (n === pregunta.Emparejamientos.length) {
+                                aciertos++;
+                              }
+                            }
+
+                          } else {
+                            if (pregunta.RespuestaCorrecta === respuesta.Respuesta[0]) {
+                              aciertos++;
+                            }
+                          }
+                        });
+                        this.histogramaAciertos[aciertos]++;
+                        this.respuestasEquipoJuegoDeCuestionario = this.respuestasEquipoJuegoDeCuestionario.concat (respuestas);
+                        cont++;
+                        if (cont === this.inscripcionesEquiposJuegoDeCuestionario.length) {
+                          // preparo el vector con las categorias para el eje X del histograma
+                          this.categoriasEjeX = [];
+                          for (let n = 0; n < this.histogramaAciertos.length ; n++) {
+                            this.categoriasEjeX.push (n.toString());
+                          }
+                          this.PrepararDonuts();
+                        }
+
+                      });
+                    });
+              });
+            });
+    });
+
+  }
 
   PrepararDonuts() {
     // preparo un donut para cada pregunta
     this.preguntas.forEach (pregunta => {
       // selecciono las respuestas para esa pregunta
-      const respuestas = this.respuestasJuegoDeCuestionario.filter (respuesta => respuesta.preguntaId === pregunta.id);
+      let respuestas;
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        respuestas = this.respuestasJuegoDeCuestionario.filter (respuesta => respuesta.preguntaId === pregunta.id);
+   
+      } else {
+        respuestas = this.respuestasEquipoJuegoDeCuestionario.filter (respuesta => respuesta.preguntaId === pregunta.id);
+      }
       let miDonut: any;
       miDonut = [];
       // preparo los datos del donut
@@ -220,7 +296,7 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
       ],
       yAxis: [{
         type: 'value',
-        name: 'Número de alumnos'
+        name: 'Número de participantes'
       }],
       series: [{
         type: 'bar',
@@ -251,7 +327,7 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
           },
           tooltip: {
               trigger: 'item',
-              formatter: '{c} alumnos <br/> ({d}%)'
+              formatter: '{c} participantes <br/> ({d}%)'
           },
           series: [
               {
@@ -293,7 +369,7 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
           },
           tooltip: {
               trigger: 'item',
-              formatter: '{c} alumnos <br/> ({d}%)'
+              formatter: '{c} participantes <br/> ({d}%)'
           },
           series: [
               {
@@ -335,7 +411,7 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
           },
           tooltip: {
               trigger: 'item',
-              formatter: '{c} alumnos <br/> ({d}%)'
+              formatter: '{c} participantes <br/> ({d}%)'
           },
           series: [
               {
@@ -377,7 +453,7 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
           },
           tooltip: {
               trigger: 'item',
-              formatter: '{c} alumnos <br/> ({d}%)'
+              formatter: '{c} participantes <br/> ({d}%)'
           },
           series: [
               {

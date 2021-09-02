@@ -14,7 +14,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         RespuestaJuegoDeCuestionario, RecursoLibro,  JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos, Rubrica,
         JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, FamiliaDeImagenesDePerfil,
         CuestionarioSatisfaccion, JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion,
-        JuegoDeEncuestaRapida, JuegoDeVotacionRapida, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido, JuegoDePuntos, JuegoDeControlDeTrabajoEnEquipo, AlumnoJuegoDeControlDeTrabajoEnEquipo} from '../clases/index';
+        JuegoDeEncuestaRapida, JuegoDeVotacionRapida, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido, JuegoDePuntos, JuegoDeControlDeTrabajoEnEquipo, AlumnoJuegoDeControlDeTrabajoEnEquipo, EquipoJuegoDeCuestionario} from '../clases/index';
 
 
 import { Escenario } from '../clases/Escenario';
@@ -27,6 +27,7 @@ import {AlumnoJuegoDeEvaluacion} from '../clases/AlumnoJuegoDeEvaluacion';
 // import {host} from '../URLs/urls';
 import * as URL from '../URLs/urls';
 import { EquipoJuegoDeVotacionUnoATodos } from '../clases/EquipoJuegoDeVotacionUnoATodos';
+import { RespuestaEquipoJuegoDeCuestionario } from '../clases/RespuestaEquipoJuegoDeCuestionario';
 
 @Injectable({
   providedIn: 'root'
@@ -46,8 +47,11 @@ export class PeticionesAPIService {
   private APIUrlCuestionarios = this.host + ':3000/api/Cuestionarios';
   private APIUrlPreguntaDelCuestionario = this.host + ':3000/api/PreguntasDelCuestionario';
   private APIUrlAlumnoJuegoDeCuestionario = this.host + ':3000/api/AlumnosJuegoDeCuestionario';
+  private APIUrlEquipoJuegoDeCuestionario = this.host + ':3000/api/equiposJuegoDeCuestionario';
   private APIUrlJuegoDeCuestionario = this.host + ':3000/api/JuegosDeCuestionario';
   private APIUrlRespuestasJuegoDeCuestionario = this.host + ':3000/api/respuestasJuegoDeCuestionario';
+  private APIUrlRespuestasEquipoJuegoDeCuestionario = this.host + ':3000/api/respuestasEquipoJuegoDeCuestionario';
+ 
   private APIUrlAlumnoJuegoDeLibro = this.host + ':3000/api/alumnojuegodecuento';
   private APIUrlJuegodeLibro = this.host + ':3000/api/juegodelibro';
   private APIUrlJuegoDePuntos = this.host + ':3000/api/JuegosDePuntos';
@@ -1188,9 +1192,16 @@ export class PeticionesAPIService {
   public DameAlumnosJuegoDeCuestionario(juegoDeCuestionario: number): Observable<Alumno[]> {
     return this.http.get<Alumno[]>(this.APIUrlJuegoDeCuestionario + '/' + juegoDeCuestionario + '/alumnos');
   }
+  public DameEquiposJuegoDeCuestionario(juegoDeCuestionario: number): Observable<Equipo[]> {
+    return this.http.get<Equipo[]>(this.APIUrlJuegoDeCuestionario + '/' + juegoDeCuestionario + '/equipos');
+  }
 
   public DameInscripcionesAlumnoJuegoDeCuestionario(juegoDeCuestionarioId: number): Observable<AlumnoJuegoDeCuestionario[]> {
     return this.http.get<AlumnoJuegoDeCuestionario[]>(this.APIUrlAlumnoJuegoDeCuestionario
+      + '?filter[where][juegoDeCuestionarioId]=' + juegoDeCuestionarioId);
+  }
+  public DameInscripcionesEquipoJuegoDeCuestionario(juegoDeCuestionarioId: number): Observable<EquipoJuegoDeCuestionario[]> {
+    return this.http.get<EquipoJuegoDeCuestionario[]>(this.APIUrlEquipoJuegoDeCuestionario
       + '?filter[where][juegoDeCuestionarioId]=' + juegoDeCuestionarioId);
   }
 
@@ -1209,6 +1220,26 @@ export class PeticionesAPIService {
     return this.http.delete<any>(this.APIUrlAlumnoJuegoDeCuestionario + '/' + alumnoJuegoDeCuestionarioId);
   }
 
+  public DameRespuestasEquipoJuegoDeCuestionario(equipoJuegoDeCuestionarioId: number): Observable<RespuestaEquipoJuegoDeCuestionario[]> {
+    return this.http.get<RespuestaEquipoJuegoDeCuestionario[]>(this.APIUrlRespuestasEquipoJuegoDeCuestionario
+      + '?filter[where][equipoJuegoDeCuestionarioId]=' + equipoJuegoDeCuestionarioId);
+  }
+
+  public BorraRespuestaEquipoDelJuegoDeCuestionario(respuestaId: number) {
+    return this.http.delete<any>(this.APIUrlRespuestasEquipoJuegoDeCuestionario + '/' + respuestaId);
+  }
+
+  public BorraEquipoDelJuegoDeCuestionario(equipoJuegoDeCuestionarioId: number): Observable<any> {
+    return this.http.delete<any>(this.APIUrlEquipoJuegoDeCuestionario + '/' + equipoJuegoDeCuestionarioId);
+  }
+
+
+
+
+
+  public InscribeEquipoJuegoDeCuestionario(equipoJuegoDeCuestionario: EquipoJuegoDeCuestionario) {
+    return this.http.post<EquipoJuegoDeCuestionario>(this.APIUrlEquipoJuegoDeCuestionario, equipoJuegoDeCuestionario);
+  }
 
   /////////////////////////////////////// GESTION DE ESCENARIOS ////////////////////////
 

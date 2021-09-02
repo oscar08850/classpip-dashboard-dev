@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Juego, Alumno } from 'src/app/clases';
+import { Juego, Alumno, Equipo, EquipoJuegoDeCuestionario, TablaEquipoJuegoDeCuestionario } from 'src/app/clases';
 import { AlumnoJuegoDeCuestionario } from 'src/app/clases/AlumnoJuegoDeCuestionario';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { SesionService, PeticionesAPIService, CalculosService } from 'src/app/servicios';
@@ -23,9 +23,12 @@ export class JuegoDeCuestionarioSeleccionadoPreparadoComponent implements OnInit
 
   // Recuperamos la informacion del juego
   alumnosDelJuego: Alumno[];
+  equiposDelJuego: Equipo[];
   // Lista de los alumnos ordenada segun su nota
   listaAlumnosOrdenadaPorNota: AlumnoJuegoDeCuestionario[];
   rankingAlumnosPorNota: TablaAlumnoJuegoDeCuestionario[];
+  listaEquiposOrdenadaPorNota: EquipoJuegoDeCuestionario[];
+  rankingEquiposPorNota: TablaEquipoJuegoDeCuestionario[];
 
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Estas segura/o que quieres activar: ';
@@ -37,8 +40,10 @@ export class JuegoDeCuestionarioSeleccionadoPreparadoComponent implements OnInit
 
   // Orden conlumnas de la tabla
   displayedColumnsAlumnos: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'nota'];
+  displayedColumnsEquipos: string[] = ['nombreEquipo', 'nota'];
 
   dataSourceAlumno;
+  dataSourceEquipo;
 
   constructor(  public dialog: MatDialog,
                 public sesion: SesionService,
@@ -48,7 +53,13 @@ export class JuegoDeCuestionarioSeleccionadoPreparadoComponent implements OnInit
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
-    this.AlumnosDelJuego();
+    console.log ('ya tengo el juego');
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      this.AlumnosDelJuego();
+    } else {
+      this.EquiposDelJuego();
+    }
+
   }
 
   AlumnosDelJuego() {
@@ -77,9 +88,49 @@ export class JuegoDeCuestionarioSeleccionadoPreparadoComponent implements OnInit
     this.dataSourceAlumno = new MatTableDataSource(this.rankingAlumnosPorNota);
   }
 
+  
+  EquiposDelJuego() {
+    console.log ('vamos por los alumnos');
+    this.peticionesAPI.DameEquiposJuegoDeCuestionario(this.juegoSeleccionado.id)
+    .subscribe(equiposJuego => {
+      this.equiposDelJuego = equiposJuego;
+      this.RecuperarInscripcionesEquipoJuego();
+    });
+  }
+
+  RecuperarInscripcionesEquipoJuego() {
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDeCuestionario(this.juegoSeleccionado.id)
+    .subscribe(inscripciones => {
+      this.listaEquiposOrdenadaPorNota = inscripciones;
+      // En el caso de que el cuestionario sea clásico y algunos equipos hayan contestado, entonces en la propia inscripción
+      // está la nota que sacó el alumno y el tiempo que empleó en contestar. Asi que ordeno la lista segun nota y tiempo (en caso de misma nota)
+      // tslint:disable-next-line:only-arrow-functions
+      this.listaEquiposOrdenadaPorNota = this.listaEquiposOrdenadaPorNota.sort(function(a, b) {
+        if (b.Nota !== a.Nota) {
+          return b.Nota - a.Nota;
+        } else {
+          // en caso de empate en la nota, gana el que empleó menos tiempo
+          return a.TiempoEmpleado - b.TiempoEmpleado;
+        }
+      });
+      console.log ('inscripciones');
+      console.log (this.listaEquiposOrdenadaPorNota);
+      this.TablaClasificacionTotalEquipos();
+    });
+  }
+
+  TablaClasificacionTotalEquipos() {
+    // Ahora preparo la tabla para mostrar la clasificación. Básicamente, junto en la misma tabla nombre del equipo con la nota
+    this.rankingEquiposPorNota = this.calculos.PrepararTablaRankingEquiposCuestionario(this.listaEquiposOrdenadaPorNota,
+      this.equiposDelJuego);
+    this.dataSourceEquipo = new MatTableDataSource(this.rankingEquiposPorNota);
+  }
+
+  
+
   ActivarJuego() {
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modalidad, this.juegoSeleccionado.PuntuacionCorrecta,
+    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo, this.juegoSeleccionado.Modalidad, this.juegoSeleccionado.PuntuacionCorrecta,
       this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, true, this.juegoSeleccionado.JuegoTerminado,
       // tslint:disable-next-line:max-line-length
       this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id)
