@@ -175,6 +175,9 @@ export class JuegoComponent implements OnInit {
   seleccionModoPresentacionKahoot: string[] = ['Mostrar pregunta',
   'No mostrar pregunta'];
 
+  puntuaLaMedia: boolean;
+
+
   // información para crear juego de avatares
   familiasElegidas: number[];
   tengoFamilias = false;
@@ -1335,6 +1338,27 @@ export class JuegoComponent implements OnInit {
     this.tengoModoPresentacion = true;
   }
 
+  // El modo de puntuación solo se aplica en el caso de juego en equipo clasico.
+  // En ese caso hay dos opciones: puntua el primero del equipo que responde o puntua la media de todos los del equipo
+  // En el primer caso ya  no hay que especificar nada mas porque todos los participantes van a recibir las 
+  // preguntas y respuestas en el mismo orden. En el campo Presentacion del modelo del juego pondremos "Primero"
+  // En el segundo caso, todos los alumnos deben responder y entonces pueden pantearse los tres modos habituales 
+  // de presentación de las preguntas/respuestas:
+  //      'Mismo orden para todos',
+  //      'Preguntas desordenadas',
+  //      'Preguntas y respuestas desordenadas'];
+  //    
+
+  
+  GuardarFormaDePuntuacion() {
+    // Si hemos elegido que puntua el primero entonces hay que indicarlo en la variable modoPresentacion
+    // En caso contrario, ya está bien lo que haya en esa variable
+    if (!this.puntuaLaMedia) {
+      this.modoPresentacion = 'Primero';
+    }
+
+  }
+
   GuardarTiempoLimite() {
     this.tiempoLimite = this.myForm.value.TiempoLimite;
     if (this.tiempoLimite === undefined) {
@@ -1373,7 +1397,10 @@ export class JuegoComponent implements OnInit {
       .subscribe(juegoCreado => {
         this.juegoDeCuestionario = juegoCreado;
         console.log ('Modo de juego ', this.modoDeJuegoSeleccionado);
-        if (this.modoDeJuegoSeleccionado === 'Individual') {
+        // tslint:disable-next-line:max-line-length
+        if ((this.modoDeJuegoSeleccionado === 'Individual') || ((this.modoDeJuegoSeleccionado === 'Equipos') && (this.modoPresentacion !== 'Primero'))) {
+          // Aunque el juego sea en equipo, si la modalidad es que todos los del equipo responden y puntua la media entonces necesito 
+          // inscripciones individuales
           // tslint:disable-next-line:prefer-for-of
           for (let i = 0; i < this.alumnosGrupo.length; i++) {
             // tslint:disable-next-line:max-line-length
@@ -2276,6 +2303,7 @@ export class JuegoComponent implements OnInit {
     this.cuestionario = undefined;
     this.tengoCuestionario = false;
     this.tengoModoPresentacion = false;
+    this.puntuaLaMedia = undefined;
 
     this.familiasElegidas = undefined;
     this.tengoFamilias = false;

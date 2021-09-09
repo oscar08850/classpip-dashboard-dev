@@ -742,6 +742,40 @@
                     <button [disabled]="!tengoModoPresentacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
                   </div>
                 </mat-step>
+
+                
+                <mat-step *ngIf ="modalidadSeleccionada === 'Clásico' && modoDeJuegoSeleccionado === 'Equipos'">
+                  <ng-template matStepLabel><div>Forma de puntuación</div></ng-template>
+
+                  <div class = "enFila">
+
+                    <div style = "width : 50%">
+                     
+                      <mat-radio-group  class="radBtnProf" aria-label="Select an option">
+                        <mat-radio-button value="'false'" [checked]="puntuaLaMedia === false" (change)="puntuaLaMedia = false; tengoModoPresentacion = true"><b>Puntúa el PRIMERO del equipo que conteste</b></mat-radio-button>
+                        <mat-radio-button value="'true'" [checked]="puntuaLaMedia === true" (change)="puntuaLaMedia = true; tengoModoPresentacion = false"><b>Puntúa la MEDIA DE TODOS los miembros del equipo</b></mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div *ngIf = "puntuaLaMedia" style = "width : 50%">
+                      <label class = "LabelStepper">Selecciona un modo de presentacion:</label>
+                      <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
+                          <mat-radio-button (click)="GuardarModoPresentacion(presentacion)" class="radio-button" *ngFor="let presentacion of seleccionModoPresentacion" [value]="presentacion">
+                            <label style="color: black;">{{presentacion}}</label>
+                          </mat-radio-button>
+                      </mat-radio-group>
+      
+                    </div>
+
+                    
+                  </div>
+
+                 
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button [disabled]="!tengoModoPresentacion" type="button" class="btn Next" (click)="GuardarFormaDePuntuacion()" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>
+
                 <mat-step *ngIf ="modalidadSeleccionada === 'Kahoot'">
                   <ng-template matStepLabel><div>Presentación</div></ng-template>
                   <div>

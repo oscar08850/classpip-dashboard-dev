@@ -79,6 +79,8 @@ export class SesionService {
   inscripcionEquipoJuegoDeCuestionario: EquipoJuegoDeCuestionario;
   equipoJuegoDeCuestionario: TablaEquipoJuegoDeCuestionario;
 
+  inscripcionesMiembrosdelEquipoJuegoDeCuestionario: AlumnoJuegoDeCuestionario[];
+
   idLibro: any;
 
   familia: FamiliaAvatares;
@@ -565,6 +567,14 @@ public TomaAlumnoJuegoDeCuestionario(alumno: TablaAlumnoJuegoDeCuestionario) {
 public TomaInscripcionEquipoJuegoDeCuestionario(inscripcion: EquipoJuegoDeCuestionario) {
   this.inscripcionEquipoJuegoDeCuestionario = inscripcion;
 }
+public TomaInscripcionesMiembrosDelEquipo(inscripciones: AlumnoJuegoDeCuestionario[]) {
+  this.inscripcionesMiembrosdelEquipoJuegoDeCuestionario = inscripciones;
+}
+
+public DameInscripcionesMiembrosDelEquipo(): AlumnoJuegoDeCuestionario[] {
+  return this.inscripcionesMiembrosdelEquipoJuegoDeCuestionario;
+}
+
 
 public TomaEquipoJuegoDeCuestionario(alumno: TablaEquipoJuegoDeCuestionario) {
   this.equipoJuegoDeCuestionario = alumno;
