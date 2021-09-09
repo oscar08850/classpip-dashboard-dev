@@ -66,8 +66,8 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnos;"></tr>
           </table>
         </div>
-        <div *ngIf = "juegoSeleccionado.Modo === 'Equipos'">
-
+        <div *ngIf = "juegoSeleccionado.Modo === 'Equipos' && juegoSeleccionado.Presentacion !== 'Primero' ">
+AAAAA
           <table align="center"  mat-table [dataSource]="dataSourceEquipo" class="example-container mat-elevation-z8">
               <ng-container matColumnDef="nombreEquipo">
                 <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  align="center">Nombre</th>
@@ -86,17 +86,42 @@
               </ng-container>
 
 
-              <ng-container matColumnDef=" ">
-                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
-                <td mat-cell style= "text-align: right" *matCellDef="let equipo">
-                  <p *ngIf = "equipo.contestado" style = "color: green;">
-                    <i class="material-icons green md-36">done</i> </p>
-                </td>
+              <ng-container  matColumnDef=" ">
+                  <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="right">Respuestas recibidas</th>
+                  <td mat-cell style= "text-align: right" *matCellDef="let equipo">
+                    <p *ngIf = "equipo.contestado" style = "color: green;">
+                      <i class="material-icons green md-36">done</i> </p>
+                    <p *ngIf = "!equipo.contestado" style = "color: red;">
+                    {{RespuestasDisponibles(equipo)}} </p>
+                  </td>
               </ng-container>
 
 
               <tr mat-header-row *matHeaderRowDef="displayedColumnsEquipos; sticky: true"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumnsEquipos;"></tr>
+          </table>
+        </div>
+        <div *ngIf = "juegoSeleccionado.Modo === 'Equipos' && juegoSeleccionado.Presentacion === 'Primero' ">
+BBBBBB
+          <table align="center"  mat-table [dataSource]="dataSourceEquipo" class="example-container mat-elevation-z8">
+              <ng-container matColumnDef="nombreEquipo">
+                <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  align="center">Nombre</th>
+                <td mat-cell  *matCellDef="let equipo">
+                  <p>{{equipo.nombre}} </p>
+                </td>
+
+              </ng-container>
+
+              <!-- Puntos Column -->
+              <ng-container matColumnDef="nota">
+                  <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Nota</th>
+                  <td mat-cell  *matCellDef="let equipo">
+                    <p *ngIf = "equipo.contestado" style = "color: green; font-size:20px">{{equipo.nota}} </p>
+                  </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsEquiposPrimero; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsEquiposPrimero;"></tr>
           </table>
         </div>
       </form>

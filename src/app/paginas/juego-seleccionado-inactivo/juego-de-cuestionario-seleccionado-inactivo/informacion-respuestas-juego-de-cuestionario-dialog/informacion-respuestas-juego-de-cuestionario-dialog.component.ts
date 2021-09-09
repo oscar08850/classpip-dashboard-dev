@@ -37,7 +37,8 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
 
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
-    if (this.juegoSeleccionado.Modo === 'Individual') {
+     // tslint:disable-next-line:max-line-length
+    if ((this.juegoSeleccionado.Modo === 'Individual') || (this.juegoSeleccionado.Modo === 'Equipos') && (this.juegoSeleccionado.Presentacion !== 'Primero')) {
       this.TraeInfoAlumnos();
     } else {
       this.TraeInfoEquipos ();
@@ -63,42 +64,44 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
                     this.inscripcionesAlumnosJuegoDeCuestionario.forEach (alumno => {
                       this.peticionesApi.DameRespuestasAlumnoJuegoDeCuestionario (alumno.id)
                       .subscribe (respuestas => {
-                        console.log ('respuestas del alumno ' + alumno.id );
-                        console.log (respuestas);
-                        let aciertos = 0;
-                        // voy a contar los aciertos de este alumno
-                        respuestas.forEach (respuesta => {
-                          const pregunta = this.preguntas.filter (p => p.id === respuesta.preguntaId)[0];
-                          if (pregunta.Tipo === 'Emparejamiento') {
-                            if (respuesta.Respuesta !== undefined) {
-                              let n = 0;
-                              for (let i = 0; i < pregunta.Emparejamientos.length; i++) {
-                                if (pregunta.Emparejamientos[i].r === respuesta.Respuesta[i]) {
-                                  n++;
+                          console.log ('respuestas del alumno ' + alumno.id );
+                          console.log (respuestas);
+                          let aciertos = 0;
+                          // voy a contar los aciertos de este alumno
+                          respuestas.forEach (respuesta => {
+                            const pregunta = this.preguntas.filter (p => p.id === respuesta.preguntaId)[0];
+                            if (pregunta.Tipo === 'Emparejamiento') {
+                              if (respuesta.Respuesta !== undefined) {
+                                let n = 0;
+                                for (let i = 0; i < pregunta.Emparejamientos.length; i++) {
+                                  if (pregunta.Emparejamientos[i].r === respuesta.Respuesta[i]) {
+                                    n++;
+                                  }
+                                }
+                                if (n === pregunta.Emparejamientos.length) {
+                                  aciertos++;
                                 }
                               }
-                              if (n === pregunta.Emparejamientos.length) {
+
+                            } else {
+                              if (pregunta.RespuestaCorrecta === respuesta.Respuesta[0]) {
                                 aciertos++;
                               }
                             }
-
-                          } else {
-                            if (pregunta.RespuestaCorrecta === respuesta.Respuesta[0]) {
-                              aciertos++;
+                          });
+                          if (alumno.Contestado) {
+                            this.histogramaAciertos[aciertos]++;
+                          }
+                          this.respuestasJuegoDeCuestionario = this.respuestasJuegoDeCuestionario.concat (respuestas);
+                          cont++;
+                          if (cont === this.inscripcionesAlumnosJuegoDeCuestionario.length) {
+                            // preparo el vector con las categorias para el eje X del histograma
+                            this.categoriasEjeX = [];
+                            for (let n = 0; n < this.histogramaAciertos.length ; n++) {
+                              this.categoriasEjeX.push (n.toString());
                             }
+                            this.PrepararDonuts();
                           }
-                        });
-                        this.histogramaAciertos[aciertos]++;
-                        this.respuestasJuegoDeCuestionario = this.respuestasJuegoDeCuestionario.concat (respuestas);
-                        cont++;
-                        if (cont === this.inscripcionesAlumnosJuegoDeCuestionario.length) {
-                          // preparo el vector con las categorias para el eje X del histograma
-                          this.categoriasEjeX = [];
-                          for (let n = 0; n < this.histogramaAciertos.length ; n++) {
-                            this.categoriasEjeX.push (n.toString());
-                          }
-                          this.PrepararDonuts();
-                        }
 
                       });
                     });
@@ -129,40 +132,42 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
                       this.peticionesApi.DameRespuestasEquipoJuegoDeCuestionario (equipo.id)
                       .subscribe (respuestas => {
 
-                        let aciertos = 0;
-                        // voy a contar los aciertos de este alumno
-                        respuestas.forEach (respuesta => {
-                          const pregunta = this.preguntas.filter (p => p.id === respuesta.preguntaId)[0];
-                          if (pregunta.Tipo === 'Emparejamiento') {
-                            if (respuesta.Respuesta !== undefined) {
-                              let n = 0;
-                              for (let i = 0; i < pregunta.Emparejamientos.length; i++) {
-                                if (pregunta.Emparejamientos[i].r === respuesta.Respuesta[i]) {
-                                  n++;
+                          let aciertos = 0;
+                          // voy a contar los aciertos de este alumno
+                          respuestas.forEach (respuesta => {
+                            const pregunta = this.preguntas.filter (p => p.id === respuesta.preguntaId)[0];
+                            if (pregunta.Tipo === 'Emparejamiento') {
+                              if (respuesta.Respuesta !== undefined) {
+                                let n = 0;
+                                for (let i = 0; i < pregunta.Emparejamientos.length; i++) {
+                                  if (pregunta.Emparejamientos[i].r === respuesta.Respuesta[i]) {
+                                    n++;
+                                  }
+                                }
+                                if (n === pregunta.Emparejamientos.length) {
+                                  aciertos++;
                                 }
                               }
-                              if (n === pregunta.Emparejamientos.length) {
+
+                            } else {
+                              if (pregunta.RespuestaCorrecta === respuesta.Respuesta[0]) {
                                 aciertos++;
                               }
                             }
-
-                          } else {
-                            if (pregunta.RespuestaCorrecta === respuesta.Respuesta[0]) {
-                              aciertos++;
+                          });
+                          if (equipo.Contestado) {
+                            this.histogramaAciertos[aciertos]++;
+                          }
+                          this.respuestasEquipoJuegoDeCuestionario = this.respuestasEquipoJuegoDeCuestionario.concat (respuestas);
+                          cont++;
+                          if (cont === this.inscripcionesEquiposJuegoDeCuestionario.length) {
+                            // preparo el vector con las categorias para el eje X del histograma
+                            this.categoriasEjeX = [];
+                            for (let n = 0; n < this.histogramaAciertos.length ; n++) {
+                              this.categoriasEjeX.push (n.toString());
                             }
+                            this.PrepararDonuts();
                           }
-                        });
-                        this.histogramaAciertos[aciertos]++;
-                        this.respuestasEquipoJuegoDeCuestionario = this.respuestasEquipoJuegoDeCuestionario.concat (respuestas);
-                        cont++;
-                        if (cont === this.inscripcionesEquiposJuegoDeCuestionario.length) {
-                          // preparo el vector con las categorias para el eje X del histograma
-                          this.categoriasEjeX = [];
-                          for (let n = 0; n < this.histogramaAciertos.length ; n++) {
-                            this.categoriasEjeX.push (n.toString());
-                          }
-                          this.PrepararDonuts();
-                        }
 
                       });
                     });
@@ -177,7 +182,8 @@ export class InformacionRespuestasJuegoDeCuestionarioDialogComponent implements 
     this.preguntas.forEach (pregunta => {
       // selecciono las respuestas para esa pregunta
       let respuestas;
-      if (this.juegoSeleccionado.Modo === 'Individual') {
+      // tslint:disable-next-line:max-line-length
+      if ((this.juegoSeleccionado.Modo === 'Individual') || (this.juegoSeleccionado.Modo === 'Equipos') && (this.juegoSeleccionado.Presentacion !== 'Primero')) {
         respuestas = this.respuestasJuegoDeCuestionario.filter (respuesta => respuesta.preguntaId === pregunta.id);
    
       } else {
