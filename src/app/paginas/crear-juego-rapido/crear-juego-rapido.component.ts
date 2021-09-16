@@ -10,7 +10,7 @@ import { MatDialog, MatTabGroup } from '@angular/material';
 
 // tslint:disable-next-line:max-line-length
 import { CuestionarioSatisfaccion, JuegoDeEncuestaRapida, TablaPuntosFormulaUno,
-          JuegoDeVotacionRapida, Cuestionario, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido } from '../../clases/index';
+          JuegoDeVotacionRapida, Cuestionario, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido, Evento } from '../../clases/index';
 
 import Swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -194,8 +194,16 @@ export class CrearJuegoRapidoComponent implements OnInit {
     this.peticionesAPI.CreaJuegoDeEncuestaRapida (juegoDeEncuestaRapida)
     .subscribe (juegoCreado => {
       this.juego = juegoCreado;
-
       this.juegoCreado = true;
+
+      //Registrar la Creación del Juego
+      let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Encuesta Rápida");
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        console.log("Registrado evento: ", res);
+      }, (err) => { 
+        console.log(err); 
+      });
+      
       Swal.fire('Juego de encuesta rápida creado correctamente', ' ', 'success');
       this.goBack();
     });
@@ -331,8 +339,16 @@ CrearJuegoDeVotacionRapida() {
   this.peticionesAPI.CreaJuegoDeVotacionRapida (juegoDeVotacionRapida)
   .subscribe (juegoCreado => {
     this.juego = juegoCreado;
-
     this.juegoCreado = true;
+
+    //Registrar la Creación del Juego
+    let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Votación Rápida");
+    this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      console.log("Registrado evento: ", res);
+    }, (err) => { 
+      console.log(err); 
+    });
+
     Swal.fire('Juego de votación rápida creado correctamente', ' ', 'success');
     this.goBack();
   });
@@ -402,8 +418,16 @@ CrearJuegoDeVotacionRapida() {
     this.peticionesAPI.CreaJuegoDeCuestionarioRapido(juegoDeCuestionarioRapido)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
-
       this.juegoCreado = true;
+
+      //Registrar la Creación del Juego
+      let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Cuestionario Rápido");
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        console.log("Registrado evento: ", res);
+      }, (err) => { 
+        console.log(err); 
+      });
+
       Swal.fire('Juego de cuestionario rapido creado correctamente', ' ', 'success');
       this.goBack();
 
@@ -463,8 +487,16 @@ CrearJuegoDeCogerTurnoRapido() {
   this.peticionesAPI.CreaJuegoDeCogerTurnoRapido (juegoDeCogerTurnoRapido)
   .subscribe (juegoCreado => {
     this.juego = juegoCreado;
-
     this.juegoCreado = true;
+
+    //Registrar la Creación del Juego
+    let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Coger Turno Rápido");
+    this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      console.log("Registrado evento: ", res);
+    }, (err) => { 
+      console.log(err); 
+    });
+
     Swal.fire('Juego de coger turno rapido creado correctamente', ' ', 'success');
     this.goBack();
   });

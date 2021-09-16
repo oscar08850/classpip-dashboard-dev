@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, EquipoJuegoDePuntos,
-  TablaAlumnoJuegoDePuntos, HistorialPuntosAlumno, TablaEquipoJuegoDePuntos, HistorialPuntosEquipo } from '../../../../clases/index';
+  TablaAlumnoJuegoDePuntos, HistorialPuntosAlumno, TablaEquipoJuegoDePuntos, HistorialPuntosEquipo, Evento, Profesor, } from '../../../../clases/index';
 
 // Services
-import { SesionService, CalculosService, PeticionesAPIService } from '../../../../servicios/index';
+import { SesionService, CalculosService, PeticionesAPIService, ComServerService } from '../../../../servicios/index';
 import {MatTableDataSource} from '@angular/material/table';
 
 import { Location } from '@angular/common';
@@ -75,7 +75,8 @@ export class AsignarPuntosComponent implements OnInit {
                private sesion: SesionService,
                private peticionesAPI: PeticionesAPIService,
                public location: Location,
-               private calculos: CalculosService ) { }
+               private calculos: CalculosService,
+               private comService: ComServerService ) { }
 
   ngOnInit() {
     const datos = this.sesion.DameDatosParaAsignarPuntos();
@@ -192,9 +193,42 @@ export class AsignarPuntosComponent implements OnInit {
         console.log ('Voy a asignar ' + this.valorPunto + 'a ' + this.rankingJuegoDePuntos[i].nombre);
         console.log ('Niveles ' + this.nivelesDelJuego);
 
-        this.calculos.AsignarPuntosAlumno ( this.listaAlumnosOrdenadaPorPuntos[i],
-                                            this.nivelesDelJuego, this.valorPunto,
-                                            this.puntoSeleccionadoId);
+        let nivelAntes: number = this.listaAlumnosOrdenadaPorPuntos[i].nivelId;
+        //console.log("Nivel antes de asignar el Punto: ", nivelAntes);
+
+        this.calculos.AsignarPuntosAlumno (this.listaAlumnosOrdenadaPorPuntos[i], this.nivelesDelJuego, this.valorPunto, this.puntoSeleccionadoId);
+
+        //Registrar la Asignación de Punto/s
+        let profesor: Profesor = this.sesion.DameProfesor();
+        let alumno: Alumno = this.alumnosDelJuego.filter(alumno => alumno.id == this.listaAlumnosOrdenadaPorPuntos[i].alumnoId)[0];
+        let eventoAsignarPuntos: Evento = new Evento(10, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Puntos", this.puntoSeleccionadoId, this.valorPunto);
+        this.peticionesAPI.CreaEvento(eventoAsignarPuntos).subscribe((res) => {
+          console.log("Registrado evento: ", res);
+        }, (err) => { 
+          console.log(err); 
+        });
+
+        let tipoPunto: string = this.tiposPuntosDelJuego.filter(punto => punto.id == this.puntoSeleccionadoId)[0].Nombre;
+        //Notificar al Alumno
+        this.comService.EnviarNotificacionIndividual(alumno.id, `Has obtenido ${this.valorPunto} punto/s de tipo ${tipoPunto} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+
+        let nivelDespues: number = this.listaAlumnosOrdenadaPorPuntos[i].nivelId;
+        //console.log("Nivel después de asignar el Punto: ", nivelDespues);
+
+        if(nivelAntes != nivelDespues){
+          //Registrar el Ascenso de Nivel
+          let eventoAscensoNivel: Evento = new Evento(11, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Puntos", undefined, undefined, this.listaAlumnosOrdenadaPorPuntos[i].nivelId);
+          this.peticionesAPI.CreaEvento(eventoAscensoNivel).subscribe((res) => {
+            console.log("Registrado evento: ", res);
+          }, (err) => { 
+            console.log(err); 
+          });
+
+          let nombreNivel: string = this.nivelesDelJuego.filter (n => n.id === this.listaAlumnosOrdenadaPorPuntos[i].nivelId)[0].Nombre;
+          //Notificar al Alumno
+          this.comService.EnviarNotificacionIndividual(alumno.id, `Has ascendido al nivel ${nombreNivel} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+        }
+
         this.rankingJuegoDePuntos[i].puntos = this.rankingJuegoDePuntos[i].puntos + this.valorPunto;
         if (this.listaAlumnosOrdenadaPorPuntos[i].nivelId !== undefined) {
           const nivel = this.nivelesDelJuego.filter (n => n.id === this.listaAlumnosOrdenadaPorPuntos[i].nivelId)[0];
@@ -226,11 +260,46 @@ export class AsignarPuntosComponent implements OnInit {
 
       // Buscamos los alumnos que hemos seleccionado
       if (this.selection.isSelected(this.dataSource.data[i]))  {
+
+        let nivelAntes: number = this.listaEquiposOrdenadaPorPuntos[i].nivelId;
+        //console.log("Nivel antes de asignar el Punto: ", nivelAntes);
+
         this.calculos.AsignarPuntosEquipo (
                     this.listaEquiposOrdenadaPorPuntos[i],
                     this.nivelesDelJuego,
                     this.valorPunto,
                     this.puntoSeleccionadoId);
+
+        //Registrar la Asignación de Punto/s
+        let profesor: Profesor = this.sesion.DameProfesor();
+        let equipo: Equipo = this.equiposDelJuego.filter(equipo => equipo.id == this.listaEquiposOrdenadaPorPuntos[i].equipoId)[0];
+        let eventoAsignarPuntos: Evento = new Evento(10, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Puntos", this.puntoSeleccionadoId, this.valorPunto);
+        this.peticionesAPI.CreaEvento(eventoAsignarPuntos).subscribe((res) => {
+          console.log("Registrado evento: ", res);
+        }, (err) => { 
+          console.log(err); 
+        });
+
+        let tipoPunto: string = this.tiposPuntosDelJuego.filter(punto => punto.id == this.puntoSeleccionadoId)[0].Nombre;
+        //Notificar a los Alumnos del Equipo
+        this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.valorPunto} punto/s de tipo ${tipoPunto} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+
+        let nivelDespues: number = this.listaEquiposOrdenadaPorPuntos[i].nivelId;
+        //console.log("Nivel después de asignar el Punto: ", nivelDespues);
+
+        if(nivelAntes != nivelDespues){
+          //Registrar el Ascenso de Nivel
+          let eventoAscensoNivel: Evento = new Evento(11, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Puntos", undefined, undefined, this.listaEquiposOrdenadaPorPuntos[i].nivelId);
+          this.peticionesAPI.CreaEvento(eventoAscensoNivel).subscribe((res) => {
+            console.log("Registrado evento: ", res);
+          }, (err) => { 
+            console.log(err); 
+          });
+          
+          let nombreNivel: string = this.nivelesDelJuego.filter (n => n.id === this.listaEquiposOrdenadaPorPuntos[i].nivelId)[0].Nombre;
+          //Notificar a los Alumnos del Equipo
+          this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha ascendido al nivel ${nombreNivel} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+        }
 
         this.rankingEquiposJuegoDePunto[i].puntos = this.rankingEquiposJuegoDePunto[i].puntos + this.valorPunto;
         if (this.listaEquiposOrdenadaPorPuntos[i].nivelId !== undefined) {
@@ -273,10 +342,41 @@ export class AsignarPuntosComponent implements OnInit {
         confirmButtonText: 'Si, estoy seguro'
       }).then((result) => {
         if (result.value) {
+          let nivelAntes: number = this.listaAlumnosOrdenadaPorPuntos[elegido].nivelId;
+          //console.log("Nivel antes de asignar el Punto: ", nivelAntes);
 
-          this.calculos.AsignarPuntosAlumno ( this.listaAlumnosOrdenadaPorPuntos[elegido],
-            this.nivelesDelJuego, this.valorPunto,
-            this.puntoAleatorioId);
+          this.calculos.AsignarPuntosAlumno (this.listaAlumnosOrdenadaPorPuntos[elegido], this.nivelesDelJuego, this.valorPunto, this.puntoAleatorioId);
+
+          //Registrar la Asignación de Punto/s
+          let profesor: Profesor = this.sesion.DameProfesor();
+          let alumno: Alumno = this.alumnosDelJuego.filter(alumno => alumno.id == this.listaAlumnosOrdenadaPorPuntos[elegido].alumnoId)[0];
+          let eventoAsignarPuntos: Evento = new Evento(10, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Puntos", this.puntoAleatorioId, this.valorPunto);
+          this.peticionesAPI.CreaEvento(eventoAsignarPuntos).subscribe((res) => {
+            console.log("Registrado evento: ", res);
+          }, (err) => { 
+            console.log(err); 
+          });
+
+          //Notificar al Alumno
+          this.comService.EnviarNotificacionIndividual(alumno.id, `Has obtenido ${this.valorPunto} punto/s de tipo Aleatorio en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+
+          let nivelDespues: number = this.listaAlumnosOrdenadaPorPuntos[elegido].nivelId;
+          //console.log("Nivel después de asignar el Punto: ", nivelDespues);
+
+          if(nivelAntes != nivelDespues){
+            //Registrar el Ascenso de Nivel
+            let eventoAscensoNivel: Evento = new Evento(11, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Puntos", undefined, undefined, this.listaAlumnosOrdenadaPorPuntos[elegido].nivelId);
+            this.peticionesAPI.CreaEvento(eventoAscensoNivel).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+
+            let nombreNivel: string = this.nivelesDelJuego.filter (n => n.id === this.listaAlumnosOrdenadaPorPuntos[elegido].nivelId)[0].Nombre;
+            //Notificar al Alumno
+            this.comService.EnviarNotificacionIndividual(alumno.id, `Has ascendido al nivel ${nombreNivel} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+          }
+
           this.rankingJuegoDePuntos[elegido].puntos = this.rankingJuegoDePuntos[elegido].puntos + this.valorPunto;
           if (this.listaAlumnosOrdenadaPorPuntos[elegido].nivelId !== undefined) {
             const nivel = this.nivelesDelJuego.filter (n => n.id === this.listaAlumnosOrdenadaPorPuntos[elegido].nivelId)[0];
@@ -303,9 +403,6 @@ export class AsignarPuntosComponent implements OnInit {
       const numeroEquipos = this.equiposDelJuego.length;
       const elegido = Math.floor(Math.random() * numeroEquipos);
       this.equipoElegido = this.rankingEquiposJuegoDePunto[elegido];
-
-
-
       Swal.fire({
         title: '¿Asignamos el punto a ' + this.equipoElegido.nombre + '?',
         icon: 'warning',
@@ -315,10 +412,41 @@ export class AsignarPuntosComponent implements OnInit {
         confirmButtonText: 'Si, estoy seguro'
       }).then((result) => {
         if (result.value) {
+          let nivelAntes: number = this.listaEquiposOrdenadaPorPuntos[elegido].nivelId;
+          //console.log("Nivel antes de asignar el Punto: ", nivelAntes);
 
-          this.calculos.AsignarPuntosEquipo ( this.listaEquiposOrdenadaPorPuntos[elegido],
-            this.nivelesDelJuego, this.valorPunto,
-            this.puntoAleatorioId);
+          this.calculos.AsignarPuntosEquipo (this.listaEquiposOrdenadaPorPuntos[elegido], this.nivelesDelJuego, this.valorPunto, this.puntoAleatorioId);
+
+          //Registrar la Asignación de Punto/s
+          let profesor: Profesor = this.sesion.DameProfesor();
+          let equipo: Equipo = this.equiposDelJuego.filter(equipo => equipo.id == this.listaEquiposOrdenadaPorPuntos[elegido].equipoId)[0];
+          let eventoAsignarPuntos: Evento = new Evento(10, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Puntos", this.puntoAleatorioId, this.valorPunto);
+          this.peticionesAPI.CreaEvento(eventoAsignarPuntos).subscribe((res) => {
+            console.log("Registrado evento: ", res);
+          }, (err) => { 
+            console.log(err); 
+          });
+
+          //Notificar a los Alumnos del Equipo
+          this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.valorPunto} punto/s de tipo Aleatorio en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+
+          let nivelDespues: number = this.listaEquiposOrdenadaPorPuntos[elegido].nivelId;
+          //console.log("Nivel después de asignar el Punto: ", nivelDespues);
+
+          if(nivelAntes != nivelDespues){
+            //Registrar el Ascenso de Nivel
+            let eventoAscensoNivel: Evento = new Evento(11, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Puntos", undefined, undefined, this.listaEquiposOrdenadaPorPuntos[elegido].nivelId);
+            this.peticionesAPI.CreaEvento(eventoAscensoNivel).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+            
+            let nombreNivel: string = this.nivelesDelJuego.filter (n => n.id === this.listaEquiposOrdenadaPorPuntos[elegido].nivelId)[0].Nombre;
+            //Notificar a los Alumnos del Equipo
+            this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha ascendido al nivel ${nombreNivel} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+          }
+
           this.rankingEquiposJuegoDePunto[elegido].puntos = this.rankingEquiposJuegoDePunto[elegido].puntos + this.valorPunto;
           if (this.listaEquiposOrdenadaPorPuntos[elegido].nivelId !== undefined) {
             const nivel = this.nivelesDelJuego.filter (n => n.id === this.listaEquiposOrdenadaPorPuntos[elegido].nivelId)[0];
@@ -340,13 +468,9 @@ export class AsignarPuntosComponent implements OnInit {
           this.selection.clear();
         }
       });
-
-
     }
   }
   goBack() {
     this.location.back();
   }
-
 }
-

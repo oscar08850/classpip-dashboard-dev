@@ -31,7 +31,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MdePopoverModule } from '@material-extended/mde';
 import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatDatepickerModule, MatNativeDateModule } from '@angular/material';
+import { MatDatepickerModule, MatNativeDateModule } from '@angular/material';
+import  {MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { ListViewModule } from '@syncfusion/ej2-angular-lists';
 import {MatSelectModule} from '@angular/material/select';
@@ -247,6 +248,10 @@ import { TeamExcludePipe } from './pipes/team-exclude.pipe';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
+import { ActividadRegistroComponent } from './paginas/actividad-registro/actividad-registro.component';
+import { ActividadGraficosComponent } from './paginas/actividad-graficos/actividad-graficos.component';
+import { ActividadConfigComponent } from './paginas/actividad-config/actividad-config.component';
+import { CdkColumnDef } from '@angular/cdk/table';
 
 
 @NgModule({
@@ -390,7 +395,10 @@ import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-act
     TeamExcludePipe,
     ModificarPerfilComponent,
     JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
-    GestionPreguntaKahootComponent
+    GestionPreguntaKahootComponent,
+    ActividadRegistroComponent,
+    ActividadGraficosComponent,
+    ActividadConfigComponent
 
   ],
   imports: [
@@ -429,6 +437,7 @@ import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-act
     MatRadioModule,
     MatSelectModule,
     MatSliderModule,
+    MatProgressSpinnerModule,
     HttpClientModule,
 
     NgxEchartsModule,
@@ -454,7 +463,8 @@ import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-act
   providers: [
     {
         provide: DateAdapter, useClass: CustomDateAdapter
-    }
+    },
+    CdkColumnDef
   ]
 
 

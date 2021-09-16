@@ -17,7 +17,7 @@ import {  Nivel, Alumno, Equipo, Juego, JuegoDeCompeticion, Punto, TablaPuntosFo
           EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable,
           JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
           JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, CuestionarioSatisfaccion,
-          JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion, Rubrica } from '../../clases/index';
+          JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion, Rubrica, Evento } from '../../clases/index';
 
 
 // Services
@@ -770,6 +770,18 @@ export class JuegoComponent implements OnInit {
     console.log('Creando Juego de Evaluacion', juego);
     this.peticionesAPI.CrearJuegoDeEvaluacion(juego).subscribe(res => {
       console.log('JuegoDeEvaluacionCreado', res);
+
+      //Registrar la Creación del Juego
+      let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Evaluación");
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        console.log("Registrado evento: ", res);
+      }, (err) => { 
+        console.log(err); 
+      });
+
+      //Notificar a los Alumnos del Grupo
+      this.comService.EnviarNotificacionGrupo(this.grupo.id, `Nuevo Juego de Evaluación para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
+
       Swal.fire('Juego de Evaluación creado correctamente', ' ', 'success');
       this.juego = res;
       this.sesion.TomaJuego(this.juego);
@@ -847,6 +859,18 @@ export class JuegoComponent implements OnInit {
       this.juego = juegoCreado;
       this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
+
+      //Registrar la Creación del Juego
+      let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Puntos");
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        console.log("Registrado evento: ", res);
+      }, (err) => { 
+        console.log(err); 
+      });
+
+      //Notificar a los Alumnos del Grupo
+      this.comService.EnviarNotificacionGrupo(this.grupo.id, `Nuevo Juego de Puntos para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
+
       // Ahora asignamos los puntos
       // tslint:disable-next-line:max-line-length
       this.puntosDelJuego.forEach (punto =>
@@ -917,6 +941,18 @@ export class JuegoComponent implements OnInit {
       console.log('Juego creado correctamente');
       this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
+
+      //Registrar la Creación del Juego
+      let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Colección");
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        console.log("Registrado evento: ", res);
+      }, (err) => { 
+        console.log(err); 
+      });
+
+      //Notificar a los Alumnos del Grupo
+      this.comService.EnviarNotificacionGrupo(this.grupo.id, `Nuevo Juego de Colección para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
+
       // Asignamos a los participantes en el juego
       if (this.modoDeJuegoSeleccionado === 'Individual') {
         // tslint:disable-next-line:prefer-for-of
@@ -942,18 +978,6 @@ export class JuegoComponent implements OnInit {
       this.Limpiar();
         // Regresamos a la lista de equipos (mat-tab con índice 0)
       this.tabGroup.selectedIndex = 0;
-      // Notificación para los miembros del grupo
-      // console.log ('envio notificación los miembros del grupo');
-      // this.comService.EnviarNotificacionGrupo (
-      //      this.grupo.id,
-      //      'Nuevo juego de colección para el grupo ' + this.grupo.Nombre
-      // );
-      console.log ('envio notificación los miembros del grupo');
-      this.comService.EnviarNotificacionGrupo (
-          this.grupo.id,
-          'Nuevo juego de colección para el grupo ' + this.grupo.Nombre
-      );
-
     });
   }
 
@@ -1020,6 +1044,18 @@ export class JuegoComponent implements OnInit {
       false, false, this.profesorId, this.grupo.id, this.cuestionario.id, this.tiempoLimite), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juegoDeCuestionario = juegoCreado;
+
+      //Registrar la Creación del Juego
+      let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Cuestionario");
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        console.log("Registrado evento: ", res);
+      }, (err) => { 
+        console.log(err); 
+      });
+
+      //Notificar a los Alumnos del Grupo
+      this.comService.EnviarNotificacionGrupo(this.grupo.id, `Nuevo Juego de Cuestionario para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
+
       // Inscribimos a los alumnos (de momento no hay juego de cuestionario por equipos)
        // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.alumnosGrupo.length; i++) {
@@ -1065,6 +1101,18 @@ export class JuegoComponent implements OnInit {
     this.peticionesAPI.CreaJuegoDeAvatar (juego, this.grupo.id)
       .subscribe (nuevoJuego => {
         this.juegoDeAvatar = nuevoJuego;
+
+        //Registrar la Creación del Juego
+        let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juegoDeAvatar.id, this.nombreDelJuego, "Juego De Avatar");
+        this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+          console.log("Registrado evento: ", res);
+        }, (err) => { 
+          console.log(err); 
+        });
+
+        //Notificar a los Alumnos del Grupo
+        this.comService.EnviarNotificacionGrupo(this.grupo.id, `Nuevo Juego de Avatar para el Grupo ${this.grupo.Nombre}: ${this.juegoDeAvatar.NombreJuego}`);
+
         // Ahora inscribimos en el juego a los participantes
         if (this.modoDeJuegoSeleccionado === 'Individual') {
 
@@ -1203,6 +1251,18 @@ export class JuegoComponent implements OnInit {
       this.juego = juegoCreado;
       this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
+
+      //Registrar la Creación del Juego
+      let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Competición Liga");
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        console.log("Registrado evento: ", res);
+      }, (err) => { 
+        console.log(err); 
+      });
+
+      //Notificar a los Alumnos del Grupo
+      this.comService.EnviarNotificacionGrupo(this.grupo.id, `Nuevo Juego De Competición Liga para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
+
       // Creamos las jornadas
       console.log ('voy a crear jornadas');
       this.calculos.CrearJornadasLiga(this.numeroDeJornadas, this.juego.id)
@@ -1258,6 +1318,18 @@ export class JuegoComponent implements OnInit {
       this.juego = juegoCreado;
       this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
+
+      //Registrar la Creación del Juego
+      let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Competición Fórmula Uno");
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        console.log("Registrado evento: ", res);
+      }, (err) => { 
+        console.log(err); 
+      });
+
+      //Notificar a los Alumnos del Grupo
+      this.comService.EnviarNotificacionGrupo(this.grupo.id, `Nuevo Juego De Competición Fórmula Uno para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
+
       this.calculos.CrearJornadasFormulaUno(this.numeroDeJornadas, this.juego.id)
       .subscribe ( jornadas => {
         this.jornadasFormulaUno = jornadas;
@@ -1393,6 +1465,18 @@ export class JuegoComponent implements OnInit {
     .subscribe(juegoCreado => {
       this.juegoDeGeocaching = juegoCreado;
       this.juegoCreado = true;
+
+      //Registrar la Creación del Juego
+      let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Geocaching");
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        console.log("Registrado evento: ", res);
+      }, (err) => { 
+        console.log(err); 
+      });
+
+      //Notificar a los Alumnos del Grupo
+      this.comService.EnviarNotificacionGrupo(this.grupo.id, `Nuevo Juego De Geocaching para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
+
       // Inscribimos a los alumnos en el juego
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.alumnosGrupo.length; i++) {
@@ -1459,6 +1543,17 @@ CrearJuegoDeVotacionUnoATodos() {
       this.juego = juegoCreado;
       this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
+
+      //Registrar la Creación del Juego
+      let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Votación Uno A Todos");
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        console.log("Registrado evento: ", res);
+      }, (err) => { 
+        console.log(err); 
+      });
+
+      //Notificar a los Alumnos del Grupo
+      this.comService.EnviarNotificacionGrupo(this.grupo.id, `Nuevo Juego De Votación Uno A Todos para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
 
       if (this.modoDeJuegoSeleccionado === 'Individual') {
 
@@ -1549,6 +1644,17 @@ CrearJuegoDeVotacionTodosAUno() {
     this.sesion.TomaJuego(this.juego);
     this.juegoCreado = true;
 
+    //Registrar la Creación del Juego
+    let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Votación Todos A Uno");
+    this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      console.log("Registrado evento: ", res);
+    }, (err) => { 
+      console.log(err); 
+    });
+
+    //Notificar a los Alumnos del Grupo
+    this.comService.EnviarNotificacionGrupo(this.grupo.id, `Nuevo Juego De Votación Todos A Uno para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
+
     if (this.modoDeJuegoSeleccionado === 'Individual') {
 
       // tslint:disable-next-line:prefer-for-of
@@ -1609,6 +1715,17 @@ CrearJuegoDeCuestionarioDeSatisfaccion() {
     this.juego = juegoCreado;
     this.sesion.TomaJuego(this.juego);
     this.juegoCreado = true;
+
+    //Registrar la Creación del Juego
+    let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Cuestionario de Satisfacción");
+    this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      console.log("Registrado evento: ", res);
+    }, (err) => { 
+      console.log(err); 
+    });
+
+    //Notificar a los Alumnos del Grupo
+    this.comService.EnviarNotificacionGrupo(this.grupo.id, `Nuevo Juego De Cuestionario de Satisfacción para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
 
     if (this.modoDeJuegoSeleccionado === 'Individual') {
 

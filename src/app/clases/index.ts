@@ -72,12 +72,12 @@ export * from './JuegoDeCuestionarioSatisfaccion';
 export * from './AlumnoJuegoDeCuestionarioSatisfaccion';
 export * from './JuegoDeEncuestaRapida';
 export * from './JuegoDeVotacionRapida';
-
 export * from './FamiliaDeImagenesDePerfil';
 export * from './JuegoDeCuestionarioRapido';
 export * from './JuegoDeCogerTurnoRapido';
 export * from './JuegoDePuntos';
+export * from './JuegoDeEvaluacion';
+export * from './EquipoJuegoEvaluado';
+export * from './AlumnoJuegoEvaluado';
 
-
-
-
+export * from './Evento';

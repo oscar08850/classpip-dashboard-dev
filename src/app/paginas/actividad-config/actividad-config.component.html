@@ -1,0 +1,22 @@
+<div class="titulo">Configuración (Registro y Notificaciones)</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+  <mat-card class="cartaFiltrosRegistro">
+    <mat-card-content>
+      <table style="width: 100%" align="center" class="example-container mat-elevation-z8">
+        <ng-container>
+          <th mat-header-cell class="tituloColumnaTabla" style="width: 15%"> Evento </th>
+          <td mat-cell> [Eventos Generales] </td>
+          <td mat-cell> Creación del Juego </td>
+          <td mat-cell> Acceso al Juego </td>
+        </ng-container>
+        <ng-container>
+          <th mat-header-cell class="tituloColumnaTabla" style="width: 5%"> Registrar Evento <br>
+            <mat-checkbox (ngModel)="registros[0]"></mat-checkbox>
+          </th>
+        </ng-container>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>
