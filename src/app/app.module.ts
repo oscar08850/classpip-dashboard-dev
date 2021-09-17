@@ -15,7 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatBadgeModule, MatInputModule, MatProgressSpinnerModule, MatRadioModule} from '@angular/material';
+import {MatBadgeModule, MatInputModule, MatRadioModule} from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
@@ -31,7 +31,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MdePopoverModule } from '@material-extended/mde';
 import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatDatepickerModule, MatNativeDateModule } from '@angular/material';
+import { MatDatepickerModule, MatNativeDateModule } from '@angular/material';
+import {MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { ListViewModule } from '@syncfusion/ej2-angular-lists';
 import {MatSelectModule} from '@angular/material/select';
@@ -244,6 +245,10 @@ import { TeamExcludePipe } from './pipes/team-exclude.pipe';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
+import { ActividadRegistroComponent } from './paginas/actividad-registro/actividad-registro.component';
+import { ActividadGraficosComponent } from './paginas/actividad-graficos/actividad-graficos.component';
+import { ActividadConfigComponent } from './paginas/actividad-config/actividad-config.component';
+import { CdkColumnDef } from '@angular/cdk/table';
 
 import { JuegoDeEvaluacionActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/juego-de-evaluacion-activo.component';
 import { EvaluacionDialogoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/evaluacion-dialogo/evaluacion-dialogo.component';
@@ -415,63 +420,67 @@ import { AsignarRubricaComponent } from './paginas/juego/asignar-rubrica/asignar
     ModificarPerfilComponent,
     JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
     GestionPreguntaKahootComponent,
+
     JuegoDeEvaluacionActivoComponent,
     EvaluacionDialogoComponent,
     EvaluacionBorrarDialogoComponent,
     MostrarCuestionarioComponent,
     JuegoDeEvaluacionSeleccionadoInactivoComponent,
     JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent,
-    AsignarRubricaComponent
+    AsignarRubricaComponent,
+    ActividadRegistroComponent,
+    ActividadGraficosComponent,
+    ActividadConfigComponent
 
   ],
   imports: [
-        BrowserModule,
-        AppRoutingModule,
-        NgbModule,
-        HttpModule,
+    BrowserModule,
+    AppRoutingModule,
+    NgbModule,
+    HttpModule,
 
-        FormsModule,
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatChipsModule,
-        MatCardModule,
-        MatMenuModule,
-        MatStepperModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatTabsModule,
-        MatExpansionModule,
-        MatTooltipModule,
-        MatTableModule,
-        MatListModule,
-        MatIconModule,
-        MatDialogModule,
-        MatDividerModule,
-        MatCheckboxModule,
-        MatSnackBarModule,
-        MatToolbarModule,
-        MatGridListModule,
-        MdePopoverModule,
-        MatSortModule,
-        MatPaginatorModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatRadioModule,
-        MatSelectModule,
-        MatSliderModule,
-        HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatChipsModule,
+    MatCardModule,
+    MatMenuModule,
+    MatStepperModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTabsModule,
+    MatExpansionModule,
+    MatTooltipModule,
+    MatTableModule,
+    MatListModule,
+    MatIconModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatCheckboxModule,
+    MatSnackBarModule,
+    MatToolbarModule,
+    MatGridListModule,
+    MdePopoverModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatProgressSpinnerModule,
+    HttpClientModule,
+    MatBadgeModule,
 
-        NgxEchartsModule,
-        ListViewModule,
-        DragDropModule,
-        AngularDateTimePickerModule,
-        MatSliderModule,
-        NgxQRCodeModule,
-        MatProgressSpinnerModule,
-        MatBadgeModule
+    NgxEchartsModule,
+    ListViewModule,
+    DragDropModule,
+    AngularDateTimePickerModule,
+    MatSliderModule,
+    NgxQRCodeModule
 
-    ],
+  ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
   entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
@@ -487,7 +496,8 @@ import { AsignarRubricaComponent } from './paginas/juego/asignar-rubrica/asignar
   providers: [
     {
         provide: DateAdapter, useClass: CustomDateAdapter
-    }
+    },
+    CdkColumnDef
   ]
 
 
