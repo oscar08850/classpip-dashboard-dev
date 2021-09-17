@@ -15,7 +15,6 @@ import {SesionService, ComServerService} from '../../../servicios/index';
 })
 export class NavbarComponent implements OnInit {
 
-
   @Output() public sidenavToggle = new EventEmitter();
 
   profesor: Profesor;
@@ -46,14 +45,13 @@ export class NavbarComponent implements OnInit {
   URLRecursos: string;
   URLMisJuegosRapidos: string;
   URLCrearJuegoRapido: string;
+  URLRegistroActividad: string;
+  URLGraficosActividad: string;
+  URLConfigActividad: string
 
-
-  constructor(  private sesion: SesionService,
-                private comServer: ComServerService,
-                private router: Router) { }
+  constructor(private sesion: SesionService, private comServer: ComServerService, private router: Router) { }
 
   ngOnInit() {
-
 
     this.URLInicio = this.router.url;
     this.URLMisGrupos = this.URLInicio + '/misGrupos';
@@ -78,7 +76,9 @@ export class NavbarComponent implements OnInit {
     this.URLRecursos = this.URLInicio + '/recursos';
     this.URLMisJuegosRapidos = this.URLInicio + '/misJuegosRapidos';
     this.URLCrearJuegoRapido = this.URLInicio + '/crearJuegoRapido';
-
+    this.URLRegistroActividad = this.URLInicio + '/registroActividad';
+    this.URLGraficosActividad = this.URLInicio + '/graficosActividad';
+    this.URLConfigActividad = this.URLInicio + '/configActividad';
 
     console.log ('estoy en navbar');
     // Me subscribo para que cada vez que cambie el profesor pueda actualizar el navbar
@@ -89,7 +89,6 @@ export class NavbarComponent implements OnInit {
   }
 
   CerrarSesion() {
-
     this.comServer.Desonectar (this.profesor.id);
 
     console.log ('voy a login');

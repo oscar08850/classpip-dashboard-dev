@@ -89,10 +89,14 @@ export * from './FamiliaDeImagenesDePerfil';
 export * from './JuegoDeCuestionarioRapido';
 export * from './JuegoDeCogerTurnoRapido';
 export * from './JuegoDePuntos';
+
 export * from './JuegoDeKahootRapido';
 export * from './JuegoDeControlDeTrabajoEnEquipo';
 export * from './AlumnoJuegoDeControlDeTrabajoEnEquipo';
 
+export * from './JuegoDeEvaluacion';
+export * from './EquipoJuegoEvaluado';
+export * from './AlumnoJuegoEvaluado';
 
 
-
+export * from './Evento';

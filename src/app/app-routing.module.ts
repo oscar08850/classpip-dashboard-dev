@@ -159,6 +159,9 @@ import { DeactivateGuardVotacionRapida } from './guardas/canExitVotacionRapida.g
 import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-perfil.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
 import { MostrarCuestionarioComponent } from './paginas/mis-cuestionarios/mostrar-cuestionario/mostrar-cuestionario.component';
+import { ActividadRegistroComponent } from './paginas/actividad-registro/actividad-registro.component';
+import { ActividadGraficosComponent } from './paginas/actividad-graficos/actividad-graficos.component';
+import { ActividadConfigComponent } from './paginas/actividad-config/actividad-config.component';
 
 const routes: Routes = [
 
@@ -357,8 +360,13 @@ const routes: Routes = [
   // tslint:disable-next-line:max-line-length
   { path: 'inicio/:id/misJuegosRapidos/juegoDeCuestionarioRapido', component: JuegoDeCuestionarioRapidoComponent, canDeactivate: [DeactivateGuardCuestionarioRapido]},
   // tslint:disable-next-line:max-line-length
-  { path: 'inicio/:id/misJuegosRapidos/juegoDeCogerTurnoRapido', component: JuegoDeCogerTurnoRapidoComponent, canDeactivate: [DeactivateGuardCogerTurnoRapido]}
-  ,
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeCogerTurnoRapido', component: JuegoDeCogerTurnoRapidoComponent, canDeactivate: [DeactivateGuardCogerTurnoRapido]},
+  
+  //REGISTRO Y GRÁFICOS DE ACTIVIDAD
+  { path: 'inicio/:id/registroActividad', component: ActividadRegistroComponent },
+  { path: 'inicio/:id/graficosActividad', component: ActividadGraficosComponent },
+  { path: 'inicio/:id/configActividad', component: ActividadConfigComponent }
+
 ];
 
 @NgModule({

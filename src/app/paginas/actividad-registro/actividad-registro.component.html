@@ -1,0 +1,309 @@
+<div class="titulo">Registro de actividad</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+  <mat-card class="cartaFiltrosRegistro">
+    <div class="enFila">
+      <button (click)="MostrarFiltros()" class="btn Aceptar" style="width: 49%;">Filtros  <mat-icon class="iconoCentradoBoton">filter_list</mat-icon></button>
+      <button (click)="GenerarPDFRegistro()" class="btn Juegos" style="width: 49%;">Descargar Registro en PDF  <mat-icon class="iconoCentradoBoton">file_download</mat-icon></button>
+    </div>
+
+    <mat-card-content *ngIf="filtrosVisibles">
+      <mat-tab-group>
+        <mat-tab label="Fecha y Hora">
+          <div class="enFila">
+            <div class="enColumna" style="width: 25%;">
+              <mat-radio-group [(ngModel)]="filtroOrdenTemporal">
+                <mat-radio-button value="asc" class="enFila">
+                  <mat-icon>date_range</mat-icon>
+                  <mat-icon>arrow_drop_up</mat-icon>
+                </mat-radio-button>
+                <mat-radio-button value="desc" class="enFila">
+                  <mat-icon>date_range</mat-icon>
+                  <mat-icon>arrow_drop_down</mat-icon>
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div class="enColumna" style="width: 25%;">
+              <mat-checkbox [(ngModel)]="filtrarFecha">Filtrar por Fecha: </mat-checkbox>
+            </div>
+            <div class="enColumna" style="width: 49%;">
+              <mat-form-field>
+                <input matInput [matDatepicker]="initialPicker" placeholder="Día inicial"
+                  [(ngModel)]="filtroFechaInicial" disabled>
+                <mat-datepicker-toggle matSuffix [for]="initialPicker"></mat-datepicker-toggle>
+                <mat-datepicker #initialPicker disabled="false"></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput [matDatepicker]="finalPicker" placeholder="Día final" [(ngModel)]="filtroFechaFinal" disabled>
+                <mat-datepicker-toggle matSuffix [for]="finalPicker"></mat-datepicker-toggle>
+                <mat-datepicker #finalPicker disabled="false"></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Tipo de Evento">
+          <div class="enFila">
+            <div class="enColumna" style="width: 40%;">
+              <mat-checkbox [(ngModel)]="filtrarTipoEvento">Filtrar por Tipo de Evento</mat-checkbox>
+            </div>
+            <div class="enColumna" style="width: 59%;">
+              <mat-form-field>
+                <mat-label>Tipo de Evento</mat-label>
+                <mat-select [(ngModel)]="filtroTipoEvento" name="tipoEvento" (selectionChange)="tipoEventoCambiado()">
+                  <mat-option value="1">Creación del Juego</mat-option>
+                  <mat-option value="2">Acceso al Juego</mat-option>
+                  <mat-option value="10">Asignación de Punto/s</mat-option>
+                  <mat-option value="11">Ascenso de Nivel (Juego de Puntos)</mat-option>
+                  <mat-option value="20">Asignación de Cromo/s</mat-option>
+                  <mat-option value="21">Regalo de Cromo</mat-option>
+                  <mat-option value="22">Finalización de Colección de Cromos</mat-option>
+                  <mat-option value="30">Asignación de Privilegio (Juego de Avatar)</mat-option>
+                  <mat-option value="31">Eliminación de Privilegio (Juego de Avatar)</mat-option>
+                  <mat-option value="32">Modificación de Avatar (Juego de Avatar)</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Alumno/Equipo">
+          <div class="enFila">
+            <div class="enColumna" style="width: 49%;">
+              <mat-checkbox [(ngModel)]="filtrarAlumno" (change)="filtrarAlumnoCambiado($event)">Filtrar por Alumno</mat-checkbox>
+            </div>
+            <div class="enColumna" style="width: 50%;">
+              <mat-form-field>
+                <mat-label>Alumno</mat-label>
+                <mat-select [(ngModel)]="filtroAlumno" name="alumno" (selectionChange)="alumnoCambiado()">
+                  <mat-option *ngFor="let alumno of listaAlumnos" [value]="alumno">
+                    {{ alumno.Nombre }} {{ alumno.PrimerApellido }} {{ alumno.SegundoApellido }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="enFila">
+            <div class="enColumna" style="width: 49%;">
+              <span>Selecciona un Grupo para filtrar por Equipo:</span>
+            </div>
+            <div class="enColumna" style="width: 50%;">
+              <mat-form-field>
+                <mat-label>Grupo</mat-label>
+                <mat-select [(ngModel)]="filtroGrupo" name="grupo" (selectionChange)="grupoCambiado($event)">
+                  <mat-option *ngFor="let grupo of listaGrupos" [value]="grupo">
+                    {{ grupo.Nombre }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroGrupo.id != null">
+            <div class="enColumna" style="width: 49%;">
+              <mat-checkbox [(ngModel)]="filtrarEquipo" (change)="filtrarEquipoCambiado($event)">Filtrar por Equipo</mat-checkbox>
+            </div>
+            <div class="enColumna" style="width: 50%;">
+              <mat-form-field>
+                <mat-label>Equipo</mat-label>
+                <mat-select [(ngModel)]="filtroEquipo" name="equipo" (selectionChange)="equipoCambiado()">
+                  <mat-option *ngFor="let equipo of listaEquipos" [value]="equipo">
+                    {{ equipo.Nombre }} (Grupo: {{ filtroGrupo.Nombre }})
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Juego">
+          <div class="enFila">
+            <div class="enColumna" style="width: 59%;">
+              <span>Selecciona un Grupo para filtrar por Juego o por uno de sus parámetros:</span>
+            </div>
+            <div class="enColumna" style="width: 40%;">
+              <mat-form-field>
+                <mat-label>Grupo</mat-label>
+                <mat-select [(ngModel)]="filtroGrupo" name="grupo" (selectionChange)="grupoCambiado($event)">
+                  <mat-option *ngFor="let grupo of listaGrupos" [value]="grupo">
+                    {{ grupo.Nombre }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroGrupo.id != null">
+            <div class="enColumna" style="width: 59%;">
+              <mat-checkbox [(ngModel)]="filtrarTipoJuego">Filtrar por Tipo de Juego (Selecciónalo para filtrar por un Juego en concreto)</mat-checkbox>
+            </div>
+            <div class="enColumna" style="width: 40%;">
+              <mat-form-field>
+                <mat-label>Tipo de Juego</mat-label>
+                <mat-select [(ngModel)]="filtroTipoJuego" name="tipoJuego" (selectionChange)="tipoJuegoCambiado($event)">
+                  <mat-option value="Juego De Avatar">Juego de Avatar</mat-option>
+                  <mat-option value="Juego De Colección">Juego De Colección</mat-option>
+                  <mat-option value="Juego De Competición Fórmula Uno">Juego De Competición Fórmula Uno</mat-option>
+                  <mat-option value="Juego De Competición Liga">Juego De Competición Liga</mat-option>
+                  <mat-option value="Juego De Cuestionario">Juego De Cuestionario</mat-option>
+                  <mat-option value="Juego De Cuestionario Rápido">Juego De Cuestionario Rápido</mat-option>
+                  <mat-option value="Juego De Cuestionario de Satisfacción">Juego De Cuestionario de Satisfacción</mat-option>
+                  <mat-option value="Juego De Encuesta Rápida">Juego De Encuesta Rápida</mat-option>
+                  <mat-option value="Juego De Evaluación">Juego De Evaluación</mat-option>
+                  <mat-option value="Juego De Geocaching">Juego De Geocaching</mat-option>
+                  <mat-option value="Juego De Puntos">Juego De Puntos</mat-option>
+                  <mat-option value="Juego De Votación Rápida">Juego De Votación Rápida</mat-option>
+                  <mat-option value="Juego De Votación Uno A Todos">Juego De Votación Uno A Todos</mat-option>
+                  <mat-option value="Juego De Votación Todos A Uno">Juego De Votación Todos A Uno</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroGrupo.id != null && (filtrarTipoJuego == false || filtroTipoJuego == ' ')">
+            <div class="enColumna">
+              <span>Selecciona un Tipo de Juego para filtrar por un Juego en concreto</span>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroTipoJuego != ' '">
+            <div class="enColumna" style="width: 59%;">
+              <mat-checkbox [(ngModel)]="filtrarJuego">Filtrar por Juego (Selecciónalo para filtrar por sus parámetros)</mat-checkbox>
+            </div>
+            <div class="enColumna" style="width: 40%;">
+              <mat-form-field>
+                <mat-label>Juego</mat-label>
+                <mat-select [(ngModel)]="filtroJuego" name="juego" (selectionChange)="juegoCambiado($event)">
+                  <mat-option *ngFor="let juego of listaJuegos" [value]="juego">{{ juego.NombreJuego }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroTipoJuego != ' ' && (filtrarJuego == false || filtroJuego.id == null)">
+            <div class="enColumna">
+              <span>Selecciona un Juego para filtrar por sus parámetros</span>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroTipoJuego == 'Juego De Puntos' && filtrarJuego == true && filtroJuego.id != null">
+            <div class="enColumna" style="width: 50%;">
+              <mat-checkbox [(ngModel)]="filtrarPunto">Filtrar por Tipo de Punto asignado (Juego de Puntos)</mat-checkbox>
+            </div>
+            <div class="enColumna" style="width: 49%;">
+              <mat-form-field>
+                <mat-label>Tipo de Punto asignado</mat-label>
+                <mat-select [(ngModel)]="filtroPunto" name="punto" (selectionChange)="puntoCambiado()">
+                  <mat-option *ngFor="let punto of listaPuntos" [value]="punto">{{ punto.Nombre }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroTipoJuego == 'Juego De Puntos' && filtrarJuego == true && filtroJuego.id != null">
+            <div class="enColumna" style="width: 50%;">
+              <mat-checkbox [(ngModel)]="filtrarNivel">Filtrar por Nivel obtenido (Juego de Puntos)</mat-checkbox>
+            </div>
+            <div class="enColumna" style="width: 49%;">
+              <mat-form-field>
+                <mat-label>Nivel obtenido</mat-label>
+                <mat-select [(ngModel)]="filtroNivel" name="nivel" (selectionChange)="nivelCambiado()">
+                  <mat-option *ngFor="let nivel of listaNiveles" [value]="nivel">{{ nivel.Nombre }} (Juego: {{ filtroJuego.NombreJuego }})</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroTipoJuego == 'Juego De Colección' && filtroJuego.Modo == 'Individual' && filtrarJuego == true && filtroJuego.id != null">
+            <div class="enColumna" style="width: 59%;">
+              <mat-checkbox [(ngModel)]="filtrarAlumnoReceptorCromo">Filtrar por Alumno al que le han regalado un Cromo (Juego de Colección)</mat-checkbox>
+            </div>
+            <div class="enColumna" style="width: 40%;">
+              <mat-form-field>
+                <mat-label>Alumno</mat-label>
+                <mat-select [(ngModel)]="filtroAlumnoReceptorCromo" name="alumno" (selectionChange)="alumnoReceptorCromoCambiado()">
+                  <mat-option *ngFor="let alumno of listaAlumnos" [value]="alumno">{{ alumno.Nombre }} {{ alumno.PrimerApellido }} {{ alumno.SegundoApellido }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroTipoJuego == 'Juego De Colección' && filtroJuego.Modo == 'Individual' && filtrarJuego == true && filtroJuego.id != null">
+            <div class="enColumna">
+              <span>En este caso, para filtrar por Alumno que ha regalado un cromo, selecciónalo en la pestaña 'Alumno/Equipo'</span>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroTipoJuego == 'Juego De Colección' && filtroJuego.Modo == 'Equipos' && filtrarJuego == true && filtroJuego.id != null">
+            <div class="enColumna" style="width: 50%;">
+              <mat-checkbox [(ngModel)]="filtrarEquipoReceptorCromo">Filtrar por Equipo al que le han regalado un Cromo (Juego de Colección)</mat-checkbox>
+            </div>
+            <div class="enColumna" style="width: 49%;">
+              <mat-form-field>
+                <mat-label>Equipo</mat-label>
+                <mat-select [(ngModel)]="filtroEquipoReceptorCromo" name="equipo" (selectionChange)="equipoReceptorCromoCambiado()">
+                  <mat-option *ngFor="let equipo of listaEquipos" [value]="equipo">{{ equipo.Nombre }} (Grupo: {{ filtroGrupo.Nombre }})</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroTipoJuego == 'Juego De Colección' && filtroJuego.Modo == 'Equipos' && filtrarJuego == true && filtroJuego.id != null">
+            <div class="enColumna">
+              <span>En este caso, para filtrar por Equipo que ha regalado un cromo, selecciónalo en la pestaña 'Alumno/Equipo'</span>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroTipoJuego == 'Juego De Avatar' && filtrarJuego == true && filtroJuego.id != null">
+            <div class="enColumna" style="width: 50%;">
+              <mat-checkbox [(ngModel)]="filtrarPrivilegio">Filtrar por Privilegio asignado/eliminado (Juego de Avatar)</mat-checkbox>
+            </div>
+            <div class="enColumna" style="width: 49%;">
+              <mat-form-field>
+                <mat-label>Privilegio asignado</mat-label>
+                <mat-select [(ngModel)]="filtroPrivilegio" name="privilegio" (selectionChange)="privilegioCambiado()">
+                  <mat-option [value]="1">Privilegio 1</mat-option>
+                  <mat-option [value]="2">Privilegio 2</mat-option>
+                  <mat-option [value]="3">Privilegio 3</mat-option>
+                  <mat-option [value]="4">Privilegio 4</mat-option>
+                  <mat-option [value]="5">Privilegio Nota de Voz</mat-option>
+                  <mat-option [value]="6">Privilegio Espiar</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="enFila" *ngIf="filtroTipoJuego == 'Juego De Avatar' && filtrarJuego == true && filtroJuego.id != null">
+            <div class="enColumna">
+              <span>En este caso, para filtrar el Privilegio por si es asignado o eliminado, especifícalo en el Tipo de Evento</span>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+      <div class="enFila" *ngIf="filtrosVisibles">
+        <button class="btn Agregar" style="width: 49%;" (click)="FiltrarListaEventos()">Aplicar Filtros Seleccionados  
+          <mat-icon class="iconoCentradoBoton">search</mat-icon></button>
+        <button class="btn Eliminar" style="width: 49%;" (click)="ReiniciarFiltros()">Reiniciar Filtros  <mat-icon
+            class="iconoCentradoBoton">refresh</mat-icon></button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 15px;" *ngIf="cargando"><mat-spinner></mat-spinner></div>
+
+  <mat-accordion class="accordion-headers-align">
+    <mat-expansion-panel *ngFor="let evento of listaEventosPaginada; let i = index" (opened)="DameDescripcionEvento(i)">
+      <mat-expansion-panel-header>
+        <mat-panel-title><b>Tipo de Evento: </b><span *ngIf="evento.TipoEvento == 1"> Creación del Juego </span><span *ngIf="evento.TipoEvento == 2"> Acceso al Juego </span><span *ngIf="evento.TipoEvento == 10"> Asignación de Punto/s </span><span *ngIf="evento.TipoEvento == 11"> Ascenso de Nivel (Juego de Puntos) </span><span *ngIf="evento.TipoEvento == 20"> Asignación de Cromo/s </span><span *ngIf="evento.TipoEvento == 21"> Regalo de Cromo </span><span *ngIf="evento.TipoEvento == 22"> Finalización de Colección de Cromos </span><span *ngIf="evento.TipoEvento == 30"> Asignación de Privilegio (Juego de Avatar) </span><span *ngIf="evento.TipoEvento == 31"> Eliminación de Privilegio (Juego de Avatar) </span><span *ngIf="evento.TipoEvento == 32"> Modificación de Avatar (Juego de Avatar) </span></mat-panel-title>
+        <mat-panel-description> {{('0' + evento.FechayHora.getDate()).slice(-2)}}/{{('0' + (evento.FechayHora.getMonth()+1)).slice(-2)}}/{{evento.FechayHora.getFullYear()}} {{('0' + evento.FechayHora.getHours()).slice(-2)}}:{{('0' + evento.FechayHora.getMinutes()).slice(-2)}} <mat-icon>info_outline</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div>
+        <mat-list role="list">
+          <mat-list-item role="listitem" *ngIf="(evento.TipoEvento == 2 || evento.TipoEvento == 10 || evento.TipoEvento == 11 || evento.TipoEvento == 20 || evento.TipoEvento == 21 || evento.TipoEvento == 22 || evento.TipoEvento == 30 || evento.TipoEvento == 31 || evento.TipoEvento == 32) && (evento.EquipoID == undefined)"> <b> Alumno: </b> <i>{{ alumnoEventoSeleccionado.Nombre }} {{ alumnoEventoSeleccionado.PrimerApellido }} {{ alumnoEventoSeleccionado.SegundoApellido }}</i> </mat-list-item>
+          <mat-list-item role="listitem" *ngIf="(evento.TipoEvento == 10 || evento.TipoEvento == 11 || evento.TipoEvento == 20 || evento.TipoEvento == 21 || evento.TipoEvento == 22) && (evento.AlumnoID == undefined)"> <b> Equipo: </b> <i>{{ equipoEventoSeleccionado.Nombre }}</i> </mat-list-item>
+          <mat-list-item role="listitem"> <b> Grupo: </b> <i>{{ grupoEventoSeleccionado.Nombre }}</i> </mat-list-item>
+          <mat-list-item role="listitem"> <b> Tipo de Juego: </b> <i>{{ juegoEventoSeleccionado.Tipo }}</i></mat-list-item>
+          <mat-list-item role="listitem"> <b> Nombre del Juego: </b> <i>{{ juegoEventoSeleccionado.NombreJuego }}</i></mat-list-item>
+          <mat-list-item role="listitem" *ngIf="evento.TipoEvento == 10"> <b> Número de Puntos: </b> <i>{{ numeroPuntosEventoSeleccionado }}</i></mat-list-item>
+          <mat-list-item role="listitem" *ngIf="evento.TipoEvento == 10"> <b> Tipo de Punto: </b> <i>{{ puntoEventoSeleccionado.Nombre }}</i></mat-list-item>
+          <mat-list-item role="listitem" *ngIf="evento.TipoEvento == 11"> <b> Nivel obtenido: </b> <i>{{ nivelEventoSeleccionado.Nombre }}</i></mat-list-item>
+          <mat-list-item role="listitem" *ngIf="evento.TipoEvento == 20"> <b> Número de Cromos: </b> <i>{{ numeroCromosEventoSeleccionado }}</i></mat-list-item>
+          <mat-list-item role="listitem" *ngIf="evento.TipoEvento == 21 && evento.EquipoID == undefined"> <b> Alumno al que le han regalado el Cromo: </b> <i>{{ alumnoReceptorCromoEventoSeleccionado.Nombre }} {{ alumnoReceptorCromoEventoSeleccionado.PrimerApellido }} {{ alumnoReceptorCromoEventoSeleccionado.SegundoApellido }}</i></mat-list-item>
+          <mat-list-item role="listitem" *ngIf="evento.TipoEvento == 21 && evento.AlumnoID == undefined"> <b> Equipo al que le han regalado el Cromo: </b> <i>{{ equipoReceptorCromoEventoSeleccionado.Nombre }}</i></mat-list-item>
+          <mat-list-item role="listitem" *ngIf="evento.TipoEvento == 30"> <b> Privilegio asignado: </b> <i>{{ privilegioEventoSeleccionado }}</i></mat-list-item>
+          <mat-list-item role="listitem" *ngIf="evento.TipoEvento == 31"> <b> Privilegio eliminado: </b> <i>{{ privilegioEventoSeleccionado }}</i></mat-list-item>
+        </mat-list>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-paginator #paginator [length]="paginatorLength" [pageSize]="paginatorPageSize" [pageSizeOptions]="paginatorPageSizeOptions" (page)="paginatorPageEvent = paginatorGetData($event)" showFirstLastButtons></mat-paginator>
+</div>
