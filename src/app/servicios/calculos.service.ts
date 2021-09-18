@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SesionService, PeticionesAPIService} from './index';
+import { SesionService, PeticionesAPIService, ComServerService} from './index';
 import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos,
          TablaEquipoJuegoDePuntos, HistorialPuntosAlumno, HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo,
          AlumnoJuegoDeColeccion, Album, Coleccion, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
@@ -52,7 +52,8 @@ export class CalculosService {
 
   constructor(
     private sesion: SesionService,
-    private peticionesAPI: PeticionesAPIService
+    private peticionesAPI: PeticionesAPIService,
+    private comService: ComServerService
    ) {}
 
 
@@ -6236,6 +6237,49 @@ public VerificarFicherosPreguntas(preguntas: any): any {
       });
     });
     return comprobanteObservable;
+  }
+  /* Tipos de evneto:
+      1: Creacion de juego
+      
+  */
+
+  public RegistrarEvento (evento: Evento) {
+    if (evento.TipoEvento) {
+        this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      }, (err) => { 
+        console.log(err); 
+      });
+    }
+  }
+
+  public RegistrarNotificarCreacionJuego (juegoId: number, nombreDelJuego: string, tipo: string, grupo: Grupo) {
+    if (true) {
+      //Registrar la Creación del Juego
+      const evento: Evento = new Evento(1, new Date(), this.sesion.DameProfesor().id, undefined, undefined, juegoId, nombreDelJuego, tipo);
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        console.log("Registrado evento: ", res);
+      }, (err) => { 
+        console.log(err); 
+      });
+    }
+    if (true) {
+      //Notificar a los Alumnos del Grupo
+      this.comService.EnviarNotificacionGrupo(grupo.id, `Nuevo ${tipo} para el Grupo ${grupo.Nombre}: ${nombreDelJuego}`);
+    }
+
+  }
+
+
+  public RegistrarCreacionJuegoRapido (juegoId: number, nombreDelJuego: string, tipo: string) {
+    if (true) {
+      //Registrar la Creación del Juego
+      const evento: Evento = new Evento(1, new Date(), this.sesion.DameProfesor().id, undefined, undefined, juegoId, nombreDelJuego, tipo);
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        console.log("Registrado evento: ", res);
+      }, (err) => { 
+        console.log(err); 
+      });
+    }
   }
 
 }

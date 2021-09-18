@@ -350,31 +350,37 @@ export class AsignarCromosComponent implements OnInit {
             console.log(res);
             Swal.fire('OK', 'Cromo asignado a los alumnos elegidos', 'success');
 
-            //Registrar la Asignación de Cromo/s
-            let profesor: Profesor = this.sesion.DameProfesor();
-            let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, 1);
-            this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
-              console.log("Registrado evento: ", res);
-            }, (err) => { 
-              console.log(err); 
-            });
-
-            //Notificar al Alumno
-            this.comService.EnviarNotificacionIndividual(alumno.id, `Has obtenido 1 cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+            if (true) {
+              //Registrar la Asignación de Cromo/s
+              let profesor: Profesor = this.sesion.DameProfesor();
+              let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, 1);
+              this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
+                console.log("Registrado evento: ", res);
+              }, (err) => { 
+                console.log(err); 
+              });
+            }
+            if (true) {
+              //Notificar al Alumno
+              this.comService.EnviarNotificacionIndividual(alumno.id, `Has obtenido 1 cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+            }
             //Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
             this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion.id, undefined).subscribe((finalizacionDespues) => {
               if ((finalizacionAntes == false) && (finalizacionDespues == true)) {
-                //Registrar la Finalización de la Colección
-                let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
-                  console.log("Registrado evento: ", res);
-                }, (err) => { 
-                  console.log(err); 
-                });
-
+                if (true) {
+                  //Registrar la Finalización de la Colección
+                  let profesor: Profesor = this.sesion.DameProfesor();
+                  let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                  this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
+                    console.log("Registrado evento: ", res);
+                  }, (err) => { 
+                    console.log(err); 
+                  });
+                }
+                if (true) {
                 //Notificar al Alumno
                 this.comService.EnviarNotificacionIndividual(alumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                }
               }
             }, (err) => {
               console.log(err); 
@@ -408,32 +414,38 @@ export class AsignarCromosComponent implements OnInit {
           .subscribe(res => {
             console.log(res);
             Swal.fire('OK', 'Cromo asignado a los equipos elegidos', 'success');
-
-            //Registrar la Asignación de Cromo/s
-            let profesor: Profesor = this.sesion.DameProfesor();
-            let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, 1);
-            this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
-              console.log("Registrado evento: ", res);
-            }, (err) => { 
-              console.log(err); 
-            });
-
-            //Notificar a los Alumnos del Equipo
-            this.comService.EnviarNotificacionEquipo(equipo.id, `Tu equipo ${equipo.Nombre} ha obtenido 1 cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+            if (true) {
+              //Registrar la Asignación de Cromo/s
+              let profesor: Profesor = this.sesion.DameProfesor();
+              let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, 1);
+              this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
+                console.log("Registrado evento: ", res);
+              }, (err) => { 
+                console.log(err); 
+              });
+            }
+            if (true) {
+              //Notificar a los Alumnos del Equipo
+              this.comService.EnviarNotificacionEquipo(equipo.id, `Tu equipo ${equipo.Nombre} ha obtenido 1 cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+            }
             //Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
             this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionDespues) => {
               if ((finalizacionAntes == false) && (finalizacionDespues == true)) {
-                //Registrar la Finalización de la Colección
-                let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
-                  console.log("Registrado evento: ", res);
-                }, (err) => { 
-                  console.log(err); 
-                });
+                if (true) {
+                  let profesor: Profesor = this.sesion.DameProfesor();
+                  //Registrar la Finalización de la Colección
+                  let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                  this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
+                    console.log("Registrado evento: ", res);
+                  }, (err) => { 
+                    console.log(err); 
+                  });
+                }
+                if (true) {
 
-                //Notificar a los Alumnos del Equipo
-                this.comService.EnviarNotificacionEquipo(equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                  //Notificar a los Alumnos del Equipo
+                  this.comService.EnviarNotificacionEquipo(equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                }
               }
             }, (err) => {
               console.log(err); 
@@ -471,32 +483,37 @@ export class AsignarCromosComponent implements OnInit {
             .subscribe(res => {
               console.log(res);
               Swal.fire('OK', 'Cromo asignado a los equipos de los alumnos elegidos', 'success');
-
-              //Registrar la Asignación de Cromo/s
-              let profesor: Profesor = this.sesion.DameProfesor();
-              let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, 1);
-              this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
-
-              //Notificar a los Alumnos del Equipo
-              this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido 1 cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+              if (true) {
+                //Registrar la Asignación de Cromo/s
+                let profesor: Profesor = this.sesion.DameProfesor();
+                let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, 1);
+                this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
+                  console.log("Registrado evento: ", res);
+                }, (err) => { 
+                  console.log(err); 
+                });
+              }
+              if (true) {
+                //Notificar a los Alumnos del Equipo
+                this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido 1 cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
               //Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
               this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionDespues) => {
                 if ((finalizacionAntes == false) && (finalizacionDespues == true)) {
-                  //Registrar la Finalización de la Colección
-                  let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-                  this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
-                    console.log("Registrado evento: ", res);
-                  }, (err) => { 
-                    console.log(err); 
-                  });
-
-                  //Notificar a los Alumnos del Equipo
-                  this.comService.EnviarNotificacionEquipo(equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                  if (true) {
+                    //Registrar la Finalización de la Colección
+                    let profesor: Profesor = this.sesion.DameProfesor();
+                    let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                    this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
+                      console.log("Registrado evento: ", res);
+                    }, (err) => { 
+                      console.log(err); 
+                    });
+                  }
+                  if (true) {
+                    //Notificar a los Alumnos del Equipo
+                    this.comService.EnviarNotificacionEquipo(equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                  }
                 }
               }, (err) => {
                 console.log(err); 
@@ -536,32 +553,37 @@ export class AsignarCromosComponent implements OnInit {
 
           this.calculos.AsignarCromosAleatoriosAlumno (alumno, this.inscripcionesAlumnos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
           Swal.fire('OK', 'Cromos aleatorios asignados a los alumnos elegidos', 'success');
-
-          //Registrar la Asignación de Cromo/s
-          let profesor: Profesor = this.sesion.DameProfesor();
-          let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.numeroCromosRandom);
-          this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-          
-          //Notificar al Alumno
-          this.comService.EnviarNotificacionIndividual(alumno.id, `Has obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-          
+          if (true) {
+            //Registrar la Asignación de Cromo/s
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.numeroCromosRandom);
+            this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
+            //Notificar al Alumno
+            this.comService.EnviarNotificacionIndividual(alumno.id, `Has obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
           //Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
           this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion.id, undefined).subscribe((finalizacionDespues) => {
             if ((finalizacionAntes == false) && (finalizacionDespues == true)) {
-              //Registrar la Finalización de la Colección
-              let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-              this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
-
-              //Notificar al Alumno
-              this.comService.EnviarNotificacionIndividual(alumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              if (true) {
+                //Registrar la Finalización de la Colección
+                let profesor: Profesor = this.sesion.DameProfesor();
+                let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
+                  console.log("Registrado evento: ", res);
+                }, (err) => { 
+                  console.log(err); 
+                });
+              }
+              if (true) {
+                //Notificar al Alumno
+                this.comService.EnviarNotificacionIndividual(alumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
             }
           }, (err) => {
             console.log(err); 
@@ -585,32 +607,37 @@ export class AsignarCromosComponent implements OnInit {
           // tslint:disable-next-line:max-line-length
           this.calculos.AsignarCromosAleatoriosEquipo (equipo, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
           Swal.fire('OK', 'Cromos aleatorios asignados a los equipos elegidos', 'success');
-
-          //Registrar la Asignación de Cromo/s
-          let profesor: Profesor = this.sesion.DameProfesor();
-          let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.numeroCromosRandom);
-          this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar a los Alumnos del Equipo
-          this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+          if (true) {
+            //Registrar la Asignación de Cromo/s
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.numeroCromosRandom);
+            this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
+            //Notificar a los Alumnos del Equipo
+            this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
           //Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
           this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionDespues) => {
             if ((finalizacionAntes == false) && (finalizacionDespues == true)) {
-              //Registrar la Finalización de la Colección
-              let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-              this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
-
-              //Notificar a los Alumnos del Equipo
-              this.comService.EnviarNotificacionEquipo(equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              if (true) {
+                //Registrar la Finalización de la Colección
+                let profesor: Profesor = this.sesion.DameProfesor();
+                let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
+                  console.log("Registrado evento: ", res);
+                }, (err) => { 
+                  console.log(err); 
+                });
+              }
+              if (true) {
+                //Notificar a los Alumnos del Equipo
+                this.comService.EnviarNotificacionEquipo(equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
             }
           }, (err) => {
             console.log(err); 
@@ -642,32 +669,37 @@ export class AsignarCromosComponent implements OnInit {
             // tslint:disable-next-line:max-line-length
             this.calculos.AsignarCromosAleatoriosEquipo (equipo, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
             Swal.fire('OK', 'Cromos aleatorios asignados a los equipos de los alumnos elegidos', 'success');
-            
-            //Registrar la Asignación de Cromo/s
-            let profesor: Profesor = this.sesion.DameProfesor();
-            let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.numeroCromosRandom);
-            this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
-              console.log("Registrado evento: ", res);
-            }, (err) => { 
-              console.log(err); 
-            });
-
-            //Notificar a los Alumnos del Equipo
-            this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+            if (true) {
+              //Registrar la Asignación de Cromo/s
+              let profesor: Profesor = this.sesion.DameProfesor();
+              let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.numeroCromosRandom);
+              this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
+                console.log("Registrado evento: ", res);
+              }, (err) => { 
+                console.log(err); 
+              });
+            }
+            if (true) {
+              //Notificar a los Alumnos del Equipo
+              this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+            }
             //Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
               this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionDespues) => {
                 if ((finalizacionAntes == false) && (finalizacionDespues == true)) {
-                  //Registrar la Finalización de la Colección
-                  let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-                  this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
-                    console.log("Registrado evento: ", res);
-                  }, (err) => { 
-                    console.log(err); 
-                  });
-
-                  //Notificar a los Alumnos del Equipo
-                  this.comService.EnviarNotificacionEquipo(equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                  if (true) {
+                    //Registrar la Finalización de la Colección
+                    let profesor: Profesor = this.sesion.DameProfesor();
+                    let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                    this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
+                      console.log("Registrado evento: ", res);
+                    }, (err) => { 
+                      console.log(err); 
+                    });
+                  }
+                  if (true) {
+                    //Notificar a los Alumnos del Equipo
+                    this.comService.EnviarNotificacionEquipo(equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                  }
                 }
               }, (err) => {
                 console.log(err); 
@@ -703,32 +735,37 @@ export class AsignarCromosComponent implements OnInit {
 
       this.calculos.AsignarCromosAleatoriosAlumno (this.alumnoElegido, this.inscripcionesAlumnos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
       Swal.fire('OK', 'Cromos aleatorios asignados a: ' + this.alumnoElegido.Nombre, 'success');
-
-      //Registrar la Asignación de Cromo/s
-      let profesor: Profesor = this.sesion.DameProfesor();
-      let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, this.alumnoElegido.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.numeroCromosRandom);
-      this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
-        console.log("Registrado evento: ", res);
-      }, (err) => { 
-        console.log(err); 
-      });
-
-      //Notificar al Alumno
-      this.comService.EnviarNotificacionIndividual(this.alumnoElegido.id, `Has obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+      if (true) {
+        //Registrar la Asignación de Cromo/s
+        let profesor: Profesor = this.sesion.DameProfesor();
+        let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, this.alumnoElegido.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.numeroCromosRandom);
+        this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
+          console.log("Registrado evento: ", res);
+        }, (err) => { 
+          console.log(err); 
+        });
+      }
+      if (true) {
+        //Notificar al Alumno
+        this.comService.EnviarNotificacionIndividual(this.alumnoElegido.id, `Has obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+      }
       //Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
       this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion.id, undefined).subscribe((finalizacionDespues) => {
         if ((finalizacionAntes == false) && (finalizacionDespues == true)) {
-          //Registrar la Finalización de la Colección
-          let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, this.alumnoElegido.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-          this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar al Alumno
-          this.comService.EnviarNotificacionIndividual(this.alumnoElegido.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          if (true) {
+            //Registrar la Finalización de la Colección
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, this.alumnoElegido.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+            this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
+            //Notificar al Alumno
+            this.comService.EnviarNotificacionIndividual(this.alumnoElegido.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
         }
       }, (err) => {
         console.log(err); 
@@ -749,32 +786,37 @@ export class AsignarCromosComponent implements OnInit {
 
       this.calculos.AsignarCromosAleatoriosEquipo (this.equipoElegido, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
       Swal.fire('OK', 'Cromos aleatorios asignados al equipo: ' + this.equipoElegido.Nombre, 'success');
-
-      //Registrar la Asignación de Cromo/s
-      let profesor: Profesor = this.sesion.DameProfesor();
-      let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, undefined, this.equipoElegido.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.numeroCromosRandom);
-      this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
-        console.log("Registrado evento: ", res);
-      }, (err) => { 
-        console.log(err); 
-      });
-
-      //Notificar a los Alumnos del Equipo
-      this.comService.EnviarNotificacionEquipo(this.equipoElegido.id, `Tu Equipo ${this.equipoElegido.Nombre} ha obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+      if (true) {
+        //Registrar la Asignación de Cromo/s
+        let profesor: Profesor = this.sesion.DameProfesor();
+        let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, undefined, this.equipoElegido.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.numeroCromosRandom);
+        this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
+          console.log("Registrado evento: ", res);
+        }, (err) => { 
+          console.log(err); 
+        });
+      }
+      if (true) {
+        //Notificar a los Alumnos del Equipo
+        this.comService.EnviarNotificacionEquipo(this.equipoElegido.id, `Tu Equipo ${this.equipoElegido.Nombre} ha obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+      }
       //Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
       this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionDespues) => {
         if ((finalizacionAntes == false) && (finalizacionDespues == true)) {
-          //Registrar la Finalización de la Colección
-          let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, undefined, this.equipoElegido.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-          this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar a los Alumnos del Equipo
-          this.comService.EnviarNotificacionEquipo(this.equipoElegido.id, `¡Enhorabuena! Tu equipo ${this.equipoElegido.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          if (true) {
+            //Registrar la Finalización de la Colección
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, undefined, this.equipoElegido.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+            this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
+            //Notificar a los Alumnos del Equipo
+            this.comService.EnviarNotificacionEquipo(this.equipoElegido.id, `¡Enhorabuena! Tu equipo ${this.equipoElegido.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
         }
       }, (err) => {
         console.log(err); 
@@ -803,23 +845,26 @@ export class AsignarCromosComponent implements OnInit {
 
           this.calculos.AsignarCromosAleatoriosEquipo (equipo, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
           Swal.fire('OK', 'Cromos aleatorios asignados al equipo de: ' + alumno.Nombre, 'success');
+          if (true) {
+            //Registrar la Asignación de Cromo/s
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.numeroCromosRandom);
+            this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
 
-          //Registrar la Asignación de Cromo/s
-          let profesor: Profesor = this.sesion.DameProfesor();
-          let eventoAsignarCromos: Evento = new Evento(20, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.numeroCromosRandom);
-          this.peticionesAPI.CreaEvento(eventoAsignarCromos).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar a los Alumnos del Equipo
-          this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+            //Notificar a los Alumnos del Equipo
+            this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
           //Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
           this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionDespues) => {
             if ((finalizacionAntes == false) && (finalizacionDespues == true)) {
               //Registrar la Finalización de la Colección
+              let profesor: Profesor = this.sesion.DameProfesor();
               let eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
               this.peticionesAPI.CreaEvento(eventoFinalizacionColeccion).subscribe((res) => {
                 console.log("Registrado evento: ", res);
@@ -876,31 +921,37 @@ export class AsignarCromosComponent implements OnInit {
 
           this.calculos.AsignarCromosAleatoriosAlumno (this.primerAlumno, this.inscripcionesAlumnos, this.cromosParaPrimero, this.probabilidadCromos, this.cromosColeccion);
 
-          //Registrar la Asignación de Cromo/s (Del Alumno 1)
-          let profesor: Profesor = this.sesion.DameProfesor();
-          let eventoAsignarCromosA1: Evento = new Evento(20, new Date(), profesor.id, this.primerAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaPrimero);
-          this.peticionesAPI.CreaEvento(eventoAsignarCromosA1).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar al Alumno (1)
-          this.comService.EnviarNotificacionIndividual(this.primerAlumno.id, `Has obtenido ${this.cromosParaPrimero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+          if (true) {
+            //Registrar la Asignación de Cromo/s (Del Alumno 1)
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoAsignarCromosA1: Evento = new Evento(20, new Date(), profesor.id, this.primerAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaPrimero);
+            this.peticionesAPI.CreaEvento(eventoAsignarCromosA1).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
+            //Notificar al Alumno (1)
+            this.comService.EnviarNotificacionIndividual(this.primerAlumno.id, `Has obtenido ${this.cromosParaPrimero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
           //Comprobamos si se ha completado la Colección (Del Alumno 1) tras haber asignado el/los Cromo/s
           this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion1.id, undefined).subscribe((finalizacionDespuesA1) => {
             if ((finalizacionAntesA1 == false) && (finalizacionDespuesA1 == true)) {
-              //Registrar la Finalización de la Colección (Del Alumno 1)
-              let eventoFinalizacionColeccionA1: Evento = new Evento(22, new Date(), profesor.id, this.primerAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-              this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionA1).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
-
-              //Notificar al Alumno (1)
-              this.comService.EnviarNotificacionIndividual(this.primerAlumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              if (true) {
+                //Registrar la Finalización de la Colección (Del Alumno 1)
+                let profesor: Profesor = this.sesion.DameProfesor();
+                let eventoFinalizacionColeccionA1: Evento = new Evento(22, new Date(), profesor.id, this.primerAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionA1).subscribe((res) => {
+                  console.log("Registrado evento: ", res);
+                }, (err) => { 
+                  console.log(err); 
+                });
+              }
+              if (true) {
+                //Notificar al Alumno (1)
+                this.comService.EnviarNotificacionIndividual(this.primerAlumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
             }
           }, (err) => {
             console.log(err); 
@@ -917,31 +968,37 @@ export class AsignarCromosComponent implements OnInit {
 
           this.calculos.AsignarCromosAleatoriosAlumno (this.segundoAlumno, this.inscripcionesAlumnos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion);
 
-          //Registrar la Asignación de Cromo/s (Del Alumno 2)
-          let profesor: Profesor = this.sesion.DameProfesor();
-          let eventoAsignarCromosA2: Evento = new Evento(20, new Date(), profesor.id, this.segundoAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaSegundo);
-          this.peticionesAPI.CreaEvento(eventoAsignarCromosA2).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar al Alumno (2)
-          this.comService.EnviarNotificacionIndividual(this.segundoAlumno.id, `Has obtenido ${this.cromosParaSegundo} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+          if (true) {
+            //Registrar la Asignación de Cromo/s (Del Alumno 2)
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoAsignarCromosA2: Evento = new Evento(20, new Date(), profesor.id, this.segundoAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaSegundo);
+            this.peticionesAPI.CreaEvento(eventoAsignarCromosA2).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
+            //Notificar al Alumno (2)
+            this.comService.EnviarNotificacionIndividual(this.segundoAlumno.id, `Has obtenido ${this.cromosParaSegundo} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
           //Comprobamos si se ha completado la Colección (Del Alumno 2) tras haber asignado el/los Cromo/s
           this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion2.id, undefined).subscribe((finalizacionDespuesA2) => {
             if ((finalizacionAntesA2 == false) && (finalizacionDespuesA2 == true)) {
-              //Registrar la Finalización de la Colección (Del Alumno 2)
-              let eventoFinalizacionColeccionA2: Evento = new Evento(22, new Date(), profesor.id, this.segundoAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-              this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionA2).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
-
-              //Notificar al Alumno (2)
-              this.comService.EnviarNotificacionIndividual(this.segundoAlumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              if (true) {
+                //Registrar la Finalización de la Colección (Del Alumno 2)
+                let profesor: Profesor = this.sesion.DameProfesor();
+                let eventoFinalizacionColeccionA2: Evento = new Evento(22, new Date(), profesor.id, this.segundoAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionA2).subscribe((res) => {
+                  console.log("Registrado evento: ", res);
+                }, (err) => { 
+                  console.log(err); 
+                });
+              }
+              if (true) {
+                //Notificar al Alumno (2)
+                this.comService.EnviarNotificacionIndividual(this.segundoAlumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
             }
           }, (err) => {
             console.log(err); 
@@ -958,31 +1015,37 @@ export class AsignarCromosComponent implements OnInit {
         
           this.calculos.AsignarCromosAleatoriosAlumno (this.tercerAlumno, this.inscripcionesAlumnos, this.cromosParaTercero, this.probabilidadCromos, this.cromosColeccion);
 
-          //Registrar la Asignación de Cromo/s (Del Alumno 3)
-          let profesor: Profesor = this.sesion.DameProfesor();
-          let eventoAsignarCromosA3: Evento = new Evento(20, new Date(), profesor.id, this.tercerAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaTercero);
-          this.peticionesAPI.CreaEvento(eventoAsignarCromosA3).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar al Alumno (3)
-          this.comService.EnviarNotificacionIndividual(this.tercerAlumno.id, `Has obtenido ${this.cromosParaTercero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+          if (true) {
+            //Registrar la Asignación de Cromo/s (Del Alumno 3)
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoAsignarCromosA3: Evento = new Evento(20, new Date(), profesor.id, this.tercerAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaTercero);
+            this.peticionesAPI.CreaEvento(eventoAsignarCromosA3).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
+            //Notificar al Alumno (3)
+            this.comService.EnviarNotificacionIndividual(this.tercerAlumno.id, `Has obtenido ${this.cromosParaTercero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
           //Comprobamos si se ha completado la Colección (Del Alumno 3) tras haber asignado el/los Cromo/s
           this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion3.id, undefined).subscribe((finalizacionDespuesA3) => {
             if ((finalizacionAntesA3 == false) && (finalizacionDespuesA3 == true)) {
-              //Registrar la Finalización de la Colección (Del Alumno 3)
-              let eventoFinalizacionColeccionA3: Evento = new Evento(22, new Date(), profesor.id, this.tercerAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-              this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionA3).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
-
-              //Notificar al Alumno (3)
-              this.comService.EnviarNotificacionIndividual(this.tercerAlumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              if (true) {
+                //Registrar la Finalización de la Colección (Del Alumno 3)
+                let profesor: Profesor = this.sesion.DameProfesor();
+                let eventoFinalizacionColeccionA3: Evento = new Evento(22, new Date(), profesor.id, this.tercerAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionA3).subscribe((res) => {
+                  console.log("Registrado evento: ", res);
+                }, (err) => { 
+                  console.log(err); 
+                });
+              }
+              if (true) {
+                //Notificar al Alumno (3)
+                this.comService.EnviarNotificacionIndividual(this.tercerAlumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
             }
           }, (err) => {
             console.log(err); 
@@ -1016,32 +1079,37 @@ export class AsignarCromosComponent implements OnInit {
         this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion1.id).subscribe((finalizacionAntesE1) => {
 
           this.calculos.AsignarCromosAleatoriosEquipo (this.primerEquipo, this.inscripcionesEquipos, this.cromosParaPrimero, this.probabilidadCromos, this.cromosColeccion);
-
-          //Registrar la Asignación de Cromo/s (Del Equipo 1)
-          let profesor: Profesor = this.sesion.DameProfesor();
-          let eventoAsignarCromosE1: Evento = new Evento(20, new Date(), profesor.id, undefined, this.primerEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaPrimero);
-          this.peticionesAPI.CreaEvento(eventoAsignarCromosE1).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar a los Alumnos del Equipo (1)
-          this.comService.EnviarNotificacionEquipo(this.primerEquipo.id, `Tu Equipo ${this.primerEquipo.Nombre} ha obtenido ${this.cromosParaPrimero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+          if (true) {
+            //Registrar la Asignación de Cromo/s (Del Equipo 1)
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoAsignarCromosE1: Evento = new Evento(20, new Date(), profesor.id, undefined, this.primerEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaPrimero);
+            this.peticionesAPI.CreaEvento(eventoAsignarCromosE1).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
+            //Notificar a los Alumnos del Equipo (1)
+            this.comService.EnviarNotificacionEquipo(this.primerEquipo.id, `Tu Equipo ${this.primerEquipo.Nombre} ha obtenido ${this.cromosParaPrimero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
           //Comprobamos si se ha completado la Colección (Del Equipo 1) tras haber asignado el/los Cromo/s
           this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion1.id).subscribe((finalizacionDespuesE1) => {
             if ((finalizacionAntesE1 == false) && (finalizacionDespuesE1 == true)) {
-              //Registrar la Finalización de la Colección (Del Equipo 1)
-              let eventoFinalizacionColeccionE1: Evento = new Evento(22, new Date(), profesor.id, undefined, this.primerEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-              this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionE1).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
-
-              //Notificar a los Alumnos del Equipo (1)
-              this.comService.EnviarNotificacionEquipo(this.primerEquipo.id, `¡Enhorabuena! Tu equipo ${this.primerEquipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              if (true) {
+                //Registrar la Finalización de la Colección (Del Equipo 1)
+                let profesor: Profesor = this.sesion.DameProfesor();
+                let eventoFinalizacionColeccionE1: Evento = new Evento(22, new Date(), profesor.id, undefined, this.primerEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionE1).subscribe((res) => {
+                  console.log("Registrado evento: ", res);
+                }, (err) => { 
+                  console.log(err); 
+                });
+              }
+              if (true) {
+                //Notificar a los Alumnos del Equipo (1)
+                this.comService.EnviarNotificacionEquipo(this.primerEquipo.id, `¡Enhorabuena! Tu equipo ${this.primerEquipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
             }
           }, (err) => {
             console.log(err); 
@@ -1058,31 +1126,37 @@ export class AsignarCromosComponent implements OnInit {
 
           this.calculos.AsignarCromosAleatoriosEquipo (this.segundoEquipo, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion);
 
-          //Registrar la Asignación de Cromo/s (Del Equipo 2)
-          let profesor: Profesor = this.sesion.DameProfesor();
-          let eventoAsignarCromosE2: Evento = new Evento(20, new Date(), profesor.id, undefined, this.segundoEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaSegundo);
-          this.peticionesAPI.CreaEvento(eventoAsignarCromosE2).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar a los Alumnos del Equipo (2)
-          this.comService.EnviarNotificacionEquipo(this.segundoEquipo.id, `Tu Equipo ${this.segundoEquipo.Nombre} ha obtenido ${this.cromosParaSegundo} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+          if (true) {
+            //Registrar la Asignación de Cromo/s (Del Equipo 2)
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoAsignarCromosE2: Evento = new Evento(20, new Date(), profesor.id, undefined, this.segundoEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaSegundo);
+            this.peticionesAPI.CreaEvento(eventoAsignarCromosE2).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
+            //Notificar a los Alumnos del Equipo (2)
+            this.comService.EnviarNotificacionEquipo(this.segundoEquipo.id, `Tu Equipo ${this.segundoEquipo.Nombre} ha obtenido ${this.cromosParaSegundo} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
           //Comprobamos si se ha completado la Colección (Del Equipo 2) tras haber asignado el/los Cromo/s
           this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion2.id).subscribe((finalizacionDespuesE2) => {
             if ((finalizacionAntesE2 == false) && (finalizacionDespuesE2 == true)) {
-              //Registrar la Finalización de la Colección (Del Equipo 2)
-              let eventoFinalizacionColeccionE2: Evento = new Evento(22, new Date(), profesor.id, undefined, this.segundoEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-              this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionE2).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
-
-              //Notificar a los Alumnos del Equipo (2)
-              this.comService.EnviarNotificacionEquipo(this.segundoEquipo.id, `¡Enhorabuena! Tu equipo ${this.segundoEquipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              if (true) {
+                //Registrar la Finalización de la Colección (Del Equipo 2)
+                let profesor: Profesor = this.sesion.DameProfesor();
+                let eventoFinalizacionColeccionE2: Evento = new Evento(22, new Date(), profesor.id, undefined, this.segundoEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionE2).subscribe((res) => {
+                  console.log("Registrado evento: ", res);
+                }, (err) => { 
+                  console.log(err); 
+                });
+              }
+              if (true) {
+                //Notificar a los Alumnos del Equipo (2)
+                this.comService.EnviarNotificacionEquipo(this.segundoEquipo.id, `¡Enhorabuena! Tu equipo ${this.segundoEquipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
             }
           }, (err) => {
             console.log(err); 
@@ -1097,32 +1171,37 @@ export class AsignarCromosComponent implements OnInit {
         this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion3.id).subscribe((finalizacionAntesE3) => {
 
           this.calculos.AsignarCromosAleatoriosEquipo (this.tercerEquipo, this.inscripcionesEquipos, this.cromosParaTercero, this.probabilidadCromos, this.cromosColeccion);
-
-          //Registrar la Asignación de Cromo/s (Del Equipo 3)
-          let profesor: Profesor = this.sesion.DameProfesor();
-          let eventoAsignarCromosE3: Evento = new Evento(20, new Date(), profesor.id, undefined, this.tercerEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaTercero);
-          this.peticionesAPI.CreaEvento(eventoAsignarCromosE3).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar a los Alumnos del Equipo (3)
-          this.comService.EnviarNotificacionEquipo(this.tercerEquipo.id, `Tu Equipo ${this.tercerEquipo.Nombre} ha obtenido ${this.cromosParaTercero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+          if (true) {
+            //Registrar la Asignación de Cromo/s (Del Equipo 3)
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoAsignarCromosE3: Evento = new Evento(20, new Date(), profesor.id, undefined, this.tercerEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaTercero);
+            this.peticionesAPI.CreaEvento(eventoAsignarCromosE3).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err);
+            });
+          }
+          if (true) {
+            //Notificar a los Alumnos del Equipo (3)
+            this.comService.EnviarNotificacionEquipo(this.tercerEquipo.id, `Tu Equipo ${this.tercerEquipo.Nombre} ha obtenido ${this.cromosParaTercero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
           //Comprobamos si se ha completado la Colección (Del Equipo 3) tras haber asignado el/los Cromo/s
           this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion3.id).subscribe((finalizacionDespuesE3) => {
             if ((finalizacionAntesE3 == false) && (finalizacionDespuesE3 == true)) {
-              //Registrar la Finalización de la Colección (Del Equipo 3)
-              let eventoFinalizacionColeccionE3: Evento = new Evento(22, new Date(), profesor.id, undefined, this.tercerEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-              this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionE3).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
-
-              //Notificar a los Alumnos del Equipo (3)
-              this.comService.EnviarNotificacionEquipo(this.tercerEquipo.id, `¡Enhorabuena! Tu equipo ${this.tercerEquipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              if (true) {
+                //Registrar la Finalización de la Colección (Del Equipo 3)
+                let profesor: Profesor = this.sesion.DameProfesor();
+                let eventoFinalizacionColeccionE3: Evento = new Evento(22, new Date(), profesor.id, undefined, this.tercerEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionE3).subscribe((res) => {
+                  console.log("Registrado evento: ", res);
+                }, (err) => { 
+                  console.log(err); 
+                });
+              }
+              if (true) {
+                //Notificar a los Alumnos del Equipo (3)
+                this.comService.EnviarNotificacionEquipo(this.tercerEquipo.id, `¡Enhorabuena! Tu equipo ${this.tercerEquipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
             }
           }, (err) => {
             console.log(err); 
@@ -1164,32 +1243,38 @@ export class AsignarCromosComponent implements OnInit {
         this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion1.id).subscribe((finalizacionAntesE1) => {
 
           this.calculos.AsignarCromosAleatoriosEquipo (equipoPrimerAlumno, this.inscripcionesEquipos, this.cromosParaPrimero, this.probabilidadCromos, this.cromosColeccion);
-
-          //Registrar la Asignación de Cromo/s (Del Equipo 1)
-          let profesor: Profesor = this.sesion.DameProfesor();
-          let eventoAsignarCromosE1: Evento = new Evento(20, new Date(), profesor.id, undefined, equipoPrimerAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaPrimero);
-          this.peticionesAPI.CreaEvento(eventoAsignarCromosE1).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar a los Alumnos del Equipo (1)
-          this.comService.EnviarNotificacionEquipo(equipoPrimerAlumno.id, `Tu Equipo ${equipoPrimerAlumno.Nombre} ha obtenido ${this.cromosParaPrimero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+          if (true) {
+            //Registrar la Asignación de Cromo/s (Del Equipo 1)
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoAsignarCromosE1: Evento = new Evento(20, new Date(), profesor.id, undefined, equipoPrimerAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaPrimero);
+            this.peticionesAPI.CreaEvento(eventoAsignarCromosE1).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
+            //Notificar a los Alumnos del Equipo (1)
+            this.comService.EnviarNotificacionEquipo(equipoPrimerAlumno.id, `Tu Equipo ${equipoPrimerAlumno.Nombre} ha obtenido ${this.cromosParaPrimero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
           //Comprobamos si se ha completado la Colección (Del Equipo 1) tras haber asignado el/los Cromo/s
           this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion1.id).subscribe((finalizacionDespuesE1) => {
             if ((finalizacionAntesE1 == false) && (finalizacionDespuesE1 == true)) {
-              //Registrar la Finalización de la Colección (Del Equipo 1)
-              let eventoFinalizacionColeccionE1: Evento = new Evento(22, new Date(), profesor.id, undefined, equipoPrimerAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-              this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionE1).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
+              if (true) {
+                //Registrar la Finalización de la Colección (Del Equipo 1)
+                let profesor: Profesor = this.sesion.DameProfesor();
+                let eventoFinalizacionColeccionE1: Evento = new Evento(22, new Date(), profesor.id, undefined, equipoPrimerAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionE1).subscribe((res) => {
+                  console.log("Registrado evento: ", res);
+                }, (err) => { 
+                  console.log(err); 
+                });
+              }
+              if (true) {
 
-              //Notificar a los Alumnos del Equipo (1)
-              this.comService.EnviarNotificacionEquipo(equipoPrimerAlumno.id, `¡Enhorabuena! Tu equipo ${equipoPrimerAlumno.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                //Notificar a los Alumnos del Equipo (1)
+                this.comService.EnviarNotificacionEquipo(equipoPrimerAlumno.id, `¡Enhorabuena! Tu equipo ${equipoPrimerAlumno.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
             }
           }, (err) => {
             console.log(err); 
@@ -1214,32 +1299,38 @@ export class AsignarCromosComponent implements OnInit {
         this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion2.id).subscribe((finalizacionAntesE2) => {
 
           this.calculos.AsignarCromosAleatoriosEquipo (equipoSegundoAlumno, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion);
+          if (true) {
+            //Registrar la Asignación de Cromo/s (Del Equipo 2)
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoAsignarCromosE2: Evento = new Evento(20, new Date(), profesor.id, undefined, equipoSegundoAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaSegundo);
+            this.peticionesAPI.CreaEvento(eventoAsignarCromosE2).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
 
-          //Registrar la Asignación de Cromo/s (Del Equipo 2)
-          let profesor: Profesor = this.sesion.DameProfesor();
-          let eventoAsignarCromosE2: Evento = new Evento(20, new Date(), profesor.id, undefined, equipoSegundoAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaSegundo);
-          this.peticionesAPI.CreaEvento(eventoAsignarCromosE2).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar a los Alumnos del Equipo (2)
-          this.comService.EnviarNotificacionEquipo(equipoSegundoAlumno.id, `Tu Equipo ${equipoSegundoAlumno.Nombre} ha obtenido ${this.cromosParaSegundo} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+            //Notificar a los Alumnos del Equipo (2)
+            this.comService.EnviarNotificacionEquipo(equipoSegundoAlumno.id, `Tu Equipo ${equipoSegundoAlumno.Nombre} ha obtenido ${this.cromosParaSegundo} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
           //Comprobamos si se ha completado la Colección (Del Equipo 2) tras haber asignado el/los Cromo/s
           this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion2.id).subscribe((finalizacionDespuesE2) => {
             if ((finalizacionAntesE2 == false) && (finalizacionDespuesE2 == true)) {
-              //Registrar la Finalización de la Colección (Del Equipo 2)
-              let eventoFinalizacionColeccionE2: Evento = new Evento(22, new Date(), profesor.id, undefined, equipoSegundoAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-              this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionE2).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
-
-              //Notificar a los Alumnos del Equipo (2)
-              this.comService.EnviarNotificacionEquipo(equipoSegundoAlumno.id, `¡Enhorabuena! Tu equipo ${equipoSegundoAlumno.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              if (true) {
+                //Registrar la Finalización de la Colección (Del Equipo 2)
+                let profesor: Profesor = this.sesion.DameProfesor();
+                let eventoFinalizacionColeccionE2: Evento = new Evento(22, new Date(), profesor.id, undefined, equipoSegundoAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionE2).subscribe((res) => {
+                  console.log("Registrado evento: ", res);
+                }, (err) => { 
+                  console.log(err); 
+                });
+              }
+              if (true) {
+                //Notificar a los Alumnos del Equipo (2)
+                this.comService.EnviarNotificacionEquipo(equipoSegundoAlumno.id, `¡Enhorabuena! Tu equipo ${equipoSegundoAlumno.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
             }
           }, (err) => {
             console.log(err); 
@@ -1263,32 +1354,38 @@ export class AsignarCromosComponent implements OnInit {
         this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion3.id).subscribe((finalizacionAntesE3) => {
 
           this.calculos.AsignarCromosAleatoriosEquipo (equipoTercerAlumno, this.inscripcionesEquipos, this.cromosParaTercero, this.probabilidadCromos, this.cromosColeccion);
-
-          //Registrar la Asignación de Cromo/s (Del Equipo 3)
-          let profesor: Profesor = this.sesion.DameProfesor();
-          let eventoAsignarCromosE3: Evento = new Evento(20, new Date(), profesor.id, undefined, equipoTercerAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaTercero);
-          this.peticionesAPI.CreaEvento(eventoAsignarCromosE3).subscribe((res) => {
-            console.log("Registrado evento: ", res);
-          }, (err) => { 
-            console.log(err); 
-          });
-
-          //Notificar a los Alumnos del Equipo (3)
-          this.comService.EnviarNotificacionEquipo(equipoTercerAlumno.id, `Tu Equipo ${equipoTercerAlumno.Nombre} ha obtenido ${this.cromosParaTercero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
-
+          if (true) {
+            //Registrar la Asignación de Cromo/s (Del Equipo 3)
+            let profesor: Profesor = this.sesion.DameProfesor();
+            let eventoAsignarCromosE3: Evento = new Evento(20, new Date(), profesor.id, undefined, equipoTercerAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección", undefined, undefined, undefined, this.cromosParaTercero);
+            this.peticionesAPI.CreaEvento(eventoAsignarCromosE3).subscribe((res) => {
+              console.log("Registrado evento: ", res);
+            }, (err) => { 
+              console.log(err); 
+            });
+          }
+          if (true) {
+            //Notificar a los Alumnos del Equipo (3)
+            this.comService.EnviarNotificacionEquipo(equipoTercerAlumno.id, `Tu Equipo ${equipoTercerAlumno.Nombre} ha obtenido ${this.cromosParaTercero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          }
           //Comprobamos si se ha completado la Colección (Del Equipo 3) tras haber asignado el/los Cromo/s
           this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion3.id).subscribe((finalizacionDespuesE3) => {
             if ((finalizacionAntesE3 == false) && (finalizacionDespuesE3 == true)) {
-              //Registrar la Finalización de la Colección (Del Equipo 3)
-              let eventoFinalizacionColeccionE3: Evento = new Evento(22, new Date(), profesor.id, undefined, equipoTercerAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
-              this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionE3).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
+              if (true) {
+                //Registrar la Finalización de la Colección (Del Equipo 3)
+                let profesor: Profesor = this.sesion.DameProfesor();
+                let eventoFinalizacionColeccionE3: Evento = new Evento(22, new Date(), profesor.id, undefined, equipoTercerAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Colección");
+                this.peticionesAPI.CreaEvento(eventoFinalizacionColeccionE3).subscribe((res) => {
+                  console.log("Registrado evento: ", res);
+                }, (err) => { 
+                  console.log(err); 
+                });
+              }
+              if (true) {
 
-              //Notificar a los Alumnos del Equipo (3)
-              this.comService.EnviarNotificacionEquipo(equipoTercerAlumno.id, `¡Enhorabuena! Tu equipo ${equipoTercerAlumno.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                //Notificar a los Alumnos del Equipo (3)
+                this.comService.EnviarNotificacionEquipo(equipoTercerAlumno.id, `¡Enhorabuena! Tu equipo ${equipoTercerAlumno.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
             }
           }, (err) => {
             console.log(err); 
