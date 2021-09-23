@@ -3,9 +3,12 @@
 
 <div class="contenedor">
   <mat-card class="cartaFiltrosRegistro">
-    <div class="enFila">
-      <button (click)="MostrarFiltros()" class="btn Aceptar" style="width: 49%;">Filtros  <mat-icon class="iconoCentradoBoton">filter_list</mat-icon></button>
-      <button (click)="GenerarPDFRegistro()" class="btn Juegos" style="width: 49%;">Descargar Registro en PDF  <mat-icon class="iconoCentradoBoton">file_download</mat-icon></button>
+    <div class = "enColumna">
+      <div class="enFila">
+        <button (click)="MostrarFiltros()" class="btn Aceptar" style="width: 49%;">Filtros  <mat-icon class="iconoCentradoBoton">filter_list</mat-icon></button>
+        <button (click)="GenerarPDFRegistro()" class="btn Juegos" style="width: 49%;">Descargar Registro en PDF  <mat-icon class="iconoCentradoBoton">file_download</mat-icon></button>
+      </div>
+      <button *ngIf = "eventosAEliminar.length > 0" (click)="EliminarEventos()" class="btn Eliminar" style="width: 49%;">Eliminar eventos marcados </button>
     </div>
 
     <mat-card-content *ngIf="filtrosVisibles">
@@ -277,12 +280,28 @@
 
   <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 15px;" *ngIf="cargando"><mat-spinner></mat-spinner></div>
 
+  <mat-checkbox color="warn" style= "padding-right: 15px;"
+              [checked] = "marcarGeneral"
+              (click)="$event.stopPropagation(); Toogle ()" 
+              (keydown)="$event.stopPropagation()" >
+  <b>Seleccionar/Deseleccionar todos </b>
+  </mat-checkbox>
   <mat-accordion class="accordion-headers-align">
     <mat-expansion-panel *ngFor="let evento of listaEventosPaginada; let i = index" (opened)="DameDescripcionEvento(i)">
       <mat-expansion-panel-header>
-        <mat-panel-title><b>Tipo de Evento: </b><span *ngIf="evento.TipoEvento == 1"> Creación del Juego </span><span *ngIf="evento.TipoEvento == 2"> Acceso al Juego </span><span *ngIf="evento.TipoEvento == 10"> Asignación de Punto/s </span><span *ngIf="evento.TipoEvento == 11"> Ascenso de Nivel (Juego de Puntos) </span><span *ngIf="evento.TipoEvento == 20"> Asignación de Cromo/s </span><span *ngIf="evento.TipoEvento == 21"> Regalo de Cromo </span><span *ngIf="evento.TipoEvento == 22"> Finalización de Colección de Cromos </span><span *ngIf="evento.TipoEvento == 30"> Asignación de Privilegio (Juego de Avatar) </span><span *ngIf="evento.TipoEvento == 31"> Eliminación de Privilegio (Juego de Avatar) </span><span *ngIf="evento.TipoEvento == 32"> Modificación de Avatar (Juego de Avatar) </span></mat-panel-title>
+      
+        <mat-panel-title>
+            <mat-checkbox color="warn" style= "padding-right: 15px;"
+              [checked] = "seleccionado [i]"
+              (click)="$event.stopPropagation(); MarcarEvento (evento)" 
+              (keydown)="$event.stopPropagation()" >
+            </mat-checkbox>
+            <b>Tipo de Evento: </b><span *ngIf="evento.TipoEvento == 1"> Creación del Juego </span><span *ngIf="evento.TipoEvento == 2"> Acceso al Juego </span><span *ngIf="evento.TipoEvento == 10"> Asignación de Punto/s </span><span *ngIf="evento.TipoEvento == 11"> Ascenso de Nivel (Juego de Puntos) </span><span *ngIf="evento.TipoEvento == 20"> Asignación de Cromo/s </span><span *ngIf="evento.TipoEvento == 21"> Regalo de Cromo </span><span *ngIf="evento.TipoEvento == 22"> Finalización de Colección de Cromos </span><span *ngIf="evento.TipoEvento == 30"> Asignación de Privilegio (Juego de Avatar) </span><span *ngIf="evento.TipoEvento == 31"> Eliminación de Privilegio (Juego de Avatar) </span><span *ngIf="evento.TipoEvento == 32"> Modificación de Avatar (Juego de Avatar) </span>
+        </mat-panel-title>
+     
         <mat-panel-description> {{('0' + evento.FechayHora.getDate()).slice(-2)}}/{{('0' + (evento.FechayHora.getMonth()+1)).slice(-2)}}/{{evento.FechayHora.getFullYear()}} {{('0' + evento.FechayHora.getHours()).slice(-2)}}:{{('0' + evento.FechayHora.getMinutes()).slice(-2)}} <mat-icon>info_outline</mat-icon>
         </mat-panel-description>
+       
       </mat-expansion-panel-header>
 
       <div>

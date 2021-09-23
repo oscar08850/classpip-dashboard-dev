@@ -2083,9 +2083,10 @@ public modificarConcurso(id, concurso): Observable<any> {
   /* public ModificaEvento(evento: Evento): Observable<Evento> {
     return this.http.put<Evento>();
   }
+  */
 
-  public BorraEvento(eventoID: number): Observable<Evento> {
-    return this.http.delete<Evento>();
-  } */
+  public BorraEvento(eventoId: number): Observable<Evento> {
+    return this.http.delete<any>(this.APIUrlEventos + '/' + eventoId);
+  } 
 
 }

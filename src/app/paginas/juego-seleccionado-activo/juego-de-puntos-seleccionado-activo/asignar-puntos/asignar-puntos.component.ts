@@ -205,11 +205,15 @@ export class AsignarPuntosComponent implements OnInit {
         // tslint:disable-next-line:max-line-length
         const eventoAsignarPuntos: Evento = new Evento(10, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Puntos', this.puntoSeleccionadoId, this.valorPunto);
         this.calculos.RegistrarEvento(eventoAsignarPuntos);
-        if (true) {
-          let tipoPunto: string = this.tiposPuntosDelJuego.filter(punto => punto.id == this.puntoSeleccionadoId)[0].Nombre;
-          // Notificar al Alumno
-          this.comService.EnviarNotificacionIndividual(alumno.id, `Has obtenido ${this.valorPunto} punto/s de tipo ${tipoPunto} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
-        }
+
+        console.log ('voy a buscar elnombre del punto ', this.puntoSeleccionadoId);
+        console.log ('puntos del juego ', this.tiposPuntosDelJuego);
+
+        const tipoPunto: string = this.tiposPuntosDelJuego.filter(punto => punto.id === Number(this.puntoSeleccionadoId))[0].Nombre;
+        // Notificar al Alumno
+        // tslint:disable-next-line:max-line-length
+        this.comService.EnviarNotificacionIndividual(10, alumno.id, `Has obtenido ${this.valorPunto} punto/s de tipo ${tipoPunto} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+        
         let nivelDespues: number = this.listaAlumnosOrdenadaPorPuntos[i].nivelId;
         //console.log("Nivel después de asignar el Punto: ", nivelDespues);
 
@@ -218,11 +222,12 @@ export class AsignarPuntosComponent implements OnInit {
           // tslint:disable-next-line:max-line-length
           const eventoAscensoNivel: Evento = new Evento(11, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Puntos', undefined, undefined, this.listaAlumnosOrdenadaPorPuntos[i].nivelId);
           this.calculos.RegistrarEvento (eventoAscensoNivel);
-          if (true) {
-            let nombreNivel: string = this.nivelesDelJuego.filter (n => n.id === this.listaAlumnosOrdenadaPorPuntos[i].nivelId)[0].Nombre;
-            //Notificar al Alumno
-            this.comService.EnviarNotificacionIndividual(alumno.id, `Has ascendido al nivel ${nombreNivel} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
-          }
+        
+          // tslint:disable-next-line:max-line-length
+          const nombreNivel: string = this.nivelesDelJuego.filter (n => n.id === Number (this.listaAlumnosOrdenadaPorPuntos[i].nivelId))[0].Nombre;
+          // Notificar al Alumno
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionIndividual(11, alumno.id, `Has ascendido al nivel ${nombreNivel} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
         }
 
         this.rankingJuegoDePuntos[i].puntos = this.rankingJuegoDePuntos[i].puntos + this.valorPunto;
@@ -276,11 +281,12 @@ export class AsignarPuntosComponent implements OnInit {
         this.calculos.RegistrarEvento(eventoAsignarPuntos);
 
 
-        if (true) {
-          let tipoPunto: string = this.tiposPuntosDelJuego.filter(punto => punto.id == this.puntoSeleccionadoId)[0].Nombre;
-          //Notificar a los Alumnos del Equipo
-          this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.valorPunto} punto/s de tipo ${tipoPunto} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
-        }
+
+        const tipoPunto: string = this.tiposPuntosDelJuego.filter(punto => punto.id === Number (this.puntoSeleccionadoId))[0].Nombre;
+        // Notificar a los Alumnos del Equipo
+        // tslint:disable-next-line:max-line-length
+        this.comService.EnviarNotificacionEquipo(10, equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.valorPunto} punto/s de tipo ${tipoPunto} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+        
         let nivelDespues: number = this.listaEquiposOrdenadaPorPuntos[i].nivelId;
         //console.log("Nivel después de asignar el Punto: ", nivelDespues);
 
@@ -290,11 +296,13 @@ export class AsignarPuntosComponent implements OnInit {
           const eventoAscensoNivel: Evento = new Evento(11, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Puntos', undefined, undefined, this.listaEquiposOrdenadaPorPuntos[i].nivelId);
           this.calculos.RegistrarEvento(eventoAscensoNivel);
 
-          if (true) {
-            let nombreNivel: string = this.nivelesDelJuego.filter (n => n.id === this.listaEquiposOrdenadaPorPuntos[i].nivelId)[0].Nombre;
-            //Notificar a los Alumnos del Equipo
-            this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha ascendido al nivel ${nombreNivel} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
-          }
+       
+          // tslint:disable-next-line:max-line-length
+          const nombreNivel: string = this.nivelesDelJuego.filter (n => n.id === Number(this.listaEquiposOrdenadaPorPuntos[i].nivelId))[0].Nombre;
+          // Notificar a los Alumnos del Equipo
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionEquipo(11, equipo.id, `Tu Equipo ${equipo.Nombre} ha ascendido al nivel ${nombreNivel} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+
         }
 
         this.rankingEquiposJuegoDePunto[i].puntos = this.rankingEquiposJuegoDePunto[i].puntos + this.valorPunto;
@@ -351,11 +359,11 @@ export class AsignarPuntosComponent implements OnInit {
           const eventoAsignarPuntos: Evento = new Evento(10, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Puntos', this.puntoAleatorioId, this.valorPunto);
           this.calculos.RegistrarEvento(eventoAsignarPuntos);
 
-          if (true) {
 
-            //Notificar al Alumno
-            this.comService.EnviarNotificacionIndividual(alumno.id, `Has obtenido ${this.valorPunto} punto/s de tipo Aleatorio en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
-          }
+          // Notificar al Alumno
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionIndividual(10, alumno.id, `Has obtenido ${this.valorPunto} punto/s de tipo Aleatorio en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+          
           let nivelDespues: number = this.listaAlumnosOrdenadaPorPuntos[elegido].nivelId;
           //console.log("Nivel después de asignar el Punto: ", nivelDespues);
 
@@ -366,11 +374,11 @@ export class AsignarPuntosComponent implements OnInit {
             const eventoAscensoNivel: Evento = new Evento(11, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Puntos', undefined, undefined, this.listaAlumnosOrdenadaPorPuntos[elegido].nivelId);
             this.calculos.RegistrarEvento(eventoAscensoNivel);
 
-            if (true) {
-              let nombreNivel: string = this.nivelesDelJuego.filter (n => n.id === this.listaAlumnosOrdenadaPorPuntos[elegido].nivelId)[0].Nombre;
-              //Notificar al Alumno
-              this.comService.EnviarNotificacionIndividual(alumno.id, `Has ascendido al nivel ${nombreNivel} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
-            }
+            // tslint:disable-next-line:max-line-length
+            const nombreNivel: string = this.nivelesDelJuego.filter (n => n.id === Number(this.listaAlumnosOrdenadaPorPuntos[elegido].nivelId))[0].Nombre;
+            // Notificar al Alumno
+            // tslint:disable-next-line:max-line-length
+            this.comService.EnviarNotificacionIndividual(11, alumno.id, `Has ascendido al nivel ${nombreNivel} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
           }
 
           this.rankingJuegoDePuntos[elegido].puntos = this.rankingJuegoDePuntos[elegido].puntos + this.valorPunto;
@@ -420,11 +428,10 @@ export class AsignarPuntosComponent implements OnInit {
           // tslint:disable-next-line:max-line-length
           const eventoAsignarPuntos: Evento = new Evento(10, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Puntos', this.puntoAleatorioId, this.valorPunto);
           this.calculos.RegistrarEvento(eventoAsignarPuntos);
-          
-          if (true) {
-            //Notificar a los Alumnos del Equipo
-            this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.valorPunto} punto/s de tipo Aleatorio en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
-          }
+
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionEquipo(10, equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.valorPunto} punto/s de tipo Aleatorio en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+
           let nivelDespues: number = this.listaEquiposOrdenadaPorPuntos[elegido].nivelId;
           //console.log("Nivel después de asignar el Punto: ", nivelDespues);
 
@@ -435,11 +442,13 @@ export class AsignarPuntosComponent implements OnInit {
             const eventoAscensoNivel: Evento = new Evento(11, new Date(), profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Puntos', undefined, undefined, this.listaEquiposOrdenadaPorPuntos[elegido].nivelId);
             this.calculos.RegistrarEvento(eventoAscensoNivel);
             
-            if (true) {
-              let nombreNivel: string = this.nivelesDelJuego.filter (n => n.id === this.listaEquiposOrdenadaPorPuntos[elegido].nivelId)[0].Nombre;
-              //Notificar a los Alumnos del Equipo
-              this.comService.EnviarNotificacionEquipo(equipo.id, `Tu Equipo ${equipo.Nombre} ha ascendido al nivel ${nombreNivel} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
-            }
+
+            // tslint:disable-next-line:max-line-length
+            const nombreNivel: string = this.nivelesDelJuego.filter (n => n.id === Number(this.listaEquiposOrdenadaPorPuntos[elegido].nivelId))[0].Nombre;
+            // Notificar a los Alumnos del Equipo
+            // tslint:disable-next-line:max-line-length
+            this.comService.EnviarNotificacionEquipo(11, equipo.id, `Tu Equipo ${equipo.Nombre} ha ascendido al nivel ${nombreNivel} en el Juego de Puntos ${this.juegoSeleccionado.NombreJuego}`);
+
           }
 
           this.rankingEquiposJuegoDePunto[elegido].puntos = this.rankingEquiposJuegoDePunto[elegido].puntos + this.valorPunto;

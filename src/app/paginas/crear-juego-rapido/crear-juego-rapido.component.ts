@@ -374,22 +374,26 @@ CrearJuegoDeVotacionRapida() {
 
 }
   //// FUNCIONES PARA LA CREACION DE JUEGO DE CUESTIONARIO RAPIDO
-  AbrirDialogoAgregarCuestionarioRapido(): void {
-    const dialogRef = this.dialog.open(AsignaCuestionarioComponent, {
-      width: '70%',
-      height: '80%',
-      position: {
-        top: '0%'
-      },
-      // Pasamos los parametros necesarios
-      data: {
-        profesorId: this.profesorId
-      }
-    });
-    dialogRef.afterClosed().subscribe(() => {
-      this.cuestionario = this.sesion.DameCuestionario();
-      this.tengoCuestionario = true;
-    });
+  // AbrirDialogoAgregarCuestionarioRapido(): void {
+  //   const dialogRef = this.dialog.open(AsignaCuestionarioComponent, {
+  //     width: '70%',
+  //     height: '80%',
+  //     position: {
+  //       top: '0%'
+  //     },
+  //     // Pasamos los parametros necesarios
+  //     data: {
+  //       profesorId: this.profesorId
+  //     }
+  //   });
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.cuestionario = this.sesion.DameCuestionario();
+  //     this.tengoCuestionario = true;
+  //   });
+  // }
+  RecibeCuestionarioElegido($event) {
+    this.cuestionario = $event;
+    this.tengoCuestionario = true;
   }
 
 

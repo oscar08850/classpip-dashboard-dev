@@ -673,6 +673,7 @@ canExit(): Observable <boolean> {
         }).then((result) => {
           if (result.value) {
             this.sonido = false;
+            this.comServer.InformarFinJuegoRapido (this.profesorId);
           }
           obs.next (result.value);
       });
