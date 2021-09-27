@@ -1,4 +1,5 @@
 export class Evento {
+    id: number;
     TipoEvento: number; //Required
     FechayHora: Date; //Required
     ProfesorID: number; //Required
@@ -16,6 +17,7 @@ export class Evento {
     Privilegio: number; //Privilegio asignado/eliminado en un Juego de Avatar
 
     constructor(tipoEvento: number, fechayhora: Date, profesorID: number, alumnoID?: number, equipoID?: number, juegoID?: number,  nombreJuego?: string, tipoJuego?: string, puntoID?: number, numeroPuntos?: number, nivelID?: number, numeroCromos?: number, alumnoReceptorCromoID?: number, equipoReceptorCromoID?: number, privilegio?: number){
+
         this.TipoEvento = tipoEvento;
         this.FechayHora = fechayhora;
         this.ProfesorID = profesorID;

@@ -70,6 +70,10 @@ export class ActividadRegistroComponent implements OnInit {
   filtroEquipoReceptorCromo: Equipo; //Equipo al cual le han regalado un Cromo
   filtrarPrivilegio: boolean;
   filtroPrivilegio: number;
+  eventosAEliminar: Evento[] = [];
+  seleccionado: boolean[];
+  seleccionadosTodos = false;
+  marcarGeneral = false;
 
   constructor(
     private APIService: PeticionesAPIService,
@@ -323,7 +327,10 @@ export class ActividadRegistroComponent implements OnInit {
         let lista: Evento[] = [];
         eventos.forEach((evento) => {
           //Para parsear las fechas que vienen de la API
-          lista.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+          // tslint:disable-next-line:max-line-length
+          const nuevoEvento = new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio);
+          nuevoEvento.id = evento.id; // esto no se copia en el constructor
+          lista.push (nuevoEvento);
         });
 
         //Para ordenar la lista según la fecha y hora
@@ -388,6 +395,7 @@ export class ActividadRegistroComponent implements OnInit {
       this.paginatorLength = this.listaEventos.length;
 
       this.cargando = false;
+      this.seleccionado = Array (this.listaEventosPaginada.length).fill (false);
     }, (err) => {
       console.log(err);
       Swal.fire({
@@ -800,5 +808,59 @@ export class ActividadRegistroComponent implements OnInit {
       });
       this.cargando = false;
     });
+  }
+
+  MarcarEvento (evento: Evento) {
+    console.log ('He seleccionado evento ', evento);
+    if (this.eventosAEliminar.includes (evento)) {
+      this.eventosAEliminar = this.eventosAEliminar.filter (e => e.id !== evento.id);
+    } else {
+      this.eventosAEliminar.push (evento);
+    }
+  }
+  EliminarEventos () {
+    console.log ('eventos a eliminar ', this.eventosAEliminar);
+    Swal.fire({
+      title: '¿Estas seguro de que quieres eliminar los eventos marcados?',
+      text: 'La operación no podrá deshacerse',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then( (result) => {
+      if (result.value) {
+        console.log ('eventos a eliminar ', this.eventosAEliminar);
+        this.seleccionado = Array (this.listaEventosPaginada.length).fill (false);
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < this.eventosAEliminar.length ; i++) {
+            this.listaEventosPaginada = this.listaEventosPaginada.filter (evento => evento.id !== this.eventosAEliminar[i].id );
+            this.APIService.BorraEvento (this.eventosAEliminar[i].id).subscribe();
+        }
+        this.eventosAEliminar = [];
+        this.seleccionadosTodos = false;
+        console.log ('voy a poner marcarGeneral a false');
+        this.marcarGeneral = true;
+        Swal.fire('Eventos eliminados con éxito');
+      }
+    });
+  }
+  Toogle () {
+    console.log ('TOGLE ', this.seleccionadosTodos);
+    if (!this.seleccionadosTodos) {
+      console.log ('voy a seleccionarlos todos ');
+      this.seleccionadosTodos = true;
+      this.marcarGeneral = false;
+      this.eventosAEliminar = this.listaEventosPaginada;
+      this.seleccionado = Array (this.listaEventosPaginada.length).fill (true);
+    } else {
+      console.log ('voy a deseleccionarlos todos ');
+      this.seleccionadosTodos = false;
+      this.marcarGeneral = true;
+      this.eventosAEliminar = [];
+      this.seleccionado = Array (this.listaEventosPaginada.length).fill (false);
+    }
+  
+    console.log ('LISTA ', this.eventosAEliminar);
   }
 }

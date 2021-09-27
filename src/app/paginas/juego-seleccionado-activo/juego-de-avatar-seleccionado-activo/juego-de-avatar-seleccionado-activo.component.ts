@@ -36,7 +36,7 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
   haCambiado: boolean[];
   hayCambios: boolean = false;
   privilegiosIniciales: boolean[][] = []; //Para comprobar después qué Privilegios en concreto se han asignado/eliminado ( [índice del AlumnoJuegoDeAvatar en la lista inscripcionesAlumnosJuegodeAvatar][número del Privilegio (1-6)] )
-
+  profesor: Profesor;
   // tslint:disable-next-line:max-line-length
   displayedColumns: string[] = ['nombre', 'primerApellido', 'segundoApellido', 'privilegio1', 'privilegio2', 'privilegio3', 'privilegio4', 'privilegio5', 'privilegio6', ' '];
   constructor(
@@ -48,6 +48,7 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
     private location: Location ) { }
   ngOnInit() {
     this.juegoSeleccionado = this.sesion.DameJuego();
+    this.profesor = this.sesion.DameProfesor();
     console.log ('Ya tengo el juego');
     console.log (this.juegoSeleccionado);
 
@@ -254,51 +255,48 @@ export class JuegoDeAvatarSeleccionadoActivoComponent implements OnInit {
         this.peticionesAPI.ModificaInscripcionAlumnoJuegoDeAvatar (this.inscripcionesAlumnosJuegodeAvatar[i]).subscribe(() => {
           //Comprobamos qué privilegios en concreto se han cambiado (se han asignado o quitado respecto al inicio)
           for (let n: number = 1; n < 7; n++) {
-            if ((this.privilegiosIniciales[i][n] == false) && (this.inscripcionesAlumnosJuegodeAvatar[i].Privilegios[n - 1] == true)) {
-              //Registrar la Asignación del Privilegio
-              let profesor: Profesor = this.sesion.DameProfesor();
-              let alumno: Alumno = this.alumnosDelJuego.filter(alumno => alumno.id == this.inscripcionesAlumnosJuegodeAvatar[i].alumnoId)[0];
-              let eventoAsignarPrivilegio: Evento = new Evento(30, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Avatar", undefined, undefined, undefined, undefined, undefined, undefined, n);
-              this.peticionesAPI.CreaEvento(eventoAsignarPrivilegio).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
+            if ((this.privilegiosIniciales[i][n] === false) && (this.inscripcionesAlumnosJuegodeAvatar[i].Privilegios[n - 1] === true)) {
+              // Registrar la Asignación del Privilegio
+              // tslint:disable-next-line:max-line-length
+              const alumno: Alumno = this.alumnosDelJuego.filter(al => al.id === this.inscripcionesAlumnosJuegodeAvatar[i].alumnoId)[0];
+              // tslint:disable-next-line:max-line-length
+              const eventoAsignarPrivilegio: Evento = new Evento(30, new Date(), this.profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Avatar', undefined, undefined, undefined, undefined, undefined, undefined, n);
+              this.calculos.RegistrarEvento (eventoAsignarPrivilegio);
+           
 
-              //Notificar al Alumno
-              if (n == 5) {
-                this.comService.EnviarNotificacionIndividual(alumno.id, `Has obtenido el Privilegio Nota de Voz en el Juego de Avatar ${this.juegoSeleccionado.NombreJuego}`);
+              // Notificar al Alumno
+              if (n === 5) {
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionIndividual(30, alumno.id, `Has obtenido el Privilegio Nota de Voz en el Juego de Avatar ${this.juegoSeleccionado.NombreJuego}`);
+              } else if (n === 6) {
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionIndividual(30, alumno.id, `Has obtenido el Privilegio Espiar en el Juego de Avatar ${this.juegoSeleccionado.NombreJuego}`);
+              } else {
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionIndividual(30, alumno.id, `Has obtenido el Privilegio ${n} en el Juego de Avatar ${this.juegoSeleccionado.NombreJuego}`);
               }
-              else if (n == 6) {
-                this.comService.EnviarNotificacionIndividual(alumno.id, `Has obtenido el Privilegio Espiar en el Juego de Avatar ${this.juegoSeleccionado.NombreJuego}`);
-              }
-              else {
-                this.comService.EnviarNotificacionIndividual(alumno.id, `Has obtenido el Privilegio ${n} en el Juego de Avatar ${this.juegoSeleccionado.NombreJuego}`);
-              }
-            }
-            else if ((this.privilegiosIniciales[i][n] == true) && (this.inscripcionesAlumnosJuegodeAvatar[i].Privilegios[n - 1] == false)) {
-              //Registrar la Eliminación del Privilegio
-              let profesor: Profesor = this.sesion.DameProfesor();
-              let alumno: Alumno = this.alumnosDelJuego.filter(alumno => alumno.id == this.inscripcionesAlumnosJuegodeAvatar[i].alumnoId)[0];
-              let eventoEliminarPrivilegio: Evento = new Evento(31, new Date(), profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, "Juego De Avatar", undefined, undefined, undefined, undefined, undefined, undefined, n);
-              this.peticionesAPI.CreaEvento(eventoEliminarPrivilegio).subscribe((res) => {
-                console.log("Registrado evento: ", res);
-              }, (err) => { 
-                console.log(err); 
-              });
+            // tslint:disable-next-line:max-line-length
+            } else if ((this.privilegiosIniciales[i][n] === true) && (this.inscripcionesAlumnosJuegodeAvatar[i].Privilegios[n - 1] === false)) {
+              // Registrar la Eliminación del Privilegio
+              // tslint:disable-next-line:max-line-length
+              const alumno: Alumno = this.alumnosDelJuego.filter(al => al.id === this.inscripcionesAlumnosJuegodeAvatar[i].alumnoId)[0];
+              // tslint:disable-next-line:max-line-length
+              const eventoEliminarPrivilegio: Evento = new Evento(31, new Date(), this.profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Avatar', undefined, undefined, undefined, undefined, undefined, undefined, n);
+              this.calculos.RegistrarEvento (eventoEliminarPrivilegio);
+           
 
-              //Notificar al Alumno
-              if (n == 5) {
-                this.comService.EnviarNotificacionIndividual(alumno.id, `Has perdido el Privilegio Nota de Voz en el Juego de Avatar ${this.juegoSeleccionado.NombreJuego}`);
+              // Notificar al Alumno
+              if (n === 5) {
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionIndividual(31, alumno.id, `Has perdido el Privilegio Nota de Voz en el Juego de Avatar ${this.juegoSeleccionado.NombreJuego}`);
+              } else if (n === 6) {
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionIndividual(31, alumno.id, `Has perdido el Privilegio Espiar en el Juego de Avatar ${this.juegoSeleccionado.NombreJuego}`);
+              } else {
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionIndividual(31, alumno.id, `Has perdido el Privilegio ${n} en el Juego de Avatar ${this.juegoSeleccionado.NombreJuego}`);
               }
-              else if (n == 6) {
-                this.comService.EnviarNotificacionIndividual(alumno.id, `Has perdido el Privilegio Espiar en el Juego de Avatar ${this.juegoSeleccionado.NombreJuego}`);
-              }
-              else {
-                this.comService.EnviarNotificacionIndividual(alumno.id, `Has perdido el Privilegio ${n} en el Juego de Avatar ${this.juegoSeleccionado.NombreJuego}`);
-              }
-            }
-            else { 
+            } else { 
               //No hay cambio en el Privilegio
             }
           }

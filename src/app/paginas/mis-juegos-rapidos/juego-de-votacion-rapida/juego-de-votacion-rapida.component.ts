@@ -204,6 +204,7 @@ canExit(): Observable <boolean> {
         }).then((result) => {
           if (result.value) {
             this.sonido = false;
+            this.comServer.InformarFinJuegoRapido (this.profesorId);
             // this.juegoSeleccionado.Respuestas = this.respuestas;
             // // salvo las respuestas que hay hasta el momento para poder recuperarlas si voilvemos a esta página
             // this.peticionesAPI.ModificarJuegoVotacionRapida (this.juegoSeleccionado).subscribe();

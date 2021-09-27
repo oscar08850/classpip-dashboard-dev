@@ -205,14 +205,18 @@ export class CrearJuegoRapidoComponent implements OnInit {
     .subscribe (juegoCreado => {
       this.juego = juegoCreado;
       this.juegoCreado = true;
+      // tslint:disable-next-line:max-line-length
+      const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Encuesta Rápida');
+      this.calculos.RegistrarEvento(evento);
 
-      //Registrar la Creación del Juego
-      let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Encuesta Rápida");
-      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
-        console.log("Registrado evento: ", res);
-      }, (err) => { 
-        console.log(err); 
-      });
+
+      // //Registrar la Creación del Juego
+      // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Encuesta Rápida");
+      // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      //   console.log("Registrado evento: ", res);
+      // }, (err) => { 
+      //   console.log(err); 
+      // });
       
       Swal.fire('Juego de encuesta rápida creado correctamente', ' ', 'success');
       this.goBack();
@@ -352,12 +356,16 @@ CrearJuegoDeVotacionRapida() {
     this.juegoCreado = true;
 
     //Registrar la Creación del Juego
-    let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Votación Rápida");
-    this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
-      console.log("Registrado evento: ", res);
-    }, (err) => { 
-      console.log(err); 
-    });
+    // tslint:disable-next-line:max-line-length
+    const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Votación Rápida');
+    this.calculos.RegistrarEvento(evento);
+
+    // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Votación Rápida");
+    // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+    //   console.log("Registrado evento: ", res);
+    // }, (err) => { 
+    //   console.log(err); 
+    // });
 
     Swal.fire('Juego de votación rápida creado correctamente', ' ', 'success');
     this.goBack();
@@ -366,22 +374,26 @@ CrearJuegoDeVotacionRapida() {
 
 }
   //// FUNCIONES PARA LA CREACION DE JUEGO DE CUESTIONARIO RAPIDO
-  AbrirDialogoAgregarCuestionarioRapido(): void {
-    const dialogRef = this.dialog.open(AsignaCuestionarioComponent, {
-      width: '70%',
-      height: '80%',
-      position: {
-        top: '0%'
-      },
-      // Pasamos los parametros necesarios
-      data: {
-        profesorId: this.profesorId
-      }
-    });
-    dialogRef.afterClosed().subscribe(() => {
-      this.cuestionario = this.sesion.DameCuestionario();
-      this.tengoCuestionario = true;
-    });
+  // AbrirDialogoAgregarCuestionarioRapido(): void {
+  //   const dialogRef = this.dialog.open(AsignaCuestionarioComponent, {
+  //     width: '70%',
+  //     height: '80%',
+  //     position: {
+  //       top: '0%'
+  //     },
+  //     // Pasamos los parametros necesarios
+  //     data: {
+  //       profesorId: this.profesorId
+  //     }
+  //   });
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.cuestionario = this.sesion.DameCuestionario();
+  //     this.tengoCuestionario = true;
+  //   });
+  // }
+  RecibeCuestionarioElegido($event) {
+    this.cuestionario = $event;
+    this.tengoCuestionario = true;
   }
 
 
@@ -442,12 +454,17 @@ CrearJuegoDeVotacionRapida() {
       this.juegoCreado = true;
 
       //Registrar la Creación del Juego
-      let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Cuestionario Rápido");
-      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
-        console.log("Registrado evento: ", res);
-      }, (err) => { 
-        console.log(err); 
-      });
+      // tslint:disable-next-line:max-line-length
+      const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Cuestionario Rápido');
+
+      this.calculos.RegistrarEvento(evento);
+
+      // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Cuestionario Rápido");
+      // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      //   console.log("Registrado evento: ", res);
+      // }, (err) => { 
+      //   console.log(err); 
+      // });
 
       Swal.fire('Juego de cuestionario rapido creado correctamente', ' ', 'success');
       this.goBack();
@@ -509,14 +526,18 @@ CrearJuegoDeCogerTurnoRapido() {
   .subscribe (juegoCreado => {
     this.juego = juegoCreado;
     this.juegoCreado = true;
-
     //Registrar la Creación del Juego
-    let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Coger Turno Rápido");
-    this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
-      console.log("Registrado evento: ", res);
-    }, (err) => { 
-      console.log(err); 
-    });
+    // tslint:disable-next-line:max-line-length
+    const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Coger Turno Rápido');
+    this.calculos.RegistrarEvento(evento);
+
+    // //Registrar la Creación del Juego
+    // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Coger Turno Rápido");
+    // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+    //   console.log("Registrado evento: ", res);
+    // }, (err) => { 
+    //   console.log(err); 
+    // });
 
     Swal.fire('Juego de coger turno rapido creado correctamente', ' ', 'success');
     this.goBack();

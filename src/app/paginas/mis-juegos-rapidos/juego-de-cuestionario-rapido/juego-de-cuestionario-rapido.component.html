@@ -34,11 +34,11 @@
           <br>
           <h3 align = "center"> Participantes</h3>
           <br>
-          <div style ="display: inline-block; width: 20%;" *ngFor="let participante of participantes; let i=index">
-                  <h2 *ngIf = "juegoSeleccionado.Modalidad === 'Clásico' && !participante.contestado" style="color: red"> {{participante.nickName}}  </h2>
-                  <h2 *ngIf = "juegoSeleccionado.Modalidad === 'Clásico' && participante.contestado" style="color: green"> {{participante.nickName}}  </h2>
-                  <h2 *ngIf = "juegoSeleccionado.Modalidad === 'Kahoot' && !participante.preparado" style="color: red"> {{participante.nickName}}  </h2>
-                  <h2 *ngIf = "juegoSeleccionado.Modalidad === 'Kahoot' && participante.preparado" style="color: green"> {{participante.nickName}}  </h2>
+          <div style ="display: inline-block; width: 20%;padding-left: 15px;" *ngFor="let participante of participantes; let i=index">
+                  <h2 *ngIf = "juegoSeleccionado.Modalidad === 'Clásico' && !participante.contestado" style="color: red"> "{{participante.nickName}}"  </h2>
+                  <h2 *ngIf = "juegoSeleccionado.Modalidad === 'Clásico' && participante.contestado" style="color: green"> "{{participante.nickName}}"  </h2>
+                  <h2 *ngIf = "juegoSeleccionado.Modalidad === 'Kahoot' && !participante.preparado" style="color: red"> "{{participante.nickName}}"  </h2>
+                  <h2 *ngIf = "juegoSeleccionado.Modalidad === 'Kahoot' && participante.preparado" style="color: green"> "{{participante.nickName}}"  </h2>
 
           </div>
         </div>

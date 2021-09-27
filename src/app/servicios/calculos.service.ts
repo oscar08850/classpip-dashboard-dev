@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { SesionService, PeticionesAPIService} from './index';
+import { SesionService } from './sesion.service';
+import { PeticionesAPIService } from './peticiones-api.service';
+import { ComServerService} from './com-server.service';
 import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos,
          TablaEquipoJuegoDePuntos, HistorialPuntosAlumno, HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo,
          AlumnoJuegoDeColeccion, Album, Coleccion, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
@@ -52,7 +54,8 @@ export class CalculosService {
 
   constructor(
     private sesion: SesionService,
-    private peticionesAPI: PeticionesAPIService
+    private peticionesAPI: PeticionesAPIService,
+    private comService: ComServerService
    ) {}
 
 
@@ -6237,5 +6240,86 @@ public VerificarFicherosPreguntas(preguntas: any): any {
     });
     return comprobanteObservable;
   }
+  /* Tipos de evneto:
+      1: Creacion de juego
+      10: Asigación de puntos
+      11: Mejora del nivel
+      20: Asignacion de cromos
+      22: Colección completada
+      30: Asignar privilegio avatar
+      31: Quitar provilegio avatar
+      
+  */
+
+  public RegistrarEvento (evento: Evento) {
+    const profesor = this.sesion.DameProfesor();
+    // la configuración de eventos que trae el profesor tiene las siguientes filas
+    //  0: creación de juegos
+    //  1: juego de puntos
+    //  2: juego de colección
+
+    // Para cada fila, la primera columna indica si hay que registrar el evento o no
+    // y la segunda si hay que notificarlo
+
+    // creación de un juego
+    if ((evento.TipoEvento === 1) && (profesor.configuracionEventos[0][0])) {
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      }, (err) => { 
+        console.log(err); 
+      });
+    }
+    // juego de puntos
+    if (((evento.TipoEvento === 10) || (evento.TipoEvento === 11)) && (profesor.configuracionEventos[1][0])) {
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      }, (err) => { 
+        console.log(err); 
+      });
+    }
+    // juego de colección
+    if (((evento.TipoEvento === 20) || (evento.TipoEvento === 22)) && (profesor.configuracionEventos[2][0])) {
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      }, (err) => { 
+        console.log(err); 
+      });
+    }
+    // juego de avatar
+    if (((evento.TipoEvento === 30) || (evento.TipoEvento === 31)) && (profesor.configuracionEventos[2][0])) {
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      }, (err) => { 
+        console.log(err); 
+      });
+    }
+
+  }
+
+  // public RegistrarNotificarCreacionJuego (juegoId: number, nombreDelJuego: string, tipo: string, grupo: Grupo) {
+  //   if (true) {
+  //     //Registrar la Creación del Juego
+  //     const evento: Evento = new Evento(1, new Date(), this.sesion.DameProfesor().id, undefined, undefined, juegoId, nombreDelJuego, tipo);
+  //     this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+  //       console.log("Registrado evento: ", res);
+  //     }, (err) => { 
+  //       console.log(err); 
+  //     });
+  //   }
+  //   if (true) {
+  //     //Notificar a los Alumnos del Grupo
+  //     this.comService.EnviarNotificacionGrupo(grupo.id, `Nuevo ${tipo} para el Grupo ${grupo.Nombre}: ${nombreDelJuego}`);
+  //   }
+
+  // }
+
+
+  // public RegistrarCreacionJuegoRapido (juegoId: number, nombreDelJuego: string, tipo: string) {
+  //   if (true) {
+  //     //Registrar la Creación del Juego
+  //     const evento: Evento = new Evento(1, new Date(), this.sesion.DameProfesor().id, undefined, undefined, juegoId, nombreDelJuego, tipo);
+  //     this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+  //       console.log("Registrado evento: ", res);
+  //     }, (err) => { 
+  //       console.log(err); 
+  //     });
+  //   }
+  // }
 
 }

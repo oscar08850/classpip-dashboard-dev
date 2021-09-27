@@ -8,6 +8,7 @@ export class Profesor {
   ImagenPerfil: string;
   Identificador: string; // lo usan los alumnos para asociarse a este profesor al registrarse
   id: number;
+  configuracionEventos: any;
 
   constructor(  Nombre?: string, PrimerApellido?: string, SegundoApellido?: string,
                 NombreUsuario?: string, email?: string, Password?: string, ImagenPerfil?: string,
