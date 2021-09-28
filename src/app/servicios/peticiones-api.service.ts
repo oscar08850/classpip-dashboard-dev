@@ -10,7 +10,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         Album, AlbumEquipo, Insignia, AlumnoJuegoDeCompeticionLiga, EquipoJuegoDeCompeticionLiga,
         Jornada, EnfrentamientoLiga, Pregunta,  PreguntaDelCuestionario, Cuestionario, AlumnoJuegoDeCompeticionFormulaUno,
         EquipoJuegoDeCompeticionFormulaUno, SesionClase, AsistenciaClase, FamiliaAvatares, JuegoDeAvatar,
-        AlumnoJuegoDeAvatar, JuegoDeCuestionario, AlumnoJuegoDeCuestionario,
+        AlumnoJuegoDeAvatar, JuegoDeCuestionario, AlumnoJuegoDeCuestionario, AlumnoJuegoDeCuento, JuegoDeCuento,
         RespuestaJuegoDeCuestionario, JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos, Rubrica,
         JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, FamiliaDeImagenesDePerfil,
         CuestionarioSatisfaccion, JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion,
@@ -25,6 +25,7 @@ import {EquipoJuegoEvaluado} from '../clases/EquipoJuegoEvaluado';
 import {AlumnoJuegoEvaluado} from '../clases/AlumnoJuegoEvaluado';
 // import {host} from '../URLs/urls';
 import * as URL from '../URLs/urls';
+import { RecursoCuento } from '../clases/clasesParaJuegoDeCuentos/RecursoCuento';
 
 @Injectable({
   providedIn: 'root'
@@ -82,6 +83,8 @@ export class PeticionesAPIService {
   private APIUrlAlumnoJuegoDeGeocaching = this.host + ':3000/api/AlumnosJuegoDeGeocaching';
 
 
+
+
   // Para cargar y descargar imagenes
   private APIUrlImagenAlumno = this.host + ':3000/api/imagenes/imagenAlumno';
   private APIUrlImagenColeccion = this.host + ':3000/api/imagenes/ImagenColeccion';
@@ -98,6 +101,16 @@ export class PeticionesAPIService {
 
   private APIUrlEscenarios = this.host + ':3000/api/Escenarios';
   private APIUrlPuntosGeolocalizables = this.host + ':3000/api/PuntosGeolocalizables';
+
+    // API Cuentos
+
+  private APIurlImagenesCuentos = this.host + ':3000/api/imagenes';
+  private APIurlRecursosCuentos = this.host + ':3000/api/recursosCuentos';
+  private urlalumnojuego = this.host + ':3000/api/alumnojuegodecuento';
+  private urllibro = this.host + ':3000/api/libro';
+  private urlParaEscena = this.host + ':3000/api/escenas';
+  private urlimagenes = this.host + ':3000/api/imagenes';
+  private APIUrlJuegodeLibro = this.host + ':3000/api/juegodelibro';
 
   private APIURLJuegoDeEvaluacion = this.host + ':3000/api/juegosDeEvaluacion';
   private APIURLEquiposJuegoEvaluado = this.host + ':3000/api/equiposJuegoEvaluado';
@@ -161,6 +174,7 @@ export class PeticionesAPIService {
     GESTION DE FAMILIAS DE AVATAES
     GESTION DE JUEGOS DE AVATARES
     GESTION DE ALUMNOS EN JUEGOS DE AVATARES
+    GESTION JUEGO DE CUENTOS
   */
 
 /////////////////////  GESTION DE PROFESORES Y ALUNNOS ///////////////////////////////
@@ -1671,4 +1685,88 @@ export class PeticionesAPIService {
   public CrearAlumnoJuegoDeEvaluacion(alumno: AlumnoJuegoEvaluado): Observable<AlumnoJuegoEvaluado> {
     return this.http.post<AlumnoJuegoEvaluado>(this.APIURLAlumnoJuegoEvaluado, alumno);
   }
+
+
+  /////////////////////////////// GESTION JUEGO DE CUENTOS //////////////////////////////////
+  public InscribeAlumnojuegoDeCuento(alumnoJuegoDeCuento: AlumnoJuegoDeCuento, id) {
+    return this.http.post<AlumnoJuegoDeCuento>(this.APIUrlJuegodeLibro + '/' + id  + '/alumnojuegodecuento',
+      alumnoJuegoDeCuento);
+
+  }
+  public CrearJuegoCuento(juego: JuegoDeCuento, grupoId: number) {
+
+    return this.http.post<JuegoDeCuento>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro', juego);
+  }
+
+
+   public DamejuegosdeCuento(grupoId: number): Observable<Juego[]> {
+    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro');
+  }
+
+  public DameAlumnosJuegoCuento(id): Observable<any>  {
+  return this.http.get<AlumnoJuegoDeCuento>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento');
+
+ }
+
+
+ public ModificarPermisosJuegoCuento(alumno: AlumnoJuegoDeCuento, id): Observable<AlumnoJuegoDeCuento> {
+  return this.http.put<AlumnoJuegoDeCuento>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento/' + alumno.id, alumno);
+}
+
+
+
+  public CrearCarpeta(nombre: any): Observable<any> {
+
+    return this.http.post<any>(this.APIurlImagenesCuentos, nombre);
+  }
+
+  public GuardarImagenRecursoCuento(nombre: any, file: FormData): Observable<any> {
+    return this.http.post<any>(this.APIurlImagenesCuentos + '/' + nombre + '/upload', file);
+  }
+
+  public GuardarRecursoCuento(recurso: any, profesorId): Observable<any> {
+    return this.http.post<any>(  this.APIUrlProfesores + '/' + profesorId + '/recursosCuentos', recurso);
+
+  }
+
+  
+  public OtenerImagenesEscena(nombreCuento):Observable<any[]>{
+    return this.http.get<any[]>(this.urlimagenes  + '/' + nombreCuento +'/files');
+
+  }
+
+  public GetEscenasDeRecurso(containerName, fileName): Observable<any> {
+    return this.httpImagenes.get(this.urlimagenes  + '/' + containerName + '/download/' + fileName, { responseType: ResponseContentType.Blob });
+  }
+
+  public CambiaEstadoJuegoDeCuentos(juegoDePuntos: Juego, juegoDePuntosId: number, grupoId: number): Observable<Juego> {
+    return this.http.put<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro/' + juegoDePuntosId, juegoDePuntos);
+  }
+
+  public BorraJuegoDeCuento(juegoDePuntosId: number): Observable<Juego> {
+    return this.http.delete<Juego>(this.APIUrlJuegodeLibro + '/' + juegoDePuntosId);
+  }
+
+  public BorrarAlumnosJuegoDeCuento(juegoDeCuentosId: number):Observable<any> {
+
+    return this.http.delete<any>(this.APIUrlJuegodeLibro + '/' + juegoDeCuentosId + '/alumnojuegodecuento') ;
+
+  }
+
+  //////////////////////////////////////// recurosos libros////////////////////////////////////////
+
+  public recuperarListaRecursos(profesorId): Observable<RecursoCuento[]> {
+    return this.http.get<RecursoCuento[]>(this.APIUrlProfesores  + '/' + profesorId + '/recursosCuentos');
+  }
+
+
+
+  public getImagenesRecurso(containerName, fileName): Observable<any> {
+    return this.httpImagenes.get(this.APIurlImagenesCuentos  + '/' + containerName + '/download/' + fileName, { responseType: ResponseContentType.Blob });
+  }
+
+
+  
+
+
 }

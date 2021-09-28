@@ -78,6 +78,8 @@ export * from './JuegoDeCuestionarioRapido';
 export * from './JuegoDeCogerTurnoRapido';
 export * from './JuegoDePuntos';
 
+export * from './clasesParaJuegoDeCuentos/AlumnoJuegoDeCuento';
+export * from './clasesParaJuegoDeCuentos/JuegoDeCuento';
 
 
 

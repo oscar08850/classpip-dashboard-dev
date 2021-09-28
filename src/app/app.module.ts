@@ -247,6 +247,8 @@ import { TeamExcludePipe } from './pipes/team-exclude.pipe';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
+import { CrearRecursosCuentoComponent } from './paginas/crear-recursos-cuento/crear-recursos-cuento.component';
+import { MisRecursosCuentoComponent } from './paginas/mis-recursos-cuento/mis-recursos-cuento.component';
 
 
 @NgModule({
@@ -390,7 +392,9 @@ import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-act
     TeamExcludePipe,
     ModificarPerfilComponent,
     JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
-    GestionPreguntaKahootComponent
+    GestionPreguntaKahootComponent,
+    CrearRecursosCuentoComponent,
+    MisRecursosCuentoComponent
 
   ],
   imports: [

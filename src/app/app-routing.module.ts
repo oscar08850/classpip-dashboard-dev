@@ -151,6 +151,12 @@ import { DeactivateGuardVotacionRapida } from './guardas/canExitVotacionRapida.g
 import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-perfil.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
 
+//Componentes Cuento:
+import { CrearRecursosCuentoComponent } from './paginas/crear-recursos-cuento/crear-recursos-cuento.component';
+import { MisRecursosCuentoComponent }  from './paginas/mis-recursos-cuento/mis-recursos-cuento.component';
+//import { ListadoCuentosComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
+//import { ReproductorCuentoComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
+
 const routes: Routes = [
 
 
@@ -324,7 +330,9 @@ const routes: Routes = [
   { path: 'inicio/:id/misCuestionariosDeSatisfaccion', component: MisCuestionariosSatisfaccionComponent},
   { path: 'inicio/:id/editarCuestionarioDeSatisfaccion', component: EditarCuestionarioSatisfaccionComponent},
 
-
+  // Cuentos
+  {path:'inicio/:id/crearRecursosCuento', component: CrearRecursosCuentoComponent},
+  {path:'inicio/:id/verRecursosCuento', component: MisRecursosCuentoComponent},
 
 
   // JUEGOS RAPIDOS
