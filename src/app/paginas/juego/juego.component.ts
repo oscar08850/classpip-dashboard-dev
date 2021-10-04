@@ -89,6 +89,8 @@ export class JuegoComponent implements OnInit {
   pesoc2;
   pesoc3;
   permisoparaver = false;
+  avanzo1 = false;
+  avanzo2 = false;
   //classpipkids//
   juego: any;
   juegoDeCuestionario: JuegoDeCuestionario;
@@ -1862,7 +1864,7 @@ Limpiar() {
   RecibeRecursos($event) {
     this.recursoElegido = $event;
     this.tengoRecurso = true;
-    localStorage.setItem("idRecursoCuentos", this.recursoElegido[0].toString());
+    localStorage.setItem("idRecursoLibros", this.recursoElegido[0].toString());
   }
 
   cargaRecursos($event) {
@@ -1879,6 +1881,19 @@ Limpiar() {
     this.tengoRecursoCargadoParaGuardar = true;
   }
 
+  avanzoElegirRecursos(){
+    if(!this.avanzo1)
+    this.avanzo1 = true;
+    else
+    this.avanzo1 = false;
+  }
+
+  avanzoElegirEspeciales(){
+    if(!this.avanzo2)
+    this.avanzo2 = true;
+    else
+    this.avanzo2 = false;
+  }
 
 
 

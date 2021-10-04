@@ -106,7 +106,7 @@ export class PeticionesAPIService {
 
   private APIurlImagenesCuentos = this.host + ':3000/api/imagenes';
   private APIurlRecursosCuentos = this.host + ':3000/api/recursosCuentos';
-  private urlalumnojuego = this.host + ':3000/api/alumnojuegodecuento';
+  private APIurlAlumnoJuego = this.host + ':3000/api/AlumnosJuegoDeCuento';
   private urllibro = this.host + ':3000/api/libro';
   private urlParaEscena = this.host + ':3000/api/escenas';
   private urlimagenes = this.host + ':3000/api/imagenes';
@@ -1705,13 +1705,13 @@ export class PeticionesAPIService {
   }
 
   public DameAlumnosJuegoCuento(id): Observable<any>  {
-  return this.http.get<AlumnoJuegoDeCuento>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento');
+  return this.http.get<AlumnoJuegoDeCuento>(this.APIUrlJuegoDeCuento + '/' + id + '/AlumnosJuegoDeCuento');
 
  }
 
 
  public ModificarPermisosJuegoCuento(alumno: AlumnoJuegoDeCuento, id): Observable<AlumnoJuegoDeCuento> {
-  return this.http.put<AlumnoJuegoDeCuento>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento/' + alumno.id, alumno);
+  return this.http.put<AlumnoJuegoDeCuento>(this.APIUrlJuegoDeCuento + '/' + id + '/AlumnosJuegoDeCuento/' + alumno.id, alumno);
 }
 
 
@@ -1741,7 +1741,7 @@ export class PeticionesAPIService {
   }
 
   public CambiaEstadoJuegoDeCuentos(juegoDePuntos: Juego, juegoDePuntosId: number, grupoId: number): Observable<Juego> {
-    return this.http.put<Juego>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro/' + juegoDePuntosId, juegoDePuntos);
+    return this.http.put<Juego>(this.APIUrlGrupos + '/' + grupoId + '/JuegoDeCuento/' + juegoDePuntosId, juegoDePuntos);
   }
 
   public BorraJuegoDeCuento(juegoDePuntosId: number): Observable<Juego> {
@@ -1751,6 +1751,11 @@ export class PeticionesAPIService {
   public BorrarAlumnosJuegoDeCuento(juegoDeCuentosId: number):Observable<any> {
 
     return this.http.delete<any>(this.APIUrlJuegodeLibro + '/' + juegoDeCuentosId + '/alumnojuegodecuento') ;
+
+  }
+
+  public dameCuento(idJuegoAlumnoCuento): Observable<any> {
+    return this.http.get<any>(this.APIurlAlumnoJuego + '/' + idJuegoAlumnoCuento + '/Cuento');
 
   }
 
@@ -1771,6 +1776,15 @@ export class PeticionesAPIService {
 //
   public crearRecursosJuegoCuento(idLibro, recurso): Observable<any> {
     return this.http.post<any>(this.APIUrlJuegoDeCuento  + '/' + idLibro + '/RecursosJuegoDeCuentos' , recurso);
+  }
+
+  public obtenerImagenesEscena(nombreCuento):Observable<any[]>{
+    return this.http.get<any[]>(this.urlimagenes  + '/' + nombreCuento +'/files');
+
+  }
+
+  public getEscenasDeRecurso(containerName, fileName): Observable<any> {
+    return this.httpImagenes.get(this.urlimagenes  + '/' + containerName + '/download/' + fileName, { responseType: ResponseContentType.Blob });
   }
 
 

@@ -31,8 +31,9 @@ export class AsignaEspecialJuegoCuentosComponent implements OnInit {
 
   ngOnInit() {
     
-    this.recurosId = localStorage.getItem('idRecursoCuentos');
-    localStorage.removeItem('idRecursoCuentos');
+    this.recurosId = localStorage.getItem('idRecursoLibros');
+    console.log(this.recurosId);
+    localStorage.removeItem('idRecursoLibros');
 
 
     this.traeRecurso();

@@ -1,0 +1,21 @@
+<div class="titulo"> Visor de Escenas </div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+<div class= "enColumna"  *ngIf="this.listaEscenasVisor2;">
+
+
+  <img  src={{this.listaEscenasVisor2[this.contador]?.url}}>
+  <p>Escena : {{this.contador}}</p>
+  <div class="enFila">
+    <button type="button" (click)="retroceder()"  class="btn Back"> Retroceder <i class="material-icons">
+      arrow_back_ios </i></button>
+    <button type="button" (click)="avanzar()" style="right: 50%;" class="btn Next">Avanzar <i class="material-icons">
+    arrow_forward_ios </i></button>
+  </div>
+
+</div>
+
+
+<div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver</button>
+</div>

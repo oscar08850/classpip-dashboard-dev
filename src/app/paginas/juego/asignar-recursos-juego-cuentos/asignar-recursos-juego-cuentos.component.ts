@@ -49,6 +49,7 @@ export class AsignarRecursosJuegoCuentosComponent implements OnInit {
     public dialog: MatDialog) { }
 
   ngOnInit() {
+    console.log("entro");
     this.profesorId = this.sesion.DameProfesor().id;
     this.recuperarRecursos();
   }

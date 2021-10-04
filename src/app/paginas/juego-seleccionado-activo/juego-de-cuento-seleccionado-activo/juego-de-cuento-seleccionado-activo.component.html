@@ -1,0 +1,147 @@
+<div class="enFila" style = "width: 50%">
+ 
+  <!-- <button type="button" class="btn Info" (click)="irAlListado()">Listado de cuentos<i class="material-icons">info</i></button>
+   <button type="button" class="btn Info" (click)="irAVotaciones()">VER CONCURSO<i class="material-icons">info</i></button> -->
+ 
+   <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionDesactivar()"> Desactivar<i class="material-icons">history</i></button>
+ </div>
+ 
+ 
+ <form style="width: 100%" *ngIf="juegoSeleccionado.Modo === 'Individual'">
+ 
+   <table style="width: 100%" align="center" mat-table [dataSource]="datasourceAlumno"
+     class="example-container mat-elevation-z8">
+ 
+ 
+     <ng-container matColumnDef="alumnoID">
+       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Nombre </th>
+       <td mat-cell *matCellDef="let alumno"> {{alumno.alumnoID}} </td>
+     </ng-container>
+ 
+     <ng-container matColumnDef="Nombre">
+       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Nombre </th>
+       <td mat-cell *matCellDef="let alumno"> {{alumno.Nombre}} </td>
+     </ng-container>
+ 
+ 
+     <ng-container matColumnDef="nivel1">
+       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> NIVEL 1 <br>
+ 
+         <mat-checkbox (change)="$event ? MasterToggle(1) : null; " [checked]="selection1.hasValue() && IsAllSelected(1)"
+           [indeterminate]="selection1.hasValue() && !IsAllSelected(1)">
+         </mat-checkbox>
+       </th>
+ 
+       <td mat-cell style="text-align: left" *matCellDef="let row; let i = index">
+ 
+ 
+         <mat-checkbox (click)="$event.stopPropagation()"
+           (change)="$event ? selection1.toggle(row) : null; HaCambiado (1,i) " [checked]="selection1.isSelected(row)">
+         </mat-checkbox>
+       </td>
+     </ng-container>
+     <!-- ///////////////////////////////////////////////// -->
+ 
+     <ng-container matColumnDef="nivel2">
+       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> NIVEL 2 <br>
+ 
+ 
+         <mat-checkbox (change)="$event ? MasterToggle(2) : null;" [checked]="selection2.hasValue() && IsAllSelected(2)"
+           [indeterminate]="selection2.hasValue() && !IsAllSelected(2)">
+         </mat-checkbox>
+       </th>
+ 
+       <td mat-cell style="text-align: left" *matCellDef="let row; let i = index">
+ 
+ 
+ 
+         <mat-checkbox (click)="$event.stopPropagation()"
+           (change)="$event ? selection2.toggle(row) : null; HaCambiado(2,i)" [checked]="selection2.isSelected(row)">
+         </mat-checkbox>
+       </td>
+     </ng-container>
+ 
+ 
+     <!-- ///////////////////////////////////////////////// -->
+ 
+     <ng-container matColumnDef="nivel3">
+       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> NIVEL 3 <br>
+ 
+ 
+ 
+         <mat-checkbox (change)="$event ? MasterToggle(3) : null; " [checked]="selection3.hasValue() && IsAllSelected(3)"
+           [indeterminate]="selection3.hasValue() && !IsAllSelected(3)">
+         </mat-checkbox>
+       </th>
+ 
+       <td mat-cell style="text-align: left" *matCellDef="let row; let i = index">
+ 
+ 
+         <mat-checkbox (click)="$event.stopPropagation()"
+           (change)="$event ? selection3.toggle(row) : null; HaCambiado(3,i)" [checked]="selection3.isSelected(row)">
+         </mat-checkbox>
+       </td>
+     </ng-container>
+ 
+     <!-- ///////////////////////////////////////////////// -->
+ 
+     <ng-container matColumnDef="permisoparaver">
+       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> PERMISO PARA VER <br>
+ 
+ 
+         <mat-checkbox (change)="$event ? MasterToggle(4) : null; " [checked]="selection4.hasValue() && IsAllSelected(4)"
+           [indeterminate]="selection4.hasValue() && !IsAllSelected(4)">
+         </mat-checkbox>
+       </th>
+ 
+       <td mat-cell style="text-align: left" *matCellDef="let row; let i = index">
+ 
+ 
+         <mat-checkbox (click)="$event.stopPropagation()"
+           (change)="$event ? selection4.toggle(row) : null; HaCambiado(4,i)" [checked]="selection4.isSelected(row)">
+         </mat-checkbox>
+       </td>
+     </ng-container>
+ 
+     <!-- ///////////////////////////////////////////////// -->
+ 
+     <ng-container matColumnDef="permisoparavotar">
+       <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 5%"> VER CUENTO <br>
+ 
+ 
+         <!--<mat-checkbox (change)="$event ? MasterToggle(5) : null;" [checked]="selection5.hasValue() && IsAllSelected(5)"
+           [indeterminate]="selection5.hasValue() && !IsAllSelected(5)">
+         </mat-checkbox>-->
+       </th>
+ 
+       <!--<td mat-cell style="text-align: left" *matCellDef="let row; let i = index">   -->
+         <td mat-cell style="text-align: left" *matCellDef="let row; let i = index">
+ 
+           <button *ngIf="this.listaLibros[i]" (click) = "irVisorCuento(this.listaLibros[i].titulo)"  mat-icon-button matTooltip="Visualizar cuento">
+             <i class="material-icons green md-36">visibility</i>
+           </button>
+         <button *ngIf="!this.listaLibros[i]" (click) = "irVisorCuento(this.listaLibros[i].titulo)"  mat-icon-button matTooltip="No puedes visualizar cuento">
+           <i class="material-icons red md-36">visibility</i>
+         </button>
+ 
+ 
+        <!-- <mat-checkbox (click)="$event.stopPropagation()"
+           (change)="$event ? selection5.toggle(row) : null; HaCambiado (5,i);" [checked]="selection5.isSelected(row)">
+         </mat-checkbox> --> 
+ 
+       </td>
+     </ng-container>
+ 
+ 
+ 
+ 
+ 
+ 
+     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+ 
+   </table>
+  
+   <button  type="button" class="btn Aceptar" (click)="RegistrarCambios()">Guardar</button>
+ 
+ </form>
