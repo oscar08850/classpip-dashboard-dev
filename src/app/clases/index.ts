@@ -80,6 +80,8 @@ export * from './JuegoDePuntos';
 
 export * from './clasesParaJuegoDeCuentos/AlumnoJuegoDeCuento';
 export * from './clasesParaJuegoDeCuentos/JuegoDeCuento';
+export * from './clasesParaJuegoDeCuentos/RecursoCuento';
+export * from './clasesParaJuegoDeCuentos/RecursoCuentoJuego';
 
 
 

@@ -8,7 +8,7 @@
       <br>
       <mat-form-field>
         <mat-label>Pack de recursos</mat-label>
-        <select matNativeControl [(ngModel)]="recursoId" (change)="traeImagenesRecursoLibro()">
+        <select matNativeControl [(ngModel)]="recursoId" (change)="traeImagenesRecursoCuento()">
           <option *ngFor="let recurso of listaRecursos" [value]="recurso.id">
             <p>{{recurso.nombre}}</p>
           </option>

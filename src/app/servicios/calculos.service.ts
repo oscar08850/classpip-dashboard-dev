@@ -492,6 +492,8 @@ export class CalculosService {
       const juegosInactivos: any[] = [];
       const juegosPreparados: any[] = [];
 
+
+      
       console.log ('vamos a por los juegos de puntos del grupo: ' + grupoID);
       this.peticionesAPI.DameJuegoDePuntosGrupo(grupoID)
       .subscribe(juegosPuntos => {
@@ -535,6 +537,8 @@ export class CalculosService {
                 juegosInactivos.push(juegosCompeticion[i]);
               }
             }
+
+            
             // ahora toca los juegos de competicion de formula uno
             console.log ('vamos a por los juegos de competicion formula uno del grupo: ' + grupoID);
             this.peticionesAPI.DameJuegoDeCompeticionFormulaUnoGrupo(grupoID)
@@ -644,6 +648,22 @@ export class CalculosService {
                               juegosInactivos.push(juegosCuestionarioSatisfaccion[i]);
                             }
                           }
+
+                        // ahora toca los juegos de creacion de cuentos
+                        console.log ('vamos a por los juegos de cuento del grupo: ' + grupoID);
+                        this.peticionesAPI.DamejuegosdeCuento(grupoID)
+                          .subscribe(juegosdecuento => {
+                          console.log('He recibido los juegos de cuento');
+                          console.log(juegosdecuento);
+                          // tslint:disable-next-line:prefer-for-of
+                         for (let i = 0; i < juegosdecuento.length; i++) {
+                          if (juegosdecuento[i].JuegoActivo === true) {
+                            juegosActivos.push(juegosdecuento[i]);
+                          } else {
+                            juegosInactivos.push(juegosdecuento[i]);
+                          }
+                        }
+
                           const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
                           obs.next (resultado);
 
@@ -665,6 +685,7 @@ export class CalculosService {
                           //   const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
                           //   obs.next (resultado);
                           // });
+                          });
                         });
                       });
                     });

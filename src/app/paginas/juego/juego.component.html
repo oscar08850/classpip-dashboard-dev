@@ -1292,6 +1292,209 @@
               </mat-step>
 
             </div>
+
+
+              <!-- ////////////////////////////SI ESCOGEMOS EL JUEGO DE TIPO DE  CREAR CUENTO  ////////////////////////////////-->
+
+              <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Cuentos' && tengoModo">
+
+
+                <mat-step>
+                  <ng-template matStepLabel>
+                    <div> Descripción </div>
+                  </ng-template>
+
+
+
+                  <div>
+                    <label class="LabelStepper">Añadir alguna indicación para los alumnos </label>
+                    <mat-form-field>
+                      <input matInput formControlName="descripcionCuento" placeholder="Escriba aqui" requiered>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>
+
+                <!-- //////////////////////////////////// -->
+
+                <!-- ///////////////////////////////////////// -->
+
+                <mat-step>
+                  <ng-template matStepLabel>
+                    <div>Elegir recurso</div>
+                  </ng-template>
+
+                  <label class="LabelStepper">Selecciona la carpeta de imagenes para el juego</label>
+                  <!-- Nos vamos al componente para asignar la colección -->
+                  <app-asignar-recursos-juego-cuentos (emisorRecursosElegidos)="RecibeRecursos($event)">
+                  </app-asignar-recursos-juego-cuentos>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button *ngIf="tengoRecurso" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+
+                </mat-step>
+
+                <mat-step>
+                  <ng-template matStepLabel>
+                    <div>Elegir especiales</div>
+                  </ng-template>
+
+                  <label class="LabelStepper">Selecciona los elementos que serán especiales en el juego</label>
+                  <!-- Nos vamos al componente para asignar la colección -->
+                  <app-asigna-especial-juego-cuentos (emisorRecursoCargado)="cargaRecursos($event)">
+                  </app-asigna-especial-juego-cuentos>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button *ngIf="tengoRecursoCargadoParaGuardar" type="button" class="btn Next"
+                      matStepperNext>Siguiente</button>
+                  </div>
+
+                </mat-step>
+
+                <!--<mat-step>aaa
+                  <ng-template matStepLabel>
+                    <div> Concurso </div>
+                  </ng-template>
+
+                  <div *ngIf="!showConcurso">
+
+                    <label class="LabelStepper">Crear un juego para el concurso</label>
+
+                    <button type="button" class="btn Next" (click)="verConcurso()">Click aquí para que este juego tenga
+                      un concurso </button>
+
+                  </div>
+
+                  <div *ngIf="showConcurso">
+
+                    <mat-form-field>
+                      <mat-label>Introduzca la tematica del concurso</mat-label>
+                      <input matInput formControlName="concursoTematica" placeholder="" requiered>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="startatpicker"
+                        placeholder="Elige fecha de finalización de incripciones / Comienzo de votaciones"
+                        formControlName="dateFinInscripcion">
+                      <mat-datepicker-toggle [for]="startatpicker">
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #startatpicker startView="year" [startAt]="startDate"></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="stopatpicker"
+                        placeholder="Elige fecha de finalización de votaciones / Fin del concurso"
+                        formControlName="dateFinVotacion">
+                      <mat-datepicker-toggle [for]="stopatpicker">
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #stopatpicker startView="year" [startAt]="startDate"></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Introduzca los requisitos del concurso:</mat-label>
+                      <input matInput formControlName="concursoRequisitos" placeholder="" requiered>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Introduzca el primero criterio de votación</mat-label>
+                      <input matInput formControlName="concursoPrimerCriterio" placeholder="" requiered>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Introduzca el segundo criterio de votación:</mat-label>
+                      <input matInput formControlName="concursoSegundoCriterio" placeholder="" requiered>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Introduzca el tercer criterio de votación:</mat-label>
+                      <input matInput formControlName="concursoTercerCriterio" placeholder="" requiered>
+                    </mat-form-field>
+
+
+                    <mat-form-field c1="fill">
+                      <mat-label>Peso del primer criterio</mat-label>
+                      <select matNativeControl required  formControlName="c1">
+                        <option value="1">1</option>
+                        <option value="1.5">1.5</option>
+                        <option value="2">2</option>
+                      </select>
+                    </mat-form-field>
+
+                    <mat-form-field c2="fill">
+                      <mat-label>Peso del segundo criterio</mat-label>
+                      <select matNativeControl required  formControlName="c2">
+                        <option value="1">1</option>
+                        <option value="1.5">1.5</option>
+                        <option value="2">2</option>
+                      </select>
+                    </mat-form-field>
+
+                    <mat-form-field c3="fill">
+                      <mat-label>Peso del tercer criterio</mat-label>
+                      <select matNativeControl required  formControlName="c3">
+                        <option value="1">1</option>
+                        <option value="1.5">1.5</option>
+                        <option value="2">2</option>
+                      </select>
+                    </mat-form-field>
+
+
+
+
+
+                    <div class="btnCambiarStep">
+
+                      <button type="button" class="btn Back" (click)="guardarConcurso()">Crear el concurso</button>
+                    </div>
+
+                  </div>
+
+
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step> xsaxa-->
+
+                <mat-step>
+                  <ng-template matStepLabel>
+                    <div> Privilegios </div>
+                  </ng-template>
+
+                  <mat-form-field>
+                    <mat-label>Introduzca si lo desea el criterio para obtener el primer nivel de privilegios
+                    </mat-label>
+                    <input matInput formControlName="criterioprivilegio1" placeholder="" requiered>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Introduzca si lo desea el criterio para obtener el segundo nivel de privilegios
+                    </mat-label>
+                    <input matInput formControlName="criterioprivilegio2" placeholder="" requiered>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Introduzca si lo desea el criterio para obtener el tercer nivel de privilegios
+                    </mat-label>
+                    <input matInput formControlName="criterioprivilegio3" placeholder="" requiered>
+                  </mat-form-field>
+
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>
+
+                <mat-step>
+                  <ng-template matStepLabel>Finalizar</ng-template>
+
+                  <span style="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}...
+                    {{tipoJuegoCompeticionSeleccionado}} ... {{modoDeJuegoSeleccionado}} </span>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button style="width: 60%" type="button" class="btn Aceptar" (click)="CrearJuegoCuento()">Crear
+                      juego de Cuentos</button>
+                  </div>
+                </mat-step>
+              </div>
 <!--
           <div *ngIf="tipoDeJuegoSeleccionado !== 'Juego De Competición' && tipoDeJuegoSeleccionado !== 'Juego De Cuestionario'">
 

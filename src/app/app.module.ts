@@ -249,6 +249,8 @@ import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
 import { CrearRecursosCuentoComponent } from './paginas/crear-recursos-cuento/crear-recursos-cuento.component';
 import { MisRecursosCuentoComponent } from './paginas/mis-recursos-cuento/mis-recursos-cuento.component';
+import { AsignarRecursosJuegoCuentosComponent } from './paginas/juego/asignar-recursos-juego-cuentos/asignar-recursos-juego-cuentos.component';
+import { AsignaEspecialJuegoCuentosComponent } from './paginas/juego/asigna-especial-juego-cuentos/asigna-especial-juego-cuentos.component';
 
 
 @NgModule({
@@ -394,7 +396,9 @@ import { MisRecursosCuentoComponent } from './paginas/mis-recursos-cuento/mis-re
     JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
     GestionPreguntaKahootComponent,
     CrearRecursosCuentoComponent,
-    MisRecursosCuentoComponent
+    MisRecursosCuentoComponent,
+    AsignarRecursosJuegoCuentosComponent,
+    AsignaEspecialJuegoCuentosComponent
 
   ],
   imports: [

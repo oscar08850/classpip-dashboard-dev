@@ -57,7 +57,7 @@ export class MisRecursosCuentoComponent implements OnInit {
 /**
  * Trae las imagenas del recursos Cuento subida por el profesor.
  */
-  traeImagenesRecursoLibro(){
+  traeImagenesRecursoCuento(){
 
 
     this.listaFotosPersonajes = [];
