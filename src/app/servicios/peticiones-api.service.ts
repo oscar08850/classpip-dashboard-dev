@@ -107,10 +107,10 @@ export class PeticionesAPIService {
   private APIurlImagenesCuentos = this.host + ':3000/api/imagenes';
   private APIurlRecursosCuentos = this.host + ':3000/api/recursosCuentos';
   private APIurlAlumnoJuego = this.host + ':3000/api/AlumnosJuegoDeCuento';
-  private urllibro = this.host + ':3000/api/libro';
-  private urlParaEscena = this.host + ':3000/api/escenas';
+  private APIurlCuento = this.host + ':3000/api/Cuentos';
+  private urlParaEscena = this.host + ':3000/api/Escenas';
   private urlimagenes = this.host + ':3000/api/imagenes';
-  private APIUrlJuegodeLibro = this.host + ':3000/api/juegodelibro';
+  private APIUrlRecursosJuegoDeCuento = this.host + ':3000/api/RecursosJuegoDeCuento';
   private APIUrlJuegoDeCuento = this.host + ':3000/api/JuegosDeCuento';
 
   private APIURLJuegoDeEvaluacion = this.host + ':3000/api/juegosDeEvaluacion';
@@ -1745,12 +1745,38 @@ export class PeticionesAPIService {
   }
 
   public BorraJuegoDeCuento(juegoDePuntosId: number): Observable<Juego> {
-    return this.http.delete<Juego>(this.APIUrlJuegodeLibro + '/' + juegoDePuntosId);
+    return this.http.delete<Juego>(this.APIUrlJuegoDeCuento + '/' + juegoDePuntosId);
   }
 
   public BorrarAlumnosJuegoDeCuento(juegoDeCuentosId: number):Observable<any> {
 
-    return this.http.delete<any>(this.APIUrlJuegodeLibro + '/' + juegoDeCuentosId + '/alumnojuegodecuento') ;
+    return this.http.delete<any>(this.APIUrlJuegoDeCuento + '/' + juegoDeCuentosId + '/AlumnosJuegoDeCuento') ;
+
+  }
+
+  public BorrarCuentoDeAlumno(id: number):Observable<any> {
+
+    return this.http.delete<any>(this.APIurlCuento + '/' +id) ;
+
+  }
+
+
+  public BorrarElementoDeEscena(escenaId: number):Observable<any> {
+
+    return this.http.delete<any>(this.urlParaEscena + '/' + escenaId + '/Elementos') ;
+
+  }
+
+  public BorrarEscena(escenaId: number):Observable<any> {
+
+    return this.http.delete<any>(this.urlParaEscena + '/' + escenaId) ;
+
+  }
+
+
+
+  public dameEscenas(cuentoId): Observable<any> {
+    return this.http.get<any>(this.urlParaEscena + '?filter[where][cuentoId]=' + cuentoId);
 
   }
 
@@ -1786,6 +1812,18 @@ export class PeticionesAPIService {
   public getEscenasDeRecurso(containerName, fileName): Observable<any> {
     return this.httpImagenes.get(this.urlimagenes  + '/' + containerName + '/download/' + fileName, { responseType: ResponseContentType.Blob });
   }
+
+  public borrarCarpeta(nombreCuento):Observable<any>{
+    return this.http.delete<any>(this.urlimagenes  + '/' + nombreCuento);
+
+  }
+
+  public borrarRecursoJuegoDeCuento(juegoId: number):Observable<any> {
+
+    return this.http.delete<any>(this.APIUrlRecursosJuegoDeCuento + '/' + juegoId) ;
+
+  }
+
 
 
 

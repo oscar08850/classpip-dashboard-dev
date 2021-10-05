@@ -253,6 +253,7 @@ import { AsignarRecursosJuegoCuentosComponent } from './paginas/juego/asignar-re
 import { AsignaEspecialJuegoCuentosComponent } from './paginas/juego/asigna-especial-juego-cuentos/asigna-especial-juego-cuentos.component';
 import { JuegoDeCuentoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-seleccionado-activo.component';
 import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
+import { JuegoDeCuentoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuento-seleccionado-inactivo/juego-de-cuento-seleccionado-inactivo.component';
 
 
 @NgModule({
@@ -402,7 +403,8 @@ import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/
     AsignarRecursosJuegoCuentosComponent,
     AsignaEspecialJuegoCuentosComponent,
     JuegoDeCuentoSeleccionadoActivoComponent,
-    ReproductorCuentoComponent
+    ReproductorCuentoComponent,
+    JuegoDeCuentoSeleccionadoInactivoComponent
 
   ],
   imports: [
