@@ -3,13 +3,13 @@ import { MatTableDataSource } from '@angular/material/table';
 
 // Imports para abrir diálogo mostrar cromos
 import { MatDialog } from '@angular/material';
-import { DialogMostrarCromosComponent } from './dialog-mostrar-cromos/dialog-mostrar-cromos.component';
 
 import { Coleccion, Juego, Alumno, Equipo} from 'src/app/clases/index';
 // Services
 
    // Services
 import { SesionService, PeticionesAPIService } from '../../../servicios/index';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-asignacion-coleccion-juego',
@@ -32,7 +32,9 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   isDisabled: Boolean = true;
 
-  displayedColumns: string[] = ['nombreColeccion', ' '];
+  
+  displayedColumns: string[] = ['select', 'nombreColeccion'];
+  selection = new SelectionModel<Coleccion>(true, []);
 
 
   juego: Juego;
@@ -50,6 +52,7 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
                public dialog: MatDialog) { }
 
   ngOnInit() {
+    console.log ('onInit de ASIGNACION');
 
     this.profesorId = this.sesion.DameProfesor().id;
     this.grupoId = this.sesion.DameGrupo().id;
@@ -83,6 +86,7 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
   }
 
   TraeListaDeColecciones() {
+    console.log ('voy a traer colecciones');
     this.peticionesAPI.DameColeccionesDelProfesor(this.profesorId)
     .subscribe(colecciones => {
       if (colecciones !== undefined) {
@@ -99,8 +103,10 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
 
   TraeColeccionesPublicas() {
 
+
     this.peticionesAPI.DameColeccionesPublicas()
     .subscribe (publicas => {
+     
       // me quedo con los públicos de los demás
       const publicasDeOtros = publicas.filter (coleccion => coleccion.profesorId !== Number(this.profesorId));
       // traigo los profesores para añadir a los publicos el nombre del propietario
@@ -108,7 +114,9 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
       .subscribe (profesores => {
         publicasDeOtros.forEach (coleccion => {
           const propietario = profesores.filter (profesor => profesor.id === coleccion.profesorId)[0];
-          coleccion.Nombre = coleccion.Nombre + '(' + propietario.Nombre + ' ' + propietario.PrimerApellido + ')';
+          if (propietario) {
+            coleccion.Nombre = coleccion.Nombre + '(' + propietario.Nombre + ' ' + propietario.PrimerApellido + ')';
+          }
         });
         this.coleccionesPublicas = publicasDeOtros;
 
@@ -116,25 +124,6 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
     });
   }
 
-  ColeccionSeleccionada(coleccion: Coleccion) {
-    // Comunico el nombre de la colección seleccionada al padre
-    this.coleccionSeleccionada = coleccion;
-    this.emisorColeccion.emit (coleccion);
-    this.isDisabled = false;
-    console.log(this.coleccionSeleccionada);
-  }
-
-
-  AbrirDialogoMostrarCromos(coleccionSeleccionada: Coleccion): void {
-
-    const dialogRef = this.dialog.open(DialogMostrarCromosComponent, {
-      width: '1000px',
-      maxHeight: '600px',
-      data: {
-        coleccion: coleccionSeleccionada
-      }
-    });
-  }
 
   MostrarPublicas() {
     this.muestroPublicas = true;
@@ -145,6 +134,44 @@ export class AsignacionColeccionJuegoComponent implements OnInit {
     this.muestroPublicas = false;
     this.datasourceColecciones = new MatTableDataSource(this.colecciones);
   }
+
+ 
+  HaSeleccionado() {
+    if (this.selection.selected.length === 0) {
+     return false;
+    } else {
+      return true;
+    }
+  }
+  Marcar(row) {
+    if (this.selection.isSelected(row)) {
+      this.selection.deselect(row);
+    } else {
+      this.selection.clear();
+      this.selection.select(row);
+    }
+  }
+
+  AsignarColeccionAlJuego() {
+    let coleccionSeleccionada;
+    console.log ('Vamos a agregar LOS PUNTOS');
+    const tiposDePuntosSeleccionados = [];
+    this.datasourceColecciones.data.forEach ( row => {
+      if (this.selection.isSelected(row)) {
+        // tiposDePuntosSeleccionados.push (row);
+        console.log ('hemos elegido ', row);
+        coleccionSeleccionada = row;
+
+      }
+    });
+    
+    this.emisorColeccion.emit (coleccionSeleccionada);
+    //   this.isDisabled = false;
+
+ 
+
+  }
+
 
 
  }

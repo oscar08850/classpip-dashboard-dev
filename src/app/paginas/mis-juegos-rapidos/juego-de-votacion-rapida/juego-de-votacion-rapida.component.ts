@@ -31,7 +31,7 @@ export class JuegoDeVotacionRapidaComponent implements OnInit {
   informacionPreparada = false;
   datos: any[];
   dataSource;
-  displayedColumns: string[] = ['concepto', 'puntos'];
+  displayedColumns: string[] = ['concepto', 'incremento', 'puntos'];
   profesorId: number;
   sonido = true;
   ficheroGenerado = false;
@@ -93,9 +93,11 @@ export class JuegoDeVotacionRapidaComponent implements OnInit {
           this.respuestas.push (respuesta);
           this.numeroRespuestas++;
           // tslint:disable-next-line:no-shadowed-variable
+          this.datos.forEach (concepto => concepto.incremento = 0);
           let i;
           for (i = 0; i < respuesta.votos.length; i++) {
             const index = this.datos.findIndex (entrada => entrada.concepto === respuesta.votos[i].c );
+            this.datos [index].incremento =  respuesta.votos[i].puntos;
             this.datos [index].puntos =  this.datos [index].puntos + respuesta.votos[i].puntos;
           }
           this.datos.sort((a, b) => b.puntos - a.puntos);
@@ -116,6 +118,7 @@ export class JuegoDeVotacionRapidaComponent implements OnInit {
       for (i = 0; i < this.juegoSeleccionado.Conceptos.length; i++) {
         this.datos.push ({
           concepto:  this.juegoSeleccionado.Conceptos[i],
+          incremento: 0,
           puntos: 0
         });
       }
@@ -201,6 +204,7 @@ canExit(): Observable <boolean> {
         }).then((result) => {
           if (result.value) {
             this.sonido = false;
+            this.comServer.InformarFinJuegoRapido (this.profesorId);
             // this.juegoSeleccionado.Respuestas = this.respuestas;
             // // salvo las respuestas que hay hasta el momento para poder recuperarlas si voilvemos a esta página
             // this.peticionesAPI.ModificarJuegoVotacionRapida (this.juegoSeleccionado).subscribe();

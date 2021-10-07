@@ -1,5 +1,5 @@
 <div class="titulo">Resultados</div>
-<div class="subtitulo">Número de alumnos por cantidad de aciertos</div>
+<div class="subtitulo">Número de participantes por cantidad de aciertos</div>
 <mat-divider class="lineaDivisoria"></mat-divider>
 <div class = "enColumna">
   <div style = "width : 100%" echarts [options]="grafico"  theme="macarons" class="demo-chart"></div>
@@ -10,10 +10,43 @@
 <mat-divider class="lineaDivisoria"></mat-divider>
 <br>
 <br>
-  <span *ngFor = "let pregunta of preguntas; index as i">
-  <span style = "display: inline-block; width: 50%;">
-      <div  echarts [options]="donuts[i]"  theme="macarons" class="demo-chart">
+<span *ngFor = "let pregunta of preguntas; index as i">
+  <span class ="donuts2col">
+  <div class = "enColumna">
+    <br>
+    <div><strong>Pregunta {{i + 1 }}</strong></div>
+    <br>
+    <div class="ion-text-wrap"> {{pregunta.Pregunta}}</div>
+    <br>
+    <br>
+    <div><strong>Respuesta correcta</strong></div>
+    <br>
+    <div
+      *ngIf =
+            "pregunta.Tipo === 'Cuatro opciones' ||
+            pregunta.Tipo === 'Verdadero o falso' ||
+            pregunta.Tipo === 'Respuesta abierta'"
+      class="ion-text-wrap">
+      {{pregunta.RespuestaCorrecta}}
+    </div>
+
+    <div *ngIf = "pregunta.Tipo === 'Emparejamiento'">
+      <div  *ngFor="let pareja of pregunta.Emparejamientos">
+        <div class ="enFila">
+          <div style = "width: 50%; margin-right: 20%; font-size: small;">
+              {{pareja.l}}
+          </div>
+          <div style = "width: 50%; font-size: small;">
+              {{pareja.r}}
+          </div>
+        </div>
       </div>
+    </div>
+    <span style = "display: inline-block; width: 50%;">
+        <div  echarts [options]="donuts[i]"  theme="macarons" class="demo-chart">
+        </div>
+    </span>
+  </div>
   </span>
 </span>
 

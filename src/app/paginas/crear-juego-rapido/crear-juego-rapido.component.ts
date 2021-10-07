@@ -10,7 +10,7 @@ import { MatDialog, MatTabGroup } from '@angular/material';
 
 // tslint:disable-next-line:max-line-length
 import { CuestionarioSatisfaccion, JuegoDeEncuestaRapida, TablaPuntosFormulaUno,
-          JuegoDeVotacionRapida, Cuestionario, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido } from '../../clases/index';
+          JuegoDeVotacionRapida, Cuestionario, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido, Evento } from '../../clases/index';
 
 import Swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -111,13 +111,22 @@ export class CrearJuegoRapidoComponent implements OnInit {
   // información para crear un juego de cuestionario
   cuestionario: Cuestionario;
   tengoCuestionario = false;
-  puntuacionCorrecta: number;
-  puntuacionIncorrecta: number;
+  puntuacionCorrecta = 0;
+  puntuacionIncorrecta = 0;
   modoPresentacion: string;
   tengoModoPresentacion = false;
+  modalidadSeleccionada: string;
+  tengoModalidad = false;
+  seleccionModalidadJuegoCuestionario: ChipColor[] = [
+    {nombre: 'Clásico', color: 'primary'},
+    {nombre: 'Kahoot', color: 'warn'}
+  ];
   seleccionModoPresentacion: string[] = ['Mismo orden para todos',
   'Preguntas desordenadas',
   'Preguntas y respuestas desordenadas'];
+
+  seleccionModoPresentacionKahoot: string[] = ['Mostrar pregunta',
+  'No mostrar pregunta'];
   tiempoLimite: number;
 
 
@@ -173,6 +182,7 @@ export class CrearJuegoRapidoComponent implements OnInit {
   }
 
 
+
   RecibeCuestionarioSatisfaccionElegido($event) {
     this.cuestionarioSatisfaccion = $event;
     this.tengoCuestionarioSatisfaccion = true;
@@ -194,8 +204,20 @@ export class CrearJuegoRapidoComponent implements OnInit {
     this.peticionesAPI.CreaJuegoDeEncuestaRapida (juegoDeEncuestaRapida)
     .subscribe (juegoCreado => {
       this.juego = juegoCreado;
-
       this.juegoCreado = true;
+      // tslint:disable-next-line:max-line-length
+      const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Encuesta Rápida');
+      this.calculos.RegistrarEvento(evento);
+
+
+      // //Registrar la Creación del Juego
+      // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Encuesta Rápida");
+      // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      //   console.log("Registrado evento: ", res);
+      // }, (err) => { 
+      //   console.log(err); 
+      // });
+      
       Swal.fire('Juego de encuesta rápida creado correctamente', ' ', 'success');
       this.goBack();
     });
@@ -331,8 +353,20 @@ CrearJuegoDeVotacionRapida() {
   this.peticionesAPI.CreaJuegoDeVotacionRapida (juegoDeVotacionRapida)
   .subscribe (juegoCreado => {
     this.juego = juegoCreado;
-
     this.juegoCreado = true;
+
+    //Registrar la Creación del Juego
+    // tslint:disable-next-line:max-line-length
+    const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Votación Rápida');
+    this.calculos.RegistrarEvento(evento);
+
+    // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Votación Rápida");
+    // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+    //   console.log("Registrado evento: ", res);
+    // }, (err) => { 
+    //   console.log(err); 
+    // });
+
     Swal.fire('Juego de votación rápida creado correctamente', ' ', 'success');
     this.goBack();
   });
@@ -340,22 +374,26 @@ CrearJuegoDeVotacionRapida() {
 
 }
   //// FUNCIONES PARA LA CREACION DE JUEGO DE CUESTIONARIO RAPIDO
-  AbrirDialogoAgregarCuestionarioRapido(): void {
-    const dialogRef = this.dialog.open(AsignaCuestionarioComponent, {
-      width: '70%',
-      height: '80%',
-      position: {
-        top: '0%'
-      },
-      // Pasamos los parametros necesarios
-      data: {
-        profesorId: this.profesorId
-      }
-    });
-    dialogRef.afterClosed().subscribe(() => {
-      this.cuestionario = this.sesion.DameCuestionario();
-      this.tengoCuestionario = true;
-    });
+  // AbrirDialogoAgregarCuestionarioRapido(): void {
+  //   const dialogRef = this.dialog.open(AsignaCuestionarioComponent, {
+  //     width: '70%',
+  //     height: '80%',
+  //     position: {
+  //       top: '0%'
+  //     },
+  //     // Pasamos los parametros necesarios
+  //     data: {
+  //       profesorId: this.profesorId
+  //     }
+  //   });
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.cuestionario = this.sesion.DameCuestionario();
+  //     this.tengoCuestionario = true;
+  //   });
+  // }
+  RecibeCuestionarioElegido($event) {
+    this.cuestionario = $event;
+    this.tengoCuestionario = true;
   }
 
 
@@ -372,6 +410,13 @@ CrearJuegoDeVotacionRapida() {
     this.puntuacionCorrecta = this.myForm.value.PuntuacionCorrecta;
     this.puntuacionIncorrecta = this.myForm.value.PuntuacionIncorrecta;
   }
+
+  ModalidadDeJuegoSeleccionada(modalidad: ChipColor) {
+    this.modalidadSeleccionada = modalidad.nombre;
+    this.tengoModalidad = true;
+  }
+
+
   GuardarModoPresentacion(modoPresentacion) {
     this.modoPresentacion = modoPresentacion;
     this.tengoModoPresentacion = true;
@@ -391,19 +436,36 @@ CrearJuegoDeVotacionRapida() {
     // anteriores. La razón es que no están bien organizado el tema de que los modelos de los diferentes juegos
     // tomen como base el modelo Juego genérico. De momento se queda así.
     const clave = Math.random().toString().substr(2, 8);
+
     const juegoDeCuestionarioRapido = new JuegoDeCuestionarioRapido (
       this.nombreDelJuego, this.tipoDeJuegoSeleccionado,
+      this.modalidadSeleccionada,
       clave,
       this.puntuacionCorrecta,
       this.puntuacionIncorrecta, this.modoPresentacion,
       false, false, this.profesorId, this.cuestionario.id, this.tiempoLimite);
+    console.log ('voy a crear juego');
+    console.log (juegoDeCuestionarioRapido);
 
     // tslint:disable-next-line:max-line-length
     this.peticionesAPI.CreaJuegoDeCuestionarioRapido(juegoDeCuestionarioRapido)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
-
       this.juegoCreado = true;
+
+      //Registrar la Creación del Juego
+      // tslint:disable-next-line:max-line-length
+      const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Cuestionario Rápido');
+
+      this.calculos.RegistrarEvento(evento);
+
+      // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Cuestionario Rápido");
+      // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      //   console.log("Registrado evento: ", res);
+      // }, (err) => { 
+      //   console.log(err); 
+      // });
+
       Swal.fire('Juego de cuestionario rapido creado correctamente', ' ', 'success');
       this.goBack();
 
@@ -463,8 +525,20 @@ CrearJuegoDeCogerTurnoRapido() {
   this.peticionesAPI.CreaJuegoDeCogerTurnoRapido (juegoDeCogerTurnoRapido)
   .subscribe (juegoCreado => {
     this.juego = juegoCreado;
-
     this.juegoCreado = true;
+    //Registrar la Creación del Juego
+    // tslint:disable-next-line:max-line-length
+    const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Coger Turno Rápido');
+    this.calculos.RegistrarEvento(evento);
+
+    // //Registrar la Creación del Juego
+    // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Coger Turno Rápido");
+    // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+    //   console.log("Registrado evento: ", res);
+    // }, (err) => { 
+    //   console.log(err); 
+    // });
+
     Swal.fire('Juego de coger turno rapido creado correctamente', ' ', 'success');
     this.goBack();
   });

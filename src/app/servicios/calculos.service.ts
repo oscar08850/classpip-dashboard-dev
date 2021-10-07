@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { SesionService, PeticionesAPIService} from './index';
+import { SesionService } from './sesion.service';
+import { PeticionesAPIService } from './peticiones-api.service';
+import { ComServerService} from './com-server.service';
 import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos,
          TablaEquipoJuegoDePuntos, HistorialPuntosAlumno, HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo,
          AlumnoJuegoDeColeccion, Album, Coleccion, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
@@ -7,7 +9,7 @@ import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHis
          AlumnoJuegoDeCompeticionLiga, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno,
          // tslint:disable-next-line:max-line-length
          TablaClasificacionJornada, TablaPuntosFormulaUno, AlumnoJuegoDeVotacionUnoATodos, TablaAlumnoJuegoDeVotacionUnoATodos,
-         AlumnoJuegoDeVotacionTodosAUno,TablaAlumnoJuegoDeVotacionTodosAUno, JuegoDeVotacionTodosAUno, FamiliaAvatares, Pregunta} from '../clases/index';
+         AlumnoJuegoDeVotacionTodosAUno, TablaAlumnoJuegoDeVotacionTodosAUno, JuegoDeVotacionTodosAUno, FamiliaAvatares, Pregunta, EquipoJuegoDeCuestionario, TablaEquipoJuegoDeCuestionario, Evento, Profesor, Punto} from '../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -19,6 +21,11 @@ import { AlumnoJuegoDeCuestionario } from '../clases/AlumnoJuegoDeCuestionario';
 import { TablaAlumnoJuegoDeCuestionario } from '../clases/TablaAlumnoJuegoDeCuestionario';
 import { AlumnoJuegoDeGeocaching } from '../clases/AlumnoJuegoDeGeocaching';
 import { TablaAlumnoJuegoDeGeocaching } from '../clases/TablaAlumnoJuegoDeGeocaching';
+import { JuegoDeEvaluacion } from '../clases/JuegoDeEvaluacion';
+import { AlumnoJuegoDeEvaluacion } from '../clases/AlumnoJuegoDeEvaluacion';
+import { EquipoJuegoDeEvaluacion } from '../clases/EquipoJuegoDeEvaluacion';
+import { EquipoJuegoDeVotacionUnoATodos } from '../clases/EquipoJuegoDeVotacionUnoATodos';
+import { TablaEquipoJuegoDeVotacionUnoATodos } from '../clases/TablaEquipoJuegoDeVotacionUnoATodos';
 
 
 
@@ -47,699 +54,654 @@ export class CalculosService {
 
   constructor(
     private sesion: SesionService,
-    private peticionesAPI: PeticionesAPIService
+    private peticionesAPI: PeticionesAPIService,
+    private comService: ComServerService
    ) {}
 
 
-  // Elimina el grupo (tanto el id del profe como del grupo estan en sesión).
-  // Lo hago con un observable para que el componente que muestra la lista de grupos
-  // espere hasta que se haya acabado la operacion de borrar el grupo de la base de datos
-  public EliminarGrupo(): any {
-    const eliminaObservable = new Observable ( obs => {
-          // Las siguientes funciones retornan observables para que pueda esperar a que acaben
-          // antes de continuar borrando cosas.
-          console.log ('Empezamos el proceso de eliminación del grupo');
-          this.EliminarMatriculas()
-          .subscribe (() => this.EliminarSesionesClase()
-          .subscribe (() => this.EliminaJuegos ()
-          .subscribe (() => {
-              console.log ('Ya voy a borrar el grupo');
-              this.peticionesAPI.BorraGrupo(
-                this.sesion.DameProfesor().id,
-                this.sesion.DameGrupo().id)
-              .subscribe(() => {
-                // Ahora elimino el grupo de la lista de grupos para que desaparezca de la pantalla al regresar
-                console.log ('Eliminamos grupo de la lista');
-                let lista = this.sesion.DameListaGrupos();
-                lista = lista.filter (g => g.id !== this.sesion.DameGrupo().id);
-                obs.next ();
-              });
-          })));
-    });
-    return eliminaObservable;
+  public async EliminarGrupo() {
+    await this.EliminarEquipos ();
+    await this.EliminarMatriculas();
+    await this.EliminarSesionesClase();
+    await this.EliminaJuegos ();
+
+    await this.peticionesAPI.BorraGrupo(
+                 this.sesion.DameProfesor().id,
+                 this.sesion.DameGrupo().id).toPromise();
+    // Ahora elimino el grupo de la lista de grupos para que desaparezca de la pantalla al regresar
+    let lista = this.sesion.DameListaGrupos();
+    lista = lista.filter (g => g.id !== this.sesion.DameGrupo().id);
   }
 
-  // Esta función genera un observable para avisar al que suscriba de cuándo se ha completado
-  private EliminaJuegos(): any {
-    const eliminaJuegosObservable = new Observable ( obs => {
-      console.log ('Vamos a borrar los juegos');
-      this.DameListaJuegos(this.sesion.DameGrupo().id)
-      .subscribe ( listas => {
-              // Hago una lista con todos los juegos (activos e inactivos)
-              const juegos = listas.activos.concat (listas.inactivos);
-              console.log ('Ya tengo los juegos');
-              console.log (juegos);
-              let cont = 0;
-              if (juegos[0] !== undefined) {
-                juegos.forEach (juego => {
-                  if (juego.Tipo === 'Juego De Puntos') {
-                    // Primero borramos las inscripciones de alumnos o equipos
-                    if (juego.Modo === 'Individual') {
-                      console.log ('Juego de puntos individual');
-                      this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos (juego.id)
-                      // tslint:disable-next-line:max-line-length
-                      .subscribe ( inscripciones => inscripciones.forEach (inscripcion => {
-                        // Borro los historiales de puntos de ese alumno
-                        this.peticionesAPI.DameHistorialPuntosAlumno (inscripcion.id)
-                        // tslint:disable-next-line:max-line-length
-                        .subscribe (historiales => historiales.forEach (historial => this.peticionesAPI.BorrarPuntosAlumno (historial.id).subscribe()));
-                        // Borro la inscripcion del alumno
-                        this.peticionesAPI.BorraInscripcionAlumnoJuegoDePuntos (inscripcion.id).subscribe();
-                      }));
-                    } else {
-                      this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos (juego.id)
-                      // tslint:disable-next-line:max-line-length
-                      .subscribe ( inscripciones => inscripciones.forEach (inscripcion => {
-                        // Borro los historiales de puntos de ese equipo
-                        this.peticionesAPI.DameHistorialPuntosEquipo (inscripcion.id)
-                        // tslint:disable-next-line:max-line-length
-                        .subscribe (historiales => historiales.forEach (historial => this.peticionesAPI.BorraPuntosEquipo (historial.id).subscribe()));
-                        // Borro la inscripcion del equipo
-                        this.peticionesAPI.BorraInscripcionEquipoJuegoDePuntos (inscripcion.id).subscribe();
-                      }));
-                    }
-                    // Ahora borramos las asignaciones de puntos
-                    this.peticionesAPI.DamePuntosJuego (juego.id)
-                    .subscribe ( puntos => puntos.forEach (punto => this.peticionesAPI.BorraPuntoJuego (punto.id).subscribe()));
-                    // y los niveles e imagenes
-                    this.peticionesAPI.DameNivelesJuego (juego.id)
-                    .subscribe ( niveles => niveles.forEach (nivel => {
-                        this.peticionesAPI.BorraNivel (nivel.id).subscribe();
-                        if (nivel.Imagen !== undefined) {
-                          this.peticionesAPI.BorraImagenNivel (nivel.Imagen).subscribe();
-                        }
-                    }));
-                    // Ahora borramos el juego
-                    this.peticionesAPI.BorraJuegoDePuntos (juego.id)
-                    .subscribe (() => {
-                      cont++;
-                      if (cont === juegos.length) {
-                        obs.next();
-                      }
-                    });
-                  } else if (juego.Tipo === 'Juego De Colección') {
-                    if (juego.Modo === 'Individual') {
-                      console.log ('borro juego de coleccion individual');
-                      this.peticionesAPI.DameInscripcionesAlumnoJuegoDeColeccion (juego.id)
-                      .subscribe (inscripciones => inscripciones.forEach (inscripcion => {
-                        // Para cada alumno inscrito tengo que traer los cromos asignados (su album) y
-                        // borrar esas asignaciones
-                        console.log ('borro inscripcion');
-                        console.log (inscripcion);
-                        this.peticionesAPI.DameAsignacionesCromosAlumno (inscripcion.id)
-                        // tslint:disable-next-line:max-line-length
-                        .subscribe (asignaciones => asignaciones.forEach (asignacion => this.peticionesAPI.BorrarAsignacionCromoAlumno (asignacion.id).subscribe())
-                        );
-                          // y ahora borro la inscripcion
-                        this.peticionesAPI.BorraInscripcionAlumnoJuegoDeColeccion (inscripcion.id)
-                        .subscribe();
-                      } ));
-                    } else {
-                      console.log ('borro juego de coleccion en equipo');
-                      this.peticionesAPI.DameInscripcionesEquipoJuegoDeColeccion (juego.id)
-                      .subscribe (inscripciones => inscripciones.forEach (inscripcion => {
-                        // Para cada alumno inscrito tengo que traer los cromos asignados (su album) y
-                        // borrar esas asignaciones
-                        console.log ('borro inscripcion');
-                        console.log (inscripcion);
-                        this.peticionesAPI.DameAsignacionesCromosEquipo (inscripcion.id)
-                        // tslint:disable-next-line:max-line-length
-                        .subscribe (asignaciones => asignaciones.forEach (asignacion => this.peticionesAPI.BorrarAsignacionCromoEquipo (asignacion.id).subscribe())
-                        );
-                          // y ahora borro la inscripcion
-                        this.peticionesAPI.BorraInscripcionEquipoJuegoDeColeccion (inscripcion.id)
-                        .subscribe();
-                      } ));
-                    }
-                    // Ahora borramos el juego
-                    this.peticionesAPI.BorraJuegoDeColeccion (juego.id)
-                    .subscribe (() => {
-                      cont++;
-                      if (cont === juegos.length) {
-                        obs.next();
-                      }
-                    });
-                  } else if (juego.Tipo === 'Juego De Competición Liga') {
-                    // Para borrar un juego de Liga ya hay una funcion en calculos, pero no la puedo
-                    // usar porque esa funcion no hace el obs.next que necesito aqui. ASi que el código que viene a continuación
-                    // es igual al de la función, pero añadiendole el obs.next al acabar de borrar
-                    console.log ('Voy a borrar liga');
-                    if (juego.Modo === 'Individual') {
-                      console.log ('Voy a borrar liga individual');
-                      this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionLiga (juego.id)
-                      // tslint:disable-next-line:max-line-length
-                      .subscribe (inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionLiga (inscripcion.id).subscribe()));
-                    } else {
-                      this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionLiga (juego.id)
-                      // tslint:disable-next-line:max-line-length
-                      .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionLiga(inscripcion.id).subscribe()));
-                    }
-                    this.peticionesAPI.DameJornadasDeCompeticionLiga (juego.id)
-                    .subscribe (jornadas => {
-                      jornadas.forEach (jornada => {
-                                this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga (jornada.id)
-                                // tslint:disable-next-line:max-line-length
-                                .subscribe (enfrentamientos => enfrentamientos.forEach (enfrentamiento => this.peticionesAPI.BorraEnrentamientoLiga (enfrentamiento).subscribe()));
-                                // Borrar jornada
-                                this.peticionesAPI.BorrarJornadaLiga (jornada).subscribe();
-                              });
-                    });
-                    // Borro el juego
-                    this.peticionesAPI.BorraJuegoDeCompeticionLiga (juego.id)
-                    .subscribe (() => {
-                      // Esto es lo que no hace la funcion que borra el juego de liga
-                      cont++;
-                      if (cont === juegos.length) {
-                        obs.next();
-                      }
-                    });
 
-                  } else if (juego.Tipo === 'Juego De Competición Fórmula Uno') {
-                     // Para borrar un juego de formula uno ya hay una funcion en calculos, pero no la puedo
-                    // usar porque esa funcion no hace el obs.next que necesito aqui. ASi que el código que viene a continuación
-                    // es igual al de la función, pero añadiendole el obs.next al acabar de borrar
+private async EliminaJuegos(): Promise<any> {
+    console.log ('Vamos a borrar los juegos');
+    const listas =  await this.DameListaJuegos(this.sesion.DameGrupo().id);
 
-                    if (juego.Modo === 'Individual') {
-                      console.log ('Voy a borrar formula 1 individual');
-                      this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionFormulaUno (juego.id)
-                      // tslint:disable-next-line:max-line-length
-                      .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(inscripcion.id).subscribe()));
-                    } else {
-                      this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionFormulaUno (juego.id)
-                      // tslint:disable-next-line:max-line-length
-                      .subscribe ( inscripciones => {
-                        // tslint:disable-next-line:max-line-length
-                        inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(inscripcion.id).subscribe());
-                      }
-                      );
-                    }
-                    // Pido las jornadas y para cada jornada pido los enfrentamientos y los borro. Y luego borro la jornada
-                    this.peticionesAPI.DameJornadasDeCompeticionFormulaUno (juego.id)
-                    .subscribe (jornadas => jornadas.forEach (jornada => this.peticionesAPI.BorrarJornadaFormulaUno (jornada).subscribe()));
-                    // Borro el juego
-                    this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno (juego.id)
-                    .subscribe (() => {
-                      // Esto es lo que no hace la funcion que borra el juego de liga
-                      cont++;
-                      if (cont === juegos.length) {
-                        obs.next();
-                      }
-                    });
-                  } else if (juego.Tipo === 'Juego De Avatar') {
-                    if (juego.Modo === 'Individual') {
-                      this.peticionesAPI.DameInscripcionesAlumnoJuegoDeAvatar (juego.id)
-                      // tslint:disable-next-line:max-line-length
-                      .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeAvatar(inscripcion.id).subscribe()));
-                    }
-                    this.peticionesAPI.BorraJuegoDeAvatar (juego.id)
-                    .subscribe (() => {
-                      // Esto es lo que no hace la funcion que borra el juego de liga
-                      cont++;
-                      if (cont === juegos.length) {
-                        obs.next();
-                      }
-                    });
+    // Hago una lista con todos los juegos (activos e inactivos)
+    let juegos = listas.activos.concat (listas.inactivos);
+    juegos = juegos.concat (listas.preparados);
+    console.log ('Ya tengo los juegos');
+    console.log (juegos);
+    if (juegos[0] !== undefined) {
+      juegos.forEach (juego => {
+        if (juego.Tipo === 'Juego De Puntos') {
+          this.EliminarJuegoDePuntos (juego);
+        } else if (juego.Tipo === 'Juego De Colección') {
+          this.EliminarJuegoDeColeccion(juego);
+        } else if (juego.Tipo === 'Juego De Competición Liga') {
+          this.EliminarJuegoDeCompeticionLiga (juego);
+        } else if (juego.Tipo === 'Juego De Competición Fórmula Uno') {
+          this.EliminarJuegoDeCompeticionFormulaUno (juego);
+        } else if (juego.Tipo === 'Juego De Avatar') {
+          this.EliminarJuegoDeAvatar (juego);
+        } else if (juego.Tipo === 'Juego De Cuestionario') {
+          this.EliminarJuegoDeCuestionario (juego);
 
-                  } else if (juego.Tipo === 'Juego De Cuestionario') {
-                    if (juego.Modo === 'Individual') {
-                      this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionario(juego.id)
-                      .subscribe( AlumnosDelJuego => {
-                        if (AlumnosDelJuego[0] !== undefined) {
-                          // Una vez recibo las inscripciones, las voy borrando una a una
-                          // tslint:disable-next-line:prefer-for-of
-                          for (let i = 0; i < AlumnosDelJuego.length; i++) {
-                            this.peticionesAPI.BorraAlumnoDelJuegoDeCuestionario(AlumnosDelJuego[i].id)
-                            .subscribe(() => {
-                                console.log('Inscripcion al juego borrada correctamente');
-                            });
-                          }
-                        } else {
-                          console.log('No hay alumnos en el juego de cuestionario');
-                        }
-                      });
-                      this.peticionesAPI.DameRespuestasAlumnoJuegoDeCuestionario(juego.id)
-                      .subscribe( respuestas => {
-                        if (respuestas[0] !== undefined) {
-                          // Una vez recibo las inscripciones, las voy borrando una a una
-                          // tslint:disable-next-line:prefer-for-of
-                          for (let i = 0; i < respuestas.length; i++) {
-                            this.peticionesAPI.BorraRespuestaAlumnoDelJuegoDeCuestionario(respuestas[i].id)
-                            .subscribe(() => {
-                                console.log('Respuesta borrada correctamente');
-                            });
-                          }
-                        } else {
-                          console.log('No hay respuestas en el juego de cuestionario');
-                        }
-
-                      });
-
-                    }
-                    this.peticionesAPI.BorrarJuegoDeCuestionario (juego.id)
-                    .subscribe (() => {
-                        // Esto es lo que no hace la funcion que borra el juego de liga
-                        cont++;
-                        if (cont === juegos.length) {
-                          obs.next();
-                        }
-                    });
-
-                  } else if (juego.Tipo === 'Juego De Geocaching') {
-                    if (juego.Modo === 'Individual') {
-                      this.peticionesAPI.DameAlumnosDelJuegoDeGeocaching(juego.id)
-                      .subscribe( AlumnosDelJuego => {
-                        if (AlumnosDelJuego[0] !== undefined) {
-
-                          // Una vez recibo las inscripciones, las voy borrando una a una
-                          // tslint:disable-next-line:prefer-for-of
-                          for (let i = 0; i < AlumnosDelJuego.length; i++) {
-                            this.peticionesAPI.BorraAlumnoDelJuegoDeGeocaching(AlumnosDelJuego[i].id)
-                            .subscribe(() => {
-                                console.log('Inscripcion al juego borrada correctamente');
-                            });
-                          }
-                        } else {
-                          console.log('No hay alumnos en el juego de geocaching');
-                        }
-
-                      });
-                    }
-                    this.peticionesAPI.BorrarJuegoDeGeocaching (juego.id)
-                    .subscribe (() => {
-                        // Esto es lo que no hace la funcion que borra el juego de liga
-                        cont++;
-                        if (cont === juegos.length) {
-                          obs.next();
-                        }
-                    });
-                  } else if (juego.Tipo === 'Juego De Votación Uno A Todos') {
-                    if (juego.Modo === 'Individual') {
-                      this.peticionesAPI.DameAlumnosJuegoDeVotacionUnoATodos(juego.id)
-                      .subscribe( AlumnosDelJuego => {
-                        if (AlumnosDelJuego[0] !== undefined) {
-                          // Una vez recibo las inscripciones, las voy borrando una a una
-                          // tslint:disable-next-line:prefer-for-of
-                          for (let i = 0; i < AlumnosDelJuego.length; i++) {
-                            this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionUnoATodos(AlumnosDelJuego[i].id)
-                            .subscribe(() => {
-                                console.log('Inscripcion al juego borrada correctamente');
-                            });
-                          }
-                        } else {
-                          console.log('No hay alumnos en el juego de votacion');
-                        }
-                      });
-                    }
-                    this.peticionesAPI.BorraJuegoDeVotacionUnoATodos (juego.id)
-                    .subscribe (() => {
-                        // Esto es lo que no hace la funcion que borra el juego de liga
-                        cont++;
-                        if (cont === juegos.length) {
-                          obs.next();
-                        }
-                    });
-                  } else if (juego.Tipo === 'Juego De Votación Todos A Uno') {
-                    if (juego.Modo === 'Individual') {
-                      this.peticionesAPI.DameAlumnosJuegoDeVotacionTodosAUno(juego.id)
-                      .subscribe( AlumnosDelJuego => {
-                        if (AlumnosDelJuego[0] !== undefined) {
-                          // Una vez recibo las inscripciones, las voy borrando una a una
-                          // tslint:disable-next-line:prefer-for-of
-                          for (let i = 0; i < AlumnosDelJuego.length; i++) {
-                            this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionTodosAUno(AlumnosDelJuego[i].id)
-                            .subscribe(() => {
-                                console.log('Inscripcion al juego borrada correctamente');
-                            });
-                          }
-                        } else {
-                          console.log('No hay alumnos en el juego de votacion');
-                        }
-                      });
-                    }
-                    this.peticionesAPI.BorraJuegoDeVotacionTodosAUno (juego.id)
-                    .subscribe (() => {
-                        // Esto es lo que no hace la funcion que borra el juego de liga
-                        cont++;
-                        if (cont === juegos.length) {
-                          obs.next();
-                        }
-                    });
-                  }
-                });
-              } else {
-                console.log ('No hay juegos');
-                obs.next();
-              }
-      });
-    });
-    return eliminaJuegosObservable;
-  }
-
-  // ESTA FUNCIÓN RECUPERA TODAS LAS MATRICULAS DEL GRUPO QUE VAMOS A BORRAR Y DESPUÉS LAS BORRA. ESTO LO HACEMOS PARA NO
-  // DEJAR MATRICULAS QUE NO NOS SIRVEN EN LA BASE DE DATOS
-  // Lo hacemos como observable para que el que la use tenga que suscribirse y pueda esperar a que se complete
-  // la operación antes de avanzar
-  private EliminarMatriculas(): any {
-    const eliminaMatriculasObservable = new Observable ( obs => {
-      // Pido las matrículas correspondientes al grupo que voy a borrar
-      console.log ('vamos a eliminar matriculas');
-      this.peticionesAPI.DameMatriculasGrupo(this.sesion.DameGrupo().id)
-      .subscribe( matriculas => {
-        if (matriculas[0] !== undefined) {
-          let cont = 0;
-          console.log ('ya tengo las matriculas');
-          console.log (matriculas);
-          // Una vez recibo las matriculas del grupo, las voy borrando una a una
-          // tslint:disable-next-line:prefer-for-of
-          for (let i = 0; i < matriculas.length; i++) {
-            this.peticionesAPI.BorraMatricula(matriculas[i].id)
-            .subscribe(() => {
-              cont++;
-              if (cont === matriculas.length) {
-                // Ya hemos borrado todas
-                console.log ('ya estan todas eliminadas');
-                obs.next();
-              }
-            });
-          }
-        } else {
-          // no hay matricular que borrar
-          console.log ('no hay matriculas para eliminara');
-          obs.next();
+        } else if (juego.Tipo === 'Juego De Geocaching') {
+          this.EliminarJuegoDeGeocaching(juego);
+        } else if (juego.Tipo === 'Juego De Votación Uno A Todos') {
+          this.EliminarJuegoDeVotacionUnoATodos (juego);
+        } else if (juego.Tipo === 'Juego De Votación Todos A Uno') {
+          this.EliminarJuegoDeVotacionTodosAUno (juego);
+        } else if (juego.Tipo === 'Juego De Evaluacion') {
+          this.EliminarJuegoDeEvaluacion (juego);
+        } else if (juego.Tipo === 'Control de trabajo en equipo') {
+          this.EliminarJuegoControlDeTrabajoEnEquipo (juego);
+        } else if (juego.Tipo === 'Juego De Cuestionario de Satisfacción') {
+          this.EliminarJuegoDeCuestionarioDeSatisfaccion (juego);
         }
-
       });
-    });
-    return eliminaMatriculasObservable;
+    } else {
+      console.log ('No hay juegos');
+    }
+
+}
+
+public async EliminarJuegoDePuntos(juego: any) {
+  // Primero borramos las inscripciones de alumnos o equipos
+  if (juego.Modo === 'Individual') {
+    const inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos (juego.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      const historial = await this.peticionesAPI.DameHistorialPuntosAlumno (inscripciones[i].id).toPromise();
+      // tslint:disable-next-line:prefer-for-of
+      for (let j = 0; j < historial.length; j ++) {
+        await this.peticionesAPI.BorrarPuntosAlumno (historial[j].id).toPromise();
+      }
+      await this.peticionesAPI.BorraInscripcionAlumnoJuegoDePuntos(inscripciones[i].id).toPromise();
+    }
+  } else {
+    const inscripciones = await this.peticionesAPI.DameInscripcionesEquipoJuegoDePuntos (juego.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      const historial = await this.peticionesAPI.DameHistorialPuntosEquipo (inscripciones[i].id).toPromise();
+      // tslint:disable-next-line:prefer-for-of
+      for (let j = 0; j < historial.length; j ++) {
+        await this.peticionesAPI.BorraPuntosEquipo (historial[j].id).toPromise();
+      }
+      await this.peticionesAPI.BorraInscripcionEquipoJuegoDePuntos(inscripciones[i].id).toPromise();
+    }
   }
 
-  // ESTA FUNCIÓN RECUPERA TODAS LAS SESIONES DE CLASE DEL GRUPO QUE VAMOS A BORRAR Y DESPUÉS LAS BORRA.
-    // Lo hacemos como observable para que el que la use tenga que suscribirse y pueda esperar a que se complete
-  // la operación antes de avanzar
-  private EliminarSesionesClase(): any {
-    const eliminaSesionesObservable = new Observable ( obs => {
-      console.log ('vamos a eliminar las sesiones de clase');
-      // Pido las matrículas correspondientes al grupo que voy a borrar
-      this.peticionesAPI.DameSesionesClaseGrupo(this.sesion.DameGrupo().id)
-      .subscribe( sesiones => {
-        if (sesiones[0] !== undefined) {
-          console.log ('ya tengo las sesiones');
-          console.log (sesiones);
-          let cont = 0;
-          // Una vez recibo las sesiones de clase del grupo, las voy borrando una a una
-          // tslint:disable-next-line:prefer-for-of
-          for (let i = 0; i < sesiones.length; i++) {
-            // primero tengo que borrar los registros de asistencia a la sesión
-            console.log ('Vamos a eliminara los registros de asistencia de la sesion ' + i);
-            this.peticionesAPI.DameAsistenciasClase (sesiones[i].id).
-            subscribe (asistencias => {
-              console.log ('ya tengo los registros de asistencia');
-              console.log (asistencias);
-              asistencias.forEach (asistencia => this.peticionesAPI.BorraAsistenciaClase (asistencia.id).subscribe());
-              console.log ('Ya he borrado los registros de asistencia');
-            });
-            // Ahora borro la sesión
-            console.log ('Ahora borro la sesion de clase');
-            this.peticionesAPI.BorraSesionClase(sesiones[i].id)
-            .subscribe(() => {
-              cont++;
-              if (cont === sesiones.length) {
-                // Ya hemos borrado todas las sesiones
-                console.log ('ya esta borradas todas las sesiones de clase');
-                obs.next();
-              }
-            });
-          }
-        } else {
-          // nada que eliminar
-          console.log ('No hay sesiones de clase para borrar');
-          obs.next();
-        }
-
-      });
-    });
-    return eliminaSesionesObservable;
+  // Ahora borramos las asignaciones de puntos
+  const puntos = await this.peticionesAPI.DamePuntosJuego (juego.id).toPromise();
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < puntos.length; i++) {
+    await this.peticionesAPI.BorraPuntoJuego (puntos[i].id).toPromise();
+  }
+  // y los niveles e imagenes
+  const niveles = await this.peticionesAPI.DameNivelesJuego (juego.id).toPromise();
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < niveles.length; i++) {
+    await this.peticionesAPI.BorraNivel (niveles[i].id).toPromise();
+    if (niveles[i].Imagen !== undefined) {
+      await this.peticionesAPI.BorraImagenNivel (niveles[i].Imagen).toPromise();
+    }
   }
 
+  // Ahora borramos el juego
+  await this.peticionesAPI.BorraJuegoDePuntos (juego.id).toPromise();
+}
 
-  // Trae de la base de datos todos los juegos del grupo y los organiza en dos
-  // listas, una de activos y otra de inactivos. Retorna estas listas como observable
-
-  public DameListaJuegos(grupoID: number): any {
-    const listasObservables = new Observable ( obs => {
-
-      const juegosActivos: any[] = [];
-      const juegosInactivos: any[] = [];
-      const juegosPreparados: any[] = [];
-
-
-      
-      console.log ('vamos a por los juegos de puntos del grupo: ' + grupoID);
-      this.peticionesAPI.DameJuegoDePuntosGrupo(grupoID)
-      .subscribe(juegosPuntos => {
-        console.log('He recibido los juegos de puntos');
-        console.log(juegosPuntos);
+public async EliminarJuegoDeColeccion(juego: any) {
+  console.log ('ELIMINAR JUEGO COLECCION');
+  if (juego.Modo === 'Individual') {
+    const inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeColeccion (juego.id).toPromise();
+    console.log ('TENGO INSCRIPCUIONES ', inscripciones);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length; i++) {
+      const asignaciones = await this.peticionesAPI.DameAsignacionesCromosAlumno (inscripciones[i].id).toPromise();
+      if (asignaciones !== undefined) {
         // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < juegosPuntos.length; i++) {
-          if (juegosPuntos[i].JuegoActivo === true) {
-            juegosActivos.push(juegosPuntos[i]);
-          } else {
-            console.log('Juego inactivo');
-            console.log(juegosPuntos[i]);
-            juegosInactivos.push(juegosPuntos[i]);
+        for (let j = 0; j < asignaciones.length; j++) {
+          await this.peticionesAPI.BorrarAsignacionCromoAlumno (asignaciones[j].id).toPromise();
+        }
+      }
+      console.log ('BORRO INSCRIPCION ', inscripciones[i]);
+      await this.peticionesAPI.BorraInscripcionAlumnoJuegoDeColeccion (inscripciones[i].id).toPromise();
+    }
+  } else {
+    const inscripciones = await this.peticionesAPI.DameInscripcionesEquipoJuegoDeColeccion (juego.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length; i++) {
+      const asignaciones = await this.peticionesAPI.DameAsignacionesCromosEquipo (inscripciones[i].id).toPromise();
+      if (asignaciones !== undefined) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < asignaciones.length; j++) {
+          await this.peticionesAPI.BorrarAsignacionCromoEquipo (asignaciones[j].id).toPromise();
+        }
+      }
+      await this.peticionesAPI.BorraInscripcionEquipoJuegoDeColeccion (inscripciones[i].id).toPromise();
+    }
+  }
+  // Ahora borramos el juego
+  await this.peticionesAPI.BorraJuegoDeColeccion (juego.id).toPromise();
+}
+
+public async EliminarJuegoDeCompeticionLiga(juego: any) {
+  if (juego.Modo === 'Individual') {
+    const inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionLiga (juego.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionLiga(inscripciones[i].id).toPromise();
+    }
+  } else {
+    const inscripciones = await this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionLiga (juego.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionLiga(inscripciones[i].id).toPromise();
+    }
+
+  }
+  // Borro las jornadas
+  const jornadas = await this.peticionesAPI.DameJornadasDeCompeticionLiga (juego.id).toPromise();
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < jornadas.length ; i++ ) {
+    const enfrentamientos = await this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga (jornadas[i].id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let j = 0; j < enfrentamientos.length ; j++ ) {
+      await this.peticionesAPI.BorraEnfrentamientoLiga (enfrentamientos[j]).toPromise();
+    }
+    await this.peticionesAPI.BorrarJornadaLiga(jornadas[i]).toPromise();
+  }
+  // Borro el juego
+  await this.peticionesAPI.BorraJuegoDeCompeticionLiga (juego.id).toPromise();
+}
+
+
+public async EliminarJuegoDeCompeticionFormulaUno(juego: any) {
+  if (juego.Modo === 'Individual') {
+    const inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionFormulaUno (juego.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(inscripciones[i].id).toPromise();
+    }
+  } else {
+    const inscripciones = await this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionFormulaUno (juego.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(inscripciones[i].id).toPromise();
+    }
+
+  }
+  // Borro las jornadas
+  const jornadas = await this.peticionesAPI.DameJornadasDeCompeticionFormulaUno (juego.id).toPromise();
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < jornadas.length ; i++ ) {
+    await this.peticionesAPI.BorrarJornadaFormulaUno(jornadas[i]).toPromise();
+  }
+  // Borro el juego
+  await this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno (juego.id).toPromise();
+}
+
+public async EliminarJuegoDeAvatar(juego: any) {
+  let inscripciones;
+  if (juego.Modo === 'Individual') {
+    inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeAvatar(juego.id).toPromise();
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionAlumnoJuegoDeAvatar(inscripciones[i].id).toPromise();
+    }
+  } else {
+    // AUN NO ES POSIBLE LA MODALIDAD DE EQUIPO EN ESTE JUEGO. CUANDO ESTÉ IMPLEMENTADA ENTONCES
+    // AQUI HABRA QUE PONER EL CÓDIGO PARA ELIMINAR
+  }
+  await this.peticionesAPI.BorraJuegoDeAvatar (juego.id).toPromise();
+}
+
+public async EliminarJuegoDeCuestionario(juego: any) {
+    let inscripciones;
+    if (juego.Modo === 'Individual') {
+
+      inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionario(juego.id).toPromise();
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < inscripciones.length; i++) {
+        const respuestas = await this.peticionesAPI.DameRespuestasAlumnoJuegoDeCuestionario(inscripciones[i].id).toPromise();
+        console.log ('borro respuestas juego ', juego.id);
+        console.log ('respuestas ', respuestas);
+        if (respuestas !== undefined) {
+          // tslint:disable-next-line:prefer-for-of
+          for (let j = 0; j < respuestas.length; j++) {
+            await this.peticionesAPI.BorraRespuestaAlumnoDelJuegoDeCuestionario(respuestas[j].id).toPromise();
           }
         }
-        // Ahora vamos apor por los juegos de colección
-        console.log ('vamos a por los juegos de colección del grupo: ' + grupoID);
-        this.peticionesAPI.DameJuegoDeColeccionGrupo(grupoID)
-        .subscribe(juegosColeccion => {
-          console.log('He recibido los juegos de coleccion');
-          console.log(juegosColeccion);
+        await this.peticionesAPI.BorraAlumnoDelJuegoDeCuestionario(inscripciones[i].id).toPromise();
+      }
+
+    } else {
+      inscripciones = await this.peticionesAPI.DameInscripcionesEquipoJuegoDeCuestionario(juego.id).toPromise();
+      console.log ('Inscripciones ', inscripciones);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < inscripciones.length; i++) {
+        const respuestas = await this.peticionesAPI.DameRespuestasEquipoJuegoDeCuestionario(inscripciones[i].id).toPromise();
+        if (respuestas !== undefined) {
           // tslint:disable-next-line:prefer-for-of
-          for (let i = 0; i < juegosColeccion.length; i++) {
-            if (juegosColeccion[i].JuegoActivo === true) {
-              juegosActivos.push(juegosColeccion[i]);
-            } else {
-              juegosInactivos.push(juegosColeccion[i]);
-            }
+          for (let j = 0; j < respuestas.length; j++) {
+            await this.peticionesAPI.BorraRespuestaEquipoDelJuegoDeCuestionario(respuestas[j].id).toPromise();
           }
-          // Ahora vamos a por los juegos de competición
-          console.log ('vamos a por los juegos de competicion liga del grupo: ' + grupoID);
-          this.peticionesAPI.DameJuegoDeCompeticionLigaGrupo(grupoID)
-          .subscribe(juegosCompeticion => {
-            console.log('He recibido los juegos de competición');
-            console.log(juegosCompeticion);
-            // tslint:disable-next-line:prefer-for-of
-            for (let i = 0; i < juegosCompeticion.length; i++) {
-              if (juegosCompeticion[i].JuegoActivo === true) {
-                juegosActivos.push(juegosCompeticion[i]);
-              } else {
-                juegosInactivos.push(juegosCompeticion[i]);
-              }
-            }
+        }
+        await this.peticionesAPI.BorraEquipoDelJuegoDeCuestionario(inscripciones[i].id).toPromise();
+      }
 
-            
-            // ahora toca los juegos de competicion de formula uno
-            console.log ('vamos a por los juegos de competicion formula uno del grupo: ' + grupoID);
-            this.peticionesAPI.DameJuegoDeCompeticionFormulaUnoGrupo(grupoID)
-            .subscribe(juegosCompeticionFormulaUno => {
-              console.log('He recibido los juegos de competición formula uno');
-              console.log(juegosCompeticionFormulaUno);
-              // tslint:disable-next-line:prefer-for-of
-              for (let i = 0; i < juegosCompeticionFormulaUno.length; i++) {
-                if (juegosCompeticionFormulaUno[i].JuegoActivo === true) {
-                  juegosActivos.push(juegosCompeticionFormulaUno[i]);
-                } else {
-                  juegosInactivos.push(juegosCompeticionFormulaUno[i]);
-                }
-              }
-              console.log ('vamos a por los juegos de avatar del grupo: ' + grupoID);
-              this.peticionesAPI.DameJuegoDeAvatarGrupo(grupoID)
-              .subscribe(juegosAvatar => {
-                console.log('He recibido los juegos de avatar');
-                console.log(juegosAvatar);
-                // tslint:disable-next-line:prefer-for-of
-                for (let i = 0; i < juegosAvatar.length; i++) {
-                  if (juegosAvatar[i].JuegoActivo === true) {
-                    juegosActivos.push(juegosAvatar[i]);
-                  } else {
-                    juegosInactivos.push(juegosAvatar[i]);
-                  }
-                }
-                // Ahora recogemos los juegos de cuestionario
-                // console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
-                console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
-                this.peticionesAPI.DameJuegoDeCuestionario(grupoID)
-                .subscribe(juegosCuestionario => {
-                  console.log('He recibido los juegos de cuestionario');
-                  console.log(juegosCuestionario);
-                  // tslint:disable-next-line:prefer-for-of
-                  for (let i = 0; i < juegosCuestionario.length; i++) {
-                    if (juegosCuestionario[i].JuegoActivo === true) {
-                      juegosCuestionario[i].Tipo = 'Juego De Cuestionario';
-                      juegosActivos.push(juegosCuestionario[i]);
-                    } else if (juegosCuestionario[i].JuegoTerminado === false && juegosCuestionario[i].JuegoActivo === false) {
-                      juegosCuestionario[i].Tipo = 'Juego De Cuestionario';
-                      juegosPreparados.push(juegosCuestionario[i]);
-                    } else if (juegosCuestionario[i].JuegoTerminado === true) {
-                      juegosCuestionario[i].Tipo = 'Juego De Cuestionario';
-                      juegosInactivos.push(juegosCuestionario[i]);
-                    }
-                  }
+    }
 
-                  console.log ('vamos a por los juegos de geocaching del grupo: ' + grupoID);
-                  this.peticionesAPI.DameJuegoDeGeocaching(grupoID)
-                  .subscribe(juegosGeocaching => {
-                    console.log('He recibido los juegos de geocaching');
-                    console.log(juegosGeocaching);
-                    // tslint:disable-next-line:prefer-for-of
-                    for (let i = 0; i < juegosGeocaching.length; i++) {
-                      if (juegosGeocaching[i].JuegoActivo === true) {
-                        juegosGeocaching[i].Tipo = 'Juego De Geocaching';
-                        juegosActivos.push(juegosGeocaching[i]);
-                      } else if (juegosGeocaching[i].JuegoTerminado === false && juegosGeocaching[i].JuegoActivo === false) {
-                        juegosGeocaching[i].Tipo = 'Juego De Geocaching';
-                        juegosPreparados.push(juegosGeocaching[i]);
-                      } else if (juegosGeocaching[i].JuegoTerminado === true) {
-                        juegosGeocaching[i].Tipo = 'Juego De Geocaching';
-                        juegosInactivos.push(juegosGeocaching[i]);
-                      }
-                    }
-                    console.log ('Vamos a por los juegos de votacion Uno a Todos del grupo: ' + grupoID);
-                    this.peticionesAPI.DameJuegosDeVotacionUnoATodos(grupoID)
-                      .subscribe(juegosVotacionUnoATodos => {
-                      console.log('He recibido los juegos de votacion Uno A Todos');
-                      console.log(juegosVotacionUnoATodos);
-                      // tslint:disable-next-line:prefer-for-of
-                      for (let i = 0; i < juegosVotacionUnoATodos.length; i++) {
-                        if (juegosVotacionUnoATodos[i].JuegoActivo === true) {
-                          juegosVotacionUnoATodos[i].Tipo = 'Juego De Votación Uno A Todos';
-                          juegosActivos.push(juegosVotacionUnoATodos[i]);
-                        } else {
-                          juegosVotacionUnoATodos[i].Tipo = 'Juego De Votación Uno A Todos';
-                          juegosInactivos.push(juegosVotacionUnoATodos[i]);
-                        }
-                      }
-                      console.log ('Vamos a por los juegos de votacion Todos A Uno del grupo: ' + grupoID);
-                      this.peticionesAPI.DameJuegosDeVotacionTodosAUno(grupoID)
-                        .subscribe(juegosVotacioTodosAUno => {
-                        console.log('He recibido los juegos de votacion Todos A Uno');
-                        console.log(juegosVotacioTodosAUno);
-                        // tslint:disable-next-line:prefer-for-of
-                        for (let i = 0; i < juegosVotacioTodosAUno.length; i++) {
-                          if (juegosVotacioTodosAUno[i].JuegoActivo === true) {
-                            juegosVotacioTodosAUno[i].Tipo = 'Juego De Votación Todos A Uno';
-                            juegosActivos.push(juegosVotacioTodosAUno[i]);
-                          } else {
-                            juegosVotacioTodosAUno[i].Tipo = 'Juego De Votación Todos A Uno';
-                            juegosInactivos.push(juegosVotacioTodosAUno[i]);
-                          }
-                        }
-                        console.log ('Vamos a por los juegos de cuestionario de satisfacción: ' + grupoID);
-                        this.peticionesAPI.DameJuegosDeCuestionarioSatisfaccion(grupoID)
-                          .subscribe(juegosCuestionarioSatisfaccion => {
-                          console.log('He recibido los juegos de cuestionario de satisfacción');
-                          console.log(juegosCuestionarioSatisfaccion);
-                          // tslint:disable-next-line:prefer-for-of
-                          for (let i = 0; i < juegosCuestionarioSatisfaccion.length; i++) {
-                            if (juegosCuestionarioSatisfaccion[i].JuegoActivo === true) {
-                              juegosActivos.push(juegosCuestionarioSatisfaccion[i]);
-                            } else {
-                              juegosInactivos.push(juegosCuestionarioSatisfaccion[i]);
-                            }
-                          }
+    await this.peticionesAPI.BorrarJuegoDeCuestionario (juego.id).toPromise();
+}
+public async EliminarJuegoDeGeocaching(juego: any) {
+  console.log ('entro a eliminar');
+  let inscripciones;
 
-                        // ahora toca los juegos de creacion de cuentos
-                        console.log ('vamos a por los juegos de cuento del grupo: ' + grupoID);
-                        this.peticionesAPI.DamejuegosdeCuento(grupoID)
-                          .subscribe(juegosdecuento => {
-                          console.log('He recibido los juegos de cuento');
-                          console.log(juegosdecuento);
-                          // tslint:disable-next-line:prefer-for-of
-                         for (let i = 0; i < juegosdecuento.length; i++) {
-                          if (juegosdecuento[i].JuegoActivo === true) {
-                            juegosActivos.push(juegosdecuento[i]);
-                          } else {
-                            juegosInactivos.push(juegosdecuento[i]);
-                          }
-                        }
+  // DE MOMENTO SOLO HAY MODO INDIVIDUAL. DE HECHO, NI SIQUIERA HAY EL CAMPO MODO EN EL JUEGO.
+  // ESO HABRA QUE ARREGLARLO CUANDO HAGAMOS LA MODALIDAD DE EQUIPOS.
 
-                          const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-                          obs.next (resultado);
+  inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeGeocaching(juego.id).toPromise();
 
-                          // console.log('GET JuegoDeEvaluacion OF grupoID: ', grupoID);
-                          // this.peticionesAPI.DameJuegosDeEvaluacion(grupoID)
-                          //   .subscribe(juegosDeEvaluacion => {
-                          //     console.log('GET RESPONSE JuegoDeEvaluacion', juegosDeEvaluacion);
-                          //     // tslint:disable-next-line:prefer-for-of
-                          //     for (let i = 0; i < juegosDeEvaluacion.length; i++) {
-                          //       if (juegosDeEvaluacion[i].JuegoActivo === true) {
-                          //         juegosDeEvaluacion[i].Tipo = 'Evaluacion';
-                          //         juegosActivos.push(juegosDeEvaluacion[i]);
-                          //       } else {
-                          //         juegosDeEvaluacion[i].Tipo = 'Evaluacion';
-                          //         juegosInactivos.push(juegosDeEvaluacion[i]);
-                          //       }
-                          //     }
-
-                          //   const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
-                          //   obs.next (resultado);
-                          // });
-                          });
-                        });
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-
-    return listasObservables;
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < inscripciones.length ; i++ ) {
+      console.log ('voy a eliminar ', inscripciones[i] );
+      await this.peticionesAPI.BorraAlumnoDelJuegoDeGeocaching (inscripciones[i].id).toPromise();
   }
 
-  public DameJuegosRapidos(profesorId: number): any {
-    const listasObservables = new Observable ( obs => {
+  await this.peticionesAPI.BorrarJuegoDeGeocaching (juego.id).toPromise();
+}
 
-      let juegosRapidos: any[] = [];
-      this.peticionesAPI.DameJuegosDeEncuestaRapida(profesorId)
-      .subscribe(juegos => {
-        console.log ('Ya tengo los juegos de encuesta rápida');
-        console.log (juegos);
-        juegosRapidos = juegosRapidos.concat (juegos);
-        this.peticionesAPI.DameJuegosDeVotacionRapida(profesorId)
-        // tslint:disable-next-line:no-shadowed-variable
-        .subscribe(juegos => {
-          console.log ('Ya tengo los juegos de votación rápida');
-          console.log (juegos);
-          juegosRapidos = juegosRapidos.concat (juegos);
-          this.peticionesAPI.DameJuegosDeCuestionarioRapido(profesorId)
-          // tslint:disable-next-line:no-shadowed-variable
-          .subscribe(juegos => {
-            console.log ('Ya tengo los juegos de cuestionario rapido');
-            console.log (juegos);
-            juegosRapidos = juegosRapidos.concat (juegos);
-            console.log (juegosRapidos);
-           // obs.next (juegosRapidos);
-            this.peticionesAPI.DameJuegosDeCogerTurnoRapido(profesorId)
-            // tslint:disable-next-line:no-shadowed-variable
-            .subscribe(juegos => {
-              console.log ('Ya tengo los juegos de coger turno rapido');
-              console.log (juegos);
-              juegosRapidos = juegosRapidos.concat (juegos);
-              console.log (juegosRapidos);
-              obs.next (juegosRapidos);
-            });
-          });
-        });
-      });
-    });
+public async EliminarJuegoDeVotacionTodosAUno(juego: any) {
+  let inscripciones;
+  if (juego.Modo === 'Individual') {
+    inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeVotacionTodosAUno(juego.id).toPromise();
 
-    return listasObservables;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionTodosAUno (inscripciones[i].id).toPromise();
+    }
+  } else {
+    // AUN NO ES POSIBLE LA MODALIDAD DE EQUIPO EN ESTE JUEGO. CUANDO ESTÉ IMPLEMENTADA ENTONCES
+    // ESTE SERÁ EL CÓDIGO PARA ELIMINAR
+    // inscripciones = await this.peticionesAPI.DameInscripcionesEquiposJuegoDeVotacionTodosAUno(juego.id).toPromise();
+
+    // // tslint:disable-next-line:prefer-for-of
+    // for (let i = 0; i < inscripciones.length ; i++ ) {
+    //   await this.peticionesAPI.BorraInscripcionEquipoJuegoDeVotacionTodosAUno (inscripciones[i].id).toPromise();
+    // }
   }
+  await this.peticionesAPI.BorraJuegoDeVotacionTodosAUno (juego.id).toPromise();
+}
+public async EliminarJuegoDeVotacionUnoATodos(juego: any) {
+  let inscripciones;
+  if (juego.Modo === 'Individual') {
+    inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeVotacionUnoATodos(juego.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionUnoATodos (inscripciones[i].id).toPromise();
+    }
+  } else {
+
+    inscripciones = await this.peticionesAPI.DameInscripcionesEquipoJuegoDeVotacionUnoATodos(juego.id).toPromise();
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionEquipoJuegoDeVotacionUnoATodos (inscripciones[i].id).toPromise();
+    }
+  }
+  await this.peticionesAPI.BorraJuegoDeVotacionUnoATodos(juego.id).toPromise();
+}
+
+public async EliminarJuegoControlDeTrabajoEnEquipo(juego: any) {
+
+  const inscripciones = await this.peticionesAPI.DameInscripcionesAlumnosJuegoDeControlDeTrabajoEnEquipo (juego.id).toPromise();
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < inscripciones.length ; i++ ) {
+    await this.peticionesAPI.BorrarInscripcionAlumnoJuegoDeControlDeTrabajoEnEquipo(inscripciones[i].id).toPromise();
+  }
+  await this.peticionesAPI.BorrarJuegoDeControlDeTrabajoEnEquipo (juego.id).toPromise();
+}
+
+public async EliminarJuegoDeEvaluacion(juego: any) {
+  let inscripciones;
+  if (juego.Modo === 'Individual') {
+    inscripciones = await this.peticionesAPI.DameRelacionAlumnosJuegoDeEvaluacion(juego.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorrarAlumnoJuegoDeEvaluacion (inscripciones[i].id).toPromise();
+    }
+  } else {
+    inscripciones = await this.peticionesAPI.DameRelacionEquiposJuegoDeEvaluacion(juego.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+       await this.peticionesAPI.BorrarEquipoJuegoDeEvaluacion (inscripciones[i].id).toPromise();
+    }
+  }
+
+  await this.peticionesAPI.BorrarJuegoDeEvaluacion (juego.id).toPromise();
+}
+
+public async EliminarJuegoDeCuestionarioDeSatisfaccion(juego: any) {
+
+  const inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionarioSatisfaccion(juego.id).toPromise();
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCuestionarioSatisfaccion (inscripciones[i].id).toPromise();
+  }
+  await this.peticionesAPI.BorraJuegoDeCuestionarioSatisfaccion (juego.id).toPromise();
+}
+private async EliminarEquipos(): Promise<any> {
+  const equipos = await this.peticionesAPI.DameEquiposDelGrupo(this.sesion.DameGrupo().id).toPromise();
+
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < equipos.length; i++) {
+    const asignaciones = await this.peticionesAPI.DameAsignacionesDelEquipo (equipos[i]).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let j = 0; j < asignaciones.length; j++) {
+      await this.peticionesAPI.BorraAlumnoEquipo (asignaciones[j]).toPromise();
+    }
+    await this.peticionesAPI.BorraEquipoDelGrupo (equipos[i]).toPromise();
+  }
+}
+
+private async EliminarMatriculas(): Promise<any> {
+    // Pido las matrículas correspondientes al grupo que voy a borrar
+    const matriculas = await this.peticionesAPI.DameMatriculasGrupo(this.sesion.DameGrupo().id).toPromise();
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < matriculas.length; i++) {
+      await this.peticionesAPI.BorraMatricula(matriculas[i].id).toPromise();
+    }
+}
+
+
+  private async EliminarSesionesClase(): Promise<any> {
+    const sesiones = await this.peticionesAPI.DameSesionesClaseGrupo(this.sesion.DameGrupo().id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < sesiones.length; i++) {
+      // REPASAR ESTO DE LAS ASISTENCIAS A CLASE PORQUE NO SE GENERA EL MODELO DE ASISTENCIA A CLASE
+      // // primero tengo que borrar los registros de asistencia a la sesión
+      // const asistencias = await this.peticionesAPI.DameAsistenciasClase (sesiones[i].id).toPromise();
+      // // tslint:disable-next-line:prefer-for-of
+      // for (let j = 0; j < asistencias.length; j++) {
+      //   await this.peticionesAPI.BorraAsistenciaClase (asistencias[j].id).toPromise();
+      // }
+      // Ahora borro la sesión
+      await this.peticionesAPI.BorraSesionClase(sesiones[i].id).toPromise();
+    }
+  }
+
+
+
+   // Esta nueva versión es más limpia
+  // Lanzamos la petición y con await esperamos el resultado antes de lanzar la siguiente
+  // Lo que estamos haciendo es haciendo síncrono el proceso, porque no necesitamos hacer nada
+  // mientras llegan los juegos que hemos pedido.
+  // El código queda más claro y fácil de mantener.
+
+
+  public async DameListaJuegos(grupoID: number): Promise<any> {
+    const juegosActivos: any[] = [];
+    const juegosInactivos: any[] = [];
+    const juegosPreparados: any[] = [];
+    let juegos: any[];
+
+    console.log ('vamos a por los juegos de puntos del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegoDePuntosGrupo(grupoID).toPromise();
+    console.log('He recibido los juegos de puntos');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+
+    console.log ('vamos a por los juegos de colección del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegoDeColeccionGrupo(grupoID).toPromise();
+    console.log('He recibido los juegos de coleccion');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+
+    console.log ('vamos a por los juegos de competicion liga del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegoDeCompeticionLigaGrupo(grupoID).toPromise();
+    console.log('He recibido los juegos de coleccion');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+    console.log ('vamos a por los juegos de competicion formula uno del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegoDeCompeticionFormulaUnoGrupo(grupoID).toPromise();
+    console.log('He recibido los juegos de competición formula uno');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+
+
+    console.log ('vamos a por los juegos de avatar del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegoDeAvatarGrupo(grupoID).toPromise();
+    console.log('He recibido los juegos de avatar');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+
+
+    console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegoDeCuestionario(grupoID).toPromise();
+    console.log('He recibido los juegos de cuestionario');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegos[i].Tipo = 'Juego De Cuestionario';
+          juegosActivos.push(juegos[i]);
+        } else if (juegos[i].JuegoTerminado === false && juegos[i].JuegoActivo === false) {
+          juegos[i].Tipo = 'Juego De Cuestionario';
+          juegosPreparados.push(juegos[i]);
+        } else if (juegos[i].JuegoTerminado === true) {
+          juegos[i].Tipo = 'Juego De Cuestionario';
+          juegosInactivos.push(juegos[i]);
+        }
+    }
+
+    console.log ('vamos a por los juegos de geocaching del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegoDeGeocaching(grupoID).toPromise();
+    console.log('He recibido los juegos de geocaching');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegos[i].Tipo = 'Juego De Geocaching';
+          juegosActivos.push(juegos[i]);
+        } else if (juegos[i].JuegoTerminado === false && juegos[i].JuegoActivo === false) {
+          juegos[i].Tipo = 'Juego De Geocaching';
+          juegosPreparados.push(juegos[i]);
+        } else if (juegos[i].JuegoTerminado === true) {
+          juegos[i].Tipo = 'Juego De Geocaching';
+          juegosInactivos.push(juegos[i]);
+        }
+    }
+
+    console.log ('Vamos a por los juegos de votacion Uno a Todos del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegosDeVotacionUnoATodos(grupoID).toPromise();
+    console.log('He recibido los juegos de votacion Uno A Todos');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegos[i].Tipo = 'Juego De Votación Uno A Todos';
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegos[i].Tipo = 'Juego De Votación Uno A Todos';
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+
+    console.log ('Vamos a por los juegos de votacion Todos A Uno del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegosDeVotacionTodosAUno(grupoID).toPromise();
+    console.log('He recibido los juegos de votacion Todos A Uno');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegos[i].Tipo = 'Juego De Votación Todos A Uno';
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegos[i].Tipo = 'Juego De Votación Todos A Uno';
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+
+
+    console.log ('Vamos a por los juegos de cuestionario de satisfacción: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegosDeCuestionarioSatisfaccion(grupoID).toPromise();
+    console.log('He recibido los juegos de cuestionario de satisfacción');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+
+
+    console.log('Vamos a por los juegos de evaluacion del grupo ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegosDeEvaluacion(grupoID).toPromise();
+    console.log('He recibido los juegos de evaluacion');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegos[i].Tipo = 'Evaluacion';
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegos[i].Tipo = 'Evaluacion';
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+    console.log ('asi esta la lista de juegos activos ', juegosActivos);
+
+    console.log ('Vamos a por los juegos de control de trabajo en equipo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegosDeControlDeTrabajoEnEquipo(grupoID).toPromise();
+    console.log('He recibido los juegos de control de trabajo en equipo');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      console.log ('entro ', juegos[i]);
+      if (juegos[i].JuegoActivo === true) {
+        console.log ('es activo');
+        juegosActivos.push(juegos[i]);
+      } else {
+        console.log ('es inactivo');
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+    console.log ('asi esta la lista de juegos activos ', juegosActivos);
+
+
+    console.log ('vamos a por los juegos de cuento del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DamejuegosdeCuento(grupoID).toPromise();
+    console.log('He recibido los juegos de cuento');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+
+    console.log ('asi esta la lista de juegos activos ', juegosActivos);
+    const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
+    return (resultado);
+}
+
+
+
+
+  public async DameJuegosRapidos(profesorId: number): Promise<any> {
+
+    let juegosRapidos: any[] = [];
+
+    let juegos;
+
+    console.log ('voy a por los juegos de encuesta rapida');
+    juegos = await this.peticionesAPI.DameJuegosDeEncuestaRapida(profesorId).toPromise();
+    console.log ('ya tengo los juegos de encuesta rapida');
+    console.log (juegos);
+    juegosRapidos = juegosRapidos.concat (juegos);
+
+
+    console.log ('voy a por los juegos de votación rápida');
+    juegos = await this.peticionesAPI.DameJuegosDeVotacionRapida(profesorId).toPromise();
+    console.log ('ya tengo los juegos de votación rápida');
+    console.log (juegos);
+    juegosRapidos = juegosRapidos.concat (juegos);
+
+
+    console.log ('voy a por los juegos de cuestionario rápido');
+    juegos = await this.peticionesAPI.DameJuegosDeCuestionarioRapido(profesorId).toPromise();
+    console.log ('ya tengo los juegos de cuestionario rápido');
+    console.log (juegos);
+    juegosRapidos = juegosRapidos.concat (juegos);
+
+    console.log ('voy a por los juegos de coger turno rápido');
+    juegos = await this.peticionesAPI.DameJuegosDeCogerTurnoRapido(profesorId).toPromise();
+    console.log ('ya tengo los juegos de coger turno rápido');
+    console.log (juegos);
+    juegosRapidos = juegosRapidos.concat (juegos);
+
+    return juegosRapidos;
+
+}
+
 
 
   public PrepararTablaRankingIndividual(  listaAlumnosOrdenadaPorPuntos,
@@ -1535,68 +1497,68 @@ export class CalculosService {
 
 /////////////////////////////////////////////////////  COMPETICIONES  ////////////////////////////////////////////////////
 
-public BorraJuegoCompeticionLiga(juegoDeCompeticion: Juego) {
-  // Pido las inscripciones de los participantes en el juego y las borro todas
-  if (juegoDeCompeticion.Modo === 'Individual') {
-    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionLiga (juegoDeCompeticion.id)
-    // tslint:disable-next-line:max-line-length
-    .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionLiga(inscripcion.id).subscribe()));
-  } else {
-    console.log ('inscripciones equipos');
-    this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionLiga (juegoDeCompeticion.id)
-    // tslint:disable-next-line:max-line-length
-    .subscribe ( inscripciones => {
-      console.log ('inscripciones');
-      console.log (inscripciones);
-      inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionLiga(inscripcion.id).subscribe());
-    }
-    );
-  }
-  // Pido las jornadas y para cada jornada pido los enfrentamientos y los borro. Y luego borro la jornada
-  this.peticionesAPI.DameJornadasDeCompeticionLiga (juegoDeCompeticion.id)
-  .subscribe (jornadas => {
-    jornadas.forEach (jornada => {
-              this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga (jornada.id)
-              // tslint:disable-next-line:max-line-length
-              .subscribe (enfrentamientos => enfrentamientos.forEach (enfrentamiento => this.peticionesAPI.BorraEnrentamientoLiga (enfrentamiento).subscribe()));
-              // Borrar jornada
-              this.peticionesAPI.BorrarJornadaLiga (jornada).subscribe();
-            });
-  });
+// public BorraJuegoCompeticionLiga(juegoDeCompeticion: Juego) {
+//   // Pido las inscripciones de los participantes en el juego y las borro todas
+//   if (juegoDeCompeticion.Modo === 'Individual') {
+//     this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionLiga (juegoDeCompeticion.id)
+//     // tslint:disable-next-line:max-line-length
+//     .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionLiga(inscripcion.id).subscribe()));
+//   } else {
+//     console.log ('inscripciones equipos');
+//     this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionLiga (juegoDeCompeticion.id)
+//     // tslint:disable-next-line:max-line-length
+//     .subscribe ( inscripciones => {
+//       console.log ('inscripciones');
+//       console.log (inscripciones);
+//       inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionLiga(inscripcion.id).subscribe());
+//     }
+//     );
+//   }
+//   // Pido las jornadas y para cada jornada pido los enfrentamientos y los borro. Y luego borro la jornada
+//   this.peticionesAPI.DameJornadasDeCompeticionLiga (juegoDeCompeticion.id)
+//   .subscribe (jornadas => {
+//     jornadas.forEach (jornada => {
+//               this.peticionesAPI.DameEnfrentamientosDeCadaJornadaLiga (jornada.id)
+//               // tslint:disable-next-line:max-line-length
+//               .subscribe (enfrentamientos => enfrentamientos.forEach (enfrentamiento => this.peticionesAPI.BorraEnrentamientoLiga (enfrentamiento).subscribe()));
+//               // Borrar jornada
+//               this.peticionesAPI.BorrarJornadaLiga (jornada).subscribe();
+//             });
+//   });
 
 
-  // Borro el juego
-  this.peticionesAPI.BorraJuegoDeCompeticionLiga (juegoDeCompeticion.id).subscribe();
+//   // Borro el juego
+//   this.peticionesAPI.BorraJuegoDeCompeticionLiga (juegoDeCompeticion.id).subscribe();
 
-}
-
-
-public BorraJuegoCompeticionFormulaUno(juegoDeCompeticion: Juego) {
-  // Pido las inscripciones de los participantes en el juego y las borro todas
-  if (juegoDeCompeticion.Modo === 'Individual') {
-    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id)
-    // tslint:disable-next-line:max-line-length
-    .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(inscripcion.id).subscribe()));
-  } else {
-    console.log ('inscripciones equipos');
-    this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id)
-    // tslint:disable-next-line:max-line-length
-    .subscribe ( inscripciones => {
-      console.log ('inscripciones');
-      console.log (inscripciones);
-      // tslint:disable-next-line:max-line-length
-      inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(inscripcion.id).subscribe());
-    }
-    );
-  }
-  // Pido las jornadas y para cada jornada pido los enfrentamientos y los borro. Y luego borro la jornada
-  this.peticionesAPI.DameJornadasDeCompeticionFormulaUno (juegoDeCompeticion.id)
-  .subscribe (jornadas => jornadas.forEach (jornada => this.peticionesAPI.BorrarJornadaFormulaUno (jornada).subscribe()));
+// }
 
 
-  // Borro el juego
-  this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id).subscribe();
-}
+// public BorraJuegoCompeticionFormulaUno(juegoDeCompeticion: Juego) {
+//   // Pido las inscripciones de los participantes en el juego y las borro todas
+//   if (juegoDeCompeticion.Modo === 'Individual') {
+//     this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id)
+//     // tslint:disable-next-line:max-line-length
+//     .subscribe ( inscripciones => inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionFormulaUno(inscripcion.id).subscribe()));
+//   } else {
+//     console.log ('inscripciones equipos');
+//     this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id)
+//     // tslint:disable-next-line:max-line-length
+//     .subscribe ( inscripciones => {
+//       console.log ('inscripciones');
+//       console.log (inscripciones);
+//       // tslint:disable-next-line:max-line-length
+//       inscripciones.forEach (inscripcion => this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionFormulaUno(inscripcion.id).subscribe());
+//     }
+//     );
+//   }
+//   // Pido las jornadas y para cada jornada pido los enfrentamientos y los borro. Y luego borro la jornada
+//   this.peticionesAPI.DameJornadasDeCompeticionFormulaUno (juegoDeCompeticion.id)
+//   .subscribe (jornadas => jornadas.forEach (jornada => this.peticionesAPI.BorrarJornadaFormulaUno (jornada).subscribe()));
+
+
+//   // Borro el juego
+//   this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno (juegoDeCompeticion.id).subscribe();
+// }
 
 public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
   const jornadasObservables = new Observable ( obs => {
@@ -1911,30 +1873,28 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
   // espere hasta que se haya acabado la operacion de borrar la pregunta de la base de datos.
   // La primera función elimina la imagen asociada a la pregunta, mientras que la segunda elimina el modelo de la pregunta.
   public EliminarPregunta(): any {
-    const eliminaObservable = new Observable ( obs =>
-      {
-        //Miramos si la imagen está asociada a más de una pregunta
-        var contador = 0;
-        //Recuperamos todas las preguntas que hay en la BD
-        this.peticionesAPI.DameTodasMisPreguntas(this.sesion.DameProfesor().id).subscribe( res =>
-          {
-            if (res[0] !== undefined){
-              //Comparamos cada una de las imágenes con la que queremos eliminar.
+    const eliminaObservable = new Observable ( obs => {
+        // Miramos si la imagen está asociada a más de una pregunta
+        let contador = 0;
+        // Recuperamos todas las preguntas que hay en la BD
+        this.peticionesAPI.DameTodasMisPreguntas(this.sesion.DameProfesor().id).subscribe( res => {
+            if (res[0] !== undefined) {
+              // Comparamos cada una de las imágenes con la que queremos eliminar.
               res.forEach( pregunta => {
-                if (pregunta.Imagen == this.sesion.DamePregunta().Imagen) {
+                if (pregunta.Imagen === this.sesion.DamePregunta().Imagen) {
                   contador ++;
                 }
               });
 
-              //Si el contador es dos o más, la imagen se usa en más de una Pregunta y, por lo tanto, no se puede borrar.
-              if (contador < 2){
+              // Si el contador es dos o más, la imagen se usa en más de una Pregunta y, por lo tanto, no se puede borrar.
+              if (contador < 2) {
                 this.peticionesAPI.BorrarImagenPregunta(this.sesion.DamePregunta().Imagen).subscribe();
-                console.log ("IMAGEN ELIMINADA");
+                console.log ('IMAGEN ELIMINADA');
               }
             }
           });
 
-          console.log ("IMAGEN EN USO")
+        console.log ('IMAGEN EN USO');
         this.peticionesAPI.BorrarPregunta(
                       this.sesion.DamePregunta().id)
             .subscribe(() => {
@@ -3369,7 +3329,45 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
     }
 
     return rankingJuegoDeVotacion;
+  }
+
+  public PrepararTablaRankingEquipoVotacionUnoATodos(listaEquiposOrdenadaPorPuntos: EquipoJuegoDeVotacionUnoATodos[],
+                                                     equiposDelJuego: Equipo[]): TablaEquipoJuegoDeVotacionUnoATodos[] {
+    console.log (' EN CALCULOS');
+    console.log (listaEquiposOrdenadaPorPuntos);
+    const rankingJuegoDeVotacion: TablaEquipoJuegoDeVotacionUnoATodos [] = [];
+    // tslint:disable-next-line:prefer-for-oF
+    for (let i = 0; i < listaEquiposOrdenadaPorPuntos.length; i++) {
+      let equipo: Equipo;
+      const equipoId = listaEquiposOrdenadaPorPuntos[i].equipoId;
+      equipo = equiposDelJuego.filter(res => res.id === equipoId)[0];
+      // tslint:disable-next-line:max-line-length
+
+      const elem = new TablaEquipoJuegoDeVotacionUnoATodos(i + 1, equipo.Nombre, 0, equipoId);
+      rankingJuegoDeVotacion[i] = elem;
+    }
+
+    // Ahora voy a ver qué equipos ya han votado para acumular sus votos y marcarlos
+    // como que ya han votado
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < listaEquiposOrdenadaPorPuntos.length; i++) {
+      if (listaEquiposOrdenadaPorPuntos[i].Votos) {
+        // Este equipo ya ha votado
+        const equipo = listaEquiposOrdenadaPorPuntos[i];
+        // Asigno los puntos a los destinatorios
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < equipo.Votos.length; j++) {
+          const votado = rankingJuegoDeVotacion.filter (eq => eq.id === equipo.Votos[j].equipoId)[0];
+          votado.puntos = votado.puntos + equipo.Votos[j].puntos;
+        }
+        // Marque que el alumno ya ha votado
+        rankingJuegoDeVotacion.filter (eq => eq.id === equipo.equipoId)[0].votado = true;
+      }
+    }
+
+    return rankingJuegoDeVotacion;
 }
+
 
 public PrepararTablaRankingIndividualVotacionUnoATodosAcabado(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[],
                                                               // tslint:disable-next-line:max-line-length
@@ -3388,6 +3386,25 @@ public PrepararTablaRankingIndividualVotacionUnoATodosAcabado(listaAlumnosOrdena
     }
 
     return rankingJuegoDeVotacion;
+}
+
+public PrepararTablaRankingEquipoVotacionUnoATodosAcabado(listaEquiposOrdenadaPorPuntos: EquipoJuegoDeVotacionUnoATodos[],
+  // tslint:disable-next-line:max-line-length
+                                                          equiposDelJuego: Equipo[]): TablaEquipoJuegoDeVotacionUnoATodos[] {
+  const rankingJuegoDeVotacion: TablaEquipoJuegoDeVotacionUnoATodos [] = [];
+  // tslint:disable-next-line:prefer-for-oF
+  for (let i = 0; i < listaEquiposOrdenadaPorPuntos.length; i++) {
+    let equipo: Equipo;
+    const equipoId = listaEquiposOrdenadaPorPuntos[i].equipoId;
+    equipo = equiposDelJuego.filter(res => res.id === equipoId)[0];
+    // tslint:disable-next-line:max-line-length
+
+    const elem = new TablaEquipoJuegoDeVotacionUnoATodos(i + 1, equipo.Nombre,
+    listaEquiposOrdenadaPorPuntos[i].puntosTotales, equipoId);
+    rankingJuegoDeVotacion[i] = elem;
+  }
+
+  return rankingJuegoDeVotacion;
 }
 
 
@@ -3660,77 +3677,91 @@ public PrepararTablaRankingIndividualVotacionTodosAUnoAcabado(listaAlumnosOrdena
     //////////////////////////////////////// JUEGO DE CUESTIONARIO ///////////////////////////////////
   public PrepararTablaRankingCuestionario(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeCuestionario[],
                                           alumnosDelJuego: Alumno[]): TablaAlumnoJuegoDeCuestionario[] {
-    const rankingJuegoDeCompeticion: TablaAlumnoJuegoDeCuestionario [] = [];
+    const rankingJuegoDeCuestionario: TablaAlumnoJuegoDeCuestionario [] = [];
     // tslint:disable-next-line:prefer-for-oF
     for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
     let alumno: Alumno;
     const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
     alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
-    rankingJuegoDeCompeticion[i] = new TablaAlumnoJuegoDeCuestionario(alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+    rankingJuegoDeCuestionario[i] = new TablaAlumnoJuegoDeCuestionario(alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
     // tslint:disable-next-line:max-line-length
     listaAlumnosOrdenadaPorPuntos[i].Nota, listaAlumnosOrdenadaPorPuntos[i].Contestado, alumnoId, listaAlumnosOrdenadaPorPuntos[i].TiempoEmpleado);
     }
-    return rankingJuegoDeCompeticion;
+    return rankingJuegoDeCuestionario;
   }
 
-  // Elimina juego de cuestionario y posterior mente procederemos a eliminar los alumnos de ese juego de cuestionario
-  public EliminarJuegoDeCuestionario(): any {
-    const eliminaObservable = new Observable ( obs => {
-          this.peticionesAPI.BorrarJuegoDeCuestionario(
-                    this.sesion.DameJuego().id)
-          .subscribe(() => {
-            this.EliminarAlumnosJuegoDeCuestionario();
-            this.EliminaRespuestasJuegoDeCuestionario();
-            obs.next ();
-          });
-    });
-    return eliminaObservable;
+  public PrepararTablaRankingEquiposCuestionario(listaEquiposOrdenadaPorPuntos: EquipoJuegoDeCuestionario[],
+                                                 equiposDelJuego: Equipo[]): TablaEquipoJuegoDeCuestionario[] {
+    const rankingJuegoDeCuestionario: TablaEquipoJuegoDeCuestionario [] = [];
+    // tslint:disable-next-line:prefer-for-oF
+    for (let i = 0; i < listaEquiposOrdenadaPorPuntos.length; i++) {
+      let equipo: Equipo;
+      const equipoId = listaEquiposOrdenadaPorPuntos[i].equipoId;
+      equipo = equiposDelJuego.filter(res => res.id === equipoId)[0];
+      // tslint:disable-next-line:max-line-length
+      rankingJuegoDeCuestionario[i] = new TablaEquipoJuegoDeCuestionario(equipo.Nombre, listaEquiposOrdenadaPorPuntos[i].Nota, listaEquiposOrdenadaPorPuntos[i].Contestado, equipoId, listaEquiposOrdenadaPorPuntos[i].TiempoEmpleado);
+    }
+    return rankingJuegoDeCuestionario;
   }
 
-  // tslint:disable-next-line:max-line-length
-  // Esta funcion recupera todos los alumnos que estaban inscritos en el juego de cuestionario y los borra. Esto lo hacemos para no dejar matriculas que no
-  // nos sirven dentro de la base de datos
-  private EliminarAlumnosJuegoDeCuestionario() {
-    // Pido los alumnos correspondientes al juego que voy a borrar
-    this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionario(this.sesion.DameJuego().id)
-    .subscribe( AlumnosDelJuego => {
-      if (AlumnosDelJuego[0] !== undefined) {
+  // // Elimina juego de cuestionario y posterior mente procederemos a eliminar los alumnos de ese juego de cuestionario
+  // public EliminarJuegoDeCuestionario(): any {
+  //   const eliminaObservable = new Observable ( obs => {
+  //         this.peticionesAPI.BorrarJuegoDeCuestionario(
+  //                   this.sesion.DameJuego().id)
+  //         .subscribe(() => {
+  //           this.EliminarAlumnosJuegoDeCuestionario();
+  //           this.EliminaRespuestasJuegoDeCuestionario();
+  //           obs.next ();
+  //         });
+  //   });
+  //   return eliminaObservable;
+  // }
 
-        // Una vez recibo las inscripciones, las voy borrando una a una
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < AlumnosDelJuego.length; i++) {
-          this.peticionesAPI.BorraAlumnoDelJuegoDeCuestionario(AlumnosDelJuego[i].id)
-          .subscribe(() => {
-              console.log('Inscripcion al juego borrada correctamente');
-          });
-        }
-      } else {
-        console.log('No hay alumnos en el juego de cuestionario');
-      }
+  // // tslint:disable-next-line:max-line-length
+  // // Esta funcion recupera todos los alumnos que estaban inscritos en el juego de cuestionario y los borra. Esto lo hacemos para no dejar matriculas que no
+  // // nos sirven dentro de la base de datos
+  // private EliminarAlumnosJuegoDeCuestionario() {
+  //   // Pido los alumnos correspondientes al juego que voy a borrar
+  //   this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionario(this.sesion.DameJuego().id)
+  //   .subscribe( AlumnosDelJuego => {
+  //     if (AlumnosDelJuego[0] !== undefined) {
 
-    });
-  }
+  //       // Una vez recibo las inscripciones, las voy borrando una a una
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let i = 0; i < AlumnosDelJuego.length; i++) {
+  //         this.peticionesAPI.BorraAlumnoDelJuegoDeCuestionario(AlumnosDelJuego[i].id)
+  //         .subscribe(() => {
+  //             console.log('Inscripcion al juego borrada correctamente');
+  //         });
+  //       }
+  //     } else {
+  //       console.log('No hay alumnos en el juego de cuestionario');
+  //     }
 
-  private EliminaRespuestasJuegoDeCuestionario() {
-    // Pido los alumnos correspondientes al juego que voy a borrar
-    this.peticionesAPI.DameRespuestasAlumnoJuegoDeCuestionario(this.sesion.DameJuego().id)
-    .subscribe( respuestas => {
-      if (respuestas[0] !== undefined) {
+  //   });
+  // }
 
-        // Una vez recibo las inscripciones, las voy borrando una a una
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < respuestas.length; i++) {
-          this.peticionesAPI.BorraRespuestaAlumnoDelJuegoDeCuestionario(respuestas[i].id)
-          .subscribe(() => {
-              console.log('Respuesta borrada correctamente');
-          });
-        }
-      } else {
-        console.log('No hay respuestas en el juego de cuestionario');
-      }
+  // private EliminaRespuestasJuegoDeCuestionario() {
+  //   // Pido los alumnos correspondientes al juego que voy a borrar
+  //   this.peticionesAPI.DameRespuestasAlumnoJuegoDeCuestionario(this.sesion.DameJuego().id)
+  //   .subscribe( respuestas => {
+  //     if (respuestas[0] !== undefined) {
 
-    });
-  }
+  //       // Una vez recibo las inscripciones, las voy borrando una a una
+  //       // tslint:disable-next-line:prefer-for-of
+  //       for (let i = 0; i < respuestas.length; i++) {
+  //         this.peticionesAPI.BorraRespuestaAlumnoDelJuegoDeCuestionario(respuestas[i].id)
+  //         .subscribe(() => {
+  //             console.log('Respuesta borrada correctamente');
+  //         });
+  //       }
+  //     } else {
+  //       console.log('No hay respuestas en el juego de cuestionario');
+  //     }
+
+  //   });
+  // }
 
 
 
@@ -3751,38 +3782,38 @@ listaAlumnosOrdenadaPorPuntos[i].Puntuacion, listaAlumnosOrdenadaPorPuntos[i].Et
 return rankingJuegoDeCompeticion;
 }
 
-public EliminarJuegoDeGeocaching(): any {
-  const eliminaObservable = new Observable ( obs => {
-        this.peticionesAPI.BorrarJuegoDeGeocaching(
-                  this.sesion.DameJuego().id)
-        .subscribe(() => {
-          this.EliminarAlumnosJuegoDeGeocaching();
-          obs.next ();
-        });
-  });
-  return eliminaObservable;
-}
+// public EliminarJuegoDeGeocaching(): any {
+//   const eliminaObservable = new Observable ( obs => {
+//         this.peticionesAPI.BorrarJuegoDeGeocaching(
+//                   this.sesion.DameJuego().id)
+//         .subscribe(() => {
+//           this.EliminarAlumnosJuegoDeGeocaching();
+//           obs.next ();
+//         });
+//   });
+//   return eliminaObservable;
+// }
 
-private EliminarAlumnosJuegoDeGeocaching() {
-  // Pido los alumnos correspondientes al juego que voy a borrar
-  this.peticionesAPI.DameAlumnosDelJuegoDeGeocaching(this.sesion.DameJuego().id)
-  .subscribe( AlumnosDelJuego => {
-    if (AlumnosDelJuego[0] !== undefined) {
+// private EliminarAlumnosJuegoDeGeocaching() {
+//   // Pido los alumnos correspondientes al juego que voy a borrar
+//   this.peticionesAPI.DameAlumnosDelJuegoDeGeocaching(this.sesion.DameJuego().id)
+//   .subscribe( AlumnosDelJuego => {
+//     if (AlumnosDelJuego[0] !== undefined) {
 
-      // Una vez recibo las inscripciones, las voy borrando una a una
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < AlumnosDelJuego.length; i++) {
-        this.peticionesAPI.BorraAlumnoDelJuegoDeGeocaching(AlumnosDelJuego[i].id)
-        .subscribe(() => {
-            console.log('Inscripcion al juego borrada correctamente');
-        });
-      }
-    } else {
-      console.log('No hay alumnos en el juego de geocaching');
-    }
+//       // Una vez recibo las inscripciones, las voy borrando una a una
+//       // tslint:disable-next-line:prefer-for-of
+//       for (let i = 0; i < AlumnosDelJuego.length; i++) {
+//         this.peticionesAPI.BorraAlumnoDelJuegoDeGeocaching(AlumnosDelJuego[i].id)
+//         .subscribe(() => {
+//             console.log('Inscripcion al juego borrada correctamente');
+//         });
+//       }
+//     } else {
+//       console.log('No hay alumnos en el juego de geocaching');
+//     }
 
-  });
-}
+//   });
+// }
 
 // Devuelve la lista de ficheros de la familia que ya están en la base de datos
 // Se usa al cargar una familia nueva para asegurarnos de que no cargamos ficheros
@@ -3959,7 +3990,7 @@ public VerificarFicherosColeccion(coleccion: any): any {
 }
 
 
-public NombreFicheroImagenPreguntaRepetido (nombreFichero: string): any {
+public NombreFicheroImagenPreguntaRepetido(nombreFichero: string): any {
   const verificarFicheroObservable = new Observable ( obs => {
     this.peticionesAPI.DameImagenPregunta (nombreFichero)
     .subscribe (
@@ -4005,5 +4036,2303 @@ public VerificarFicherosPreguntas(preguntas: any): any {
   });
   return listaFicherosObservable;
 }
+
+
+
+  // Devuelve el Observable del Juego específico en función del Tipo de Juego y su ID
+  public DameJuego(tipoJuego: string, juegoID: number): Observable<any> {
+    switch (tipoJuego) {
+      case "Juego De Avatar":
+        return this.peticionesAPI.DameJuegoDeAvatar(juegoID);
+
+      case "Juego De Coger Turno Rápido":
+        return this.peticionesAPI.DameJuegoDeCogerTurnoRapido(juegoID);
+
+      case "Juego De Colección":
+        return this.peticionesAPI.DameJuegoDeColeccion(juegoID);
+
+      case "Juego De Competición Fórmula Uno":
+        return this.peticionesAPI.DameJuegoDeCompeticionFormulaUno(juegoID);
+
+      case "Juego De Competición Liga":
+        return this.peticionesAPI.DameJuegoDeCompeticionLiga(juegoID);
+
+      case "Juego De Cuestionario":
+        return this.peticionesAPI.DameJuegoDeCuestionarioPorID(juegoID);
+
+      case "Juego De Cuestionario Rápido":
+        return this.peticionesAPI.DameJuegoDeCuestionarioRapido(juegoID);
+
+      case "Juego De Cuestionario de Satisfacción":
+        return this.peticionesAPI.DameJuegoDeCuestionarioSatisfaccion(juegoID);
+
+      case "Juego De Encuesta Rápida":
+        return this.peticionesAPI.DameJuegoDeEncuestaRapida(juegoID);
+
+      case "Juego De Evaluación":
+        return this.peticionesAPI.DameJuegoDeEvaluacion(juegoID);
+
+      case "Juego De Geocaching":
+        return this.peticionesAPI.DameJuegoDeGeocachingPorID(juegoID);
+
+      case "Juego De Puntos":
+        return this.peticionesAPI.DameJuegoDePuntos(juegoID);
+
+      case "Juego De Votación Rápida":
+        return this.peticionesAPI.DameJuegoDeVotacionRapida(juegoID);
+
+      case "Juego De Votación Uno A Todos":
+        return this.peticionesAPI.DameJuegoDeVotacionTodosAUno(juegoID);
+
+      case "Juego De Votación Todos A Uno":
+        return this.peticionesAPI.DameJuegoDeVotacionUnoATodos(juegoID);
+
+      default:
+        return null;
+    }
+  }
+
+  // Devuelve el Observable de los Juegos en función del Tipo de Juego y el Grupo al que pertenecen
+  public DameJuegosDelGrupoSegunTipo(tipoJuego: string, grupoID: number): Observable<any> {
+    const profesor: Profesor = this.sesion.DameProfesor();
+    switch (tipoJuego) {
+      case "Juego De Avatar":
+        return this.peticionesAPI.DameJuegoDeAvatarGrupo(grupoID);
+
+      case "Juego De Coger Turno Rápido": // Este Tipo de Juego no se asocia a ningún Grupo, así que lo buscamos según el Profesor
+        return this.peticionesAPI.DameJuegosDeCogerTurnoRapido(profesor.id);
+
+      case "Juego De Colección":
+        return this.peticionesAPI.DameJuegoDeColeccionGrupo(grupoID);
+
+      case "Juego De Competición Fórmula Uno":
+        return this.peticionesAPI.DameJuegoDeCompeticionFormulaUnoGrupo(grupoID);
+
+      case "Juego De Competición Liga":
+        return this.peticionesAPI.DameJuegoDeCompeticionLigaGrupo(grupoID);
+
+      case "Juego De Cuestionario":
+        return this.peticionesAPI.DameJuegoDeCuestionario(grupoID);
+
+      case "Juego De Cuestionario Rápido": // Este Tipo de Juego no se asocia a ningún Grupo, así que lo buscamos según el Profesor
+        return this.peticionesAPI.DameJuegosDeCuestionarioRapido(profesor.id);
+
+      case "Juego De Cuestionario de Satisfacción":
+        return this.peticionesAPI.DameJuegosDeCuestionarioSatisfaccion(grupoID);
+
+      case "Juego De Encuesta Rápida": // Este Tipo de Juego no se asocia a ningún Grupo, así que lo buscamos según el Profesor
+        return this.peticionesAPI.DameJuegosDeEncuestaRapida(profesor.id);
+
+      case "Juego De Evaluación":
+        return this.peticionesAPI.DameJuegosDeEvaluacion(grupoID);
+
+      case "Juego De Geocaching":
+        return this.peticionesAPI.DameJuegoDeGeocaching(grupoID);
+
+      case "Juego De Puntos":
+        return this.peticionesAPI.DameJuegoDePuntosGrupo(grupoID);
+
+      case "Juego De Votación Rápida": // Este Tipo de Juego no se asocia a ningún Grupo, así que lo buscamos según el Profesor
+        return this.peticionesAPI.DameJuegosDeVotacionRapida(profesor.id);
+
+      case "Juego De Votación Uno A Todos":
+        return this.peticionesAPI.DameJuegosDeVotacionTodosAUno(grupoID);
+
+      case "Juego De Votación Todos A Uno":
+        return this.peticionesAPI.DameJuegosDeVotacionUnoATodos(grupoID);
+
+      default:
+        return null;
+    }
+  }
+
+
+  // ---------------------------------------- CÁLCULOS PARA EL REGISTRO DE ACTIVIDAD (EVENTOS) ----------------------------------------//
+
+  // Devuelve el Observable con los datos específicos (que no van explícitos, es decir, van con un ID) de un Evento
+  public DameDatosEvento(evento: Evento): Observable<any> {
+    const datosEventoObservable: Observable<any> = new Observable((obs) => {
+      let datosEvento: any = {};
+
+      switch (Number(evento.TipoEvento)) {
+        case 1: // Grupo + Juego
+          this.DameJuego(evento.TipoJuego, evento.JuegoID).subscribe((juego) => {
+            // console.log(juego);
+            this.peticionesAPI.DameGrupo(juego.grupoId).subscribe((grupo) => {
+              // console.log(grupo);
+              datosEvento = {
+                juego,
+                grupo
+              };
+              obs.next(datosEvento);
+            }, (err) => {
+              console.log(err);
+              Swal.fire({
+                title: "Error al obtener el Grupos del Evento seleccionado",
+                text: err.message,
+                icon: "error",
+                showConfirmButton: false,
+                timer: 3000
+              });
+              obs.next(datosEvento);
+            });
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error al obtener el Juego del Evento seleccionado",
+              text: err.message,
+              icon: "error",
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(datosEvento);
+          });
+          break;
+
+        // Grupo + Alumno + Juego
+        case 2:
+        case 30:
+        case 31:
+        case 32:
+          this.peticionesAPI.DameAlumno(evento.AlumnoID).subscribe((alumno) => {
+            // console.log(alumno);
+            this.DameJuego(evento.TipoJuego, evento.JuegoID).subscribe((juego) => {
+              // console.log(juego);
+              this.peticionesAPI.DameGrupo(juego.grupoId).subscribe((grupo) => {
+                // console.log(grupo);
+                datosEvento = {
+                  alumno,
+                  juego,
+                  grupo
+                };
+                obs.next(datosEvento);
+              }, (err) => {
+                console.log(err);
+                Swal.fire({
+                  title: "Error al obtener el Grupo del Evento seleccionado",
+                  text: err.message,
+                  icon: "error",
+                  showConfirmButton: false,
+                  timer: 3000
+                });
+                obs.next(datosEvento);
+              });
+            }, (err) => {
+              console.log(err);
+              Swal.fire({
+                title: "Error al obtener el Juego del Evento seleccionado",
+                text: err.message,
+                icon: "error",
+                showConfirmButton: false,
+                timer: 3000
+              });
+              obs.next(datosEvento);
+            });
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error al obtener el Alumno del Evento seleccionado",
+              text: err.message,
+              icon: "error",
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(datosEvento);
+          });
+          break;
+
+        case 10: // Grupo + Alumno + Equipo + Juego + Punto
+          this.DameJuego(evento.TipoJuego, evento.JuegoID).subscribe((juego) => {
+            // console.log(juego);
+            this.peticionesAPI.DameGrupo(juego.grupoId).subscribe((grupo) => {
+              // console.log(grupo);
+              const profesor: Profesor = this.sesion.DameProfesor();
+              this.peticionesAPI.DameTipoDePunto(evento.PuntoID, profesor.id).subscribe((punto) => {
+                // console.log(punto);
+                if(juego.Modo == 'Individual') { // Juego de Puntos Individual
+                  this.peticionesAPI.DameAlumno(evento.AlumnoID).subscribe((alumno) => {
+                    // console.log(alumno);
+                    datosEvento = {
+                      juego,
+                      grupo,
+                      punto,
+                      alumno
+                    };
+                    obs.next(datosEvento);
+                  }, (err) => {
+                    console.log(err);
+                    Swal.fire({
+                      title: "Error al obtener el Alumno del Evento seleccionado",
+                      text: err.message,
+                      icon: "error",
+                      showConfirmButton: false,
+                      timer: 3000
+                    });
+                    obs.next(datosEvento);
+                  });
+                } else { // Juego de Puntos en Equipos
+                  this.peticionesAPI.DameEquipo(evento.EquipoID).subscribe((equipo) => {
+                    // console.log(equipo);
+                    datosEvento = {
+                      juego,
+                      grupo,
+                      punto,
+                      equipo
+                    };
+                    obs.next(datosEvento);
+                  }, (err) => {
+                    console.log(err);
+                    Swal.fire({
+                      title: "Error al obtener el Equipo del Evento seleccionado",
+                      text: err.message,
+                      icon: "error",
+                      showConfirmButton: false,
+                      timer: 3000
+                    });
+                    obs.next(datosEvento);
+                  });
+                }
+              }, (err) => {
+                console.log(err);
+                Swal.fire({
+                  title: "Error al obtener el Punto del Evento seleccionado",
+                  text: err.message,
+                  icon: "error",
+                  showConfirmButton: false,
+                  timer: 3000
+                });
+                obs.next(datosEvento);
+              });
+            }, (err) => {
+              console.log(err);
+              Swal.fire({
+                title: "Error al obtener el Grupo del Evento seleccionado",
+                text: err.message,
+                icon: "error",
+                showConfirmButton: false,
+                timer: 3000
+              });
+              obs.next(datosEvento);
+            });
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error al obtener el Juego del Evento seleccionado",
+              text: err.message,
+              icon: "error",
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(datosEvento);
+          });
+          break;
+
+        case 11: // Grupo + Alumno + Equipo + Juego + Nivel
+          this.DameJuego(evento.TipoJuego, evento.JuegoID).subscribe((juego) => {
+            // console.log(juego);
+            this.peticionesAPI.DameGrupo(juego.grupoId).subscribe((grupo) => {
+              // console.log(grupo);
+              this.peticionesAPI.DameNivel(evento.NivelID).subscribe((nivel) => {
+                // console.log(punto);
+                if(juego.Modo == 'Individual') { // Juego de Puntos Individual
+                  this.peticionesAPI.DameAlumno(evento.AlumnoID).subscribe((alumno) => {
+                    // console.log(alumno);
+                    datosEvento = {
+                      juego,
+                      grupo,
+                      nivel,
+                      alumno
+                    };
+                    obs.next(datosEvento);
+                  }, (err) => {
+                    console.log(err);
+                    Swal.fire({
+                      title: "Error al obtener el Alumno del Evento seleccionado",
+                      text: err.message,
+                      icon: "error",
+                      showConfirmButton: false,
+                      timer: 3000
+                    });
+                    obs.next(datosEvento);
+                  });
+                } else { // Juego de Puntos en Equipos
+                  this.peticionesAPI.DameEquipo(evento.EquipoID).subscribe((equipo) => {
+                    // console.log(equipo);
+                    datosEvento = {
+                      juego,
+                      grupo,
+                      nivel,
+                      equipo
+                    };
+                    obs.next(datosEvento);
+                  }, (err) => {
+                    console.log(err);
+                    Swal.fire({
+                      title: "Error al obtener el Equipo del Evento seleccionado",
+                      text: err.message,
+                      icon: "error",
+                      showConfirmButton: false,
+                      timer: 3000
+                    });
+                    obs.next(datosEvento);
+                  });
+                }
+              }, (err) => {
+                console.log(err);
+                Swal.fire({
+                  title: "Error al obtener el Nivel del Evento seleccionado",
+                  text: err.message,
+                  icon: "error",
+                  showConfirmButton: false,
+                  timer: 3000
+                });
+                obs.next(datosEvento);
+              });
+            }, (err) => {
+              console.log(err);
+              Swal.fire({
+                title: "Error al obtener el Grupo del Evento seleccionado",
+                text: err.message,
+                icon: "error",
+                showConfirmButton: false,
+                timer: 3000
+              });
+              obs.next(datosEvento);
+            });
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error al obtener el Juego del Evento seleccionado",
+              text: err.message,
+              icon: "error",
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(datosEvento);
+          });
+          break;
+
+        // Grupo + Alumno + Equipo + Juego
+        case 20:
+        case 22:
+          this.DameJuego(evento.TipoJuego, evento.JuegoID).subscribe((juego) => {
+            // console.log(juego);
+            this.peticionesAPI.DameGrupo(juego.grupoId).subscribe((grupo) => {
+              // console.log(grupo);
+              if(juego.Modo == 'Individual') { // Juego Individual
+                this.peticionesAPI.DameAlumno(evento.AlumnoID).subscribe((alumno) => {
+                  // console.log(alumno);
+                  datosEvento = {
+                    juego,
+                    grupo,
+                    alumno
+                  };
+                  obs.next(datosEvento);
+                }, (err) => {
+                  console.log(err);
+                  Swal.fire({
+                    title: "Error al obtener el Alumno del Evento seleccionado",
+                    text: err.message,
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 3000
+                  });
+                  obs.next(datosEvento);
+                });
+              } else { // Juego en Equipos
+                this.peticionesAPI.DameEquipo(evento.EquipoID).subscribe((equipo) => {
+                  // console.log(equipo);
+                  datosEvento = {
+                    juego,
+                    grupo,
+                    equipo
+                  };
+                  obs.next(datosEvento);
+                }, (err) => {
+                  console.log(err);
+                  Swal.fire({
+                    title: "Error al obtener el Equipo del Evento seleccionado",
+                    text: err.message,
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 3000
+                  });
+                  obs.next(datosEvento);
+                });
+              }
+            }, (err) => {
+              console.log(err);
+              Swal.fire({
+                title: "Error al obtener el Grupo del Evento seleccionado",
+                text: err.message,
+                icon: "error",
+                showConfirmButton: false,
+                timer: 3000
+              });
+              obs.next(datosEvento);
+            });
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error al obtener el Juego del Evento seleccionado",
+              text: err.message,
+              icon: "error",
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(datosEvento);
+          });
+          break;
+
+        case 21: // Grupo + Alumno + Equipo + Juego + AlumnoReceptorCromo + EquipoReceptorCromo
+          this.DameJuego(evento.TipoJuego, evento.JuegoID).subscribe((juego) => {
+            // console.log(juego);
+            this.peticionesAPI.DameGrupo(juego.grupoId).subscribe((grupo) => {
+              // console.log(grupo);
+              if(juego.Modo == 'Individual') { // Juego de Colección Individual
+                this.peticionesAPI.DameAlumno(evento.AlumnoID).subscribe((alumno) => {
+                  // console.log(alumno);
+                  this.peticionesAPI.DameAlumno(evento.AlumnoReceptorCromoID).subscribe((alumnoReceptorCromo) => {
+                    // console.log(alumnoReceptorCromo);
+                    datosEvento = {
+                      juego,
+                      grupo,
+                      alumno,
+                      alumnoReceptorCromo
+                    };
+                    obs.next(datosEvento);
+                  }, (err) => {
+                    console.log(err);
+                    Swal.fire({
+                      title: "Error al obtener el Alumno Receptor de Cromo del Evento seleccionado",
+                      text: err.message,
+                      icon: "error",
+                      showConfirmButton: false,
+                      timer: 3000
+                    });
+                    obs.next(datosEvento);
+                  });
+                }, (err) => {
+                  console.log(err);
+                  Swal.fire({
+                    title: "Error al obtener el Alumno del Evento seleccionado",
+                    text: err.message,
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 3000
+                  });
+                  obs.next(datosEvento);
+                });
+              } else { // Juego de Colección en Equipos
+                this.peticionesAPI.DameEquipo(evento.EquipoID).subscribe((equipo) => {
+                  // console.log(equipo);
+                  this.peticionesAPI.DameEquipo(evento.EquipoReceptorCromoID).subscribe((equipoReceptorCromo) => {
+                    datosEvento = {
+                      juego,
+                      grupo,
+                      equipo,
+                      equipoReceptorCromo
+                    };
+                    obs.next(datosEvento);
+                  }, (err) => {
+                    console.log(err);
+                    Swal.fire({
+                      title: "Error al obtener el Equipo Receptor de Cromo del Evento seleccionado",
+                      text: err.message,
+                      icon: "error",
+                      showConfirmButton: false,
+                      timer: 3000
+                    });
+                    obs.next(datosEvento);
+                  });
+                }, (err) => {
+                  console.log(err);
+                  Swal.fire({
+                    title: "Error al obtener el Equipo del Evento seleccionado",
+                    text: err.message,
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 3000
+                  });
+                  obs.next(datosEvento);
+                });
+              }
+            }, (err) => {
+              console.log(err);
+              Swal.fire({
+                title: "Error al obtener el Grupo del Evento seleccionado",
+                text: err.message,
+                icon: "error",
+                showConfirmButton: false,
+                timer: 3000
+              });
+              obs.next(datosEvento);
+            });
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error al obtener el Juego del Evento seleccionado",
+              text: err.message,
+              icon: "error",
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(datosEvento);
+          });
+          break;
+
+        default:
+          obs.next(datosEvento);
+          break;
+      }
+    });
+    return datosEventoObservable;
+  }
+
+  // Devuelve el Observable con los valores para generar la mini tabla de Filtros (Para el PDF del Registro de Actividad)
+  public DameTablaFiltros(filtrarTipoEvento: boolean, filtroTipoEvento: number, filtrarFecha: boolean, filtroFechaInicial: Date, filtroFechaFinal: Date, filtroGrupo: Grupo, filtrarAlumno: boolean, filtroAlumno: Alumno, filtrarEquipo: boolean, filtroEquipo: Equipo, filtrarTipoJuego: boolean, filtroTipoJuego: string, filtrarJuego: boolean, filtroJuego: any, filtrarPunto: boolean, filtroPunto: Punto, filtrarNivel: boolean, filtroNivel: Nivel, filtrarAlumnoReceptorCromo: boolean, filtroAlumnoReceptorCromo: Alumno, filtrarEquipoReceptorCromo: boolean, filtroEquipoReceptorCromo: Equipo, filtrarPrivilegio: boolean, filtroPrivilegio: number): Observable<any> {
+    const tablaFiltrosObservable: Observable<any> = new Observable((obs) => {
+      const tablaFiltros: string[] = [];
+
+      if(filtrarTipoEvento) {
+        switch(Number(filtroTipoEvento)) {
+          case 1: tablaFiltros.push("Creación del Juego");
+                  break;
+          case 2: tablaFiltros.push("Acceso al Juego");
+                  break;
+          case 10: tablaFiltros.push("Asignación de Punto/s");
+                   break;
+          case 11: tablaFiltros.push("Ascenso de Nivel (Juego de Puntos)");
+                   break;
+          case 20: tablaFiltros.push("Asignación de Cromo/s");
+                   break;
+          case 21: tablaFiltros.push("Regalo de Cromo");
+                   break;
+          case 22: tablaFiltros.push("Finalización de Colección de Cromos");
+                   break;
+          case 30: tablaFiltros.push("Asignación de Privilegio (Juego de Avatar)");
+                   break;
+          case 31: tablaFiltros.push("Eliminación de Privilegio (Juego de Avatar)");
+                   break;
+          case 32: tablaFiltros.push("Modificación de Avatar (Juego de Avatar)");
+                   break;
+        }
+      } else { tablaFiltros.push(" - "); }
+
+      if(filtrarFecha) {
+        const diaInicial = ('0' + filtroFechaInicial.getDate()).slice(-2);
+        const mesInicial = ('0' + (filtroFechaInicial.getMonth() + 1)).slice(-2);
+        const anyoInicial = filtroFechaInicial.getFullYear();
+        const fechaInicial: string = `${diaInicial}/${mesInicial}/${anyoInicial}`;
+
+        const diaFinal = ('0' + filtroFechaFinal.getDate()).slice(-2);
+        const mesFinal = ('0' + (filtroFechaFinal.getMonth() + 1)).slice(-2);
+        const anyoFinal = filtroFechaFinal.getFullYear();
+        const fechaFinal: string = `${diaFinal}/${mesFinal}/${anyoFinal}`;
+
+        tablaFiltros.push(`Entre el ${fechaInicial} y el ${fechaFinal}`);
+      } else { tablaFiltros.push(" - "); }
+
+      if(filtroGrupo.id != null) { tablaFiltros.push(filtroGrupo.Nombre); } else { tablaFiltros.push(" - "); }
+
+      if(filtrarAlumno) { tablaFiltros.push(`${filtroAlumno.Nombre} ${filtroAlumno.PrimerApellido} ${filtroAlumno.SegundoApellido}`); } else if(filtrarEquipo) { tablaFiltros.push(`${filtroEquipo.Nombre} (Equipo)`); } else { tablaFiltros.push(" - "); }
+
+      if(filtrarTipoJuego) {
+        if(filtrarJuego) { tablaFiltros.push(`${filtroJuego.NombreJuego} (${filtroTipoJuego})`); } else { tablaFiltros.push(`Tipo: ${filtroTipoJuego}`); }
+      } else {
+        if(filtrarJuego) { tablaFiltros.push(`Nombre: ${filtroJuego.NombreJuego}`); } else { tablaFiltros.push(" - "); }
+      }
+
+      if(filtrarPunto) { tablaFiltros.push(`Tipo: ${filtroPunto.Nombre}`); } else { tablaFiltros.push(" - "); }
+
+      if(filtrarNivel) { tablaFiltros.push(filtroNivel.Nombre); } else { tablaFiltros.push(" - "); }
+
+      if(filtrarAlumnoReceptorCromo) { tablaFiltros.push(`Cromo regalado a ${filtroAlumnoReceptorCromo.Nombre} ${filtroAlumnoReceptorCromo.PrimerApellido} ${filtroAlumnoReceptorCromo.SegundoApellido}`); } else if(filtrarEquipoReceptorCromo) { tablaFiltros.push(`Cromo regalado al equipo ${filtroEquipoReceptorCromo}`); } else { tablaFiltros.push(" - "); }
+
+      if(filtrarPrivilegio) {
+        let nombrePrivilegio: string = " ";
+        if (filtroPrivilegio == 5) {
+          nombrePrivilegio = "Privilegio Nota de Voz";
+        } else if (filtroPrivilegio == 6) {
+          nombrePrivilegio = "Privilegio Espiar";
+        } else {
+          nombrePrivilegio = `Privilegio ${filtroPrivilegio}`;
+        }
+
+        tablaFiltros.push(nombrePrivilegio);
+      } else { tablaFiltros.push(" - "); }
+
+      obs.next(tablaFiltros);
+    });
+    return tablaFiltrosObservable;
+  }
+
+  // Devuelve el Observable con los valores para generar la tabla de Eventos (Para el PDF del Registro de Actividad)
+  public DameTablaEventos(listaEventos: Evento[]): Observable<any> {
+    const tablaEventosObservable: Observable<any> = new Observable((obs) => {
+      const tablaEventos: string[][] = [];
+      let contadorFilas: number = 0; // Cuando sea igual a la longitud de la listaEventos, entonces se retornará para generar el PDF
+
+      for (let i: number = 0; i < listaEventos.length; i++) { // Lo hacemos con for en vez de foreach para que no se desordene la lista
+        const diaEvento = ('0' + listaEventos[i].FechayHora.getDate()).slice(-2);
+        const mesEvento = ('0' + (listaEventos[i].FechayHora.getMonth() + 1)).slice(-2);
+        const anyoEvento = listaEventos[i].FechayHora.getFullYear();
+        const horaEvento = ('0' + listaEventos[i].FechayHora.getHours()).slice(-2);
+        const minutosEvento = ('0' + listaEventos[i].FechayHora.getMinutes()).slice(-2);
+        const fechaEvento: string = `${diaEvento}/${mesEvento}/${anyoEvento} ${horaEvento}:${minutosEvento}`;
+
+        this.DameDatosEvento(listaEventos[i]).subscribe((datos) => {
+          switch (Number(listaEventos[i].TipoEvento)) {
+            case 1: // Grupo + Juego
+              tablaEventos[i] = ['Creación del Juego', fechaEvento, String(datos.grupo.Nombre), ' - ', `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', ' - ', ' - ', ' - '];
+              break;
+
+            case 2: // Grupo + Alumno + Juego
+              const alumnoEvento: string = `${datos.alumno.Nombre} ${datos.alumno.PrimerApellido} ${datos.alumno.SegundoApellido}`;
+              tablaEventos[i] = ['Acceso al Juego', fechaEvento, String(datos.grupo.Nombre), alumnoEvento, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', ' - ', ' - ', ' - '];
+              break;
+
+            case 10: // Grupo + Alumno + Equipo + Juego + Punto
+              if (datos.juego.Modo == 'Individual') { // Juego de Puntos Individual
+                const alumnoEvento: string = `${datos.alumno.Nombre} ${datos.alumno.PrimerApellido} ${datos.alumno.SegundoApellido}`;
+                tablaEventos[i] = ['Asignación de Punto/s', fechaEvento, String(datos.grupo.Nombre), alumnoEvento, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, `${listaEventos[i].NumeroPuntos} punto/s de ${String(datos.punto.Nombre)}`, ' - ', ' - ', ' - '];
+              } else { // Juego de Puntos en Equipos
+                tablaEventos[i] = ['Asignación de Punto/s', fechaEvento, String(datos.grupo.Nombre), `${String(datos.equipo.Nombre)} (Equipo)`, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, `${listaEventos[i].NumeroPuntos} punto/s de ${String(datos.punto.Nombre)}`, ' - ', ' - ', ' - '];
+              }
+              break;
+
+            case 11: // Grupo + Alumno + Equipo + Juego + Nivel
+              if (datos.juego.Modo == 'Individual') { // Juego de Puntos Individual
+                const alumnoEvento: string = `${datos.alumno.Nombre} ${datos.alumno.PrimerApellido} ${datos.alumno.SegundoApellido}`;
+                tablaEventos[i] = ['Ascenso de Nivel (Juego de Puntos)', fechaEvento, String(datos.grupo.Nombre), alumnoEvento, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', `${datos.nivel.Nombre} (${String(datos.nivel.PuntosAlcanzar)} p)`, ' - ', ' - '];
+              } else { // Juego de Puntos en Equipos
+                tablaEventos[i] = ['Ascenso de Nivel (Juego de Puntos)', fechaEvento, String(datos.grupo.Nombre), `${String(datos.equipo.Nombre)} (Equipo)`, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', `${datos.nivel.Nombre} (${String(datos.nivel.PuntosAlcanzar)} p)`, ' - ', ' - '];
+              }
+              break;
+
+            case 20: // Grupo + Alumno + Equipo + Juego + Cromos
+              if (datos.juego.Modo == 'Individual') { // Juego de Colección Individual
+                const alumnoEvento: string = `${datos.alumno.Nombre} ${datos.alumno.PrimerApellido} ${datos.alumno.SegundoApellido}`;
+                tablaEventos[i] = ['Asignación de Cromo/s', fechaEvento, String(datos.grupo.Nombre), alumnoEvento, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', ' - ', `${listaEventos[i].NumeroCromos} cromo/s`, ' - '];
+              } else { // Juego de Colección en Equipos
+                tablaEventos[i] = ['Asignación de Cromo/s', fechaEvento, String(datos.grupo.Nombre), `${String(datos.equipo.Nombre)} (Equipo)`, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', ' - ', `${listaEventos[i].NumeroCromos} cromo/s`, ' - '];
+              }
+              break;
+
+            case 21: // Grupo + Alumno + Equipo + Juego + AlumnoReceptorCromo + EquipoReceptorCromo
+              if (datos.juego.Modo == 'Individual') { // Juego de Colección Individual
+                const alumnoEvento: string = `${datos.alumno.Nombre} ${datos.alumno.PrimerApellido} ${datos.alumno.SegundoApellido}`;
+                const alumnoReceptorCromoEvento: string = `${datos.alumnoReceptorCromo.Nombre} ${datos.alumnoReceptorCromo.PrimerApellido} ${datos.alumnoReceptorCromo.SegundoApellido}`;
+                tablaEventos[i] = ['Regalo de Cromo', fechaEvento, String(datos.grupo.Nombre), alumnoEvento, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', ' - ', `Cromo regalado a ${alumnoReceptorCromoEvento}`, ' - '];
+              } else { // Juego de Colección en Equipos
+                tablaEventos[i] = ['Regalo de Cromo', fechaEvento, String(datos.grupo.Nombre), `${String(datos.equipo.Nombre)} (Equipo)`, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', ' - ', `Cromo regalado al Equipo ${String(datos.equipoReceptorCromo.Nombre)}`, ' - '];
+              }
+              break;
+
+            case 22: // Grupo + Alumno + Equipo + Juego
+              if (datos.juego.Modo == 'Individual') { // Juego de Colección Individual
+                const alumnoEvento: string = `${datos.alumno.Nombre} ${datos.alumno.PrimerApellido} ${datos.alumno.SegundoApellido}`;
+                tablaEventos[i] = ['Finalización de Colección de Cromos', fechaEvento, String(datos.grupo.Nombre), alumnoEvento, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', ' - ', ' - ', ' - '];
+              } else { // Juego de Colección en Equipos
+                tablaEventos[i] = ['Finalización de Colección de Cromos', fechaEvento, String(datos.grupo.Nombre), `${String(datos.equipo.Nombre)} (Equipo)`, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', ' - ', ' - ', ' - '];
+              }
+              break;
+
+            case 30: // Grupo + Alumno + Juego + Privilegio
+              let nombrePrivilegioAsignado: string = ' ';
+              if (listaEventos[i].Privilegio == 5) {
+                nombrePrivilegioAsignado = 'Privilegio Nota de Voz';
+              } else if (listaEventos[i].Privilegio == 6) {
+                nombrePrivilegioAsignado = 'Privilegio Espiar';
+              } else {
+                nombrePrivilegioAsignado = `Privilegio ${listaEventos[i].Privilegio}`;
+              }
+
+              const alumnoAsignacionPrivilegio: string = `${datos.alumno.Nombre} ${datos.alumno.PrimerApellido} ${datos.alumno.SegundoApellido}`;
+              tablaEventos[i] = ['Asignación de Privilegio (Juego de Avatar)', fechaEvento, String(datos.grupo.Nombre), alumnoAsignacionPrivilegio, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', ' - ', ' - ', `${nombrePrivilegioAsignado}`];
+              break;
+
+            case 31:
+              let nombrePrivilegioEliminado: string = ' ';
+              if (listaEventos[i].Privilegio == 5) {
+                nombrePrivilegioEliminado = 'Privilegio Nota de Voz';
+              } else if (listaEventos[i].Privilegio == 6) {
+                nombrePrivilegioEliminado = 'Privilegio Espiar';
+              } else {
+                nombrePrivilegioEliminado = `Privilegio ${listaEventos[i].Privilegio}`;
+              }
+
+              const alumnoEliminacionPrivilegio: string = `${datos.alumno.Nombre} ${datos.alumno.PrimerApellido} ${datos.alumno.SegundoApellido}`;
+              tablaEventos[i] = ['Eliminación de Privilegio (Juego de Avatar)', fechaEvento, String(datos.grupo.Nombre), alumnoEliminacionPrivilegio, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', ' - ', ' - ', `${nombrePrivilegioEliminado}`];
+              break;
+
+            case 32:
+              const alumnoModificacionAvatar: string = `${datos.alumno.Nombre} ${datos.alumno.PrimerApellido} ${datos.alumno.SegundoApellido}`;
+              tablaEventos[i] = ['Modificación de Avatar (Juego de Avatar)', fechaEvento, String(datos.grupo.Nombre), alumnoModificacionAvatar, `${String(datos.juego.NombreJuego)} (${String(datos.juego.Tipo)})`, ' - ', ' - ', ' - ', ' - '];
+              break;
+
+            default:
+              tablaEventos[i] = [' - ', ' - ', ' - ', ' - ', ' - ', ' - ', ' - ', ' - ', ' - '];
+              break;
+          }
+          // Ya se ha procesado esta fila de la tabla (elemento de la listaEventos)
+          contadorFilas = contadorFilas + 1;
+
+          if (contadorFilas == listaEventos.length) { // Ya se han cargado todos los datos de cada fila de la tabla (cada elemento de la listaEventos)
+            obs.next(tablaEventos);
+          }
+        }, (err) => {
+          console.log(err);
+
+          Swal.fire({
+            title: `Error al obtener los Datos del Evento número ${i}`,
+            text: err.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 3000
+          });
+
+          // Ya se ha procesado esta fila de la tabla (elemento de la listaEventosPaginada)
+          contadorFilas = contadorFilas + 1;
+
+          if (contadorFilas === listaEventos.length) { // Ya se han cargado todos los datos de cada fila de la tabla (cada elemento de la listaEventos)
+            obs.next(tablaEventos);
+          }
+        });
+      }
+    });
+    return tablaEventosObservable;
+  }
+
+  // ----------------------------------------------------------------------------------------------------------------------------------//
+
+
+  // -------------------------------------------------- CÁLCULOS PARA LOS GRÁFICOS DE ACTIVIDAD --------------------------------------------------//
+
+  // Devuelve los valores necesarios para mostrar el Histograma seleccionado
+  public CalculaHistograma(tipoHistograma: number, diaInicial: Date, diaFinal: Date, juegoSeleccionado: any, profesor: Profesor, alumnoSeleccionado?: Alumno, equipoSeleccionado?: Equipo, puntoSeleccionado?: Punto, nivelSeleccionado?: Nivel, alumnoReceptorCromoSeleccionado?: Alumno, equipoReceptorCromoSeleccionado?: Equipo): Observable<any> {
+    const histogramaObservable: Observable<any> = new Observable((obs) => {
+      let histograma: any = {};
+
+      // Para que se busque hasta el último día, incluido:
+      diaFinal.setHours(23);
+      diaFinal.setMinutes(59);
+      diaFinal.setSeconds(59);
+      diaFinal.setMilliseconds(999);
+      const numDias: number = Math.ceil((diaFinal.getTime() - diaInicial.getTime()) / (1000 * 60 * 60 * 24)); // Número de días de diferencia entre el inicial y final; El ceil hace que ambos estén incluídos también
+      // console.log(`Número de barras (días): ${numDias}`);
+
+      const fechaBusqueda: Date = diaInicial; // Dia en el que se van a buscar los eventos
+      const dias: string[] = []; // Valores X de las barras
+
+      const eventosFiltrados: Evento[] = []; // Necesaria para poder parsear las fechas
+
+      switch (Number(tipoHistograma)) {
+        case 1: // Número de accesos a un Juego de un Alumno
+          const accesos: number[] = []; // Valores Y de las barras
+
+          let filtrosAcceso: string = ' ';
+          if (alumnoSeleccionado.Username === 'todos') {
+            filtrosAcceso = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=2&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+          } else {
+            filtrosAcceso = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=2&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+          }
+
+          this.peticionesAPI.DameEventosFiltrados(filtrosAcceso).subscribe((eventos) => {
+            // console.log(eventos);
+            eventos.forEach((evento) => {
+              eventosFiltrados.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+            });
+
+            for (let contDias: number = 0; contDias < numDias; contDias++) {
+              let accesosDia: number = 0;
+
+              eventosFiltrados.forEach((evento) => {
+                if ((evento.FechayHora.getDate() === fechaBusqueda.getDate()) && (evento.FechayHora.getMonth() === fechaBusqueda.getMonth()) && (evento.FechayHora.getFullYear() === fechaBusqueda.getFullYear())) { // Es el día a buscar
+                  accesosDia = accesosDia + 1;
+                }
+              });
+
+              accesos[contDias] = accesosDia;
+              dias[contDias] = `${fechaBusqueda.toLocaleDateString()}`;
+              fechaBusqueda.setDate(diaInicial.getDate() + 1);
+            }
+
+            histograma = {
+              color: ['#3398DB'],
+              tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                  type: 'shadow'
+                }
+              },
+              grid: {
+                left: '5%',
+                right: '5%',
+                bottom: '10%',
+                containLabel: true
+              },
+              xAxis: [
+                {
+                  type: 'category',
+                  data: dias,
+                  axisTick: {
+                    alignWithLabel: true
+                  }
+                }
+              ],
+              yAxis: [{
+                type: 'value'
+              }],
+              series: [{
+                name: 'Nº de accesos',
+                type: 'bar',
+                barWidth: '50%',
+                data: accesos
+              }]
+            };
+            obs.next(histograma);
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: 'Error al obtener los Eventos filtrados para procesar los Datos del Histograma',
+              text: err.message,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(histograma);
+          });
+          break;
+
+        case 2: // Número de Alumnos que han accedido a un Juego
+          const alumnosAcceso: number[] = []; // Valores Y de las barras
+
+          this.peticionesAPI.DameEventosFiltrados(`?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=2&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`).subscribe((eventos) => {
+            // console.log(eventos);
+            eventos.forEach((evento) => {
+              eventosFiltrados.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+            });
+
+            for (let contDias: number = 0; contDias < numDias; contDias++) {
+              let alumnosAccesoDia: number = 0;
+              const alumnosDiferentesDia: number[] = [];
+
+              eventosFiltrados.forEach((evento) => {
+                if ((evento.FechayHora.getDate() === fechaBusqueda.getDate()) && (evento.FechayHora.getMonth() === fechaBusqueda.getMonth()) && (evento.FechayHora.getFullYear() === fechaBusqueda.getFullYear())) { // Es el día a buscar
+                  // En este caso el contador sólo cuenta cuántos alumnos en ese día han entrado al Juego
+                  if (!alumnosDiferentesDia.includes(evento.AlumnoID)) {
+                    alumnosDiferentesDia.push(evento.AlumnoID);
+                    alumnosAccesoDia = alumnosAccesoDia + 1;
+                  }
+                }
+              });
+
+              alumnosAcceso[contDias] = alumnosAccesoDia;
+              dias[contDias] = `${fechaBusqueda.toLocaleDateString()}`;
+              fechaBusqueda.setDate(diaInicial.getDate() + 1);
+            }
+
+            histograma = {
+              color: ['#3398DB'],
+              tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                  type: 'shadow'
+                }
+              },
+              grid: {
+                left: '5%',
+                right: '5%',
+                bottom: '10%',
+                containLabel: true
+              },
+              xAxis: [
+                {
+                  type: 'category',
+                  data: dias,
+                  axisTick: {
+                    alignWithLabel: true
+                  }
+                }
+              ],
+              yAxis: [{
+                type: 'value'
+              }],
+              series: [{
+                name: 'Nº de Alumnos que han accedido',
+                type: 'bar',
+                barWidth: '50%',
+                data: alumnosAcceso
+              }]
+            };
+            obs.next(histograma);
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: 'Error al obtener los Eventos filtrados para procesar los Datos del Histograma',
+              text: err.message,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(histograma);
+          });
+          break;
+
+        case 10: // Número de Puntos obtenidos por un Alumno/Equipo
+          const puntos: any[] = []; // Valores Y de las barras
+
+          let filtrosPuntos: string = ' ';
+          let filtrosNiveles: string = ' '; // Para comprobar si en el día se ha subido de nivel, si se ha subido de nivel se marca la barra en otro color
+          if (puntoSeleccionado.Nombre === ' [TODOS LOS TIPOS DE PUNTO] ') {
+            if (juegoSeleccionado.Modo === 'Individual') { // Individual
+              if (alumnoSeleccionado.Username === 'todos') {
+                filtrosPuntos = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=10&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+                filtrosNiveles = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=11&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+              } else {
+                filtrosPuntos = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=10&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+                filtrosNiveles = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=11&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+              }
+            } else { // En Equipos
+              if (equipoSeleccionado.Nombre === ' [TODOS LOS EQUIPOS] ') {
+                filtrosPuntos = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=10&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+                filtrosNiveles = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=11&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+              } else {
+                filtrosPuntos = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=10&filter[where][EquipoID]=${equipoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+                filtrosNiveles = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=11&filter[where][EquipoID]=${equipoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+              }
+            }
+          } else { // Un Punto en concreto
+            if (juegoSeleccionado.Modo === 'Individual') { // Individual
+              if (alumnoSeleccionado.Username === 'todos') {
+                filtrosPuntos = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=10&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][PuntoID]=${puntoSeleccionado.id}`;
+                filtrosNiveles = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=11&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+              } else {
+                filtrosPuntos = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=10&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][PuntoID]=${puntoSeleccionado.id}`;
+                filtrosNiveles = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=11&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+              }
+            } else { // En Equipos
+              if (equipoSeleccionado.Nombre === ' [TODOS LOS EQUIPOS] ') {
+                filtrosPuntos = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=10&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][PuntoID]=${puntoSeleccionado.id}`;
+                filtrosNiveles = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=11&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+              } else {
+                filtrosPuntos = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=10&filter[where][EquipoID]=${equipoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][PuntoID]=${puntoSeleccionado.id}`;
+                filtrosNiveles = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=11&filter[where][EquipoID]=${equipoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+              }
+            }
+          }
+
+          this.peticionesAPI.DameEventosFiltrados(filtrosPuntos).subscribe((eventos) => {
+            // console.log(eventos);
+            eventos.forEach((evento) => {
+              eventosFiltrados.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+            });
+
+            const eventosFiltradosNiveles: Evento[] = []; // Para comprobar si en el día concreto se ha subido de nivel
+            this.peticionesAPI.DameEventosFiltrados(filtrosNiveles).subscribe((eventos) => {
+              // console.log(eventos);
+              eventos.forEach((evento) => {
+                eventosFiltradosNiveles.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+              });
+
+              for (let contDias: number = 0; contDias < numDias; contDias++) {
+                let puntosDia: number = 0;
+                let ascensoDia: boolean = false;
+
+                eventosFiltrados.forEach((evento) => {
+                  if ((evento.FechayHora.getDate() === fechaBusqueda.getDate()) && (evento.FechayHora.getMonth() === fechaBusqueda.getMonth()) && (evento.FechayHora.getFullYear() === fechaBusqueda.getFullYear())) { // Es el día a buscar
+                    puntosDia = puntosDia + evento.NumeroPuntos;
+
+                    eventosFiltradosNiveles.forEach((eventoNiveles) => {
+                      if ((eventoNiveles.FechayHora.getDate() === fechaBusqueda.getDate()) && (eventoNiveles.FechayHora.getMonth() === fechaBusqueda.getMonth()) && (eventoNiveles.FechayHora.getFullYear() === fechaBusqueda.getFullYear())) { // Es el día a buscar
+                        // Se ha subido de nivel
+                        ascensoDia = true;
+                      }
+                    });
+                  }
+                });
+                if (ascensoDia) {
+                  puntos[contDias] = { value: puntosDia, itemStyle: { color: 'green'}};
+                } else {
+                  puntos[contDias] = puntosDia;
+                }
+                dias[contDias] = `${fechaBusqueda.toLocaleDateString()}`;
+                fechaBusqueda.setDate(diaInicial.getDate() + 1);
+              }
+
+              histograma = {
+                color: ['#3398DB', 'green'],
+                tooltip: {
+                  trigger: 'axis',
+                  axisPointer: {
+                    type: 'shadow'
+                  }
+                },
+                legend: {
+                  data: ['Nº de Puntos obtenidos', 'Ascenso de nivel']
+                },
+                grid: {
+                  left: '5%',
+                  right: '5%',
+                  bottom: '10%',
+                  containLabel: true
+                },
+                xAxis: [
+                  {
+                    type: 'category',
+                    data: dias,
+                    axisTick: {
+                      alignWithLabel: true
+                    }
+                  }
+                ],
+                yAxis: [{
+                  type: 'value',
+                }],
+                series: [{
+                  name: 'Nº de Puntos obtenidos',
+                  type: 'bar',
+                  barWidth: '50%',
+                  data: puntos
+                }, {
+                  name: 'Ascenso de nivel',
+                  type: 'bar',
+                  data: []
+                }]
+              };
+              obs.next(histograma);
+            }, (err) => {
+              console.log(err);
+              Swal.fire({
+                title: 'Error al obtener los Eventos filtrados para procesar los Datos del Histograma',
+                text: err.message,
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 3000
+              });
+              obs.next(histograma);
+            });
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: 'Error al obtener los Eventos filtrados para procesar los Datos del Histograma',
+              text: err.message,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(histograma);
+          });
+          break;
+
+        case 11: // Número de Alumnos/Equipos que han obtenido el Tipo de Punto
+          const alumnosPunto: number[] = []; // Valores Y de las barras
+          const equiposPunto: number[] = []; // Valores Y de las barras
+
+          let filtrosNumAlumnosEquiposPunto: string = ' ';
+          if (puntoSeleccionado.Nombre === ' [TODOS LOS TIPOS DE PUNTO] ') {
+            filtrosNumAlumnosEquiposPunto = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=10&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+          } else {
+            filtrosNumAlumnosEquiposPunto = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=10&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][PuntoID]=${puntoSeleccionado.id}`;
+          }
+
+          this.peticionesAPI.DameEventosFiltrados(filtrosNumAlumnosEquiposPunto).subscribe((eventos) => {
+            // console.log(eventos);
+            eventos.forEach((evento) => {
+              eventosFiltrados.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+            });
+
+            for (let contDias: number = 0; contDias < numDias; contDias++) {
+              let alumnosPuntoDia: number = 0;
+              let equiposPuntoDia: number = 0;
+              const alumnosDiferentesDia: number[] = [];
+              const equiposDiferentesDia: number[] = [];
+
+              eventosFiltrados.forEach((evento) => {
+                if ((evento.FechayHora.getDate() === fechaBusqueda.getDate()) && (evento.FechayHora.getMonth() === fechaBusqueda.getMonth()) && (evento.FechayHora.getFullYear() === fechaBusqueda.getFullYear())) { // Es el día a buscar
+                  // En este caso el contador sólo cuenta cuántos Alumnos/Equipos en ese día han obtenido Puntos
+                  if(juegoSeleccionado.Modo === 'Individual') { // Individual
+                    if(evento.AlumnoID !== undefined) { // Es un Evento de un JDP Individual
+                      if (!alumnosDiferentesDia.includes(evento.AlumnoID)) {
+                        alumnosDiferentesDia.push(evento.AlumnoID);
+                        alumnosPuntoDia = alumnosPuntoDia + 1;
+                      }
+                    }
+                  } else { // En Equipo
+                    if(evento.EquipoID !== undefined) { // Es un Evento de un JDP En Equipos
+                      if (!equiposDiferentesDia.includes(evento.EquipoID)) {
+                        equiposDiferentesDia.push(evento.EquipoID);
+                        equiposPuntoDia = equiposPuntoDia + 1;
+                      }
+                    }
+                  }
+                }
+              });
+
+              alumnosPunto[contDias] = alumnosPuntoDia;
+              equiposPunto[contDias] = equiposPuntoDia;
+              dias[contDias] = `${fechaBusqueda.toLocaleDateString()}`;
+              fechaBusqueda.setDate(diaInicial.getDate() + 1);
+            }
+
+            if (juegoSeleccionado.Modo === 'Individual') {
+              histograma = {
+                color: ['#3398DB'],
+                tooltip: {
+                  trigger: 'axis',
+                  axisPointer: {
+                    type: 'shadow'
+                  }
+                },
+                grid: {
+                  left: '5%',
+                  right: '5%',
+                  bottom: '10%',
+                  containLabel: true
+                },
+                xAxis: [
+                  {
+                    type: 'category',
+                    data: dias,
+                    axisTick: {
+                      alignWithLabel: true
+                    }
+                  }
+                ],
+                yAxis: [{
+                  type: 'value'
+                }],
+                series: [{
+                  name: 'Nº de Alumnos que lo han obtenido',
+                  type: 'bar',
+                  barWidth: '50%',
+                  data: alumnosPunto
+                }]
+              };
+            } else {
+              histograma = {
+                color: ['#3398DB'],
+                tooltip: {
+                  trigger: 'axis',
+                  axisPointer: {
+                    type: 'shadow'
+                  }
+                },
+                grid: {
+                  left: '5%',
+                  right: '5%',
+                  bottom: '10%',
+                  containLabel: true
+                },
+                xAxis: [
+                  {
+                    type: 'category',
+                    data: dias,
+                    axisTick: {
+                      alignWithLabel: true
+                    }
+                  }
+                ],
+                yAxis: [{
+                  type: 'value'
+                }],
+                series: [{
+                  name: 'Nº de Equipos que lo han obtenido',
+                  type: 'bar',
+                  barWidth: '50%',
+                  data: equiposPunto
+                }]
+              };
+            }
+            obs.next(histograma);
+            }, (err) => {
+              console.log(err);
+              Swal.fire({
+                title: 'Error al obtener los Eventos filtrados para procesar los Datos del Histograma',
+                text: err.message,
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 3000
+              });
+              obs.next(histograma);
+            });
+          break;
+
+        case 20: // Número de Cromos obtenidos por un Alumno/Equipo
+          const cromos: number[] = []; // Valores Y de las barras
+
+          let filtrosCromos: string = ' ';
+          if (juegoSeleccionado.Modo === 'Individual') { // Individual
+            if (alumnoSeleccionado.Username === 'todos') {
+              filtrosCromos = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=20&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            } else {
+              filtrosCromos = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=20&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            }
+          } else { // En Equipos
+            if (equipoSeleccionado.Nombre === ' [TODOS LOS EQUIPOS] ') {
+              filtrosCromos = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=20&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            } else {
+              filtrosCromos = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=20&filter[where][EquipoID]=${equipoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            }
+          }
+
+          this.peticionesAPI.DameEventosFiltrados(filtrosCromos).subscribe((eventos) => {
+            // console.log(eventos);
+            eventos.forEach((evento) => {
+              eventosFiltrados.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+            });
+
+            for (let contDias: number = 0; contDias < numDias; contDias++) {
+              let cromosDia: number = 0;
+
+              eventosFiltrados.forEach((evento) => {
+                if ((evento.FechayHora.getDate() === fechaBusqueda.getDate()) && (evento.FechayHora.getMonth() === fechaBusqueda.getMonth()) && (evento.FechayHora.getFullYear() === fechaBusqueda.getFullYear())) { // Es el día a buscar
+                  cromosDia = cromosDia + evento.NumeroCromos;
+                }
+              });
+
+              cromos[contDias] = cromosDia;
+              dias[contDias] = `${fechaBusqueda.toLocaleDateString()}`;
+              fechaBusqueda.setDate(diaInicial.getDate() + 1);
+            }
+
+            histograma = {
+              color: ['#3398DB'],
+              tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                  type: 'shadow'
+                }
+              },
+              grid: {
+                left: '5%',
+                right: '5%',
+                bottom: '10%',
+                containLabel: true
+              },
+              xAxis: [
+                {
+                  type: 'category',
+                  data: dias,
+                  axisTick: {
+                    alignWithLabel: true
+                  }
+                }
+              ],
+              yAxis: [{
+                type: 'value',
+              }],
+              series: [{
+                name: 'Nº de Cromos obtenidos',
+                type: 'bar',
+                barWidth: '50%',
+                data: cromos
+              }]
+            };
+            obs.next(histograma);
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: 'Error al obtener los Eventos filtrados para procesar los Datos del Histograma',
+              text: err.message,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(histograma);
+          });
+          break;
+
+        case 21: // Número de Cromos regalados por un Alumno/Equipo a un Alumno/Equipo
+          const cromosRegalados: number[] = []; // Valores Y de las barras
+
+          let filtrosCromosRegalados: string = ' ';
+          if (juegoSeleccionado.Modo === 'Individual') { // Individual
+            if ((alumnoSeleccionado.Username === 'todos') && (alumnoReceptorCromoSeleccionado.Username === 'todos')) {
+              filtrosCromosRegalados = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=21&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            } else if ((alumnoSeleccionado.Username !== 'todos') && (alumnoReceptorCromoSeleccionado.Username === 'todos')) {
+              filtrosCromosRegalados = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=21&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            } else if ((alumnoSeleccionado.Username === 'todos') && (alumnoReceptorCromoSeleccionado.Username !== 'todos')) {
+              filtrosCromosRegalados = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=21&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][AlumnoReceptorCromoID]=${alumnoReceptorCromoSeleccionado.id}`;
+            } else {
+              filtrosCromosRegalados = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=21&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][AlumnoReceptorCromoID]=${alumnoReceptorCromoSeleccionado.id}`;
+            }
+          } else { // En Equipos
+            if ((equipoSeleccionado.Nombre === ' [TODOS LOS EQUIPOS] ') && (equipoReceptorCromoSeleccionado.Nombre === ' [TODOS LOS EQUIPOS] ')) {
+              filtrosCromosRegalados = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=21&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            } else if ((equipoSeleccionado.Nombre !== ' [TODOS LOS EQUIPOS] ') && (equipoReceptorCromoSeleccionado.Nombre === ' [TODOS LOS EQUIPOS] ')) {
+              filtrosCromosRegalados = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=21&filter[where][EquipoID]=${equipoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            } else if ((equipoSeleccionado.Nombre === ' [TODOS LOS EQUIPOS] ') && (equipoReceptorCromoSeleccionado.Nombre !== ' [TODOS LOS EQUIPOS] ')) {
+              filtrosCromosRegalados = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=21&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][EquipoReceptorCromoID]=${equipoReceptorCromoSeleccionado.id}`;
+            } else {
+              filtrosCromosRegalados = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=21&filter[where][EquipoID]=${equipoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][EquipoReceptorCromoID]=${equipoReceptorCromoSeleccionado.id}`;
+            }
+          }
+
+          this.peticionesAPI.DameEventosFiltrados(filtrosCromosRegalados).subscribe((eventos) => {
+            // console.log(eventos);
+            eventos.forEach((evento) => {
+              eventosFiltrados.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+            });
+
+            for (let contDias: number = 0; contDias < numDias; contDias++) {
+              let cromosRegaladosDia: number = 0;
+
+              eventosFiltrados.forEach((evento) => {
+                if ((evento.FechayHora.getDate() === fechaBusqueda.getDate()) && (evento.FechayHora.getMonth() === fechaBusqueda.getMonth()) && (evento.FechayHora.getFullYear() === fechaBusqueda.getFullYear())) { // Es el día a buscar
+                  cromosRegaladosDia = cromosRegaladosDia + 1;
+                }
+              });
+
+              cromosRegalados[contDias] = cromosRegaladosDia;
+              dias[contDias] = `${fechaBusqueda.toLocaleDateString()}`;
+              fechaBusqueda.setDate(diaInicial.getDate() + 1);
+            }
+
+            histograma = {
+              color: ['#3398DB'],
+              tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                  type: 'shadow'
+                }
+              },
+              grid: {
+                left: '5%',
+                right: '5%',
+                bottom: '10%',
+                containLabel: true
+              },
+              xAxis: [
+                {
+                  type: 'category',
+                  data: dias,
+                  axisTick: {
+                    alignWithLabel: true
+                  }
+                }
+              ],
+              yAxis: [{
+                type: 'value',
+              }],
+              series: [{
+                name: 'Nº de Cromos regalados',
+                type: 'bar',
+                barWidth: '50%',
+                data: cromosRegalados
+              }]
+            };
+            obs.next(histograma);
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: 'Error al obtener los Eventos filtrados para procesar los Datos del Histograma',
+              text: err.message,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(histograma);
+          });
+          break;
+
+        case 30: // Número de modificaciones de Avatar de un Alumno (Juego de Avatar)
+          const modificaciones: number[] = []; // Valores Y de las barras
+
+          let filtrosModificaciones: string = ' ';
+          if (alumnoSeleccionado.Username === 'todos') {
+            filtrosModificaciones = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=32&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+          } else {
+            filtrosModificaciones = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=32&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+          }
+
+          this.peticionesAPI.DameEventosFiltrados(filtrosModificaciones).subscribe((eventos) => {
+            // console.log(eventos);
+            eventos.forEach((evento) => {
+              eventosFiltrados.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+            });
+
+            for (let contDias: number = 0; contDias < numDias; contDias++) {
+              let modificacionesDia: number = 0;
+
+              eventosFiltrados.forEach((evento) => {
+                if ((evento.FechayHora.getDate() === fechaBusqueda.getDate()) && (evento.FechayHora.getMonth() === fechaBusqueda.getMonth()) && (evento.FechayHora.getFullYear() === fechaBusqueda.getFullYear())) { // Es el día a buscar
+                  modificacionesDia = modificacionesDia + 1;
+                }
+              });
+
+              modificaciones[contDias] = modificacionesDia;
+              dias[contDias] = `${fechaBusqueda.toLocaleDateString()}`;
+              fechaBusqueda.setDate(diaInicial.getDate() + 1);
+            }
+
+            histograma = {
+              color: ['#3398DB'],
+              tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                  type: 'shadow'
+                }
+              },
+              grid: {
+                left: '5%',
+                right: '5%',
+                bottom: '10%',
+                containLabel: true
+              },
+              xAxis: [
+                {
+                  type: 'category',
+                  data: dias,
+                  axisTick: {
+                    alignWithLabel: true
+                  }
+                }
+              ],
+              yAxis: [{
+                type: 'value'
+              }],
+              series: [{
+                name: 'Nº de modificaciones',
+                type: 'bar',
+                barWidth: '50%',
+                data: modificaciones
+              }]
+            };
+            obs.next(histograma);
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: 'Error al obtener los Eventos filtrados para procesar los Datos del Histograma',
+              text: err.message,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(histograma);
+          });
+          break;
+
+        default:
+          histograma = {};
+          obs.next(histograma);
+          break;
+      }
+    });
+    return histogramaObservable;
+  }
+
+
+  // Devuelve los valores necesarios para mostrar la Función Contínua seleccionada
+  /* public CalculaFuncion(tipoFuncion: number, diaInicial: Date, diaFinal: Date, juegoSeleccionado: any, profesor: Profesor, alumnoSeleccionado?: Alumno, equipoSeleccionado?: Equipo): Observable<any> {
+    const funcionObservable: Observable<any> = new Observable((obs) => {
+      obs.next({});
+    });
+    return funcionObservable;
+  } */
+
+  // Devuelve los valores necesarios para mostrar el Diagrama seleccionado
+  public CalculaDiagrama(tipoDiagrama: number, diaInicial: Date, diaFinal: Date, juegoSeleccionado: any, profesor: Profesor, alumnoSeleccionado?: Alumno, equipoSeleccionado?: Equipo, nivelSeleccionado?: Nivel, privilegioSeleccionado?: number): Observable<any> {
+    const diagramaObservable: Observable<any> = new Observable((obs) => {
+      let diagrama: any = {};
+
+      // Para que se busque hasta el último día, incluido:
+      diaFinal.setHours(23);
+      diaFinal.setMinutes(59);
+      diaFinal.setSeconds(59);
+      diaFinal.setMilliseconds(999);
+      const numDias: number = Math.ceil((diaFinal.getTime() - diaInicial.getTime()) / (1000 * 60 * 60 * 24)); // Número de días de diferencia entre el inicial y final; El ceil hace que ambos estén incluídos también
+      // console.log(`Número de barras (días): ${numDias}`);
+
+      const fechaBusqueda: Date = diaInicial; // Dia en el que se van a buscar los eventos
+      const dias: string[] = []; // Valores X del Diagrama
+
+      let datosPuntos: any[] = []; // Indica dónde se van a representar los puntos del Diagrama
+
+      const eventosFiltrados: Evento[] = []; // Necesaria para poder parsear las fechas
+
+      switch (Number(tipoDiagrama)) {
+        case 10: // Diagrama 'Punch Card' de los Ascensos de Nivel de un Alumno/Equipo (Juego de Puntos)
+          const niveles: string[] = []; // Valores Y del Diagrama
+
+          let filtrosAscenso: string = ' ';
+          if (nivelSeleccionado.Nombre === ' [TODOS LOS NIVELES] ') {
+            if (juegoSeleccionado.Modo === 'Individual') { // Individual
+              filtrosAscenso = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=11&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            } else { // En Equipos
+              filtrosAscenso = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=11&filter[where][EquipoID]=${equipoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            }
+          } else {
+            if (juegoSeleccionado.Modo === 'Individual') { // Individual
+              filtrosAscenso = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=11&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][NivelID]=${nivelSeleccionado.id}`;
+            } else { // En Equipos
+              filtrosAscenso = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=11&filter[where][EquipoID]=${equipoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][NivelID]=${nivelSeleccionado.id}`;
+            }
+          }
+
+          this.peticionesAPI.DameEventosFiltrados(filtrosAscenso).subscribe((eventos) => {
+            // console.log(eventos);
+            eventos.forEach((evento) => {
+              eventosFiltrados.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+            });
+
+            this.peticionesAPI.DameNiveles().subscribe((todosNiveles) => {
+              // console.log(todosNiveles);
+
+              for (let contDias: number = 0; contDias < numDias; contDias++) {
+                eventosFiltrados.forEach((evento) => {
+                  if ((evento.FechayHora.getDate() === fechaBusqueda.getDate()) && (evento.FechayHora.getMonth() === fechaBusqueda.getMonth()) && (evento.FechayHora.getFullYear() === fechaBusqueda.getFullYear())) { // Es el día a buscar
+                    const nivel: Nivel = todosNiveles.filter((nivel) => (nivel.id === evento.NivelID && nivel.juegoDePuntosId === evento.JuegoID))[0];
+                    // console.log(nivel);
+
+                    if (!niveles.includes(nivel.Nombre)) {
+                      niveles.push(nivel.Nombre);
+                    }
+                    datosPuntos.push([contDias, niveles.indexOf(nivel.Nombre)]);
+                  }
+                });
+                dias[contDias] = `${fechaBusqueda.toLocaleDateString()}`;
+                fechaBusqueda.setDate(diaInicial.getDate() + 1);
+              }
+
+              datosPuntos = datosPuntos.map(function(item) {
+                return [item[0], item[1]];
+              });
+
+              diagrama = {
+                color: ['#3398DB'],
+                legend: {
+                  data: ['Nivel obtenido']
+                },
+                tooltip: {
+                  position: 'top',
+                  formatter(params) {
+                    return 'Nivel obtenido: ' + niveles[params.value[1]] + ' | Día: ' + dias[params.value[0]];
+                  }
+                },
+                grid: {
+                  left: 20,
+                  right: 30,
+                  bottom: 10,
+                  containLabel: true
+                },
+                xAxis: [
+                  {
+                    type: 'category',
+                    data: dias,
+                    boundaryGap: false,
+                    splitLine: {
+                        show: true
+                    },
+                    axisLine: {
+                        show: false
+                    }
+                  }
+                ],
+                yAxis: [{
+                  type: 'category',
+                  data: niveles,
+                  axisLine: {
+                    show: false
+                }
+                }],
+                series: [{
+                  name: 'Nivel obtenido',
+                  type: 'scatter',
+                  data: datosPuntos
+                }]
+              };
+              obs.next(diagrama);
+            }, (err) => {
+              console.log(err);
+              Swal.fire({
+              title: 'Error al obtener los Niveles para procesar los Datos del Diagrama',
+              text: err.message,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 3000
+            });
+              obs.next(diagrama);
+            });
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: 'Error al obtener los Eventos filtrados para procesar los Datos del Diagrama',
+              text: err.message,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(diagrama);
+          });
+          break;
+
+        case 20: // Diagrama ‘Punch Card’ de las Finalizaciones de Colecciones de Cromos de Alumnos/Equipos (Juego de Colección)
+          const alumnosFinalizacion: string[] = []; // Valores Y del Diagrama
+          const equiposFinalizacion: string[] = []; // Valores Y del Diagrama
+
+          let filtrosFinalizacion = ' ';
+          if (juegoSeleccionado.Modo === 'Individual') { // Individual
+            if (alumnoSeleccionado.Username === 'todos') {
+              filtrosFinalizacion = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=22&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            } else {
+              filtrosFinalizacion = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=22&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            }
+          } else { // En Equipos
+            if (equipoSeleccionado.Nombre === ' [TODOS LOS EQUIPOS] ') {
+              filtrosFinalizacion = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=22&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][NivelID]=${nivelSeleccionado.id}`;
+            } else {
+              filtrosFinalizacion = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=22&filter[where][EquipoID]=${equipoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][NivelID]=${nivelSeleccionado.id}`;
+            }
+          }
+
+          this.peticionesAPI.DameEventosFiltrados(filtrosFinalizacion).subscribe((eventos) => {
+            // console.log(eventos);
+            eventos.forEach((evento) => {
+              eventosFiltrados.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+            });
+
+            this.peticionesAPI.DameAlumnos().subscribe((todosAlumnos) => {
+              // console.log(todosAlumnos);
+
+              this.peticionesAPI.DameEquipos().subscribe((todosEquipos) => {
+                // console.log(todosEquipos);
+
+                for (let contDias = 0; contDias < numDias; contDias++) {
+                  eventosFiltrados.forEach((evento) => {
+                    if ((evento.FechayHora.getDate() === fechaBusqueda.getDate()) && (evento.FechayHora.getMonth() === fechaBusqueda.getMonth()) && (evento.FechayHora.getFullYear() === fechaBusqueda.getFullYear())) { // Es el día a buscar
+                      if (juegoSeleccionado.Modo === 'Individual') { // Individual
+                        const alumno: Alumno = todosAlumnos.filter((alumno) => (alumno.id === evento.AlumnoID))[0];
+                        // console.log(alumno);
+
+                        const nombreCompletoAlumno = `${alumno.Nombre} ${alumno.PrimerApellido} ${alumno.SegundoApellido}`;
+                        if (!alumnosFinalizacion.includes(nombreCompletoAlumno)) {
+                          alumnosFinalizacion.push(nombreCompletoAlumno);
+                        }
+                        datosPuntos.push([contDias, alumnosFinalizacion.indexOf(nombreCompletoAlumno)]);
+                      } else { // En Equipos
+                        const equipo: Equipo = todosEquipos.filter((equipo) => (equipo.id === evento.EquipoID))[0];
+                        // console.log(equipo);
+
+                        if (!equiposFinalizacion.includes(equipo.Nombre)) {
+                          equiposFinalizacion.push(equipo.Nombre);
+                        }
+                        datosPuntos.push([contDias, alumnosFinalizacion.indexOf(equipo.Nombre)]);
+                      }
+                    }
+                  });
+                  dias[contDias] = `${fechaBusqueda.toLocaleDateString()}`;
+                  fechaBusqueda.setDate(diaInicial.getDate() + 1);
+                }
+
+                datosPuntos = datosPuntos.map(function(item) {
+                  return [item[0], item[1]];
+                });
+
+                if (juegoSeleccionado.Modo === 'Individual') { // Individual
+                  diagrama = {
+                    color: ['#3398DB'],
+                    legend: {
+                      data: ['Finalización de la Colección']
+                    },
+                    tooltip: {
+                      position: 'top',
+                      formatter(params) {
+                        return 'El Alumno ' + alumnosFinalizacion[params.value[1]] + ' ha completado la Colección | Día: ' + dias[params.value[0]];
+                      }
+                    },
+                    grid: {
+                      left: 20,
+                      right: 30,
+                      bottom: 10,
+                      containLabel: true
+                    },
+                    xAxis: [
+                      {
+                        type: 'category',
+                        data: dias,
+                        boundaryGap: false,
+                        splitLine: {
+                            show: true
+                        },
+                        axisLine: {
+                            show: false
+                        }
+                      }
+                    ],
+                    yAxis: [{
+                      type: 'category',
+                      data: alumnosFinalizacion,
+                      axisLine: {
+                        show: false
+                    }
+                    }],
+                    series: [{
+                      name: 'Finalización de la Colección',
+                      type: 'scatter',
+                      data: datosPuntos
+                    }]
+                  };
+                } else { // En Equipos
+                  diagrama = {
+                    color: ['#3398DB'],
+                    legend: {
+                      data: ['Finalización de la Colección']
+                    },
+                    tooltip: {
+                      position: 'top',
+                      formatter(params) {
+                        return 'El Equipo ' + equiposFinalizacion[params.value[1]] + ' ha completado la Colección | Día: ' + dias[params.value[0]];
+                      }
+                    },
+                    grid: {
+                      left: 20,
+                      right: 30,
+                      bottom: 10,
+                      containLabel: true
+                    },
+                    xAxis: [
+                      {
+                        type: 'category',
+                        data: dias,
+                        boundaryGap: false,
+                        splitLine: {
+                            show: true
+                        },
+                        axisLine: {
+                            show: false
+                        }
+                      }
+                    ],
+                    yAxis: [{
+                      type: 'category',
+                      data: equiposFinalizacion,
+                      axisLine: {
+                        show: false
+                    }
+                    }],
+                    series: [{
+                      name: 'Finalización de la Colección',
+                      type: 'scatter',
+                      data: datosPuntos
+                    }]
+                  };
+                }
+                obs.next(diagrama);
+              }, (err) => {
+                console.log(err);
+                Swal.fire({
+                  title: 'Error al obtener los Equipos para procesar los Datos del Diagrama',
+                  text: err.message,
+                  icon: 'error',
+                  showConfirmButton: false,
+                  timer: 3000
+                });
+                obs.next(diagrama);
+              });
+            }, (err) => {
+              console.log(err);
+              Swal.fire({
+                title: 'Error al obtener los Alumnos para procesar los Datos del Diagrama',
+                text: err.message,
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 3000
+              });
+              obs.next(diagrama);
+            });
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: 'Error al obtener los Eventos filtrados para procesar los Datos del Diagrama',
+              text: err.message,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(diagrama);
+          });
+          break;
+
+        case 30: // Diagrama 'Punch Card' de las Asignaciones/Eliminaciones de Privilegios de un Alumno (Juego de Avatar)
+          const datosPuntosAsignacion: any[] = []; // Indica dónde se van a representar los puntos de Asignación en el Diagrama (puntos verdes)
+          const datosPuntosEliminacion: any[] = []; // Indica dónde se van a representar los puntos de Eliminación en el Diagrama (puntos rojos)
+          const privilegios: string[] = []; // Valores Y del Diagrama
+
+          let filtrosAsignacion = ' ';
+          let filtrosEliminacion = ' ';
+          if (privilegioSeleccionado === -1) { // Todos los Privilegios
+            filtrosAsignacion = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=30&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+            filtrosEliminacion = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=31&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`;
+          } else { // Un Privilegio en concreto
+            filtrosAsignacion = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=30&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][Privilegio]=${privilegioSeleccionado}`;
+            filtrosEliminacion = `?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=31&filter[where][AlumnoID]=${alumnoSeleccionado.id}&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}&filter[where][Privilegio]=${privilegioSeleccionado}`;
+          }
+
+          this.peticionesAPI.DameEventosFiltrados(filtrosAsignacion).subscribe((eventosAsignacion) => {
+            // console.log(eventosAsignacion);
+            eventosAsignacion.forEach((evento) => {
+              eventosFiltrados.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+            });
+
+            this.peticionesAPI.DameEventosFiltrados(filtrosEliminacion).subscribe((eventosEliminacion) => {
+              // console.log(eventosEliminacion);
+              eventosEliminacion.forEach((evento) => {
+                eventosFiltrados.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+              });
+
+              for (let contDias = 0; contDias < numDias; contDias++) {
+                eventosFiltrados.forEach((evento) => {
+                  if ((evento.FechayHora.getDate() === fechaBusqueda.getDate()) && (evento.FechayHora.getMonth() === fechaBusqueda.getMonth()) && (evento.FechayHora.getFullYear() === fechaBusqueda.getFullYear())) { // Es el día a buscar
+                    let nombrePrivilegio = ' ';
+                    if (evento.Privilegio === 5) {
+                      nombrePrivilegio = 'Privilegio Nota de Voz';
+                    } else if (evento.Privilegio === 6) {
+                      nombrePrivilegio = 'Privilegio Espiar';
+                    } else {
+                      nombrePrivilegio = `Privilegio ${evento.Privilegio}`;
+                    }
+
+                    if (!privilegios.includes(nombrePrivilegio)) {
+                      privilegios.push(nombrePrivilegio);
+                    }
+                    if (evento.TipoEvento === 30) { // Asignación
+                      datosPuntosAsignacion.push({
+                        value: [contDias, privilegios.indexOf(nombrePrivilegio)],
+                        itemStyle: { color: 'green' }
+                      });
+                    } else { // Eliminación
+                      datosPuntosEliminacion.push({
+                        value: [contDias, privilegios.indexOf(nombrePrivilegio)],
+                        itemStyle: { color: 'red' }
+                      });
+                    }
+                    // Para representar las etiquetas de ambos tipos de punto (Asignación/Eliminación)
+                    datosPuntos.push([contDias, privilegios.indexOf(nombrePrivilegio)]);
+                  }
+                });
+                dias[contDias] = `${fechaBusqueda.toLocaleDateString()}`;
+                fechaBusqueda.setDate(diaInicial.getDate() + 1);
+              }
+
+              // Para representar las etiquetas de ambos tipos de punto (Asignación/Eliminación)
+              datosPuntos = datosPuntos.map(function(item) {
+                return [item[0], item[1]];
+              });
+
+              diagrama = {
+                color: ['green', 'red'],
+                legend: {
+                  data: ['Privilegio asignado', 'Privilegio eliminado']
+                },
+                tooltip: {
+                  trigger: 'item'
+                },
+                grid: {
+                  left: 20,
+                  right: 30,
+                  bottom: 10,
+                  containLabel: true
+                },
+                xAxis: [
+                  {
+                    type: 'category',
+                    data: dias,
+                    boundaryGap: false,
+                    splitLine: {
+                        show: true
+                    },
+                    axisLine: {
+                        show: false
+                    }
+                  }
+                ],
+                yAxis: [{
+                  type: 'category',
+                  data: privilegios,
+                  axisLine: {
+                    show: false
+                }
+                }],
+                series: [{
+                  name: 'Privilegio asignado',
+                  type: 'scatter',
+                  data: datosPuntosAsignacion,
+                  tooltip: {
+                    position: 'top',
+                    formatter(params) {
+                      return 'Privilegio asignado: ' + privilegios[params.value[1]] + ' | Día: ' + dias[params.value[0]];
+                    }
+                  }
+                }, {
+                  name: 'Privilegio eliminado',
+                  type: 'scatter',
+                  data: datosPuntosEliminacion,
+                  tooltip: {
+                    position: 'top',
+                    formatter(params) {
+                      return 'Privilegio eliminado: ' + privilegios[params.value[1]] + ' | Día: ' + dias[params.value[0]];
+                    }
+                  }
+                }]
+              };
+              obs.next(diagrama);
+            }, (err) => {
+              console.log(err);
+              Swal.fire({
+                title: 'Error al obtener los Eventos filtrados para procesar los Datos del Diagrama',
+                text: err.message,
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 3000
+              });
+              obs.next(diagrama);
+            });
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: 'Error al obtener los Eventos filtrados para procesar los Datos del Diagrama',
+              text: err.message,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(diagrama);
+          });
+          break;
+
+        default:
+          diagrama = {};
+          obs.next(diagrama);
+          break;
+      }
+    });
+    return diagramaObservable;
+  }
+
+  // Devuelve los valores necesarios para mostrar el Grafo seleccionado
+  public CalculaGrafo(tipoGrafo: number, juegoSeleccionado: any, profesor: Profesor): Observable<any> {
+    const grafoObservable: Observable<any> = new Observable((obs) => {
+      let grafo: any = {};
+
+      const nodes: any[] = []; // Nodos del grafo
+      /* EJEMPLO
+      {
+        "id": "0",
+        "name": "Myriel",
+        "symbolSize": 19.12381,
+        "x": -266.82776,
+        "y": 299.6904,
+        "value": 28.685715,
+        "category": 0
+      } */
+      const links: any[] = []; // Enlaces del grafo
+      /* EJEMPLO
+      {
+        "source": "1",
+        "target": "0"
+      } */
+      let categories: any[] = []; // Categorías del grafo
+      /* EJEMPLO
+      {
+        "name": "类目0"
+      } */
+
+      const eventosFiltrados: Evento[] = []; // Necesaria para poder parsear las fechas
+
+      switch (Number(tipoGrafo)) {
+        case 20: // Red de regalos de Cromos ("red de relaciones") entre Alumnos/Equipos (Juego de Colección)
+          categories = [{name: 'Relación de regalo de Cromos'}];
+
+          this.peticionesAPI.DameAlumnosJuegoDeColeccion(juegoSeleccionado.id).subscribe((alumnos) => {
+            // console.log(alumnos);
+            this.peticionesAPI.DameEquiposJuegoDeColeccion(juegoSeleccionado.id).subscribe((equipos) => {
+              // console.log(equipos);
+              this.peticionesAPI.DameEventosFiltrados(`?filter[where][ProfesorID]=${profesor.id}&filter[where][TipoEvento]=21&filter[where][TipoJuego]=${juegoSeleccionado.Tipo}&filter[where][JuegoID]=${juegoSeleccionado.id}`).subscribe((eventos) => {
+                // console.log(eventos);
+                eventos.forEach((evento) => {
+                  // tslint:disable-next-line:max-line-length
+                  eventosFiltrados.push(new Evento(evento.TipoEvento, new Date(evento.FechayHora), evento.ProfesorID, evento.AlumnoID, evento.EquipoID, evento.JuegoID, evento.NombreJuego, evento.TipoJuego, evento.PuntoID, evento.NumeroPuntos, evento.NivelID, evento.NumeroCromos, evento.AlumnoReceptorCromoID, evento.EquipoReceptorCromoID, evento.Privilegio));
+                });
+
+                const valuesAlumnos: number[] = []; // Hacemos que por cada relación entre dos Alumnos, se lleve 5 puntos el que da el Cromo y 2.5 el que lo recibe //El índice de este vector es el ID del Alumno
+                const valuesEquipos: number[] = []; // Hacemos que por cada relación entre dos Equipos, se lleve 5 puntos el que da el Cromo y 2.5 el que lo recibe //El índice de este vector es el ID del Equipo
+                for (let link = 0; link < eventosFiltrados.length; link++) {
+                  if (juegoSeleccionado.Modo === 'Individual') {
+                    links.push({
+                      source: '"' + eventosFiltrados[link].AlumnoID + '"',
+                      target: '"' + eventosFiltrados[link].AlumnoReceptorCromoID + '"'
+                    });
+                    if (valuesAlumnos[eventosFiltrados[link].AlumnoID] == null) { valuesAlumnos[eventosFiltrados[link].AlumnoID] = 0; }
+                    if (valuesAlumnos[eventosFiltrados[link].AlumnoReceptorCromoID] == null) { valuesAlumnos[eventosFiltrados[link].AlumnoReceptorCromoID] = 0; }
+                    valuesAlumnos[eventosFiltrados[link].AlumnoID] = valuesAlumnos[eventosFiltrados[link].AlumnoID] + 5;
+                    valuesAlumnos[eventosFiltrados[link].AlumnoReceptorCromoID] = valuesAlumnos[eventosFiltrados[link].AlumnoReceptorCromoID] + 2.5;
+                  } else {
+                    links.push({
+                      source: '"' + eventosFiltrados[link].EquipoID + '"',
+                      target: '"' + eventosFiltrados[link].EquipoReceptorCromoID + '"'
+                    });
+                    if (valuesEquipos[eventosFiltrados[link].EquipoID] == null) { valuesEquipos[eventosFiltrados[link].EquipoID] = 0; }
+                    if (valuesEquipos[eventosFiltrados[link].EquipoReceptorCromoID] == null) { valuesEquipos[eventosFiltrados[link].EquipoReceptorCromoID] = 0; }
+                    valuesEquipos[eventosFiltrados[link].EquipoID] = valuesEquipos[eventosFiltrados[link].EquipoID] + 5;
+                    valuesEquipos[eventosFiltrados[link].EquipoReceptorCromoID] = valuesEquipos[eventosFiltrados[link].EquipoReceptorCromoID] + 2.5;
+                  }
+                }
+
+                if (juegoSeleccionado.Modo === 'Individual') { // Individual
+                  for (let node = 0; node < alumnos.length; node++) {
+                    const posX: number = Math.floor(Math.random() * (500 - 10 + 1) + 10);
+                    const posY: number = Math.floor(Math.random() * (500 - 10 + 1) + 10);
+                    nodes.push({
+                      id: '"' + alumnos[node].id + '"',
+                      name: `${alumnos[node].Nombre} ${alumnos[node].PrimerApellido} ${alumnos[node].SegundoApellido}`,
+                      value: valuesAlumnos[alumnos[node].id],
+                      symbolSize: Number(valuesAlumnos[alumnos[node].id] * (2 / 3)),
+                      category: 0,
+                      x: posX,
+                      y: posY
+                    });
+                  }
+                } else { // En Equipos
+                  for (let node = 0; node < equipos.length; node++) {
+                    const posX: number = Math.floor(Math.random() * (500 - 10 + 1) + 10);
+                    const posY: number = Math.floor(Math.random() * (500 - 10 + 1) + 10);
+                    nodes.push({
+                      id: '"' + equipos[node].id + '"',
+                      name: `${equipos[node].Nombre}`,
+                      value: valuesEquipos[alumnos[node].id],
+                      symbolSize: Number(valuesEquipos[alumnos[node].id] * (2 / 3)),
+                      category: 0,
+                      x: posX,
+                      y: posY
+                    });
+                  }
+                }
+
+                nodes.forEach(function(node) {
+                  node.label = {
+                    show: node.symbolSize > 0
+                  };
+                });
+                grafo = {
+                  title: {
+                    text: 'Red de regalo de Cromos',
+                    subtext: 'Red de "relaciones" entre Alumnos/Equipos',
+                    top: 'bottom',
+                    left: 'right'
+                  },
+                  tooltip: {},
+                  legend: [{
+                    data: categories.map(function(a) {
+                        return a.name;
+                    })
+                  }],
+                  animationDuration: 1500,
+                  animationEasingUpdate: 'quinticInOut',
+                  series: [
+                    {
+                      name: 'Puntuación de regalos [2,5 x Cromo recibido | 5 x Cromo regalado]',
+                      type: 'graph',
+                      layout: 'circular',
+                      data: nodes,
+                      links,
+                      categories,
+                      roam: true,
+                      label: {
+                        position: 'right',
+                        formatter: '{b}',
+                        color: 'black'
+                      },
+                      lineStyle: {
+                        color: 'source',
+                        curveness: 0.3
+                      },
+                      emphasis: {
+                        focus: 'adjacency',
+                        lineStyle: {
+                          width: 10
+                        }
+                      }
+                    }
+                  ]
+                };
+                obs.next(grafo);
+              }, (err) => {
+                console.log(err);
+                Swal.fire({
+                  title: 'Error al obtener los Eventos filtrados para procesar los Datos del Grafo',
+                  text: err.message,
+                  icon: 'error',
+                  showConfirmButton: false,
+                  timer: 3000
+                });
+                obs.next(grafo);
+              });
+            }, (err) => {
+              console.log(err);
+              Swal.fire({
+                title: 'Error al obtener los Equipos para procesar los Datos del Grafo',
+                text: err.message,
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 3000
+              });
+              obs.next(grafo);
+            });
+          }, (err) => {
+            console.log(err);
+            Swal.fire({
+              title: 'Error al obtener los Alumnos para procesar los Datos del Grafo',
+              text: err.message,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 3000
+            });
+            obs.next(grafo);
+          });
+          break;
+
+        default:
+          break;
+      }
+    });
+    return grafoObservable;
+  }
+
+  public CompruebaFinalizacionColeccion(coleccionID: number, alumnoJDPid?: number, equipoJDPid?: number): Observable<boolean> {
+    const comprobanteObservable: Observable<boolean> = new Observable((obs) => {
+      this.peticionesAPI.DameCromosColeccion(coleccionID).subscribe((cromos) => {
+        //console.log(cromos);
+        let cromosAsignadosDiferentes: number[] = [];
+        if(alumnoJDPid != undefined){
+          this.peticionesAPI.DameAsignacionesCromosAlumno(alumnoJDPid).subscribe((asignaciones) => {
+            //console.log(asignaciones);
+            asignaciones.forEach((asignacion) => {
+              if(!cromosAsignadosDiferentes.includes(asignacion.cromoId)){
+                cromosAsignadosDiferentes.push(asignacion.cromoId);
+              }
+            });
+            if(cromosAsignadosDiferentes.length == cromos.length){
+              obs.next(true);
+            }
+            else{
+              obs.next(false);
+            }
+          }, (err) => {
+            console.log(err);
+            obs.next(false);
+          });
+        }
+        else if(equipoJDPid != undefined){
+          this.peticionesAPI.DameAsignacionesCromosEquipo(equipoJDPid).subscribe((asignaciones) => {
+            //console.log(asignaciones);
+            asignaciones.forEach((asignacion) => {
+              if(!cromosAsignadosDiferentes.includes(asignacion.cromoId)){
+                cromosAsignadosDiferentes.push(asignacion.cromoId);
+              }
+            });
+            if(cromosAsignadosDiferentes.length == cromos.length){
+              obs.next(true);
+            }
+            else{
+              obs.next(false);
+            }
+          }, (err) => {
+            console.log(err);
+            obs.next(false);
+          });
+        }
+        else{
+          obs.next(false);
+        }
+      }, (err) => {
+        console.log(err); 
+        obs.next(false);
+      });
+    });
+    return comprobanteObservable;
+  }
+  /* Tipos de evneto:
+      1: Creacion de juego
+      10: Asigación de puntos
+      11: Mejora del nivel
+      20: Asignacion de cromos
+      22: Colección completada
+      30: Asignar privilegio avatar
+      31: Quitar provilegio avatar
+      
+  */
+
+  public RegistrarEvento (evento: Evento) {
+    const profesor = this.sesion.DameProfesor();
+    // la configuración de eventos que trae el profesor tiene las siguientes filas
+    //  0: creación de juegos
+    //  1: juego de puntos
+    //  2: juego de colección
+
+    // Para cada fila, la primera columna indica si hay que registrar el evento o no
+    // y la segunda si hay que notificarlo
+
+    // creación de un juego
+    if ((evento.TipoEvento === 1) && (profesor.configuracionEventos[0][0])) {
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      }, (err) => { 
+        console.log(err); 
+      });
+    }
+    // juego de puntos
+    if (((evento.TipoEvento === 10) || (evento.TipoEvento === 11)) && (profesor.configuracionEventos[1][0])) {
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      }, (err) => { 
+        console.log(err); 
+      });
+    }
+    // juego de colección
+    if (((evento.TipoEvento === 20) || (evento.TipoEvento === 22)) && (profesor.configuracionEventos[2][0])) {
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      }, (err) => { 
+        console.log(err); 
+      });
+    }
+    // juego de avatar
+    if (((evento.TipoEvento === 30) || (evento.TipoEvento === 31)) && (profesor.configuracionEventos[2][0])) {
+      this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+      }, (err) => { 
+        console.log(err); 
+      });
+    }
+
+  }
+
+  // public RegistrarNotificarCreacionJuego (juegoId: number, nombreDelJuego: string, tipo: string, grupo: Grupo) {
+  //   if (true) {
+  //     //Registrar la Creación del Juego
+  //     const evento: Evento = new Evento(1, new Date(), this.sesion.DameProfesor().id, undefined, undefined, juegoId, nombreDelJuego, tipo);
+  //     this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+  //       console.log("Registrado evento: ", res);
+  //     }, (err) => { 
+  //       console.log(err); 
+  //     });
+  //   }
+  //   if (true) {
+  //     //Notificar a los Alumnos del Grupo
+  //     this.comService.EnviarNotificacionGrupo(grupo.id, `Nuevo ${tipo} para el Grupo ${grupo.Nombre}: ${nombreDelJuego}`);
+  //   }
+
+  // }
+
+
+  // public RegistrarCreacionJuegoRapido (juegoId: number, nombreDelJuego: string, tipo: string) {
+  //   if (true) {
+  //     //Registrar la Creación del Juego
+  //     const evento: Evento = new Evento(1, new Date(), this.sesion.DameProfesor().id, undefined, undefined, juegoId, nombreDelJuego, tipo);
+  //     this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+  //       console.log("Registrado evento: ", res);
+  //     }, (err) => { 
+  //       console.log(err); 
+  //     });
+  //   }
+  // }
 
 }

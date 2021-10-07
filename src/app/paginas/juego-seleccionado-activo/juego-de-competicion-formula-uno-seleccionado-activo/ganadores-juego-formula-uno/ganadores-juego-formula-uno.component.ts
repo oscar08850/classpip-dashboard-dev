@@ -13,6 +13,8 @@ import { forEach } from '@angular/router/src/utils/collection';
 import { MatTableDataSource } from '@angular/material';
 
 import Swal from 'sweetalert2';
+import { AlumnoJuegoDeEvaluacion } from 'src/app/clases/AlumnoJuegoDeEvaluacion';
+import { EquipoJuegoDeEvaluacion } from 'src/app/clases/EquipoJuegoDeEvaluacion';
 
 
 
@@ -74,6 +76,8 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
   listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario: AlumnoJuegoDeCuestionario[];
   listaAlumnosOrdenadaPorPuntosJuegoDeVotacionUnoATodos: AlumnoJuegoDeVotacionUnoATodos[];
+  listaAlumnosOrdenadaPorPuntosJuegoDeEvaluacion: AlumnoJuegoDeEvaluacion[];
+  listaEquiposOrdenadaPorPuntosJuegoDeEvaluacion: EquipoJuegoDeEvaluacion[];
 
   listaAlumnosClasificacion: TablaAlumnoJuegoDeCompeticion[] = [];
   listaEquiposClasificacion: TablaEquipoJuegoDeCompeticion[] = [];
@@ -105,6 +109,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     // tslint:disable-next-line:max-line-length
     this.juegosDisponibles = this.juegosDisponibles.concat (this.sesion.DameJuegosDeCuestionariosAcabados());
     this.juegosDisponibles = this.juegosDisponibles.concat (this.sesion.DameJuegosDeVotacionUnoATodosAcabados());
+    this.juegosDisponibles = this.juegosDisponibles.concat (this.sesion.DameJuegosDeEvaluacionTerminados());
     console.log ('Juegos para elegir ganadores ');
     console.log (this.juegosDisponibles);
     this.asignados = false;
@@ -144,13 +149,15 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       // ordena la lista por puntos
       // tslint:disable-next-line:only-arrow-functions
       // tslint:disable-next-line:max-line-length
-      // tslint:disable-next-line:only-arrow-functions
-      // tslint:disable-next-line:max-line-length
-      // tslint:disable-next-line:only-arrow-functions
-      // tslint:disable-next-line:max-line-length
       this.listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario = this.listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario.sort(function(obj1, obj2) {
-        return obj2.Nota - obj1.Nota;
+        if (obj1.Nota !== obj2.Nota) {
+          return obj2.Nota - obj1.Nota;
+        } else {
+          // en caso de empate en la nota, gana el que empleó menos tiempo
+          return obj1.TiempoEmpleado - obj2.TiempoEmpleado;
+        }
       });
+
     });
   }
 
@@ -170,6 +177,28 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       });
     });
 
+  }
+  RecuperarInscripcionesEquiposJuegoEvaluacion() {
+    this.peticionesAPI.DameRelacionEquiposJuegoDeEvaluacion(this.juegoDisponibleSeleccionadoID)
+    .subscribe((res: EquipoJuegoDeEvaluacion[]) => {
+      this.equiposRelacion = res;
+      this.equiposRelacion = this.equiposRelacion.sort(function(obj1, obj2) {
+        return obj2.notaFinal - obj1.notaFinal;
+      });
+    });
+
+  }
+
+  RecuperarInscripcionesAlumnosJuegoEvaluacion() {
+    this.peticionesAPI.DameRelacionAlumnosJuegoDeEvaluacion(this.juegoDisponibleSeleccionadoID)
+      .subscribe((res: AlumnoJuegoDeEvaluacion[]) => {
+        console.log ('ya tengo las inscripcuones ', res);
+        this.listaAlumnosOrdenadaPorPuntosJuegoDeEvaluacion = res;
+        // tslint:disable-next-line:max-line-length
+        this.listaAlumnosOrdenadaPorPuntosJuegoDeEvaluacion = this.listaAlumnosOrdenadaPorPuntosJuegoDeEvaluacion.sort(function(obj1, obj2) {
+          return obj2.notaFinal - obj1.notaFinal;
+        });
+      });
   }
 
   Disputada(jornadaId): boolean {
@@ -273,7 +302,14 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
     } else if ( this.juegoDisponibleSeleccionado.Tipo === 'Juego De Votación Uno A Todos') {
       // De momento solo hay individual
       this.RecuperarInscripcionesAlumnosJuegoDeVotacionUnoATodos();
-    }
+    } else if ( this.juegoDisponibleSeleccionado.Tipo === 'Evaluacion') {
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        console.log ('vamos a por las inscripciones de los alumnos');
+        this.RecuperarInscripcionesAlumnosJuegoEvaluacion();
+      } else {
+        this.RecuperarInscripcionesEquiposJuegoEvaluacion();
+      }
+    } 
   }
 
   AsignarGanadoresAleatoriamente() {
@@ -328,11 +364,25 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
           ganadores.push(this.listaAlumnosOrdenadaPorPuntosJuegoDeVotacionUnoATodos[i].alumnoId);
           i++;
         }
+      } else if (this.juegoDisponibleSeleccionado.Tipo === 'Evaluacion') {
+        console.log ('lista juego evaluacion ' , this.listaAlumnosOrdenadaPorPuntosJuegoDeEvaluacion);
+        let i = 0;
+        while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+          ganadores.push(this.listaAlumnosOrdenadaPorPuntosJuegoDeEvaluacion[i].alumnoId);
+          i++;
+        }
       }
-    } else {
+    // Juego en equipo
+    } else if (this.juegoDisponibleSeleccionado.Tipo === 'Juego De Puntos') {
       let i = 0;
       while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
         ganadores.push(this.listaEquiposOrdenadaPorPuntosJuegoDePuntos[i].equipoId);
+        i++;
+      }
+    } else if (this.juegoDisponibleSeleccionado.Tipo === 'Evaluacion') {
+      let i = 0;
+      while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+        ganadores.push(this.listaEquiposOrdenadaPorPuntosJuegoDeEvaluacion[i].equipoId);
         i++;
       }
     }

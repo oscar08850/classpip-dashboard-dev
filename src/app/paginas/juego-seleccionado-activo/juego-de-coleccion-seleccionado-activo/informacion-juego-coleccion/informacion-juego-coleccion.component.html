@@ -34,17 +34,6 @@
           </mat-card-header>
           <!-- <mat-card-content style="display: flex; align-items: center;justify-content: center;"> -->
           <mat-card-content>
-
-            <div class = "enFila" style = "width: 30%">
-
-              <button type="button" style="width: 50px !important;" class="btn Editar" (click) = "AbrirDialogoEditarCromo(cromo)">
-                <i  class="material-icons">edit </i>
-              </button>
-
-              <button type="button" style="width: 50px !important;" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionBorrarCromo(cromo)">
-                <i  class="material-icons">delete </i>
-              </button>
-            </div>
               <div *ngIf = "!coleccion.DosCaras" class="posicionImagen">
                 <img class ="imagenCromo" *ngIf="imagenCromoDelante[i]"  mat-card-image [src]="imagenCromoDelante[i]" >
               </div>
@@ -69,28 +58,6 @@
           </mat-card-content>
           </div>
         </mat-card>
-
-
-
-
-
-
-        <!-- <mat-card-header>
-          <div style="display: flex; justify-content:space-between; width: 250px ">
-          <div  >
-          <mat-card-title>{{cromo.Nombre}}</mat-card-title>
-          <mat-card-subtitle><p style="margin-bottom: -2px;">Nivel: {{cromo.Nivel}} </p><p style="margin-bottom: -2px;">Probabilidad: {{cromo.Probabilidad}} </p></mat-card-subtitle>
-        </div>
-          <div class="elementoCromo">
-          </div>
-        </div>
-        </mat-card-header>
-        <mat-card-content style="display: flex; align-items: center;justify-content: center;">
-        <div class="posicionImagen" >
-        <img class ="imagenCromo" *ngIf="imagenCromoDelante[i]" mat-card-image [src]="imagenCromoDelante[i]" >
-      </div>
-    </mat-card-content>
-      </mat-card> -->
   </mat-grid-tile>
 </mat-grid-list>
 

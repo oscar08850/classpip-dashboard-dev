@@ -67,21 +67,22 @@
     </mat-tab>
     <mat-tab label="Crear rubrica paso a paso">
       <mat-card-content>
-        <mat-horizontal-stepper [linear]="true" #stepper>
+        NO OPERATIVO
+        <!-- <mat-horizontal-stepper [linear]="true" #stepper> -->
           <!-- PASO 1 -->
-          <mat-step [stepControl]="firstFormGroup">
+          <!-- <mat-step [stepControl]="firstFormGroup"> -->
             <!-- Usare un primer formulario para introducir nombre y la descripción -->
-            <form [formGroup]="firstFormGroup">
+            <!-- <form [formGroup]="firstFormGroup"> -->
               <!-- El nombre introducido se guardará en la variable nombre del formulario -->
-              <ng-template matStepLabel>Nombre</ng-template>
+              <!-- <ng-template matStepLabel>Nombre</ng-template>
               <mat-form-field style= "width: 40%">
-                <mat-label>Nombre</mat-label>
+                <mat-label>Nombre</mat-label> -->
                 <!-- En cuanto escriba algo llamo a la función Disabled para decidir si muestro
                 ya el boton de siguiente (que solo se muestra si se ha escrito algo en los dos campos) -->
-                  <input  (keyup)="BotonPaso1()" matInput placeholder="Nombre de la rúbrica" formControlName="nombreRubrica" required>
-              </mat-form-field>
+                  <!-- <input  (keyup)="BotonPaso1()" matInput placeholder="Nombre de la rúbrica" formControlName="nombreRubrica" required>
+              </mat-form-field> -->
               <!-- Pongo una DIV ahora para que la edad la ponga debajo del nombre, y no al lado -->
-              <div>
+              <!-- <div>
                 <ng-template matStepLabel>Descripcion</ng-template>
                 <mat-form-field style= "width: 40%">
                   <mat-label>Descripcion</mat-label>
@@ -97,10 +98,10 @@
               </div>
 
             </form>
-          </mat-step>
+          </mat-step> -->
 
           <!-- SEGUNDO PASO -->
-          <mat-step>
+          <!-- <mat-step>
             <ng-template matStepLabel>Añadir Criterios</ng-template>
             <div>
               <div>
@@ -118,7 +119,7 @@
               </div>
             </div>
           </mat-step>
-        </mat-horizontal-stepper>
+        </mat-horizontal-stepper> -->
       </mat-card-content>
     </mat-tab>
   </mat-tab-group>

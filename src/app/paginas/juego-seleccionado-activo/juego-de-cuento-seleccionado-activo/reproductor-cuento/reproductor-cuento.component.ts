@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { SesionClase, TablaHistorialPuntosAlumno } from 'src/app/clases';
 import { PeticionesAPIService, SesionService } from 'src/app/servicios';
 import { Router } from '@angular/router';
+
 import { ImagenToBackend } from 'src/app/clases/clasesParaJuegoDeCuentos/ImagenGuardada';
 import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-reproductor-cuento',
@@ -122,5 +124,4 @@ export class ReproductorCuentoComponent implements OnInit {
     console.log('end')
   
   }
-
 }

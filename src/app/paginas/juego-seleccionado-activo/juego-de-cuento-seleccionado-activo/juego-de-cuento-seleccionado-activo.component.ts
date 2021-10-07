@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import {
   Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, JuegoDeCuento, EquipoJuegoDePuntos,
   TablaAlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeCuento
+
 } from '../../../clases/index';
 import { MatDialog } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
@@ -14,7 +15,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 import { MatTableDataSource } from '@angular/material/table';
 
+
 import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-juego-de-cuento-seleccionado-activo',
@@ -27,6 +30,7 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
   displayedColumns: string[] = [ 'alumnoID', 'Nombre',  'nivel1', 'nivel2', 'nivel3', 'permisoparaver', 'permisoparavotar'];
   // displayedColumns: string[] = ['alumnoID',  'nivel1', 'nivel2', 'nivel3', 'permisoparaver', 'permisoparavotar'];
 
+
   listaDePrueba: any =[];
   listaJuegoAlumnosCuentos: any = [];
   listaLibros: any = [];
@@ -36,6 +40,7 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
   grupoid: any;
   alumnosDelJuego: AlumnoJuegoDeCuento[];
   inscripcionesAlumnosJuegodelibro: AlumnoJuegoDeCuento[];
+
   selection1 = new SelectionModel<any>(true, []);
   selection2 = new SelectionModel<any>(true, []);
   selection3 = new SelectionModel<any>(true, []);
@@ -53,11 +58,12 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    
+
     this.juegoSeleccionado = this.sesion.DameJuego();
 
     this.grupoid = this.sesion.DameGrupo();
     this.obteneralumnosdelJuego();
+
     //this.getLibro();
 
   }
@@ -79,16 +85,15 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
     }
     else Swal.fire('Alerta', 'El alumno no ha creado ningún cuento', 'warning');
 
-  }
 
+  }
 
   /**
    * Método que pide a la API todos los alumnos que pertenecen al Juego de Cuento y sus respectivos cuentos
    */
   obteneralumnosdelJuego() {
-
-
     this.peticionesAPI.DameAlumnosJuegoCuento(this.juegoSeleccionado.id)
+
       .subscribe(alumnosJuego => {
 
         console.log(alumnosJuego);
@@ -115,11 +120,11 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
 
 
         });
- 
 
       });
 
   }
+
 
   /**
    * Prepara la tabla con todos los privilegios que tengan asignados los alumnos
@@ -128,7 +133,6 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
     this.datasourceAlumno = new MatTableDataSource(this.alumnosDelJuego);
 
     console.log(this.datasourceAlumno);
-
     this.datasourceAlumno.data.forEach(row => {
 
       const inscripcion = this.alumnosDelJuego.filter(ins => ins.alumnoID === row.alumnoID)[0];
@@ -170,6 +174,7 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
    * @param n se refiere al privilegio seleccionado
    * @returns devuelve el numero de alumnos que hay que seleccionar
    */
+
   IsAllSelected(n) {
     let numSelected;
     if (n === 1) {
@@ -192,12 +197,11 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
     return numSelected === numRows;
   }
 
-
-
   /**
    * Permite modificar el privilegio del alumno
    * @param n 
    */
+
   MasterToggle(n) {
 
     if (n === 1) {
@@ -254,6 +258,7 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
   }
 
 
+
   /**
    * Comprueba que nivel del alumno ha sido cambiado
    * @param n se refiere al nivel de privilegio: nivel1, nivel2, nivel3, permisoparaver
@@ -293,16 +298,15 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
   }
 
 
+
   /**
    * Método que guarda los cambios que el profesor ha realizado en la API
    */
+
   RegistrarCambios() {
 
     for (let i = 0; i < this.alumnosDelJuego.length; i++) {
-      
-  
         this.peticionesAPI.ModificarPermisosJuegoCuento(this.alumnosDelJuego[i], this.juegoSeleccionado.id).subscribe();
-      
     }
     Swal.fire('Cambios registrados correctamente', ' ', 'success');
   }
@@ -352,6 +356,7 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
   /**
    * Vas a la pantalla Listado de Cuentos, ahora mismo en desuso
    */
+
   irAlListado(){
 
     this.router.navigate(['/grupo/' + this.grupoid.id + '/juego/juegoSeleccionadoActivo/listadoCuentos']);
@@ -361,12 +366,11 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
   /**
    * Vas a la pantalla Votaciones, ahora mismo en desuso
    */
+
   irAVotaciones(){
 
     this.router.navigate(['/grupo/' + this.grupoid + '/juego/juegoSeleccionadoActivo/votacionescuento']);
 
   }
-
-
-
 }
+

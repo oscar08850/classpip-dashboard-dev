@@ -1,4 +1,5 @@
-<div class="titulo">Juego de cuestionario rápido</div>
+<div *ngIf = "juegoSeleccionado.Modalidad === 'Clásico'" class="titulo">Juego de cuestionario rápido modo clásico</div>
+<div *ngIf = "juegoSeleccionado.Modalidad === 'Kahoot'" class="titulo">Juego de cuestionario rápido modo kahoot</div>
 <mat-divider style="width: 70%; margin-left : 15%"></mat-divider>
 
 
@@ -11,41 +12,39 @@
   <mat-tab-group>
     <mat-tab  *ngIf = "juegoSeleccionado" label="Información para la conexión y participantes">
       <div class = "enFila">
-        <div style = 'width: 50%' class = "enColumna">
+        <div style = 'width: 50%'  class = "enColumna">
           <br>
           <br>
           <h3> Enlace para la conexión</h3>
-          <h1><strong>147.83.118.92:8100/home</strong></h1>
+          <h1><strong>classpip.upc.edu:8101</strong></h1>
           <br>
-          <img src="../assets/QR.png" style = "width: 200px"/>
-          <!-- <ngx-qrcode
-          [elementType]="elementType"
-          [errorCorrectionLevel]="correctionLevel"
-          [value]="value"
-          cssClass="cssQR">
-          </ngx-qrcode> -->
+          <img src="../assets/QRExpress.png" style = "width: 200px"/>
           <br>
           <h3> Clave</h3>
           <h1><strong>{{juegoSeleccionado.Clave}}</strong></h1>
-
           <br>
-          <img src="../assets/ImagenLogin.png" style = "width: 500px"/>
+          <br>
+          <img src="../assets/loginExpress.png" style = "width: 450px; height: 800px"/>
           <!-- <button  *ngIf = "mostrarParticipantes" type="button"  (click) = "Toogle()" class="btn Aceptar" style = "width: 20%">Mostrar resultados</button>
           <button  *ngIf = "!mostrarParticipantes" type="button"  (click) = "Toogle()" class="btn Aceptar" style = "width: 20%">Mostrar participantes</button> -->
         </div>
+  
         <div style = 'width: 50%'>
           <br>
           <br>
           <h3 align = "center"> Participantes</h3>
           <br>
-          <div style ="display: inline-block; width: 20%;" *ngFor="let participante of participantes; let i=index">
-                  <h2 *ngIf = "!participante.contestado" style="color: red"> {{participante.nickName}}  </h2>
-                  <h2 *ngIf = "participante.contestado" style="color: green"> {{participante.nickName}}  </h2>
+          <div style ="display: inline-block; width: 20%;padding-left: 15px;" *ngFor="let participante of participantes; let i=index">
+                  <h2 *ngIf = "juegoSeleccionado.Modalidad === 'Clásico' && !participante.contestado" style="color: red"> "{{participante.nickName}}"  </h2>
+                  <h2 *ngIf = "juegoSeleccionado.Modalidad === 'Clásico' && participante.contestado" style="color: green"> "{{participante.nickName}}"  </h2>
+                  <h2 *ngIf = "juegoSeleccionado.Modalidad === 'Kahoot' && !participante.preparado" style="color: red"> "{{participante.nickName}}"  </h2>
+                  <h2 *ngIf = "juegoSeleccionado.Modalidad === 'Kahoot' && participante.preparado" style="color: green"> "{{participante.nickName}}"  </h2>
+
           </div>
         </div>
       </div>
     </mat-tab>
-    <mat-tab label="Clasificación">
+    <mat-tab *ngIf = "juegoSeleccionado.Modalidad === 'Clásico'" label="Clasificación">
     <div class= "enColumna" >
       <br>
       <br>
@@ -109,7 +108,7 @@
       <br>
       <br>
 
-
+<!--
       <mat-accordion>
           <mat-expansion-panel *ngFor="let respuestas of respuestasPreguntasAbiertas; let i = index">
             <mat-expansion-panel-header>
@@ -131,25 +130,163 @@
             </div>
 
           </mat-expansion-panel>
-      </mat-accordion>
+      </mat-accordion> -->
 
 
 
     </div>
     </mat-tab>
+    <mat-tab *ngIf = "juegoSeleccionado.Modalidad === 'Kahoot'" label="Lanzar preguntas">
+      <div class= "enColumna" style = "height: 1200px" >
+        <br>
+        <br>
+
+
+        <div class= "enColumna" *ngIf ="mostrarBotonLanzarPregunta" style = "width:100%">
+          <div *ngIf = "siguientePregunta > 0 " class = "enFila" style = "width:100%">
+            <div style = "width: 40%;">
+              <h3 *ngIf ="!finKahoot" align = "center"> Clasificación general parcial</h3>
+              <h3 *ngIf ="finKahoot" align = "center"> Clasificación general final</h3>
+              <br>
+
+              <table align = "center" style = "width: 80%" *ngIf = "siguientePregunta > 0 " mat-table [dataSource]="dataSourceKahoot"  class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="nick">
+                          <th mat-header-cell fxFlex="80%" class= "tituloColumnaTabla" *matHeaderCellDef> Nick </th>
+                          <td mat-cell  fxFlex="80%"style= "text-align: left" *matCellDef="let alumno"> {{alumno.nickName}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="incremento">
+                          <th mat-header-cell fxFlex="10%"  style= "text-align: left;" class= "tituloColumnaTabla" *matHeaderCellDef >  </th>
+                          <td mat-cell fxFlex="10%"  style= "text-align: left; color:red" *matCellDef="let alumno">
+                            <span *ngIf = "alumno.incremento > 0">+{{alumno.incremento}}</span>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="puntos">
+                          <th mat-header-cell fxFlex="10%"  class= "tituloColumnaTabla header-align-right" *matHeaderCellDef> Puntos </th>
+                          <td mat-cell fxFlex="10%"  style= "text-align: right" *matCellDef="let alumno"> {{alumno.puntos}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsKahoot"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsKahoot;"></tr>
+
+              </table>
+            </div>
+
+            <div style = "width: 60%; ">
+              <h3 align = "center"> Pregunta {{siguientePregunta}}</h3>
+              <h4 align = "center"> {{preguntaAMostrar.Pregunta}}</h4>
+              <h5 align = "center"> Respuesta correcta</h5>
+
+              <h5 align = "center"
+                *ngIf =
+                      "preguntaAMostrar.Tipo === 'Cuatro opciones' ||
+                      preguntaAMostrar.Tipo === 'Verdadero o falso' ||
+                      preguntaAMostrar.Tipo === 'Respuesta abierta'"
+              >
+                {{preguntaAMostrar.RespuestaCorrecta}}
+              </h5>
+              <mat-list style = "width:40%; margin-left: 30%;"  *ngIf = "preguntaAMostrar.Tipo === 'Emparejamiento'">
+                  <mat-list-item *ngFor="let pareja of preguntaAMostrar.Emparejamientos">
+                    <div matLine>
+                      <p style="float:left">{{pareja.l}}</p>
+                      <p style="float:right">{{pareja.r}}</p>
+                    </div>
+                  </mat-list-item>
+              </mat-list>
+
+
+              <div  echarts [options]="donuts[siguientePregunta - 1]"  theme="macarons" class="demo-chart">
+              </div>
+            </div>
+
+
+          </div>
+          <br>
+          <br>
+
+          <button  *ngIf = "siguientePregunta === 0 " type="button"  (click) = "LanzarPregunta()" class="btn Aceptar" style = "width: 50%">Empezar</button>
+          <button  *ngIf = "MostrarBotonSiguientePregunta()" type="button"  (click) = "LanzarPregunta()" class="btn Aceptar" style = "width: 50%">Siguiente pregunta</button>
+
+
+        </div>
+        <div *ngIf ="mostrarCuentaAtras" style = "font-size:15em; color:blue">
+          {{cuentaAtras}}
+        </div>
+        <div *ngIf ="mostrarSiguientePregunta">
+          <div class = "enColumna">
+            <div class = "enColumna" style = "width: 500px">
+
+              <p style="font-size:30px;">Pregunta {{siguientePregunta + 1}} de {{preguntas.length}}</p>
+              <div class ="enFila">
+
+                <p style = "padding-top: 25px">Tiempo restante: </p><p style="font-size: 50px; color: red">{{cuentaAtras2}}</p>
+
+                <p style = "padding-top: 25px">Respuestas recibidas: </p><p style="font-size: 50px; color: red"> {{contadorRespuestasKahoot}}</p>
+
+              </div>
+            </div>
+
+
+
+
+            <div *ngIf ="preguntaAMostrar.Tipo === 'Cuatro opciones'" class = "enColumna">
+
+              <img *ngIf = "preguntaAMostrar.Imagen" style = "width: 500px; height: 500px" [src]="imagenPreguntaAMostrar" >
+              <p style="font-size: 60px;">{{preguntaAMostrar.Pregunta}}</p>
+              <div class = "enColumna">
+                <div class = "enFila">
+                  <div style = "background-color: red; width:40%; padding: 5%; color: white" >{{opcionesDesordenadas[0]}}</div>
+                  <div style = "background-color:green; width:40%; padding: 5%; color: white;">{{opcionesDesordenadas[1]}}</div>
+                </div>
+                <div class = "enFila">
+                  <div style = "background-color: blue; width:40%; padding: 5%; color: white">{{opcionesDesordenadas[2]}}</div>
+                  <div style = "background-color:yellow; width:40%; padding: 5%;" >{{opcionesDesordenadas[3]}}</div>
+                </div>
+              </div>
+
+            </div>
+            <div *ngIf ="preguntaAMostrar.Tipo === 'Verdadero o falso'" class = "enColumna">
+
+              <img *ngIf = "preguntaAMostrar.Imagen" style = "width: 500px; height: 500px" [src]="imagenPreguntaAMostrar" >
+              <p style="font-size: 60px;">{{preguntaAMostrar.Pregunta}}</p>
+              <div class = "enColumna">
+                <div class = "enFila">
+                  <div style = "background-color: red; width:40%; padding: 5%; color: white; text-align: center;" >Falso</div>
+                  <div style = "background-color:green; width:40%; padding: 5%; color: white;text-align: center;">Verdadero</div>
+                </div>
+              </div>
+
+            </div>
+            <div *ngIf ="preguntaAMostrar.Tipo === 'Respuesta abierta'" class = "enColumna">
+
+              <img *ngIf = "preguntaAMostrar.Imagen" style = "width: 500px; height: 500px" [src]="imagenPreguntaAMostrar" >
+              <p style="font-size: 60px;">{{preguntaAMostrar.Pregunta}}</p>
+              <br>
+              <p style="font-size: 30px;">Escribe tu respuesta</p>
+            </div>
+            <div *ngIf ="preguntaAMostrar.Tipo === 'Emparejamiento'" class = "enColumna">
+
+              <img *ngIf = "preguntaAMostrar.Imagen" style = "width: 500px; height: 500px" [src]="imagenPreguntaAMostrar" >
+              <p style="font-size: 60px;">{{preguntaAMostrar.Pregunta}}</p>
+              <br>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </mat-tab>
     <mat-tab label="Resultados">
-      <div class= "enColumna" >
+      <div>
         <br>
         <br>
         <h3> Resultados</h3>
         <br>
+        <div class = "enColumna">
         <button  type="button"  (click) = "GenerarInforme()" class="btn Aceptar" style = "width: 50%">Genera un informe en PDF con los resultados</button>
         <br>
-        <h4><strong>Número de participantes:  </strong>{{numeroParticipantes}}</h4>
-        <h4><strong>Número de respuestas:  </strong>{{numeroRespuestas}} ({{((numeroRespuestas/numeroParticipantes)*100).toFixed(0)}}%)</h4>
-
-        <br>
-        <br>
+        </div>
 
 
         <div class="subtitulo">Número de participantes por cantidad de aciertos</div>
@@ -162,16 +299,91 @@
         <div class="subtitulo">Porcentaje de aciertos en cada pregunta</div>
         <mat-divider class="lineaDivisoria"></mat-divider>
 
-      </div>
 
+        <span *ngFor = "let pregunta of preguntas; index as i">
+          <span class ="donuts2col">
+          <div class = "enColumna">
+            <br>
+            <div><strong>Pregunta {{i + 1 }}</strong></div>
+            <br>
+            <div class="ion-text-wrap"> {{pregunta.Pregunta}}</div>
+            <br>
+            <br>
+            <div><strong>Respuesta correcta</strong></div>
+            <br>
+            <div
+              *ngIf =
+                    "pregunta.Tipo === 'Cuatro opciones' ||
+                    pregunta.Tipo === 'Verdadero o falso' ||
+                    pregunta.Tipo === 'Respuesta abierta'"
+              class="ion-text-wrap">
+              {{pregunta.RespuestaCorrecta}}
+            </div>
+
+            <div *ngIf = "pregunta.Tipo === 'Emparejamiento'">
+              <div  *ngFor="let pareja of pregunta.Emparejamientos">
+                <div class ="enFila">
+                  <div style = "width: 50%; margin-right: 20%; font-size: small;">
+                      {{pareja.l}}
+                  </div>
+                  <div style = "width: 50%; font-size: small;">
+                      {{pareja.r}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span style = "display: inline-block; width: 50%;">
+                <div  echarts [options]="donuts[i]"  theme="macarons" class="demo-chart">
+                </div>
+            </span>
+          </div>
+          </span>
+        </span>
+
+
+
+
+      </div>
+<!--
       <br>
       <br>
       <span *ngFor = "let pregunta of preguntas; index as i">
           <span style = "display: inline-block; width: 50%;">
+
+
+              <br>
+              <div><strong>Pregunta {{i + 1 }}</strong></div>
+              <br>
+              <div class="ion-text-wrap"> {{pregunta.Pregunta}}</div>
+              <br>
+              <br>
+              <div><strong>Respuesta correcta</strong></div>
+              <br>
+              <div
+                *ngIf =
+                      "pregunta.Tipo === 'Cuatro opciones' ||
+                      pregunta.Tipo === 'Verdadero o falso' ||
+                      pregunta.Tipo === 'Respuesta abierta'"
+                class="ion-text-wrap">
+                {{pregunta.RespuestaCorrecta}}
+              </div>
+
+              <div *ngIf = "pregunta.Tipo === 'Emparejamiento'">
+                <div  *ngFor="let pareja of pregunta.Emparejamientos">
+                  <div class ="enFila">
+                    <div style = "width: 50%; margin-right: 20%; font-size: small;">
+                        {{pareja.l}}
+                    </div>
+                    <div style = "width: 50%; font-size: small;">
+                        {{pareja.r}}
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div  echarts [options]="donuts[i]"  theme="macarons" class="demo-chart">
               </div>
           </span>
-      </span>
+      </span> -->
     </mat-tab>
   </mat-tab-group>
 </div>

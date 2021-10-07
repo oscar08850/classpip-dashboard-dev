@@ -41,8 +41,7 @@ export class InicioComponent implements OnInit {
       format: 'dd-MM-yyyy-hh:mm',
       defaultOpen: true
   }
-  imagenSilueta = 'http://147.83.118.92:3000/api/imagenes/imagenColeccion/download/compositores.png';
-
+ 
   constructor(  private peticionesAPI: PeticionesAPIService,
                 private sesion: SesionService,
                 private calculos: CalculosService,
@@ -61,25 +60,55 @@ export class InicioComponent implements OnInit {
   }
 
 
-ObtenJuegosActivosDelProfesor() {
-  this.peticionesAPI.DameGruposProfesor(this.profesor.id)
-  .subscribe(res => {
-    this.listaGrupos = res;
-    if (res[0] !== undefined) {
-      let cont = 0;
-      this.listaGrupos.forEach (grupo => {
-        this.calculos.DameListaJuegos(grupo.id)
-        .subscribe ( listas => {
-                this.juegosActivos = this.juegosActivos.concat (listas.activos);
-                cont = cont + 1;
-                if (cont === this.listaGrupos.length) {
-                  this.PreparaTabla();
-                }
+  // ObtenJuegosActivosDelProfesor_old() {
+  //   this.peticionesAPI.DameGruposProfesor(this.profesor.id)
+  //   .subscribe(res => {
+  //     this.listaGrupos = res;
+  //     if (res[0] !== undefined) {
+  //       let cont = 0;
+  //       this.listaGrupos.forEach (grupo => {
+          
+  //         this.calculos.DameListaJuegos(grupo.id)
+  //         .subscribe ( listas => {
+  //                 this.juegosActivos = this.juegosActivos.concat (listas.activos);
+  //                 cont = cont + 1;
+  //                 if (cont === this.listaGrupos.length) {
+  //                   this.PreparaTabla();
+  //                 }
+  //         });
+  //       });
+  //     }
+  //   });
+  // }
+
+
+  ObtenJuegosActivosDelProfesor() {
+    this.peticionesAPI.DameGruposProfesor(this.profesor.id)
+    .subscribe(res => {
+      this.listaGrupos = res;
+      if (res[0] !== undefined) {
+        let cont = 0;
+        this.listaGrupos.forEach (async grupo => {
+          // Obtenemos la lista de juegos del grupo. La función nos devuelve una Promise y esperamos 
+          // el resultado con el await.
+          console.log ('voy a por los juegos del grupo ', grupo);
+          const listas =  await this.calculos.DameListaJuegos(grupo.id);
+          this.juegosActivos = this.juegosActivos.concat (listas.activos);
+          cont ++;
+          if (cont === this.listaGrupos.length) {
+            console.log ('YA LOS TENGO ', this.juegosActivos);
+            console.log ('voy a preparar la tabla');
+            this.PreparaTabla();
+          }
+
         });
-      });
-    }
-  });
-}
+       
+      }
+    });
+  }
+
+
+
 PreparaTabla() {
   console.log ('voy a preparar tabla. Esta es la lista de juegos activos');
   console.log (this.juegosActivos);

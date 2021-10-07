@@ -130,9 +130,9 @@ mat-card-subtitle {
   color: white
 }
 
-label{
+/* label{
   color: white;
-}
+} */
 
 
 .mat-chip {
@@ -662,4 +662,65 @@ span.avatar5col {
   justify-content: center;
   filter: drop-shadow(5px 5px 5px #222222);
   opacity: .5;
+}
+
+//Elementos de un mat expansion panel (Acordeón)
+.accordion-headers-align .mat-expansion-panel-header-title,
+.accordion-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+.accordion-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+.accordion-headers-align .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+//Estilo del Card para los filtros del Registro de Actividad
+.cartaFiltrosRegistro {
+  margin-bottom: 15px;
+  background-color: rgb(231, 231, 231);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(154, 167, 165) !important;
+}
+.cartaFiltrosRegistro mat-card-content {
+  text-align: center; 
+  display: flex; 
+  flex-direction: column;
+}
+
+//Estilo del Card para los Gráficos de Actividad
+.cartaGraficoActividad {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  background-color: rgb(231, 231, 231);
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  box-shadow: 0px 3px 6px 0px rgb(154, 167, 165) !important;
+}
+.cartaGraficoActividad mat-card-title {
+  color: rgb(63, 81, 181);
+}
+.cartaGraficoActividad mat-card-content {
+  text-align: center;
+  display: flex; 
+  align-items: center; 
+  flex-direction: column;
+}
+.botonesCartaGraficoActividad {
+  width: 75%; 
+  margin-top: 20px; 
+  margin-bottom: 20px;
+}
+
+//Estilo para centrar un icono en un Botón (junto a un texto)
+.iconoCentradoBoton {
+  display: inline-flex; 
+  vertical-align: top;
 }

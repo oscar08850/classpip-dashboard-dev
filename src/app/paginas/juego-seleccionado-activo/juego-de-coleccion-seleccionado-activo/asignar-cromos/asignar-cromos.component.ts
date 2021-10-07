@@ -9,7 +9,7 @@ import { DialogoConfirmacionComponent } from '../../../COMPARTIDO/dialogo-confir
 import Swal from 'sweetalert2';
 
 import { Alumno, Equipo, Juego, AlumnoJuegoDeColeccion, EquipoJuegoDeColeccion,
- Album, AlbumEquipo, Coleccion, Cromo, AlumnoJuegoDePuntos } from '../../../../clases/index';
+ Album, AlbumEquipo, Coleccion, Cromo, AlumnoJuegoDePuntos, Evento, Profesor } from '../../../../clases/index';
 
 
 import {SesionService, PeticionesAPIService, CalculosService, ComServerService} from '../../../../servicios/index';
@@ -105,6 +105,7 @@ export class AsignarCromosComponent implements OnInit {
   segundoEquipo: Equipo;
   tercerEquipo: Equipo;
   mostrarLista = true;
+  profesor: Profesor;
 
   constructor(
                private sesion: SesionService,
@@ -118,6 +119,7 @@ export class AsignarCromosComponent implements OnInit {
   ngOnInit() {
     this.coleccion = this.sesion.DameColeccion();
     this.juegoSeleccionado = this.sesion.DameJuego();
+    this.profesor = this.sesion.DameProfesor();
     console.log ('Ya estamos ' + this.coleccion);
     this.CromosColeccion();
     if (this.juegoSeleccionado.Modo === 'Individual') {
@@ -332,103 +334,175 @@ export class AsignarCromosComponent implements OnInit {
 
 
   AsignarCromoAlumnos(cromoSeleccionado) {
+    this.dataSource.data.forEach(row => {
+      if (this.selection.isSelected(row)) {
+        let alumno: Alumno;
+        alumno = row;
+        console.log(alumno.Nombre + ' seleccionado');
 
-    this.dataSource.data.forEach
-    (row => {
-                    if (this.selection.isSelected(row))  {
-                      let alumno: Alumno;
-                      alumno = row;
-                      console.log(alumno.Nombre + ' seleccionado');
+        let alumnoJuegoDeColeccion: AlumnoJuegoDeColeccion;
+        alumnoJuegoDeColeccion = this.inscripcionesAlumnos.filter(res => res.alumnoId === alumno.id)[0];
+        console.log(alumnoJuegoDeColeccion);
 
-                      let alumnoJuegoDeColeccion: AlumnoJuegoDeColeccion;
-                      alumnoJuegoDeColeccion = this.inscripcionesAlumnos.filter(res => res.alumnoId === alumno.id)[0];
-                      console.log(alumnoJuegoDeColeccion);
+        // Comprobamos si se ha completado la Colección antes de haber asignado el/los Cromo/s
+        // tslint:disable-next-line:max-line-length
+        this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion.id, undefined).subscribe((finalizacionAntes) => {
 
-                      this.peticionesAPI.AsignarCromoAlumno(new Album (alumnoJuegoDeColeccion.id, cromoSeleccionado))
-                      .subscribe(res => {
+          this.peticionesAPI.AsignarCromoAlumno(new Album (alumnoJuegoDeColeccion.id, cromoSeleccionado))
+          .subscribe(res => {
+            console.log(res);
+            Swal.fire('OK', 'Cromo asignado a los alumnos elegidos', 'success');
 
-                        console.log(res);
+            // tslint:disable-next-line:max-line-length
+            const eventoAsignarCromos: Evento = new Evento(20, new Date(), this.profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, 1);
+            this.calculos.RegistrarEvento (eventoAsignarCromos);
 
-                      });
-                      // Notificación para el alumno
-                      console.log ('envio notificación al alumno')
-                      this.comService.EnviarNotificacionIndividual (
-                        alumnoJuegoDeColeccion.alumnoId,
-                        'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
-                    }
-            }
-    );
-    Swal.fire('OK', 'Cromo asignado a los alumnos elegidos', 'success');
+           
+            // Notificar al Alumno
+            // tslint:disable-next-line:max-line-length
+            this.comService.EnviarNotificacionIndividual(20, alumno.id, `Has obtenido 1 cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+            
+            // Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
+            // tslint:disable-next-line:max-line-length
+            this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion.id, undefined).subscribe((finalizacionDespues) => {
+              if ((finalizacionAntes === false) && (finalizacionDespues === true)) {
+                // tslint:disable-next-line:max-line-length
+                const eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), this.profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+                this.calculos.RegistrarEvento(eventoFinalizacionColeccion);
+               
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionIndividual(22, alumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              }
+            }, (err) => {
+              console.log(err);
+            });
+          }, (err) => {
+            console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
+      }
+    });
   }
 
 
   AsignarCromoEquipos(cromoSeleccionado) {
+    this.dataSource.data.forEach(row => {
+      if (this.selection.isSelected(row)) {
+        let equipo: Equipo;
+        equipo = row;
+        console.log(equipo.Nombre + ' seleccionado');
 
-    this.dataSource.data.forEach
-    (row => {
-                if (this.selection.isSelected(row))  {
+        let equipoJuegoDeColeccion: EquipoJuegoDeColeccion;
+        equipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0];
+        console.log(equipoJuegoDeColeccion);
 
-                        let equipo: Equipo;
-                        equipo = row;
-                        console.log(equipo.Nombre + ' seleccionado');
+        // Comprobamos si se ha completado la Colección antes de haber asignado el/los Cromo/s
+        // tslint:disable-next-line:max-line-length
+        this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionAntes) => {
 
-                        let equipoJuegoDeColeccion: EquipoJuegoDeColeccion;
-                        equipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0];
-                        console.log(equipoJuegoDeColeccion);
+          this.peticionesAPI.AsignarCromoEquipo(new AlbumEquipo (equipoJuegoDeColeccion.id, cromoSeleccionado))
+          .subscribe(res => {
+            console.log(res);
+            Swal.fire('OK', 'Cromo asignado a los equipos elegidos', 'success');
+            // Registrar la Asignación de Cromo/s
+            // tslint:disable-next-line:max-line-length
+            const eventoAsignarCromos: Evento = new Evento(20, new Date(), this.profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, 1);
+            this.calculos.RegistrarEvento (eventoAsignarCromos);
 
-                        this.peticionesAPI.AsignarCromoEquipo(new AlbumEquipo (equipoJuegoDeColeccion.id, cromoSeleccionado))
-                        .subscribe(res => {
+          
+            // Notificar a los Alumnos del Equipo
+            // tslint:disable-next-line:max-line-length
+            this.comService.EnviarNotificacionEquipo(20, equipo.id, `Tu equipo ${equipo.Nombre} ha obtenido 1 cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+       
+            // Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
+            // tslint:disable-next-line:max-line-length
+            this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionDespues) => {
+              if ((finalizacionAntes === false) && (finalizacionDespues === true)) {
+                // tslint:disable-next-line:max-line-length
+                const eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), this.profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+                this.calculos.RegistrarEvento(eventoFinalizacionColeccion);
+     
+           
 
-                          console.log(res);
-                        });
-                        // Notificación para los miembros del equipo
-                        console.log ('envio notificación los miembros del equipo');
-                        this.comService.EnviarNotificacionEquipo (
-                            equipo.id,
-                            'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
-                        );
-                }
-            }
-    );
-    Swal.fire('OK', 'Cromo asignado a los equipos elegidos', 'success');
-
+                // Notificar a los Alumnos del Equipo
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionEquipo(22, equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                
+              }
+            }, (err) => {
+              console.log(err);
+            });
+          }, (err) => {
+            console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
+      }
+    });
   }
 
 
   AsignarCromoEquiposDeAlumnosElegidos(cromoSeleccionado) {
+    this.dataSource.data.forEach(row => {
+      if (this.selection.isSelected(row))  {
+        let alumno: Alumno;
+        alumno = row;
+        // Buscamos el equipo del juego al que pertenece el alumno
+        this.peticionesAPI.DameEquiposDelAlumno (alumno.id)
+        .subscribe (equiposDelAlumno => {
+          // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso del
+          // alumno
+          const equipo = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
+          let equipoJuegoDeColeccion: EquipoJuegoDeColeccion;
+          equipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0];
+          console.log(equipoJuegoDeColeccion);
 
-    this.dataSource.data.forEach
-    (row => {
-                if (this.selection.isSelected(row))  {
-                        let alumno: Alumno;
-                        alumno = row;
-                        // Buscamos el equipo del juego al que pertenece el alumno
-                        this.peticionesAPI.DameEquiposDelAlumno (alumno.id)
-                        .subscribe (equiposDelAlumno => {
-                          // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso del
-                          // alumno
-                          const equipo = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
-                          let equipoJuegoDeColeccion: EquipoJuegoDeColeccion;
-                          equipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0];
-                          console.log(equipoJuegoDeColeccion);
+          // Comprobamos si se ha completado la Colección antes de haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionAntes) => {
 
-                          this.peticionesAPI.AsignarCromoEquipo(new AlbumEquipo (equipoJuegoDeColeccion.id, cromoSeleccionado))
-                          .subscribe(res => {
+            this.peticionesAPI.AsignarCromoEquipo(new AlbumEquipo (equipoJuegoDeColeccion.id, cromoSeleccionado))
+            .subscribe(res => {
+              console.log(res);
+              Swal.fire('OK', 'Cromo asignado a los equipos de los alumnos elegidos', 'success');
+              // tslint:disable-next-line:max-line-length
+              const eventoAsignarCromos: Evento = new Evento(20, new Date(), this.profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, 1);
+              this.calculos.RegistrarEvento(eventoAsignarCromos);
 
-                            console.log(res);
-                          });
-                          // Notificación para los miembros del equipo
-                          console.log ('envio notificación los miembros del equipo');
-                          this.comService.EnviarNotificacionEquipo (
-                              equipo.id,
-                              'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
-                          );
-                        });
+        
+              // Notificar a los Alumnos del Equipo
+              // tslint:disable-next-line:max-line-length
+              this.comService.EnviarNotificacionEquipo(20, equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido 1 cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+
+              // Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
+              // tslint:disable-next-line:max-line-length
+              this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionDespues) => {
+                if ((finalizacionAntes === false) && (finalizacionDespues === true)) {
+                  // tslint:disable-next-line:max-line-length
+                  const eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), this.profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+                  this.calculos.RegistrarEvento(eventoFinalizacionColeccion);
+
+             
+                  // Notificar a los Alumnos del Equipo
+                  // tslint:disable-next-line:max-line-length
+                  this.comService.EnviarNotificacionEquipo(22, equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                  
                 }
-            }
-    );
-    Swal.fire('OK', 'Cromo asignado a los equipos de los alumnos elegidos', 'success');
-
+              }, (err) => {
+                console.log(err);
+              });
+            }, (err) => {
+              console.log(err);
+            });
+          }, (err) => {
+            console.log(err);
+          });
+        });
+      }
+    });
   }
 
 
@@ -445,66 +519,150 @@ export class AsignarCromosComponent implements OnInit {
   }
 
   AsignarCromosAleatoriosAlumno() {
-    this.dataSource.data.forEach
-    (row =>  {  if (this.selection.isSelected(row))  {
-                const alumno: Alumno = row;
-                this.calculos.AsignarCromosAleatoriosAlumno (
-                  alumno, this.inscripcionesAlumnos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
-                );
-                  // Notificación para el alumno
-                console.log ('envio notificación al alumno');
-                this.comService.EnviarNotificacionIndividual (
-                      alumno.id,
-                      'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
-                }
-    });
-    Swal.fire('OK', 'Cromos aleatorios asignados a los alumnos elegidos', 'success');
-  }
-  AsignarCromosAleatoriosEquipo() {
+    this.dataSource.data.forEach(row => {
+      if (this.selection.isSelected(row))  {
+        const alumno: Alumno = row;
 
-    this.dataSource.data.forEach
-    (row => {
-              if (this.selection.isSelected(row))  {
-                const equipo: Equipo = row;
-                // tslint:disable-next-line:max-line-length
-                this.calculos.AsignarCromosAleatoriosEquipo (equipo, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
-                console.log ('envio notificación los miembros del equipo');
-                this.comService.EnviarNotificacionEquipo (
-                    equipo.id,
-                    'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
-                );
-              }
+        // Comprobamos si se ha completado la Colección antes de haber asignado el/los Cromo/s
+        const alumnoJuegoDeColeccion: AlumnoJuegoDeColeccion = this.inscripcionesAlumnos.filter(res => res.alumnoId === alumno.id)[0];
+        // tslint:disable-next-line:max-line-length
+        this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion.id, undefined).subscribe((finalizacionAntes) => {
+
+          // tslint:disable-next-line:max-line-length
+          this.calculos.AsignarCromosAleatoriosAlumno (alumno, this.inscripcionesAlumnos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
+          Swal.fire('OK', 'Cromos aleatorios asignados a los alumnos elegidos', 'success');
+          // tslint:disable-next-line:max-line-length
+          const eventoAsignarCromos: Evento = new Evento(20, new Date(), this.profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.numeroCromosRandom);
+          this.calculos.RegistrarEvento (eventoAsignarCromos);
+
+       
+          // Notificar al Alumno
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionIndividual(20, alumno.id, `Has obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          
+          // Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion.id, undefined).subscribe((finalizacionDespues) => {
+            if ((finalizacionAntes === false) && (finalizacionDespues === true)) {
+              // tslint:disable-next-line:max-line-length
+              const eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), this.profesor.id, alumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+              this.calculos.RegistrarEvento(eventoFinalizacionColeccion);
+            
+        
+              // Notificar al Alumno
+              // tslint:disable-next-line:max-line-length
+              this.comService.EnviarNotificacionIndividual(22, alumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              
+            }
+          }, (err) => {
+            console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
+      }
     });
-    Swal.fire('OK', 'Cromos aleatorios asignados a los equipos elegidos', 'success');
+  }
+
+  AsignarCromosAleatoriosEquipo() {
+    this.dataSource.data.forEach(row => {
+      if (this.selection.isSelected(row))  {
+        const equipo: Equipo = row;
+
+        // Comprobamos si se ha completado la Colección antes de haber asignado el/los Cromo/s
+        const equipoJuegoDeColeccion: EquipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0];
+        // tslint:disable-next-line:max-line-length
+        this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionAntes) => {
+
+          // tslint:disable-next-line:max-line-length
+          this.calculos.AsignarCromosAleatoriosEquipo (equipo, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
+          Swal.fire('OK', 'Cromos aleatorios asignados a los equipos elegidos', 'success');
+          // tslint:disable-next-line:max-line-length
+          const eventoAsignarCromos: Evento = new Evento(20, new Date(), this.profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.numeroCromosRandom);
+          this.calculos.RegistrarEvento(eventoAsignarCromos);
+
+      
+          // Notificar a los Alumnos del Equipo
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionEquipo(20, equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          
+          // Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionDespues) => {
+            if ((finalizacionAntes === false) && (finalizacionDespues === true)) {
+              // tslint:disable-next-line:max-line-length
+              const eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), this.profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+              this.calculos.RegistrarEvento(eventoFinalizacionColeccion);
+            
+           
+              // Notificar a los Alumnos del Equipo
+              // tslint:disable-next-line:max-line-length
+              this.comService.EnviarNotificacionEquipo(22, equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              
+            }
+          }, (err) => {
+            console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
+      }
+    });
   }
 
   AsignarCromosAleatoriosEquiposDeAlumnosElegidos() {
-    this.dataSource.data.forEach
-    (row =>  {
-            if (this.selection.isSelected(row))  {
-                  let alumno: Alumno;
-                  alumno = row;
-                  // Buscamos el equipo del juego al que pertenece el alumno
-                  this.peticionesAPI.DameEquiposDelAlumno (alumno.id)
-                  .subscribe (equiposDelAlumno => {
-                    // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso del
-                    // alumno
-                    const equipo = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
-                    let equipoJuegoDeColeccion: EquipoJuegoDeColeccion;
-                    equipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0];
+    this.dataSource.data.forEach(row =>  {
+      if (this.selection.isSelected(row)) {
+        let alumno: Alumno;
+        alumno = row;
+        // Buscamos el equipo del juego al que pertenece el alumno
+        this.peticionesAPI.DameEquiposDelAlumno (alumno.id)
+        .subscribe (equiposDelAlumno => {
+          // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso del
+          // alumno
+          const equipo = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
+          let equipoJuegoDeColeccion: EquipoJuegoDeColeccion;
+          equipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0];
 
-                    // tslint:disable-next-line:max-line-length
-                    this.calculos.AsignarCromosAleatoriosEquipo (equipo, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
-                    // Notificación para los miembros del equipo
-                    console.log ('envio notificación los miembros del equipo');
-                    this.comService.EnviarNotificacionEquipo (
-                        equipo.id,
-                        'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
-                    );
-                  });
-            }
+          // Comprobamos si se ha completado la Colección antes de haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionAntes) => {
+
+            // tslint:disable-next-line:max-line-length
+            this.calculos.AsignarCromosAleatoriosEquipo (equipo, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
+            Swal.fire('OK', 'Cromos aleatorios asignados a los equipos de los alumnos elegidos', 'success');
+            // tslint:disable-next-line:max-line-length
+            const eventoAsignarCromos: Evento = new Evento(20, new Date(), this.profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.numeroCromosRandom);
+            this.calculos.RegistrarEvento(eventoAsignarCromos);
+
+     
+            // Notificar a los Alumnos del Equipo
+            // tslint:disable-next-line:max-line-length
+            this.comService.EnviarNotificacionEquipo(20, equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+            
+            // Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
+            // tslint:disable-next-line:max-line-length
+            this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionDespues) => {
+              if ((finalizacionAntes === false) && (finalizacionDespues === true)) {
+                // tslint:disable-next-line:max-line-length
+                const eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), this.profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+                this.calculos.RegistrarEvento(eventoFinalizacionColeccion);
+              
+             
+                // Notificar a los Alumnos del Equipo
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionEquipo(22, equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                
+              }
+            }, (err) => {
+              console.log(err);
+            });
+          }, (err) => {
+              console.log(err);
+          });
+        });
+      }
     });
-    Swal.fire('OK', 'Cromos aleatorios asignados a los equipos de los alumnos elegidos', 'success');
   }
 
   AsignarAleatoriamenteCromosAleatorios() {
@@ -523,30 +681,87 @@ export class AsignarCromosComponent implements OnInit {
     const numeroAlumnos = this.alumnosDelJuego.length;
     const elegido = Math.floor(Math.random() * numeroAlumnos);
     this.alumnoElegido = this.alumnosDelJuego[elegido];
-    this.calculos.AsignarCromosAleatoriosAlumno (
-            this.alumnoElegido, this.inscripcionesAlumnos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
-    );
-    // Notificación para el alumno
-    console.log ('envio notificación al alumno');
-    this.comService.EnviarNotificacionIndividual (
-            this.alumnoElegido.id,
-            'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
-    Swal.fire('OK', 'Cromos aleatorios asignados a: ' + this.alumnoElegido.Nombre, 'success');
+
+    // Comprobamos si se ha completado la Colección antes de haber asignado el/los Cromo/s
+    // tslint:disable-next-line:max-line-length
+    const alumnoJuegoDeColeccion: AlumnoJuegoDeColeccion = this.inscripcionesAlumnos.filter(res => res.alumnoId === this.alumnoElegido.id)[0];
+    // tslint:disable-next-line:max-line-length
+    this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion.id, undefined).subscribe((finalizacionAntes) => {
+
+      // tslint:disable-next-line:max-line-length
+      this.calculos.AsignarCromosAleatoriosAlumno (this.alumnoElegido, this.inscripcionesAlumnos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
+      Swal.fire('OK', 'Cromos aleatorios asignados a: ' + this.alumnoElegido.Nombre, 'success');
+      // tslint:disable-next-line:max-line-length
+      const eventoAsignarCromos: Evento = new Evento(20, new Date(), this.profesor.id, this.alumnoElegido.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.numeroCromosRandom);
+      this.calculos.RegistrarEvento (eventoAsignarCromos);
+
+      // Notificar al Alumno
+      // tslint:disable-next-line:max-line-length
+      this.comService.EnviarNotificacionIndividual(20, this.alumnoElegido.id, `Has obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+
+        // Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
+      // tslint:disable-next-line:max-line-length
+      this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion.id, undefined).subscribe((finalizacionDespues) => {
+        if ((finalizacionAntes === false) && (finalizacionDespues === true)) {
+          // tslint:disable-next-line:max-line-length
+          const eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), this.profesor.id, this.alumnoElegido.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+          this.calculos.RegistrarEvento(eventoFinalizacionColeccion);
+
+          // Notificar al Alumno
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionIndividual(22, this.alumnoElegido.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          
+        }
+      }, (err) => {
+        console.log(err);
+      });
+    }, (err) => {
+      console.log(err);
+    });
   }
 
   AsignarCromosAleatoriosEquipoAleatorio() {
     const numeroEquipos = this.equiposDelJuego.length;
     const elegido = Math.floor(Math.random() * numeroEquipos);
     this.equipoElegido = this.equiposDelJuego[elegido];
-    this.calculos.AsignarCromosAleatoriosEquipo (
-            this.equipoElegido, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
-    );
-    console.log ('envio notificación los miembros del equipo');
-    this.comService.EnviarNotificacionEquipo (
-        this.equipoElegido.id,
-        'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
-    );
-    Swal.fire('OK', 'Cromos aleatorios asignados al equipo: ' + this.equipoElegido.Nombre, 'success');
+
+    // Comprobamos si se ha completado la Colección antes de haber asignado el/los Cromo/s
+    // tslint:disable-next-line:max-line-length
+    const equipoJuegoDeColeccion: EquipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === this.equipoElegido.id)[0];
+    // tslint:disable-next-line:max-line-length
+    this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionAntes) => {
+
+      // tslint:disable-next-line:max-line-length
+      this.calculos.AsignarCromosAleatoriosEquipo (this.equipoElegido, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
+      Swal.fire('OK', 'Cromos aleatorios asignados al equipo: ' + this.equipoElegido.Nombre, 'success');
+      // tslint:disable-next-line:max-line-length
+      const eventoAsignarCromos: Evento = new Evento(20, new Date(), this.profesor.id, undefined, this.equipoElegido.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.numeroCromosRandom);
+      this.calculos.RegistrarEvento(eventoAsignarCromos);
+
+
+      // Notificar a los Alumnos del Equipo
+      // tslint:disable-next-line:max-line-length
+      this.comService.EnviarNotificacionEquipo(20, this.equipoElegido.id, `Tu Equipo ${this.equipoElegido.Nombre} ha obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);      
+      // Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
+      // tslint:disable-next-line:max-line-length
+      this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionDespues) => {
+        if ((finalizacionAntes === false) && (finalizacionDespues === true)) {
+          // tslint:disable-next-line:max-line-length
+          const eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), this.profesor.id, undefined, this.equipoElegido.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+          this.calculos.RegistrarEvento(eventoFinalizacionColeccion);
+
+    
+          // Notificar a los Alumnos del Equipo
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionEquipo(22, this.equipoElegido.id, `¡Enhorabuena! Tu equipo ${this.equipoElegido.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          
+        }
+      }, (err) => {
+        console.log(err);
+      });
+    }, (err) => {
+      console.log(err);
+    });
   }
 
   AsignarCromosAleatoriosEquipoDeAlumnoAleatorio() {
@@ -556,25 +771,52 @@ export class AsignarCromosComponent implements OnInit {
 
     // Buscamos el equipo del juego al que pertenece el alumno
     this.peticionesAPI.DameEquiposDelAlumno (alumno.id)
-                  .subscribe (equiposDelAlumno => {
-                    // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso del
-                    // alumno
-                    const equipo = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
-                    let equipoJuegoDeColeccion: EquipoJuegoDeColeccion;
-                    equipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0];
-                    this.calculos.AsignarCromosAleatoriosEquipo (
-                      equipo, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion
-                    );
-                    Swal.fire('OK', 'Cromos aleatorios asignados al equipo de: ' + alumno.Nombre, 'success');
-                    console.log ('envio notificación los miembros del equipo');
-                    this.comService.EnviarNotificacionEquipo (
-                        equipo.id,
-                        'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
-                    );
-                  });
+      .subscribe (equiposDelAlumno => {
+        // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso del
+        // alumno
+        const equipo = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
+        let equipoJuegoDeColeccion: EquipoJuegoDeColeccion;
+        equipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipo.id)[0];
+
+        // Comprobamos si se ha completado la Colección antes de haber asignado el/los Cromo/s
+        // tslint:disable-next-line:max-line-length
+        this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionAntes) => {
+
+          // tslint:disable-next-line:max-line-length
+          this.calculos.AsignarCromosAleatoriosEquipo (equipo, this.inscripcionesEquipos, this.numeroCromosRandom, this.probabilidadCromos, this.cromosColeccion);
+          Swal.fire('OK', 'Cromos aleatorios asignados al equipo de: ' + alumno.Nombre, 'success');
+          // tslint:disable-next-line:max-line-length
+          const eventoAsignarCromos: Evento = new Evento(20, new Date(), this.profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.numeroCromosRandom);
+          this.calculos.RegistrarEvento(eventoAsignarCromos);
+
+         
+          // Notificar a los Alumnos del Equipo
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionEquipo(20, equipo.id, `Tu Equipo ${equipo.Nombre} ha obtenido ${this.numeroCromosRandom} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          
+          // Comprobamos si se ha completado la Colección tras haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion.id).subscribe((finalizacionDespues) => {
+            if ((finalizacionAntes === false) && (finalizacionDespues === true)) {
+
+              // tslint:disable-next-line:max-line-length
+              const eventoFinalizacionColeccion: Evento = new Evento(22, new Date(), this.profesor.id, undefined, equipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+              this.calculos.RegistrarEvento(eventoFinalizacionColeccion);
+           
+       
+              // Notificar a los Alumnos del Equipo
+              // tslint:disable-next-line:max-line-length
+              this.comService.EnviarNotificacionEquipo(22, equipo.id, `¡Enhorabuena! Tu equipo ${equipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+
+            }
+          }, (err) => {
+            console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
+      });
   }
-
-
 
   AlumnosDelEquipo(equipo: Equipo) {
     console.log(equipo);
@@ -605,28 +847,130 @@ export class AsignarCromosComponent implements OnInit {
         this.segundoAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[1].alumnoId)[0];
         this.tercerAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[2].alumnoId)[0];
 
-        this.calculos.AsignarCromosAleatoriosAlumno (
-          this.primerAlumno, this.inscripcionesAlumnos, this.cromosParaPrimero, this.probabilidadCromos, this.cromosColeccion
-        );
-        console.log ('envio notificación al alumno');
-        this.comService.EnviarNotificacionIndividual (
-                this.primerAlumno.id,
-                'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
 
-        this.calculos.AsignarCromosAleatoriosAlumno (
-          this.segundoAlumno, this.inscripcionesAlumnos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion
-        );
-        this.comService.EnviarNotificacionIndividual (
-                this.segundoAlumno.id,
-                'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
-        this.calculos.AsignarCromosAleatoriosAlumno (
-          this.tercerAlumno, this.inscripcionesAlumnos, this.cromosParaTercero, this.probabilidadCromos, this.cromosColeccion
-        );
-        this.comService.EnviarNotificacionIndividual (
-          this.tercerAlumno.id,
-          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego);
+
+        // Comprobamos si se ha completado la Colección (Del Alumno 1) antes de haber asignado el/los Cromo/s
+        // tslint:disable-next-line:max-line-length
+        const alumnoJuegoDeColeccion1: AlumnoJuegoDeColeccion = this.inscripcionesAlumnos.filter(res => res.alumnoId === this.primerAlumno.id)[0];
+        // tslint:disable-next-line:max-line-length
+        this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion1.id, undefined).subscribe((finalizacionAntesA1) => {
+
+          // tslint:disable-next-line:max-line-length
+          this.calculos.AsignarCromosAleatoriosAlumno (this.primerAlumno, this.inscripcionesAlumnos, this.cromosParaPrimero, this.probabilidadCromos, this.cromosColeccion);
+          // tslint:disable-next-line:max-line-length
+          const eventoAsignarCromosA1: Evento = new Evento(20, new Date(), this.profesor.id, this.primerAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.cromosParaPrimero);
+          this.calculos.RegistrarEvento(eventoAsignarCromosA1);
+
+
+          // Notificar al Alumno (1)
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionIndividual(20, this.primerAlumno.id, `Has obtenido ${this.cromosParaPrimero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          
+          // Comprobamos si se ha completado la Colección (Del Alumno 1) tras haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion1.id, undefined).subscribe((finalizacionDespuesA1) => {
+            if ((finalizacionAntesA1 === false) && (finalizacionDespuesA1 === true)) {
+              // tslint:disable-next-line:max-line-length
+              const eventoFinalizacionColeccionA1: Evento = new Evento(22, new Date(), this.profesor.id, this.primerAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+              this.calculos.RegistrarEvento(eventoFinalizacionColeccionA1);
+
+    
+              // Notificar al Alumno (1)
+              // tslint:disable-next-line:max-line-length
+              this.comService.EnviarNotificacionIndividual(22, this.primerAlumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              
+            }
+          }, (err) => {
+            console.log(err);
+          });
+          
+        }, (err) => {
+          console.log(err);
+        });
+
+
+
+        // Comprobamos si se ha completado la Colección (Del Alumno 2) antes de haber asignado el/los Cromo/s
+        // tslint:disable-next-line:max-line-length
+        const alumnoJuegoDeColeccion2: AlumnoJuegoDeColeccion = this.inscripcionesAlumnos.filter(res => res.alumnoId === this.segundoAlumno.id)[0];
+        // tslint:disable-next-line:max-line-length
+        this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion2.id, undefined).subscribe((finalizacionAntesA2) => {
+
+          // tslint:disable-next-line:max-line-length
+          this.calculos.AsignarCromosAleatoriosAlumno (this.segundoAlumno, this.inscripcionesAlumnos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion);
+          // tslint:disable-next-line:max-line-length
+          const eventoAsignarCromosA2: Evento = new Evento(20, new Date(), this.profesor.id, this.segundoAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.cromosParaSegundo);
+          this.calculos.RegistrarEvento(eventoAsignarCromosA2);
+
+      
+          // Notificar al Alumno (2)
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionIndividual(20, this.segundoAlumno.id, `Has obtenido ${this.cromosParaSegundo} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          
+          // Comprobamos si se ha completado la Colección (Del Alumno 2) tras haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion2.id, undefined).subscribe((finalizacionDespuesA2) => {
+            if ((finalizacionAntesA2 === false) && (finalizacionDespuesA2 === true)) {
+              // tslint:disable-next-line:max-line-length
+              const eventoFinalizacionColeccionA2: Evento = new Evento(22, new Date(), this.profesor.id, this.segundoAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+              this.calculos.RegistrarEvento(eventoFinalizacionColeccionA2);
+             
+            
+              // Notificar al Alumno (2)
+              // tslint:disable-next-line:max-line-length
+              this.comService.EnviarNotificacionIndividual(22, this.segundoAlumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              
+            }
+          }, (err) => {
+            console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
+
+
+
+        // Comprobamos si se ha completado la Colección (Del Alumno 3) antes de haber asignado el/los Cromo/s
+        // tslint:disable-next-line:max-line-length
+        const alumnoJuegoDeColeccion3: AlumnoJuegoDeColeccion = this.inscripcionesAlumnos.filter(res => res.alumnoId === this.tercerAlumno.id)[0];
+        // tslint:disable-next-line:max-line-length
+        this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion3.id, undefined).subscribe((finalizacionAntesA3) => {
+
+          // tslint:disable-next-line:max-line-length
+          this.calculos.AsignarCromosAleatoriosAlumno (this.tercerAlumno, this.inscripcionesAlumnos, this.cromosParaTercero, this.probabilidadCromos, this.cromosColeccion);
+          // tslint:disable-next-line:max-line-length
+          const eventoAsignarCromosA3: Evento = new Evento(20, new Date(), this.profesor.id, this.tercerAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.cromosParaTercero);
+          this.calculos.RegistrarEvento (eventoAsignarCromosA3);
+
+       
+          // Notificar al Alumno (3)
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionIndividual(20, this.tercerAlumno.id, `Has obtenido ${this.cromosParaTercero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          
+          // Comprobamos si se ha completado la Colección (Del Alumno 3) tras haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, alumnoJuegoDeColeccion3.id, undefined).subscribe((finalizacionDespuesA3) => {
+            if ((finalizacionAntesA3 === false) && (finalizacionDespuesA3 === true)) {
+              // tslint:disable-next-line:max-line-length
+              const eventoFinalizacionColeccionA3: Evento = new Evento(22, new Date(), this.profesor.id, this.tercerAlumno.id, undefined, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+              this.calculos.RegistrarEvento (eventoFinalizacionColeccionA3);
+
+           
+              // Notificar al Alumno (3)
+              // tslint:disable-next-line:max-line-length
+              this.comService.EnviarNotificacionIndividual(22, this.tercerAlumno.id, `¡Enhorabuena! Has completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              
+            }
+          }, (err) => {
+            console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
+
+
+
         Swal.fire('OK', 'Cromos aleatorios asignados a los tres mejores alumnos en el juego de puntos elegido: ', 'success');
-
       });
 
     } else if (this.juegoSeleccionado.Asignacion === 'Equipo') {
@@ -642,90 +986,286 @@ export class AsignarCromosComponent implements OnInit {
         this.segundoEquipo = this.equiposDelJuego.filter (a => a.id === ranking[1].equipoId)[0];
         this.tercerEquipo = this.equiposDelJuego.filter (a => a.id === ranking[2].equipoId)[0];
 
-        this.calculos.AsignarCromosAleatoriosEquipo (
-          this.primerEquipo, this.inscripcionesEquipos, this.cromosParaPrimero, this.probabilidadCromos, this.cromosColeccion
-        );
-        this.comService.EnviarNotificacionEquipo (
-          this.primerEquipo.id,
-          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
-        );
-        this.calculos.AsignarCromosAleatoriosEquipo (
-          this.segundoEquipo, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion
-        );
-        this.comService.EnviarNotificacionEquipo (
-          this.segundoEquipo.id,
-          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
-        );
-        this.calculos.AsignarCromosAleatoriosEquipo (
-          this.tercerEquipo, this.inscripcionesEquipos, this.cromosParaTercero, this.probabilidadCromos, this.cromosColeccion
-        );
-        this.comService.EnviarNotificacionEquipo (
-          this.tercerEquipo.id,
-          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
-        );
+
+
+        // Comprobamos si se ha completado la Colección (Del Equipo 1) antes de haber asignado el/los Cromo/s
+        // tslint:disable-next-line:max-line-length
+        const equipoJuegoDeColeccion1: EquipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === this.primerEquipo.id)[0];
+        // tslint:disable-next-line:max-line-length
+        this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion1.id).subscribe((finalizacionAntesE1) => {
+
+          // tslint:disable-next-line:max-line-length
+          this.calculos.AsignarCromosAleatoriosEquipo (this.primerEquipo, this.inscripcionesEquipos, this.cromosParaPrimero, this.probabilidadCromos, this.cromosColeccion);
+
+          // tslint:disable-next-line:max-line-length
+          const eventoAsignarCromosE1: Evento = new Evento(20, new Date(), this.profesor.id, undefined, this.primerEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.cromosParaPrimero);
+          this.calculos.RegistrarEvento (eventoAsignarCromosE1);
+
+          // Notificar a los Alumnos del Equipo (1)
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionEquipo(20, this.primerEquipo.id, `Tu Equipo ${this.primerEquipo.Nombre} ha obtenido ${this.cromosParaPrimero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          
+          // Comprobamos si se ha completado la Colección (Del Equipo 1) tras haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion1.id).subscribe((finalizacionDespuesE1) => {
+            if ((finalizacionAntesE1 === false) && (finalizacionDespuesE1 === true)) {
+                // tslint:disable-next-line:max-line-length
+                const eventoFinalizacionColeccionE1: Evento = new Evento(22, new Date(), this.profesor.id, undefined, this.primerEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+                this.calculos.RegistrarEvento(eventoFinalizacionColeccionE1);
+
+                // Notificar a los Alumnos del Equipo (1)
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionEquipo(22, this.primerEquipo.id, `¡Enhorabuena! Tu equipo ${this.primerEquipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                
+              }
+            }, (err) => {
+              console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
+
+
+
+        // Comprobamos si se ha completado la Colección (Del Equipo 2) antes de haber asignado el/los Cromo/s
+        // tslint:disable-next-line:max-line-length
+        const equipoJuegoDeColeccion2: EquipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === this.segundoEquipo.id)[0];
+        // tslint:disable-next-line:max-line-length
+        this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion2.id).subscribe((finalizacionAntesE2) => {
+
+          // tslint:disable-next-line:max-line-length
+          this.calculos.AsignarCromosAleatoriosEquipo (this.segundoEquipo, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion);
+          // tslint:disable-next-line:max-line-length
+          const eventoAsignarCromosE2: Evento = new Evento(20, new Date(), this.profesor.id, undefined, this.segundoEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.cromosParaSegundo);
+          this.calculos.RegistrarEvento (eventoAsignarCromosE2);
+
+         
+          // Notificar a los Alumnos del Equipo (2)
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionEquipo(20, this.segundoEquipo.id, `Tu Equipo ${this.segundoEquipo.Nombre} ha obtenido ${this.cromosParaSegundo} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          
+          // Comprobamos si se ha completado la Colección (Del Equipo 2) tras haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion2.id).subscribe((finalizacionDespuesE2) => {
+            if ((finalizacionAntesE2 === false) && (finalizacionDespuesE2 === true)) {
+                // tslint:disable-next-line:max-line-length
+                const eventoFinalizacionColeccionE2: Evento = new Evento(22, new Date(), this.profesor.id, undefined, this.segundoEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+                this.calculos.RegistrarEvento(eventoFinalizacionColeccionE2);
+
+     
+                // Notificar a los Alumnos del Equipo (2)
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionEquipo(22, this.segundoEquipo.id, `¡Enhorabuena! Tu equipo ${this.segundoEquipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                
+            }
+            }, (err) => {
+              console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
+
+
+        // Comprobamos si se ha completado la Colección (Del Equipo 3) antes de haber asignado el/los Cromo/s
+        // tslint:disable-next-line:max-line-length
+        const equipoJuegoDeColeccion3: EquipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === this.tercerEquipo.id)[0];
+        // tslint:disable-next-line:max-line-length
+        this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion3.id).subscribe((finalizacionAntesE3) => {
+
+          // tslint:disable-next-line:max-line-length
+          this.calculos.AsignarCromosAleatoriosEquipo (this.tercerEquipo, this.inscripcionesEquipos, this.cromosParaTercero, this.probabilidadCromos, this.cromosColeccion);
+          // tslint:disable-next-line:quotemark
+          // tslint:disable-next-line:max-line-length
+          const eventoAsignarCromosE3: Evento = new Evento(20, new Date(), this.profesor.id, undefined, this.tercerEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.cromosParaTercero);
+          this.calculos.RegistrarEvento (eventoAsignarCromosE3);
+
+  
+          // Notificar a los Alumnos del Equipo (3)
+          // tslint:disable-next-line:max-line-length
+          this.comService.EnviarNotificacionEquipo(20, this.tercerEquipo.id, `Tu Equipo ${this.tercerEquipo.Nombre} ha obtenido ${this.cromosParaTercero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+          
+          // Comprobamos si se ha completado la Colección (Del Equipo 3) tras haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion3.id).subscribe((finalizacionDespuesE3) => {
+            if ((finalizacionAntesE3 === false) && (finalizacionDespuesE3 === true)) {
+              // tslint:disable-next-line:max-line-length
+              const eventoFinalizacionColeccionE3: Evento = new Evento(22, new Date(), this.profesor.id, undefined, this.tercerEquipo.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+              this.calculos.RegistrarEvento(eventoFinalizacionColeccionE3);
+          
+              // Notificar a los Alumnos del Equipo (3)
+              // tslint:disable-next-line:max-line-length
+              this.comService.EnviarNotificacionEquipo(22, this.tercerEquipo.id, `¡Enhorabuena! Tu equipo ${this.tercerEquipo.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+              
+            }
+          }, (err) => {
+            console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
         Swal.fire('OK', 'Cromos aleatorios asignados a los tres mejores equipos en el juego de puntos elegido: ', 'success');
-
       });
-
-
     } else {
-    // el juego es de equipo pero con asignación individual
-    this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(this.juegoPuntosSeleccionadoId)
-    .subscribe(inscripciones => {
-      // tslint:disable-next-line:only-arrow-functions
-      const ranking = inscripciones.sort(function(obj1, obj2) {
-        return obj2.PuntosTotalesAlumno - obj1.PuntosTotalesAlumno;
-      });
-      // Obtengo los tres primeros alumnos del ranking (atención porque el ranking solo
-      // tiene los identificadores de los alumnos y a partir de ellos tengo que conseguir los alumnos)
-      this.primerAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[0].alumnoId)[0];
-      this.segundoAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[1].alumnoId)[0];
-      this.tercerAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[2].alumnoId)[0];
+      // el juego es de equipo pero con asignación individual
+      this.peticionesAPI.DameInscripcionesAlumnoJuegoDePuntos(this.juegoPuntosSeleccionadoId)
+      .subscribe(inscripciones => {
+        // tslint:disable-next-line:only-arrow-functions
+        const ranking = inscripciones.sort(function(obj1, obj2) {
+          return obj2.PuntosTotalesAlumno - obj1.PuntosTotalesAlumno;
+        });
+        // Obtengo los tres primeros alumnos del ranking (atención porque el ranking solo
+        // tiene los identificadores de los alumnos y a partir de ellos tengo que conseguir los alumnos)
+        this.primerAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[0].alumnoId)[0];
+        this.segundoAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[1].alumnoId)[0];
+        this.tercerAlumno = this.alumnosDelJuego.filter (a => a.id === ranking[2].alumnoId)[0];
 
-      // Buscamos el equipo del juego al que pertenece cada uno de los alumnos para asignarle los cromos
-      this.peticionesAPI.DameEquiposDelAlumno (this.primerAlumno.id)
-      .subscribe (equiposDelAlumno => {
-        // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso de alumno
-        const equipoPrimerAlumno = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
-        this.calculos.AsignarCromosAleatoriosEquipo (
-          equipoPrimerAlumno, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion
-        );
-        this.comService.EnviarNotificacionEquipo (
-          equipoPrimerAlumno.id,
-          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
-        );
-      });
+        // Buscamos el equipo del juego al que pertenece cada uno de los alumnos para asignarle los cromos
+        this.peticionesAPI.DameEquiposDelAlumno (this.primerAlumno.id)
+        .subscribe (equiposDelAlumno => {
+          // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso de alumno
+          const equipoPrimerAlumno = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
 
-      this.peticionesAPI.DameEquiposDelAlumno (this.segundoAlumno.id)
-      .subscribe (equiposDelAlumno => {
-        // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso de alumno
-        const equipoSegundoAlumno = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
-        this.calculos.AsignarCromosAleatoriosEquipo (
-          equipoSegundoAlumno, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion
-        );
-        this.comService.EnviarNotificacionEquipo (
-          equipoSegundoAlumno.id,
-          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
-        );
-      });
+          // Comprobamos si se ha completado la Colección (Del Equipo 1) antes de haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          const equipoJuegoDeColeccion1: EquipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipoPrimerAlumno.id)[0];
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion1.id).subscribe((finalizacionAntesE1) => {
 
-      this.peticionesAPI.DameEquiposDelAlumno (this.tercerAlumno.id)
-      .subscribe (equiposDelAlumno => {
-        // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso de alumno
-        const equipoTercerAlumno = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
-        this.calculos.AsignarCromosAleatoriosEquipo (
-          equipoTercerAlumno, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion
-        );
-        this.comService.EnviarNotificacionEquipo (
-          equipoTercerAlumno.id,
-          'Tienes nuevos cromos en el juego ' + this.juegoSeleccionado.NombreJuego
-        );
-      });
-      Swal.fire('OK', 'Cromos aleatorios asignados a los  equipos de los tres mejores alumnos en el juego de puntos elegido: ', 'success');
-    });
+            // tslint:disable-next-line:max-line-length
+            this.calculos.AsignarCromosAleatoriosEquipo (equipoPrimerAlumno, this.inscripcionesEquipos, this.cromosParaPrimero, this.probabilidadCromos, this.cromosColeccion);
+            // tslint:disable-next-line:max-line-length
+            const eventoAsignarCromosE1: Evento = new Evento(20, new Date(), this.profesor.id, undefined, equipoPrimerAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.cromosParaPrimero);
+            this.calculos.RegistrarEvento (eventoAsignarCromosE1);
 
+        
+            // Notificar a los Alumnos del Equipo (1)
+            // tslint:disable-next-line:max-line-length
+            this.comService.EnviarNotificacionEquipo(20, equipoPrimerAlumno.id, `Tu Equipo ${equipoPrimerAlumno.Nombre} ha obtenido ${this.cromosParaPrimero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+            
+            // Comprobamos si se ha completado la Colección (Del Equipo 1) tras haber asignado el/los Cromo/s
+            // tslint:disable-next-line:max-line-length
+            this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion1.id).subscribe((finalizacionDespuesE1) => {
+              if ((finalizacionAntesE1 === false) && (finalizacionDespuesE1 === true)) {
+                // tslint:disable-next-line:max-line-length
+                const eventoFinalizacionColeccionE1: Evento = new Evento(22, new Date(), this.profesor.id, undefined, equipoPrimerAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+                this.calculos.RegistrarEvento(eventoFinalizacionColeccionE1);
+                
+               
+                // Notificar a los Alumnos del Equipo (1)
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionEquipo(22, equipoPrimerAlumno.id, `¡Enhorabuena! Tu equipo ${equipoPrimerAlumno.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                
+              }
+            }, (err) => {
+                console.log(err);
+            });
+          }, (err) => {
+            console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
+
+
+        this.peticionesAPI.DameEquiposDelAlumno (this.segundoAlumno.id)
+        .subscribe (equiposDelAlumno => {
+          // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso de alumno
+          const equipoSegundoAlumno = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
+
+          // Comprobamos si se ha completado la Colección (Del Equipo 2) antes de haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          const equipoJuegoDeColeccion2: EquipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipoSegundoAlumno.id)[0];
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion2.id).subscribe((finalizacionAntesE2) => {
+            // tslint:disable-next-line:max-line-length
+            this.calculos.AsignarCromosAleatoriosEquipo (equipoSegundoAlumno, this.inscripcionesEquipos, this.cromosParaSegundo, this.probabilidadCromos, this.cromosColeccion);
+
+            // tslint:disable-next-line:max-line-length
+            const eventoAsignarCromosE2: Evento = new Evento(20, new Date(), this.profesor.id, undefined, equipoSegundoAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.cromosParaSegundo);
+            this.calculos.RegistrarEvento (eventoAsignarCromosE2);
+
+      
+
+            // Notificar a los Alumnos del Equipo (2)
+            // tslint:disable-next-line:max-line-length
+            this.comService.EnviarNotificacionEquipo(20, equipoSegundoAlumno.id, `Tu Equipo ${equipoSegundoAlumno.Nombre} ha obtenido ${this.cromosParaSegundo} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+            
+            // Comprobamos si se ha completado la Colección (Del Equipo 2) tras haber asignado el/los Cromo/s
+            // tslint:disable-next-line:max-line-length
+            this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion2.id).subscribe((finalizacionDespuesE2) => {
+              if ((finalizacionAntesE2 === false) && (finalizacionDespuesE2 === true)) {
+                  // tslint:disable-next-line:max-line-length
+                  const eventoFinalizacionColeccionE2: Evento = new Evento(22, new Date(), this.profesor.id, undefined, equipoSegundoAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+                  this.calculos.RegistrarEvento (eventoFinalizacionColeccionE2);
+              
+            
+                  // Notificar a los Alumnos del Equipo (2)
+                  // tslint:disable-next-line:max-line-length
+                  this.comService.EnviarNotificacionEquipo(22, equipoSegundoAlumno.id, `¡Enhorabuena! Tu equipo ${equipoSegundoAlumno.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                  
+              }
+            }, (err) => {
+                console.log(err);
+            });
+          }, (err) => {
+            console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
+
+
+
+        this.peticionesAPI.DameEquiposDelAlumno (this.tercerAlumno.id)
+        .subscribe (equiposDelAlumno => {
+          // Busco el equipo que esta tanto en la lista de equipos del juego como en la lista de equipso de alumno
+          const equipoTercerAlumno = equiposDelAlumno.filter(e => this.equiposDelJuego.some(a => a.id === e.id))[0];
+
+          // Comprobamos si se ha completado la Colección (Del Equipo 3) antes de haber asignado el/los Cromo/s
+          // tslint:disable-next-line:max-line-length
+          const equipoJuegoDeColeccion3: EquipoJuegoDeColeccion = this.inscripcionesEquipos.filter(res => res.equipoId === equipoTercerAlumno.id)[0];
+          // tslint:disable-next-line:max-line-length
+          this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion3.id).subscribe((finalizacionAntesE3) => {
+
+            // tslint:disable-next-line:max-line-length
+            this.calculos.AsignarCromosAleatoriosEquipo (equipoTercerAlumno, this.inscripcionesEquipos, this.cromosParaTercero, this.probabilidadCromos, this.cromosColeccion);
+            // tslint:disable-next-line:max-line-length
+            const eventoAsignarCromosE3: Evento = new Evento(20, new Date(), this.profesor.id, undefined, equipoTercerAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección', undefined, undefined, undefined, this.cromosParaTercero);
+            this.calculos.RegistrarEvento (eventoAsignarCromosE3);
+
+
+            
+            // Notificar a los Alumnos del Equipo (3)
+            // tslint:disable-next-line:max-line-length
+            this.comService.EnviarNotificacionEquipo(20, equipoTercerAlumno.id, `Tu Equipo ${equipoTercerAlumno.Nombre} ha obtenido ${this.cromosParaTercero} cromo/s en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+            
+            // Comprobamos si se ha completado la Colección (Del Equipo 3) tras haber asignado el/los Cromo/s
+            // tslint:disable-next-line:max-line-length
+            this.calculos.CompruebaFinalizacionColeccion(this.juegoSeleccionado.coleccionId, undefined, equipoJuegoDeColeccion3.id).subscribe((finalizacionDespuesE3) => {
+              if ((finalizacionAntesE3 === false) && (finalizacionDespuesE3 === true)) {
+                // tslint:disable-next-line:max-line-length
+                const eventoFinalizacionColeccionE3: Evento = new Evento(22, new Date(), this.profesor.id, undefined, equipoTercerAlumno.id, this.juegoSeleccionado.id, this.juegoSeleccionado.NombreJuego, 'Juego De Colección');
+                this.calculos.RegistrarEvento(eventoFinalizacionColeccionE3);
+         
+
+                // Notificar a los Alumnos del Equipo (3)
+                // tslint:disable-next-line:max-line-length
+                this.comService.EnviarNotificacionEquipo(22, equipoTercerAlumno.id, `¡Enhorabuena! Tu equipo ${equipoTercerAlumno.Nombre} ha completado la colección de cromos en el Juego de Colección ${this.juegoSeleccionado.NombreJuego}`);
+                
+              }
+            }, (err) => {
+              console.log(err);
+            });
+          }, (err) => {
+            console.log(err);
+          });
+        }, (err) => {
+          console.log(err);
+        });
+        // tslint:disable-next-line:max-line-length
+        Swal.fire('OK', 'Cromos aleatorios asignados a los  equipos de los tres mejores alumnos en el juego de puntos elegido: ', 'success');
+      });
     }
-
   }
 
   AbrirDialogoConfirmacionAsignarCromo(): void {

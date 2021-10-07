@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { SesionService, PeticionesAPIService, CalculosService } from '../../../servicios/index';
 import Swal from 'sweetalert2';
-import {JuegoDeVotacionUnoATodos, Alumno, AlumnoJuegoDeVotacionUnoATodos, TablaAlumnoJuegoDeVotacionUnoATodos} from '../../../clases/index';
+import {JuegoDeVotacionUnoATodos, Alumno, AlumnoJuegoDeVotacionUnoATodos, TablaAlumnoJuegoDeVotacionUnoATodos, Equipo} from '../../../clases/index';
 import { MatTableDataSource } from '@angular/material/table';
 import { Location } from '@angular/common';
+import { EquipoJuegoDeVotacionUnoATodos } from 'src/app/clases/EquipoJuegoDeVotacionUnoATodos';
+import { TablaEquipoJuegoDeVotacionUnoATodos } from 'src/app/clases/TablaEquipoJuegoDeVotacionUnoATodos';
 
 @Component({
   selector: 'app-juego-de-votacion-uno-atodos-seleccionado-inactivo',
@@ -13,11 +15,19 @@ import { Location } from '@angular/common';
 export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements OnInit {
   juegoSeleccionado: any;
   alumnosDelJuego: Alumno[];
+  equiposDelJuego: Equipo[];
+  alumnosEquipo: Alumno[];
   listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[];
+  listaEquiposOrdenadaPorPuntos: EquipoJuegoDeVotacionUnoATodos[];
   rankingIndividualJuegoDeVotacionUnoATodos: TablaAlumnoJuegoDeVotacionUnoATodos[] = [];
+  rankingEquipoJuegoDeVotacionUnoATodos: TablaEquipoJuegoDeVotacionUnoATodos[] = [];
+
   dataSourceAlumno;
+  dataSourceEquipo;
 
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos'];
+  displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'puntos'];
+
   constructor(
     public sesion: SesionService,
     public peticionesAPI: PeticionesAPIService,
@@ -32,7 +42,7 @@ export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements On
     if (this.juegoSeleccionado.Modo === 'Individual') {
       this.AlumnosDelJuego();
     } else {
-      console.log ('aun no funciona la modalidad por equipos');
+      this.EquiposDelJuego();
     }
   }
 
@@ -48,6 +58,17 @@ export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements On
       });
   }
 
+  EquiposDelJuego() {
+    console.log ('Vamos a pos los equipos');
+    this.peticionesAPI.DameEquiposJuegoDeVotacionUnoATodos(this.juegoSeleccionado.id)
+    .subscribe(equiposJuego => {
+      console.log ('Ya tengo los equipos');
+      console.log(equiposJuego);
+      this.equiposDelJuego = equiposJuego;
+      this.RecuperarInscripcionesEquipoJuego();
+    });
+  }
+
   RecuperarInscripcionesAlumnoJuego() {
     console.log ('vamos por las inscripciones ' + this.juegoSeleccionado.id);
     this.peticionesAPI.DameInscripcionesAlumnoJuegoDeVotacionUnoATodos(this.juegoSeleccionado.id)
@@ -61,6 +82,20 @@ export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements On
       this.TablaClasificacionTotal();
     });
   }
+  RecuperarInscripcionesEquipoJuego() {
+    console.log ('vamos por las inscripciones de equipos ' + this.juegoSeleccionado.id);
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDeVotacionUnoATodos(this.juegoSeleccionado.id)
+    .subscribe(inscripciones => {
+      this.listaEquiposOrdenadaPorPuntos = inscripciones;
+      // ordena la lista por puntos
+      // tslint:disable-next-line:only-arrow-functions
+      this.listaEquiposOrdenadaPorPuntos = this.listaEquiposOrdenadaPorPuntos.sort(function(obj1, obj2) {
+        return obj2.puntosTotales - obj1.puntosTotales;
+      });
+      this.TablaClasificacionTotal();
+    });
+  }
+
 
   TablaClasificacionTotal() {
 
@@ -76,38 +111,33 @@ export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements On
       this.dataSourceAlumno = new MatTableDataSource(this.rankingIndividualJuegoDeVotacionUnoATodos);
 
     } else {
-      console.log ('la modalidad en equipo aun no está operativa');
+    
+      // tslint:disable-next-line:max-line-length
+      this.rankingEquipoJuegoDeVotacionUnoATodos = this.calculos.PrepararTablaRankingEquipoVotacionUnoATodosAcabado (
+        this.listaEquiposOrdenadaPorPuntos,
+        this.equiposDelJuego);
+      // tslint:disable-next-line:only-arrow-functions
+      this.rankingEquipoJuegoDeVotacionUnoATodos = this.rankingEquipoJuegoDeVotacionUnoATodos.sort(function(obj1, obj2) {
+        return obj2.puntos - obj1.puntos;
+      });
+
+      this.dataSourceEquipo = new MatTableDataSource(this.rankingEquipoJuegoDeVotacionUnoATodos);
 
     }
   }
 
-  Eliminar() {
+   
+  Eliminar(): void {
+
     Swal.fire({
-      title: '¿Seguro que quieres eliminar el juego de votación?',
-      icon: 'warning',
+      title: 'Confirma que quieres eliminar el juego <b>' + this.juegoSeleccionado.NombreJuego + '</b>',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, estoy seguro'
-    }).then((result) => {
+      confirmButtonText: 'Confirmar',
+    }).then(async (result) => {
       if (result.value) {
-        // Primero elimino las inscripciones
-        let cont = 0;
-        this.listaAlumnosOrdenadaPorPuntos.forEach (inscripcion => {
-          this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionUnoATodos (inscripcion.id)
-          .subscribe(() => {
-            cont++;
-            if (cont === this.listaAlumnosOrdenadaPorPuntos.length) {
-              // Ya están todas las inscripciones eliminadas
-              // ahora elimino el juego
-              this.peticionesAPI.BorraJuegoDeVotacionUnoATodos (this.juegoSeleccionado.id)
-              .subscribe(() => {
-                Swal.fire('El juego se ha eliminado correctamente');
-                this.location.back();
-              });
-            }
-          });
-        });
+        await this.calculos.EliminarJuegoDeVotacionUnoATodos(this.juegoSeleccionado);
+        Swal.fire('El juego ha sido eliminado correctamente', ' ', 'success');
+        this.location.back();
       }
     });
   }
@@ -135,11 +165,28 @@ export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements On
     });
   }
 
-
   applyFilter(filterValue: string) {
-    this.dataSourceAlumno.filter = filterValue.trim().toLowerCase();
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      this.dataSourceAlumno.filter = filterValue.trim().toLowerCase();
+    } else {
+      this.dataSourceEquipo.filter = filterValue.trim().toLowerCase();
+    }
   }
+  AlumnosDelEquipo(equipo: Equipo) {
+    console.log(equipo);
 
+    this.peticionesAPI.DameAlumnosEquipo (equipo.id)
+    .subscribe(res => {
+      if (res[0] !== undefined) {
+        this.alumnosEquipo = res;
+        console.log(res);
+      } else {
+        console.log('No hay alumnos en este equipo');
+        // Informar al usuario
+        this.alumnosEquipo = undefined;
+      }
+    });
+  }
 
 
 }

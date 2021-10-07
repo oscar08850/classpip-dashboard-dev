@@ -1,16 +1,31 @@
-<div *ngIf = cuestionario class="titulo">Respuestas de:</div>
-<div class="subtitulo">{{alumno.nombre}} {{alumno.primerApellido}} {{alumno.segundoApellido}}</div>
-<mat-divider *ngIf = alumno class="lineaDivisoria"> </mat-divider>
+<div class="titulo">Respuestas de:</div>
+<div *ngIf = "alumno" class="subtitulo">{{alumno.nombre}} {{alumno.primerApellido}} {{alumno.segundoApellido}}</div>
+<div *ngIf = "equipo" class="subtitulo">{{equipo.nombre}} </div>
+
+<mat-divider  class="lineaDivisoria"> </mat-divider>
 <br>
 <br>
 <div class ="enColumna">
-  <div style= "display: table; width: 60%">
+  <div *ngIf = "info" style= "display: table; width: 60%">
     <div class="col" style="width: 15%; display: table-cell;vertical-align: middle;"><h1 style="color:red">Mal</h1></div>
     <div class="col" style="width: 50%; display: table-cell;vertical-align: middle;">
         <div style = "width : 100%;" echarts [options]="info"  theme="macarons" class="demo-chart"></div>
     </div>
     <div class="col" style="width: 15%; display: table-cell;vertical-align: middle;" ><h1 style="color:green">Bien</h1></div>
   </div>
+  <div *ngIf = "infoMiembrosEquipo">
+    <div class= "enColumna" *ngFor = "let info of infoMiembrosEquipo; let i = index" style= "display: table; width: 100%">
+      <div style = "width: 100%">Respuestas de <strong>{{alumnosOrdenados[i].Nombre}} {{alumnosOrdenados[i].PrimerApellido}} {{alumnosOrdenados[i].SegundoApellido}}</strong></div>
+      <div>
+        <div class="col" style="width: 15%; display: table-cell;vertical-align: middle;"><h1 style="color:red">Mal</h1></div>
+        <div class="col" style="width: 100%; display: table-cell;vertical-align: middle;">
+            <div style = "width : 100%;" echarts [options]="info"  theme="macarons" class="demo-chart"></div>
+        </div>
+        <div class="col" style="width: 15%; display: table-cell;vertical-align: middle;" ><h1 style="color:green">Bien</h1></div>
+      </div>
+      <mat-divider  class="lineaDivisoria"> </mat-divider>
+    </div>
   </div>
+</div>
 <div class="enColumna"> <button type="button" class="btn Back" (click)="goBack()">Volver </button>
 </div>

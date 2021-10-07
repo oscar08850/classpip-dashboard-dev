@@ -4,6 +4,19 @@
   width: 100%;
 }
 
+.input-porcentaje {
+  width: 70px;
+  float: right;
+}
+
+.texto-izquierda {
+  text-align: right;
+}
+
+table {
+  width: 100%;
+}
+
 .example-full-width {
   width: 100%;
 }
@@ -33,6 +46,16 @@ mat-slider {
   width: 300px;
 }
 
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.radio-button {
+  margin: 5px;
+  color: black;
+}
 // /* Colores de iconos */
 // .material-icons.red { color: rgb(212, 57, 52); }
 // .material-icons.green { color: rgb(92, 184, 92); }
@@ -148,3 +171,27 @@ mat-slider {
     margin: 5px;
     color: black;
   }
+
+
+.example-margin{
+
+  margin: 5px;
+  color: rgb(198, 24, 24);
+  font-style: bold;
+
+}
+
+label {
+	cursor: pointer;
+	color: #555;
+	display: block;
+	padding: 10px;
+	margin: 3px;
+}
+
+.imagenPanelJuegos {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+}

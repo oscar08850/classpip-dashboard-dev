@@ -43,6 +43,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   juegosPuntos: Juego[] = [];
   juegosCuestionariosTerminados: Juego[] = [];
   juegosDeVotacionUnoATodosTerminados: any[] = [];
+  juegosDeEvaluacionTerminados: any[] = [];
   botoneditarPuntosDesactivado = true;
   datasourceAlumno;
   datasourceEquipo;
@@ -73,6 +74,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     this.DameJuegosdePuntos();
     this.DameJuegosdeCuestionariosAcabados();
     this.DameJuegosdeVotacionUnoATodosAcabados();
+    this.DameJuegosdeEvaluacionAcabados();
   }
 
   // Recupera los alumnos que pertenecen al juego
@@ -242,6 +244,7 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
     this.sesion.TomaJuegosDePuntos(this.juegosPuntos);
     this.sesion.TomaJuegosDeCuestionario (this.juegosCuestionariosTerminados);
     this.sesion.TomaJuegosDeVotacionUnoATodos (this.juegosDeVotacionUnoATodosTerminados);
+    this.sesion.TomaJuegosDeEvaluacion (this.juegosDeEvaluacionTerminados);
   }
 
   editarjornadas() {
@@ -275,36 +278,65 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
   }
 
 
-  DesactivarJuego() {
-    console.log(this.juegoSeleccionado);
-    this.peticionesAPI.CambiaEstadoJuegoDeCompeticionFormulaUno(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
-      this.juegoSeleccionado.Asignacion,
-      undefined, false), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
-        if (res !== undefined) {
-          console.log(res);
-          console.log('juego desactivado');
-          this.location.back();
-        }
-      });
-  }
+  // DesactivarJuego() {
+  //   console.log(this.juegoSeleccionado);
+  //   this.peticionesAPI.CambiaEstadoJuegoDeCompeticionFormulaUno(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
+  //     this.juegoSeleccionado.Asignacion,
+  //     undefined, false), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
+  //       if (res !== undefined) {
+  //         console.log(res);
+  //         console.log('juego desactivado');
+  //         this.location.back();
+  //       }
+  //     });
+  // }
 
-  AbrirDialogoConfirmacionDesactivar(): void {
+  // AbrirDialogoConfirmacionDesactivar(): void {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        nombre: this.juegoSeleccionado.Tipo,
+
+  //   Swal.fire({
+  //     title: 'Desactivar',
+  //     text: "Estas segura/o de que quieres desactivar: " + this.juegoSeleccionado.Tipo,
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Aceptar',
+  //     cancelButtonText: 'Cancelar'
+
+  //   }).then((result) => {
+  //     if (result.value) {
+  //       this.DesactivarJuego();
+  //       Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' Desactivado correctamente', 'success');
+  //     }
+  //   })
+  // }
+
+    
+  Desactivar() {
+    Swal.fire({
+      title: '¿Seguro que quieres desactivar el juego?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then((result) => {
+      if (result.value) {
+        this.juegoSeleccionado.JuegoActivo = false;
+        this.peticionesAPI.CambiaEstadoJuegoDeCompeticionFormulaUno (this.juegoSeleccionado)
+        .subscribe(res => {
+            if (res !== undefined) {
+              Swal.fire('El juego se ha desactivado correctamente');
+              this.location.back();
+            }
+        });
       }
     });
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.DesactivarJuego();
-        Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' desactivado correctamente', 'success');
-      }
-    });
   }
+
+
+
   applyFilter(filterValue: string) {
     this.datasourceAlumno.filter = filterValue.trim().toLowerCase();
   }
@@ -343,6 +375,23 @@ export class JuegoDeCompeticionFormulaUnoSeleccionadoActivoComponent implements 
 
   }
 
+  
+  DameJuegosdeEvaluacionAcabados() {
+    console.log ('vamos a por los juegos de evaluacion acabados' + this.juegoSeleccionado.grupoId);
+    this.peticionesAPI.DameJuegosDeEvaluacion(this.juegoSeleccionado.grupoId)
+    .subscribe(juegos => {
+      console.log ('Ya tengo los juegos de evaluacion');
+      console.log (juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if ((juegos[i].JuegoActivo === false) && (juegos[i].rubricaId > 0)) {
+          this.juegosDeEvaluacionTerminados.push(juegos[i]);
+        }
+      }
+    });
+
+
+  }
 
   DameJuegosdeVotacionUnoATodosAcabados() {
     console.log ('vamos a por los juegos de votacion Uno A Todos ' + this.juegoSeleccionado.grupoId);

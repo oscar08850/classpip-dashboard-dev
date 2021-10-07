@@ -218,15 +218,10 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
 
   DesactivarJuego() {
     console.log(this.juegoSeleccionado);
+    this.juegoSeleccionado.JuegoActivo = false;
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CambiaEstadoJuegoDeColeccion(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo, this.juegoSeleccionado.Asignacion,
-      undefined, false, this.juegoSeleccionado.NumeroTotalJornadas, this.juegoSeleccionado.TipoJuegoCompeticion,
-      this.juegoSeleccionado.NumeroParticipantesPuntuan, this.juegoSeleccionado.Puntos, this.juegoSeleccionado.NombreJuego),
-      this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
+    this.peticionesAPI.CambiaEstadoJuegoDeColeccion(this.juegoSeleccionado).subscribe(res => {
         if (res !== undefined) {
-          console.log('juego desactivado');
-          console.log(res);
-          console.log('juego desactivado');
           this.location.back();
         }
       });
@@ -234,20 +229,22 @@ export class JuegoDeColeccionSeleccionadoActivoComponent implements OnInit {
 
   AbrirDialogoConfirmacionDesactivar(): void {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        nombre: this.juegoSeleccionado.Tipo,
-      }
-    });
+    Swal.fire({
+      title: 'Desactivar',
+      text: "Estas segura/o de que quieres desactivar: " + this.juegoSeleccionado.Tipo,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    }).then((result) => {
+      if (result.value) {
         this.DesactivarJuego();
-        Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' desactivado correctamente', 'success');
+        Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' Desactivado correctamente', 'success');
       }
-    });
+    })
   }
 
   MostrarInformacion() {
