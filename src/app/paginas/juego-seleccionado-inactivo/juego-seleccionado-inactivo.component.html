@@ -43,6 +43,10 @@
 </div>
 
 
+<div  class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuentos'">
+  <app-juego-de-cuento-seleccionado-inactivo></app-juego-de-cuento-seleccionado-inactivo>
+</div>
+
 <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Evaluacion'">
   <app-juego-de-evaluacion-seleccionado-inactivo></app-juego-de-evaluacion-seleccionado-inactivo>
 </div>

@@ -86,6 +86,9 @@ export class SesionService {
   familia: FamiliaAvatares;
   cuestionarioDeSatiafaccion: CuestionarioSatisfaccion;
 
+  idCuento: any;
+  contenedor: any;
+
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
     this.profesor = profesor;
@@ -611,13 +614,25 @@ public DameCuestionarioSatisfaccion(): CuestionarioSatisfaccion {
 
 //cuentos
 
-public setIdLibro(id)
+
+public setIdCuento(id)
 {
-  this.idLibro = id;
+  this.idCuento = id;
 }
 
-public getIdLibro()
+public getIdCuento()
 {
-  return this.idLibro;
+  return this.idCuento;
 }
+
+public setContenedor(contenedor){
+  this.contenedor = contenedor;
+}
+
+public getContenedor(){
+  return this.contenedor;
+}
+
+
+
 }

@@ -245,6 +245,15 @@ import { TeamExcludePipe } from './pipes/team-exclude.pipe';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
+
+import { CrearRecursosCuentoComponent } from './paginas/crear-recursos-cuento/crear-recursos-cuento.component';
+import { MisRecursosCuentoComponent } from './paginas/mis-recursos-cuento/mis-recursos-cuento.component';
+import { AsignarRecursosJuegoCuentosComponent } from './paginas/juego/asignar-recursos-juego-cuentos/asignar-recursos-juego-cuentos.component';
+import { AsignaEspecialJuegoCuentosComponent } from './paginas/juego/asigna-especial-juego-cuentos/asigna-especial-juego-cuentos.component';
+import { JuegoDeCuentoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-seleccionado-activo.component';
+import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
+import { JuegoDeCuentoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuento-seleccionado-inactivo/juego-de-cuento-seleccionado-inactivo.component';
+
 import { ActividadRegistroComponent } from './paginas/actividad-registro/actividad-registro.component';
 import { ActividadGraficosComponent } from './paginas/actividad-graficos/actividad-graficos.component';
 import { ActividadConfigComponent } from './paginas/actividad-config/actividad-config.component';
@@ -255,15 +264,6 @@ import { EvaluacionDialogoComponent } from './paginas/juego-seleccionado-activo/
 import { EvaluacionBorrarDialogoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/evaluacion-borrar-dialogo/evaluacion-borrar-dialogo.component';
 import { MostrarCuestionarioComponent } from './paginas/mis-cuestionarios/mostrar-cuestionario/mostrar-cuestionario.component';
 
-
-import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
-import { MisRecursosLibroComponent } from './paginas/mis-recursos-libro/mis-recursos-libro.component';
-import { JuegoDeCuentoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-seleccionado-activo.component';
-import { AsignarRecursosJuegoLibrosComponent } from './paginas/juego/asignar-recursos-juego-libros/asignar-recursos-juego-libros.component';
-import { AsignaEspecialJuegoLibrosComponent } from './paginas/juego/asigna-especial-juego-libros/asigna-especial-juego-libros.component';
-import { VotacionescuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-votaciones/votacionescuento/votacionescuento.component';
-import { ListadoCuentosComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
-import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
 import { JuegoDeEvaluacionSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-evaluacion-seleccionado-inactivo/juego-de-evaluacion-seleccionado-inactivo.component';
 // tslint:disable-next-line:max-line-length
 import { JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-control-de-trabajo-en-equipo-seleccionado-activo/juego-de-control-de-trabajo-en-equipo-seleccionado-activo.component';
@@ -379,15 +379,6 @@ import { AsignarRubricaComponent } from './paginas/juego/asignar-rubrica/asignar
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
     RespuestasAlumnoJuegoDeCuestionarioComponent,
     VerTodosComponent,
-    CrearRecursosLibroComponent,
-    MisRecursosLibroComponent,
-    JuegoDeCuentoSeleccionadoActivoComponent,
-    AsignarRecursosJuegoLibrosComponent,
-    AsignaEspecialJuegoLibrosComponent,
-    ListadoCuentosComponent,
-    ReproductorCuentoComponent,
-    VotacionescuentoComponent,
-    ListadoCuentosComponent,
     JuegoDeVotacionUnoATodosSeleccionadoActivoComponent,
     JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent,
     CrearRubricaComponent,
@@ -420,7 +411,13 @@ import { AsignarRubricaComponent } from './paginas/juego/asignar-rubrica/asignar
     ModificarPerfilComponent,
     JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
     GestionPreguntaKahootComponent,
-
+    CrearRecursosCuentoComponent,
+    MisRecursosCuentoComponent,
+    AsignarRecursosJuegoCuentosComponent,
+    AsignaEspecialJuegoCuentosComponent,
+    JuegoDeCuentoSeleccionadoActivoComponent,
+    ReproductorCuentoComponent,
+    JuegoDeCuentoSeleccionadoInactivoComponent,
     JuegoDeEvaluacionActivoComponent,
     EvaluacionDialogoComponent,
     EvaluacionBorrarDialogoComponent,

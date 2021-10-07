@@ -28,6 +28,17 @@ import {
 
 
 
+          AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
+          EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
+          EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
+          AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
+          EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable,
+          JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
+          JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, CuestionarioSatisfaccion,
+          JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion, Rubrica,
+          JuegoDeCuento, AlumnoJuegoDeCuento, RecursoCuento, RecursoCuentoJuego } from '../../clases/index';
+
+
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService, ComServerService } from '../../servicios/index';
@@ -93,6 +104,9 @@ export class JuegoComponent implements OnInit {
   // Usaré esta variable para determinar si debo advertir al usuario de
   // que está abandonando el proceso de creación del juego
   creandoJuego = false;
+
+  //añadido classpipkids//
+
   inscribirtemporada;
   nivel1 = false;
   nivel2 = false;
@@ -101,14 +115,20 @@ export class JuegoComponent implements OnInit {
   pesoc2;
   pesoc3;
   permisoparaver = false;
-  permisoparavotar = false;
+
+  avanzo1 = false;
+  avanzo2 = false;
+  //classpipkids//
+
   juego: any;
 
   juegoDeCuestionario: JuegoDeCuestionario;
   juegoDeCompeticion: JuegoDeCompeticion;
   juegoDeAvatar: JuegoDeAvatar;
   juegoDeGeocaching: JuegoDeGeocaching;
-  juegoDeLibro: JuegoDeLibros;
+
+  juegoDeCuento: JuegoDeCuento;
+
 
   // Informacion para todos los juegos
   myForm: FormGroup;
@@ -130,6 +150,7 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Puntos', color: 'primary'},
     {nombre: 'Juego De Colección', color: 'accent'},
     {nombre: 'Juego De Evaluación', color: 'accent'},
+    {nombre: 'Juego De Cuentos', color: 'primary'},
     {nombre: 'Control de trabajo en equipo', color: 'primary'},
   ];
   seleccionModoJuego: ChipColor[] = [
@@ -294,6 +315,15 @@ export class JuegoComponent implements OnInit {
   puntuacionCorrectaGeoBonus: number;
   puntuacionIncorrectaGeoBonus: number;
 
+
+
+   //info para juego de cuentos
+
+   recursoElegido: number[];
+   tengoRecurso = false;
+   tengoRecursoCargadoParaGuardar: any = false;
+   recursoCargadoParaGuardar: RecursoCuento;
+   recursoParaCuento: RecursoCuentoJuego;
 
 
   // información para crear juego de votación
@@ -470,8 +500,12 @@ export class JuegoComponent implements OnInit {
       NombreDelConcepto: ['', Validators.required],
       PesoDelConcepto: ['', Validators.required],
       TiempoLimite: ['', Validators.required],
+      descripcionCuento: ['', Validators.required],
+      criterioprivilegio1: ['', Validators.required],
+      criterioprivilegio2: ['', Validators.required],
+      criterioprivilegio3: ['', Validators.required]
       PreguntaAbierta:  ['', Validators.required],
-      NumeroDeControles: ['', Validators.required],
+      NumeroDeControles: ['', Validators.required]
     });
 
 
@@ -2512,6 +2546,138 @@ export class JuegoComponent implements OnInit {
 
   }
 
+
+  ///////////////// FUNCIONES PARA CREAR JUEGO DE CUENTO /////////////
+
+  CrearJuegoCuento() {
+
+    const juego = new JuegoDeCuento(this.nombreDelJuego,
+      this.tipoDeJuegoSeleccionado,
+      this.modoDeJuegoSeleccionado,
+      true);
+    juego.descripcion = this.myForm.value.descripcionCuento;
+    //juego.Temporada = 'SI';
+    juego.criterioprivilegio1 = this.myForm.value.criterioprivilegio1;
+    juego.criterioprivilegio2 = this.myForm.value.criterioprivilegio2;
+    juego.criterioprivilegio3 = this.myForm.value.criterioprivilegio3;
+
+
+    this.peticionesAPI.CrearJuegoCuento(juego, this.grupo.id)
+      .subscribe(juego => {
+
+        this.crearRecursoJuegoCuento(juego.id);
+
+        this.juegoDeCuento = juego;
+
+        if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+          console.log('Voy a inscribir a los alumnos del grupo');
+          // tslint:disable-next-line:max-line-length
+          if (this.modoDeJuegoSeleccionado === 'Individual') {
+            console.log('Voy a inscribir a los alumnos del grupo');
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < this.alumnosGrupo.length; i++) {
+              // tslint:disable-next-line:max-line-length
+              console.log('inscribo');
+
+              var alumno = new AlumnoJuegoDeCuento;
+              alumno.nivel1 = this.nivel1;
+              alumno.nivel2 = this.nivel2;
+              alumno.nivel3 = this.nivel3;
+              alumno.permisoparaver = this.permisoparaver;
+              alumno.alumnoID = this.alumnosGrupo[i].id;
+              alumno.Nombre = this.alumnosGrupo[i].Nombre;
+
+
+
+              var id = this.juegoDeCuento.id;
+
+              this.peticionesAPI.InscribeAlumnojuegoDeCuento(alumno, id)
+                .subscribe((res) => {
+                  console.log(res);
+                }
+                  , (err) => {
+                    console.log(err);
+
+                  });
+            }
+          } else {
+
+          }
+          Swal.fire('Juego de cuento creado correctamente', ' ', 'success');
+
+
+          if (this.juegosActivos === undefined) {
+
+            this.juegosActivos = [];
+          }
+          this.juegosActivos.push(this.juegoDeCuento);
+          this.Limpiar();
+
+          this.tabGroup.selectedIndex = 0;
+        }
+      });
+  }
+
+  public onDate(event): void {
+    var e = event;
+    console.log(event);
+  }
+
+  crearRecursoJuegoCuento(idCuento: any) {
+    this.peticionesAPI.crearRecursosJuegoCuento(idCuento, this.recursoParaCuento)
+      .subscribe((res) => {
+
+      }, (err) => {
+        console.log(err);
+      })
+  }
+
+  inscribir(inscribirt) {
+    console.log(inscribirt);
+    this.inscribirtemporada = inscribirt;
+  }
+
+
+  RecibeRecursos($event) {
+    this.recursoElegido = $event;
+    this.tengoRecurso = true;
+    localStorage.setItem("idRecursoLibros", this.recursoElegido[0].toString());
+  }
+
+  cargaRecursos($event) {
+    this.recursoCargadoParaGuardar = $event;
+
+
+    this.recursoParaCuento = new RecursoCuentoJuego;
+    this.recursoParaCuento.nombre = this.recursoCargadoParaGuardar.nombre;
+    this.recursoParaCuento.carpeta = this.recursoCargadoParaGuardar.carpeta;
+    this.recursoParaCuento.imagenes = this.recursoCargadoParaGuardar.imagenes;
+    this.recursoParaCuento.juegoId = 0;
+
+
+    this.tengoRecursoCargadoParaGuardar = true;
+  }
+
+  avanzoElegirRecursos(){
+    if(!this.avanzo1)
+    this.avanzo1 = true;
+    else
+    this.avanzo1 = false;
+  }
+
+  avanzoElegirEspeciales(){
+    if(!this.avanzo2)
+    this.avanzo2 = true;
+    else
+    this.avanzo2 = false;
+  }
+
+
+
+
+
+
   /// Para los controles de trabajo en equipo
   GuardarNumeroDeControles() {
     this.numeroDeControles = this.myForm.value.NumeroDeControles;
@@ -2574,4 +2740,5 @@ export class JuegoComponent implements OnInit {
 
 
   }
+
 }
