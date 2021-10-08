@@ -1803,6 +1803,7 @@ public modificarConcurso(id, concurso): Observable<any> {
   }
 
   public DameCuestionariosSatisfaccionPublicos(): Observable<CuestionarioSatisfaccion[]> {
+   
     return this.http.get<CuestionarioSatisfaccion[]>(this.APIUrlCuestionariosSatisfaccion
       + '?filter[where][Publico]=true');
   }

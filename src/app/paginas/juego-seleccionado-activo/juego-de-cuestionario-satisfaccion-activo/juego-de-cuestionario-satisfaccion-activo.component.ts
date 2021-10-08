@@ -182,6 +182,7 @@ export class JuegoDeCuestionarioSatisfaccionActivoComponent implements OnInit {
 
     autoTable(doc, { html: '#tabla',  startY:  margenSuperior + 70 });
 
+    const pageHeight = doc.internal.pageSize.height;
     let i;
     for (i = 0; i < this.respuestasPreguntasAbiertas.length; i++) {
       doc.addPage('a4', 'p');
@@ -194,9 +195,16 @@ export class JuegoDeCuestionarioSatisfaccionActivoComponent implements OnInit {
       doc.setFontSize(12);
       doc.setTextColor('black');
       for (j = 0; j < this.respuestasPreguntasAbiertas[i].length; j++) {
+        const splittedText = doc.splitTextToSize(this.respuestasPreguntasAbiertas[i][j],  160);
 
-        doc.text(this.respuestasPreguntasAbiertas[i][j], margenIzquierdo,  margenSuperior + cont);
+        doc.text(splittedText, margenIzquierdo,  margenSuperior + cont);
+        cont = cont + interlineado * (splittedText.length);
+        doc.line(margenIzquierdo, margenSuperior + cont, margenIzquierdo + 150, margenSuperior + cont);
         cont = cont + interlineado;
+        if (cont > pageHeight) {
+          doc.addPage();
+          cont = 0;
+        }
       }
     }
 

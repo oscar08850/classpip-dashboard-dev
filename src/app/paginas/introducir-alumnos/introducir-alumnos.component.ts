@@ -28,6 +28,7 @@ export class IntroducirAlumnosComponent implements OnInit {
   dataSource;
   profesor: Profesor;
   alumnosEnClasspip: Alumno[];
+  loading = false;
 
   constructor(
                 private peticionesAPI: PeticionesAPIService,
@@ -104,6 +105,7 @@ export class IntroducirAlumnosComponent implements OnInit {
       confirmButtonText: 'OK'
     }).then(async (result) => {
       if (result.value) {
+        this.loading = true;
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.nuevosAlumnos.length; i++) {
         const alumno = this.nuevosAlumnos[i];
@@ -120,8 +122,9 @@ export class IntroducirAlumnosComponent implements OnInit {
         });
         // Espero un tiempo para no provocar una avalancha de e,alis que parece
         // saturar al servidor
-        await this.Delay(1000);
+        await this.Delay(500);
         }
+        this.loading = false;
         // tslint:disable-next-line:max-line-length
         Swal.fire('Añadidos', this.nuevosAlumnos.length + ' nuevos alumnos añadidos correctamente. Se les ha enviado un email con sus datos e instandoles a que modifiquen lo antes posible su contraseña.', 'success');
         this.nuevosAlumnos = [];

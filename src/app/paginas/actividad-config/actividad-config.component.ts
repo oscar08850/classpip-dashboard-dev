@@ -78,10 +78,13 @@ export class ActividadConfigComponent implements OnInit {
     this.tiposDeEvantos.push ('Juego de avatares');
 
     this.dataSourceEventos = new MatTableDataSource(this.tiposDeEvantos);
-    if (!this.profesor.configuracionEventos) {
+    // La segunda condición es para subsanar el error de que algunos profes solo tenían dos filas de tipos de eventos.
+    if (!this.profesor.configuracionEventos || this.profesor.configuracionEventos.length < 4 ) {
       this.configuracion = Array(this.tiposDeEvantos.length);
       this.configuracion [0] = Array(2).fill (false);
       this.configuracion [1] = Array(2).fill (false);
+      this.configuracion [2] = Array(2).fill (false);
+      this.configuracion [3] = Array(2).fill (false);
       this.profesor.configuracionEventos = this.configuracion;
     }
     for (let i = 0; i <  this.dataSourceEventos.data.length; i++) {
