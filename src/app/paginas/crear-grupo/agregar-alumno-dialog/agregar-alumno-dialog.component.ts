@@ -146,20 +146,20 @@ export class AgregarAlumnoDialogComponent implements OnInit {
 
 
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        nombre: alumno.Nombre,
-      }
-    });
+    // const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+    //   height: '150px',
+    //   data: {
+    //     mensaje: this.mensaje,
+    //     nombre: alumno.Nombre,
+    //   }
+    // });
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.EliminarDelGrupo(alumno);
-        Swal.fire('Eliminado', 'Alumno eliminado correctamente', 'success');
-      }
-    });
+    // dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    //   if (confirmed) {
+    //     this.EliminarDelGrupo(alumno);
+    //     Swal.fire('Eliminado', 'Alumno eliminado correctamente', 'success');
+    //   }
+    // });
   }
 
   EliminarDelGrupo(alumno: Alumno) {

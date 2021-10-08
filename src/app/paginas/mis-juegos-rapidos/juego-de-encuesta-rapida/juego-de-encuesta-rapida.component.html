@@ -109,11 +109,12 @@
             <div class="enColumna">
                   <div>
                   <span style="font-weight: bold; margin-left: 16px; font-size: 130%;">Respuestas</span>
-                  <mat-list role="list" >
-                      <mat-list-item role="listitem" *ngFor="let respuesta of respuestas">
-                        {{respuesta}}
-                      </mat-list-item>
-                  </mat-list>
+                  <br>
+                
+                  <mat-list-item class="ion-text-wrap;"  role="listitem" *ngFor="let respuesta of respuestas">
+                      <p style = "border-bottom: black;">{{respuesta}}</p>
+                  </mat-list-item>
+                 
                   </div>
             </div>
 
