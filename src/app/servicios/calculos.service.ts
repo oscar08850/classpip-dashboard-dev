@@ -645,18 +645,18 @@ private async EliminarMatriculas(): Promise<any> {
     console.log ('asi esta la lista de juegos activos ', juegosActivos);
 
 
-    console.log ('vamos a por los juegos de cuento del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DamejuegosdeCuento(grupoID).toPromise();
-    console.log('He recibido los juegos de cuento');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegosInactivos.push(juegos[i]);
-      }
-    }
+    // console.log ('vamos a por los juegos de cuento del grupo: ' + grupoID);
+    // juegos = await this.peticionesAPI.DamejuegosdeCuento(grupoID).toPromise();
+    // console.log('He recibido los juegos de cuento');
+    // console.log(juegos);
+    // // tslint:disable-next-line:prefer-for-of
+    // for (let i = 0; i < juegos.length; i++) {
+    //   if (juegos[i].JuegoActivo === true) {
+    //     juegosActivos.push(juegos[i]);
+    //   } else {
+    //     juegosInactivos.push(juegos[i]);
+    //   }
+    // }
 
     console.log ('asi esta la lista de juegos activos ', juegosActivos);
     const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};

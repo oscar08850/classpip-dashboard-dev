@@ -15,7 +15,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         RespuestaJuegoDeCuestionario, JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos, Rubrica,
         JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, FamiliaDeImagenesDePerfil,
         CuestionarioSatisfaccion, JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion,
-        JuegoDeEncuestaRapida, JuegoDeVotacionRapida, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido, JuegoDePuntos} from '../clases/index';
+        JuegoDeEncuestaRapida, JuegoDeVotacionRapida, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido, JuegoDePuntos, AlumnoJuegoDeControlDeTrabajoEnEquipo, EquipoJuegoDeCuestionario, Evento, JuegoDeControlDeTrabajoEnEquipo} from '../clases/index';
 
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
@@ -31,6 +31,9 @@ import { EquipoJuegoDeVotacionUnoATodos } from '../clases/EquipoJuegoDeVotacionU
 import { RespuestaEquipoJuegoDeCuestionario } from '../clases/RespuestaEquipoJuegoDeCuestionario';
 import { AlumnoJuegoDeEvaluacion } from '../clases/AlumnoJuegoDeEvaluacion';
 import { EquipoJuegoDeEvaluacion } from '../clases/EquipoJuegoDeEvaluacion';
+import { AlumnoJuegoDeLibro } from '../clases/AlumnoJuegoDeLibro';
+import { RecursoLibro } from '../clases/clasesParaLibros/recursoLibro';
+import { JuegoDeLibros } from '../clases/JuegoDeLibros';
 
 
 @Injectable({
@@ -1484,53 +1487,53 @@ export class PeticionesAPIService {
   //////////////////////////////// GESTION DE EQUIPOS EN JUEGO DE AVATAR /////////////////
 
 
-  /////////////////////////////// GESTION LIBROS //////////////////////////////////
+//   /////////////////////////////// GESTION LIBROS //////////////////////////////////
 
 
 
-  public InscribeAlumnojuegoDelibro(alumnoJuegoDeLibro: AlumnoJuegoDeLibro, id) {
-    return this.http.post<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id  + '/alumnojuegodecuento',
-      alumnoJuegoDeLibro);
+//   public InscribeAlumnojuegoDelibro(alumnoJuegoDeLibro: AlumnoJuegoDeLibro, id) {
+//     return this.http.post<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id  + '/alumnojuegodecuento',
+//       alumnoJuegoDeLibro);
 
-  }
-  public crearjuegolibro(juego: JuegoDeLibros, grupoId: number) {
+//   }
+//   public crearjuegolibro(juego: JuegoDeLibros, grupoId: number) {
 
-    return this.http.post<JuegoDeLibros>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro', juego);
-  }
-
-
-   public DamejuegosdeCuento(grupoId: number): Observable<Juego[]> {
-    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro');
-  }
-
-  public DameAlumnosJuegoLibro(id): Observable<any>  {
-  return this.http.get<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento');
-
- }
+//     return this.http.post<JuegoDeLibros>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro', juego);
+//   }
 
 
- public ModificarPermidosJuegoLibro(alumno: AlumnoJuegoDeLibro, id): Observable<AlumnoJuegoDeLibro> {
-  return this.http.put<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento/' + alumno.id, alumno);
-}
+//    public DamejuegosdeCuento(grupoId: number): Observable<Juego[]> {
+//     return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegodelibro');
+//   }
+
+//   public DameAlumnosJuegoLibro(id): Observable<any>  {
+//   return this.http.get<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento');
+
+//  }
+
+
+//  public ModificarPermidosJuegoLibro(alumno: AlumnoJuegoDeLibro, id): Observable<AlumnoJuegoDeLibro> {
+//   return this.http.put<AlumnoJuegoDeLibro>(this.APIUrlJuegodeLibro + '/' + id + '/alumnojuegodecuento/' + alumno.id, alumno);
+// }
 
 
 
-  public crearCarpeta(nombre: any): Observable<any> {
+//   public crearCarpeta(nombre: any): Observable<any> {
 
-    return this.http.post<any>(this.APIurlImagenesLibros, nombre);
-  }
+//     return this.http.post<any>(this.APIurlImagenesLibros, nombre);
+//   }
 
-  public guardarImagenRecursoLibro(nombre: any, file: FormData): Observable<any> {
-    return this.http.post<any>(this.APIurlImagenesLibros + '/' + nombre + '/upload', file);
-  }
-  // public guardarRecursoLibro(recurso: any):Observable<any>{
-  //   return this.http.post<any>(this.APIurlRecursosLibros, recurso);
-  // }
+//   public guardarImagenRecursoLibro(nombre: any, file: FormData): Observable<any> {
+//     return this.http.post<any>(this.APIurlImagenesLibros + '/' + nombre + '/upload', file);
+//   }
+//   // public guardarRecursoLibro(recurso: any):Observable<any>{
+//   //   return this.http.post<any>(this.APIurlRecursosLibros, recurso);
+//   // }
 
-  public guardarRecursoLibro(recurso: any, profesorId): Observable<any> {
-    return this.http.post<any>(  this.APIUrlProfesores + '/' + profesorId + '/recursosLibros', recurso);
+//   public guardarRecursoLibro(recurso: any, profesorId): Observable<any> {
+//     return this.http.post<any>(  this.APIUrlProfesores + '/' + profesorId + '/recursosLibros', recurso);
 
-  }
+//   }
    /////////////////////////////////////// GESTION JUEGOS DE VOTACION: UNO A TODOS /////////////////////////////////
 
 
@@ -1623,58 +1626,58 @@ public ModificaInscripcionEquipoJuegoDeVotacionUnoATodos(inscripcion: EquipoJueg
 
 //////////////// recurosos libros////////////////////////////////////////
 
-  public recuperarListaRecursos(profesorId): Observable<RecursoLibro[]> {
-    return this.http.get<RecursoLibro[]>(this.APIUrlProfesores  + '/' + profesorId + '/recursosLibros');
-  }
+  // public recuperarListaRecursos(profesorId): Observable<RecursoLibro[]> {
+  //   return this.http.get<RecursoLibro[]>(this.APIUrlProfesores  + '/' + profesorId + '/recursosLibros');
+  // }
 
-  public recuperarRecursosLibro(profesorId, recurosId): Observable<RecursoLibro> {
-    return this.http.get<RecursoLibro>(this.APIUrlProfesores  + '/' + profesorId + '/recursosLibros' + '/' + recurosId);
-  }
+  // public recuperarRecursosLibro(profesorId, recurosId): Observable<RecursoLibro> {
+  //   return this.http.get<RecursoLibro>(this.APIUrlProfesores  + '/' + profesorId + '/recursosLibros' + '/' + recurosId);
+  // }
 
-  public crearRecursosJuegoLibro(idLibro, recurso): Observable<any> {
-    return this.http.post<any>(this.APIUrlJuegodeLibro  + '/' + idLibro + '/recursosJuegoLibro' , recurso);
-  }
+  // public crearRecursosJuegoLibro(idLibro, recurso): Observable<any> {
+  //   return this.http.post<any>(this.APIUrlJuegodeLibro  + '/' + idLibro + '/recursosJuegoLibro' , recurso);
+  // }
 
-  public getImagenesRecurso(containerName, fileName): Observable<any> {
-    return this.httpImagenes.get(this.APIurlImagenesLibros  + '/' + containerName + '/download/' + fileName, { responseType: ResponseContentType.Blob });
-  }
-
-
-  public crearConcurso(idLibro: any, concurso: any): Observable<any> {
-    return this.http.post<any>(this.APIUrlJuegodeLibro + '/' + idLibro + '/' + 'juegoLibroConcurso', concurso);
-  }
-
-  public dameLibro(idJuegoAlumnoLibro): Observable<any> {
-    return this.http.get<any>(this.urlalumnojuego + '/' + idJuegoAlumnoLibro + '/Libro');
-
-  }
-
-  public dameunlibro(id): Observable<any> {
-    return this.http.get<any>(this.urllibro + '/' + id);
-  }
+//   public getImagenesRecurso(containerName, fileName): Observable<any> {
+//     return this.httpImagenes.get(this.APIurlImagenesLibros  + '/' + containerName + '/download/' + fileName, { responseType: ResponseContentType.Blob });
+//   }
 
 
-  public dameEscenasLibro(idlibro: string): Observable<any> {
-    return this.http.get<any>(this.urllibro + '/' + idlibro + '/escenas');
-  }
+//   public crearConcurso(idLibro: any, concurso: any): Observable<any> {
+//     return this.http.post<any>(this.APIUrlJuegodeLibro + '/' + idLibro + '/' + 'juegoLibroConcurso', concurso);
+//   }
+
+//   public dameLibro(idJuegoAlumnoLibro): Observable<any> {
+//     return this.http.get<any>(this.urlalumnojuego + '/' + idJuegoAlumnoLibro + '/Libro');
+
+//   }
+
+//   public dameunlibro(id): Observable<any> {
+//     return this.http.get<any>(this.urllibro + '/' + id);
+//   }
 
 
-  public getFramesByEscenaId(id): Observable<any> {
-    return this.http.get<any>(this.urlParaEscena + '/' + id + '/frames');
-  }
-  public getImagen(nameFile: string, contenedor: string): Observable<any> {
-    return this.httpImagenes.get(this.urlimagenes + '/' + contenedor + '/download/' + nameFile,
-      { responseType: ResponseContentType.Blob });
-  }
+//   public dameEscenasLibro(idlibro: string): Observable<any> {
+//     return this.http.get<any>(this.urllibro + '/' + idlibro + '/escenas');
+//   }
 
-  public dameConcurso(idjuegoLibro): Observable<any> {
-    return this.http.get<any>(this.APIUrlJuegodeLibro + '/' + idjuegoLibro + '/juegoLibroConcurso');
 
-}
+//   public getFramesByEscenaId(id): Observable<any> {
+//     return this.http.get<any>(this.urlParaEscena + '/' + id + '/frames');
+//   }
+//   public getImagen(nameFile: string, contenedor: string): Observable<any> {
+//     return this.httpImagenes.get(this.urlimagenes + '/' + contenedor + '/download/' + nameFile,
+//       { responseType: ResponseContentType.Blob });
+//   }
 
-public modificarConcurso(id, concurso): Observable<any> {
-  return this.http.put<any>(this.APIUrlConcursoLibros + '/' + id, concurso);
-}
+//   public dameConcurso(idjuegoLibro): Observable<any> {
+//     return this.http.get<any>(this.APIUrlJuegodeLibro + '/' + idjuegoLibro + '/juegoLibroConcurso');
+
+// }
+
+// public modificarConcurso(id, concurso): Observable<any> {
+//   return this.http.put<any>(this.APIUrlConcursoLibros + '/' + id, concurso);
+// }
   /////////////////////////////////////// GESTION JUEGOS DE VOTACION: TODOS A UNO  /////////////////////////////////
 
   public DameJuegoDeVotacionTodosAUno(juegoDeVotacionTodosAUnoID: number): Observable<JuegoDeVotacionTodosAUno> {
@@ -2164,7 +2167,7 @@ public modificarConcurso(id, concurso): Observable<any> {
     return this.httpImagenes.get(this.urlimagenes  + '/' + containerName + '/download/' + fileName, { responseType: ResponseContentType.Blob });
   }
 
-  public borrarCarpeta(nombreCuento):Observable<any>{
+  public borrarCarpeta(nombreCuento): Observable<any>{
     return this.http.delete<any>(this.urlimagenes  + '/' + nombreCuento);
 
   }

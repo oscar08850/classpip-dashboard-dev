@@ -352,25 +352,5 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
     })
   }
 
-
-  /**
-   * Vas a la pantalla Listado de Cuentos, ahora mismo en desuso
-   */
-
-  irAlListado(){
-
-    this.router.navigate(['/grupo/' + this.grupoid.id + '/juego/juegoSeleccionadoActivo/listadoCuentos']);
-
-  }
-  
-  /**
-   * Vas a la pantalla Votaciones, ahora mismo en desuso
-   */
-
-  irAVotaciones(){
-
-    this.router.navigate(['/grupo/' + this.grupoid + '/juego/juegoSeleccionadoActivo/votacionescuento']);
-
-  }
 }
 
