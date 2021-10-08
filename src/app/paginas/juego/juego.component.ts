@@ -17,26 +17,15 @@ import {
 
   AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
   EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
-  EquipoJuegoDeCompeticionFormulaUno, Cuestionario, AlumnoJuegoDeLibro, JuegoDeAvatar, JuegoDeLibros, FamiliaAvatares,
+  EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
   AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-  EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable, concursoLibro, ImagenToBackend, RecursoLibroJuego, RecursoLibro,
+  EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable,
   JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
   JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, CuestionarioSatisfaccion,
   JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion, Rubrica,
-  JuegoDeControlDeTrabajoEnEquipo, AlumnoJuegoDeControlDeTrabajoEnEquipo, EquipoJuegoDeCuestionario, Evento
+  JuegoDeControlDeTrabajoEnEquipo, AlumnoJuegoDeControlDeTrabajoEnEquipo, EquipoJuegoDeCuestionario, Evento, AlumnoJuegoDeCuento, JuegoDeCuento, RecursoCuento, RecursoCuentoJuego
 } from '../../clases/index';
 
-
-
-          AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
-          EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
-          EquipoJuegoDeCompeticionFormulaUno, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
-          AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
-          EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable,
-          JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
-          JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, CuestionarioSatisfaccion,
-          JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion, Rubrica,
-          JuegoDeCuento, AlumnoJuegoDeCuento, RecursoCuento, RecursoCuentoJuego } from '../../clases/index';
 
 
 
@@ -62,6 +51,9 @@ import {log} from 'util';
 import {EquipoJuegoDeEvaluacion} from '../../clases/EquipoJuegoDeEvaluacion';
 import {AlumnoJuegoDeEvaluacion} from '../../clases/AlumnoJuegoDeEvaluacion';
 import { EquipoJuegoDeVotacionUnoATodos } from 'src/app/clases/EquipoJuegoDeVotacionUnoATodos';
+import { concursoLibro } from 'src/app/clases/clasesParaLibros/concursoLibro';
+import { RecursoLibroJuego } from 'src/app/clases/clasesParaLibros/recurosLibroJuego';
+import { RecursoLibro } from 'src/app/clases/clasesParaLibros/recursoLibro';
 
 
 export interface OpcionSeleccionada {
@@ -206,14 +198,14 @@ export class JuegoComponent implements OnInit {
 
   //info para juego de libros
 
-  recursoElegido: number[];
-  tengoRecurso = false;
-  showConcurso: any = false;
-  concursoLibro: concursoLibro;
-  siConcurso: any = false;
-  tengoRecursoCargadoParaGuardar: any = false;
-  recursoCargadoParaGuardar: RecursoLibro;
-  recursoParaLibro: RecursoLibroJuego;
+  // recursoElegido: number[];
+  // tengoRecurso = false;
+  // showConcurso: any = false;
+  // concursoLibro: concursoLibro;
+  // siConcurso: any = false;
+  // tengoRecursoCargadoParaGuardar: any = false;
+  // recursoCargadoParaGuardar: RecursoLibro;
+  // recursoParaLibro: RecursoLibroJuego;
 
   // Información para crear juego de evaluación
   descripcionJuegoEvaluacion = '';
@@ -501,9 +493,6 @@ export class JuegoComponent implements OnInit {
       PesoDelConcepto: ['', Validators.required],
       TiempoLimite: ['', Validators.required],
       descripcionCuento: ['', Validators.required],
-      criterioprivilegio1: ['', Validators.required],
-      criterioprivilegio2: ['', Validators.required],
-      criterioprivilegio3: ['', Validators.required]
       PreguntaAbierta:  ['', Validators.required],
       NumeroDeControles: ['', Validators.required]
     });
@@ -517,7 +506,7 @@ export class JuegoComponent implements OnInit {
 
 
 
-    this.siConcurso = false;
+
     this.listaConceptos = [];
     this.totalPesos = 0;
 
@@ -1512,159 +1501,160 @@ export class JuegoComponent implements OnInit {
   }
 
 
-  CrearJuegoLibro() {
+  // CrearJuegoLibro() {
 
-    const juego = new JuegoDeLibros(this.nombreDelJuego,
-      this.tipoDeJuegoSeleccionado,
-      this.modoDeJuegoSeleccionado,
-      true);
-    juego.descripcion = this.myForm.value.descripcionlibro;
-    juego.Temporada = 'SI';
-    juego.criterioprivilegio1 = this.myForm.value.criterioprivilegio1;
-    juego.criterioprivilegio2 = this.myForm.value.criterioprivilegio2;
-    juego.criterioprivilegio3 = this.myForm.value.criterioprivilegio3;
-
-
-
-    this.peticionesAPI.crearjuegolibro(juego, this.grupo.id)
-      .subscribe(juego => {
-
-        if (this.siConcurso == true) {
-          this.crearConcurso(juego.id);
-        }
-
-        this.crearRecursoJuegoLibro(juego.id);
-
-        this.juegoDeLibro = juego;
-
-
-        if (this.modoDeJuegoSeleccionado === 'Individual') {
-
-          console.log('Voy a inscribir a los alumnos del grupo');
-          // tslint:disable-next-line:max-line-length
-          if (this.modoDeJuegoSeleccionado === 'Individual') {
-            console.log('Voy a inscribir a los alumnos del grupo');
-            // tslint:disable-next-line:prefer-for-of
-            for (let i = 0; i < this.alumnosGrupo.length; i++) {
-              // tslint:disable-next-line:max-line-length
-              console.log('inscribo');
-
-              var alumno = new AlumnoJuegoDeLibro;
-              alumno.nivel1 = this.nivel1;
-              alumno.nivel2 = this.nivel2;
-              alumno.nivel3 = this.nivel3;
-              alumno.permisoparaver = this.permisoparaver;
-              alumno.permisoparavotar = this.permisoparavotar;
-              alumno.alumnoID = this.alumnosGrupo[i].id;
-              alumno.Nombre = this.alumnosGrupo[i].Nombre;
+  //   const juego = new JuegoDeLibros(this.nombreDelJuego,
+  //     this.tipoDeJuegoSeleccionado,
+  //     this.modoDeJuegoSeleccionado,
+  //     true);
+  //   juego.descripcion = this.myForm.value.descripcionlibro;
+  //   juego.Temporada = 'SI';
+  //   juego.criterioprivilegio1 = this.myForm.value.criterioprivilegio1;
+  //   juego.criterioprivilegio2 = this.myForm.value.criterioprivilegio2;
+  //   juego.criterioprivilegio3 = this.myForm.value.criterioprivilegio3;
 
 
 
-              var id = this.juegoDeLibro.id;
+  //   this.peticionesAPI.crearjuegolibro(juego, this.grupo.id)
+  //     .subscribe(juego => {
 
-              this.peticionesAPI.InscribeAlumnojuegoDelibro(alumno, id)
-                .subscribe((res) => {
-                  console.log(res);
-                }
-                  , (err) => {
-                    console.log(err);
+  //       if (this.siConcurso == true) {
+  //         this.crearConcurso(juego.id);
+  //       }
 
-                  });
-            }
-          } else {
+  //       this.crearRecursoJuegoLibro(juego.id);
 
-          }
-          Swal.fire('Juego de libro creado correctamente', ' ', 'success');
+  //       this.juegoDeLibro = juego;
 
 
-          if (this.juegosActivos === undefined) {
+  //       if (this.modoDeJuegoSeleccionado === 'Individual') {
 
-            this.juegosActivos = [];
-          }
-          this.juegosActivos.push(this.juegoDeLibro);
-          this.Limpiar();
+  //         console.log('Voy a inscribir a los alumnos del grupo');
+  //         // tslint:disable-next-line:max-line-length
+  //         if (this.modoDeJuegoSeleccionado === 'Individual') {
+  //           console.log('Voy a inscribir a los alumnos del grupo');
+  //           // tslint:disable-next-line:prefer-for-of
+  //           for (let i = 0; i < this.alumnosGrupo.length; i++) {
+  //             // tslint:disable-next-line:max-line-length
+  //             console.log('inscribo');
 
-          this.tabGroup.selectedIndex = 0;
-        }
-      });
-  }
-
-  public onDate(event): void {
-    var e = event;
-    console.log(event);
-  }
-
-  crearConcurso(idLibro: any) {
-    this.concursoLibro.acabado = false;
-    this.peticionesAPI.crearConcurso(idLibro, this.concursoLibro)
-      .subscribe((res) => {
-        this.siConcurso = false;
-
-      }, (err) => {
-        console.log(err);
-      })
-  }
-
-  crearRecursoJuegoLibro(idLibro: any) {
-    this.peticionesAPI.crearRecursosJuegoLibro(idLibro, this.recursoParaLibro)
-      .subscribe((res) => {
-        this.siConcurso = false;
-
-      }, (err) => {
-        console.log(err);
-      })
-  }
-
-  guardarConcurso() {
-    this.concursoLibro = new concursoLibro();
-
-    this.concursoLibro.concursoTematica = this.myForm.value.concursoTematica;
-    this.concursoLibro.dateFinInscripcion = this.myForm.value.dateFinInscripcion;
-    this.concursoLibro.dateFinVotacion = this.myForm.value.dateFinVotacion;
-    this.concursoLibro.concursoRequisitos = this.myForm.value.concursoRequisitos;
-    this.concursoLibro.concursoPrimerCriterio = this.myForm.value.concursoPrimerCriterio;
-    this.concursoLibro.concursoSegundoCriterio = this.myForm.value.concursoSegundoCriterio;
-    this.concursoLibro.concursoTercerCriterio = this.myForm.value.concursoTercerCriterio;
-    this.concursoLibro.listaLibrosParticipantes = [];
-    this.siConcurso = true;
-    this.concursoLibro.peso1 = this.myForm.value.c1;
-    this.concursoLibro.peso2 = this.myForm.value.c2;
-    this.concursoLibro.peso3 = this.myForm.value.c3;
-
-  }
+  //             var alumno = new AlumnoJuegoDeLibro;
+  //             alumno.nivel1 = this.nivel1;
+  //             alumno.nivel2 = this.nivel2;
+  //             alumno.nivel3 = this.nivel3;
+  //             alumno.permisoparaver = this.permisoparaver;
+  //             alumno.permisoparavotar = this.permisoparavotar;
+  //             alumno.alumnoID = this.alumnosGrupo[i].id;
+  //             alumno.Nombre = this.alumnosGrupo[i].Nombre;
 
 
 
+  //             var id = this.juegoDeLibro.id;
 
-  inscribir(inscribirt) {
-    console.log(inscribirt);
-    this.inscribirtemporada = inscribirt;
-  }
+  //             this.peticionesAPI.InscribeAlumnojuegoDelibro(alumno, id)
+  //               .subscribe((res) => {
+  //                 console.log(res);
+  //               }
+  //                 , (err) => {
+  //                   console.log(err);
 
+  //                 });
+  //           }
+  //         } else {
 
-  RecibeRecursos($event) {
-    this.recursoElegido = $event;
-    this.tengoRecurso = true;
-    localStorage.setItem("idRecursoLibros", this.recursoElegido[0].toString());
-  }
-
-  cargaRecursos($event) {
-    this.recursoCargadoParaGuardar = $event;
-
-
-    this.recursoParaLibro = new RecursoLibroJuego;
-    this.recursoParaLibro.nombre = this.recursoCargadoParaGuardar.nombre;
-    this.recursoParaLibro.carpeta = this.recursoCargadoParaGuardar.carpeta;
-    this.recursoParaLibro.imagenes = this.recursoCargadoParaGuardar.imagenes;
-    this.recursoParaLibro.juegoId = 0;
+  //         }
+  //         Swal.fire('Juego de libro creado correctamente', ' ', 'success');
 
 
-    this.tengoRecursoCargadoParaGuardar = true;
-  }
+  //         if (this.juegosActivos === undefined) {
+
+  //           this.juegosActivos = [];
+  //         }
+  //         this.juegosActivos.push(this.juegoDeLibro);
+  //         this.Limpiar();
+
+  //         this.tabGroup.selectedIndex = 0;
+  //       }
+  //     });
+  // }
+
+  // public onDate(event): void {
+  //   var e = event;
+  //   console.log(event);
+  // }
+
+  // crearConcurso(idLibro: any) {
+  //   this.concursoLibro.acabado = false;
+  //   this.peticionesAPI.crearConcurso(idLibro, this.concursoLibro)
+  //     .subscribe((res) => {
+  //       this.siConcurso = false;
+
+  //     }, (err) => {
+  //       console.log(err);
+  //     })
+  // }
+
+  // crearRecursoJuegoLibro(idLibro: any) {
+  //   this.peticionesAPI.crearRecursosJuegoLibro(idLibro, this.recursoParaLibro)
+  //     .subscribe((res) => {
+  //       this.siConcurso = false;
+
+  //     }, (err) => {
+  //       console.log(err);
+  //     })
+  // }
+
+  // guardarConcurso() {
+  //   this.concursoLibro = new concursoLibro();
+
+  //   this.concursoLibro.concursoTematica = this.myForm.value.concursoTematica;
+  //   this.concursoLibro.dateFinInscripcion = this.myForm.value.dateFinInscripcion;
+  //   this.concursoLibro.dateFinVotacion = this.myForm.value.dateFinVotacion;
+  //   this.concursoLibro.concursoRequisitos = this.myForm.value.concursoRequisitos;
+  //   this.concursoLibro.concursoPrimerCriterio = this.myForm.value.concursoPrimerCriterio;
+  //   this.concursoLibro.concursoSegundoCriterio = this.myForm.value.concursoSegundoCriterio;
+  //   this.concursoLibro.concursoTercerCriterio = this.myForm.value.concursoTercerCriterio;
+  //   this.concursoLibro.listaLibrosParticipantes = [];
+  //   this.siConcurso = true;
+  //   this.concursoLibro.peso1 = this.myForm.value.c1;
+  //   this.concursoLibro.peso2 = this.myForm.value.c2;
+  //   this.concursoLibro.peso3 = this.myForm.value.c3;
+
+  // }
+
+
+
+
+  // inscribir(inscribirt) {
+  //   console.log(inscribirt);
+  //   this.inscribirtemporada = inscribirt;
+  // }
+
+
+  // RecibeRecursos($event) {
+  //   this.recursoElegido = $event;
+  //   this.tengoRecurso = true;
+  //   localStorage.setItem("idRecursoLibros", this.recursoElegido[0].toString());
+  // }
+
+  // cargaRecursos($event) {
+  //   this.recursoCargadoParaGuardar = $event;
+
+
+  //   this.recursoParaLibro = new RecursoLibroJuego;
+  //   this.recursoParaLibro.nombre = this.recursoCargadoParaGuardar.nombre;
+  //   this.recursoParaLibro.carpeta = this.recursoCargadoParaGuardar.carpeta;
+  //   this.recursoParaLibro.imagenes = this.recursoCargadoParaGuardar.imagenes;
+  //   this.recursoParaLibro.juegoId = 0;
+
+
+  //   this.tengoRecursoCargadoParaGuardar = true;
+  // }
 
 
 
   //// FUNCIONES PARA LA CREACION DE UN JUEGO DE AVATARES
+ 
   RecibeFamiliasElegidas($event) {
     this.familiasElegidas = $event;
     this.tengoFamilias = true;
@@ -2536,15 +2526,7 @@ export class JuegoComponent implements OnInit {
   }
 
 
-  verConcurso() {
-
-    this.showConcurso = true;
-    this.conceptosAsignados = false;
-    this.listaConceptos = [];
-    this.totalPesos = 0;
-    this.tengoModoReparto = true;
-
-  }
+ 
 
 
   ///////////////// FUNCIONES PARA CREAR JUEGO DE CUENTO /////////////

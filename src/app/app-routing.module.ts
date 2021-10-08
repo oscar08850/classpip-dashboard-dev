@@ -119,12 +119,6 @@ import {MenuRecursosComponent} from './paginas/menu-recursos/menu-recursos.compo
 
 //Componentes Libro:
 
-import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
-import { MisRecursosLibroComponent }  from './paginas/mis-recursos-libro/mis-recursos-libro.component';
-import { ListadoCuentosComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
-import { ReproductorCuentoComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
-
-import { VotacionescuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-votaciones/votacionescuento/votacionescuento.component';
 import {CrearRubricaComponent } from './paginas/crear-rubrica/crear-rubrica.component';
 import { MisRubricasComponent } from './paginas/mis-rubricas/mis-rubricas.component';
 
@@ -330,14 +324,12 @@ const routes: Routes = [
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/verTodos', component: VerTodosComponent },
 
 
-  //libros
-  {path:'inicio/:id/crearRecursosLibro', component: CrearRecursosLibroComponent},
-  
-  {path:'inicio/:id/verRecursosLibro', component: MisRecursosLibroComponent},
+  //cuentos
 
-  {path:'grupo/:id/juego/juegoSeleccionadoActivo/listadoCuentos', component: ListadoCuentosComponent},
+
+
   {path:'grupo/:id/juego/juegoSeleccionadoActivo/reproductorCuento', component:   ReproductorCuentoComponent},
-  {path:'grupo/:id/juego/juegoSeleccionadoActivo/votacionescuento', component: VotacionescuentoComponent},
+ 
   
   // Rubricas
   { path: 'inicio/:id/crearRubrica', component: CrearRubricaComponent},

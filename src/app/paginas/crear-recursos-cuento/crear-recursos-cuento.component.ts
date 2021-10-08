@@ -289,6 +289,7 @@ export class CrearRecursosCuentoComponent implements OnInit {
  
 
   guardar() {
+    console.log ('Vamos a guardar el pack');
 
 
     this.listaCompletaParaGuardar = [];
@@ -314,7 +315,7 @@ export class CrearRecursosCuentoComponent implements OnInit {
     console.log ('voy a crear carpeta');
     console.log (postfolder);
     this.API.CrearCarpeta(postfolder).subscribe((res) => {
-
+      console.log ('Carpeta creada');
       console.log ('voy a guardar las fotos');
       this.guardarLasFotos();
 
@@ -326,6 +327,8 @@ export class CrearRecursosCuentoComponent implements OnInit {
   guardarLasFotos() {
 
     var i = 0;
+    console.log ('Estoy en guardarLasFotos');
+    console.log (this.listaCompletaParaGuardar);
 
     this.listaCompletaParaGuardar.forEach(file => {
 
