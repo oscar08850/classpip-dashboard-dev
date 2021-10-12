@@ -114,13 +114,16 @@ export class PeticionesAPIService {
 
 
   private APIurlImagenesCuentos = this.host + ':3000/api/imagenes';
-  private APIurlRecursosCuentos = this.host + ':3000/api/recursosCuentos';
   private APIurlAlumnoJuego = this.host + ':3000/api/AlumnosJuegoDeCuento';
   private APIurlCuento = this.host + ':3000/api/Cuentos';
   private urlParaEscena = this.host + ':3000/api/Escenas';
   private urlimagenes = this.host + ':3000/api/imagenes';
   private APIUrlRecursosJuegoDeCuento = this.host + ':3000/api/RecursosJuegoDeCuento';
   private APIUrlJuegoDeCuento = this.host + ':3000/api/JuegosDeCuento';
+  private APIurlRecursosCuentos = this.host + ':3000/api/RecursosCuentos';
+
+
+
 
 
   private APIURLJuegoDeEvaluacion = this.host + ':3000/api/juegosDeEvaluacion';
@@ -2080,6 +2083,8 @@ public ModificaInscripcionEquipoJuegoDeVotacionUnoATodos(inscripcion: EquipoJueg
   }
 
   public GuardarRecursoCuento(recurso: any, profesorId): Observable<any> {
+    let string = this.APIUrlProfesores + '/' + profesorId + '/recursosCuentos';
+    console.log ('POST A ', string);
     return this.http.post<any>(  this.APIUrlProfesores + '/' + profesorId + '/recursosCuentos', recurso);
 
   }
@@ -2151,6 +2156,7 @@ public ModificaInscripcionEquipoJuegoDeVotacionUnoATodos(inscripcion: EquipoJueg
 
 
   public getImagenesRecurso(containerName, fileName): Observable<any> {
+    // tslint:disable-next-line:max-line-length
     return this.httpImagenes.get(this.APIurlImagenesCuentos  + '/' + containerName + '/download/' + fileName, { responseType: ResponseContentType.Blob });
   }
 //
@@ -2158,12 +2164,13 @@ public ModificaInscripcionEquipoJuegoDeVotacionUnoATodos(inscripcion: EquipoJueg
     return this.http.post<any>(this.APIUrlJuegoDeCuento  + '/' + idLibro + '/RecursosJuegoDeCuentos' , recurso);
   }
 
-  public obtenerImagenesEscena(nombreCuento):Observable<any[]>{
+  public obtenerImagenesEscena(nombreCuento): Observable<any[]>{
     return this.http.get<any[]>(this.urlimagenes  + '/' + nombreCuento +'/files');
 
   }
 
   public getEscenasDeRecurso(containerName, fileName): Observable<any> {
+    // tslint:disable-next-line:max-line-length
     return this.httpImagenes.get(this.urlimagenes  + '/' + containerName + '/download/' + fileName, { responseType: ResponseContentType.Blob });
   }
 
@@ -2175,8 +2182,22 @@ public ModificaInscripcionEquipoJuegoDeVotacionUnoATodos(inscripcion: EquipoJueg
   public borrarRecursoJuegoDeCuento(juegoId: number):Observable<any> {
 
     return this.http.delete<any>(this.APIUrlRecursosJuegoDeCuento + '/' + juegoId) ;
-
   }
+
+
+  
+    public DameCarpeta(nombre: any): Observable<any> {
+
+      return this.http.get<any>(this.APIurlRecursosCuentos+'?filter[where][carpeta]='+nombre);
+    }
+  
+  
+    public BorrarRecursosCuento(id: number):Observable<any> {
+  
+      return this.http.delete<any>(this.APIurlRecursosCuentos + '/' + id) ;
+  
+    }
+
 
 
 

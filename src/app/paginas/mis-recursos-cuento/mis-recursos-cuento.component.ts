@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { PeticionesAPIService } from '../../servicios/peticiones-api.service';
 import { SesionService } from '../../servicios/sesion.service';
 import { ImagenToBackend } from '../../clases/clasesParaJuegoDeCuentos/ImagenGuardada';
+import {Location} from '@angular/common';
+import Swal from 'sweetalert2';
 
 
 
@@ -26,7 +28,10 @@ export class MisRecursosCuentoComponent implements OnInit {
 
 
 
-  constructor(public API: PeticionesAPIService, public sesion: SesionService) { }
+  constructor(
+    public API: PeticionesAPIService, 
+    public sesion: SesionService,
+    private location: Location) { }
 
 
   ngOnInit() {
@@ -123,5 +128,28 @@ export class MisRecursosCuentoComponent implements OnInit {
     });
     
   }
+  EliminarRecurso(nombreRecurso: string, id: number){
+    Swal.fire({
+      title: '¿Seguro que quieres eliminar este recurso?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
+        this.API.borrarCarpeta(nombreRecurso).subscribe(res=>{
+          this.API.BorrarRecursosCuento(id).subscribe(res=>{
+            console.log("Recurso eliminado");
+            Swal.fire('Recurso eliminado');
+            this.location.back();
+          });
+        });
+
+      }
+    });
+  }
+
 
 }

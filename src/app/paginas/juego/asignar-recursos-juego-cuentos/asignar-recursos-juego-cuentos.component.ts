@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog, MatTabGroup } from '@angular/material';
 import {  Alumno, Equipo} from 'src/app/clases/index';
 
-import { RecursoCuento } from '../../../clases/clasesParaJuegoDeCuentos/recursoCuento';
+import { RecursoCuento } from '../../../clases/clasesParaJuegoDeCuentos/RecursoCuento';
 import { JuegoDeCuento } from '../../../clases/clasesParaJuegoDeCuentos/JuegoDeCuento';
 
 
