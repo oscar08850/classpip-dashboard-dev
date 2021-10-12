@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Juego, Alumno, Pregunta, Cuestionario } from 'src/app/clases';
+import { Juego, Alumno, Pregunta, Cuestionario, EquipoJuegoDeCuestionario, Equipo, TablaEquipoJuegoDeCuestionario } from 'src/app/clases';
 import { AlumnoJuegoDeCuestionario } from 'src/app/clases/AlumnoJuegoDeCuestionario';
 import { TablaAlumnoJuegoDeCuestionario } from 'src/app/clases/TablaAlumnoJuegoDeCuestionario';
 import { MatDialog, MatTableDataSource } from '@angular/material';
@@ -24,14 +24,18 @@ import * as URL from '../../../URLs/urls';
 export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
   // Juego de Cuestionario saleccionado
-  juegoSeleccionado: Juego;
+  juegoSeleccionado: any;
 
   // Recuperamos la informacion del juego
   alumnosDelJuego: Alumno[];
+  equiposDelJuego: Equipo[];
 
   // Lista de los alumnos ordenada segun su nota
   listaAlumnosOrdenadaPorNota: AlumnoJuegoDeCuestionario[];
+  listaEquiposOrdenadaPorNota: EquipoJuegoDeCuestionario[];
   rankingAlumnosPorNota: TablaAlumnoJuegoDeCuestionario[];
+
+  rankingEquiposPorNota: TablaEquipoJuegoDeCuestionario[];
 
   // tslint:disable-next-line:no-inferrable-types
   mensaje: string = 'Estas segura/o que quieres desactivar: ';
@@ -42,9 +46,13 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
   // Orden conlumnas de la tabla
   displayedColumnsAlumnos: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'nota', ' '];
   displayedColumnsAlumnosKahoot: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'conexion'];
-
+  displayedColumnsEquipos: string[] = ['nombreEquipo', 'nota', ' '];
+  displayedColumnsEquiposPrimero: string[] = ['nombreEquipo', 'nota'];
+  
   dataSourceAlumno;
+  dataSourceEquipo;
   dataSourceAlumnosConectados;
+  dataSourceEquiposConectados;
 
   // tslint:disable-next-line:no-inferrable-types
 
@@ -55,7 +63,8 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
   //Lista para tratado de conexiones
   alumnosConectados: any[];
   listaAlumnos: any[];
-
+  equiposConectados: any[];
+  listaEquipos: any[];
 
 //////////////////////////////////
 
@@ -100,6 +109,8 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
   finKahoot = false;
   respuestasPreguntaActual: any[];
   donutsKahoot: any[] = [];
+  equipos = [];
+  respuestasPorEquipo = [];
 
 
   constructor(  public dialog: MatDialog,
@@ -111,48 +122,66 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
                 private router: Router) { }
 
   ngOnInit() {
-    // El juego de cuestionario de momento solo es individual, pero puede ser de modalidad clásica o kahoot
+    // El juego de cuestionario puede ser de modalidad clásica o kahoot
+    // El en caso de modalidad clasica, puede ser individual o en equipo
 
-    this.alumnosConectados = [];
-    this.listaAlumnos = [];
-
+    
     const sound = new Howl({
       src: ['/assets/got-it-done.mp3']
     });
 
     this.juegoSeleccionado = this.sesion.DameJuego();
     console.log(this.juegoSeleccionado.Modalidad);
-    // Este procedimiento prepara la lista alumnosDelJuego (que son los que participan en el juego)
-    // y una lista que se llama alumnosConectados en la que cada item contiene el alumno y un boolean que indica si está conectado (necesario para
-    // la modalidad Kahoot)
-    this.AlumnosDelJuego();
 
-    // Aqui traemos el cuestionario, las preguntas y el histograma de aciertos
-    // Para cada pregunta preparamos la imagen si la tiene y el donut que usaremos para mostrar las respuestas
-    this.PreparaInfo();
+    if (this.juegoSeleccionado.Modo === 'Individual') {
+      this.alumnosConectados = [];
+      this.listaAlumnos = [];
 
-    if (this.juegoSeleccionado.Modalidad === 'Kahoot') {
+      // Este procedimiento prepara la lista alumnosDelJuego (que son los que participan en el juego)
+      // y una lista que se llama alumnosConectados en la que cada item contiene el alumno y un boolean que indica si está conectado (necesario para
+      // la modalidad Kahoot)
+      this.AlumnosDelJuego();
 
-      // Cada alumno que quiera participar en el Kahoot enviara una notificación de que está preparado, enviando su identificador de alumno
-      this.comServer.EsperoConfirmacionPreparadoKahoot()
-      .subscribe((alId) => {
-        // el participante está listo para empezar el kahoot. Tomo nota de esto
-        const alum = this.alumnosConectados.find (al => al.alumno.id === alId);
-        alum.conectado = true;
-        // Actualizo la tabla de conectados (aparecerá el simbolo verde al lado del nombre del alumno)
-        this.dataSourceAlumnosConectados = new MatTableDataSource(this.alumnosConectados);
+      // Aqui traemos el cuestionario, las preguntas y el histograma de aciertos
+      // Para cada pregunta preparamos la imagen si la tiene y el donut que usaremos para mostrar las respuestas
+      this.PreparaInfo();
 
-        // Añado al alumno a la lista de alumnos que participan en el juego. En esa lista tendo los datos para hacer el seguimiento del juego
-        this.listaAlumnos.push ( {
-          alumno: alum.alumno,
-          incremento: 0,  // indica cuántos puntos suma con la última respuesta
-          puntos: 0,
-          aciertos: 0 // esto es para el histograma
-        })
-      });
+      if (this.juegoSeleccionado.Modalidad === 'Kahoot') {
+
+        // Cada alumno que quiera participar en el Kahoot enviara una notificación de que está preparado, enviando su identificador de alumno
+        this.comServer.EsperoConfirmacionPreparadoKahoot()
+        .subscribe((alId) => {
+          // el participante está listo para empezar el kahoot. Tomo nota de esto
+          const alum = this.alumnosConectados.find (al => al.alumno.id === alId);
+          alum.conectado = true;
+          // Actualizo la tabla de conectados (aparecerá el simbolo verde al lado del nombre del alumno)
+          this.dataSourceAlumnosConectados = new MatTableDataSource(this.alumnosConectados);
+
+          // Añado al alumno a la lista de alumnos que participan en el juego. En esa lista tendo los datos para hacer el seguimiento del juego
+          this.listaAlumnos.push ( {
+            alumno: alum.alumno,
+            incremento: 0,  // indica cuántos puntos suma con la última respuesta
+            puntos: 0,
+            aciertos: 0 // esto es para el histograma
+          })
+        });
+      }
+    } else if ((this.juegoSeleccionado.Modo === 'Equipos') && (this.juegoSeleccionado.Presentacion === 'Primero')) {
+      // Hacemos lo mismo pero ahora con los equipos
+      this.equiposConectados = [];
+      this.listaEquipos = [];
+
+      this.EquiposDelJuego();
+
+      this.PreparaInfo();
+
+    } else {
+      // Este es el caso de juego en equipo pero en el que puntua la media.
+      // Por tanto, contestan todos los alumnos y tenemos inscripciones de alumnos y no de equipos
+      this.TablaParaModoEquipoConInscripcionesIndividuales();
     }
 
-    if (this.juegoSeleccionado.Modalidad === 'Clásico') {
+    if (this.juegoSeleccionado.Modalidad === 'Clásico' && this.juegoSeleccionado.Modo === 'Individual') {
       // Si el juego es Clásico directamente espero la respuesta a todas las preguntas del cuestionario
       // La notificación que me llega contiene:
       //  id del alumno
@@ -180,7 +209,153 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
           this.dataSourceAlumno = new MatTableDataSource(this.rankingAlumnosPorNota);
       });
     }
+    
+    if (this.juegoSeleccionado.Modalidad === 'Clásico' && this.juegoSeleccionado.Modo === 'Equipos') {
+      if (this.juegoSeleccionado.Presentacion === 'Primero') {
+        // Si el juego es Clásico, en equipo y puntua el primero directamente espero la respuesta a todas las preguntas del cuestionario
+        // La notificación que me llega contiene:
+        //  id del equipo
+        //  nota obtenida 
+        //  tiempo empleado
+        // Si  algun miembro del equipo ya ha contestado la respuesta se ignora
 
+        this.comServer.EsperoRespuestasEquipoJuegoDeCuestionario()
+        .subscribe((equipo: any) => {
+
+            // Añado la información a la tabla con el ranking, que vuelvo a ordenar
+            const eq = this.rankingEquiposPorNota.filter (a => a.id === equipo.id )[0];
+            if (!eq.contestado) {
+              sound.play();
+              eq.nota = equipo.nota;
+              eq.tiempoEmpleado = equipo.tiempo;
+              eq.contestado = true;
+    
+              // tslint:disable-next-line:only-arrow-functions
+              this.rankingEquiposPorNota = this.rankingEquiposPorNota.sort(function(a, b) {
+                if (b.nota !== a.nota) {
+                  return b.nota - a.nota;
+                } else {
+                  // en caso de empate en la nota, gana el que empleó menos tiempo
+                  return a.tiempoEmpleado - b.tiempoEmpleado;
+                }
+              });
+              this.dataSourceEquipo = new MatTableDataSource(this.rankingEquiposPorNota);
+            }
+        });
+      } else {
+        // Si el juego es Clásico, en equipo y puntua la media espero respuestas individuales
+        // La notificación que me llega contiene:
+        //  id del alumno
+        //  nota obtenida 
+        //  tiempo empleado
+        // Tengo que acumular resultado y ver si han contestado ya todos los del grupo
+
+        // Necesitaré los equipos del grupo
+        this.TraeEquiposDelGrupo ();
+       
+        this.comServer.EsperoRespuestasJuegoDeCuestionario()
+        .subscribe(async (alumno: any) => {
+            sound.play();
+            // tengo que buscar el equipo de este alumno
+            const equiposAlumno = await this.peticionesAPI.DameEquiposDelAlumno (alumno.id).toPromise();
+            // Busco el equipo que esta tanto en la lista de equipos del grupo como en la lista de equipos del alumno
+            const equipo = equiposAlumno.filter(e => this.equipos.some(a => a.id === e.id))[0];
+            // Acumulo la nota de este alumno en la lista de control de respuestas de equipos
+            const equipoEnRanking = this.rankingEquiposPorNota.find (e => e.id === equipo.id);
+            equipoEnRanking.nota = equipoEnRanking.nota + alumno.nota;
+            equipoEnRanking.tiempoEmpleado = equipoEnRanking.tiempoEmpleado +  alumno.tiempo;
+            const infoEquipo = this.respuestasPorEquipo.find (eq => eq.equipoId === equipo.id);
+            infoEquipo.respuestasQueFaltan --;
+            if (infoEquipo.respuestasQueFaltan === 0) {
+              equipoEnRanking.contestado = true;
+              equipoEnRanking.nota = equipoEnRanking.nota / infoEquipo.numeroDeAlumnos;
+            }
+            this.rankingEquiposPorNota = this.rankingEquiposPorNota.sort(function(a, b) {
+              if (b.nota !== a.nota) {
+                return b.nota - a.nota;
+              } else {
+                // en caso de empate en la nota, gana el que empleó menos tiempo
+                return a.tiempoEmpleado - b.tiempoEmpleado;
+              }
+            });
+            this.dataSourceEquipo = new MatTableDataSource(this.rankingEquiposPorNota);
+        });
+
+      }
+    }
+
+  }
+
+  async TraeEquiposDelGrupo () {
+    this.equipos = await this.peticionesAPI.DameEquiposDelGrupo (this.juegoSeleccionado.grupoId).toPromise();
+  }
+  async TablaParaModoEquipoConInscripcionesIndividuales() {
+    // Apara cada alumno inscrito tengo que ver si ha contestado. Si es así acumular su nota a las de su equipo.
+    // Y en el caso que hayan contestado ya todos entonces tomar nota para mostrar la calificacion media del equipo
+    this.rankingEquiposPorNota = [];
+    this.respuestasPorEquipo = [];
+    //Preparo la lista para controlar las respuestas del equipo. Para cada uno necesito el id, el numero de alumnos y las respuestas que faltan
+    
+    const equipos = await this.peticionesAPI.DameEquiposDelGrupo (this.juegoSeleccionado.grupoId).toPromise();
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < equipos.length; i++) {
+      // Esta es la tabla que usaré para mostrar al usuario
+      this.rankingEquiposPorNota.push ( new TablaEquipoJuegoDeCuestionario (equipos[i].Nombre, 0, undefined, equipos[i].id, 0));
+      const alumnosEquipo = await this.peticionesAPI.DameEquipoConAlumnos (equipos[i].id).toPromise();
+      // y esta la tabla para controlar las respuestas del equipo
+      this.respuestasPorEquipo.push ({
+        equipoId: equipos[i].id,
+        respuestasQueFaltan: alumnosEquipo.length,
+        numeroDeAlumnos: alumnosEquipo.length
+      });
+    }
+    // Ahora recorro las inscriptiones para ir actualizando las respuestas de los equipos en el caso de los alumnos que hayan contestado
+    const inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCuestionario(this.juegoSeleccionado.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length; i++) {
+      if (inscripciones[i].Contestado) {
+        const alumnoId = inscripciones[i].alumnoId;
+        // tengo que buscar el equipo de este alumno
+        const equiposAlumno = await this.peticionesAPI.DameEquiposDelAlumno (alumnoId).toPromise();
+        // Busco el equipo que esta tanto en la lista de equipos del grupo como en la lista de equipos del
+          // alumno
+        const equipo = equiposAlumno.filter(e => equipos.some(a => a.id === e.id))[0];
+        // Acumulo la nota de este alumno en la lista de control de respuestas de equipos
+        const equipoEnRanking = this.rankingEquiposPorNota.find (e => e.id === equipo.id);
+        equipoEnRanking.nota = equipoEnRanking.nota + inscripciones[i].Nota;
+        equipoEnRanking.tiempoEmpleado = equipoEnRanking.tiempoEmpleado +  inscripciones[i].TiempoEmpleado;
+        this.respuestasPorEquipo.find (eq => eq.equipoId === equipo.id).respuestasQueFaltan --;
+      }
+    }
+    // Ahora vamos a ver cuáles son los equipos en los que ya han respondido todos sus miembros para asignarles la nota media
+    this.rankingEquiposPorNota.forEach (equipo => {
+      const infoEquipo = this.respuestasPorEquipo.find (eq => eq.equipoId === equipo.id);
+      if (infoEquipo.respuestasQueFaltan === 0) {
+        equipo.contestado = true;
+        equipo.nota = equipo.nota / infoEquipo.numeroDeAlumnos;
+      }
+    });
+    // ordenamos la lista
+    // tslint:disable-next-line:only-arrow-functions
+    this.rankingEquiposPorNota = this.rankingEquiposPorNota.sort(function(a, b) {
+      if (b.nota !== a.nota) {
+        return b.nota - a.nota;
+      } else {
+        // en caso de empate en la nota, gana el que empleó menos tiempo
+        return a.tiempoEmpleado - b.tiempoEmpleado;
+      }
+    });
+    this.dataSourceEquipo = new MatTableDataSource(this.rankingEquiposPorNota);
+    console.log ('tego ranking ', this.rankingEquiposPorNota);
+  }
+
+  RespuestasDisponibles (equipo): string {
+    console.log ('respuestas disponibles de ', equipo);
+    console.log (this.respuestasPorEquipo);
+    const infoEquipo = this.respuestasPorEquipo.find (eq => eq.equipoId === equipo.id);
+    const respuestasDisponibles = infoEquipo.numeroDeAlumnos - infoEquipo.respuestasQueFaltan + '/' + infoEquipo.numeroDeAlumnos;
+    return respuestasDisponibles;
   }
 
   
@@ -316,17 +491,63 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
   }
 
   
-
-  DesactivarJuego() {
-    // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modalidad, this.juegoSeleccionado.PuntuacionCorrecta,
-      this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, false, this.juegoSeleccionado.JuegoTerminado,
-      // tslint:disable-next-line:max-line-length
-      this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
-      .subscribe(res => {
-        this.location.back();
+  EquiposDelJuego() {
+    this.peticionesAPI.DameEquiposJuegoDeCuestionario(this.juegoSeleccionado.id)
+    .subscribe(equiposJuego => {
+      this.equiposDelJuego = equiposJuego;
+      this.equiposDelJuego.forEach(eq => {
+        this.equiposConectados.push({
+          equipo: eq,
+          conectado: false
+        });
       });
+
+      // Preparo la tabla en la que se irán viendo los alumnos que se van conectando
+      this.dataSourceEquiposConectados = new MatTableDataSource(this.equiposConectados);
+      this.RecuperarInscripcionesEquipoJuego();
+    });
   }
+
+  RecuperarInscripcionesEquipoJuego() {
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDeCuestionario(this.juegoSeleccionado.id)
+    .subscribe(inscripciones => {
+      this.listaEquiposOrdenadaPorNota = inscripciones;
+      // En el caso de que el cuestionario sea clásico y algunos equipos hayan contestado, entonces en la propia inscripción
+      // está la nota que sacó el alumno y el tiempo que empleó en contestar. Asi que ordeno la lista segun nota y tiempo (en caso de misma nota)
+      // tslint:disable-next-line:only-arrow-functions
+      this.listaEquiposOrdenadaPorNota = this.listaEquiposOrdenadaPorNota.sort(function(a, b) {
+        if (b.Nota !== a.Nota) {
+          return b.Nota - a.Nota;
+        } else {
+          // en caso de empate en la nota, gana el que empleó menos tiempo
+          return a.TiempoEmpleado - b.TiempoEmpleado;
+        }
+      });
+      console.log ('inscripciones');
+      console.log (this.listaEquiposOrdenadaPorNota);
+      this.TablaClasificacionTotalEquipos();
+    });
+  }
+
+  TablaClasificacionTotalEquipos() {
+    // Ahora preparo la tabla para mostrar la clasificación. Básicamente, junto en la misma tabla nombre del equipo con la nota
+    this.rankingEquiposPorNota = this.calculos.PrepararTablaRankingEquiposCuestionario(this.listaEquiposOrdenadaPorNota,
+      this.equiposDelJuego);
+    this.dataSourceEquipo = new MatTableDataSource(this.rankingEquiposPorNota);
+  }
+
+  
+
+  // DesactivarJuego() {
+  //   // tslint:disable-next-line:max-line-length
+  //   this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modalidad, this.juegoSeleccionado.PuntuacionCorrecta,
+  //     this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, false, this.juegoSeleccionado.JuegoTerminado,
+  //     // tslint:disable-next-line:max-line-length
+  //     this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
+  //     .subscribe(res => {
+  //       this.location.back();
+  //     });
+  // }
 
   AbrirDialogoConfirmacionDesactivar(): void {
 
@@ -342,24 +563,18 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
     }).then((result) => {
       if (result.value) {
-        this.DesactivarJuego();
-        Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' Desactivado correctamente', 'success'); 
+        this.juegoSeleccionado.JuegoActivo = false;
+        this.peticionesAPI.ModificaJuegoDeCuestionario (this.juegoSeleccionado, this.juegoSeleccionado.id)
+        .subscribe (() => {
+          Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' Desactivado correctamente', 'success');
+          this.location.back();
+        })
+
       }
-    })
-
+    });
   }
 
-  FinalizarJuego() {
-    // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modalidad, this.juegoSeleccionado.PuntuacionCorrecta,
-      this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, false, true,
-      // tslint:disable-next-line:max-line-length
-      this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
-      .subscribe(res => {
-        this.location.back();
-      });
-  }
-
+ 
   AbrirDialogoConfirmacionFinalizar(): void {
 
     Swal.fire({
@@ -374,10 +589,15 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
     }).then((result) => {
       if (result.value) {
-        this.FinalizarJuego();
-        Swal.fire('Finalizado', this.juegoSeleccionado.Tipo + ' Finalizado correctamente', 'success');
+        this.juegoSeleccionado.JuegoActivo = false;
+        this.juegoSeleccionado.JuegoTerminado = true;
+        this.peticionesAPI.ModificaJuegoDeCuestionario (this.juegoSeleccionado, this.juegoSeleccionado.id)
+        .subscribe (() => {
+          Swal.fire('Finalizado', this.juegoSeleccionado.Tipo + ' Finalizado correctamente', 'success');
+          this.location.back();
+        });
       }
-    })
+    });
   }
 
   AbrirDialogoInformacionJuego(): void {
@@ -956,7 +1176,7 @@ MostrarBotonSiguientePregunta (): boolean {
       ],
       yAxis: [{
         type: 'value',
-        name: 'Número de alumnos'
+        name: 'Número de participantes'
       }],
       series: [{
         type: 'bar',
@@ -986,7 +1206,7 @@ MostrarBotonSiguientePregunta (): boolean {
           },
           tooltip: {
               trigger: 'item',
-              formatter: '{c} alumnos <br/> ({d}%)'
+              formatter: '{c} participantes <br/> ({d}%)'
           },
           series: [
               {
@@ -1028,7 +1248,7 @@ MostrarBotonSiguientePregunta (): boolean {
           },
           tooltip: {
               trigger: 'item',
-              formatter: '{c} alumnos <br/> ({d}%)'
+              formatter: '{c} participantes <br/> ({d}%)'
           },
           series: [
               {
@@ -1070,7 +1290,7 @@ MostrarBotonSiguientePregunta (): boolean {
           },
           tooltip: {
               trigger: 'item',
-              formatter: '{c} alumnos <br/> ({d}%)'
+              formatter: '{c} participantes <br/> ({d}%)'
           },
           series: [
               {
@@ -1112,7 +1332,7 @@ MostrarBotonSiguientePregunta (): boolean {
           },
           tooltip: {
               trigger: 'item',
-              formatter: '{c} alumnos <br/> ({d}%)'
+              formatter: '{c} participantes <br/> ({d}%)'
           },
           series: [
               {

@@ -245,6 +245,7 @@ export class JuegoDeEncuestaRapidaComponent implements OnInit {
 
     autoTable(doc, { html: '#tabla',  startY:  margenSuperior + 70 });
 
+    const pageHeight = doc.internal.pageSize.height;
     let i;
     for (i = 0; i < this.respuestasPreguntasAbiertas.length; i++) {
       doc.addPage("a4", "p");
@@ -257,17 +258,19 @@ export class JuegoDeEncuestaRapidaComponent implements OnInit {
       let j;
       doc.setFontSize(12);
       doc.setTextColor("black");
+     
+
       for (j = 0; j < this.respuestasPreguntasAbiertas[i].length; j++) {
+        const splittedText = doc.splitTextToSize(this.respuestasPreguntasAbiertas[i][j],  160);
 
-        // descompomgo el texto en lineas de anchura máxima 180
-        const splittedText = doc.splitTextToSize(this.respuestasPreguntasAbiertas[i][j],  180);
-        const lines = splittedText.length; // splitted text is a string array
-        doc.text (splittedText, margenIzquierdo, margenSuperior + cont);
-        cont = cont + interlineado * lines;
-        // tslint:disable-next-line:max-line-length
-        doc.line(margenIzquierdo, margenSuperior + cont - interlineado + 1, margenIzquierdo + 150, margenSuperior + cont - interlineado + 1) ;
-
-
+        doc.text(splittedText, margenIzquierdo,  margenSuperior + cont);
+        cont = cont + interlineado * (splittedText.length);
+        doc.line(margenIzquierdo, margenSuperior + cont, margenIzquierdo + 150, margenSuperior + cont);
+        cont = cont + interlineado;
+        if (cont > pageHeight) {
+          doc.addPage();
+          cont = 0;
+        }
       }
     }
 
@@ -336,6 +339,7 @@ canExit(): Observable <boolean> {
         }).then((result) => {
           if (result.value) {
             this.sonido = false;
+            this.comServer.InformarFinJuegoRapido (this.profesorId);
             // this.juegoSeleccionado.Respuestas = this.respuestas;
             // // salvo las respuestas que hay hasta el momento para poder recuperarlas si voilvemos a esta página
             // this.peticionesAPI.ModificarJuegoDeEncuestaRapida (this.juegoSeleccionado).subscribe();

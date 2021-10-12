@@ -1,0 +1,4791 @@
+[33mcommit c53ee8232a24e21b49de03bf3a6c7633e37e1aa7[m[33m ([m[1;36mHEAD -> [m[1;32mdev[m[33m, [m[1;31mmio/dev[m[33m)[m
+Author: miguelvalero <miguel.valero@upc.edu>
+Date:   Thu Sep 23 09:46:45 2021 +0200
+
+    control nick usado y arreglos botones juegos rapidos
+
+[33mcommit 9293d46f3fe748f73407ab49ff777fc1c754cdc6[m
+Author: miguelvalero <miguel.valero@upc.edu>
+Date:   Sat Sep 18 08:51:04 2021 +0200
+
+    config eventos
+
+[33mcommit 9f49d0c819c66c0e2fb2857182b68004afb5db31[m[33m ([m[1;31mmio/master[m[33m, [m[1;31mmio/HEAD[m[33m)[m
+Merge: fab5d3e 8ce0574
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Sep 17 16:10:22 2021 +0200
+
+    Merge pull request #122 from miguelvalero/marc285-dev
+    
+    Marc285 dev
+
+[33mcommit 8ce0574a1721e7ea2b9f66e7a8cd0be6781b19b5[m[33m ([m[1;31mmio/marc285-dev[m[33m)[m
+Merge: fab5d3e 1817cfa
+Author: miguelvalero <miguel.valero@upc.edu>
+Date:   Fri Sep 17 16:06:42 2021 +0200
+
+    arreglos integracion eventos
+
+[33mcommit 1817cfa7705f9ae42d9d3494f7579174995f5b6c[m
+Author: marc285 <marc285ee@gmail.com>
+Date:   Thu Sep 16 22:12:20 2021 +0200
+
+    Notificaciones y registro de eventos
+
+[33mcommit fab5d3e962e099717bb9a3a76667702e6ccc0f34[m
+Merge: 6473ea3 637913d
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Sep 9 08:22:12 2021 +0200
+
+    Merge pull request #120 from miguelvalero/dev
+    
+    cuestionario clasico equipo completo
+
+[33mcommit 637913d71dd16300f55d00f874dff62ff7785da9[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Sep 9 08:12:37 2021 +0200
+
+    cuestionario clasico equipo completo
+
+[33mcommit 6473ea3c4e3e07853d29dccde6cba790ecd661ba[m
+Merge: a4b27be 4e10eb5
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Sep 2 16:13:54 2021 +0200
+
+    Merge pull request #117 from miguelvalero/dev
+    
+    cuestionario clasico en equipo
+
+[33mcommit 4e10eb58279f50da24fb4677c109d472dd1d1614[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Sep 2 16:04:48 2021 +0200
+
+    cuestionario clasico en equipo
+
+[33mcommit a4b27be53ad14b370edb2676f7757673030a5a9b[m
+Merge: f331aeb 04d606d
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed Aug 25 08:46:01 2021 +0200
+
+    Merge pull request #115 from miguelvalero/CTE
+    
+    Cte
+
+[33mcommit 04d606d2321c1edbc6ed46278bfa4e0bbe5f4a1e[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed Aug 25 08:39:17 2021 +0200
+
+    unificacion seleccion recursos al crear juego
+
+[33mcommit 77a00df3e134a37a396a238ae443e0aa45dbf1b4[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Aug 24 15:31:23 2021 +0200
+
+    panel de selección de tipos de juego
+
+[33mcommit cc08e2b36d91c42736bf5f5919ecaa06ac413ae1[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Aug 24 09:05:37 2021 +0200
+
+    mejoras eliminacion juegos y grupo
+
+[33mcommit 6e140605fba0acef062aee66e2cdce4d2e1916c8[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sat Aug 21 18:54:45 2021 +0200
+
+    simplificacion juego activo CTE
+
+[33mcommit e8d3f563b3a4e498552110b69c938ebf4b7369da[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sun Aug 15 11:26:57 2021 +0200
+
+    con CTE
+
+[33mcommit f331aebc44b81bb1f91dfceddc8e4981fb4ebd80[m
+Author: classpip-admin <classpip@gmail.com>
+Date:   Tue Jul 20 20:24:22 2021 +0200
+
+    Update README.md
+
+[33mcommit 0c58ff16efa485f333c2c6e417009ee004fa5010[m
+Merge: 9ebefca 30293ac
+Author: Izan Pérez Cosano <izanperez98@gmail.com>
+Date:   Wed Jul 7 13:55:44 2021 +0200
+
+    Merge pull request #113 from classpip/dev
+    
+    Dev
+
+[33mcommit 30293acf98520ffd8adbb28cb47a1a03dcae6313[m
+Merge: bf3843c 9ebefca
+Author: Izan Pérez Cosano <izanperez98@gmail.com>
+Date:   Wed Jul 7 13:55:36 2021 +0200
+
+    Merge branch 'master' into dev
+
+[33mcommit bf3843cdcf5937672e94f0462a6abef576369378[m
+Merge: 7a811d5 dab4078
+Author: Izan Pérez Cosano <izanperez98@gmail.com>
+Date:   Tue Jul 6 21:38:07 2021 +0200
+
+    Merge pull request #112 from eperezcosano/dev
+    
+    Dev
+
+[33mcommit dab4078f27b1a3245e026ad5f52eaf8e9d5a28f0[m
+Merge: deb0101 aa1e0fc
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Jun 16 17:58:59 2021 +0200
+
+    Merge remote-tracking branch 'mio/dev' into dev
+
+[33mcommit deb0101c35d0b2443edbb00df55994dc05ec3c25[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Jun 16 17:58:18 2021 +0200
+
+    - Sockets para la tabla del juego de evaluacion.
+    - Corregido error en el cálculo de nota media cuando ya estaba calculada.
+    - Corregido error en mostrar comentarios en un juego de equipos.
+    - Corregido ordenar filas por Nota Media.
+    - Cambio del puerto del servidor 8080 a 8200.
+
+[33mcommit 9ebefca75756d1f3fb1af9be727d30349d1191da[m
+Merge: 4175662 cc8a1b5
+Author: Izan Pérez Cosano <izanperez98@gmail.com>
+Date:   Fri May 28 15:09:35 2021 +0200
+
+    Merge pull request #110 from classpip/dependabot/npm_and_yarn/browserslist-4.16.6
+    
+    Bump browserslist from 4.14.7 to 4.16.6
+
+[33mcommit 4175662de42cedef55508f77be972ac036241dac[m
+Merge: 4054525 59b9991
+Author: Izan Pérez Cosano <izanperez98@gmail.com>
+Date:   Fri May 28 15:08:42 2021 +0200
+
+    Merge pull request #111 from classpip/dependabot/npm_and_yarn/dns-packet-1.3.4
+    
+    Bump dns-packet from 1.3.1 to 1.3.4
+
+[33mcommit 59b99916d575b7b5728716ce5f5e3d1d879aafc5[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Fri May 28 01:29:11 2021 +0000
+
+    Bump dns-packet from 1.3.1 to 1.3.4
+    
+    Bumps [dns-packet](https://github.com/mafintosh/dns-packet) from 1.3.1 to 1.3.4.
+    - [Release notes](https://github.com/mafintosh/dns-packet/releases)
+    - [Changelog](https://github.com/mafintosh/dns-packet/blob/master/CHANGELOG.md)
+    - [Commits](https://github.com/mafintosh/dns-packet/compare/v1.3.1...v1.3.4)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit cc8a1b5b6e4c45a9ce955ab7db0b2731510d64ec[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Tue May 25 14:57:32 2021 +0000
+
+    Bump browserslist from 4.14.7 to 4.16.6
+    
+    Bumps [browserslist](https://github.com/browserslist/browserslist) from 4.14.7 to 4.16.6.
+    - [Release notes](https://github.com/browserslist/browserslist/releases)
+    - [Changelog](https://github.com/browserslist/browserslist/blob/main/CHANGELOG.md)
+    - [Commits](https://github.com/browserslist/browserslist/compare/4.14.7...4.16.6)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 4054525ec9eda77002b7b1889b7d8d70244f12a4[m
+Merge: b965461 77fcc87
+Author: Izan Pérez Cosano <izanperez98@gmail.com>
+Date:   Mon May 10 14:22:20 2021 +0200
+
+    Merge pull request #109 from classpip/dependabot/npm_and_yarn/hosted-git-info-2.8.9
+    
+    Bump hosted-git-info from 2.7.1 to 2.8.9
+
+[33mcommit b965461ed0788e3455b6efae669c7b2220c76db0[m
+Merge: 153c236 96a539c
+Author: Izan Pérez Cosano <izanperez98@gmail.com>
+Date:   Mon May 10 14:21:45 2021 +0200
+
+    Merge pull request #108 from classpip/dependabot/npm_and_yarn/lodash-4.17.21
+    
+    Bump lodash from 4.17.20 to 4.17.21
+
+[33mcommit 77fcc8765baf4819ade27557860674999b25ccff[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Mon May 10 12:14:54 2021 +0000
+
+    Bump hosted-git-info from 2.7.1 to 2.8.9
+    
+    Bumps [hosted-git-info](https://github.com/npm/hosted-git-info) from 2.7.1 to 2.8.9.
+    - [Release notes](https://github.com/npm/hosted-git-info/releases)
+    - [Changelog](https://github.com/npm/hosted-git-info/blob/v2.8.9/CHANGELOG.md)
+    - [Commits](https://github.com/npm/hosted-git-info/compare/v2.7.1...v2.8.9)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 96a539cdc6f1468df68e6d5390236c4fda0152d2[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Mon May 10 12:12:52 2021 +0000
+
+    Bump lodash from 4.17.20 to 4.17.21
+    
+    Bumps [lodash](https://github.com/lodash/lodash) from 4.17.20 to 4.17.21.
+    - [Release notes](https://github.com/lodash/lodash/releases)
+    - [Commits](https://github.com/lodash/lodash/compare/4.17.20...4.17.21)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 153c236754b09e03f5c75cd4c493b070f4353aa2[m
+Merge: db1046d b9d5353
+Author: Izan Pérez Cosano <izanperez98@gmail.com>
+Date:   Mon May 10 13:37:54 2021 +0200
+
+    Merge pull request #107 from classpip/dependabot/npm_and_yarn/url-parse-1.5.1
+    
+    Bump url-parse from 1.4.7 to 1.5.1
+
+[33mcommit b9d5353196e38cae4b7a024eb6229217605b1df4[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Sat May 8 12:08:31 2021 +0000
+
+    Bump url-parse from 1.4.7 to 1.5.1
+    
+    Bumps [url-parse](https://github.com/unshiftio/url-parse) from 1.4.7 to 1.5.1.
+    - [Release notes](https://github.com/unshiftio/url-parse/releases)
+    - [Commits](https://github.com/unshiftio/url-parse/compare/1.4.7...1.5.1)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit db1046d7c726aef3465bdc34106b16e27026d7d6[m
+Merge: 33a1567 732e014
+Author: Izan Pérez Cosano <izanperez98@gmail.com>
+Date:   Tue Apr 20 14:41:31 2021 +0200
+
+    Merge pull request #106 from classpip/dependabot/npm_and_yarn/ssri-6.0.2
+    
+    Bump ssri from 6.0.1 to 6.0.2
+
+[33mcommit 732e0145767cab846b6e4e3aa52f6c38f4c0e95b[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Tue Apr 20 12:37:38 2021 +0000
+
+    Bump ssri from 6.0.1 to 6.0.2
+    
+    Bumps [ssri](https://github.com/npm/ssri) from 6.0.1 to 6.0.2.
+    - [Release notes](https://github.com/npm/ssri/releases)
+    - [Changelog](https://github.com/npm/ssri/blob/v6.0.2/CHANGELOG.md)
+    - [Commits](https://github.com/npm/ssri/compare/v6.0.1...v6.0.2)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 33a15677fc0a7435fad3a2840253396423900fcd[m
+Merge: 05fe885 d9fed6d
+Author: Izan Pérez Cosano <izanperez98@gmail.com>
+Date:   Tue Apr 20 14:00:33 2021 +0200
+
+    Merge pull request #96 from classpip/dependabot/npm_and_yarn/jspdf-2.3.1
+    
+    Bump jspdf from 2.2.0 to 2.3.1
+
+[33mcommit 05fe885e3145d8020a4a807635ee040fcdd6bc7b[m
+Merge: 3c2f270 ccf10dd
+Author: Izan Pérez Cosano <izanperez98@gmail.com>
+Date:   Tue Apr 20 13:59:49 2021 +0200
+
+    Merge pull request #104 from classpip/dependabot/npm_and_yarn/y18n-4.0.1
+    
+    Bump y18n from 4.0.0 to 4.0.1
+
+[33mcommit 3c2f270943d13d0fa2e7245d5558dc9df588cb40[m
+Merge: 958e7b4 246f502
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Apr 1 12:58:10 2021 +0200
+
+    Merge pull request #105 from miguelvalero/kahoot
+    
+    Kahoot
+
+[33mcommit 246f5026268faf9cb4b36316c1695065c74a3080[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Apr 1 12:56:41 2021 +0200
+
+    juego cuestionario grupo kahoot
+
+[33mcommit ccf10dd1141c5c748da09d297b49aeb209f9542d[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Tue Mar 30 23:26:46 2021 +0000
+
+    Bump y18n from 4.0.0 to 4.0.1
+    
+    Bumps [y18n](https://github.com/yargs/y18n) from 4.0.0 to 4.0.1.
+    - [Release notes](https://github.com/yargs/y18n/releases)
+    - [Changelog](https://github.com/yargs/y18n/blob/master/CHANGELOG.md)
+    - [Commits](https://github.com/yargs/y18n/commits)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 1340ba841101d4ed897ce2c8f680f894c1e7cc7c[m[33m ([m[1;32mkahoot[m[33m)[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sun Mar 28 22:16:50 2021 +0200
+
+    evaluacion inactivo
+
+[33mcommit 4f41fb64e9afdb43ea9d5f9d3bc8d937e583ddb4[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Mar 23 18:45:24 2021 +0100
+
+    con await para cargar los juegos
+
+[33mcommit 958e7b4297beb31360a979fa4a5e4c5a5fe9418f[m
+Merge: d4d0a73 dbf584d
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Sun Mar 21 09:27:25 2021 +0100
+
+    Merge pull request #103 from miguelvalero/dev
+    
+    con votacion equipos
+
+[33mcommit dbf584da5c89bfc87c83070fe23b58ad6beeedb2[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sun Mar 21 09:26:05 2021 +0100
+
+    con votacion equipos
+
+[33mcommit d4d0a730b9bd40fab26e8a47fd70ccff4e199c19[m
+Merge: d3b5529 24c02a3
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Mar 19 23:40:12 2021 +0100
+
+    Merge pull request #102 from miguelvalero/dev
+    
+    imagenes login
+
+[33mcommit 24c02a39603b73867636b80cbdbbd15b8d252b53[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Mar 19 23:38:48 2021 +0100
+
+    imagenes login
+
+[33mcommit d3b5529bcb75056d07a135a67332a5a511719a23[m
+Merge: e9c9000 3ce3fb2
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed Mar 17 13:30:53 2021 +0100
+
+    Merge pull request #101 from miguelvalero/dev
+    
+    arreglos encuesta rapida
+
+[33mcommit 3ce3fb2e9e335f85a2a9455cc63bcc226fee52aa[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed Mar 17 13:28:39 2021 +0100
+
+    arreglos encuesta rapida
+
+[33mcommit e9c9000b531546885bb2b8d3db695248c3a9d49f[m
+Merge: 4312cff bc6cdca
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed Mar 17 07:59:29 2021 +0100
+
+    Merge pull request #100 from miguelvalero/dev
+    
+    Nombre y apellidos en tabla evaluaciones
+
+[33mcommit bc6cdca4e7f11c91cc07f6ea5d033aed2832be7f[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed Mar 17 07:57:58 2021 +0100
+
+    Nombre y apellidos en tabla evaluaciones
+
+[33mcommit 4312cff1ae984985d4930c548178d1d61ce4ba20[m
+Merge: ab44d68 fbf1b83
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Mar 16 13:37:17 2021 +0100
+
+    Merge pull request #99 from miguelvalero/dev3
+    
+    Nombre y apellidos al asignar evaluadores
+
+[33mcommit fbf1b83eb32c6b1c1e49aec943d33d57be7e8db2[m[33m ([m[1;31mmio/dev3[m[33m)[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Mar 16 13:35:04 2021 +0100
+
+    Nombre y apellidos al asignar evaluadores
+
+[33mcommit ab44d684dea0fdb544e40f8b994c15cd42882f3f[m
+Merge: 70a970b d4d9073
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Mar 15 07:42:14 2021 +0100
+
+    Merge pull request #98 from miguelvalero/dev
+    
+    Analisis coincidencia
+
+[33mcommit d4d9073f6edd46582f428b9863de6b5a18275ce5[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Mar 15 07:40:49 2021 +0100
+
+    Analisis coincidencia
+
+[33mcommit 70a970bfaf870a6bced866eb39aef4eb56379aac[m
+Merge: bd87118 aa1e0fc
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Sat Mar 13 02:18:47 2021 +0100
+
+    Merge pull request #97 from eperezcosano/dev
+    
+    Dev
+
+[33mcommit aa1e0fc18e34a45ae8ca20b3c5318732e6ac956a[m
+Merge: babe823 bd87118
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Sat Mar 13 02:18:38 2021 +0100
+
+    Merge branch 'master' into dev
+
+[33mcommit babe823ac04180de7e33a0e6f5ee5090282fd79c[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Sat Mar 13 02:16:06 2021 +0100
+
+    checkbox
+
+[33mcommit d9fed6df420b6f505135c97a5332db6aa0b165bb[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Fri Mar 12 22:01:38 2021 +0000
+
+    Bump jspdf from 2.2.0 to 2.3.1
+    
+    Bumps [jspdf](https://github.com/MrRio/jsPDF) from 2.2.0 to 2.3.1.
+    - [Release notes](https://github.com/MrRio/jsPDF/releases)
+    - [Changelog](https://github.com/MrRio/jsPDF/blob/master/RELEASE.md)
+    - [Commits](https://github.com/MrRio/jsPDF/compare/v2.2.0...v2.3.1)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit aef39b697f43e8d1956d92425227bd81c8dae7f9[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Mar 11 14:46:01 2021 +0100
+
+    matsort
+
+[33mcommit bd871181b5f27bef923f647249e3fb9505de862e[m
+Merge: 38ae3a8 db00ab8
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Mar 11 14:12:51 2021 +0100
+
+    Merge pull request #94 from classpip/dependabot/npm_and_yarn/elliptic-6.5.4
+    
+    Bump elliptic from 6.5.3 to 6.5.4
+
+[33mcommit 38ae3a8ee3f78dee3bf3ecc056695a8790f4f682[m
+Merge: 920062c a5e9209
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Mar 9 18:03:45 2021 +0100
+
+    Merge pull request #95 from miguelvalero/dev
+    
+    Dev
+
+[33mcommit a5e9209fb154b869683f2207a50b3ba76320bca6[m
+Merge: 920062c 1084477
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Mar 9 18:01:08 2021 +0100
+
+    Merge branch 'dev'
+
+[33mcommit 1084477e2edc756ed7f5412255179a987802b153[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Mar 9 17:57:13 2021 +0100
+
+    cambiar a textarea la descripcion del juego de evaluacion
+
+[33mcommit db00ab85ceb2995caa0037245adcf9a5b949cbe6[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Tue Mar 9 16:48:32 2021 +0000
+
+    Bump elliptic from 6.5.3 to 6.5.4
+    
+    Bumps [elliptic](https://github.com/indutny/elliptic) from 6.5.3 to 6.5.4.
+    - [Release notes](https://github.com/indutny/elliptic/releases)
+    - [Commits](https://github.com/indutny/elliptic/compare/v6.5.3...v6.5.4)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 920062c78a1da859294fcc416a3d4ccd468528b4[m
+Merge: 8a07970 81a6649
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Mar 8 09:52:34 2021 +0100
+
+    Merge pull request #93 from miguelvalero/dev
+    
+    retoques para produccion
+
+[33mcommit 81a66498b0cec2a3b429c941742c2309490eef04[m
+Merge: 4322d45 8a07970
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Mar 8 09:52:25 2021 +0100
+
+    Merge branch 'master' into dev
+
+[33mcommit 4322d456fc14510d0a21c6295925a84a9b6155f1[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Mar 8 09:50:21 2021 +0100
+
+    retoques para produccion
+
+[33mcommit 79da6a2d553d9066262d2f63ac7fc0c63fd6f00c[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Sat Mar 6 15:49:49 2021 +0100
+
+    columnas de  calculo nota
+
+[33mcommit 966485f88d4434c4c276e609331587b7e57c193b[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Sat Mar 6 15:19:10 2021 +0100
+
+    columnas de criterios
+
+[33mcommit 6a4ea7e552805b7a4d201be2e958cd99da97090c[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Sat Mar 6 13:31:43 2021 +0100
+
+    resumen de comentarios filtro de vacios
+
+[33mcommit 0ba816da7e5c52f20ba4062178563d86b4a1b085[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Sat Mar 6 12:59:24 2021 +0100
+
+    resumen de comentarios
+
+[33mcommit 9891535d8b46833a073f6db9e7c624fe253227d9[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Sat Mar 6 12:14:25 2021 +0100
+
+    columna de profesor fijada
+
+[33mcommit 3295300c10cd5c288deb245ae4926e1c53a3790f[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Sat Mar 6 11:52:57 2021 +0100
+
+    conexion URL arreglado
+
+[33mcommit 8a07970b9c5f727ae2ff8ff76e532cd5af4ad7b5[m
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Sat Mar 6 11:18:45 2021 +0100
+
+    Update urls.ts
+
+[33mcommit 9532524c241da47a65a2be9f9432205258304a5f[m
+Merge: 41b0cc1 6bbde41
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Sat Mar 6 08:14:53 2021 +0100
+
+    Merge pull request #92 from miguelvalero/dev
+    
+    arreglos URLs
+
+[33mcommit 6bbde41ee78a5030ac47da871a3397f9e66779b2[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sat Mar 6 08:13:43 2021 +0100
+
+    arreglos URLs
+
+[33mcommit 41b0cc12733aeedda246dbaa6451078b33fee3bd[m
+Merge: 450e180 b01388f
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Sat Mar 6 07:31:30 2021 +0100
+
+    Merge pull request #91 from miguelvalero/dev1
+    
+    Dev1
+
+[33mcommit b01388f404a082218113952ce15557576c10005a[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sat Mar 6 07:29:53 2021 +0100
+
+    retoques integracion con Izan
+
+[33mcommit cfc85007e8cf787e9b43c018a5bc738366ca416a[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Mar 5 14:40:17 2021 +0100
+
+    temp
+
+[33mcommit 450e1806014ac0b8b49986c588ffb7bd912d3104[m
+Merge: 7e11130 e25eba3
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Mar 5 11:47:06 2021 +0100
+
+    Merge pull request #90 from miguelvalero/dev2
+    
+    Dev2
+
+[33mcommit e25eba320b100ba5affc56146ac47f72c5614ffd[m[33m ([m[1;31mmio/dev2[m[33m)[m
+Merge: 9aa82d8 7e11130
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Mar 5 11:46:58 2021 +0100
+
+    Merge branch 'master' into dev2
+
+[33mcommit 9aa82d802d77a6f9094e44389b209527b319bd54[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Mar 5 11:24:50 2021 +0100
+
+    antes de merge con Izan
+
+[33mcommit 7e11130e443d004204fdfd0f74387268d1fd828e[m
+Merge: f829e10 966396a
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Fri Mar 5 11:02:16 2021 +0100
+
+    Merge pull request #89 from eperezcosano/dev
+    
+    Dev
+
+[33mcommit 966396ada965b54fea4d7ee21cef51dadb586525[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Mar 4 19:03:28 2021 +0100
+
+    minor fixes
+
+[33mcommit e05c7207d1154e377a1715a7192cddf814560a5e[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Mar 4 18:33:53 2021 +0100
+
+    minor fix
+
+[33mcommit c1cd8787d242564a2576c45c5ad421002f1e7f08[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Feb 25 16:17:56 2021 +0100
+
+    notamedia notafinal
+
+[33mcommit 322066fd0b15bfe6f1abe829102e817a93438e29[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Feb 25 15:59:15 2021 +0100
+
+    notamedia nota criterios
+
+[33mcommit 628195c86c5a5c0bfb734f0d0f53fe849ecf7f73[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Feb 25 15:30:18 2021 +0100
+
+    notamedia badge styles
+
+[33mcommit 1748ba9e93e8f5aa55a32300ed77c90b6d054831[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sun Feb 21 07:10:57 2021 +0100
+
+    antes de opiniones
+
+[33mcommit f829e1091d7f723792a1f38fcf54aa6c4a2c6d8f[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Fri Feb 19 17:45:51 2021 +0100
+
+    correccion de errores de merge
+
+[33mcommit 39a4f8650d61c35c38cb9e70d32689bacd17029c[m
+Merge: 059ad4b 0d73c6a
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Fri Feb 19 16:54:14 2021 +0100
+
+    merge de dev a master
+
+[33mcommit 059ad4ba5e1f71b77432a9800b7e02005798a115[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Fri Feb 19 15:35:43 2021 +0100
+
+    nota media dialog, calculo de notas sin acabar
+
+[33mcommit 0d73c6a8443bc3b1e0007aad90c476bb0f6a7d3f[m
+Merge: 625b6ee 7a811d5
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Feb 19 13:11:24 2021 +0100
+
+    Merge pull request #87 from classpip/dev
+    
+    Dev
+
+[33mcommit 7a811d5a3d99b1d528007333c9199df2207191c7[m
+Merge: ae206e4 779b2f0
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Feb 19 13:10:30 2021 +0100
+
+    Merge pull request #84 from Marioboto3/dev
+    
+    Implementada la función "mostrar-cuestionario"
+
+[33mcommit 625b6ee528c85805106c6750c24739bdb4a8fb23[m
+Merge: 0042ff4 505d11d
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Feb 19 13:07:34 2021 +0100
+
+    Merge pull request #86 from miguelvalero/modeloJE
+    
+    Modelo je
+
+[33mcommit 505d11d5e3e8ef9a81bdd33c2df529ab3c7e66f5[m[33m ([m[1;31mmio/modeloJE[m[33m)[m
+Merge: f156438 0042ff4
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Feb 19 13:06:05 2021 +0100
+
+    Merge branch 'master' into modeloJE
+
+[33mcommit f156438d190869fe36d464d48b6e042e36da0e88[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Feb 19 13:00:21 2021 +0100
+
+    Antes del merge con el juego de evaluación
+
+[33mcommit 0042ff462693bef40a45c156883acef27c0d5b1b[m
+Merge: fedcbfd 43ae83d
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Thu Feb 18 16:31:30 2021 +0100
+
+     todas las funcionalidades de juego de cuentos
+
+[33mcommit fedcbfd09074e615fe2851592d43e7fbda160706[m
+Merge: a44663e ae206e4
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Wed Feb 17 18:37:30 2021 +0100
+
+    funcionalidades para cuentame
+
+[33mcommit a0bd219451a7d6ec1b72d92e0a8326cb75adb129[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Feb 17 16:39:51 2021 +0100
+
+    calcular media si solo porfe dominante
+
+[33mcommit d5bca4ca21b78d88f4173b7ce62d48f6d8f5fde1[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Feb 17 16:34:10 2021 +0100
+
+    calcular media con profe normal y profe dominante
+
+[33mcommit 1a2e96284e7acf7dbc8718d22e46bd8b313717c3[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Feb 17 16:08:45 2021 +0100
+
+    profesor column Normal/50%
+
+[33mcommit 69706aa221c09ffbfcdafaae30b7e18424110217[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Feb 17 15:56:07 2021 +0100
+
+    profesor delete nota
+
+[33mcommit 10cd8b906a2a337df16a498ca399c41e2e7b9df4[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Feb 17 15:47:11 2021 +0100
+
+    profesor show nota dialog
+
+[33mcommit 21d1e84e575d4aa28245d8ee9e3f8a4d56fa30c3[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Feb 17 15:25:05 2021 +0100
+
+    profesor show nota
+
+[33mcommit ab710214e521b0c5aff63b99f0673c930fa5bba6[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Feb 17 14:30:20 2021 +0100
+
+    profesor send nota
+
+[33mcommit 6d96d7670f16347a42603d72394ea983334cf93e[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Feb 17 14:05:47 2021 +0100
+
+    profesor form
+
+[33mcommit 22c242c7f97ceb10fa53d4c7bf927c765a8e9b26[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Feb 16 22:53:53 2021 +0100
+
+    disabled cell if not evaluable
+
+[33mcommit 81f2c76257ce92abe8943aac0c76a959cba32e42[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Feb 16 22:06:00 2021 +0100
+
+    disabled cell if no autoev
+
+[33mcommit 104f69cfdb630e5378a24ca777118249ee94f155[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Feb 16 18:58:40 2021 +0100
+
+    arreglado disposicion notas equipos por equipos
+
+[33mcommit fac74e588cc8081595d71d766e101bba4bc7aef9[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Feb 16 18:41:47 2021 +0100
+
+    borrar notas
+
+[33mcommit 08687de2be9ce42bb8d4e59503146639fb35e606[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Feb 16 17:25:57 2021 +0100
+
+    fixed missing id for equipos row table
+
+[33mcommit 1bfc94c7f8b7add88b1af84c43a2360427810960[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Feb 16 17:05:11 2021 +0100
+
+    elimina nota de alumno
+
+[33mcommit 3451d54fafcfe45560a02151e33328f0d0f75400[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Feb 16 16:02:59 2021 +0100
+
+    delete button spinner
+
+[33mcommit 714b6cd25f2e274861c68a62811b8ca47390cca6[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Feb 16 15:07:30 2021 +0100
+
+    dialog opens
+
+[33mcommit 53d3607c13cb1ccf1389cd0d4b535f1f09a89848[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Feb 11 18:03:08 2021 +0100
+
+    added delete dialog
+
+[33mcommit 27f0bc4213f580c3de9af7ccfea49ec56b79fb0b[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Feb 11 17:57:49 2021 +0100
+
+    delete icon
+
+[33mcommit e892eb5869c42826745ca3bbc1ed10a625ac61b0[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Feb 11 17:36:44 2021 +0100
+
+    calculo nota por penalizacion arreglado
+
+[33mcommit 2cdb7e940c4b5cb8caf40b8e3350ba40ac1df264[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Feb 11 16:41:30 2021 +0100
+
+    notas para penalizacion
+
+[33mcommit 9e7741ffb9cdb913614fb6871faed5bf3215180f[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Feb 11 16:11:36 2021 +0100
+
+    dialog accordion and notes
+
+[33mcommit 19079dacb8616a13c92a927dda41d6621cd7d8b0[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Feb 11 14:30:20 2021 +0100
+
+    cell divider
+
+[33mcommit 5ec3084c3748e46af40a70f6faaaa1bfda876c9d[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Feb 11 14:07:36 2021 +0100
+
+    accordion game details
+
+[33mcommit 43ae83d081c80e0bbd9f4f442aec37a321df0aaf[m
+Merge: 36d5b2e 0d52226
+Author: Marc Cayuelas <marc.cayuelas.lobato@estudiantat.upc.edu>
+Date:   Mon Feb 8 14:34:42 2021 +0100
+
+    Merge pull request #85 from marc285/dev
+    
+    Tarea inicial Marc
+
+[33mcommit 0d52226c8a41fad1ba049b75d5d81f1761aae024[m
+Author: marc285 <marc285ee@gmail.com>
+Date:   Mon Feb 8 14:21:31 2021 +0100
+
+    Añadido botón para parar la reproducción de una nota de voz (en la página 'Ver todos los avatares' de un Juego de Avatares)
+
+[33mcommit 36d5b2e4b57a9a37ea725f98c9ffdce0652672bb[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Sun Feb 7 20:42:23 2021 +0100
+
+    Delete .vscode directory
+
+[33mcommit b1f1b6488194237dec0d5dabbdc318ccf12a9fb9[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Sun Feb 7 20:40:59 2021 +0100
+
+    Delete q
+
+[33mcommit 4b7685a3e67b7564dac9a3e377a2887975a94495[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Sun Feb 7 20:40:43 2021 +0100
+
+    Delete ,
+
+[33mcommit 6cf32a4834b15b9241c4b3b17cec280dc3bfcf93[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Sun Feb 7 20:40:23 2021 +0100
+
+    Delete .editorconfig
+
+[33mcommit 779b2f0439d9cb7e22b4e299b60db76967cc05bd[m
+Author: Marioboto3 <marioboto98@gmail.com>
+Date:   Mon Feb 1 15:02:28 2021 +0100
+
+    Implementada la funcionalidad de mostrar cuestionarios de satisfacción
+
+[33mcommit 08fae53234852fcedff223508892984ec7b8c8b1[m
+Author: Marioboto3 <marioboto98@gmail.com>
+Date:   Mon Feb 1 10:28:02 2021 +0100
+
+    Creada la función ver-cuestionario
+
+[33mcommit 847fd23da3c865fe7923d5bf93df44a0ac5d3e4f[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Jan 27 00:48:46 2021 +0100
+
+    dialog content
+
+[33mcommit 93cac564f73e802f278d8f78f29e7acdaaea99eb[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Jan 26 21:06:42 2021 +0100
+
+    dialog component dialog
+
+[33mcommit 4295f6f4a73492d8c5d0057c3a74b95e4d6950ab[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Jan 26 21:05:29 2021 +0100
+
+    dialog component
+
+[33mcommit 0f6ed74b59c4301cad05f68baecd73c76ebeaccc[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Jan 26 20:42:13 2021 +0100
+
+    open dialog function
+
+[33mcommit dd8e2938c5e1940e523f9464611c8292f8c6feca[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Jan 26 19:05:27 2021 +0100
+
+    calcular nota penalizacion fixed
+
+[33mcommit 30447650935fb1d07861af671b72a6a6ccc30acc[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Jan 26 18:06:21 2021 +0100
+
+    calcular nota penalizacion
+
+[33mcommit bd60380007779db0eac168890f8044144bb045bf[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Jan 26 17:14:44 2021 +0100
+
+    fixed error table for teams by teams and students
+
+[33mcommit 1c8e8572b16e3de63f5d22e373b816bd606a6b2d[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Mon Jan 25 21:51:17 2021 +0100
+
+    table for teams by teams and teams by students
+
+[33mcommit 58d375f68037af903dd52c6fb6a7c3bb44723ba8[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Mon Jan 25 19:07:35 2021 +0100
+
+    error fixed
+
+[33mcommit 91d2a9e913b7345a7db02bf357fe4ab7bddc74e5[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Mon Jan 25 19:01:34 2021 +0100
+
+    calcular nota media fix, css column
+
+[33mcommit 7a9e8aac487948c769c688ce7444e4f01fce70c2[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Mon Jan 25 18:52:01 2021 +0100
+
+    calcular nota media
+
+[33mcommit 3fad91914bc573def708d120749b438594089184[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Mon Jan 25 18:21:37 2021 +0100
+
+    calcular nota
+
+[33mcommit e959ef536c58b9ba8a2c820b73218895245e8174[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Mon Jan 25 17:38:55 2021 +0100
+
+    table css hover styles
+
+[33mcommit 9cc31d4b6a038e2e35ed59ac9cf1710dcc199579[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sat Jan 23 20:15:23 2021 +0100
+
+    antes de kahoot rapido
+
+[33mcommit 3db03f468217ef570b6b9fa3cfaf52b88318f878[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Fri Jan 22 23:16:26 2021 +0100
+
+    table css
+
+[33mcommit d4c3c2f212b2901f5232652300ef1f38956e024f[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Fri Jan 22 22:05:42 2021 +0100
+
+    table results
+
+[33mcommit 0b85e6eaed6f7fead8a05fdfe42088af357c30c5[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Fri Jan 22 16:23:07 2021 +0100
+
+    juego activo evaluacion
+
+[33mcommit 3d5b0e3b9c915f98bff7ae0b54df62c0fd21297f[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Fri Jan 22 15:08:54 2021 +0100
+
+    fixed event bindings
+
+[33mcommit 24ef0f6237b03821928f9f8af5902ad3b00df4e8[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 21 20:40:31 2021 +0100
+
+    Penalizacion table improved
+
+[33mcommit 12b5200bed7dfbf30c552f5d7c9e2b968bb65be7[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 21 20:11:59 2021 +0100
+
+    Pesos table improved
+
+[33mcommit 326fdf9841cab0f1fee9b3789595113b17b94867[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 21 19:49:10 2021 +0100
+
+    Parent pesos
+
+[33mcommit ef8df5b36d5de340b108e0fd50939eea156f1f8e[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 21 18:48:53 2021 +0100
+
+    Respuestas y descripcion
+
+[33mcommit 1d1d88e54414fd557b638f52661d95357c69b10b[m
+Merge: 7f63f1f 02efa57
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 21 17:26:13 2021 +0100
+
+    Merge pull request #4 from eperezcosano/dependabot/npm_and_yarn/http-proxy-1.18.1
+    
+    Bump http-proxy from 1.17.0 to 1.18.1
+
+[33mcommit 7f63f1f5ebcf088f2d53a2d5189c0bcbdc28cc2f[m
+Merge: a0ebe42 78555c2
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 21 17:25:59 2021 +0100
+
+    Merge pull request #5 from eperezcosano/dependabot/npm_and_yarn/lodash-4.17.20
+    
+    Bump lodash from 4.17.15 to 4.17.20
+
+[33mcommit 78555c29cb999a17d7d977f06e9d8ecce5fb4bf3[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Thu Jan 21 12:38:19 2021 +0000
+
+    Bump lodash from 4.17.15 to 4.17.20
+    
+    Bumps [lodash](https://github.com/lodash/lodash) from 4.17.15 to 4.17.20.
+    - [Release notes](https://github.com/lodash/lodash/releases)
+    - [Commits](https://github.com/lodash/lodash/compare/4.17.15...4.17.20)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 02efa57076e4025380f129e33231eba2e3b41d54[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Thu Jan 21 12:36:39 2021 +0000
+
+    Bump http-proxy from 1.17.0 to 1.18.1
+    
+    Bumps [http-proxy](https://github.com/http-party/node-http-proxy) from 1.17.0 to 1.18.1.
+    - [Release notes](https://github.com/http-party/node-http-proxy/releases)
+    - [Changelog](https://github.com/http-party/node-http-proxy/blob/master/CHANGELOG.md)
+    - [Commits](https://github.com/http-party/node-http-proxy/compare/1.17.0...1.18.1)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 397989e897258d7efdb2663e2fec11930a9bf65a[m
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Jan 19 17:35:16 2021 +0100
+
+    Update README.md
+
+[33mcommit a0ebe421f3b8290d8a228ee92d621e6b2d619a2b[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Jan 19 13:40:07 2021 +0100
+
+    fixed duplicated import and npm i
+
+[33mcommit a59d9f652ee17d95f5a0eb6a245190a933fb504c[m
+Merge: d71b422 8159cf3
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Jan 19 13:29:02 2021 +0100
+
+    Merge remote-tracking branch 'mio/dev' into dev
+
+[33mcommit d71b422b02f563e62c1cafb50d441a92ea8b2095[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Tue Jan 19 13:19:15 2021 +0100
+
+    Arreglo de modelos
+
+[33mcommit b18af4fe39fe143fb0bea81116105ce55a7def0d[m
+Merge: 7fed708 82c6ed1
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Jan 18 19:05:01 2021 +0100
+
+    Merge pull request #83 from miguelvalero/dev
+    
+    mas ajustes
+
+[33mcommit 82c6ed1eeb8bbd22a282ffdda1727f14ee44042b[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Jan 18 19:04:10 2021 +0100
+
+    mas ajustes
+
+[33mcommit 7fed708fffa987a2749a26d4591f8129ddaa3c5b[m
+Merge: c4470f0 8c9c871
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Jan 18 17:39:55 2021 +0100
+
+    Merge pull request #82 from miguelvalero/dev
+    
+    ajustes después de pasar al nuevo repositorio
+
+[33mcommit 8c9c871238d09c7bd673f83c9c8e6ceb463f7b02[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Jan 18 17:38:52 2021 +0100
+
+    ajustes después de pasar al nuevo repositorio
+
+[33mcommit c4470f011d8a0471f44a8cb968b1d4c6e0c98208[m
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Jan 18 17:18:30 2021 +0100
+
+    Update README.md
+
+[33mcommit de5247e238ff6ff63f0f7b367643b9c2b9682dd1[m
+Merge: afdb047 8159cf3
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Jan 18 09:41:33 2021 +0100
+
+    Merge pull request #80 from eperezcosano/dev
+    
+    Dev
+
+[33mcommit 8159cf3c29eee8b9c7a16672f45a5ff8716f5f4b[m
+Merge: da2f022 afdb047
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Mon Jan 18 09:41:00 2021 +0100
+
+    Merge branch 'master' into dev
+
+[33mcommit afdb04701586720098f5324477e7f7ce48ed3049[m
+Merge: a8cc868 1edc561
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Jan 18 08:48:11 2021 +0100
+
+    Merge pull request #79 from miquel15/dev
+    
+    Dev
+
+[33mcommit 1edc561a157d725886787fbffb0e52e18321f9cd[m
+Author: Miquel <miquelsolera@gmail.com>
+Date:   Mon Jan 18 08:46:23 2021 +0100
+
+     Miquel antes de integración global
+
+[33mcommit a8cc868e1ee9b8a1bb2025157779f9be9fe5f072[m
+Merge: 4a9ce0d 9d2c6d1
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Jan 18 08:00:33 2021 +0100
+
+    Merge pull request #78 from miguelvalero/PREGUNTAS
+    
+    con preguntas de 4 tipos
+
+[33mcommit 4a9ce0d065fc489239007f948225b0fdf2155466[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Sun Jan 17 09:59:02 2021 +0100
+
+    Update README.md
+
+[33mcommit 14adf1b73e7c1c5995d60e5fd283b2cc3ec995b7[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Sun Jan 17 09:44:09 2021 +0100
+
+    Update README.md
+
+[33mcommit da2f02280285c15dd699ae20baa85b85024b8c53[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Fri Jan 15 18:10:58 2021 +0100
+
+    POST alumnosJuegoEvaluado AND equiposJuegoEvaluado
+
+[33mcommit 9d2c6d1cc4c943ce60291adaf3c4afecf316c287[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Jan 15 10:05:44 2021 +0100
+
+    con preguntas de 4 tipos
+
+[33mcommit b928508dc0656fff299e526601fdc88449788495[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 14 20:07:09 2021 +0100
+
+    npm i
+
+[33mcommit bfbe2a8ffeacf1dafc47c3c2298e2f1024b63949[m
+Merge: 57cd02d ee135ee
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 14 18:54:32 2021 +0100
+
+    Merge pull request #3 from eperezcosano/dependabot/npm_and_yarn/jquery-3.5.0
+    
+    Bump jquery from 1.9.1 to 3.5.0
+
+[33mcommit ee135eea611b76080f960ed013064d56ef7ddd12[m
+Merge: 1310461 57cd02d
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 14 18:54:21 2021 +0100
+
+    Merge branch 'master' into dependabot/npm_and_yarn/jquery-3.5.0
+
+[33mcommit 57cd02db950836b6f4fab786b067f2b8e5c4694f[m
+Merge: ca071fc 40442d2
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 14 18:51:04 2021 +0100
+
+    Merge pull request #2 from eperezcosano/dependabot/npm_and_yarn/websocket-extensions-0.1.4
+    
+    Bump websocket-extensions from 0.1.3 to 0.1.4
+
+[33mcommit ca071fc42eebcd1b6890d9e305c74092548d5d2a[m
+Merge: 76e7585 b0bf8c6
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 14 18:50:03 2021 +0100
+
+    Merge pull request #1 from eperezcosano/dependabot/npm_and_yarn/https-proxy-agent-2.2.4
+    
+    Bump https-proxy-agent from 2.2.1 to 2.2.4
+
+[33mcommit b0bf8c621477bdda3d3c63bcb9be7a32c6eafb25[m
+Merge: 18d586e 76e7585
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 14 18:49:51 2021 +0100
+
+    Merge branch 'master' into dependabot/npm_and_yarn/https-proxy-agent-2.2.4
+
+[33mcommit 76e7585073d34d5168dde760f84851fd15f1f3c4[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 14 18:38:13 2021 +0100
+
+    merge fix problems
+
+[33mcommit e5124a5d8f1121cf9bc1e0bfa03f610dc82eb972[m
+Merge: 033d885 f84402e
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 14 17:54:07 2021 +0100
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       package-lock.json
+    #       package.json
+    #       src/app/URLs/urls.ts
+    #       src/app/app.module.ts
+    #       src/app/paginas/juego/juego.component.scss
+    #       src/app/paginas/juego/juego.component.ts
+    #       src/app/servicios/calculos.service.ts
+    #       src/app/servicios/peticiones-api.service.ts
+
+[33mcommit 033d8854f6649aed722df6b937ca5e378eba9ebc[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Thu Jan 14 17:15:48 2021 +0100
+
+    updated dependencies
+
+[33mcommit acb655e82b399eb78be0acab72bd385ecc6d2ec1[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Jan 13 19:25:14 2021 +0100
+
+    calculos juegosDeEvaluacion juegosActivos e Inactivos
+
+[33mcommit 2f8e9cb9ee217f178643ff448f9f8121a8efa73d[m
+Author: Izan Pérez Cosano <izanperez@yandex.com>
+Date:   Wed Jan 13 19:05:21 2021 +0100
+
+    creada peticion get DameJuegosDeEvaluacion por grupoId
+
+[33mcommit 79a61dde5a518079cc5af0d55fcae1efab43d4a5[m
+Author: Izan Pérez Cosano <izan.perez@estudiant.upc.edu>
+Date:   Sun Jan 10 22:27:36 2021 +0100
+
+    alumnoJuegoEvaluado
+
+[33mcommit 63c221e24b7cb4c12811b90cda9d4d3194dd5e4b[m
+Author: Izan Pérez Cosano <izan.perez@estudiant.upc.edu>
+Date:   Sun Jan 10 22:07:31 2021 +0100
+
+    alumnos added when equipos vs alumnos
+
+[33mcommit 52c6042ec6ee3886121e0a83f410ed35362d3376[m
+Author: Izan Pérez Cosano <izan.perez@estudiant.upc.edu>
+Date:   Sun Jan 10 21:49:20 2021 +0100
+
+    create equiposEvaluados when juegoEvaluacion is created
+
+[33mcommit 088a27af11f3b5929069ffa19e8dd47028e08db9[m
+Author: Izan Pérez Cosano <izan.perez@estudiant.upc.edu>
+Date:   Sat Jan 9 20:18:01 2021 +0100
+
+    juego de evaluacion POST API
+
+[33mcommit e005f78240cc8a4bfee4f444db1ff53fea799f74[m
+Merge: d032735 55cbb84
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Jan 8 07:21:53 2021 +0100
+
+    Merge pull request #76 from miguelvalero/observaciones
+    
+    Observaciones
+
+[33mcommit 55cbb8407cfed15173f1e2589bbb29a4187e305b[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Jan 8 07:11:21 2021 +0100
+
+    con observaciones para sesiones
+
+[33mcommit 2f08e31294ee50c8d23b3e51d6c33f14df9ef4fc[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Jan 7 15:00:32 2021 +0100
+
+    antes de tutorial observaciones
+
+[33mcommit d364d1041dd8b0f3c4ace6631c463c149319ef9f[m
+Author: Miquel <miquelsolera@gmail.com>
+Date:   Mon Dec 28 13:13:44 2020 +0100
+
+    1a connexió de mode Kahoot amb l'app mv
+
+[33mcommit a44663eea60463b03c3e06a93b2c51865b148638[m
+Merge: e2bf363 cf7177f
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Sat Dec 26 19:44:17 2020 +0100
+
+    Merge branch 'master' of https://github.com/Willicornio/cuentame-dashboard
+
+[33mcommit e2bf3632ec9398975f682255ef26a1eef1b8060a[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Sat Dec 26 19:44:10 2020 +0100
+
+     arreglos en la tabla de permisos
+
+[33mcommit 34c8c12c46f7daf3c8b808f6fca38b00d6c869dc[m
+Author: Miquel <miquelsolera@gmail.com>
+Date:   Thu Dec 24 00:13:03 2020 +0100
+
+    Modificacions necessaries per afegir la Modalitat com atribut del joc de qüestionari
+
+[33mcommit e13b3fb6811c2ea60404d4f4112092922315cf4a[m
+Author: Miquel <miquelsolera@gmail.com>
+Date:   Sun Dec 20 15:48:15 2020 +0100
+
+    url actualitzada a localhost
+
+[33mcommit d032735c80d6d5f8f4f8a022d7cbcfbe343c7221[m
+Merge: fd6b856 ae206e4
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Dec 15 17:39:15 2020 +0100
+
+    Merge pull request #75 from rocmeseguer/dev
+    
+    Dev
+
+[33mcommit ae206e45c33c05954fd247a558be9610dc6c3c23[m
+Merge: 3604511 fd6b856
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Dec 15 17:39:06 2020 +0100
+
+    Merge branch 'master' into dev
+
+[33mcommit 36045113c87a38ccd04aca575d864a1e2be8fb0e[m
+Merge: ae33063 12bf328
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Dec 15 17:34:27 2020 +0100
+
+    Merge pull request #74 from miguelvalero/dev
+    
+    Dev
+
+[33mcommit 12bf32824edf316e70013fdc2a7618e5054f5121[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Dec 15 17:23:33 2020 +0100
+
+    Diciembre
+
+[33mcommit fd6b856326367c0bab3613b75757596204b6e657[m
+Merge: 3de8237 0878629
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Dec 15 09:05:53 2020 +0100
+
+    Merge pull request #73 from miquel15/dev2
+    
+    Dev2
+
+[33mcommit 0878629157ddf3f815f74ca8eae1d355e65ebd26[m
+Merge: a8be564 3de8237
+Author: miquel15 <miquelsolera@gmail.com>
+Date:   Tue Dec 15 09:04:48 2020 +0100
+
+    Merge branch 'master' into dev2
+
+[33mcommit a8be564db7167deccbabb8412c698033cec53e1b[m
+Author: Miquel <miquelsolera@gmail.com>
+Date:   Mon Dec 14 21:28:11 2020 +0100
+
+    Import massiu. Ja importa les imatges.
+
+[33mcommit cec38d65035cdb5dc34404fb54dabb3d8b03e7b0[m
+Author: Miquel <miquelsolera@gmail.com>
+Date:   Mon Dec 14 19:24:16 2020 +0100
+
+    Clase Urls modificada. Afegit http:// davant de localhost perquè considerés l'enllaç segur. Editar pregunta OK
+
+[33mcommit f14df580a75e9a6ab1651288401d436142703877[m
+Author: Miquel <miquelsolera@gmail.com>
+Date:   Mon Dec 14 08:31:22 2020 +0100
+
+    Modificacions per incloure la imatge en l' edició de la pregunta
+
+[33mcommit 14520b447fde3d6f5b216831b7f5e8a7a11b6f44[m
+Author: Izan Pérez Cosano <izan.perez@estudiant.upc.edu>
+Date:   Thu Nov 19 20:31:29 2020 +0100
+
+    relaciones acabado
+
+[33mcommit 0ed5f7902ca5e93d82a18bdad39864ecf84890a4[m
+Author: Izan Pérez Cosano <izan.perez@estudiant.upc.edu>
+Date:   Thu Nov 19 15:46:41 2020 +0100
+
+    relaciones
+
+[33mcommit 9071a86e01decfbaac7c9882ce857b1bc6966cde[m
+Author: Izan Pérez Cosano <izan.perez@estudiant.upc.edu>
+Date:   Thu Nov 19 13:55:25 2020 +0100
+
+    pesos fixed
+
+[33mcommit e39f9151e3d9996d296f2ab71dc87eb6c8420d17[m
+Author: Miquel <miquelsolera@gmail.com>
+Date:   Wed Nov 18 16:40:21 2020 +0100
+
+    Degug part eliminar pregunta fet. Tot Ok
+
+[33mcommit a1774eb22d3db3a7760df456e2d96354b0aaff75[m
+Author: Miquel <miquelsolera@gmail.com>
+Date:   Wed Nov 18 13:50:22 2020 +0100
+
+    Debug part crear pregunta fet. Tot ok// Modificacions per al edit de les imatges
+
+[33mcommit cf7177fcf23e4936eeb151993bd72fa7b90f9f46[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sun Nov 15 17:18:18 2020 +0100
+
+    cambios reproducgor ya van todo
+
+[33mcommit 0150262fbdec298e90f62b77becbd95c0e662323[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Nov 14 19:04:35 2020 +0100
+
+    cambios repro
+
+[33mcommit 79ad3f4ef4b0d97e30a73fb6c333cd7b65ce2201[m
+Author: Miquel <miquelsolera@gmail.com>
+Date:   Tue Nov 10 13:45:49 2020 +0100
+
+    Modificació en l'eliminació d'una pregunta per esborrar la imatge associada a ella també
+
+[33mcommit 4a7b2b1c975cdb9982434c75aabea4a9febc7822[m
+Author: Miquel <miquelsolera@gmail.com>
+Date:   Tue Nov 10 12:29:34 2020 +0100
+
+    Afegim la possibilitat d'insertar una imatge a cada Pregunta creada individualment
+
+[33mcommit 3de8237f7ff0c089642a365a9b4c5001e0e329b2[m
+Merge: f84402e 040d88f
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Sat Nov 7 08:40:48 2020 +0100
+
+    Merge pull request #71 from miguelvalero/dev
+    
+    Dev
+
+[33mcommit 040d88f0ff237074de6af888f7ce6ce54bc5f7db[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sat Nov 7 08:31:01 2020 +0100
+
+    Votacion con reparto libre
+
+[33mcommit 9c292e8e3d799c9aea69d5b3bf41d11fc05f8f1c[m
+Author: Izan Pérez Cosano <izan.perez@estudiant.upc.edu>
+Date:   Wed Nov 4 21:51:08 2020 +0100
+
+    pipe team exclude
+
+[33mcommit 970eedfeba35511ece58ca4de1f40d2e2ce3dd8a[m
+Author: Izan Pérez Cosano <izan.perez@estudiant.upc.edu>
+Date:   Tue Nov 3 17:30:25 2020 +0100
+
+    setp sleccion rubrica
+
+[33mcommit 1da307da8e5ed01b7b25b7e653fd0cde0fcd8a11[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Oct 27 17:53:09 2020 +0100
+
+    con cambio de perfil de usuario y cambios en el login
+
+[33mcommit 110f10631e9a0646b8cd6199254c0a4e3fda9c44[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Oct 26 21:41:51 2020 +0100
+
+    antes de cambios en login
+
+[33mcommit f84402ecedf287969c86e38322795f2bc406633a[m
+Merge: ba72084 2574b08
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Sun Oct 25 13:03:49 2020 +0100
+
+    Merge pull request #70 from miguelvalero/dev
+    
+    Dev
+
+[33mcommit 2574b084a9485b3e643e2d0a1b270e511a383910[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sun Oct 25 12:53:09 2020 +0100
+
+    juegos rapidos completos
+
+[33mcommit d2d8c179f074829726faa34b0c426b92d3b167b4[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Oct 20 06:07:49 2020 +0200
+
+    con recursos publicos
+
+[33mcommit ba720843f5e466650256738939a97d3a61ec7943[m
+Merge: 2c99903 f5ed0b2
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Oct 15 08:23:17 2020 +0200
+
+    Merge pull request #69 from miguelvalero/dev
+    
+    Dev
+
+[33mcommit f5ed0b2618ce55c5db613b9c9fcbc278e86d35d3[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Oct 15 08:13:07 2020 +0200
+
+    con juegos rapidos
+
+[33mcommit 20275cb81b24cbf1d8e8918c46ec182e21dfdac5[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sun Oct 11 20:02:43 2020 +0200
+
+    con juegos rapidos
+
+[33mcommit 4912b3da1036930c42344f1a0d6884934c729713[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Oct 10 16:20:28 2020 +0200
+
+    cambio textos reproductor
+
+[33mcommit c8273ea963d98b1cf36d5cb37d1db5483ddece46[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Mon Oct 5 18:58:05 2020 +0200
+
+    sd
+
+[33mcommit aee8d4cf7e625153b29ce31abbde23eb8f27af32[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Mon Oct 5 12:17:35 2020 +0200
+
+    votaciones en directo
+
+[33mcommit 0fcffc6419120a473681d56390d8ecdfd28bab60[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Wed Sep 30 15:57:49 2020 +0200
+
+    a
+
+[33mcommit 38a5438970e7f5157ec2119505dc8d44346b9a0d[m
+Merge: 42a5686 86c5eb3
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Sat Sep 26 20:33:09 2020 +0200
+
+    Merge branch 'master' of https://github.com/Willicornio/cuentame-dashboard
+
+[33mcommit 42a5686205ca93ea6bd8a67473ff4625ca7aabee[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Sat Sep 26 20:32:45 2020 +0200
+
+    selecionar ganador
+
+[33mcommit 86c5eb34ffbb0549ab0dbc641470f7520b3a4b3d[m
+Merge: 658bc03 f5881b3
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Sep 26 18:21:00 2020 +0200
+
+    Merge branch 'master' of https://github.com/Willicornio/cuentame-dashboard
+
+[33mcommit 658bc035903d869030dcebc8f556b4898f76f128[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Sep 26 18:20:53 2020 +0200
+
+    audios
+
+[33mcommit f5881b3aab1e2f0061537873e7fc870abf651795[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Thu Sep 24 19:02:09 2020 +0200
+
+    ganador
+
+[33mcommit a1d3bb24a631adbc8160586b9a93a09b4d2a88be[m
+Merge: 8b05538 ba5f250
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Wed Sep 23 19:07:49 2020 +0200
+
+    a
+
+[33mcommit 8b0553865ef051de2570812de39618498d874333[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Wed Sep 23 18:29:34 2020 +0200
+
+    a
+
+[33mcommit 37b9aa10ff8bd3a6ad17a9f43da16a9c8e1921ff[m
+Author: Izan Pérez Cosano <izan.perez@estudiant.upc.edu>
+Date:   Wed Sep 23 18:11:47 2020 +0200
+
+    npm install
+
+[33mcommit ba5f250e23bc94651878cc9f8304e8e3df13d1ea[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Mon Sep 21 18:15:57 2020 +0200
+
+    arreglo del bug de crear recursos
+
+[33mcommit 1ffc99eed92a2ba99ee4f62e655a18f4b4de0eb1[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Thu Sep 17 18:53:50 2020 +0200
+
+    votaciones
+
+[33mcommit eacfd7b9a2d57b8ecad5614cb392bf8179c08564[m
+Merge: fae7fe3 92381c0
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Wed Sep 16 20:04:51 2020 +0200
+
+    Merge branch 'master' of https://github.com/Willicornio/cuentame-dashboard
+
+[33mcommit fae7fe3ef401b36752bc478c4de75e73f0801e98[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Wed Sep 16 20:03:44 2020 +0200
+
+    seguir votaciones
+
+[33mcommit 92381c0e20073efc6666b379cd13b88acc15f998[m
+Merge: f78aee7 3e269ea
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Tue Sep 15 18:50:52 2020 +0200
+
+    Merge branch 'master' of https://github.com/Willicornio/cuentame-dashboard
+
+[33mcommit f78aee7c085bdf1510ca1f5b303945123b7c0388[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Tue Sep 15 18:50:17 2020 +0200
+
+    ya va el repdodcgor per olas felchas 1 poco regular
+
+[33mcommit 2c9990386bb59abe92035551ec2bca7c90f4296c[m
+Merge: ef1322a 05c49f3
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Sep 15 08:22:34 2020 +0200
+
+    Merge pull request #68 from miguelvalero/dev2
+    
+    Dev2
+
+[33mcommit 05c49f370f35bb34dae6644bb5e805e7cb141d03[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Sep 15 08:10:23 2020 +0200
+
+    con gestion de imagenes de perfil
+
+[33mcommit 3e269ead9c016924148d9e6ffc82a11a6354ecab[m
+Merge: 88fab28 2b692de
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Mon Sep 14 22:26:18 2020 +0200
+
+    Merge branch 'master' of https://github.com/Willicornio/cuentame-dashboard
+
+[33mcommit 88fab28bc0e669fd3db6743bd2379bea6c2e6f1d[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Mon Sep 14 22:26:11 2020 +0200
+
+    q
+
+[33mcommit 2b692de68fcb6496514b9de22a92f3b744a8f4e6[m
+Merge: e5eff56 29c816f
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Mon Sep 14 18:55:48 2020 +0200
+
+    primera parte reprodcutor
+
+[33mcommit e5eff56be89a4219322e31d06c75040e635fe263[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Mon Sep 14 18:54:19 2020 +0200
+
+    parte del reproducotor
+
+[33mcommit 29c816f10ec938c165cc1b0d0df5596ab07a7810[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Sun Sep 13 15:33:11 2020 +0200
+
+    empezando votaciones en directo
+
+[33mcommit 683b558d862ea0799bf53b8618e2731e75380ba0[m
+Merge: b0219b7 da116d4
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Sun Sep 13 13:05:04 2020 +0200
+
+    a
+
+[33mcommit b0219b79b834b7cf64c5a15222c5ca0f014bfa94[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Sun Sep 13 13:01:59 2020 +0200
+
+    votacionespag
+
+[33mcommit da116d4763d257a2d537981bdec2ba7374214bfe[m
+Merge: 4061961 0dea855
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Sep 12 14:02:34 2020 +0200
+
+    Merge branch 'master' of https://github.com/Willicornio/cuentame-dashboard
+
+[33mcommit 4061961557200f26e4d921fe8fcb0c028be51ad0[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Sep 12 14:02:13 2020 +0200
+
+    poca cosa
+
+[33mcommit 0dea85578a5933ff0940382a61d9165567b60e5d[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Wed Sep 9 17:07:50 2020 +0200
+
+    coger pesos
+
+[33mcommit 562a688880ff89766b04756adec0ecbc9ae7a66f[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Tue Sep 8 17:32:04 2020 +0200
+
+    añadir pesos
+
+[33mcommit d2b4c5589a65e440374327114058eaa7622b2d43[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Tue Sep 8 17:13:26 2020 +0200
+
+    añadido los criterios para subir d enivel
+
+[33mcommit 29f5a02b5faa5433c6ba9912a71a9fbc1c68b820[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Sep 8 15:20:55 2020 +0200
+
+    coleccion equipos asignacion individual acabado
+
+[33mcommit 6acef6cf24d656c6893a9e26d0f9dc2a53d2b41c[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sun Sep 6 13:07:11 2020 +0200
+
+    arreglos pequeños
+
+[33mcommit 6d0fbcb0d76674b4623e825e563f3a8671b13b2c[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Sep 4 17:14:46 2020 +0200
+
+    coleccion por equipos con asignacion individual
+
+[33mcommit 2d7e976dcddcf48e4dc1ecef9899ee57642550bc[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Wed Sep 2 13:17:00 2020 +0200
+
+    cambio model
+
+[33mcommit ef1322a42dca458b61d8cd051265e7a5d0b9c74e[m
+Merge: f0094d0 ceb76a3
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Sep 1 17:31:42 2020 +0200
+
+    Merge pull request #65 from miguelvalero/dev2
+    
+    Dev2
+
+[33mcommit ceb76a3486f0c38db39cd4f177e86076e47fbfda[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Sep 1 17:19:39 2020 +0200
+
+    con copia de cuestionarios y escenarios y con formulario de registro
+
+[33mcommit 2c22fdefb775f79fe8780326c00d4b7518110ccf[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Sep 1 08:35:40 2020 +0200
+
+    con notificaciones
+
+[33mcommit be934ef75908371527121053308959ec588089de[m
+Merge: ef28d48 7db0fd8
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Mon Aug 31 15:34:40 2020 +0200
+
+    Merge branch 'master' of https://github.com/Willicornio/cuentame-dashboard
+
+[33mcommit 7db0fd83fc773eb964b5b9a123ca0e077314abf0[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Mon Aug 31 15:32:50 2020 +0200
+
+    ya sé diferenciar entre un get y un post
+
+[33mcommit ef28d48f26f007d00adb8b7d134f58f9925eadf2[m
+Merge: 1f528fc e7d50ff
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Mon Aug 31 15:28:16 2020 +0200
+
+    Merge branch 'master' of https://github.com/Willicornio/cuentame-dashboard
+
+[33mcommit 1f528fc25eead8e2f5bca4275a2443cd04c2453c[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Mon Aug 31 15:28:11 2020 +0200
+
+    a
+
+[33mcommit 716118f6ffd8e880d1ef7b976973e7250c230f29[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Aug 31 07:52:11 2020 +0200
+
+    antes de notificaciones
+
+[33mcommit 2c51a75217fdfbe00c74776347637a542421ac1d[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sun Aug 30 16:45:48 2020 +0200
+
+    salvar familia en ficheros
+
+[33mcommit e7d50ffb0e76ea62f466de5a13338ec2494e0515[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Fri Aug 28 19:03:40 2020 +0200
+
+    Lo de poner fotos especiales al crear un jeugo
+
+[33mcommit 117ec1776f687d6da6a06aab32c43d0c9939316c[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Thu Aug 27 17:17:54 2020 +0200
+
+    ya se pueden crear concursos, mickey ouse ayudame no kiero se r1 milensa
+
+[33mcommit d0ff3819a42a90b2687aa632d9ca4f550d2f8599[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Thu Aug 27 12:10:47 2020 +0200
+
+     ya la gestión de permisos
+
+[33mcommit 5ecd8674e54d981fe584854f82be8983b0c8154c[m
+Merge: 15d6bc9 d570f12
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Wed Aug 26 17:36:53 2020 +0200
+
+     van cosas
+
+[33mcommit 15d6bc933b0e9448f8cbb155f4b1c4a7ebaa0b01[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Wed Aug 26 16:53:52 2020 +0200
+
+    haciendo cosas como catalana
+
+[33mcommit d570f12dde653df0815486b04f65c1c6557c1727[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Wed Aug 26 16:45:29 2020 +0200
+
+    Quedate en tu casa me escuchas
+
+[33mcommit 7f235e6333008317542ff67940234cd57fbb289b[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Wed Aug 26 12:47:09 2020 +0200
+
+    tabla permisos
+
+[33mcommit eabfed40f2f3f01052ce4250202965a3115d4bd4[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Tue Aug 25 13:00:28 2020 +0200
+
+    crear juego
+
+[33mcommit 3b5f1e211483c7898701b64af3e5a51d238c2477[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Mon Aug 24 15:22:30 2020 +0200
+
+    no se si he cambiado algo
+
+[33mcommit ca517588e37432b119ca5d148fdea279b1657c95[m
+Merge: 514a96a 4d62bee
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Sat Aug 22 16:30:46 2020 +0200
+
+    Merge branch 'master' of https://github.com/Willicornio/cuentame-dashboard
+
+[33mcommit 514a96a1b5ac5831234ff82badc4b7ab2920c813[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Sat Aug 22 16:30:40 2020 +0200
+
+    willicornio yo tambien se hacer commits de mierda
+
+[33mcommit 4d62bee5417cacbfd3b36826eb973de425fd89bf[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Aug 22 16:22:33 2020 +0200
+
+    Me da verguenza ajena dejar los comentarios
+
+[33mcommit f18065fe1b82c05ff9d1b10103edad4cdee6170e[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Aug 22 16:21:03 2020 +0200
+
+    la movida está rara para elegir un recurso
+
+[33mcommit 7f1898304fb046fed8619293a0293da20d476eef[m
+Merge: fe18f84 1ea1fea
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Aug 22 13:06:31 2020 +0200
+
+    Merge branch 'master' of https://github.com/Willicornio/cuentame-dashboard
+
+[33mcommit 1ea1feabcd987da6f92724aad36fd11d08ce6985[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Sat Aug 22 13:02:17 2020 +0200
+
+    juego activo
+
+[33mcommit fe18f84096fb64618211f1890e39a2c3efccee8a[m
+Merge: 02e4695 a741bf7
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Aug 22 13:02:01 2020 +0200
+
+    Merge branch 'master' of https://github.com/Willicornio/cuentame-dashboard
+
+[33mcommit a741bf70ab3c8d97ac790f904c37086a04d4c3a2[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Sat Aug 22 12:57:26 2020 +0200
+
+    juego libros selecionado
+
+[33mcommit 02e46952d2119bb39b5e3e5d024ff42816b0c1ac[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Aug 22 12:53:42 2020 +0200
+
+    git porfavor....
+
+[33mcommit 3dce9480f8263aab8a797d391c21ff78025fbf6f[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Aug 22 12:50:23 2020 +0200
+
+    las cards ya están preciosas
+
+[33mcommit dffb15561731a3b086904c1a2e053d97055ce245[m
+Author: STLERV <annafrias.9@gmail.com>
+Date:   Sat Aug 22 12:46:41 2020 +0200
+
+     ja se pueden crear juegos de libros
+
+[33mcommit 046a0ae5a4c7b1dfb0ed46f32423838f3d43cdb7[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Thu Aug 20 17:57:40 2020 +0200
+
+    ya va lo de verse eso de las fotos que ya fueron cargadas por el señor profesor y que pues estan guardadas en el servidor
+
+[33mcommit 2ca6352888f3f094aa225f75278debb9624da900[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Tue Aug 18 16:34:57 2020 +0200
+
+    4 tonterias
+
+[33mcommit ecc0c05e22a6421ae2c66d3f4374ffc6d9e219ec[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Aug 18 11:01:43 2020 +0200
+
+    con votacion todos a uno inactivo
+
+[33mcommit f5fc8ae9938f186e924186f72b47f43a218b836a[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Mon Aug 17 18:01:22 2020 +0200
+
+    ya se guarda todo esto, falta arreglar la movida del tick
+
+[33mcommit 2775a6a8a8f0f01325919512e182f9af3054c479[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Aug 17 09:17:12 2020 +0200
+
+    con votacion todos a una
+
+[33mcommit 9ea81635e9059ef3da18700eadf59a49f2897c2e[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Sat Aug 15 13:45:36 2020 +0200
+
+    QUE NO VA EL HEADER CONTENT DE VERDAD QUE ESTRÉS DE VIDA
+
+[33mcommit eae02913e8a4dd630841061e5f18e64b99fae7b9[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Aug 14 08:02:10 2020 +0200
+
+    antes de juego de votacion todos a uno
+
+[33mcommit eeea162737dc480e8911b17fa26363d170a151c7[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Thu Aug 13 17:28:33 2020 +0200
+
+    He puesto 4 cosas
+
+[33mcommit 4e47e07af35954af4e691f38912a4c358181122d[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Wed Aug 12 17:36:02 2020 +0200
+
+    organizado lo de lsa carpetas
+
+[33mcommit bf324785440e0195a2a17db1ec86fa671b498b81[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Tue Aug 11 18:54:30 2020 +0200
+
+    subidas carptetas ocn fotos hecho
+
+[33mcommit 67abc2113802900d976bb80a3370546feed87324[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Tue Aug 11 15:26:29 2020 +0200
+
+    first commit
+
+[33mcommit 288a3effcb47e455f50fa3c42d6d1337bf5ffa81[m
+Merge: 16567b5 f0094d0
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Mon Aug 10 17:02:10 2020 +0200
+
+    af
+
+[33mcommit 16567b59e17b3ea302fbeef535332dea9221a044[m
+Author: willicornio <guillecacerola@gmail.com>
+Date:   Mon Aug 10 17:01:13 2020 +0200
+
+    af
+
+[33mcommit 6debdd65562c925df02d51023adcb46d3cf2f8b3[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sat Aug 8 09:06:08 2020 +0200
+
+    rubricas
+
+[33mcommit 1cdc87b0ceb4c379d7abaeca3b35848429c001f6[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Aug 6 08:58:44 2020 +0200
+
+    votaciones + voz en avatares
+
+[33mcommit f0094d08291372290ccdf18fc0be5a9f7c28619b[m
+Merge: 5e63a58 4c40c3e
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Aug 3 09:13:22 2020 +0200
+
+    Merge pull request #64 from miguelvalero/dev
+    
+    ver avatares
+
+[33mcommit 4c40c3e5d5b49974c49081b27b5fb0e36a5621e2[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Aug 3 09:04:07 2020 +0200
+
+    ver avatares
+
+[33mcommit 5e63a587c5c8f91c25f6fa39a5784f3f1298fe79[m
+Merge: c2d7444 ae33063
+Author: oriolfuertes <60069432+oriolfuertes@users.noreply.github.com>
+Date:   Mon Jul 20 09:18:04 2020 +0200
+
+    Merge pull request #62 from rocmeseguer/dev
+    
+    version final geocaching
+
+[33mcommit ae3306317bf0de157cf4af12d41f01eb19ca8621[m
+Merge: 77ad55d c2d7444
+Author: oriolfuertes <60069432+oriolfuertes@users.noreply.github.com>
+Date:   Sun Jul 19 21:00:15 2020 +0200
+
+    Merge branch 'master' into dev
+
+[33mcommit 77ad55d91db949fd886d4f55447844d1101b9866[m
+Author: Oriol Fuertes <oriolfuertes@MacBook-Pro-de-Oriol.local>
+Date:   Sun Jul 19 20:53:11 2020 +0200
+
+    version final geocaching
+
+[33mcommit c2d7444418d458c94e0ecb0067d0ca1c77225ea5[m
+Merge: 409a613 b220d5f
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Sat Jul 4 15:42:15 2020 +0200
+
+    Merge pull request #60 from miguelvalero/dev
+    
+    retoques despues de merge
+
+[33mcommit b220d5f2a76e528a56a734c25a338fc3e467954f[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sat Jul 4 15:33:20 2020 +0200
+
+    retoques despues de merge
+
+[33mcommit 409a61373cb3bf55f027f42bd7069411e6f95346[m
+Merge: b26512e af27536
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Sat Jul 4 15:31:31 2020 +0200
+
+    Merge pull request #59 from miguelvalero/dev
+    
+    Dev
+
+[33mcommit af275360e2df8c942f236bc226e9494f0e579ccb[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sat Jul 4 15:22:25 2020 +0200
+
+    retoques
+
+[33mcommit b26512e13f429ef71f7bc5feedac796b0f5327bd[m
+Merge: c1dd74c 11c4e4c
+Author: Ruben1996 <rubencobe96@gmail.com>
+Date:   Sat Jun 27 10:18:39 2020 +0200
+
+    Merge pull request #58 from Ruben1996/devUltima
+    
+    Ultimos retoques
+
+[33mcommit 11c4e4c95a60de9425399fd887b5c0d5d5b158ec[m
+Merge: 7968ac0 c1dd74c
+Author: Ruben1996 <rubencobe96@gmail.com>
+Date:   Sat Jun 27 10:18:09 2020 +0200
+
+    Merge branch 'master' into devUltima
+
+[33mcommit 7968ac072682b1c526f581110a5f230e445623e0[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Sat Jun 27 10:11:51 2020 +0200
+
+    Ultimos retoques
+
+[33mcommit 8c7675852f009cf49c8a3b50d4199b1bf716f654[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Jun 18 08:22:23 2020 +0200
+
+    Cargar preguntas de fichero
+
+[33mcommit c1dd74cfb77c7a00f9daff4fda2ba31ba0aedd43[m
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed Jun 17 09:43:49 2020 +0200
+
+    Update README.md
+
+[33mcommit c840defcc9d9665d1e447c2bd0eb5d6298c12b5f[m
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed Jun 17 09:42:34 2020 +0200
+
+    Update README.md
+
+[33mcommit 1cbae83924c85a78643d78047b4ad8e13bd1e82a[m
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed Jun 17 09:41:17 2020 +0200
+
+    Update README.md
+
+[33mcommit 131046193912617be8d229ee2e5d170e21a06011[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Wed Jun 17 07:26:46 2020 +0000
+
+    Bump jquery from 1.9.1 to 3.5.0
+    
+    Bumps [jquery](https://github.com/jquery/jquery) from 1.9.1 to 3.5.0.
+    - [Release notes](https://github.com/jquery/jquery/releases)
+    - [Commits](https://github.com/jquery/jquery/compare/1.9.1...3.5.0)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 2336bb660287368442c72ffeb48de0d5d31c7009[m
+Merge: 5a4e548 a8d102a
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed Jun 17 08:25:55 2020 +0200
+
+    Merge pull request #57 from miguelvalero/dev
+    
+    Dev
+
+[33mcommit a8d102a500cc6b12ffff71a4b3591ae93f4dbcd8[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Jun 15 17:25:38 2020 +0200
+
+    simplificacion carga imagenes de avatares
+
+[33mcommit 5443f200867beeca4677d7c6eef035974446c186[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Jun 15 15:36:41 2020 +0200
+
+    simplificacion carga imagenes de colecciones
+
+[33mcommit 390eec0a4d8a51433613ae636e9b13f8ebe170f4[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Jun 11 06:24:00 2020 +0200
+
+    graficos resultados juego cuestionario
+
+[33mcommit 40442d24315229697faec70b42411529c1f6ea00[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Sun Jun 7 05:55:14 2020 +0000
+
+    Bump websocket-extensions from 0.1.3 to 0.1.4
+    
+    Bumps [websocket-extensions](https://github.com/faye/websocket-extensions-node) from 0.1.3 to 0.1.4.
+    - [Release notes](https://github.com/faye/websocket-extensions-node/releases)
+    - [Changelog](https://github.com/faye/websocket-extensions-node/blob/master/CHANGELOG.md)
+    - [Commits](https://github.com/faye/websocket-extensions-node/compare/0.1.3...0.1.4)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 5a4e548f2fb4ecb13bbda14abd2361abf2e965db[m
+Merge: 8231203 038b456
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Jun 2 16:59:42 2020 +0200
+
+    Merge pull request #55 from miguelvalero/dev
+    
+    retoques creacion juego
+
+[33mcommit 038b45626cf1738882f48fb5cb7d47c3cb0fd22b[m
+Merge: 174be3b 8231203
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Jun 2 16:59:34 2020 +0200
+
+    Merge branch 'master' into dev
+
+[33mcommit 174be3b082408b5c756d7ff2ca42e4c7e816d593[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Jun 2 16:44:29 2020 +0200
+
+    retoques creacion juego
+
+[33mcommit 8231203e9edb45fd313185a4062869e76d772d0c[m
+Merge: b3efb9f 1500f96
+Author: oriolfuertes <60069432+oriolfuertes@users.noreply.github.com>
+Date:   Tue Jun 2 14:04:34 2020 +0200
+
+    Merge pull request #54 from oriolfuertes/dev
+    
+    juego de geocaching
+
+[33mcommit 1500f96693419e9be6817f1781f6d9b14ffc69c2[m
+Author: Oriol Fuertes <oriolfuertes@MacBook-Pro-de-Oriol.local>
+Date:   Tue Jun 2 14:02:34 2020 +0200
+
+    juego de geocaching
+
+[33mcommit b3efb9f23eef5fa265a895092aab7c3f2d67cb02[m
+Merge: 5945639 41f0424
+Author: oriolfuertes <60069432+oriolfuertes@users.noreply.github.com>
+Date:   Tue Jun 2 10:28:56 2020 +0200
+
+    Merge pull request #53 from oriolfuertes/dev2
+    
+    JuegoGeocaching
+
+[33mcommit 41f04246817111fbfde72c9627da2a58e0c6627f[m
+Merge: 666cdba 5945639
+Author: oriolfuertes <60069432+oriolfuertes@users.noreply.github.com>
+Date:   Tue Jun 2 10:28:44 2020 +0200
+
+    Merge branch 'master' into dev2
+
+[33mcommit 666cdba5daf3c04c8404e97f2484be809d3a9676[m
+Author: Oriol Fuertes <oriolfuertes@MacBook-Pro-de-Oriol.local>
+Date:   Tue Jun 2 10:10:57 2020 +0200
+
+    JuegoGeocaching
+
+[33mcommit 59456398331aa95c19a83a4c69fd994e25b0112d[m
+Merge: df9f3ad 7b5e35d
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Sun May 31 07:43:45 2020 +0200
+
+    Merge pull request #52 from miguelvalero/dev
+    
+    Dev
+
+[33mcommit 7b5e35d119356fa12971dff8ced353a9a59786ff[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sun May 31 07:34:55 2020 +0200
+
+    ajustes en zIndex y en colecciones
+
+[33mcommit b5feaab05a15a706947996f3c290ad29fd032317[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu May 28 08:01:11 2020 +0200
+
+    reorganizacion creacion juego
+
+[33mcommit df9f3ad00a7142232ca6b1bbc30055bf1e9a3921[m
+Merge: 754e9ec 7aad848
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue May 26 10:49:14 2020 +0200
+
+    Merge pull request #51 from miguelvalero/dev
+    
+    Ajustes estilos
+
+[33mcommit 754e9ec4b8a1b90a30ac5b3efb87ed6f416552cf[m
+Merge: 4c0633e 696b107
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue May 26 10:46:43 2020 +0200
+
+    Merge pull request #50 from miguelvalero/dev
+    
+    Dev
+
+[33mcommit 7aad8482fc9eccf09ed6a72670fd50c7e54a6320[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue May 26 10:41:30 2020 +0200
+
+    Ajustes estilos
+
+[33mcommit 696b107f6f1eaf502bfe72f2894ca7d045bc270c[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon May 25 16:15:05 2020 +0200
+
+    Voltear cromos
+
+[33mcommit 696727027ddba2bc78083a1a6424a4adebc4458e[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sat May 23 08:46:47 2020 +0200
+
+    Juegos activos al inicio
+
+[33mcommit 38dba81b92154f48da4bdb7bc0a042ec42f0a679[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri May 22 15:24:56 2020 +0200
+
+    Ajustes panel de recursos
+
+[33mcommit 42265b8f55ce4d80c1f5cec547301dfdd0e45e59[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri May 22 08:27:50 2020 +0200
+
+    Nuevo menu recursos
+
+[33mcommit 7b8f597d277f98510dd522a6d02912c1903711fc[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu May 21 14:37:55 2020 +0200
+
+    cargar familia de avatares desde ficheros
+
+[33mcommit 5006da8c3a223c4583854c354fc8d29a92a95ae8[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu May 21 08:20:22 2020 +0200
+
+    cargar coleccion desde ficheros
+
+[33mcommit e66e6defd5b415100e38c9d53ae727bfe6bc2dc2[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue May 19 15:07:49 2020 +0200
+
+    cromos de dos caras
+
+[33mcommit f40f98a6e4b9f19ebd08f3f2e84aa4a0a5fdf0df[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon May 18 16:17:18 2020 +0200
+
+    Añadir dorso a cromo
+
+[33mcommit 4c0633ecff0a78a1fb7b08ae905385e4ddd01d00[m
+Merge: 38c114b a58e9b0
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed May 13 18:03:32 2020 +0200
+
+    Merge pull request #49 from miguelvalero/dev
+    
+    Arreglos despues del merge con Oriol
+
+[33mcommit a58e9b05f1a458fcb9e927c9ec3308478e2eb278[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed May 13 17:55:50 2020 +0200
+
+    Arreglos despues del merge con Oriol
+
+[33mcommit 38c114bf2d5d62ea3cd9afbff4e0d5b2232f7e40[m
+Merge: c259f09 b1f8bbc
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed May 13 17:01:29 2020 +0200
+
+    Merge pull request #48 from miguelvalero/dev
+    
+    mas retoques avatares
+
+[33mcommit b1f8bbce0e7209df4bb3f3a42be0eda282c12534[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed May 13 16:53:26 2020 +0200
+
+    mas retoques avatares
+
+[33mcommit c259f0934230f8e615809f4d72bc739031162f4f[m
+Merge: 35bd8b1 d21bb82
+Author: oriolfuertes <60069432+oriolfuertes@users.noreply.github.com>
+Date:   Wed May 13 14:14:25 2020 +0200
+
+    Merge pull request #47 from rocmeseguer/Geocaching
+    
+    Geocaching
+
+[33mcommit d21bb82e3b65425cfe66a904182e34f614693cc4[m[33m ([m[1;31mmio/Geocaching[m[33m)[m
+Merge: 229809c 35bd8b1
+Author: oriolfuertes <60069432+oriolfuertes@users.noreply.github.com>
+Date:   Wed May 13 14:14:02 2020 +0200
+
+    Merge branch 'master' into Geocaching
+
+[33mcommit 229809cbd72db1a6f6a42bbc904d0141e1520eb7[m
+Author: Oriol Fuertes <oriolfuertes@MacBook-Pro-de-Oriol.local>
+Date:   Wed May 13 13:57:00 2020 +0200
+
+    Paginas crear-escenario y mis-escenarios
+
+[33mcommit 35bd8b1990fcc7cd418866ff11da24ab935db843[m
+Merge: 58912d3 0fb763e
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue May 12 08:33:01 2020 +0200
+
+    Merge pull request #46 from miguelvalero/dev
+    
+    Dev
+
+[33mcommit 0fb763ea78dac540e334566fb8390ef04539d1d9[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue May 12 08:24:08 2020 +0200
+
+    eliminacion error clase juego
+
+[33mcommit fd2bb92a2b7bbba2237978bf54e5f8f59b657f18[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon May 11 15:09:02 2020 +0200
+
+    Arreglos tamaños de las imagenes de los avatares
+
+[33mcommit 58912d34a4edb617fe9f3269acbcc26b679203fc[m
+Merge: 9766616 b342f12
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu May 7 09:06:07 2020 +0200
+
+    Merge pull request #45 from miguelvalero/dev2
+    
+    Dev2
+
+[33mcommit b342f12aaf28d8d82c867a2a5fedb01d295b9680[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu May 7 08:56:46 2020 +0200
+
+    Arreglos despues de merger con cuestionarios
+
+[33mcommit 6294f29a1047da6119ecf2339109c9ad2b2abf9a[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed May 6 23:27:50 2020 +0200
+
+    arreglos 1
+
+[33mcommit 9766616e0ef1a1a5c5d8080a3bf5ac785176617a[m
+Merge: 2d0e119 c48c49b
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed May 6 23:24:14 2020 +0200
+
+    Merge pull request #44 from miguelvalero/dev
+    
+    Dev
+
+[33mcommit c48c49b3e1a819abfcf8a2ed85c7f75d6fd244cb[m
+Merge: aeb771f 2d0e119
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed May 6 23:24:06 2020 +0200
+
+    Merge branch 'master' into dev
+
+[33mcommit 2d0e1198112eb582680b4e7f2ee11c4c3b8d23b8[m
+Merge: 13dd835 9098f25
+Author: Ruben1996 <rubencobe96@gmail.com>
+Date:   Wed May 6 18:33:13 2020 +0200
+
+    Merge pull request #43 from Ruben1996/dev2
+    
+    Dos errores encontrados y solucionados
+
+[33mcommit 9098f250af112ef7f32b55acbcbe3f35ca79fda8[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Wed May 6 18:32:15 2020 +0200
+
+    Dos errores encontrados y solucionados
+
+[33mcommit 13dd835bbb0f4c175a33cb912ff56fa83147b505[m
+Merge: e41123d c1bea4f
+Author: Ruben1996 <rubencobe96@gmail.com>
+Date:   Wed May 6 17:29:47 2020 +0200
+
+    Merge pull request #42 from Ruben1996/dev
+    
+    Dev
+
+[33mcommit aeb771fef0c8c8857772460640a9c95f2c32c2bd[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed May 6 17:21:25 2020 +0200
+
+    Juego de avatares individual
+
+[33mcommit ea45fd3bf1a013e132d41551ad18f24b6d4447bf[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri May 1 08:22:03 2020 +0200
+
+    Borrar familia avatares
+
+[33mcommit c1bea4f674302e9e27f949378510ab4b9d78d6ae[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Thu Apr 30 17:34:42 2020 +0200
+
+    Color juegos preparados cambiado
+
+[33mcommit bffa4040732d0536d4aac78cd12f8db7b6758360[m
+Author: Oriol Fuertes <oriolfuertes@MacBook-Pro-de-Oriol.local>
+Date:   Thu Apr 30 16:53:51 2020 +0200
+
+    Crear escenario
+
+[33mcommit 740d6f5398d7dbe2d16e891157e1ab3969e7db69[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Apr 30 15:05:00 2020 +0200
+
+    Arregos tema avatares
+
+[33mcommit 8087e784fd998788e8f8b13b5c84871c035923c7[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Tue Apr 28 19:03:06 2020 +0200
+
+    Cambio de puntos a nota
+
+[33mcommit ebcf2c1c24d0908b4d6cd277d9e320315b2a117c[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Mon Apr 27 18:10:09 2020 +0200
+
+    Error en la visibilidad del boton de guardar cambios del juego de cuestinario arreglado
+
+[33mcommit 0da2b3fa8f8d88ecc9e6ca3e059a905802e64241[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Apr 27 18:03:57 2020 +0200
+
+    ver familias de avatares
+
+[33mcommit 845d695d48540b7df708652d0125545033aa53fb[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sun Apr 26 13:44:27 2020 +0200
+
+    Creacion de familia de avatares
+
+[33mcommit 17d7553b33ae1363c37aa45aef3fd54568908a5d[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sat Apr 25 09:28:20 2020 +0200
+
+    borrar los juegos inactivos al borrar un grupo
+
+[33mcommit 7572f074197b0cfa0830b2b9908c82106847117a[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sat Apr 25 09:12:11 2020 +0200
+
+    borrar los juegos de liga y formula 1 al borrar un grupo
+
+[33mcommit ddc95e2cd486f17a3847d5028990676482d4c668[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Apr 24 10:51:50 2020 +0200
+
+    borrar los juegos de coleccion al borrar un grupo
+
+[33mcommit 437921067448cc69c40d9508b5ab7af196f2a68f[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Apr 23 17:51:22 2020 +0200
+
+    gestion sesiones de clase y primeros pasos para borrar todos los juegos al borrar un grupo
+
+[33mcommit 098f0941f1bd5b62993cf4aa70c861fd71b0a61d[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed Apr 22 08:51:40 2020 +0200
+
+    Marca hora asistencia
+
+[33mcommit 56504071a0465bd59777f3474350809027542250[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Tue Apr 21 19:48:26 2020 +0200
+
+    Modo de juego preparado añadido y funcionando. Editar juego en estado preparado funcionando
+
+[33mcommit da7f422b31bc6c975a8888b7c5859ad52a624520[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Apr 21 09:27:32 2020 +0200
+
+    graficos para desarrolladores
+
+[33mcommit 44ca116978eeb5feeb91890bc0aa073cc30a7b2b[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sun Apr 19 18:48:41 2020 +0200
+
+    Limpieza de servicios
+
+[33mcommit 18d586e1dd7c0a1e4dc4fc8e39e05324c405d33a[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Thu Apr 16 20:25:07 2020 +0000
+
+    Bump https-proxy-agent from 2.2.1 to 2.2.4
+    
+    Bumps [https-proxy-agent](https://github.com/TooTallNate/node-https-proxy-agent) from 2.2.1 to 2.2.4.
+    - [Release notes](https://github.com/TooTallNate/node-https-proxy-agent/releases)
+    - [Commits](https://github.com/TooTallNate/node-https-proxy-agent/compare/2.2.1...2.2.4)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit e41123d4879de163287a5d72d0f2f1bb69d69db9[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Thu Apr 16 20:29:51 2020 +0200
+
+    Update README.md
+
+[33mcommit 5d013fb3432335b4ba6b1defd1a87a7ad4252e85[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Thu Apr 16 13:29:38 2020 +0200
+
+    Update README.md
+
+[33mcommit 864bbc86ce212780130d60bc7e5f99e891315585[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Mon Apr 13 12:31:03 2020 +0200
+
+    Modificaciones htmls y error solucionado al añadir juego de cuestionario
+
+[33mcommit fba7bb1ceff5596116a2ee81b5bb181d980b967e[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Sun Apr 12 19:22:40 2020 +0200
+
+    Boton de informacion funcionando correctamente en juego activo e inactivo
+
+[33mcommit 799c7c0addef25b3fe0f18212ceb9b951775d5b9[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Sun Apr 12 13:52:39 2020 +0200
+
+    Eliminar juego funcionando correctamente y primer diseño de informacion del juego implementado
+
+[33mcommit 50a95d0e3f37a5a6030dac26ef853ce724cc8b15[m
+Merge: 8ccae23 2502c40
+Author: catalasebastia <47882791+catalasebastia@users.noreply.github.com>
+Date:   Sat Apr 11 12:50:37 2020 +0200
+
+    Merge pull request #39 from catalasebastia/devAngels
+    
+    Correcciones en Cuarentena
+
+[33mcommit 2502c40ddf75cdfca1001d15e69b66ea35e1bdf7[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Apr 10 21:55:44 2020 +0200
+
+    Correcciones mínimas del front-end
+
+[33mcommit d0339ad3076ee08e1fb86f6bc222ad5fb7b56b09[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Fri Apr 10 13:36:27 2020 +0200
+
+    Pasar juego de activo a inactivo funcionando. Y pagina de ver caracterisiticas del juego tambien
+
+[33mcommit cf890bafa99eecde3c12889593c15b92f1c7b4c1[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Apr 10 12:58:28 2020 +0200
+
+    Mejoras en cuarentena Sweetalert F1
+
+[33mcommit 8ccae239ec1c2acb70cc9b116603cbf80c639693[m
+Merge: 3949b0b 8518b55
+Author: alejandrogimeno <47666777+alejandrogimeno@users.noreply.github.com>
+Date:   Fri Apr 10 00:45:07 2020 +0200
+
+    Merge pull request #38 from alejandrogimeno/dev
+    
+    Mejoras varias
+
+[33mcommit 8518b5574f59c1e903fc4041cc24cdbb128d5d36[m
+Merge: 295afa9 1e08237
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Apr 9 22:36:16 2020 +0200
+
+    Merge remote-tracking branch 'alejandrogimeno/dev' into devAngels
+
+[33mcommit 295afa90b3c5b94035cb3554f9a52fab91daa78c[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Apr 9 22:35:39 2020 +0200
+
+    SweetAlerts Liga
+
+[33mcommit 1e08237acff08122d535d9ae3fa0daef2df47406[m
+Merge: 30c1b35 3c0db09
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Thu Apr 9 20:32:49 2020 +0200
+
+    Merge remote-tracking branch 'catalasebastia/devAngels' into dev
+
+[33mcommit 30c1b35a6c6c7531688ebabfaafe9a1627181109[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Thu Apr 9 20:27:31 2020 +0200
+
+    Cambio nombre funcion crear enfrentamientos
+
+[33mcommit 3c0db0977de26eac240d9e89761226799aa9cfe0[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Apr 9 20:07:24 2020 +0200
+
+    SweetAlerts F1
+    
+    Falta considerar la casuística de que el profesor introdujera el mismo nombre más de una vez, no debería guardarse el resultado en la base de datos y salir un sweetalert para que revisara los resultados
+
+[33mcommit acbe6bbdaf3ee9857a25a64e8b2b026808b7bdaa[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Thu Apr 9 19:59:26 2020 +0200
+
+    Creacion de juego y añadir alumnos matriculados funcionando y añadido a la lista de juegos
+
+[33mcommit 7a22bd4991bee461e8649815aba506438fa7ce2c[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Apr 9 18:30:32 2020 +0200
+
+    Mejoras en cuarentena HTML F1 y Liga
+
+[33mcommit 20ecd98567b0e84e7ae984cfbfc8a5b60acd8676[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Apr 9 17:16:11 2020 +0200
+
+    Mejoras en cuarentena HTML F1
+
+[33mcommit 3949b0bd75d7a6167d52bb4c9d71c2bcd2c6f63e[m
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Apr 9 15:11:28 2020 +0200
+
+    Update README.md
+
+[33mcommit a5370404266d5883273cdcbe61d70f25996a8078[m
+Merge: 8bf5cb4 f7275a4
+Author: catalasebastia <47882791+catalasebastia@users.noreply.github.com>
+Date:   Thu Apr 9 13:25:38 2020 +0200
+
+    Merge pull request #37 from catalasebastia/dev
+    
+    Mejoras en cuarentena
+
+[33mcommit f7275a4a7475f65bbb3ca6f7456f17ccb1a6dbfb[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Apr 9 13:19:17 2020 +0200
+
+    Mejoras en cuarentena
+    
+    -Título Editar Juego F1
+    -Que no pete cuando se asignan resultados manualmasivamente F1 cuando el profesor comete algún error
+    -Que cuando asignamos ganadores en Ligase actualicen los datos de TablaJornada
+    -Mensaje : Alguno de los alumnos/equipos introducidos no se corresponde con ninguno de los participantes del juego
+
+[33mcommit 8bf5cb4cb8dfbbe3ac507e2a4b6e03f130b4e8ef[m
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Apr 9 08:26:30 2020 +0200
+
+    Update README.md
+
+[33mcommit e7606eccf8d1d8311ac4d2ecfc4656c9474258b1[m
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Apr 9 08:06:43 2020 +0200
+
+    Update README.md
+
+[33mcommit 96c5cf7c641d49e6979eeeb04f5b456aa3fd5f4c[m
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Apr 9 08:05:32 2020 +0200
+
+    Update README.md
+
+[33mcommit 07584627143d6b938a3455bf828dce40a1048c59[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Wed Apr 8 19:56:19 2020 +0200
+
+    Todos los valores recogidos en html para crear juego de cuestionario funcionando
+
+[33mcommit 030de38a860da6dc515802f0fd4cd740a953fa53[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Tue Apr 7 20:23:46 2020 +0200
+
+    Creacion de juego de cuestionario añadiendo cuestionario, puntuacion y intento de presentacion
+
+[33mcommit 2b2b812451decbf232127fd0cc116b9ef431435a[m
+Merge: 36f88e9 2231469
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Apr 7 16:17:37 2020 +0200
+
+    Merge pull request #36 from miguelvalero/dev
+    
+    Mejoras en cuarentena
+
+[33mcommit 2231469586e6ecee1a9db154c5dc9937353f0aaa[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Apr 7 16:07:26 2020 +0200
+
+    Mejoras en cuarentena
+
+[33mcommit 34451775ba4305c0767ab380e6891b9ecf10e609[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Mon Apr 6 20:19:58 2020 +0200
+
+    Primer diseño creacion juego de cuestionario
+
+[33mcommit 36f88e9b1b09d39a2624d2f34b1bc98a369c00e1[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Sat Apr 4 16:15:54 2020 +0200
+
+    Update README.md
+
+[33mcommit e220b84ef03225d92a4dccf3686f7097b5c5b93b[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Sat Apr 4 15:51:57 2020 +0200
+
+    Update README.md
+
+[33mcommit 9212902b62c1ea44c5b10c219cc06d8c31ba0250[m
+Merge: ba4d769 7b4565d
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Sat Apr 4 08:49:22 2020 +0200
+
+    Merge pull request #35 from miguelvalero/dec
+    
+    Arreglos tras integración preguntas y cuestionarios
+
+[33mcommit 7b4565d94053cf035f4dd1e84cce558a3d9a06be[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Sat Apr 4 08:40:37 2020 +0200
+
+    Arreglos tras integración preguntas y cuestionarios
+
+[33mcommit ba4d769380025ebab57d8dc65837966806d1de21[m
+Merge: 1f1164d 4d81fe2
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Apr 3 23:51:49 2020 +0200
+
+    Merge pull request #34 from miguelvalero/prueba
+    
+    Prueba
+
+[33mcommit 4d81fe2dbcbbefe34b983ee6976a0767d9729850[m
+Merge: 1499965 1f1164d
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Apr 3 23:51:33 2020 +0200
+
+    Merge branch 'master' into prueba
+
+[33mcommit 14999652b39aa93393ff9ca0d145d551a585ddc1[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Apr 3 22:59:24 2020 +0200
+
+    mejoras competicion F1
+
+[33mcommit 1f1164d2e61cfee29957bb91aab1b09b77982d7f[m
+Merge: 3ead820 9615d6e
+Author: Ruben1996 <rubencobe96@gmail.com>
+Date:   Fri Apr 3 16:13:05 2020 +0200
+
+    Merge pull request #33 from Ruben1996/dev
+    
+    Dev
+
+[33mcommit 9615d6efc8d15e46bd711b2b13f4293b5395ad28[m
+Merge: a54bb68 3ead820
+Author: Ruben1996 <rubencobe96@gmail.com>
+Date:   Fri Apr 3 15:59:49 2020 +0200
+
+    Merge branch 'master' into dev
+
+[33mcommit a54bb68ae13d13853d8a880b14a3f497c37592e0[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Thu Apr 2 19:20:19 2020 +0200
+
+    Editar cuestinario funcionando perfectamente
+
+[33mcommit e3a7c454d5500dcc7ad32880e28756758a229053[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Wed Apr 1 19:30:51 2020 +0200
+
+    Editar cuestionario añadido
+
+[33mcommit d5f8456d425f6c62d67ba5b6bf53d6a7e059d84e[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Wed Apr 1 18:52:02 2020 +0200
+
+    Editar pregunta funcionando perfectamente
+
+[33mcommit 42e69e8e6d338e2252731f98c4ce212a7b02b894[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed Apr 1 17:38:12 2020 +0200
+
+    asignacion manual antes de arreglos generales
+
+[33mcommit 48f902edd4a9400c3ccd09df699f408dcce1f30d[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Tue Mar 31 19:59:15 2020 +0200
+
+    Editar pregunta añadido pero sin funcionar los botones
+
+[33mcommit 8b0fbd3fe527423d26fae26855d3fe38b36b5789[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Tue Mar 31 18:18:34 2020 +0200
+
+    Borrar pregunta y cuestionario funcionan al 100% y eliminan todo lo necesario
+
+[33mcommit 51dde3680fdffb70ccf0f7606b8dab6ebd186636[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Mon Mar 30 20:31:49 2020 +0200
+
+    Paginas de mis preguntas/cuestionarios añadidas y funcionando, falta mirar que funcione bien el eliminar y empezar el editar
+
+[33mcommit 5876b719c77be7c276671ec1153a6cd72465fcd2[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Mon Mar 30 20:30:00 2020 +0200
+
+    Guarda creacion de cuestionario añadida y funcionando
+
+[33mcommit d87ecf709c15f78b585e4b377a6e3b96c20d928d[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sun Mar 29 23:34:18 2020 +0200
+
+    Arreglos menores varios
+
+[33mcommit 09a05f62edf24c1282e5f9ed7957469d664d1545[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Sun Mar 29 14:03:00 2020 +0200
+
+    Crear cuestionario añadidendo preguntas hecho y funcionando
+
+[33mcommit e525f544f4ea2ef792d791b06208245056d0c1cd[m
+Merge: 9bcb8b9 3ead820
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Mar 28 23:39:07 2020 +0100
+
+    Merge remote-tracking branch 'origin/master' into dev
+
+[33mcommit 9bcb8b982d4ccc5b3f83dd4024c8ea1e55173b8f[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Mar 28 23:37:30 2020 +0100
+
+    actualización Juego de competición desactivado
+
+[33mcommit 3ead8203439a485309b52155fd2f7962a7b5b83e[m
+Merge: ffb4377 6ea0af2
+Author: catalasebastia <47882791+catalasebastia@users.noreply.github.com>
+Date:   Sat Mar 28 18:59:01 2020 +0100
+
+    Merge pull request #32 from catalasebastia/devAngels
+    
+    Actualización TablaJornada después de asignar ganadores de competición
+
+[33mcommit 4984c494d61629510d2e873ee18a40488c766611[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Sat Mar 28 13:00:23 2020 +0100
+
+    Dialogo de añadir preguntas en creacion de cuestionario hecho
+
+[33mcommit 6ea0af290d6a916df10459a9f17fa3407d7569b0[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Mar 28 00:55:05 2020 +0100
+
+    corrección error mínimo
+
+[33mcommit 4dc945461419e5741745c997dafe05c21e8a69f6[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Mar 28 00:48:45 2020 +0100
+
+    Arreglo bug actualizar TablaJornada (JornadasCompeticion) ganadores liga
+
+[33mcommit 3056aaad9605e614d537b8d1922d06ebe4e3a859[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Mar 27 23:39:04 2020 +0100
+
+    Arreglo bug de actualizar TablaJornada (JornadasDelJuego) ganadores F1
+
+[33mcommit ffb437723f45d04414f86043f22ed169804e1e87[m
+Merge: 5532f0a 9fa59dc
+Author: catalasebastia <47882791+catalasebastia@users.noreply.github.com>
+Date:   Fri Mar 27 16:40:30 2020 +0100
+
+    Merge pull request #31 from miguelvalero/dev
+    
+    Arreglos liga equipos
+
+[33mcommit 9fa59dc328dd5ec5ce7ce010c15048d3985538e9[m
+Merge: cde8da9 5532f0a
+Author: catalasebastia <47882791+catalasebastia@users.noreply.github.com>
+Date:   Fri Mar 27 16:39:41 2020 +0100
+
+    Merge branch 'master' into dev
+
+[33mcommit 5532f0ab3bcb1d0b67ae39addf71940f0af4f266[m
+Merge: d52ddf4 6c1f079
+Author: catalasebastia <47882791+catalasebastia@users.noreply.github.com>
+Date:   Fri Mar 27 16:08:29 2020 +0100
+
+    Merge pull request #30 from catalasebastia/devAngels
+    
+    Nueva distribución de botones en las pantallas de asignar ganadores
+
+[33mcommit 6c1f07969027e792e7bec20a2e06331b6b29ace4[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Mar 27 15:45:05 2020 +0100
+
+    Nueva distribución de botones y selectores en ganadores Liga
+
+[33mcommit 80a7d594494fa991cace26e31aa3631182f6726d[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Mar 27 15:03:13 2020 +0100
+
+    Nueva distribuciónn de botones y selectores en ganadores F1
+
+[33mcommit cde8da95966183b79270828183cc7e97fbcd3e4d[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Mar 27 08:12:13 2020 +0100
+
+    Arreglos liga equipos
+
+[33mcommit d52ddf478cb589cc8402c8b60a4d1214a2423f97[m
+Merge: a234e02 1d14918
+Author: alejandrogimeno <47666777+alejandrogimeno@users.noreply.github.com>
+Date:   Fri Mar 27 01:48:47 2020 +0100
+
+    Merge pull request #29 from alejandrogimeno/dev
+    
+    Nueva metodología asignar ganador F1
+
+[33mcommit 1d149187d2139814b9c3cd62ea5fd266f025784f[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Mar 27 01:29:11 2020 +0100
+
+    Nueva metodología asignar ganador F1
+
+[33mcommit 45043458f5349b7c78c153c762cf106194d4984d[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Thu Mar 26 19:51:46 2020 +0100
+
+    Crear pregunta funcionando correctamente
+
+[33mcommit e49b08b5a60ce0d382c9958ccca9002258b0d1bd[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Mar 26 19:05:47 2020 +0100
+
+    Añadir sweetalert cuando la jornada ya tenía ganadores LIGA
+
+[33mcommit 54b61e3cd9c1026c34fc1719f648a970ad9e44fe[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Thu Mar 26 18:39:27 2020 +0100
+
+    Htmls funcionando de crear pregunta y crear cuestionario
+
+[33mcommit be28c4fc2cb231e80c93941f63e3e60d206d72db[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Mar 26 17:19:29 2020 +0100
+
+    Correcciones para mostrar en información jornada finalizada/pendiente
+
+[33mcommit a234e029d1375f822632b675f1c995e91e6f41e4[m
+Merge: f095225 e2a932d
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Mar 26 16:33:51 2020 +0100
+
+    Merge pull request #28 from miguelvalero/dev
+    
+    Mas cambios en asignacion ganadores
+
+[33mcommit e2a932d625759f0b3e2a14e96623543fc688f4c8[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Mar 26 16:25:15 2020 +0100
+
+    Mas cambios en asignacion ganadores
+
+[33mcommit 8ba341ec6b8f39f881c4a8cbd223418ca7c979ba[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Wed Mar 25 18:48:39 2020 +0100
+
+    navbar modificada con botones funcionando
+
+[33mcommit d8116da5c2072f1f75839d8f3a1ca9ceeeb404ca[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Wed Mar 25 18:47:21 2020 +0100
+
+    Clases de cuestionario, pregunta y preguntaDelCuestionario añadidas. Pagina de preguntas y cuestinario. Y app-routing y app.module modificado
+
+[33mcommit f09522523f6152689162594dfea24039166f6f75[m
+Merge: a1ef1c0 6d0fbc5
+Author: alejandrogimeno <47666777+alejandrogimeno@users.noreply.github.com>
+Date:   Wed Mar 25 15:27:20 2020 +0100
+
+    Merge pull request #27 from alejandrogimeno/dev
+    
+    Mejoras Asignar ganadores
+
+[33mcommit 6d0fbc53d800dd6cf14a61a0d1b82a4534d04093[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Wed Mar 25 15:17:35 2020 +0100
+
+    corrección pequeño error
+
+[33mcommit 2b408f52ee563448a81b12c2083e57cfe70178bb[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Wed Mar 25 15:05:46 2020 +0100
+
+    Parte 1 Desarrollo: Nueva metodología liga MANUALMENTE
+
+[33mcommit 9900c33a4a8ebe49eb942026a70f78224cb83c23[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Wed Mar 25 12:51:56 2020 +0100
+
+    Nueva metodología asignar ganadores liga
+    
+    Mediante juego de puntos OK!!
+    Aleatoriamente OK!!
+    
+    Falta hacer que funcione Manualmente
+
+[33mcommit eb6dedc59217ca758f8bb5357c475d7667463634[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Tue Mar 24 20:17:48 2020 +0100
+
+    Comento las pruebas
+
+[33mcommit 12870e69867eb07d3807d186f1860a67ff996ad1[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Tue Mar 24 20:16:28 2020 +0100
+
+    Nueva metodología asignar ganador liga manualmente
+
+[33mcommit a1ef1c05155c53d8457605aac419871fd1b51242[m
+Merge: fa8297d 948fbd6
+Author: alejandrogimeno <47666777+alejandrogimeno@users.noreply.github.com>
+Date:   Fri Mar 20 23:39:31 2020 +0100
+
+    Merge pull request #26 from alejandrogimeno/dev
+    
+    Arreglos varios
+
+[33mcommit 948fbd687908dd18b7d52f355ec250b2a07edcf3[m
+Merge: 6b19419 abd6b65
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Fri Mar 20 23:38:48 2020 +0100
+
+    Merge remote-tracking branch 'catalasebastia/devAngels' into dev
+
+[33mcommit abd6b65dfd332f89f4064dc865833e6387a21a0d[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Mar 20 00:44:59 2020 +0100
+
+    Mejoras Sweetalerts Seleccionar ganadores Manualmente F1
+
+[33mcommit 6b19419906942199a5fd9e3a47d9db529f61ecbd[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Thu Mar 19 22:49:20 2020 +0100
+
+    Arreglos en Asignar ganadores Liga
+
+[33mcommit 7141ad3973d712fae1db99992560a043c006ee73[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Mar 19 22:45:00 2020 +0100
+
+    Mejoras Seleccionar ganadores Manualmente F1
+
+[33mcommit 8092204e00419bc52c7a8eb36c5047f5b50b1c5c[m
+Merge: cd70e19 a157cd3
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Thu Mar 19 22:10:52 2020 +0100
+
+    Merge remote-tracking branch 'catalasebastia/devAngels' into dev
+
+[33mcommit cd70e1918ab084c32ebc4e28d57d8274cca59542[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Thu Mar 19 22:10:10 2020 +0100
+
+    ganador Liga como F1 + Eliminar botón resultados
+
+[33mcommit a157cd39a82cb6e5e7ae3fda3e85a87b130fd220[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Mar 19 20:21:19 2020 +0100
+
+    Añadidos sweetalerts Asignar ganadores Liga Manualmente
+
+[33mcommit 07c4c9798b26afbbb850ddd4f1148fd8edb1dcfa[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Mar 19 17:19:22 2020 +0100
+
+    Corregido Bug Seleccionar Ganador
+    
+    Si seleccionabas el selector del título para que se marcara toda la columna (por ejemplo si quiero que todos los enfrentamientos queden en empate y selecciono el selector de toda la columna) cuando le daba al botón manualmente no se guardaba ningún resultado
+
+[33mcommit 5c57fe4602ebddf39d524f06a15819c71695285a[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Mar 19 13:35:20 2020 +0100
+
+    Mejoras front-end Juego de Competición Fórmula Uno
+
+[33mcommit 9f4316b4c338e7eab5a4cc60d7ad634f2d68595f[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Mar 19 13:26:17 2020 +0100
+
+    Mejoras front-end Juego de Competición Liga
+
+[33mcommit 0e99aafe645db820310ff9b92ded466bf277fcd8[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Mar 19 12:34:25 2020 +0100
+
+    Reorganización Funciones Asignar ganador Liga
+
+[33mcommit b4bf20b1eb80d98d0ad417642e07cf38ef240008[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Wed Mar 18 22:52:36 2020 +0100
+
+    Alerta "Ya hay ganadores" en asignar mediante puntos para Liga
+
+[33mcommit f93be5ebaac3708adb0427b37dee7e60a55a7f29[m
+Merge: 40efb97 bc35936
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Wed Mar 18 18:53:43 2020 +0100
+
+    Merge remote-tracking branch 'catalasebastia/devAngels' into dev
+
+[33mcommit 40efb975ab82ad04f47e9b17647e26fd9be9d6cd[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Wed Mar 18 18:52:46 2020 +0100
+
+    RouteLink Informacion Juego de Competicion
+
+[33mcommit bc3593666e34f4463ee1758622557d8b4f6b0ed9[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Wed Mar 18 15:47:55 2020 +0100
+
+    Corregido error Ganador Liga Manual Equipos
+
+[33mcommit 93147070c7ac177568a4c749aa5f570f616306b2[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Wed Mar 18 15:27:19 2020 +0100
+
+    pequeño cambio que me había dejado en el commit anterior
+
+[33mcommit ce9401db8024a65452d42ccd918dc81a9ac1f75e[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Wed Mar 18 15:16:58 2020 +0100
+
+    Arreglos Asignación Ganador Manualmente  Liga
+
+[33mcommit c75da0eeefe5b0e36760014d5d4dc4d310c19cf6[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Wed Mar 18 12:15:55 2020 +0100
+
+    Corregido error asignar ganador Liga mediante Juego de Puntos
+
+[33mcommit a933cb70b20fc3eee7fffd6a4d245124dd60c0ff[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Wed Mar 18 01:30:41 2020 +0100
+
+    Cambios para que en la base de datos no se guarden los nombres solo id
+
+[33mcommit 430019d8c87360a6d2600820706b704f19054708[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Wed Mar 18 00:13:26 2020 +0100
+
+    Añadidos sweetalerts Asignar ganadores Liga Aleatoriamente
+
+[33mcommit 758d329e5253d035ea37265a7215c99a589660c0[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Tue Mar 17 21:07:03 2020 +0100
+
+    Corregido error mínimo
+
+[33mcommit dbdbb843d73b0e23e507b4e114f36d3634925c3c[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Tue Mar 17 21:06:28 2020 +0100
+
+    Mejoras front-end Juego Liga
+    
+    Añadidos iconos para mostrar en información si una jornada está terminada o no.
+    Añadido botón Resultados en información, activado cuando no hay resultados de la jornada y desactivado cuando ya hay ganadores
+    
+    Falta hacer el routerLink del botón Resultados de información para que se redirija a la pantalla de seleccionar ganadores
+
+[33mcommit 715b8f181ba6e67b01a3f5e0b6918b9bf1fa9f55[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Tue Mar 17 14:10:31 2020 +0100
+
+    Mejoras front-end Juego Formula Uno
+    
+    Añadidos iconos para mostrar en información si una jornada está terminada o no.
+    Añadido botón Resultados en información, activado cuando no hay resultados de la jornada y desactivado cuando ya hay ganadores
+    
+    Falta hacer el routerLink del botón Resultados de información para que se redirija a la pantalla de seleccionar ganadores
+
+[33mcommit fa8297db222d9b8e46476f132ddfb626869feb8b[m
+Merge: 81521e0 febcc2f
+Author: alejandrogimeno <47666777+alejandrogimeno@users.noreply.github.com>
+Date:   Mon Mar 16 21:29:37 2020 +0100
+
+    Merge pull request #25 from alejandrogimeno/dev
+    
+    Dashboard Casi definitivo
+
+[33mcommit febcc2fd278a692374bbc190de6b00c3f316b400[m
+Merge: cd28ca7 17e9ab9
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Mar 16 21:27:50 2020 +0100
+
+    Merge remote-tracking branch 'catalasebastia/devAngels' into dev
+
+[33mcommit cd28ca7609a159af6907f1c6ea27242f4e759147[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Mar 16 21:27:14 2020 +0100
+
+    Ajuste display juegos
+
+[33mcommit 17e9ab96816311b3685fd21b00cf58889e00c110[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Mar 16 19:10:12 2020 +0100
+
+    Corregido error mínimo
+
+[33mcommit 5fbe86f8910761f3622983524c1e6bf0d9625a67[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Mar 16 18:56:58 2020 +0100
+
+    Mostrar mensaje de quien descansa en la Jornada Liga
+
+[33mcommit f03a0974543e85038c3f065e8127c443476dac7f[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Mar 15 20:59:32 2020 +0100
+
+    Desarrollo Parte 2: Misma pantalla editar jornadas y puntuación OK!!
+
+[33mcommit fd0bd37cabd633c28ab04731775a12dcc310319c[m
+Merge: 78a5934 b148773
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sun Mar 15 19:20:14 2020 +0100
+
+    Merge remote-tracking branch 'origin/dependabot/npm_and_yarn/acorn-6.4.1' into dev
+
+[33mcommit b1487730eaf86c4a967ec5b9f7556736c1b921de[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Sun Mar 15 15:44:38 2020 +0000
+
+    Bump acorn from 6.1.1 to 6.4.1
+    
+    Bumps [acorn](https://github.com/acornjs/acorn) from 6.1.1 to 6.4.1.
+    - [Release notes](https://github.com/acornjs/acorn/releases)
+    - [Commits](https://github.com/acornjs/acorn/compare/6.1.1...6.4.1)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 78a5934b2a117aaf9efaf71df776a0590a545bf5[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sun Mar 15 13:23:18 2020 +0100
+
+    Mejoras creacion juegos + bug puntos F1
+
+[33mcommit ddb9c1ae4fdbe9b23b063e512d899cc750f83656[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Mar 14 22:54:47 2020 +0100
+
+    Arreglos varios: Parte 2
+
+[33mcommit 57ebadc7b26e819fed1973749abcf169687de92e[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Mar 14 22:53:04 2020 +0100
+
+    Arreglos varios
+
+[33mcommit 90e1aa915e516177f37559a1992a0f52659a9832[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Fri Mar 13 23:40:03 2020 +0100
+
+    Mejoras varias en creación del juego y en display Fecha
+
+[33mcommit c3ddf305e4515d96de27e0f6457355f5ca3b4f20[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Mar 13 14:03:32 2020 +0100
+
+    Desarrollo Parte 1: Misma pantalla para editar jornadas y puntuación
+
+[33mcommit 4d80e6a5b6cc5d98dfab1c4358ddf7a5af12c40e[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Mar 13 14:02:26 2020 +0100
+
+    Añadir sweetalerts Asignar Ganadores Formula Uno
+
+[33mcommit 5fa1651283a661855c32238594694f622ddb1b7b[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Mar 13 12:36:05 2020 +0100
+
+    Arreglo bug en asignar ganadores Fórmula 1 con Juego de Puntos
+
+[33mcommit d485a8a1118ccc39c1e3b77cce456859046dd8bf[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Thu Mar 12 01:23:52 2020 +0100
+
+    Alertas creacion Juego
+
+[33mcommit 40eb67bf814eff96b1c637bcf6fc0ea4ead8394e[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Thu Mar 12 00:15:18 2020 +0100
+
+    Alertas Editar Puntuacion F1 (creacion de juego)
+
+[33mcommit 59cb142e4bfeb88eec32010b76a6194d292d4e3b[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Thu Mar 12 00:03:11 2020 +0100
+
+    Alertas en Editar Puntuacion F1
+
+[33mcommit 925b2aa62536b4919fece43a741fcfd65dc28577[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Wed Mar 11 21:55:43 2020 +0100
+
+    Cambios de Nombre Archivos
+
+[33mcommit 9bfe1582b5c8ed7ee391ec2a06300e4bf5ef8915[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Tue Mar 10 00:16:03 2020 +0100
+
+    Correciones de Bugs y Mejoras de Display
+
+[33mcommit 53d104045adcae15453c01b8c2ce77f3d5672ec1[m
+Merge: e646ec2 ae13da1
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Mar 9 20:29:48 2020 +0100
+
+    Merge remote-tracking branch 'catalasebastia/devAngels' into dev
+
+[33mcommit ae13da1d2bcab99e2e385288a86f9bd7f2cd5a95[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Mar 9 02:25:19 2020 +0100
+
+    Cositas que me había dejado por commitear
+
+[33mcommit 56741f2cf36f4cbaf37b0949c6aa85cb7cab5c01[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Mar 9 02:13:24 2020 +0100
+
+    Parte Desarrollo 7: Asignar Ganador Formula Uno Masivamente OK!!
+    
+    Tanto para Individual como para Equipo
+
+[33mcommit e646ec23c0de74fd7279c471ac4285cd6ffd7235[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Mar 9 00:30:02 2020 +0100
+
+    asignación Puntos F1 mediante Juego de puntos
+
+[33mcommit edd1df6fea3141435edfdda7a6be0a88ed0c31c4[m
+Merge: 3c014d8 89b522e
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sun Mar 8 19:29:22 2020 +0100
+
+    Merge remote-tracking branch 'catalasebastia/devAngels' into dev
+
+[33mcommit 3c014d83bdeedc9f280d205503dfca130386a104[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sun Mar 8 19:28:59 2020 +0100
+
+    Arreglos en Pantalla modificación puntos F1
+
+[33mcommit 89b522ef245897fe41189aa92d6c96275d4bbe2f[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Mar 8 15:42:33 2020 +0100
+
+    Limpiez función no necesaria
+
+[33mcommit 9163ab58e106c2ee0ea7d21e7ea4f6602ba68cab[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Mar 8 15:40:22 2020 +0100
+
+    Parte Desarrollo 6: Asignar Ganador Formula Uno Aleatorio OK!!
+    
+    Tanto Individual como Aleatorio
+
+[33mcommit 3cc66d9b0fa46b3e96207bb64e288609d9ea9456[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Mar 8 14:29:05 2020 +0100
+
+    Parte Desarrollo 5: Asignar Ganador Formula Uno Aleatorio Individual OK!
+
+[33mcommit bb75855d866dda12de79ab2aaf81059b4f2467c5[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Mar 8 12:06:00 2020 +0100
+
+    Parte Desarrollo 4: Asignar Ganador Formula Uno
+    
+    Problema a la hora de guardar en la base de datos AlumnoJuegoCompeticionForulaUno que puntua con los puntos actualizados y JornadaDeCompeticionFormulaUno con los ganadores actualizados
+
+[33mcommit ad699edc201ab2469069d60b9cc98d312a9cbffc[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sun Mar 8 01:02:49 2020 +0100
+
+    Pantalla modificación vector puntos para ganadores F1
+
+[33mcommit ec6eee7777d3ed295d5295a6987142dc6b432f0a[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Mar 7 23:14:49 2020 +0100
+
+    Incorporacion Nombre en los juegos
+
+[33mcommit ce9eaf9959539af6fba3b4bfd44b55cbf85bde39[m
+Merge: 641ca6a f69ed8c
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Mar 7 22:23:35 2020 +0100
+
+    Merge remote-tracking branch 'catalasebastia/devAngels' into dev
+
+[33mcommit f69ed8cb0a619575bec55b70824ae03808a5939f[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Mar 7 20:31:47 2020 +0100
+
+    Parte Desarrollo 3: Asignar Ganador Formula Uno
+    
+    Arreglos más bugs a la hora de mostrar las tablas de clasificación
+
+[33mcommit 641ca6a244889dab8e9cced7c6f8c13e292ad506[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Mar 7 19:27:33 2020 +0100
+
+    asignación de punto en liga mediante juego de puntos
+
+[33mcommit bf4162eb9c9d71c6cc17a0bf1a109443d6ae5026[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Mar 6 13:36:29 2020 +0100
+
+    Parte Desarrollo 2: Asignar Ganador Formula Uno
+    
+    Arreglos bugs a la hora de mostrar las tablas de clasificación y añadido sweetalert en asignacion aleatoria
+
+[33mcommit 602aa8e157910db7380bda3460304902acea5e6f[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Wed Mar 4 00:26:56 2020 +0100
+
+    Paso Introducir Nombre Juego
+
+[33mcommit a1b14e1e8c25cd89579ec6c0ad599255474a64a0[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Tue Mar 3 00:17:13 2020 +0100
+
+    Mejoras en Creacion F1
+
+[33mcommit e663db6d331e61dfbf15ac11f2d1e748a6f2c9dc[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Mar 2 22:18:47 2020 +0100
+
+    Mejoras en creacion F1 + Editar jornada
+
+[33mcommit b58c54db9659f475582352664be91a6d7ea4f4a3[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Mar 2 17:45:17 2020 +0100
+
+    Parte Desarrollo 1: Asignar Ganador Formula Uno
+
+[33mcommit 4d274828c822efdb5caa14f3008a925e27c5fd3f[m
+Merge: 563bcdf 7ce5f5e
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Mar 2 00:40:28 2020 +0100
+
+    Merge remote-tracking branch 'catalasebastia/devAngels' into dev
+
+[33mcommit 563bcdf6b6bb39e420c61ec84e005e1749cc186f[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Mar 2 00:39:02 2020 +0100
+
+    Correccion Modificar jornada Liga y F1
+
+[33mcommit 7ce5f5e1d397a33d625d8d30e601908bbcc458ab[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Feb 28 19:49:14 2020 +0100
+
+    Pantalla Información Fórmula Uno FUNCIONA!
+
+[33mcommit 4aef75f089205734bd4d48cb5afcf9e21510b29c[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Thu Feb 27 02:19:24 2020 +0100
+
+    Editar Jornadas F1+ Desactivar+ Juego F1 Inactivo
+
+[33mcommit 6139a1b074fd5132169e7455cdf518e2853393bb[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Wed Feb 26 00:16:58 2020 +0100
+
+    Arreglos del Merge
+
+[33mcommit f40e916279ac14b4b67256912fc1266faa22d9cc[m
+Merge: 5b17d94 fe538fb
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Tue Feb 25 23:26:24 2020 +0100
+
+    Merge remote-tracking branch 'catalasebastia/devAngels' into dev
+
+[33mcommit fe538fbc5d0399dec72abb8dad9a82e2dcf5ef73[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Tue Feb 25 02:47:17 2020 +0100
+
+    Pequeños arreglos para obtener info clasificación por jornadas
+    
+    Revisar equipos
+
+[33mcommit ca972e17d7370b3714fcd11c417bb883fdae8e4f[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Tue Feb 25 02:45:46 2020 +0100
+
+    Información obtenida para la clasificación por jornadas en información
+    
+    Revisar para equipos
+
+[33mcommit 5b17d94d1a711de7b1b6d08bb7988c7294d84e20[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Tue Feb 25 00:09:56 2020 +0100
+
+    Mejoras en Creacion de Juego (Vector puntuacion)
+
+[33mcommit 97d473fe895c0dc0a62d147d20dc219c596893e8[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sun Feb 23 23:09:58 2020 +0100
+
+    Creacion Asignacion puntos formula 1
+
+[33mcommit 866c7f42a96ef84060e811df9979ea35437ec93d[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Feb 23 22:37:06 2020 +0100
+
+    Creación Pantallas Información & Ganadores Fórmula Uno
+
+[33mcommit c5d5e098029842398fe2e357d9970c1958298d25[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Feb 23 16:34:27 2020 +0100
+
+    Tabla Clasificación EQUIPOS Fórmula Uno FUNCIONA!
+
+[33mcommit 5521b91c77a6aaed9c35d00e0e12dfdca5d5cfd9[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Feb 23 14:38:18 2020 +0100
+
+    Tabla clasificación INDIVIDUAL Fórmula Uno FUNCIONA!
+
+[33mcommit d75255a9a76d118cec325623012f06791e7f21b5[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Feb 23 13:58:25 2020 +0100
+
+    Información obtenida para crear la tabla de clasificación Fórmula Uno
+
+[33mcommit a1c0312bc5fa4e2d855d8a569ea0079a8d7a6b64[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Feb 22 21:43:40 2020 +0100
+
+    Creación Pantalla Inicio Juego de Competición Fórmula Uno
+
+[33mcommit 619a9e1562fe0cebd24a9963d7be7e14b9f34f30[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Feb 22 13:08:55 2020 +0100
+
+    Reubicación funciones
+
+[33mcommit 5c9c84265ac7419ad646bb6a79d129a3bdafb7b8[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Tue Feb 18 00:06:15 2020 +0100
+
+    Crear Juego de Formula 1
+
+[33mcommit 81521e0a481ef02f9fdca003265505837bc7e8fd[m
+Merge: 1201df2 dd384be
+Author: alejandrogimeno <47666777+alejandrogimeno@users.noreply.github.com>
+Date:   Sun Feb 16 17:18:27 2020 +0100
+
+    Merge pull request #23 from alejandrogimeno/dev
+    
+    Editar Competicion + Competicion inactiva
+
+[33mcommit dd384be24986efcab934d8a0b16ee7afc48072e5[m
+Merge: cb80c51 1201df2
+Author: alejandrogimeno <47666777+alejandrogimeno@users.noreply.github.com>
+Date:   Sun Feb 16 17:18:15 2020 +0100
+
+    Merge branch 'master' into dev
+
+[33mcommit cb80c51b710e8cbc6b2bf3457f3934759671f13a[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sun Feb 16 16:31:19 2020 +0100
+
+    Pantalla juego de competicion inactivo
+
+[33mcommit 56920ca25568b6d75bc60e025059eed30f7be8f9[m
+Merge: 52b4495 e201ffb
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Feb 15 20:40:04 2020 +0100
+
+    Merge remote-tracking branch 'catalasebastia/devAngels' into dev
+
+[33mcommit 52b4495838c612e8909ef18fad19b1923bd012b2[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Feb 15 20:39:56 2020 +0100
+
+    Arreglos merge 2
+
+[33mcommit e201ffbb8e1c0671c92f83c23cde9b648b463e59[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Feb 15 20:19:29 2020 +0100
+
+    Arreglos para el Merge
+
+[33mcommit 5333ff6f0eb954d7111e76a021a49dfcdfe6a09e[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Feb 15 19:10:17 2020 +0100
+
+    Arreglos Merge
+
+[33mcommit 6630dde6451ad74923c7598fed80dd26ecd59fee[m
+Merge: d30b2db 9c4101a
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Feb 15 18:26:31 2020 +0100
+
+    Merge remote-tracking branch 'catalasebastia/devAngels' into dev
+
+[33mcommit d30b2db30d03f4066a4b17e19dbe2a54519cdd72[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Feb 15 18:24:27 2020 +0100
+
+    Arreglos Finales crear enfrentamientos
+
+[33mcommit 9c4101a4e7783f1e2eda8d6ccfc74ee370e5b886[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Feb 15 17:52:07 2020 +0100
+
+    Desarrollo Pantalla Seleccionar Ganador FUNCIONA!
+
+[33mcommit 7d0f24e214ad4056cba76ffdeee3d05250479e1f[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Feb 15 17:32:38 2020 +0100
+
+    Parte 12 Desarrollo Pantalla Seleccionar Ganador
+    
+    Ya no se suman puntos en el caso de empate si el enfrentamiento ya tiene un ganador ni se suman puntos a los participantes ni se registra el empate en la base de datos
+
+[33mcommit 90e36295b44304718a61d4b71aaa845b8e9cb3e3[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Feb 15 17:14:03 2020 +0100
+
+    Parte 11 Desarrollo Pantalla Seleccionar Ganador
+    
+    Creación función AsignarEmpateIndividual, problema en los enfrentamietnos que ya tienen un ganador no lo guarda en la base de datos pero si les suma un punto a cada participante, y esto no debería pasar
+
+[33mcommit 9a23d341391b870358d56cc7bf6660fd9be96082[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Feb 15 16:45:31 2020 +0100
+
+    Arreglos que me he dejado por subir en el commit anterior
+
+[33mcommit d7fd6b210fdd867245fd7eab120bbb872860ee8d[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Feb 15 16:43:57 2020 +0100
+
+    Parte 10 Desarrollo Pantalla Seleccionar Ganador
+    
+    Solo falta empate por Equipos
+
+[33mcommit 9509022fe579901eac7b97e6de0da7c4e7e16132[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Feb 14 16:41:23 2020 +0100
+
+    Parte 9 Desarrollo Pantalla seleccionar Ganador
+    
+    Para los Juegos de Competición Liga Equipos ya se asigna aleatoriamente un ganador. Faltaría hacer la revisión de si ya tiene ganador, para que en ese caso no se sobreescriban los resultados de los enfrentamientos directamente sino que en un futuro aparezca el sweetalert con las opciones de aceptar la operación y sobreescribir o cancelar y no sobreeescribir
+
+[33mcommit 37671e5c6dc6458359b335b9802afd3d6d4af683[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Feb 14 16:30:25 2020 +0100
+
+    Parte 8 Desarrollo Pantalla Seleccionar Ganador
+    
+    Para los Juegos de Competición Liga Individual ya se asigna aleatoriamente un ganador. Faltaría hacer la revisión de si ya tiene ganador, para que en ese caso no se sobreescriban los resultados de los enfrentamientos directamente sino que en un futuro aparezca el sweetalert con las opciones de aceptar la operación y sobreescribir o cancelar y no sobreeescribir
+
+[33mcommit 6c04f6476fea8db404c997c0eb55ffaaaf33bc1b[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Feb 14 01:43:04 2020 +0100
+
+    Parte 7 Desarrollo Pantalla Seleccionar Ganador
+    
+    Implementación de la condición de que el ganador no esté asignado para poder asignarlo en Equipos (en individual ya estaba). En caso de ya estar asignado, en un futuro habría que añadir un sweatalert en el que cancelar sea no asignar nada y aceptar asignarlo de todas formas (sería como editar el resultado)
+
+[33mcommit a29a6e8d9892785f67be9c7e6940c39fefbb7e82[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Feb 14 01:12:12 2020 +0100
+
+    Parte 6 Desarrollo Pantalla Seleccionar Ganador
+    
+    Solucionado error en Asignar Ganador Individual y Asignar Ganador Equipos funcionando excepto empate
+
+[33mcommit 9e9ea82ca2a3d27b6e863d81b214bcddc6cc5752[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Feb 13 23:29:14 2020 +0100
+
+    Arreglos Asignar Ganador Individual
+
+[33mcommit ed8755c0febbb7323a1e7adca60c83351668b39d[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Feb 13 18:54:12 2020 +0100
+
+    Parte 5 Desarrollo Pantalla Seleccionar Ganador
+    
+    Asignar ganador para Individual funciona (falta revisar porque cuando hay una doble selección en el mismo enfrentamiento e intentas asignar ganador pero despues deseleccionas y vuelves a asignar no funciona, se queda el true de que hay más de una seleccion)
+    Asignar puntos en equipos funciona pero falta el empate y los accesos a la base de datos (también falta la función asignar ganador)
+
+[33mcommit 47eea04698c5392da67c36b024b28d423a5ffd96[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Feb 10 21:51:12 2020 +0100
+
+    Parte 4 desarrollo Pantalla Seleccionar Ganador
+    
+    Asignar ganador para Individual funciona (falta revisar porque cuando hay una doble selección en el mismo enfrentamiento e intentas asignar ganador pero despues deseleccionas y vuelves a asignar no funciona, se queda el true de que hay más de una seleccion)
+
+[33mcommit f35ac2579b6262a4fe42b4b110f5ddc12d83d478[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Feb 10 20:35:59 2020 +0100
+
+    Parte 3 desarrollo Pantalla Seleccionar Ganador
+    
+    Ya se guarda en la base de datos el ganador (excepto en caso de empate) y se le suman tres puntos a este --> de momento para asignar el ganador lo hace desde el botón aleatorio (esto hay que cambiarlo al botón de manual)
+
+[33mcommit 1201df2189cadcd7aa4060a7d5771d2b8015a082[m
+Merge: c453a7b ff47fea
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Thu Feb 6 17:00:32 2020 +0100
+
+    Merge pull request #22 from Ruben1996/dev
+    
+    Incorporacion de alertas con sweetalert2
+
+[33mcommit ff47fea50173667fc2d70772507125d24a6fc792[m
+Author: Ruben <rubencobe96@gmail.com>
+Date:   Thu Feb 6 16:57:12 2020 +0100
+
+    Incorporacion de alertas con sweetalert2
+
+[33mcommit 48e5413df0b67524c90c614790b1b59e634cd99a[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Thu Feb 6 00:41:43 2020 +0100
+
+    Mejoras en creacion de enfrentamientos
+
+[33mcommit 2dcdf0e045f73b3563e6aa416949fe29fe11470c[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Tue Feb 4 23:05:25 2020 +0100
+
+    Creacion Enfrentamientos
+
+[33mcommit 2b31b3e34ed4ff54962f02ed54331a19ad6f06ca[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Tue Feb 4 18:40:47 2020 +0100
+
+    Parte 2 desarrollo Pantalla Seleccionar Ganador
+    
+    Ya tenemos la tabla con las opciones para seleccionar el ganador en cada enfrentamiento de la jornada
+
+[33mcommit 4d2c37946d5e52a707bb2d475d30e3ab09d7b3bc[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Wed Jan 29 17:29:17 2020 +0100
+
+    Parte 1 desarrollo Pantalla Seleccionar Ganador
+
+[33mcommit 5415c42685ed1f32ca56a074050ddc4d274d290f[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Jan 26 22:23:21 2020 +0100
+
+    Creación Pantalla Seleccionar Ganador Juego Competición Liga
+
+[33mcommit 4cef4dadc176e46fbb7a0b3b039274506aa72142[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Jan 26 20:24:04 2020 +0100
+
+    Tabla Enfrentamientos de la Jornada con los Nombres y no los ID
+
+[33mcommit 07935b7f23cc4ada956f5a46fd4a6df4d9786196[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sun Jan 26 18:42:47 2020 +0100
+
+    Arreglos en Modiicar jornada
+
+[33mcommit 3c5d0c928cbf80429bed56dc61ebcccf226dd40f[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Jan 25 18:29:50 2020 +0100
+
+    Mejoras apariencia Jornadas
+
+[33mcommit 87d607923efe4cb2f9fb5f521e32c9cf4d47b0fa[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Jan 19 19:29:15 2020 +0100
+
+    Tabla Clasificación Liga Individual OK
+
+[33mcommit d951a6bb78cdd25d161569001e85da7faa5ce1ef[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Jan 19 19:07:08 2020 +0100
+
+    Rellenar TablaAlumnoJuegoDeCompeticion[] completamente
+
+[33mcommit 64e74ca324b8c5ef90909315785cc686af8b01ea[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Jan 19 16:21:57 2020 +0100
+
+    Tabla Clasificación Liga Equipos OK
+
+[33mcommit 12dc4e4c22c170331a9c3a415182c052490afac9[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Jan 19 14:11:15 2020 +0100
+
+    Rellenar TablaEquipoJuegoDeCompeticion[] completamente
+
+[33mcommit e247bb5787a87756fda602befede993a92c41e3c[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Jan 19 13:29:55 2020 +0100
+
+    Arreglo función CalcularPartidosPerdidos()
+
+[33mcommit 48631b41f347aa224fd724c91b2ff71d2a3a5052[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Jan 19 02:31:52 2020 +0100
+
+    Añadir Calculos de partidos: Totales Jugados Ganados Empatadod Perdidos
+    
+    Falta por repasar la función CalcularPartidosPerdidos que falla
+
+[33mcommit f365d4263ff29d6e70b3d14fa6fc89b270046587[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Jan 18 13:33:44 2020 +0100
+
+    Obtener Todos los Enfrentamientos de un juego
+
+[33mcommit c453a7bef9e2fcdc93eabd2099da20c36c617c0e[m
+Merge: 6ac9116 87b22c0
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Jan 13 13:42:49 2020 +0100
+
+    Merge pull request #21 from miguelvalero/master
+    
+    Ajustes despues de pull request con Alejandro y Angels
+
+[33mcommit 87b22c080414d4049842e8e60c3dd79f63b252a8[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Jan 13 13:35:06 2020 +0100
+
+    Ajustes despues de pull request con Alejandro y Angels
+
+[33mcommit 6ac91165be7edc40309685203bbc0375bffcef05[m
+Merge: eca78d6 11037aa
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Jan 13 11:54:59 2020 +0100
+
+    Merge pull request #20 from miguelvalero/dev
+    
+    arreglos 13 enero
+
+[33mcommit eca78d6d64418e5713ff90de1575a0043dfa2e7e[m
+Merge: a69a933 8561382
+Author: catalasebastia <47882791+catalasebastia@users.noreply.github.com>
+Date:   Mon Jan 13 11:50:24 2020 +0100
+
+    Merge pull request #19 from catalasebastia/master
+    
+    Primeros arreglos pull request
+
+[33mcommit 11037aa31f78228c9fbdf83320e7afb3706d0b9c[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Jan 13 11:45:48 2020 +0100
+
+    arreglos 13 enero
+
+[33mcommit 8561382c33b65aca12fe38d28d8a28f4da4cc3a9[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Jan 13 11:44:26 2020 +0100
+
+    Primeros arreglos pull request
+
+[33mcommit a69a93394cb281e6b8311c6b4fbdae75b0e5e2b6[m
+Merge: 81987e6 bffffa7
+Author: catalasebastia <47882791+catalasebastia@users.noreply.github.com>
+Date:   Mon Jan 13 11:20:40 2020 +0100
+
+    Merge pull request #18 from catalasebastia/EliminarPestañasInformacion
+    
+    Eliminar pestañas informacion
+
+[33mcommit bffffa756243a2fc509ac166edf851869dc1bee4[m
+Merge: d0c59e8 81987e6
+Author: catalasebastia <47882791+catalasebastia@users.noreply.github.com>
+Date:   Mon Jan 13 11:11:32 2020 +0100
+
+    Merge branch 'master' into EliminarPestañasInformacion
+
+[33mcommit d0c59e8020695c965e046a0388fe04b9be123a9b[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Jan 12 16:16:40 2020 +0100
+
+    Eliminar Pestañas en la Página de Infromación
+    
+    Las pestañas de Alumnos de cada equipo y Criterio ganador no eran necesarias
+
+[33mcommit 04546df772431fa22da2293cdb88da4aae4d1056[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Jan 11 20:27:13 2020 +0100
+
+    Arreglos merge
+
+[33mcommit 7454e2b61952bf2c8e064dacfa917217b8a55351[m
+Merge: 9c72823 2588326
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Jan 11 20:16:30 2020 +0100
+
+    Merge remote-tracking branch 'alejandrogimeno/dev' into Merge
+
+[33mcommit 2588326a7f98c81acf84fb72d4be9307da368d71[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Fri Jan 10 22:51:14 2020 +0100
+
+    Añadido boton de Finalizar y editar
+
+[33mcommit 28797eab02414c383b4495c718e845ac767234d0[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Fri Jan 10 22:29:18 2020 +0100
+
+    Cambio orden creacion competicion + juego de competicion desactivado
+
+[33mcommit 288a860f2b7df4f15b1554b7105043c2225faf3a[m
+Merge: 25e2a54 f78a6c5
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Fri Jan 10 21:08:15 2020 +0100
+
+    Merge branch 'elim' into dev
+
+[33mcommit 9c72823b2e59a07ae863cfdb858996f13433dfbb[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Jan 10 14:01:02 2020 +0100
+
+    Mostrar enfrentamientos de cada Jornada en una tabla
+    
+    Para Equipos está probado que funciona, faltaría probar en individual añadiendo enfrentamientos a la base de datos
+
+[33mcommit 65185653024f4cd8c0a878a6c26390be7d5995d5[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Jan 10 10:40:44 2020 +0100
+
+    Recibir información Enfrentamientos de una Jornada
+    
+    Cuando en la parte de Jornadas de la pantalla Información seleccionas una jornada se obtienen los enfrentamientos de esta
+
+[33mcommit b76003116ba6dd36ce1709886b9c8f980d1684cb[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Jan 9 21:04:08 2020 +0100
+
+    Renombrar función Dame y Toma DatosJornadas
+    
+    Me he dejado estos cambios en el push anterior
+
+[33mcommit e391950549d46308e1f655ce8e2a077197dca585[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Thu Jan 9 20:59:22 2020 +0100
+
+    Correccines: TablaJornadas y nombre funciones Dame y Toma DatosJornadas
+    
+    necesitaba la id de la jornada para luego obtener los enfrentamientos por lo que la he añadido a TablaJornadas
+
+[33mcommit 0ca5e24ecb35530921c9543a37b1c954b2c22d4c[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Jan 6 12:17:31 2020 +0100
+
+    Añadir JuegoCompLiga Equipos
+
+[33mcommit 0508338fab5f7fe747f16f22717e5e8f007bdc7f[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Jan 4 13:27:34 2020 +0100
+
+    Corrección clase EquipoJuegoDeCompeticionLiga
+
+[33mcommit a30e55db075ac273357fae87c2a11e9f508a2ec3[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Jan 4 12:05:54 2020 +0100
+
+    Mejoras en Información
+
+[33mcommit 25e2a5483f60191978e4654f32bbae335ceb3ae7[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Fri Jan 3 00:54:44 2020 +0100
+
+    Arreglos en editar jornadas
+
+[33mcommit 9601747a7eafeacf4299f0a436cde4064d2723d7[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Wed Jan 1 13:01:53 2020 +0100
+
+    Correccion errores en Editar Jornadas
+
+[33mcommit 955a7d143caa4f51fb3c9697b1c3847178084e9b[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Tue Dec 31 22:48:53 2019 +0100
+
+    Mejoras en Editar Jornadas
+
+[33mcommit 0ccfba801c51e74630e099c5e6fbc91370574541[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sun Dec 29 20:18:05 2019 +0100
+
+    Pagina Editar Jornadas
+
+[33mcommit 61375362fbaaf4ed3187440b2143098ca3861756[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Dec 28 19:29:09 2019 +0100
+
+    Arreglos postear jornadas
+
+[33mcommit 3880989b6ee1d62abb436703d49069d2d1d0a96b[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Dec 28 19:12:40 2019 +0100
+
+    Crear jornadas
+
+[33mcommit fa6d805347e46fc45e12f1d08811e4c8940d1e24[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Fri Dec 27 23:35:29 2019 +0100
+
+    Intento crear lista jornadas (jornadasEstablecidas + jornadasNoEstablec)
+
+[33mcommit f78a6c53233d814ea1798534b40aa2542e6092f8[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Tue Dec 24 18:54:56 2019 +0100
+
+    Juego de commpeticion desactivado + Eliminar juego de competicion
+
+[33mcommit 7e78b57091a4c1a0bd8c3c0df9e0c66629399171[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Tue Dec 24 16:48:15 2019 +0100
+
+    Añadir atributo TipoJuegoCompeticion a la clase Juego
+
+[33mcommit 80770064ec90679d6a5199b2ef4481888ac0bbb0[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Tue Dec 24 16:18:50 2019 +0100
+
+    Creación Pantalla Información Juego de Competición
+
+[33mcommit 09720d6df1c57e886bb3bfb89e56e993547c42f3[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Dec 23 23:23:58 2019 +0100
+
+    Arreglos Juego De Competicion + Creacion juegoDeCompSelecInact component
+
+[33mcommit 647d863f36824f96951aefbf98f99b56ea6dc424[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Dec 23 22:02:00 2019 +0100
+
+    Tabla ranking + Desactivar Merge
+
+[33mcommit 278111f2ef561e2326bea1ce44cbc4d45a87343a[m
+Merge: 72c6fed 9b7b4ce
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Dec 23 21:52:09 2019 +0100
+
+    Merge remote-tracking branch 'catalasebastia/developer' into dev
+
+[33mcommit 9b7b4ce24470a37cfded271b756525d9fd3731ab[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Dec 23 21:29:31 2019 +0100
+
+    Añadir Tabla Ranking Pantalla Inicio Juego De Competicion
+
+[33mcommit 72c6fedec4730ad11889fc3305259087e441f367[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Dec 23 20:40:50 2019 +0100
+
+    Desactivar Juego de competicion
+
+[33mcommit d416ee969e019a6a1bce18099fae61ab997938d8[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Dec 23 16:07:21 2019 +0100
+
+    Añadir Botones a Pantalla Inicio Juego De Competicion
+
+[33mcommit 37acedaa39a7ff8ef8dc245dee308fad2a37e610[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Dec 23 15:21:38 2019 +0100
+
+    Creación Pantalla Inicio JuegoCompeticion
+
+[33mcommit dc9f297ed72664892ac904c5a2097ee29c78c4c6[m
+Merge: ee98941 5e06587
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Dec 23 15:11:07 2019 +0100
+
+    Merge branch 'Convert_JuegoCompeticion_To_Juego' into developer
+
+[33mcommit 5e06587a9e9ec7bf48c243dfa01f3b8063326598[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Mon Dec 23 15:10:41 2019 +0100
+
+    Convertir JuegoDeCompeticion en Juego
+    
+    Para no tener el problema de añadir en la lista de juegosActivos objetos de tipo Juego y objetos de tipo JuegoDeCompeticion, el juego que se crea al crearJuegoDeCompeticion es un objeto de tipo Juego
+
+[33mcommit 81987e647702f6082e93a4b73dd6c6b8ed732663[m
+Merge: 123287f dce3ad4
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed Dec 11 09:38:01 2019 +0100
+
+    Merge pull request #17 from miguelvalero/dev
+    
+    Varias mejoras
+
+[33mcommit dce3ad45d02872d11d6b3cfa8aa7a29b7cd300fe[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed Dec 11 09:28:45 2019 +0100
+
+    Confirmacion abandono proceso creacion (grupo, coleccion, juego)
+
+[33mcommit ee989411719a45d68bbd2fca65c0c797cddb042a[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Dec 8 12:08:41 2019 +0100
+
+    Organización peticiones-api
+
+[33mcommit c12bf24aa3cff5c2803fa7f50caa268a7e5835f3[m
+Merge: 1d451a4 7de8b08
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Dec 8 00:50:41 2019 +0100
+
+    Merge branch 'developer' into InscribirAlumnosJuegoCompLig_funciona
+
+[33mcommit 7de8b080a419230cc0e0c21bcf2a1fc9f57b48d7[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sun Dec 8 00:47:39 2019 +0100
+
+    Arreglos: mostrar juegos de competicion en la lista de juegos activos
+
+[33mcommit 1d451a4945e980446a592fe8857a35b00b0b0830[m
+Merge: d01c723 7bd6a0b
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Dec 7 23:47:40 2019 +0100
+
+    Merge branch 'dev' into alejandrogimeno/dev
+
+[33mcommit 7bd6a0bcf219bf5b35dff6aa961a904d27368bbc[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Dec 7 23:45:00 2019 +0100
+
+    Arreglos: inscribir alumnos a juego de competicion liga
+
+[33mcommit d01c723ee15bab9a48c93db639d2ffadca564a66[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Dec 7 22:54:03 2019 +0100
+
+    Problemas al Inscribir alumnos
+
+[33mcommit b1ac91c5cf8d81da119189e919e62e7e18ef58c8[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Dec 7 20:17:42 2019 +0100
+
+    Input jornadas arreglado
+
+[33mcommit d55b3eda8d5271ae534fe00d6a006904519e4bd6[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Dec 5 12:02:16 2019 +0100
+
+    Creacion aleatoria de equipos y asignacion de cromos segun ranking de puntos
+
+[33mcommit 871d80fb6263e391a42e1044c563b78f30036b54[m
+Merge: 6ada1e6 8866926
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Tue Dec 3 19:21:38 2019 +0100
+
+    Merge remote-tracking branch 'catalasebastia/dev1' into dev
+
+[33mcommit e6e9e336585b590cb222ced1ce26ae858df77402[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Dec 2 08:35:12 2019 +0100
+
+    Asignación aleatoria de cromos
+
+[33mcommit 50fb817cdc65c7798ba91cee2cff20740b7b3666[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Dec 2 07:32:31 2019 +0100
+
+    Seleccion aleatoria de un alumno y asignación aleatoria de puntos
+
+[33mcommit 123287f843b23579e8cac44f8f6bda1c4c8380c3[m
+Merge: 5a61dc3 bfad77f
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Nov 29 08:11:24 2019 +0100
+
+    Merge pull request #16 from miguelvalero/dev
+    
+    Gestion de alumnos
+
+[33mcommit bfad77ff5c6b532281857a6cf32dd5416edcbd16[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Nov 29 08:03:33 2019 +0100
+
+    Mas mejoras creacion y edicion grupos (Miguel)
+
+[33mcommit 2156a161d2801fa76aeba9cb4e33ff67a9c4c822[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Nov 28 18:13:32 2019 +0100
+
+    Mejoras creacion y edicion grupos (Miguel)
+
+[33mcommit f8ba499f1d9fd3c254818fe16e8ed65c0e58c3b5[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Nov 28 08:31:18 2019 +0100
+
+    Gestion de alumnos (Miguel)
+
+[33mcommit 88669267e4d3237e246ab7b37afb42425d941646[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Tue Nov 26 20:50:38 2019 +0100
+
+    Añadir Clase JuegoCompeticiones
+
+[33mcommit 35675d51340b0184d7370ddd97c66146463f58c6[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Tue Nov 26 20:39:44 2019 +0100
+
+    Arreglo CrearJuegoDeCompeticionLiga
+
+[33mcommit 6ada1e62737a9c5b1021debca3dcf0f91637334d[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Tue Nov 26 19:10:22 2019 +0100
+
+    Nueva actualizacion
+
+[33mcommit a5a69dae8e1fc2e053b239471e08cc611d730cf8[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Tue Nov 26 19:06:26 2019 +0100
+
+    Nueva actualizacion
+
+[33mcommit eb64e7f4435e0488f9578941059b6fb8cb1e6da1[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Nov 26 18:25:52 2019 +0100
+
+    Eliminacion de cromos (Miguel)
+
+[33mcommit 8fbb57d299c32442f4a9a150ad137891a299ceca[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Nov 25 22:32:03 2019 +0100
+
+    Adaptacion a los nuevos services
+
+[33mcommit 5a61dc3c0abd5800b738b099c95385b71e308114[m
+Merge: 5d058cc 56925e5
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Nov 15 10:43:23 2019 +0100
+
+    Merge pull request #15 from miguelvalero/dev
+    
+    Arreglos en colecciones (Miguel)
+
+[33mcommit 56925e5c02a8bd162570ed28ef766a570230ee9a[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Nov 15 10:35:33 2019 +0100
+
+    Mas arreglos en colecciones (Miguel)
+
+[33mcommit 306612f031e53b254863752229a933e140faebfe[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Nov 14 18:39:52 2019 +0100
+
+    arreglos en colecciones (Miguel)
+
+[33mcommit 5d058ccc08fbce3e661266c7fc66225410de39ed[m
+Merge: e5f9a25 f24c08d
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Nov 14 08:11:19 2019 +0100
+
+    Merge pull request #14 from miguelvalero/dev
+    
+     Competar peticionesAPI con descargas de imagenes y reordenar las funciones
+
+[33mcommit f24c08dfaf607f186f6e3ed361a9c637e956dbad[m
+Merge: 2b848ef e5f9a25
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Nov 14 08:10:35 2019 +0100
+
+    Merge branch 'master' into dev
+
+[33mcommit e5f9a25cfb4b1221ccfa101e72c52840ad346bec[m
+Merge: 6c72b97 46fb687
+Author: sajda16 <53145663+sajda16@users.noreply.github.com>
+Date:   Wed Nov 13 19:51:09 2019 +0100
+
+    Merge pull request #13 from sajda16/dev
+    
+    Cambios en colecciones
+
+[33mcommit 46fb6873d14c4ef8e7e524f2425e5441a73c33a5[m
+Author: sajda16 <sajda.al.moussaoui@gmail.com>
+Date:   Wed Nov 13 19:39:31 2019 +0100
+
+    Cambios en colecciones
+
+[33mcommit 37e66ba5ac1f8e4c590340ebdd1ff20615978f38[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sat Nov 2 17:53:18 2019 +0100
+
+    Mejoras en crear competicion
+
+[33mcommit d739f349e39b43887c090def49c025f6a45ecd30[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Fri Nov 1 20:38:45 2019 +0100
+
+    Cambios en HTML de crear juegos, numero de jornadas para liga
+
+[33mcommit e49f7ab2b4ffc9c4689cdbb9eefdb2a197a83d20[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Fri Nov 1 18:58:51 2019 +0100
+
+    Cambios en HTML de crear juegos
+
+[33mcommit 2b848efde9bce7b63d8d731145a5aac91a9272b6[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Oct 25 13:53:38 2019 +0200
+
+    Competar peticionesAPI con descargas de imagenes y reordenar las funciones
+
+[33mcommit 6c72b97cb5ddb338235cf2947ee23c16a99e825d[m
+Merge: 55778c4 aa388a3
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Oct 24 09:07:21 2019 +0200
+
+    Merge pull request #11 from miguelvalero/dev
+    
+    Error tras el ultimo merge arreglado (Miguel)
+
+[33mcommit aa388a315774cad0cb0e59dbfd85afa40b8c9690[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Oct 24 09:01:05 2019 +0200
+
+    Error tras el ultimo merge arreglado (Miguel)
+
+[33mcommit 55778c4744f6656a13b006b132989c8a4da524a4[m
+Merge: fd3baf8 47eb24e
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed Oct 23 17:45:29 2019 +0200
+
+    Merge pull request #10 from miguelvalero/dev
+    
+    Reorganizacion estilos
+
+[33mcommit 47eb24e6b91fb794a54e3f43e18995f9c2f4fa46[m
+Merge: dab1d06 fd3baf8
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed Oct 23 17:45:17 2019 +0200
+
+    Merge branch 'master' into dev
+
+[33mcommit dab1d06147500ee8e61c60231d1bd299d4618d6e[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed Oct 23 17:37:23 2019 +0200
+
+    reorganización de los estilos (Miguel)
+
+[33mcommit fd3baf8a4e64b92f6f8c05857fad46f733871082[m
+Merge: 05fbad3 4a59049
+Author: catalasebastia <47882791+catalasebastia@users.noreply.github.com>
+Date:   Sun Oct 20 15:07:08 2019 +0200
+
+    Merge pull request #9 from catalasebastia/dev
+    
+    Introducción de alertas
+
+[33mcommit 4a59049682ad240dcdc4dd085efffa5925883576[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Oct 19 18:10:27 2019 +0200
+
+    Alerta en Crear Grupo y Finalizar= goBack()
+
+[33mcommit 33fbccb4634ab93c6cb97698742b895ca436e665[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Oct 19 16:32:53 2019 +0200
+
+    Alerta en Editar Grupo
+
+[33mcommit 428bb5103ff556b34463cb83d52c771e6d401c2a[m
+Author: Angels <catalasebastia@gmaill.com>
+Date:   Sat Oct 19 15:23:37 2019 +0200
+
+    Alerta en el login
+
+[33mcommit 71209d4cd26c6b18db80b707006d140ed7dc4b99[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Oct 18 19:16:06 2019 +0200
+
+    unificación de estilos (viernes 18-10)
+
+[33mcommit 05fbad3b47bd12900e6903e9bfc6c26327813655[m
+Merge: 5c9cc7e 8a79a14
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Fri Oct 18 12:05:50 2019 +0200
+
+    Merge pull request #8 from miguelvalero/dev
+    
+    Recomendaciones de estilos
+
+[33mcommit 8a79a142def279ffb4d29105f39a717ce8dcfbd5[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Oct 18 11:58:37 2019 +0200
+
+    Ha añadido recomendaciones estilos
+
+[33mcommit f3c0c071ba66f7db645e4798d2b67ed6b16e37d2[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Oct 17 12:06:24 2019 +0200
+
+    He añadido algunos botones para volver
+
+[33mcommit 5c9cc7efd26847866cc00d575897e7407a238292[m
+Merge: 493da9d 3e57f37
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Tue Oct 15 08:59:04 2019 +0200
+
+    Merge pull request #7 from miguelvalero/dev
+    
+    Mas retoques para arreglar edicion y agregacion de cromos
+
+[33mcommit 3e57f372c1793fc3cc3d7296995373867f539631[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Oct 15 08:51:52 2019 +0200
+
+    Mas retoques aun en colecciones (Miguel)
+
+[33mcommit c0d8a8756fbe4232a7d19d011637ee00dae6b138[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Tue Oct 15 07:48:17 2019 +0200
+
+    Mas arreglos en la edición de cromos (Miguel)
+
+[33mcommit 493da9da658611c2eefb96ea5ec535acc621ce3c[m
+Merge: 6aac86e 84a7341
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Oct 14 19:18:57 2019 +0200
+
+    Merge pull request #6 from miguelvalero/dev
+    
+    Mas retoques en las colecciones
+
+[33mcommit 84a734129a8bc58a49a32e5c3ad387be2cb4f1fb[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Oct 14 19:10:33 2019 +0200
+
+    mas retoques en las colecciones (miguel)
+
+[33mcommit 4c96ea3c4048c77d459684ee83db6bd45e047798[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Oct 14 08:41:58 2019 +0200
+
+    Retoques en puntos e insignias por Miguel
+
+[33mcommit 6aac86e0a74a240726be10e178ec48a20eebe896[m
+Merge: 6dc1c39 38e317f
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Mon Oct 14 07:36:44 2019 +0200
+
+    Merge pull request #5 from miguelvalero/dev
+    
+    Mejoras en la asignación de puntos y niveles
+
+[33mcommit 38e317f043ae07d8ccfc3a4e80f30976cd534393[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Mon Oct 14 07:28:20 2019 +0200
+
+    Simplificaciones en asignación de puntos y niveles, por Miguel
+
+[33mcommit 6dc1c395dda8bc89777c5ea7c747efa4d467f0b9[m
+Merge: dbd305e 4b1af48
+Author: alejandrogimeno <47666777+alejandrogimeno@users.noreply.github.com>
+Date:   Sun Oct 13 16:19:13 2019 +0200
+
+    Merge pull request #4 from alejandrogimeno/dev
+    
+    Reestructuracion codigo en Puntos e insignias
+
+[33mcommit 4b1af48576e1da2b15ab1796c3373cd7f7a89d45[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Sun Oct 13 16:05:58 2019 +0200
+
+    Reestructuracion final de codigo en Puntos e Insignias
+
+[33mcommit a7253344cb7c7db04df12831aa542e52aa3e94d3[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Fri Oct 11 19:26:04 2019 +0200
+
+    Actualizacion Servicios Puntos e Insignias
+
+[33mcommit 0c796bae9cf12600e23ce65d3f25d46337d3ac6b[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Fri Oct 11 18:37:05 2019 +0200
+
+    Actualizacion funciones API en Puntos e insignias
+
+[33mcommit b69ae2f9e6d33bda39f9c99c2f6575db1b908cbf[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Fri Oct 11 18:36:40 2019 +0200
+
+    Actualizacion funciones API en Puntos e insignias
+
+[33mcommit d46f8b3319ada0fcbc45df835833d3c55591e993[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Fri Oct 11 12:45:04 2019 +0200
+
+    Antes de empezar a cambiar lo de los puntos y niveles
+
+[33mcommit dbd305e9033f879ac27a06c55c2d11c8321bf6c9[m
+Merge: 8d46ee7 7d4d2c4
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Thu Oct 10 18:27:22 2019 +0200
+
+    Merge pull request #3 from miguelvalero/dev
+    
+    Segunda reorganización de código por Miguel
+
+[33mcommit 7d4d2c4d582da0f688247f087ad6aa7ea9bf1a55[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Thu Oct 10 17:13:18 2019 +0200
+
+    retoques adicionales a la segunda reorganización de código hecha por Miguel
+
+[33mcommit e97a2a1424c7adb3a74e3600dec1b3aea02f954b[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed Oct 9 17:18:57 2019 +0200
+
+    Segunda fase de reorganización de código por Miguel
+
+[33mcommit 8d46ee7ee2fd027e5bd76976f70c082df9ff4887[m
+Merge: dcb1719 356d84a
+Author: alejandrogimeno <47666777+alejandrogimeno@users.noreply.github.com>
+Date:   Mon Oct 7 18:58:51 2019 +0200
+
+    Merge pull request #2 from rocmeseguer/dev
+    
+    Dev
+
+[33mcommit 356d84ac41f8d642e02251fa3654a2d8bccffd5f[m
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Oct 7 18:10:56 2019 +0200
+
+    Auto stash before merge of "dev" and "origin/master"
+
+[33mcommit 7e0909c247442b1514694ce3f8234895ec7b4ee5[m
+Merge: 973b4cc dcb1719
+Author: ALEJANDRO <agimenomares@gmail.com>
+Date:   Mon Oct 7 18:08:11 2019 +0200
+
+    Merge remote-tracking branch 'origin/master' into dev
+
+[33mcommit dcb1719263ffe923e3be2789ff35d7bf0394b15d[m
+Merge: 973b4cc 1f273f4
+Author: miguelvalero <32190349+miguelvalero@users.noreply.github.com>
+Date:   Wed Oct 2 09:12:13 2019 +0200
+
+    Merge pull request #1 from miguelvalero/prueba
+    
+    Primera fase de reorganización de código hecha por Miguel
+
+[33mcommit 1f273f4a76d5fe8ee3d02e5e0daab7a207e25679[m
+Author: Miguel Valero <miguel.valero@upc.edu>
+Date:   Wed Oct 2 08:54:16 2019 +0200
+
+    Primera fase de reorganización de código hecha por Miguel
+
+[33mcommit 973b4cc9138ba5753159722a17afe8279cd71ff3[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Tue Sep 10 18:55:04 2019 +0200
+
+    Update README.md
+
+[33mcommit 1ff48ee274cd3c315c56cc4dec6ed34931875d7d[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Tue Sep 10 18:51:22 2019 +0200
+
+    Update README.md
+
+[33mcommit d2bc27d27a7c95fbc81c9d37fcbbcc7a73cec0a6[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Tue Sep 10 16:41:02 2019 +0200
+
+    Update README.md
+
+[33mcommit 2e5a070c9a0d9dce4c3c4f85bce63047cb037ab2[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Sat Sep 7 15:50:52 2019 +0200
+
+    Update README.md
+
+[33mcommit a4a7198faac66e3cb40c31a63b0211209d641dc1[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Thu Sep 5 17:45:08 2019 +0200
+
+    Update README.md
+
+[33mcommit 759e6a775fe0a266c47befb30542a463beaccd57[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Thu Sep 5 17:44:03 2019 +0200
+
+    Update README.md
+
+[33mcommit 9ee3c7560d24025dfc74863872b3eb78ff83a3a1[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Thu Sep 5 17:43:17 2019 +0200
+
+    Update README.md
+
+[33mcommit 95497e24e2804f4510477fe8dfb3972bd5eb5e60[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Thu Sep 5 17:40:08 2019 +0200
+
+    Update README.md
+
+[33mcommit 862ed00bb6ff5000a45317afe12092349092a497[m
+Author: unknown <meseguer@ac.upc.edu>
+Date:   Thu Sep 5 17:33:04 2019 +0200
+
+    Canvis en el README i Llicencia
+    :#      new file:   README.md
+
+[33mcommit 67d530af1e548cf2a76d45b69678022a3fa6e261[m
+Author: rocmeseguer <meseguer@ac.upc.edu>
+Date:   Thu Sep 5 17:14:24 2019 +0200
+
+    Initial commit

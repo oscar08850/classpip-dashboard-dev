@@ -150,22 +150,18 @@ export class EquiposComponent implements OnInit {
   // hará mediante un diálogo al cual pasaremos el mensaje y el nombre del equipo
   AbrirDialogoConfirmacionBorrar(equipo: Equipo): void {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        nombre: equipo.Nombre,
-      }
-    });
-
-    // Antes de cerrar recogeremos el resultado del diálogo: Borrar (true) o cancelar (false). Si confirmamos, borraremos
-    // el equipo (función EliminarEquipo) y mostraremos un Swal con el mensaje de que se ha eliminado correctamente.
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    Swal.fire({
+      title: '¿Seguro que quieres eliminar el equipo?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
         this.EliminarEquipo(equipo);
         Swal.fire('Eliminado', equipo.Nombre + ' eliminado correctamente', 'success');
-
-
       }
     });
   }

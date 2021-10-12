@@ -126,52 +126,18 @@ export class JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent implements On
     }
   }
 
-  Eliminar() {
+   
+  Eliminar(): void {
+
     Swal.fire({
-      title: '¿Seguro que quieres eliminar el juego de votación?',
-      icon: 'warning',
+      title: 'Confirma que quieres eliminar el juego <b>' + this.juegoSeleccionado.NombreJuego + '</b>',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, estoy seguro'
-    }).then((result) => {
+      confirmButtonText: 'Confirmar',
+    }).then(async (result) => {
       if (result.value) {
-        if (this.juegoSeleccionado.Modo === 'Individual') {
-          // Primero elimino las inscripciones
-          let cont = 0;
-          this.listaAlumnosOrdenadaPorPuntos.forEach (inscripcion => {
-            this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionUnoATodos (inscripcion.id)
-            .subscribe(() => {
-              cont++;
-              if (cont === this.listaAlumnosOrdenadaPorPuntos.length) {
-                // Ya están todas las inscripciones eliminadas
-                // ahora elimino el juego
-                this.peticionesAPI.BorraJuegoDeVotacionUnoATodos (this.juegoSeleccionado.id)
-                .subscribe(() => {
-                  Swal.fire('El juego se ha eliminado correctamente');
-                  this.location.back();
-                });
-              }
-            });
-          });
-        } else {
-          let cont = 0;
-          this.listaEquiposOrdenadaPorPuntos.forEach (inscripcion => {
-            this.peticionesAPI.BorraInscripcionEquipoJuegoDeVotacionUnoATodos (inscripcion.id)
-            .subscribe(() => {
-              cont++;
-              if (cont === this.listaEquiposOrdenadaPorPuntos.length) {
-                // Ya están todas las inscripciones eliminadas
-                // ahora elimino el juego
-                this.peticionesAPI.BorraJuegoDeVotacionUnoATodos (this.juegoSeleccionado.id)
-                .subscribe(() => {
-                  Swal.fire('El juego se ha eliminado correctamente');
-                  this.location.back();
-                });
-              }
-            });
-          });
-        }
+        await this.calculos.EliminarJuegoDeVotacionUnoATodos(this.juegoSeleccionado);
+        Swal.fire('El juego ha sido eliminado correctamente', ' ', 'success');
+        this.location.back();
       }
     });
   }

@@ -85,7 +85,7 @@
             </mat-step>
 
            <!-- TERCER PASO: ELEGIR CUESTIONARIO -->
-            <mat-step>
+            <!-- <mat-step>
               <ng-template matStepLabel><div>Cuestionario</div></ng-template>
               <div>
                 <span *ngIf = "tengoCuestionario" style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}:  {{cuestionario.Titulo}} ... {{modoDeJuegoSeleccionado}} </span>
@@ -96,7 +96,26 @@
                 <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                 <button [disabled]="!tengoCuestionario" type="button" class="btn Next" matStepperNext>Siguiente</button>
               </div>
+            </mat-step> -->
+
+            
+            <mat-step>
+              <ng-template matStepLabel><div>Cuestionario</div></ng-template>
+
+              <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona el cuestionario</label>
+            
+         
+              <app-asigna-cuestionario
+              (emisorCuestionarioElegido) = "RecibeCuestionarioElegido ($event)"
+              ></app-asigna-cuestionario>
+              <span *ngIf = "tengoCuestionario" style ="font-weight: bold;color:green;"> Has elegido ... {{tipoDeJuegoSeleccionado}}:  {{cuestionario.Titulo}} ... {{modoDeJuegoSeleccionado}} </span>
+              <div class="btnCambiarStep">
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button *ngIf = "tengoCuestionario" type="button" class="btn Next"  matStepperNext>Siguiente</button>
+              </div>
             </mat-step>
+
+
 
             <!--cuarto paso, establecemos la puntuacion-->
             <mat-step *ngIf ="modalidadSeleccionada === 'Clásico'">

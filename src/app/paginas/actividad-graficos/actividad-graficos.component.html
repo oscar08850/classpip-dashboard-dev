@@ -1,0 +1,452 @@
+<div class="titulo">Gráficos de actividad</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+
+<div class="contenedor">
+  <mat-card class="cartaGraficoActividad">
+    <mat-card-header>
+      <mat-card-title>
+        <h4><b>Histograma</b></h4>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field style="width: 75%; margin-top: 30px">
+        <mat-label>Seleccionar Tipo de Histograma</mat-label>
+        <mat-select [(ngModel)]="tipoHistograma" name="tipoHistograma">
+          <mat-option value="1">Número de accesos a un Juego de un Alumno</mat-option>
+          <mat-option value="2">Número de Alumnos que han accedido a un Juego</mat-option>
+          <mat-option value="10">Número de Puntos obtenidos por un Alumno/Equipo</mat-option>
+          <mat-option value="11">Número de Alumnos/Equipos que han obtenido el Tipo de Punto</mat-option>
+          <mat-option value="20">Número de Cromos obtenidos por un Alumno/Equipo</mat-option>
+          <mat-option value="21">Número de Cromos regalados por un Alumno/Equipo a un Alumno/Equipo</mat-option>
+          <mat-option value="30">Número de modificaciones de Avatar de un Alumno (Juego de Avatar)</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="tipoHistograma == 1 || tipoHistograma == 2 || tipoHistograma == 10 || tipoHistograma == 11 || tipoHistograma == 12 || tipoHistograma == 20 || tipoHistograma == 21 || tipoHistograma == 30" style="width: 75%;">
+        <!-- ngIf con todos los tipos de histograma que impliquen a un Grupo -->
+        <mat-label>Selecciona un Grupo</mat-label>
+        <mat-select [(ngModel)]="grupoSeleccionado" name="grupo" (selectionChange)="grupoCambiado($event)">
+          <mat-option *ngFor="let grupo of listaGrupos" [value]="grupo">
+            {{ grupo.Nombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="(tipoHistograma == 1 || tipoHistograma == 2 || tipoHistograma == 10 || tipoHistograma == 11 || tipoHistograma == 12 || tipoHistograma == 20 || tipoHistograma == 21 || tipoHistograma == 30) && grupoSeleccionado.id != null" style="width: 75%;">
+        <!-- ngIf con todos los tipos de histograma que impliquen a un Juego -->
+        <mat-label>Selecciona el Tipo de Juego</mat-label>
+        <mat-select [(ngModel)]="tipoJuegoSelecionado" name="tipoJuego" (selectionChange)="tipoJuegoCambiado($event)">
+          <mat-option value="Juego De Avatar" *ngIf="tipoHistograma == 1 || tipoHistograma == 2 || tipoHistograma == 30">Juego de Avatar</mat-option>
+          <mat-option value="Juego De Colección" *ngIf="tipoHistograma == 1 || tipoHistograma == 2 || tipoHistograma == 20 || tipoHistograma == 21">Juego De Colección</mat-option>
+          <mat-option value="Juego De Competición Fórmula Uno" *ngIf="tipoHistograma == 1 || tipoHistograma == 2">Juego De Competición Fórmula Uno</mat-option>
+          <mat-option value="Juego De Competición Liga" *ngIf="tipoHistograma == 1 || tipoHistograma == 2">Juego De Competición Liga</mat-option>
+          <mat-option value="Juego De Cuestionario" *ngIf="tipoHistograma == 1 || tipoHistograma == 2">Juego De Cuestionario</mat-option>
+          <mat-option value="Juego De Cuestionario Rápido" *ngIf="tipoHistograma == 1 || tipoHistograma == 2">Juego De Cuestionario Rápido</mat-option>
+          <mat-option value="Juego De Cuestionario de Satisfacción" *ngIf="tipoHistograma == 1 || tipoHistograma == 2">Juego De Cuestionario de Satisfacción</mat-option>
+          <mat-option value="Juego De Encuesta Rápida" *ngIf="tipoHistograma == 1 || tipoHistograma == 2">Juego De Encuesta Rápida</mat-option>
+          <mat-option value="Juego De Evaluación" *ngIf="tipoHistograma == 1 || tipoHistograma == 2">Juego De Evaluación</mat-option>
+          <mat-option value="Juego De Geocaching" *ngIf="tipoHistograma == 1 || tipoHistograma == 2">Juego De Geocaching</mat-option>
+          <mat-option value="Juego De Puntos" *ngIf="tipoHistograma == 1 || tipoHistograma == 2 || tipoHistograma == 10 || tipoHistograma == 11 || tipoHistograma == 12">Juego De Puntos</mat-option>
+          <mat-option value="Juego De Votación Rápida" *ngIf="tipoHistograma == 1 || tipoHistograma == 2">Juego De Votación Rápida</mat-option>
+          <mat-option value="Juego De Votación Uno A Todos" *ngIf="tipoHistograma == 1 || tipoHistograma == 2">Juego De Votación Uno A Todos</mat-option>
+          <mat-option value="Juego De Votación Todos A Uno" *ngIf="tipoHistograma == 1 || tipoHistograma == 2">Juego De Votación Todos A Uno</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="(tipoHistograma == 1 || tipoHistograma == 2 || tipoHistograma == 10 || tipoHistograma == 11 || tipoHistograma == 12 || tipoHistograma == 20 || tipoHistograma == 21 || tipoHistograma == 30) && grupoSeleccionado.id != null && tipoJuegoSelecionado != 0" style="width: 75%;">
+        <!-- ngIf con todos los tipos de histograma que impliquen a un Juego -->
+        <mat-label>Seleccionar Juego</mat-label>
+        <mat-select [(ngModel)]="juegoSeleccionado" name="juego" (selectionChange)="juegoCambiado($event)">
+          <mat-option *ngFor="let juego of listaJuegos" [value]="juego">
+            {{ juego.NombreJuego }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="tipoHistograma == 1 || ((tipoHistograma == 10 || tipoHistograma == 12 || tipoHistograma == 20 || tipoHistograma == 21 || tipoHistograma == 30) && juegoSeleccionado.Modo == 'Individual')" style="width: 75%;">
+        <!-- ngIf con todos los tipos de histograma que impliquen a un Alumno -->
+        <mat-label *ngIf="tipoHistograma == 1 || tipoHistograma == 10 || tipoHistograma == 12 || tipoHistograma == 20 || tipoHistograma == 30">Seleccionar Alumno</mat-label>
+        <mat-label *ngIf="tipoHistograma == 21">Seleccionar Alumno que ha regalado el Cromo</mat-label>
+        <mat-select *ngIf="tipoHistograma == 1 || tipoHistograma == 10 || tipoHistograma == 12 || tipoHistograma == 20 || tipoHistograma == 21 || tipoHistograma == 30" [(ngModel)]="alumnoSeleccionado" name="alumno">
+        <!-- ngIf con todos los tipos de histograma en los cuales se pueda filtrar por TODOS los Alumnos -->
+          <mat-option *ngFor="let alumno of listaAlumnosConTodos" [value]="alumno">
+            {{ alumno.Nombre }} {{ alumno.PrimerApellido }} {{ alumno.SegundoApellido }}
+          </mat-option>
+        </mat-select>
+        <!-- <mat-select *ngIf="tipoHistograma == " [(ngModel)]="alumnoSeleccionado" name="alumno"> -->
+        <!-- ngIf con todos los tipos de histograma en los cuales se deba filtrar por UN SOLO Alumno -->
+          <!-- <mat-option *ngFor="let alumno of listaAlumnos" [value]="alumno">
+            {{ alumno.Nombre }} {{ alumno.PrimerApellido }} {{ alumno.SegundoApellido }}
+          </mat-option>
+        </mat-select> -->
+      </mat-form-field>
+
+      <mat-form-field *ngIf="tipoHistograma == 21 && juegoSeleccionado.Modo == 'Individual'" style="width: 75%;">
+        <mat-label>Seleccionar Alumno al que le han regalado un Cromo</mat-label>
+        <mat-select [(ngModel)]="alumnoReceptorCromoSeleccionado" name="alumno">
+          <mat-option *ngFor="let alumno of listaAlumnosConTodos" [value]="alumno">
+            {{ alumno.Nombre }} {{ alumno.PrimerApellido }} {{ alumno.SegundoApellido }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="((tipoHistograma == 10 || tipoHistograma == 12 || tipoHistograma == 20 || tipoHistograma == 21) && juegoSeleccionado.Modo == 'Equipos')" style="width: 75%;">
+        <!-- ngIf con todos los tipos de histograma que impliquen a un Equipo -->
+        <mat-label *ngIf="tipoHistograma == 10 || tipoHistograma == 12 || tipoHistograma == 20">Seleccionar Equipo</mat-label>
+        <mat-label *ngIf="tipoHistograma == 21">Seleccionar Equipo que ha regalado el Cromo</mat-label>
+        <mat-select *ngIf="tipoHistograma == 10 || tipoHistograma == 12 || tipoHistograma == 20 || tipoHistograma == 21" [(ngModel)]="equipoSeleccionado" name="equipo">
+          <!-- ngIf con todos los tipos de histograma en los cuales se pueda filtrar por TODOS los Equipos -->
+          <mat-option *ngFor="let equipo of listaEquiposConTodos" [value]="equipo">
+            {{ equipo.Nombre }} <span *ngIf="equipo.id != -1"> (Grupo: {{ grupoSeleccionado.Nombre }})</span>
+          </mat-option>
+        </mat-select>
+        <!-- mat-select ngIf="tipoHistograma == " [(ngModel)]="equipoSeleccionado" name="equipo" -->
+          <!-- ngIf con todos los tipos de histograma en los cuales se deba filtrar por UN SOLO Equipo -->
+          <!-- <mat-option *ngFor="let equipo of listaEquipos" [value]="equipo">
+            {{ equipo.Nombre }} (Grupo: {{ grupoSeleccionado.Nombre }})
+          </mat-option>
+        </mat-select> -->
+      </mat-form-field>
+
+      <mat-form-field *ngIf="tipoHistograma == 21 && juegoSeleccionado.Modo == 'Equipos'" style="width: 75%;">
+        <mat-label>Seleccionar Equipo al que le han regalado un Cromo</mat-label>
+        <mat-select [(ngModel)]="equipoReceptorCromoSeleccionado" name="equipo">
+          <mat-option *ngFor="let equipo of listaEquiposConTodos" [value]="equipo">
+            {{ equipo.Nombre }} <span *ngIf="equipo.id != -1"> (Grupo: {{ grupoSeleccionado.Nombre }})</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="(tipoHistograma == 10 || tipoHistograma == 11) && juegoSeleccionado.id != null" style="width: 75%;">
+        <!-- ngIf con todos los tipos de histograma que impliquen a un Punto -->
+        <mat-label>Seleccionar Tipo de Punto obtenido</mat-label>
+        <mat-select [(ngModel)]="puntoSeleccionado" name="punto">
+          <mat-option *ngFor="let punto of listaPuntos" [value]="punto">
+            {{ punto.Nombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 15px;" *ngIf="cargandoHistograma"><mat-spinner></mat-spinner></div>
+
+      <div style="width: 85%;" echarts [options]="histograma" id="histograma"></div>
+
+      <div class="enFila" style="width: 75%;">
+        <div class="enColumna" style="width: 45%;">
+          <mat-form-field>
+            <input matInput [matDatepicker]="initialPickerHistograma" placeholder="Día inicial" [(ngModel)]="diaInicialHistograma" disabled>
+            <mat-datepicker-toggle matSuffix [for]="initialPickerHistograma"></mat-datepicker-toggle>
+            <mat-datepicker #initialPickerHistograma disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="enColumna" style="width: 45%;">
+          <mat-form-field>
+            <input matInput [matDatepicker]="finalPickerHistograma" placeholder="Día final" [(ngModel)]="diaFinalHistograma" disabled>
+            <mat-datepicker-toggle matSuffix [for]="finalPickerHistograma"></mat-datepicker-toggle>
+            <mat-datepicker #finalPickerHistograma disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="enFila botonesCartaGraficoActividad">
+        <button (click)="DameHistograma()" class="btn Aceptar" style="width: 49%;">Mostrar Histograma  <mat-icon
+            class="iconoCentradoBoton">insert_chart</mat-icon></button>
+        <button (click)="GenerarPDFHistograma()" class="btn Juegos" style="width: 49%;">Descargar Histograma en PDF  
+          <mat-icon class="iconoCentradoBoton">file_download</mat-icon></button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+
+  <!-- <mat-card class="cartaGraficoActividad">
+    <mat-card-header>
+      <mat-card-title>
+        <h4><b>Función</b></h4>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field style="width: 75%; margin-top: 30px">
+        <mat-label>Seleccionar Tipo de Función</mat-label>
+        <mat-select [(ngModel)]="tipoFuncion" name="tipoFuncion">
+          <mat-option value="1">Evolución del Nivel de un Juego de Puntos</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="tipoFuncion == 1" style="width: 75%;"> -->
+        <!-- ngIf con todos los tipos de función que impliquen a un Juego -->
+        <!-- <mat-label>Seleccionar Juego</mat-label>
+        <mat-select [(ngModel)]="nombreJuegoSeleccionado" name="juego">
+          <mat-option *ngFor="let nombreJuego of listaNombresJuegos" [value]="nombreJuego">
+            {{ nombreJuego }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="tipoFuncion == 1" style="width: 75%;"> -->
+        <!-- ngIf con todos los tipos de función que impliquen a un Alumno -->
+        <!-- <mat-label>Seleccionar Alumno (Para Juegos Individuales)</mat-label>
+        <mat-select [(ngModel)]="alumnoSeleccionado" name="alumno">
+          <mat-option *ngFor="let alumno of listaAlumnos" [value]="alumno">
+            {{ alumno.Nombre }} {{ alumno.PrimerApellido }} {{ alumno.SegundoApellido }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="tipoFuncion == 1" style="width: 75%;"> -->
+        <!-- ngIf con todos los tipos de función que impliquen a un Equipo -->
+        <!-- <mat-label>Seleccionar Equipo (Para Juegos en Equipo)</mat-label>
+        <mat-select [(ngModel)]="equipoSeleccionado" name="equipo">
+          <mat-option *ngFor="let equipo of listaEquipos" [value]="equipo">
+            {{ equipo.Nombre }} (Del Grupo {{ equipo.grupoId }})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div style="width: 85%;" echarts [options]="funcion" id="funcion"></div>
+
+      <div class="enFila" style="width: 75%;">
+        <div class="enColumna" style="width: 45%;">
+          <mat-form-field>
+            <input matInput [matDatepicker]="initialPickerFuncion" placeholder="Día inicial" [(ngModel)]="diaInicialFuncion" disabled>
+            <mat-datepicker-toggle matSuffix [for]="initialPickerFuncion"></mat-datepicker-toggle>
+            <mat-datepicker #initialPickerFuncion disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="enColumna" style="width: 45%;">
+          <mat-form-field>
+            <input matInput [matDatepicker]="finalPickerFuncion" placeholder="Día final" [(ngModel)]="diaFinalFuncion" disabled>
+            <mat-datepicker-toggle matSuffix [for]="finalPickerFuncion"></mat-datepicker-toggle>
+            <mat-datepicker #finalPickerFuncion disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="enFila botonesCartaGraficoActividad">
+        <button (click)="DameFuncion()" class="btn Aceptar" style="width: 49%;">Mostrar Funcion  <mat-icon
+            class="iconoCentradoBoton">insert_chart</mat-icon></button>
+        <button (click)="GenerarPDFFuncion()" class="btn Juegos" style="width: 49%;">Descargar Función en PDF  
+          <mat-icon class="iconoCentradoBoton">file_download</mat-icon></button>
+      </div>
+    </mat-card-content>
+  </mat-card> -->
+
+
+  <mat-card class="cartaGraficoActividad">
+    <mat-card-header>
+      <mat-card-title>
+        <h4><b>Diagrama</b></h4>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field style="width: 75%; margin-top: 30px">
+        <mat-label>Seleccionar Tipo de Diagrama</mat-label>
+        <mat-select [(ngModel)]="tipoDiagrama" name="tipoDiagrama">
+          <mat-option value="10">'Punch Card' de los Ascensos de Nivel de un Alumno/Equipo (Juego de Puntos)</mat-option>
+          <mat-option value="20">'Punch Card' de las Finalizaciones de Colecciones de Cromos de Alumnos/Equipos (Juego de Colección)</mat-option>
+          <mat-option value="30">'Punch Card' de las Asignaciones/Eliminaciones de Privilegios de un Alumno (Juego de Avatar)</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="tipoDiagrama == 10 || tipoDiagrama == 20 || tipoDiagrama == 30" style="width: 75%;">
+        <!-- ngIf con todos los tipos de diagrama que impliquen a un Grupo -->
+        <mat-label>Selecciona un Grupo</mat-label>
+        <mat-select [(ngModel)]="grupoSeleccionado" name="grupo" (selectionChange)="grupoCambiado($event)">
+          <mat-option *ngFor="let grupo of listaGrupos" [value]="grupo">
+            {{ grupo.Nombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="(tipoDiagrama == 10  || tipoDiagrama == 20 || tipoDiagrama == 30) && grupoSeleccionado.id != null" style="width: 75%;">
+        <!-- ngIf con todos los tipos de histograma que impliquen a un Juego -->
+        <mat-label>Selecciona el Tipo de Juego</mat-label>
+        <mat-select [(ngModel)]="tipoJuegoSelecionado" name="tipoJuego" (selectionChange)="tipoJuegoCambiado($event)">
+          <mat-option value="Juego De Avatar" *ngIf="tipoDiagrama == 30">Juego de Avatar</mat-option>
+          <mat-option value="Juego De Colección" *ngIf="tipoDiagrama == 20">Juego De Colección</mat-option>
+          <!-- <mat-option value="Juego De Competición Fórmula Uno" *ngIf="tipoDiagrama == ">Juego De Competición Fórmula Uno</mat-option>
+          <mat-option value="Juego De Competición Liga" *ngIf="tipoDiagrama == ">Juego De Competición Liga</mat-option>
+          <mat-option value="Juego De Cuestionario" *ngIf="tipoDiagrama == ">Juego De Cuestionario</mat-option>
+          <mat-option value="Juego De Cuestionario Rápido" *ngIf="tipoDiagrama == ">Juego De Cuestionario Rápido</mat-option>
+          <mat-option value="Juego De Cuestionario de Satisfacción" *ngIf="tipoDiagrama == ">Juego De Cuestionario de Satisfacción</mat-option>
+          <mat-option value="Juego De Encuesta Rápida" *ngIf="tipoDiagrama == ">Juego De Encuesta Rápida</mat-option>
+          <mat-option value="Juego De Evaluación" *ngIf="tipoDiagrama == ">Juego De Evaluación</mat-option>
+          <mat-option value="Juego De Geocaching" *ngIf="tipoDiagrama == ">Juego De Geocaching</mat-option> -->
+          <mat-option value="Juego De Puntos" *ngIf="tipoDiagrama == 10">Juego De Puntos</mat-option>
+          <!-- <mat-option value="Juego De Votación Rápida" *ngIf="tipoDiagrama == ">Juego De Votación Rápida</mat-option>
+          <mat-option value="Juego De Votación Uno A Todos" *ngIf="tipoDiagrama == ">Juego De Votación Uno A Todos</mat-option>
+          <mat-option value="Juego De Votación Todos A Uno" *ngIf="tipoDiagrama == ">Juego De Votación Todos A Uno</mat-option> -->
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="(tipoDiagrama == 10 || tipoDiagrama == 20 || tipoDiagrama == 30) && grupoSeleccionado.id != null && tipoJuegoSelecionado != 0" style="width: 75%;">
+        <!-- ngIf con todos los tipos de diagrama que impliquen a un Juego -->
+        <mat-label>Seleccionar Juego</mat-label>
+        <mat-select [(ngModel)]="juegoSeleccionado" name="juego" (selectionChange)="juegoCambiado($event)">
+          <mat-option *ngFor="let juego of listaJuegos" [value]="juego">
+            {{ juego.NombreJuego }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="(tipoDiagrama == 10 || tipoDiagrama == 20 || tipoDiagrama == 30) && juegoSeleccionado.Modo == 'Individual'" style="width: 75%;">
+        <!-- ngIf con todos los tipos de diagrama que impliquen a un Alumno -->
+        <mat-label>Seleccionar Alumno</mat-label>
+        <mat-select *ngIf="tipoDiagrama == 20" [(ngModel)]="alumnoSeleccionado" name="alumno">
+          <!-- ngIf con todos los tipos de diagrama en los cuales se se pueda filtrar por TODOS los Alumnos -->
+          <mat-option *ngFor="let alumno of listaAlumnosConTodos" [value]="alumno">
+            {{ alumno.Nombre }} {{ alumno.PrimerApellido }} {{ alumno.SegundoApellido }}
+          </mat-option>
+        </mat-select>
+        <mat-select *ngIf="tipoDiagrama == 10 || tipoDiagrama == 30" [(ngModel)]="alumnoSeleccionado" name="alumno">
+          <!-- ngIf con todos los tipos de diagrama en los cuales se deba filtrar por UN SOLO Alumno -->
+          <mat-option *ngFor="let alumno of listaAlumnos" [value]="alumno">
+            {{ alumno.Nombre }} {{ alumno.PrimerApellido }} {{ alumno.SegundoApellido }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="((tipoDiagrama == 10 || tipoDiagrama == 20) && juegoSeleccionado.Modo == 'Equipos')" style="width: 75%;">
+        <!-- ngIf con todos los tipos de diagrama que impliquen a un Equipo -->
+        <mat-label>Seleccionar Equipo</mat-label>
+         <mat-select *ngIf="tipoDiagrama == 20" [(ngModel)]="equipoSeleccionado" name="equipo">
+          <!-- ngIf con todos los tipos de diagrama en los cuales se se pueda filtrar por TODOS los Equipos -->
+          <mat-option *ngFor="let equipo of listaEquiposConTodos" [value]="equipo">
+            {{ equipo.Nombre }} <span *ngIf="equipo.id != -1"> (Grupo: {{ grupoSeleccionado.Nombre }})</span>
+          </mat-option>
+        </mat-select>
+        <mat-select *ngIf="tipoDiagrama == 10" [(ngModel)]="equipoSeleccionado" name="equipo">
+          <!-- ngIf con todos los tipos de diagrama en los cuales se deba filtrar por UN SOLO Equipo -->
+          <mat-option *ngFor="let equipo of listaEquipos" [value]="equipo">
+            {{ equipo.Nombre }} (Grupo: {{ grupoSeleccionado.Nombre }})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="tipoDiagrama == 10 && juegoSeleccionado.id != null" style="width: 75%;">
+        <!-- ngIf con todos los tipos de diagrama que impliquen a un Nivel -->
+        <mat-label>Seleccionar Nivel obtenido</mat-label>
+        <mat-select [(ngModel)]="nivelSeleccionado" name="nivel">
+          <mat-option *ngFor="let nivel of listaNiveles" [value]="nivel">
+            {{ nivel.Nombre }} <span *ngIf="nivel.id != -1"> (Juego: {{ juegoSeleccionado.NombreJuego }})</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="tipoDiagrama == 30 && juegoSeleccionado.id != null" style="width: 75%;">
+        <!-- ngIf con todos los tipos de diagrama que impliquen a un Privilegio -->
+        <mat-label>Seleccionar Privilegio asignado</mat-label>
+        <mat-select [(ngModel)]="privilegioSeleccionado" name="privilegio">
+          <mat-option [value]="-1"> [TODOS LOS PRIVILEGIOS] </mat-option>
+          <mat-option [value]="1">Privilegio 1</mat-option>
+          <mat-option [value]="2">Privilegio 2</mat-option>
+          <mat-option [value]="3">Privilegio 3</mat-option>
+          <mat-option [value]="4">Privilegio 4</mat-option>
+          <mat-option [value]="5">Privilegio Nota de Voz</mat-option>
+          <mat-option [value]="6">Privilegio Espiar</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 15px;" *ngIf="cargandoDiagrama"><mat-spinner></mat-spinner></div>
+
+      <div style="width: 85%;" echarts [options]="diagrama" id="diagrama"></div>
+
+      <div class="enFila" style="width: 75%;">
+        <div class="enColumna" style="width: 45%;">
+          <mat-form-field>
+            <input matInput [matDatepicker]="initialPickerDiagrama" placeholder="Día inicial" [(ngModel)]="diaInicialDiagrama" disabled>
+            <mat-datepicker-toggle matSuffix [for]="initialPickerDiagrama"></mat-datepicker-toggle>
+            <mat-datepicker #initialPickerDiagrama disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="enColumna" style="width: 45%;">
+          <mat-form-field>
+            <input matInput [matDatepicker]="finalPickerDiagrama" placeholder="Día final" [(ngModel)]="diaFinalDiagrama" disabled>
+            <mat-datepicker-toggle matSuffix [for]="finalPickerDiagrama"></mat-datepicker-toggle>
+            <mat-datepicker #finalPickerDiagrama disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="enFila botonesCartaGraficoActividad">
+        <button (click)="DameDiagrama()" class="btn Aceptar" style="width: 49%;">Mostrar Diagrama  <mat-icon
+            class="iconoCentradoBoton">insert_chart</mat-icon></button>
+        <button (click)="GenerarPDFDiagrama()" class="btn Juegos" style="width: 49%;">Descargar Diagrama en PDF  
+          <mat-icon class="iconoCentradoBoton">file_download</mat-icon></button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+
+  <mat-card class="cartaGraficoActividad">
+    <mat-card-header>
+      <mat-card-title>
+        <h4><b>Grafo</b></h4>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field style="width: 75%; margin-top: 30px">
+        <mat-label>Seleccionar Tipo de Grafo</mat-label>
+        <mat-select [(ngModel)]="tipoGrafo" name="tipoGrafo">
+          <mat-option value="20">Red de regalos de Cromos ("red de relaciones") entre Alumnos/Equipos (Juego de Colección)</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="tipoGrafo == 20" style="width: 75%;">
+        <!-- ngIf con todos los tipos de grafo que impliquen a un Grupo -->
+        <mat-label>Selecciona un Grupo</mat-label>
+        <mat-select [(ngModel)]="grupoSeleccionado" name="grupo" (selectionChange)="grupoCambiado($event)">
+          <mat-option *ngFor="let grupo of listaGrupos" [value]="grupo">
+            {{ grupo.Nombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="(tipoGrafo == 20) && grupoSeleccionado.id != null" style="width: 75%;">
+        <!-- ngIf con todos los tipos de grafo que impliquen a un Juego -->
+        <mat-label>Selecciona el Tipo de Juego</mat-label>
+        <mat-select [(ngModel)]="tipoJuegoSelecionado" name="tipoJuego" (selectionChange)="tipoJuegoCambiado($event)">
+          <!-- <mat-option value="Juego De Avatar" *ngIf="tipoGrafo == ">Juego de Avatar</mat-option> -->
+          <mat-option value="Juego De Colección" *ngIf="tipoGrafo == 20">Juego De Colección</mat-option>
+          <!-- <mat-option value="Juego De Competición Fórmula Uno" *ngIf="tipoGrafo == ">Juego De Competición Fórmula Uno</mat-option>
+          <mat-option value="Juego De Competición Liga" *ngIf="tipoGrafo == ">Juego De Competición Liga</mat-option>
+          <mat-option value="Juego De Cuestionario" *ngIf="tipoGrafo == ">Juego De Cuestionario</mat-option>
+          <mat-option value="Juego De Cuestionario Rápido" *ngIf="tipoGrafo == ">Juego De Cuestionario Rápido</mat-option>
+          <mat-option value="Juego De Cuestionario de Satisfacción" *ngIf="tipoGrafo == ">Juego De Cuestionario de Satisfacción</mat-option>
+          <mat-option value="Juego De Encuesta Rápida" *ngIf="tipoGrafo == ">Juego De Encuesta Rápida</mat-option>
+          <mat-option value="Juego De Evaluación" *ngIf="tipoGrafo == ">Juego De Evaluación</mat-option>
+          <mat-option value="Juego De Geocaching" *ngIf="tipoGrafo == ">Juego De Geocaching</mat-option>
+          <mat-option value="Juego De Puntos" *ngIf="tipoGrafo == ">Juego De Puntos</mat-option>
+          <mat-option value="Juego De Votación Rápida" *ngIf="tipoGrafo == ">Juego De Votación Rápida</mat-option>
+          <mat-option value="Juego De Votación Uno A Todos" *ngIf="tipoGrafo == ">Juego De Votación Uno A Todos</mat-option>
+          <mat-option value="Juego De Votación Todos A Uno" *ngIf="tipoGrafo == ">Juego De Votación Todos A Uno</mat-option> -->
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="(tipoGrafo == 20) && grupoSeleccionado.id != null && tipoJuegoSelecionado != 0" style="width: 75%;">
+        <!-- ngIf con todos los tipos de grafo que impliquen a un Juego -->
+        <mat-label>Seleccionar Juego</mat-label>
+        <mat-select [(ngModel)]="juegoSeleccionado" name="juego" (selectionChange)="juegoCambiado($event)">
+          <mat-option *ngFor="let juego of listaJuegos" [value]="juego">
+            {{ juego.NombreJuego }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 15px;" *ngIf="cargandoGrafo"><mat-spinner></mat-spinner></div>
+
+      <div style="width: 85%;" echarts [options]="grafo" id="grafo"></div>
+
+      <div class="enFila botonesCartaGraficoActividad">
+        <button (click)="DameGrafo()" class="btn Aceptar" style="width: 49%;">Mostrar Grafo  <mat-icon class="iconoCentradoBoton">insert_chart</mat-icon></button>
+        <button (click)="GenerarPDFGrafo()" class="btn Juegos" style="width: 49%;">Descargar Grafo en PDF  <mat-icon class="iconoCentradoBoton">file_download</mat-icon></button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

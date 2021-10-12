@@ -174,8 +174,12 @@ Andrés;Iniesta;Luján;adri;andres.iniesta@uni.es"
                   </table>
 
                 </form>
-                <button  style="width: 50%; margin-left: 25%;" (click) = "RegistraAlumnos();" type="button" class="btn Agregar" >Registra a estos alumnos<i class="material-icons">
-                    person_add </i></button>
+                <div class = "enColumna">
+                  <button   style="width: 50%; margin-left: 25%;" (click) = "RegistraAlumnos();" type="button" class="btn Agregar" >Registra a estos alumnos<i class="material-icons">
+                      person_add </i></button>
+                    <br>
+                  <img style="width: 20%; margin-left: 30%;" *ngIf="loading" src="assets/loading.gif" />
+                </div>
               </div>
 
             </div>

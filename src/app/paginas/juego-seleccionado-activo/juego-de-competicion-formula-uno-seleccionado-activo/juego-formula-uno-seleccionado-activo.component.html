@@ -5,7 +5,7 @@
     <button type="button" class="btn Editar" (click) = editarjornadas(); routerLink = "editarjornadasJuegoDeCompeticionFormulaUno">Editar Juego<i class="material-icons">edit</i></button>
     <!-- <button type="button" class="btn Editar" (click) = editarpuntos(); routerLink = "editarpuntosJuegoDeCompeticionFormulaUno" [disabled]="botoneditarPuntosDesactivado">Editar Puntos Ganadores<i class="material-icons">edit</i></button> -->
     <button type="button" class="btn Aceptar" (click) = seleccionarGanadorLiga();  routerLink = "ganadoresJuegoDeCompeticionFormulaUno">Resultados<i class="material-icons">emoji_events</i></button>
-    <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionDesactivar()"> Desactivar<i class="material-icons">history</i></button>
+    <button type="button" class="btn Eliminar" (click) = "Desactivar()"> Desactivar<i class="material-icons">history</i></button>
   </div>
   <br>
   <div  *ngIf="(jornadas !== undefined) && CompeticionFinalizada()" class="subtitulo">Clasificación general definitiva</div>

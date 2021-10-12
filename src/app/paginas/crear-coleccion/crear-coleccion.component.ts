@@ -528,6 +528,8 @@ export class CrearColeccionComponent implements OnInit {
   SeleccionarFicherosCromos($event) {
     this.ficherosColeccion = Array.from($event.target.files);
     // Ya tenemos todos los ficheros de las imagenes
+    // Hay que confirmar que no faltan ficheros
+    // CONFIRMAR AQUI
     // Cogemos la imagen de la colección para que se muestre
     const fileImagenColeccion = this.ficherosColeccion.filter (f => f.name === this.infoColeccion.ImagenColeccion)[0];
 

@@ -5,6 +5,7 @@ import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import * as URL from '../URLs/urls';
 import { Alumno, Profesor } from '../clases/index';
+import { SesionService } from './sesion.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +15,13 @@ export class ComServerService {
   notificacionconectar = 'dash conectado';
   private socket;
   private url = URL.Servidor;
-  constructor() {
+  constructor( private sesion: SesionService) {
   }
 
 
 
   public Conectar(profesorId) {
+    console.log ('voy a conectar ', this.url);
     this.socket = io(this.url);
     this.socket.emit('dash', this.notificacionconectar);
     this.socket.emit ('conectarDash', profesorId);
@@ -35,9 +37,18 @@ export class ComServerService {
 
   public EsperoRespuestasJuegoDeCuestionario(): any {
     return Observable.create((observer) => {
-      this.socket.on('respuestaJuegoDeCuestionario', (alumnoId) => {
-        console.log('Respuesta cuestionaro ' + alumnoId);
-        observer.next(alumnoId);
+      this.socket.on('respuestaJuegoDeCuestionario', (alumno) => {
+        console.log('Respuesta cuestionaro ' + alumno);
+        observer.next(alumno);
+      });
+
+    });
+  }
+  public EsperoRespuestasEquipoJuegoDeCuestionario(): any {
+    return Observable.create((observer) => {
+      this.socket.on('respuestaEquipoJuegoDeCuestionario', (equipo) => {
+        console.log('Respuesta cuestionaro ' + equipo);
+        observer.next(equipo);
       });
 
     });
@@ -89,19 +100,41 @@ export class ComServerService {
   }
   /////////////este ya no es el mio///////////////////
 
-  public EnviarNotificacionIndividual(alumnoDestinatarioId: number, mensajeAEnviar: string) {
-    console.log('dentro del servicio para enviar notificación al alumno');
-    this.socket.emit('notificacionIndividual', { alumnoId: alumnoDestinatarioId, mensaje: mensajeAEnviar });
+  public EnviarNotificacionIndividual(tipoEvento: number, alumnoDestinatarioId: number, mensajeAEnviar: string) {
+    // juego de puntos
+    if (((tipoEvento === 10) || (tipoEvento === 11)) && (this.sesion.DameProfesor().configuracionEventos[1][1])) {
+      this.socket.emit('notificacionIndividual', { alumnoId: alumnoDestinatarioId, mensaje: mensajeAEnviar });
+    }
+    // juego de coleccion
+    if (((tipoEvento === 20) || (tipoEvento === 22)) && (this.sesion.DameProfesor().configuracionEventos[2][1])) {
+      this.socket.emit('notificacionIndividual', { alumnoId: alumnoDestinatarioId, mensaje: mensajeAEnviar });
+    }
+    // juego de avatar
+    if (((tipoEvento === 30) || (tipoEvento === 31)) && (this.sesion.DameProfesor().configuracionEventos[3][1])) {
+     this.socket.emit('notificacionIndividual', { alumnoId: alumnoDestinatarioId, mensaje: mensajeAEnviar });
+    }
   }
 
-  public EnviarNotificacionEquipo(equipoDestinatarioId: number, mensajeAEnviar: string) {
-    console.log('dentro del servicio para enviar notificación al equipo');
-    this.socket.emit('notificacionEquipo', { equipoId: equipoDestinatarioId, mensaje: mensajeAEnviar });
+  public EnviarNotificacionEquipo(tipoEvento: number, equipoDestinatarioId: number, mensajeAEnviar: string) {
+    // juego de puntos
+    if (((tipoEvento === 10) || (tipoEvento === 11)) && (this.sesion.DameProfesor().configuracionEventos[1][1])) {
+      this.socket.emit('notificacionEquipo', { equipoId: equipoDestinatarioId, mensaje: mensajeAEnviar });
+    }
+    // juego de coleccion
+    if (((tipoEvento === 20) || (tipoEvento === 22)) && (this.sesion.DameProfesor().configuracionEventos[2][1])) {
+      this.socket.emit('notificacionEquipo', { equipoId: equipoDestinatarioId, mensaje: mensajeAEnviar });
+    }
+    // juego de avatar
+    if (((tipoEvento === 30) || (tipoEvento === 31)) && (this.sesion.DameProfesor().configuracionEventos[3][1])) {
+      this.socket.emit('notificacionEquipo', { equipoId: equipoDestinatarioId, mensaje: mensajeAEnviar });
+    }
   }
 
-  public EnviarNotificacionGrupo(grupoDestinatarioId: number, mensajeAEnviar: string) {
-    console.log('dentro del servicio para enviar notificación al grupo');
-    this.socket.emit('notificacionGrupo', { grupoId: grupoDestinatarioId, mensaje: mensajeAEnviar });
+  public EnviarNotificacionGrupo(tipoEvento: number , grupoDestinatarioId: number, mensajeAEnviar: string) {
+    if ((tipoEvento === 1) && (this.sesion.DameProfesor().configuracionEventos[0][1])) {
+      this.socket.emit('notificacionGrupo', { grupoId: grupoDestinatarioId, mensaje: mensajeAEnviar });
+    }
+
   }
 
   public RecordarContrasena(profesor: Profesor) {
@@ -266,6 +299,9 @@ export class ComServerService {
     });
   }
   /* FIN JUEGO DE EVALUACION */
+  public InformarFinJuegoRapido(profesorId: number) {
+    this.socket.emit ('finJuegoRapido' , profesorId);
+  }
 }
 
 

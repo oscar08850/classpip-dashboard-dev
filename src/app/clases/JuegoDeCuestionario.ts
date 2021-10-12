@@ -2,7 +2,8 @@ export class JuegoDeCuestionario {
 
     NombreJuego: string;
     Tipo: string;
-    Modalidad: string;
+    Modo: string;
+    Modalidad: string; // Clasico o Kahoot
     PuntuacionCorrecta: number;
     PuntuacionIncorrecta: number;
     TiempoLimite: number;
@@ -15,11 +16,12 @@ export class JuegoDeCuestionario {
     cuestionarioId: number;
 
     // tslint:disable-next-line:max-line-length
-    constructor(NombreJuego?: string, Tipo?: string, Modalidad?: string, PuntuacionCorrecta?: number, PuntuacionIncorrecta?: number, Presentacion?: string, JuegoActivo?: boolean, JuegoTerminado?: boolean,
+    constructor(NombreJuego?: string, Tipo?: string, Modo?: string, Modalidad?: string, PuntuacionCorrecta?: number, PuntuacionIncorrecta?: number, Presentacion?: string, JuegoActivo?: boolean, JuegoTerminado?: boolean,
                 profesorId?: number, grupoId?: number, cuestionarioId?: number,
                 TiempoLimite?: number) {
         this.NombreJuego = NombreJuego;
         this.Tipo = Tipo;
+        this.Modo = Modo;
         this.Modalidad = Modalidad;
         this.PuntuacionCorrecta = PuntuacionCorrecta;
         this.PuntuacionIncorrecta = PuntuacionIncorrecta;

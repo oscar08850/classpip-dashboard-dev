@@ -71,31 +71,22 @@ export class AsignarCuestionarioSatisfaccionComponent implements OnInit {
     });
   }
 
-  Seleccionar (row) {
-    this.selection.clear();
-    this.selection.select(row);
-
+  
+  HaSeleccionado() {
+    if (this.selection.selected.length === 0) {
+     return false;
+    } else {
+      return true;
+    }
   }
-
-  /* Para averiguar si todas las filas están seleccionadas */
-  // IsAllSelected() {
-  //   const numSelected = this.selection.selected.length;
-  //   const numRows = this.dataSource.data.length;
-  //   return numSelected === numRows;
-  // }
-
-  /* Cuando se clica en el checkbox de cabecera hay que ver si todos los
-    * checkbox estan acivados, en cuyo caso se desactivan todos, o si hay alguno
-    * desactivado, en cuyo caso se activan todos */
-
-  // MasterToggle() {
-  //   if (this.IsAllSelected()) {
-  //     this.selection.clear(); // Desactivamos todos
-  //   } else {
-  //     // activamos todos
-  //     this.dataSource.data.forEach(row => this.selection.select(row));
-  //   }
-  // }
+  Marcar(row) {
+    if (this.selection.isSelected(row)) {
+      this.selection.deselect(row);
+    } else {
+      this.selection.clear();
+      this.selection.select(row);
+    }
+  }
 
   AcabarSeleccion() {
     console.log ('voy a cogerlo');

@@ -119,12 +119,6 @@ import {MenuRecursosComponent} from './paginas/menu-recursos/menu-recursos.compo
 
 //Componentes Libro:
 
-import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
-import { MisRecursosLibroComponent }  from './paginas/mis-recursos-libro/mis-recursos-libro.component';
-import { ListadoCuentosComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
-import { ReproductorCuentoComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
-
-import { VotacionescuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-votaciones/votacionescuento/votacionescuento.component';
 import {CrearRubricaComponent } from './paginas/crear-rubrica/crear-rubrica.component';
 import { MisRubricasComponent } from './paginas/mis-rubricas/mis-rubricas.component';
 
@@ -159,6 +153,15 @@ import { DeactivateGuardVotacionRapida } from './guardas/canExitVotacionRapida.g
 import { ModificarPerfilComponent } from './paginas/modificar-perfil/modificar-perfil.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
 import { MostrarCuestionarioComponent } from './paginas/mis-cuestionarios/mostrar-cuestionario/mostrar-cuestionario.component';
+import { ActividadRegistroComponent } from './paginas/actividad-registro/actividad-registro.component';
+import { ActividadGraficosComponent } from './paginas/actividad-graficos/actividad-graficos.component';
+import { ActividadConfigComponent } from './paginas/actividad-config/actividad-config.component';
+
+//Componentes Cuento:
+import { CrearRecursosCuentoComponent } from './paginas/crear-recursos-cuento/crear-recursos-cuento.component';
+import { MisRecursosCuentoComponent }  from './paginas/mis-recursos-cuento/mis-recursos-cuento.component';
+//import { ListadoCuentosComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
+import { ReproductorCuentoComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
 
 const routes: Routes = [
 
@@ -321,14 +324,12 @@ const routes: Routes = [
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/verTodos', component: VerTodosComponent },
 
 
-  //libros
-  {path:'inicio/:id/crearRecursosLibro', component: CrearRecursosLibroComponent},
-  
-  {path:'inicio/:id/verRecursosLibro', component: MisRecursosLibroComponent},
+  //cuentos
 
-  {path:'grupo/:id/juego/juegoSeleccionadoActivo/listadoCuentos', component: ListadoCuentosComponent},
+
+
   {path:'grupo/:id/juego/juegoSeleccionadoActivo/reproductorCuento', component:   ReproductorCuentoComponent},
-  {path:'grupo/:id/juego/juegoSeleccionadoActivo/votacionescuento', component: VotacionescuentoComponent},
+ 
   
   // Rubricas
   { path: 'inicio/:id/crearRubrica', component: CrearRubricaComponent},
@@ -343,7 +344,10 @@ const routes: Routes = [
   { path: 'inicio/:id/misCuestionariosDeSatisfaccion', component: MisCuestionariosSatisfaccionComponent},
   { path: 'inicio/:id/editarCuestionarioDeSatisfaccion', component: EditarCuestionarioSatisfaccionComponent},
 
-
+  // Cuentos
+  {path:'inicio/:id/crearRecursosCuento', component: CrearRecursosCuentoComponent},
+  {path:'inicio/:id/verRecursosCuento', component: MisRecursosCuentoComponent},
+  {path:'grupo/:id/juego/juegoSeleccionadoActivo/reproductorCuento', component: ReproductorCuentoComponent},
 
 
   // JUEGOS RAPIDOS
@@ -357,8 +361,13 @@ const routes: Routes = [
   // tslint:disable-next-line:max-line-length
   { path: 'inicio/:id/misJuegosRapidos/juegoDeCuestionarioRapido', component: JuegoDeCuestionarioRapidoComponent, canDeactivate: [DeactivateGuardCuestionarioRapido]},
   // tslint:disable-next-line:max-line-length
-  { path: 'inicio/:id/misJuegosRapidos/juegoDeCogerTurnoRapido', component: JuegoDeCogerTurnoRapidoComponent, canDeactivate: [DeactivateGuardCogerTurnoRapido]}
-  ,
+  { path: 'inicio/:id/misJuegosRapidos/juegoDeCogerTurnoRapido', component: JuegoDeCogerTurnoRapidoComponent, canDeactivate: [DeactivateGuardCogerTurnoRapido]},
+  
+  //REGISTRO Y GRÁFICOS DE ACTIVIDAD
+  { path: 'inicio/:id/registroActividad', component: ActividadRegistroComponent },
+  { path: 'inicio/:id/graficosActividad', component: ActividadGraficosComponent },
+  { path: 'inicio/:id/configActividad', component: ActividadConfigComponent }
+
 ];
 
 @NgModule({

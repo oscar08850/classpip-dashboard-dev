@@ -3,7 +3,7 @@ import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insign
          // tslint:disable-next-line:max-line-length
          TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeCuestionario,
          TablaAlumnoJuegoDeCuestionario,
-         FamiliaAvatares, CuestionarioSatisfaccion} from '../clases';
+         FamiliaAvatares, CuestionarioSatisfaccion, TablaEquipoJuegoDeCuestionario, EquipoJuegoDeCuestionario} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
@@ -76,10 +76,18 @@ export class SesionService {
   inscripcionAlumnoJuegoDeCuestionario: AlumnoJuegoDeCuestionario;
   alumnoJuegoDeCuestionario: TablaAlumnoJuegoDeCuestionario;
 
+  inscripcionEquipoJuegoDeCuestionario: EquipoJuegoDeCuestionario;
+  equipoJuegoDeCuestionario: TablaEquipoJuegoDeCuestionario;
+
+  inscripcionesMiembrosdelEquipoJuegoDeCuestionario: AlumnoJuegoDeCuestionario[];
+
   idLibro: any;
 
   familia: FamiliaAvatares;
   cuestionarioDeSatiafaccion: CuestionarioSatisfaccion;
+
+  idCuento: any;
+  contenedor: any;
 
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
@@ -559,13 +567,37 @@ public TomaAlumnoJuegoDeCuestionario(alumno: TablaAlumnoJuegoDeCuestionario) {
   this.alumnoJuegoDeCuestionario = alumno;
 }
 
+public TomaInscripcionEquipoJuegoDeCuestionario(inscripcion: EquipoJuegoDeCuestionario) {
+  this.inscripcionEquipoJuegoDeCuestionario = inscripcion;
+}
+public TomaInscripcionesMiembrosDelEquipo(inscripciones: AlumnoJuegoDeCuestionario[]) {
+  this.inscripcionesMiembrosdelEquipoJuegoDeCuestionario = inscripciones;
+}
+
+public DameInscripcionesMiembrosDelEquipo(): AlumnoJuegoDeCuestionario[] {
+  return this.inscripcionesMiembrosdelEquipoJuegoDeCuestionario;
+}
+
+
+public TomaEquipoJuegoDeCuestionario(alumno: TablaEquipoJuegoDeCuestionario) {
+  this.equipoJuegoDeCuestionario = alumno;
+}
+
 public DameAlumnoJuegoDeCuestionario(): TablaAlumnoJuegoDeCuestionario {
   return this.alumnoJuegoDeCuestionario;
+}
+
+public DameEquipoJuegoDeCuestionario(): TablaEquipoJuegoDeCuestionario {
+  return this.equipoJuegoDeCuestionario;
 }
 
 public DameInscripcionAlumnoJuegoDeCuestionario(): AlumnoJuegoDeCuestionario {
   return this.inscripcionAlumnoJuegoDeCuestionario;
 }
+public DameInscripcionEquipoJuegoDeCuestionario(): EquipoJuegoDeCuestionario {
+  return this.inscripcionEquipoJuegoDeCuestionario;
+}
+
 public TomaFamilia(familia: FamiliaAvatares) {
   this.familia = familia;
 }
@@ -582,13 +614,25 @@ public DameCuestionarioSatisfaccion(): CuestionarioSatisfaccion {
 
 //cuentos
 
-public setIdLibro(id)
+
+public setIdCuento(id)
 {
-  this.idLibro = id;
+  this.idCuento = id;
 }
 
-public getIdLibro()
+public getIdCuento()
 {
-  return this.idLibro;
+  return this.idCuento;
 }
+
+public setContenedor(contenedor){
+  this.contenedor = contenedor;
+}
+
+public getContenedor(){
+  return this.contenedor;
+}
+
+
+
 }

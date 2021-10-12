@@ -255,65 +255,107 @@ export class JuegoDeColeccionSeleccionadoInactivoComponent implements OnInit {
     });
   }
 
-  ReactivarJuego() {
-    console.log ('voy a reactivar');
-    console.log(this.juegoSeleccionado);
-    this.peticionesAPI.CambiaEstadoJuegoDeColeccion(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
-      this.juegoSeleccionado.Asignacion,
-      undefined, true, this.juegoSeleccionado.NumeroTotalJornadas, this.juegoSeleccionado.TipoJuegoCompeticion,
-      this.juegoSeleccionado.NumeroParticipantesPuntuan, this.juegoSeleccionado.Puntos, this.juegoSeleccionado.NombreJuego),
-      this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
-        if (res !== undefined) {
-          console.log(res);
-          console.log('juego reactivado');
-          this.location.back();
-        }
-      });
-  }
+  // ReactivarJuego() {
+  //   console.log ('voy a reactivar');
+  //   console.log(this.juegoSeleccionado);
+  //   this.peticionesAPI.CambiaEstadoJuegoDeColeccion(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
+  //     this.juegoSeleccionado.Asignacion,
+  //     undefined, true, this.juegoSeleccionado.NumeroTotalJornadas, this.juegoSeleccionado.TipoJuegoCompeticion,
+  //     this.juegoSeleccionado.NumeroParticipantesPuntuan, this.juegoSeleccionado.Puntos, this.juegoSeleccionado.NombreJuego),
+  //     this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
+  //       if (res !== undefined) {
+  //         console.log(res);
+  //         console.log('juego reactivado');
+  //         this.location.back();
+  //       }
+  //     });
+  // }
 
-  AbrirDialogoConfirmacionReactivar(): void {
+  // AbrirDialogoConfirmacionReactivar(): void {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        nombre: this.juegoSeleccionado.Tipo,
+  //   const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+  //     height: '150px',
+  //     data: {
+  //       mensaje: this.mensaje,
+  //       nombre: this.juegoSeleccionado.Tipo,
+  //     }
+  //   });
+
+  //   dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+  //     if (confirmed) {
+  //       this.ReactivarJuego();
+  //       Swal.fire('Reactivado', this.juegoSeleccionado.Tipo + ' reactivado correctamente', 'success');
+  //     }
+  //   });
+  // }
+
+  // EliminarJuego() {
+  //   this.peticionesAPI.BorraJuegoDeColeccion(this.juegoSeleccionado.id)
+  //   .subscribe(res => {
+  //     console.log('Juego eliminado');
+  //     this.location.back();
+  //   });
+  // }
+
+  // AbrirDialogoConfirmacionEliminar(): void {
+
+  //   const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+  //     height: '150px',
+  //     data: {
+  //       mensaje: this.mensajeBorrar,
+  //       nombre: this.juegoSeleccionado.Tipo,
+  //     }
+  //   });
+
+  //   dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+  //     if (confirmed) {
+  //       this.EliminarJuego();
+  //       Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
+  //     }
+  //   });
+  // }
+
+   
+  Eliminar() {
+    Swal.fire({
+      title: '¿Seguro que quieres eliminar el juego?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then( async (result) => {
+      if (result.value) {
+        await this.calculos.EliminarJuegoDeColeccion(this.juegoSeleccionado);
+        Swal.fire('El juego se ha eliminado correctamente');
+        this.location.back();
       }
     });
+  }
+  Reactivar() {
+    Swal.fire({
+      title: '¿Seguro que quieres activar el juego?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then((result) => {
+      if (result.value) {
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.ReactivarJuego();
-        Swal.fire('Reactivado', this.juegoSeleccionado.Tipo + ' reactivado correctamente', 'success');
+        this.juegoSeleccionado.JuegoActivo = true;
+        this.peticionesAPI.CambiaEstadoJuegoDeColeccion (this.juegoSeleccionado)
+        .subscribe(res => {
+            if (res !== undefined) {
+              Swal.fire('El juego se ha activado correctamente');
+              this.location.back();
+            }
+        });
       }
     });
   }
 
-  EliminarJuego() {
-    this.peticionesAPI.BorraJuegoDeColeccion(this.juegoSeleccionado.id)
-    .subscribe(res => {
-      console.log('Juego eliminado');
-      this.location.back();
-    });
-  }
 
-  AbrirDialogoConfirmacionEliminar(): void {
-
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensajeBorrar,
-        nombre: this.juegoSeleccionado.Tipo,
-      }
-    });
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.EliminarJuego();
-        Swal.fire('Eliminado', this.juegoSeleccionado.Tipo + ' eliminado correctamente', 'success');
-      }
-    });
-  }
 
 
   MostrarInformacion() {

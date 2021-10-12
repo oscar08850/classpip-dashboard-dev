@@ -167,20 +167,38 @@ export class EditarGrupoComponent implements OnInit {
   // MEDIANTE UN DIÁLOGO
   AbrirDialogoConfirmacionBorrar(): void {
 
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensaje,
-        nombre: this.grupoSeleccionado.Nombre,
-      }
-    });
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    Swal.fire({
+      title: '¿Seguro que quieres eliminar a esos alumnos del grupo?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
         this.BorrarAlumnos();
         Swal.fire('Eliminados', 'Alumnos eliminados correctamente', 'success');
       }
     });
+
+
+
+    // const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
+    //   height: '150px',
+    //   data: {
+    //     mensaje: this.mensaje,
+    //     nombre: this.grupoSeleccionado.Nombre,
+    //   }
+    // });
+
+    // dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    //   if (confirmed) {
+    //     this.BorrarAlumnos();
+    //     Swal.fire('Eliminados', 'Alumnos eliminados correctamente', 'success');
+    //   }
+    // });
   }
 
   // Recorro el array de seleccionados y miro si lo borro o no.

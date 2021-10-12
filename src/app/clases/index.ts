@@ -49,6 +49,7 @@ export * from './JuegoDeAvatar';
 export * from './AlumnoJuegoDeAvatar';
 export * from './Cuestionario';
 export * from './AlumnoJuegoDeCuestionario';
+export * from './EquipoJuegoDeCuestionario';
 export * from './JuegoDeCuestionario';
 export * from './Escenario';
 export * from './PuntoGeolocalizable';
@@ -59,13 +60,7 @@ export * from './AlumnoJuegoDeGeocaching';
 export * from './ParaAlbum';
 export * from './RespuestaJuegoDeCuestionario';
 export * from './TablaAlumnoJuegoDeCuestionario';
-export * from './clasesParaLibros/recursoLibro';
-export * from './AlumnoJuegoDeLibro';
-export * from './JuegoDeLibros';
-export * from './clasesParaLibros/imagenGuardada';
-export * from './clasesParaLibros/concursoLibro';
-export * from './clasesParaLibros/imagenGuardada';
-export * from './clasesParaLibros/recurosLibroJuego';
+export * from './TablaEquipoJuegoDeCuestionario';
 
 export * from './JuegoDeVotacionUnoATodos';
 export * from './AlumnoJuegoDeVotacionUnoATodos';
@@ -87,8 +82,20 @@ export * from './FamiliaDeImagenesDePerfil';
 export * from './JuegoDeCuestionarioRapido';
 export * from './JuegoDeCogerTurnoRapido';
 export * from './JuegoDePuntos';
+
+
+export * from './clasesParaJuegoDeCuentos/AlumnoJuegoDeCuento';
+export * from './clasesParaJuegoDeCuentos/JuegoDeCuento';
+export * from './clasesParaJuegoDeCuentos/RecursoCuento';
+export * from './clasesParaJuegoDeCuentos/RecursoCuentoJuego';
+
 export * from './JuegoDeKahootRapido';
+export * from './JuegoDeControlDeTrabajoEnEquipo';
+export * from './AlumnoJuegoDeControlDeTrabajoEnEquipo';
+
+export * from './JuegoDeEvaluacion';
+export * from './EquipoJuegoEvaluado';
+export * from './AlumnoJuegoEvaluado';
 
 
-
-
+export * from './Evento';

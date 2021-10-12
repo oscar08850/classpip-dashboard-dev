@@ -5,14 +5,19 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
 import {
-  Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, JuegoDeLibros, EquipoJuegoDePuntos,
-  TablaAlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeLibro
+  Alumno, Equipo, Juego, Punto, Nivel, AlumnoJuegoDePuntos, JuegoDeCuento, EquipoJuegoDePuntos,
+  TablaAlumnoJuegoDePuntos, TablaEquipoJuegoDePuntos, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeCuento
+
 } from '../../../clases/index';
 import { MatDialog } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { MatTableDataSource } from '@angular/material/table';
+
+
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-juego-de-cuento-seleccionado-activo',
@@ -25,11 +30,17 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
   displayedColumns: string[] = [ 'alumnoID', 'Nombre',  'nivel1', 'nivel2', 'nivel3', 'permisoparaver', 'permisoparavotar'];
   // displayedColumns: string[] = ['alumnoID',  'nivel1', 'nivel2', 'nivel3', 'permisoparaver', 'permisoparavotar'];
 
+
+  listaDePrueba: any =[];
+  listaJuegoAlumnosCuentos: any = [];
+  listaLibros: any = [];
+
   datasourceAlumno;
   juegoSeleccionado: any;
   grupoid: any;
-  alumnosDelJuego: AlumnoJuegoDeLibro[];
-  inscripcionesAlumnosJuegodelibro: AlumnoJuegoDeLibro[];
+  alumnosDelJuego: AlumnoJuegoDeCuento[];
+  inscripcionesAlumnosJuegodelibro: AlumnoJuegoDeCuento[];
+
   selection1 = new SelectionModel<any>(true, []);
   selection2 = new SelectionModel<any>(true, []);
   selection3 = new SelectionModel<any>(true, []);
@@ -53,28 +64,74 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
     this.grupoid = this.sesion.DameGrupo();
     this.obteneralumnosdelJuego();
 
+    //this.getLibro();
+
+  }
+  
+
+  
+  /**
+   * Método que permite al profesor ir al reproductor cuento y visualizar el cuento creado
+   * @param contenedor Nombre del conteneder del cuento
+   */
+   irVisorCuento(contenedor){
+
+    if(contenedor){
+
+    
+    this.sesion.setContenedor(contenedor);
+    console.log("cuentoo: "+ contenedor);
+    this.router.navigate(['/grupo/' + this.juegoSeleccionado.grupoId + '/juego/juegoSeleccionadoActivo/reproductorCuento'])
+    }
+    else Swal.fire('Alerta', 'El alumno no ha creado ningún cuento', 'warning');
+
 
   }
 
-
+  /**
+   * Método que pide a la API todos los alumnos que pertenecen al Juego de Cuento y sus respectivos cuentos
+   */
   obteneralumnosdelJuego() {
+    console.log ('Vamos a obtener alumnos ');
+    this.peticionesAPI.DameAlumnosJuegoCuento(this.juegoSeleccionado.id)
 
-
-    this.peticionesAPI.DameAlumnosJuegoLibro(this.juegoSeleccionado.id)
       .subscribe(alumnosJuego => {
-
+        console.log ('Ya los tenemos ');
         console.log(alumnosJuego);
         this.alumnosDelJuego = alumnosJuego;
         this.haCambiado = Array(this.alumnosDelJuego.length).fill(false);
         this.PrepararTabla();
+        this.alumnosDelJuego.forEach(element => {
+          this.peticionesAPI.dameCuento(element.id)
+          .subscribe((res) => {
+            if (res.length != 0) {
+              this.listaLibros.push(res[0]);
+              console.log(this.listaLibros);
+            }
+            else this.listaLibros.push(false);
+    
+          }, (err) => {
+    
+          })
+
+
+
+
+
+        });
 
       });
 
   }
 
+
+  /**
+   * Prepara la tabla con todos los privilegios que tengan asignados los alumnos
+   */
   PrepararTabla() {
     this.datasourceAlumno = new MatTableDataSource(this.alumnosDelJuego);
 
+    console.log(this.datasourceAlumno);
     this.datasourceAlumno.data.forEach(row => {
 
       const inscripcion = this.alumnosDelJuego.filter(ins => ins.alumnoID === row.alumnoID)[0];
@@ -111,6 +168,12 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
   }
 
 
+  /**
+   * Seleccionamos todas la casilla de la columna del privilegio que quiera el profesor
+   * @param n se refiere al privilegio seleccionado
+   * @returns devuelve el numero de alumnos que hay que seleccionar
+   */
+
   IsAllSelected(n) {
     let numSelected;
     if (n === 1) {
@@ -133,7 +196,10 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
     return numSelected === numRows;
   }
 
-
+  /**
+   * Permite modificar el privilegio del alumno
+   * @param n 
+   */
 
   MasterToggle(n) {
 
@@ -191,6 +257,12 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
   }
 
 
+
+  /**
+   * Comprueba que nivel del alumno ha sido cambiado
+   * @param n se refiere al nivel de privilegio: nivel1, nivel2, nivel3, permisoparaver
+   * @param i se refiere al alumno del juego de cuento
+   */
   HaCambiado(n ,i) {
     if(n==1)
     {
@@ -226,34 +298,58 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
 
 
 
+  /**
+   * Método que guarda los cambios que el profesor ha realizado en la API
+   */
+
   RegistrarCambios() {
 
     for (let i = 0; i < this.alumnosDelJuego.length; i++) {
-      
-  
-        this.peticionesAPI.ModificarPermidosJuegoLibro(this.alumnosDelJuego[i], this.juegoSeleccionado.id).subscribe();
-      
+        this.peticionesAPI.ModificarPermisosJuegoCuento(this.alumnosDelJuego[i], this.juegoSeleccionado.id).subscribe();
     }
     Swal.fire('Cambios registrados correctamente', ' ', 'success');
   }
 
-
-  irAlListado(){
-
-    this.router.navigate(['/grupo/' + this.grupoid.id + '/juego/juegoSeleccionadoActivo/listadoCuentos']);
-
+  /**
+   * Método que desactiva el Juego de Cuento
+   */
+  DesactivarJuego() {
+    console.log(this.juegoSeleccionado);
+    this.peticionesAPI.CambiaEstadoJuegoDeCuentos(new Juego (this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modo,
+      this.juegoSeleccionado.Asignacion,
+      undefined, false, this.juegoSeleccionado.NumeroTotalJornadas, this.juegoSeleccionado.TipoJuegoCompeticion,
+      this.juegoSeleccionado.NumeroParticipantesPuntuan, this.juegoSeleccionado.Puntos, this.juegoSeleccionado.NombreJuego),
+      this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId).subscribe(res => {
+        if (res !== undefined) {
+          console.log(res);
+          console.log('juego desactivado');
+          this.location.back();
+        }
+      });
   }
-  
 
-  irAVotaciones(){
+  /**
+   * Método que abre dialogo para que el profesor confirme que desea desactivar el Juego de Cuento
+   */
+  AbrirDialogoConfirmacionDesactivar(): void {
 
-    this.router.navigate(['/grupo/' + this.grupoid + '/juego/juegoSeleccionadoActivo/votacionescuento']);
+    Swal.fire({
+      title: 'Desactivar',
+      text: "Estas segura/o de que quieres desactivar: " + this.juegoSeleccionado.Tipo,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
 
+    }).then((result) => {
+      if (result.value) {
+        this.DesactivarJuego();
+        Swal.fire('Desactivado', this.juegoSeleccionado.Tipo + ' Desactivado correctamente', 'success');
+      }
+    })
   }
 
 }
-
-
-
-
 

@@ -1,0 +1,104 @@
+<h1> Cargar los recursos para un cuento.</h1>
+
+<button (click)="mostrar()" style="width: 30%" type="button" class="btn Info">
+    Mostrar/ocultar guía
+</button>
+
+<div class="enColumna" *ngIf="ver" style="border-color: red;">
+
+    <pre>
+        <p>
+
+    Para cargar todos los recursos que se necesitan, se tendrá que crear de forma local las siguientes carpetas:
+     -La carpeta principal tendrá que llamarse con el nombre que se quiera llamar el pack de recursos.
+     -Tendrá que tener las subcarpetas siguientes con los nombres siguientes:
+        -fondos
+        -personajes
+         -objetos
+     -Las foto tendrán que estar guardadas en su respectiva carpeta.
+     -El nombre de la foto será el que mismo nombre que verá el alumno que esté utilizando este pack de recursos.
+    Ejemplo:
+    packVerano (carpeta principal):
+                                        -fondos (carpeta secundaria):
+                                                                        -fondoPalmeras (archivo)
+                                                                        -fondoPlaya (archivo)
+                                        -personajes (carpeta secundaria):   
+                                                                        -playero (archivo)
+                                        -objetos (carpeta secundaria):      
+                                                                        -cubo (archivo)
+                                                                        -pala (archivo)
+                                                                        -toalla (archivo)                    
+
+    -Se tendrá que pulsar el botón "Elegir archivos" y elegir la carpeta principal, en el caso del ejemplo la carpeta "packVerano"
+
+</p>
+</pre>
+</div>
+
+<div class="picker"><input (click)="a($event)" type="file" id="picker" name="fileList" webkitdirectory multiple>
+
+   
+</div>
+<div  *ngIf="cargaFiles">
+    <button (click)="b()" style="width: 10%" type="button" class="btn Info">
+        Cargar y mostrar imagenes
+    </button>
+ </div>
+
+<!-- <div class="button"><input (change)="a($event)" type="file" id="picker" name="fileList" webkitdirectory multiple>
+</div> -->
+
+
+<div *ngIf="verFotos">
+    <h2>Este grupo de recursos se llama : {{nombreFamila}}</h2>
+    <h2>Personajes:</h2>
+
+    <div>
+        <mat-grid-list cols="5" rowHeight="1:1">
+            <mat-grid-tile *ngFor='let imageF of listadePreviewsPersonaje'>
+                <mat-card>
+
+                    <img [src]='imageF.file'>
+                    <h3>{{imageF.nombre}}</h3>
+
+                </mat-card>
+
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    <h2>Fondos:</h2>
+
+    <div>
+        <mat-grid-list cols="2" rowHeight="1:1">
+            <mat-grid-tile *ngFor='let imageP of listadePreviewsFondo'>
+                <mat-card>
+
+                    <img [src]='imageP.file' height="700" width="700">
+                    <h3>{{imageP.nombre}}</h3>
+
+                </mat-card>
+
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    <h2>Objetos:</h2>
+
+    <div>
+        <mat-grid-list cols="5" rowHeight="1:1">
+            <mat-grid-tile *ngFor='let imageO of listadePreviewsObjeto'>
+                <mat-card>
+                    <img [src]='imageO.file' height="250" width="250">
+                    <h3>{{imageO.nombre}}</h3>
+
+                </mat-card>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+
+
+
+    <button (click)="guardar()" style="width: 10%" type="button" class="btn Info">
+        Guardar pack de recursos
+    </button>
+
+</div>

@@ -50,7 +50,7 @@ export class JuegoDeCuestionarioSatisfaccionInactivoComponent implements OnInit 
   }
 
 
-  Eliminar() {
+  Eliminar2() {
     Swal.fire({
       title: '¿Seguro que quieres eliminar el juego?',
       icon: 'warning',
@@ -77,6 +77,25 @@ export class JuegoDeCuestionarioSatisfaccionInactivoComponent implements OnInit 
             }
           });
         });
+      }
+    });
+  }
+
+  
+  Eliminar() {
+    Swal.fire({
+      title: '¿Seguro que quieres eliminar el juego?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then(async (result) => {
+      if (result.value) {
+        // Primero elimino las inscripciones
+        await this.calculos.EliminarJuegoDeCuestionarioDeSatisfaccion (this.juegoSeleccionado)
+        Swal.fire('El juego se ha eliminado correctamente');
+        this.location.back();
       }
     });
   }

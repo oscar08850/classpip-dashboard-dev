@@ -34,9 +34,9 @@
 
           <h3 align = "center"> Participantes</h3>
           <br>
-          <div style ="display: inline-block; padding: 10px;" *ngFor="let participante of participantes; let i=index">
-                  <h2 *ngIf = "!participante.contestado" style="color: red"> {{participante.nickName}}  </h2>
-                  <h2 *ngIf = "participante.contestado" style="color: green"> {{participante.nickName}}  </h2>
+          <div style ="display: inline-block; " *ngFor="let participante of participantes; let i=index">
+                  <h2 *ngIf = "!participante.contestado" style="color: red ; padding: 10px;"> "{{participante.nickName}}" </h2>
+                  <h2 *ngIf = "participante.contestado" style="color: green; padding: 10px;"> "{{participante.nickName}}"  </h2>
           </div>
         </div>
       </div>
@@ -109,11 +109,12 @@
             <div class="enColumna">
                   <div>
                   <span style="font-weight: bold; margin-left: 16px; font-size: 130%;">Respuestas</span>
-                  <mat-list role="list" >
-                      <mat-list-item role="listitem" *ngFor="let respuesta of respuestas">
-                        {{respuesta}}
-                      </mat-list-item>
-                  </mat-list>
+                  <br>
+                
+                  <mat-list-item class="ion-text-wrap;"  role="listitem" *ngFor="let respuesta of respuestas">
+                      <p style = "border-bottom: black;">{{respuesta}}</p>
+                  </mat-list-item>
+                 
                   </div>
             </div>
 

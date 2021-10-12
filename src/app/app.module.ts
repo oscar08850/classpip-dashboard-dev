@@ -15,7 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatBadgeModule, MatInputModule, MatProgressSpinnerModule, MatRadioModule} from '@angular/material';
+import {MatBadgeModule, MatInputModule, MatRadioModule} from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
@@ -31,7 +31,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MdePopoverModule } from '@material-extended/mde';
 import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatDatepickerModule, MatNativeDateModule } from '@angular/material';
+import { MatDatepickerModule, MatNativeDateModule } from '@angular/material';
+import {MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { ListViewModule } from '@syncfusion/ej2-angular-lists';
 import {MatSelectModule} from '@angular/material/select';
@@ -79,8 +80,6 @@ import { EditarInsigniaComponent } from './paginas/mis-puntos/editar-insignia/ed
 import { EditarColeccionComponent } from './paginas/mis-colecciones/editar-coleccion/editar-coleccion.component';
 import { AgregarCromoDialogComponent } from './paginas/mis-colecciones/agregar-cromo-dialog/agregar-cromo-dialog.component';
 import { AsignacionColeccionJuegoComponent } from './paginas/juego/asignacion-coleccion-juego/asignacion-coleccion-juego.component';
-// tslint:disable-next-line:max-line-length
-import { DialogMostrarCromosComponent } from './paginas/juego/asignacion-coleccion-juego/dialog-mostrar-cromos/dialog-mostrar-cromos.component';
 // tslint:disable-next-line:max-line-length
 import { JuegoDeColeccionSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-coleccion-seleccionado-activo/juego-de-coleccion-seleccionado-activo.component';
 // tslint:disable-next-line:max-line-length
@@ -222,6 +221,7 @@ import { MisFamiliasImagenesPerfilComponent } from './paginas/mis-familias-image
 import { CrearCuestionarioSatisfaccionComponent } from './paginas/crear-cuestionario-satisfaccion/crear-cuestionario-satisfaccion.component';
 import {MisCuestionariosSatisfaccionComponent} from './paginas/mis-cuestionarios-satisfaccion/mis-cuestionarios-satisfaccion.component';
 import { AsignarCuestionarioSatisfaccionComponent } from './paginas/juego/asignar-cuestionario-satisfaccion/asignar-cuestionario-satisfaccion.component';
+
 import { JuegoDeCuestionarioSatisfaccionActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-satisfaccion-activo/juego-de-cuestionario-satisfaccion-activo.component';
 import { JuegoDeCuestionarioSatisfaccionInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuestionario-satisfaccion-inactivo/juego-de-cuestionario-satisfaccion-inactivo.component';
 import { MisJuegosRapidosComponent } from './paginas/mis-juegos-rapidos/mis-juegos-rapidos.component';
@@ -246,22 +246,28 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { JuegoDeCuestionarioKahootSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo.component';
 import { GestionPreguntaKahootComponent } from './paginas/juego-seleccionado-activo/juego-de-cuestionario-kahoot-seleccionado-activo/gestion-pregunta-kahoot/gestion-pregunta-kahoot.component';
 
+import { CrearRecursosCuentoComponent } from './paginas/crear-recursos-cuento/crear-recursos-cuento.component';
+import { MisRecursosCuentoComponent } from './paginas/mis-recursos-cuento/mis-recursos-cuento.component';
+import { AsignarRecursosJuegoCuentosComponent } from './paginas/juego/asignar-recursos-juego-cuentos/asignar-recursos-juego-cuentos.component';
+import { AsignaEspecialJuegoCuentosComponent } from './paginas/juego/asigna-especial-juego-cuentos/asigna-especial-juego-cuentos.component';
+import { JuegoDeCuentoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-seleccionado-activo.component';
+import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
+import { JuegoDeCuentoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-cuento-seleccionado-inactivo/juego-de-cuento-seleccionado-inactivo.component';
+
+import { ActividadRegistroComponent } from './paginas/actividad-registro/actividad-registro.component';
+import { ActividadGraficosComponent } from './paginas/actividad-graficos/actividad-graficos.component';
+import { ActividadConfigComponent } from './paginas/actividad-config/actividad-config.component';
+import { CdkColumnDef } from '@angular/cdk/table';
+
 import { JuegoDeEvaluacionActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/juego-de-evaluacion-activo.component';
 import { EvaluacionDialogoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/evaluacion-dialogo/evaluacion-dialogo.component';
 import { EvaluacionBorrarDialogoComponent } from './paginas/juego-seleccionado-activo/juego-de-evaluacion-activo/evaluacion-borrar-dialogo/evaluacion-borrar-dialogo.component';
 import { MostrarCuestionarioComponent } from './paginas/mis-cuestionarios/mostrar-cuestionario/mostrar-cuestionario.component';
 
-
-import { CrearRecursosLibroComponent } from './paginas/crear-recursos-libro/crear-recursos-libro.component';
-import { MisRecursosLibroComponent } from './paginas/mis-recursos-libro/mis-recursos-libro.component';
-import { JuegoDeCuentoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-seleccionado-activo.component';
-import { AsignarRecursosJuegoLibrosComponent } from './paginas/juego/asignar-recursos-juego-libros/asignar-recursos-juego-libros.component';
-import { AsignaEspecialJuegoLibrosComponent } from './paginas/juego/asigna-especial-juego-libros/asigna-especial-juego-libros.component';
-import { VotacionescuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/juego-de-cuento-votaciones/votacionescuento/votacionescuento.component';
-import { ListadoCuentosComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
-import { ReproductorCuentoComponent } from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
 import { JuegoDeEvaluacionSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-evaluacion-seleccionado-inactivo/juego-de-evaluacion-seleccionado-inactivo.component';
-
+// tslint:disable-next-line:max-line-length
+import { JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-control-de-trabajo-en-equipo-seleccionado-activo/juego-de-control-de-trabajo-en-equipo-seleccionado-activo.component';
+import { AsignarRubricaComponent } from './paginas/juego/asignar-rubrica/asignar-rubrica.component';
 
 
 @NgModule({
@@ -301,7 +307,6 @@ import { JuegoDeEvaluacionSeleccionadoInactivoComponent } from './paginas/juego-
     EditarColeccionComponent,
     AgregarCromoDialogComponent,
     AsignacionColeccionJuegoComponent,
-    DialogMostrarCromosComponent,
     JuegoDeColeccionSeleccionadoActivoComponent,
     AsignarCromosComponent,
     InformacionJuegoColeccionComponent,
@@ -374,15 +379,6 @@ import { JuegoDeEvaluacionSeleccionadoInactivoComponent } from './paginas/juego-
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
     RespuestasAlumnoJuegoDeCuestionarioComponent,
     VerTodosComponent,
-    CrearRecursosLibroComponent,
-    MisRecursosLibroComponent,
-    JuegoDeCuentoSeleccionadoActivoComponent,
-    AsignarRecursosJuegoLibrosComponent,
-    AsignaEspecialJuegoLibrosComponent,
-    ListadoCuentosComponent,
-    ReproductorCuentoComponent,
-    VotacionescuentoComponent,
-    ListadoCuentosComponent,
     JuegoDeVotacionUnoATodosSeleccionadoActivoComponent,
     JuegoDeVotacionUnoATodosSeleccionadoInactivoComponent,
     CrearRubricaComponent,
@@ -415,66 +411,78 @@ import { JuegoDeEvaluacionSeleccionadoInactivoComponent } from './paginas/juego-
     ModificarPerfilComponent,
     JuegoDeCuestionarioKahootSeleccionadoActivoComponent,
     GestionPreguntaKahootComponent,
+    CrearRecursosCuentoComponent,
+    MisRecursosCuentoComponent,
+    AsignarRecursosJuegoCuentosComponent,
+    AsignaEspecialJuegoCuentosComponent,
+    JuegoDeCuentoSeleccionadoActivoComponent,
+    ReproductorCuentoComponent,
+    JuegoDeCuentoSeleccionadoInactivoComponent,
     JuegoDeEvaluacionActivoComponent,
     EvaluacionDialogoComponent,
     EvaluacionBorrarDialogoComponent,
     MostrarCuestionarioComponent,
-    JuegoDeEvaluacionSeleccionadoInactivoComponent
+    JuegoDeEvaluacionSeleccionadoInactivoComponent,
+    JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent,
+    AsignarRubricaComponent,
+    ActividadRegistroComponent,
+    ActividadGraficosComponent,
+    ActividadConfigComponent
 
   ],
   imports: [
-        BrowserModule,
-        AppRoutingModule,
-        NgbModule,
-        HttpModule,
+    BrowserModule,
+    AppRoutingModule,
+    NgbModule,
+    HttpModule,
 
-        FormsModule,
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatChipsModule,
-        MatCardModule,
-        MatMenuModule,
-        MatStepperModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatTabsModule,
-        MatExpansionModule,
-        MatTooltipModule,
-        MatTableModule,
-        MatListModule,
-        MatIconModule,
-        MatDialogModule,
-        MatDividerModule,
-        MatCheckboxModule,
-        MatSnackBarModule,
-        MatToolbarModule,
-        MatGridListModule,
-        MdePopoverModule,
-        MatSortModule,
-        MatPaginatorModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatRadioModule,
-        MatSelectModule,
-        MatSliderModule,
-        HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatChipsModule,
+    MatCardModule,
+    MatMenuModule,
+    MatStepperModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTabsModule,
+    MatExpansionModule,
+    MatTooltipModule,
+    MatTableModule,
+    MatListModule,
+    MatIconModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatCheckboxModule,
+    MatSnackBarModule,
+    MatToolbarModule,
+    MatGridListModule,
+    MdePopoverModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatProgressSpinnerModule,
+    HttpClientModule,
+    MatBadgeModule,
 
-        NgxEchartsModule,
-        ListViewModule,
-        DragDropModule,
-        AngularDateTimePickerModule,
-        MatSliderModule,
-        NgxQRCodeModule,
-        MatProgressSpinnerModule,
-        MatBadgeModule
+    NgxEchartsModule,
+    ListViewModule,
+    DragDropModule,
+    AngularDateTimePickerModule,
+    MatSliderModule,
+    NgxQRCodeModule
 
-    ],
+  ],
   // INCLUIR DIÁLOGOS AQUI ADEMÁS DE ARRIBA
-  entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent, DialogMostrarCromosComponent,
+  entryComponents: [AgregarAlumnoDialogComponent, AgregarPreguntasDialogComponent,
     AgregarAlumnoEquipoComponent, DialogoConfirmacionComponent, MoverAlumnoComponent, AgregarCromoDialogComponent,
     // tslint:disable-next-line:max-line-length
-    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AgregarPuntoGeolocalizableDialogComponent, EditarPuntoGeolocalizableDialogComponent, AsignaCuestionarioComponent,
+    EditarCromoDialogComponent, DialogoComponent, EditarPreguntaDialogComponent, AgregarPuntoGeolocalizableDialogComponent, EditarPuntoGeolocalizableDialogComponent, 
     // tslint:disable-next-line:max-line-length
     InformacionJuegoDeCuestionarioDialogComponent, AsignaEscenarioComponent, AsignaPreguntasComponent, InformacionJuegoDeGeocachingDialogComponent,
     InformacionRespuestasJuegoDeCuestionarioDialogComponent,
@@ -485,7 +493,8 @@ import { JuegoDeEvaluacionSeleccionadoInactivoComponent } from './paginas/juego-
   providers: [
     {
         provide: DateAdapter, useClass: CustomDateAdapter
-    }
+    },
+    CdkColumnDef
   ]
 
 

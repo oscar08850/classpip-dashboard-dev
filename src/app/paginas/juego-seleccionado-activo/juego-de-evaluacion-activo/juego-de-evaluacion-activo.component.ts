@@ -797,11 +797,10 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
       confirmButtonText: 'Confirmar',
     }).then((result) => {
       if (result.value) {
-        this.calculos.EliminarJuegoDeEvaluacion(this.juego)
-        .subscribe(() => {
-          this.location.back();
-          Swal.fire('Juego eliminado correctamente', ' ', 'success');
-        });
+        this.calculos.EliminarJuegoDeEvaluacion(this.juego);
+        this.location.back();
+        Swal.fire('Juego eliminado correctamente', ' ', 'success');
+
       }
     });
   }

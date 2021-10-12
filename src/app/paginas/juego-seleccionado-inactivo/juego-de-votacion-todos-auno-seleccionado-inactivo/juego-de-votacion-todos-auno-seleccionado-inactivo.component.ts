@@ -103,25 +103,11 @@ export class JuegoDeVotacionTodosAUnoSeleccionadoInactivoComponent implements On
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, estoy seguro'
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.value) {
-        // Primero elimino las inscripciones
-        let cont = 0;
-        this.listaAlumnosOrdenadaPorPuntos.forEach (inscripcion => {
-          this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionTodosAUno (inscripcion.id)
-          .subscribe(() => {
-            cont++;
-            if (cont === this.listaAlumnosOrdenadaPorPuntos.length) {
-              // Ya están todas las inscripciones eliminadas
-              // ahora elimino el juego
-              this.peticionesAPI.BorraJuegoDeVotacionTodosAUno (this.juegoSeleccionado.id)
-              .subscribe(() => {
-                Swal.fire('El juego se ha eliminado correctamente');
-                this.location.back();
-              });
-            }
-          });
-        });
+        await this.calculos.EliminarJuegoDeVotacionTodosAUno(this.juegoSeleccionado);
+        Swal.fire('El juego se ha eliminado correctamente');
+        this.location.back();
       }
     });
   }
