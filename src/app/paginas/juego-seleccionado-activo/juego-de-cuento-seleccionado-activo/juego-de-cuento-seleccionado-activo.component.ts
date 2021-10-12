@@ -92,17 +92,16 @@ export class JuegoDeCuentoSeleccionadoActivoComponent implements OnInit {
    * Método que pide a la API todos los alumnos que pertenecen al Juego de Cuento y sus respectivos cuentos
    */
   obteneralumnosdelJuego() {
+    console.log ('Vamos a obtener alumnos ');
     this.peticionesAPI.DameAlumnosJuegoCuento(this.juegoSeleccionado.id)
 
       .subscribe(alumnosJuego => {
-
+        console.log ('Ya los tenemos ');
         console.log(alumnosJuego);
         this.alumnosDelJuego = alumnosJuego;
         this.haCambiado = Array(this.alumnosDelJuego.length).fill(false);
         this.PrepararTabla();
         this.alumnosDelJuego.forEach(element => {
-
-
           this.peticionesAPI.dameCuento(element.id)
           .subscribe((res) => {
             if (res.length != 0) {
