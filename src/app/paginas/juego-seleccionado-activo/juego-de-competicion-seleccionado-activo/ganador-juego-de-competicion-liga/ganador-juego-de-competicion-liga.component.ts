@@ -574,31 +574,35 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
         }
       }
     }  else if (this.juegoDisponibleSeleccionado.Tipo === 'Juego De Votación Uno A Todos') {
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
+        if (this.juegoDisponibleSeleccionado.Modo === 'Individual') {
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.EnfrentamientosJornadaSeleccionada.length; i++) {
 
-          // Saco al jugador uno de la lista de participantes del juego de votacion
-          // tslint:disable-next-line:max-line-length
+            // Saco al jugador uno de la lista de participantes del juego de votacion
+            // tslint:disable-next-line:max-line-length
 
-          // tslint:disable-next-line:max-line-length
-          const JugadorUno = this.listaAlumnosJuegoDeVotacionUnoATodos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno))[0];
-          // tslint:disable-next-line:max-line-length
-          const JugadorDos = this.listaAlumnosJuegoDeVotacionUnoATodos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos))[0];
+            // tslint:disable-next-line:max-line-length
+            const JugadorUno = this.listaAlumnosJuegoDeVotacionUnoATodos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorUno))[0];
+            // tslint:disable-next-line:max-line-length
+            const JugadorDos = this.listaAlumnosJuegoDeVotacionUnoATodos.filter (a => a.alumnoId === Number (this.EnfrentamientosJornadaSeleccionada[i].JugadorDos))[0];
 
-          console.log (JugadorUno.alumnoId + ' versus ' + JugadorDos.alumnoId);
-          console.log (JugadorUno.puntosTotales + ' versus ' + JugadorDos.puntosTotales);
-          if (JugadorUno.puntosTotales > JugadorDos.puntosTotales) {
-            resultados.push (1);
-            this.selectionUno.select(this.dataSourceTablaGanadorIndividual.data[i]);
+            console.log (JugadorUno.alumnoId + ' versus ' + JugadorDos.alumnoId);
+            console.log (JugadorUno.puntosTotales + ' versus ' + JugadorDos.puntosTotales);
+            if (JugadorUno.puntosTotales > JugadorDos.puntosTotales) {
+              resultados.push (1);
+              this.selectionUno.select(this.dataSourceTablaGanadorIndividual.data[i]);
 
-          } else  if (JugadorUno.puntosTotales < JugadorDos.puntosTotales) {
-            resultados.push (2);
-            this.selectionDos.select(this.dataSourceTablaGanadorIndividual.data[i]);
+            } else  if (JugadorUno.puntosTotales < JugadorDos.puntosTotales) {
+              resultados.push (2);
+              this.selectionDos.select(this.dataSourceTablaGanadorIndividual.data[i]);
 
-          } else {
-            resultados.push (0);
-            this.selectionTres.select(this.dataSourceTablaGanadorIndividual.data[i]);
+            } else {
+              resultados.push (0);
+              this.selectionTres.select(this.dataSourceTablaGanadorIndividual.data[i]);
+            }
           }
+        } else {
+          
         }
     }
     this.calculos.AsignarResultadosJornadaLiga(this.juegoSeleccionado , this.jornadaId, resultados);

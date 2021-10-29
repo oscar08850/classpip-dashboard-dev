@@ -15,6 +15,7 @@ import { MatTableDataSource } from '@angular/material';
 import Swal from 'sweetalert2';
 import { AlumnoJuegoDeEvaluacion } from 'src/app/clases/AlumnoJuegoDeEvaluacion';
 import { EquipoJuegoDeEvaluacion } from 'src/app/clases/EquipoJuegoDeEvaluacion';
+import { EquipoJuegoDeVotacionUnoATodos } from 'src/app/clases/EquipoJuegoDeVotacionUnoATodos';
 
 
 
@@ -76,6 +77,7 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
   listaAlumnosOrdenadaPorPuntosJuegoDeCuestionario: AlumnoJuegoDeCuestionario[];
   listaAlumnosOrdenadaPorPuntosJuegoDeVotacionUnoATodos: AlumnoJuegoDeVotacionUnoATodos[];
+  listaEquiposOrdenadaPorPuntosJuegoDeVotacionUnoATodos: EquipoJuegoDeVotacionUnoATodos[];
   listaAlumnosOrdenadaPorPuntosJuegoDeEvaluacion: AlumnoJuegoDeEvaluacion[];
   listaEquiposOrdenadaPorPuntosJuegoDeEvaluacion: EquipoJuegoDeEvaluacion[];
 
@@ -173,6 +175,24 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       // tslint:disable-next-line:only-arrow-functions
       // tslint:disable-next-line:max-line-length
       this.listaAlumnosOrdenadaPorPuntosJuegoDeVotacionUnoATodos = this.listaAlumnosOrdenadaPorPuntosJuegoDeVotacionUnoATodos.sort(function(obj1, obj2) {
+        return obj2.puntosTotales - obj1.puntosTotales;
+      });
+    });
+
+  }
+
+  RecuperarInscripcionesEquiposJuegoDeVotacionUnoATodos() {
+    this.peticionesAPI.DameInscripcionesEquipoJuegoDeVotacionUnoATodos(this.juegoDisponibleSeleccionadoID)
+    .subscribe(inscripciones => {
+      this.listaEquiposOrdenadaPorPuntosJuegoDeVotacionUnoATodos = inscripciones;
+      // ordena la lista por puntos
+      // tslint:disable-next-line:only-arrow-functions
+      // tslint:disable-next-line:max-line-length
+      // tslint:disable-next-line:only-arrow-functions
+      // tslint:disable-next-line:max-line-length
+      // tslint:disable-next-line:only-arrow-functions
+      // tslint:disable-next-line:max-line-length
+      this.listaEquiposOrdenadaPorPuntosJuegoDeVotacionUnoATodos = this.listaEquiposOrdenadaPorPuntosJuegoDeVotacionUnoATodos.sort(function(obj1, obj2) {
         return obj2.puntosTotales - obj1.puntosTotales;
       });
     });
@@ -300,8 +320,11 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
       // De momento solo hay individual
       this.RecuperarInscripcionesAlumnosJuegoCuestionario();
     } else if ( this.juegoDisponibleSeleccionado.Tipo === 'Juego De Votación Uno A Todos') {
-      // De momento solo hay individual
-      this.RecuperarInscripcionesAlumnosJuegoDeVotacionUnoATodos();
+      if (this.juegoSeleccionado.Modo === 'Individual') {
+        this.RecuperarInscripcionesAlumnosJuegoDeVotacionUnoATodos();
+      } else {
+        this.RecuperarInscripcionesEquiposJuegoDeVotacionUnoATodos();
+      }
     } else if ( this.juegoDisponibleSeleccionado.Tipo === 'Evaluacion') {
       if (this.juegoSeleccionado.Modo === 'Individual') {
         console.log ('vamos a por las inscripciones de los alumnos');
@@ -373,17 +396,26 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
         }
       }
     // Juego en equipo
-    } else if (this.juegoDisponibleSeleccionado.Tipo === 'Juego De Puntos') {
-      let i = 0;
-      while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
-        ganadores.push(this.listaEquiposOrdenadaPorPuntosJuegoDePuntos[i].equipoId);
-        i++;
-      }
-    } else if (this.juegoDisponibleSeleccionado.Tipo === 'Evaluacion') {
-      let i = 0;
-      while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
-        ganadores.push(this.listaEquiposOrdenadaPorPuntosJuegoDeEvaluacion[i].equipoId);
-        i++;
+    } else {
+      
+      if (this.juegoDisponibleSeleccionado.Tipo === 'Juego De Puntos') {
+        let i = 0;
+        while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+          ganadores.push(this.listaEquiposOrdenadaPorPuntosJuegoDePuntos[i].equipoId);
+          i++;
+        }
+      } else if (this.juegoDisponibleSeleccionado.Tipo === 'Evaluacion') {
+        let i = 0;
+        while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+          ganadores.push(this.listaEquiposOrdenadaPorPuntosJuegoDeEvaluacion[i].equipoId);
+          i++;
+        }
+      } else if (this.juegoDisponibleSeleccionado.Tipo === 'Juego De Votación Uno A Todos') {
+        let i = 0;
+        while (i < this.juegoSeleccionado.NumeroParticipantesPuntuan) {
+          ganadores.push(this.listaEquiposOrdenadaPorPuntosJuegoDeVotacionUnoATodos[i].equipoId);
+          i++;
+        }
       }
     }
     // Añado puntos de elegidos a la tabla
