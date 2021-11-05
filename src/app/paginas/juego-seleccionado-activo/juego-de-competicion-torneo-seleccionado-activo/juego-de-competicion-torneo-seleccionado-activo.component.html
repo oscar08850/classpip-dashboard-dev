@@ -1,0 +1,380 @@
+<div class="enColumna">
+
+  <div class="enFila" style="width: 65%">
+    <button type="button" class="btn Info"  (click) = Informacion();  routerLink = "informacionJuegoDeCompeticionTorneo">Información<i class="material-icons">info</i></button>
+    <button type="button" class="btn Editar" (click) = editarjornadas(); routerLink = "editarjornadasJuegoDeCompeticionTorneo">Editar Jornadas<i class="material-icons">edit</i></button>
+    <button type="button" class="btn Aceptar" (click) = seleccionarGanadorTorneo(); routerLink = "seleccionarGanadorJuegoDeCompeticionTorneo">Resultados<i class="material-icons">emoji_events</i></button>
+    <button type="button" class="btn Eliminar" (click) = "DesactivarJuego()"> Desactivar<i class="material-icons">history</i></button>
+   
+  </div>
+<!-- ////////////////////////////////////// CUADRO TORNEO ////////////////////////////////////////////////////-->
+  <br>
+  <div  class="subtitulo">Cuadro Torneo</div>
+  <br>
+  <span *ngIf="juegoSeleccionado.ModeloTorneo == 'Clásico'" >
+
+  <span *ngIf="enfrentamientosDelJuego !== undefined" >
+    <!-- ///////////////////////// 2 participantes ////////////////////////-->
+    <span *ngIf="enfrentamientosDelJuego.length === 1" >
+      <img  src = "../../assets/cuadro2teams.PNG" style="width: 370px; height: 150px; position: relative;top: 10px;left: -5px;">
+      <div class="texto-encima">
+      
+      <span *ngFor="let participantes of participantestorneo; let i = index" >
+        
+     <!-- ///////////// Final ///////////////// -->
+     <span *ngIf="participantes.length === 2" >
+     
+      <mat-list class="mat-list" style = "position: relative;top: 2px;left: 190px;">
+        <mat-list-item style = "width: 200px;height: 70px;font-size: 100%;" *ngFor="let participante of participantes; let i = index" >
+          <span *ngIf="participante!==undefined" >
+            <span style="border-image: initial;">{{participante}} </span> <br><br>
+          </span> 
+          <span *ngIf="participante==undefined" >
+            <span style="border-image: initial;">Fantasma</span> <br><br>
+          </span> 
+        </mat-list-item>
+      </mat-list>
+      <span *ngIf="GanadorTorneo !== undefined" >
+        <span style="border-image: initial;color:blue;position: relative;top: -90px;left: 430px;">{{GanadorTorneo}}</span>
+      </span>
+    </span>
+    </span>
+    </div>
+    </span> 
+
+    <!-- ///////////////////////// 4 participantes ////////////////////////-->
+    <span *ngIf="enfrentamientosDelJuego.length === 2" >
+      <img  src = "../../assets/cuadro4teams.PNG" style="width: 500px; height: 200px; position: relative;top: 10px;left: -5px;">
+      <div class="texto-encima">
+      
+      <span *ngFor="let participantes of participantestorneo; let i = index" >
+        
+     <!-- ///////////// Semis ///////////////// -->
+     <span *ngIf="participantes.length === 4" >
+      <mat-list class="mat-list" style = "position: relative;top: 7px;left: 120px;">
+        <mat-list-item style = "width: 200px;height: 50px;font-size: 100%;" *ngFor="let participante of participantes; let i = index" >
+          <span *ngIf="participante!==undefined" >
+            <span style="border-image: initial;">{{participante}}</span> <br><br>
+          </span> 
+          <span *ngIf="participante==undefined" >
+            <span style="border-image: initial;">Fantasma</span> <br><br>
+          </span> 
+        </mat-list-item>
+      </mat-list>
+    </span>
+     <!-- ///////////// Final ///////////////// -->
+     <span *ngIf="participantes.length === 2" >
+     
+      <mat-list class="mat-list" style = "position: relative;top: -203px;left: 300px;">
+        <mat-list-item style = "width: 200px;height: 100px;font-size: 100%;" *ngFor="let participante of participantes; let i = index" >
+          <span *ngIf="participante!==undefined" >
+            <span style="border-image: initial;">{{participante}} </span> <br><br>
+          </span> 
+          <span *ngIf="participante==undefined" >
+            <span style="border-image: initial;">Fantasma</span> <br><br>
+          </span> 
+        </mat-list-item>
+      </mat-list>
+      <span *ngIf="GanadorTorneo !== undefined" >
+        <span style="border-image: initial; color:blue;position: relative;top: -320px;left: 515px;">{{GanadorTorneo}}</span>
+      </span>
+    </span>
+    </span>
+    </div>
+    </span> 
+    <!-- ///////////////////////// 8 participantes ////////////////////////-->
+
+  <span *ngIf="enfrentamientosDelJuego.length === 3" >
+  <img  src = "../../assets/cuadro8teams.jpg" style="width: 920px; height: 395px; position: relative;top: 10px;left: -5px;">
+  <div class="texto-encima">
+  
+  <span *ngFor="let participantes of participantestorneo; let i = index" >
+  <!-- ///////////// 4tos /////////////////-->
+    <span *ngIf="participantes.length === 8" >
+      <mat-list class="mat-list" style = "position: relative;top: 3px;left: -98px;">
+        <mat-list-item style = "width: 200px;height: 50px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+          <span *ngIf="participante!==undefined" >
+            <span style="border-image: initial;">{{participante}}</span> <br><br> 
+          </span> 
+          <span *ngIf="participante==undefined" >
+            <span style="border-image: initial;">Fantasma</span> <br><br>
+          </span> 
+        </mat-list-item>
+      </mat-list>
+    </span>
+ <!-- ///////////// Semis ///////////////// -->
+ <span *ngIf="participantes.length === 4" >
+  <mat-list class="mat-list" style = "position: relative;top: -405px;left: 150px;">
+    <mat-list-item style = "width: 200px;height: 100px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+      <span *ngIf="participante!==undefined" >
+        <span style="border-image: initial;">{{participante}}</span> <br><br>
+      </span> 
+      <span *ngIf="participante==undefined" >
+        <span style="border-image: initial;">Fantasma</span> <br><br>
+      </span> 
+    </mat-list-item>
+  </mat-list>
+</span>
+ <!-- ///////////// Final ///////////////// -->
+ <span *ngIf="participantes.length === 2" >
+ 
+  <mat-list class="mat-list" style = "position: relative;top: -810px;left: 400px;">
+    <mat-list-item style = "width: 200px;height: 200px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+      <span *ngIf="participante!==undefined" >
+        <span style="border-image: initial;">{{participante}} </span> <br><br>
+      </span> 
+      <span *ngIf="participante==undefined" >
+        <span style="border-image: initial;">Fantasma</span> <br><br>
+      </span> 
+    </mat-list-item>
+  </mat-list>
+  <span *ngIf="GanadorTorneo !== undefined" >
+    <span style="border-image: initial; color:blue;position: relative;top: -1035px;left: 650px;">{{GanadorTorneo}}</span>
+  </span>
+</span>
+</span>
+</div>
+</span> 
+    <!-- ///////////////////////// 16 participantes ////////////////////////-->
+    
+  <span *ngIf="enfrentamientosDelJuego.length === 4" >
+    <img  src = "../../assets/cuadro16teams.jpg" style="width: 1500px; height: 750px; position: relative;top: 10px;left: 200px;">
+    <div class="texto-encima">
+    
+    <span *ngFor="let participantes of participantestorneo; let i = index" >
+         <!-- ///////////// 8vos /////////////////-->
+         <span *ngIf="participantes.length === 16" >
+          <mat-list class="mat-list" style = "position: relative;top: 3px;left: -190px;">
+            <mat-list-item style = "width: 200px;height: 45px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+              <span *ngIf="participante!==undefined" >
+                <span style="border-image: initial;">{{participante}}</span> <br><br> 
+              </span> 
+              <span *ngIf="participante==undefined" >
+                <span style="border-image: initial;">Fantasma</span> <br><br>
+              </span> 
+            </mat-list-item>
+          </mat-list>
+        </span>
+    <!-- ///////////// 4tos /////////////////-->
+      <span *ngIf="participantes.length === 8" >
+        <mat-list class="mat-list" style = "position: relative;top: -725px;left: 100px;">
+          <mat-list-item style = "width: 200px;height: 90px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+            <span *ngIf="participante!==undefined" >
+              <span style="border-image: initial;">{{participante}}</span> <br><br> 
+            </span> 
+            <span *ngIf="participante==undefined" >
+              <span style="border-image: initial;">Fantasma</span> <br><br>
+            </span> 
+          </mat-list-item>
+        </mat-list>
+      </span>
+   <!-- ///////////// Semis ///////////////// -->
+   <span *ngIf="participantes.length === 4" >
+    <mat-list class="mat-list" style = "position: relative;top: -1450px;left: 370px;">
+      <mat-list-item style = "width: 200px;height: 180px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+        <span *ngIf="participante!==undefined" >
+          <span style="border-image: initial;">{{participante}}</span> <br><br>
+        </span> 
+        <span *ngIf="participante==undefined" >
+          <span style="border-image: initial;">Fantasma</span> <br><br>
+        </span> 
+      </mat-list-item>
+    </mat-list>
+  </span>
+   <!-- ///////////// Final ///////////////// -->
+   <span *ngIf="participantes.length === 2" >
+   
+    <mat-list class="mat-list" style = "position: relative;top: -2180px;left: 630px;">
+      <mat-list-item style = "width: 200px;height: 365px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+        <span *ngIf="participante!==undefined" >
+          <span style="border-image: initial;">{{participante}} </span> <br><br>
+        </span> 
+        <span *ngIf="participante==undefined" >
+          <span style="border-image: initial;">Fantasma</span> <br><br>
+        </span> 
+      </mat-list-item>
+    </mat-list>
+    <span *ngIf="GanadorTorneo !== undefined" >
+      <span style="border-image: initial;color:blue;position: relative;top: -2590px;left: 910px;">{{GanadorTorneo}}</span>
+    </span>
+  </span>
+  </span>
+  </div>
+  </span> 
+    <!-- ///////////////////////// 32 participantes ////////////////////////-->
+      
+  <span *ngIf="enfrentamientosDelJuego.length === 5" >
+    <img  src = "../../assets/cuadro32teams.jpg" style="width: 2200px; height: 1240px; position: relative;top: 10px;left: 600px;">
+    <div class="texto-encima">
+    
+    <span *ngFor="let participantes of participantestorneo; let i = index" >
+        <!-- ///////////// 16vos /////////////////-->
+        <span *ngIf="participantes.length === 32" >
+          <mat-list class="mat-list" style = "position: relative;top: 1px;left: -140px;">
+            <mat-list-item style = "width: 200px;height: 37.5px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+              <span *ngIf="participante!==undefined" >
+                <span style="border-image: initial;">{{participante}}</span> <br><br> 
+              </span> 
+              <span *ngIf="participante==undefined" >
+                <span style="border-image: initial;">Fantasma</span> <br><br>
+              </span> 
+            </mat-list-item>
+          </mat-list>
+        </span>
+         <!-- ///////////// 8vos /////////////////-->
+         <span *ngIf="participantes.length === 16" >
+          <mat-list class="mat-list" style = "position: relative;top: -1205px;left: 130px;">
+            <mat-list-item style = "width: 200px;height: 75px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+              <span *ngIf="participante!==undefined" >
+                <span style="border-image: initial;">{{participante}}</span> <br><br> 
+              </span> 
+              <span *ngIf="participante==undefined" >
+                <span style="border-image: initial;">Fantasma</span> <br><br>
+              </span> 
+            </mat-list-item>
+          </mat-list>
+        </span>
+    <!-- ///////////// 4tos /////////////////-->
+      <span *ngIf="participantes.length === 8" >
+        <mat-list class="mat-list" style = "position: relative;top: -2410px;left: 400px;">
+          <mat-list-item style = "width: 200px;height: 150px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+            <span *ngIf="participante!==undefined" >
+              <span style="border-image: initial;">{{participante}}</span> <br><br> 
+            </span> 
+            <span *ngIf="participante==undefined" >
+              <span style="border-image: initial;">Fantasma</span> <br><br>
+            </span> 
+          </mat-list-item>
+        </mat-list>
+      </span>
+   <!-- ///////////// Semis ///////////////// -->
+   <span *ngIf="participantes.length === 4" >
+    <mat-list class="mat-list" style = "position: relative;top: -3620px;left: 650px;">
+      <mat-list-item style = "width: 200px;height: 300px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+        <span *ngIf="participante!==undefined" >
+          <span style="border-image: initial;">{{participante}}</span> <br><br>
+        </span> 
+        <span *ngIf="participante==undefined" >
+          <span style="border-image: initial;">Fantasma</span> <br><br>
+        </span> 
+      </mat-list-item>
+    </mat-list>
+  </span>
+   <!-- ///////////// Final ///////////////// -->
+   <span *ngIf="participantes.length === 2" >
+   
+    <mat-list class="mat-list" style = "position: relative;top: -4845px;left: 900px;">
+      <mat-list-item style = "width: 200px;height: 600px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+        <span *ngIf="participante!==undefined" >
+          <span style="border-image: initial;">{{participante}} </span> <br><br>
+        </span> 
+        <span *ngIf="participante==undefined" >
+          <span style="border-image: initial;">Fantasma</span> <br><br>
+        </span> 
+      </mat-list-item>
+    </mat-list>
+    <span *ngIf="GanadorTorneo !== undefined" >
+      <span style="border-image: initial;color:blue;position: relative;top: -5460px;left: 1160px;">{{GanadorTorneo}}</span>
+    </span>
+  </span>
+  </span>
+  </div>
+  </span> 
+    <!-- ///////////////////////// 64 participantes ////////////////////////-->
+  
+    <span *ngIf="enfrentamientosDelJuego.length === 6" >
+      <img  src = "../../assets/cuadro64teams.jpg" style="width: 2400px; height: 2140px; position: relative;top: 10px;left: 700px;">
+      <div class="texto-encima">
+      
+      <span *ngFor="let participantes of participantestorneo; let i = index" >
+          <!-- ///////////// 32vos /////////////////-->
+          <span *ngIf="participantes.length === 64" >
+            <mat-list class="mat-list" style = "position: relative;top: 3px;left: -140px;">
+              <mat-list-item style = "width: 200px;height: 32.8px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+                <span *ngIf="participante!==undefined" >
+                  <span style="border-image: initial;">{{participante}}</span> <br><br> 
+                </span> 
+                <span *ngIf="participante==undefined" >
+                  <span style="border-image: initial;">Fantasma</span> <br><br>
+                </span> 
+              </mat-list-item>
+            </mat-list>
+          </span>
+          <!-- ///////////// 16vos /////////////////-->
+          <span *ngIf="participantes.length === 32" >
+            <mat-list class="mat-list" style = "position: relative;top: -2102px;left: 145px;">
+              <mat-list-item style = "width: 200px;height: 65.4px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+                <span *ngIf="participante!==undefined" >
+                  <span style="border-image: initial;">{{participante}}</span> <br><br> 
+                </span> 
+                <span *ngIf="participante==undefined" >
+                  <span style="border-image: initial;">Fantasma</span> <br><br>
+                </span> 
+              </mat-list-item>
+            </mat-list>
+          </span>
+           <!-- ///////////// 8vos /////////////////-->
+           <span *ngIf="participantes.length === 16" >
+            <mat-list class="mat-list" style = "position: relative;top: -4200px;left: 430px;">
+              <mat-list-item style = "width: 200px;height: 130.8px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+                <span *ngIf="participante!==undefined" >
+                  <span style="border-image: initial;">{{participante}}</span> <br><br> 
+                </span> 
+                <span *ngIf="participante==undefined" >
+                  <span style="border-image: initial;">Fantasma</span> <br><br>
+                </span> 
+              </mat-list-item>
+            </mat-list>
+          </span>
+      <!-- ///////////// 4tos /////////////////-->
+        <span *ngIf="participantes.length === 8" >
+          <mat-list class="mat-list" style = "position: relative;top: -6302px;left: 700px;">
+            <mat-list-item style = "width: 200px;height: 261.6px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+              <span *ngIf="participante!==undefined" >
+                <span style="border-image: initial;">{{participante}}</span> <br><br> 
+              </span> 
+              <span *ngIf="participante==undefined" >
+                <span style="border-image: initial;">Fantasma</span> <br><br>
+              </span> 
+            </mat-list-item>
+          </mat-list>
+        </span>
+     <!-- ///////////// Semis ///////////////// -->
+     <span *ngIf="participantes.length === 4" >
+      <mat-list class="mat-list" style = "position: relative;top: -8415px;left: 960px;">
+        <mat-list-item style = "width: 200px;height: 523.2px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+          <span *ngIf="participante!==undefined" >
+            <span style="border-image: initial;">{{participante}}</span> <br><br>
+          </span> 
+          <span *ngIf="participante==undefined" >
+            <span style="border-image: initial;">Fantasma</span> <br><br>
+          </span> 
+        </mat-list-item>
+      </mat-list>
+    </span>
+     <!-- ///////////// Final ///////////////// -->
+     <span *ngIf="participantes.length === 2" >
+     
+      <mat-list class="mat-list" style = "position: relative;top: -10505px;left: 1220px;">
+        <mat-list-item style = "width: 200px;height: 1046.4px;font-size: 95%;" *ngFor="let participante of participantes; let i = index" >
+          <span *ngIf="participante!==undefined" >
+            <span style="border-image: initial;">{{participante}} </span> <br><br>
+          </span> 
+          <span *ngIf="participante==undefined" >
+            <span style="border-image: initial;">Fantasma</span> <br><br>
+          </span> 
+        </mat-list-item>
+      </mat-list>
+      <span *ngIf="GanadorTorneo !== undefined" >
+        <span style="border-image: initial;color:blue;position: relative;top: -11575px;left: 1495px;">{{GanadorTorneo}}</span>
+      </span>
+    </span>
+    </span>
+    </div>
+    </span> 
+
+    
+
+</span>
+</span>
+</div>

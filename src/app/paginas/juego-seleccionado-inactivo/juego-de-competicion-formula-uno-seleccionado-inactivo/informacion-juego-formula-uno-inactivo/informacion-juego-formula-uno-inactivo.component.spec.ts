@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 // tslint:disable-next-line:max-line-length
-import { InformacionJuegoDeCompeticionFormulaUnoInactivoComponent } from './informacion-juego-de-competicion-formula-uno-inactivo.component';
+import { InformacionJuegoDeCompeticionFormulaUnoInactivoComponent } from './informacion-juego-formula-uno-inactivo.component';
 
 describe('InformacionJuegoDeCompeticioninactivoComponent', () => {
   let component: InformacionJuegoDeCompeticionFormulaUnoInactivoComponent;

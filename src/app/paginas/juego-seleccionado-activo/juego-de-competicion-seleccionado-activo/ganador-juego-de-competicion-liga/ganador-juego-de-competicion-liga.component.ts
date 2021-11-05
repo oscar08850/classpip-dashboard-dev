@@ -312,42 +312,82 @@ export class GanadorJuegoDeCompeticionLigaComponent implements OnInit {
 
   /* Esta función decide si los botones deben estar activos (si se ha seleccionado la jornada)
      o si debe estar desactivado (si no se ha seleccionado la jornada) */
-  SeleccionaJornada() {
+     SeleccionaJornada() {
       console.log('Estoy en actualizar botón');
-      // if (this.Disputada (this.jornadaId)) {
-      //   this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-      // }
-      this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-      console.log(this.modoAsignacionId);
-      if (this.modoAsignacionId === undefined || this.jornadaId === undefined) {
-        this.botonAsignarAleatorioDesactivado = true;
-        this.botonAsignarManualDesactivado = true;
-        this.botonAsignarJuegoDesactivado = true;
-      } else if (Number(this.modoAsignacionId) === 1) { // Manual
-        console.log('Modo manual');
-        this.botonAsignarAleatorioDesactivado = true;
-        this.botonAsignarManualDesactivado = false;
-        this.botonAsignarJuegoDesactivado = true;
+      let jornadaAnterior : number;
+      console.log (this.jornadaId);
+      jornadaAnterior = this.jornadaId -1;
+      console.log (jornadaAnterior);
+      console.log (this.JornadasCompeticion[0].id);
+      if (this.jornadaId == this.JornadasCompeticion[0].id) {
+            this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+            console.log(this.modoAsignacionId);
+            if (this.modoAsignacionId === undefined || this.jornadaId === undefined) {
+              this.botonAsignarAleatorioDesactivado = true;
+              this.botonAsignarManualDesactivado = true;
+              this.botonAsignarJuegoDesactivado = true;
+            } else if (Number(this.modoAsignacionId) === 1) { // Manual
+              console.log('Modo manual');
+              this.botonAsignarAleatorioDesactivado = true;
+              this.botonAsignarManualDesactivado = false;
+              this.botonAsignarJuegoDesactivado = true;
+              this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+            } else if (Number(this.modoAsignacionId) === 2) { // Aleatorio
+              console.log('Modo aleatorio');
+              this.botonAsignarManualDesactivado = true;
+              this.botonAsignarAleatorioDesactivado = false;
+              this.botonAsignarJuegoDesactivado = true;
+              this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+            } else if (Number(this.modoAsignacionId) === 3 && this.juegosDisponibles.length !== 0) { // JuegoPuntos
+              console.log('Modo puntos');
+              this.botonAsignarManualDesactivado = true;
+              this.botonAsignarAleatorioDesactivado = true;
+              this.botonAsignarJuegoDesactivado = false;
+              this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+              this.ActualizarBotonJuego();
+            } else if (Number(this.modoAsignacionId) === 3 && this.juegosDisponibles.length === 0) { // JuegoPuntos
+              this.botonAsignarManualDesactivado = true;
+              this.botonAsignarAleatorioDesactivado = true;
+              this.botonAsignarJuegoDesactivado = true;
+              Swal.fire('Cuidado', 'No hay juegos disponibles para este este grupo', 'warning');
+            }
+      } 
+     else if (!this.Disputada(jornadaAnterior)){
+        Swal.fire('Cuidado, no se ha jugado la jornada anterior');
+        this.location.back();
+      } else {
         this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-      } else if (Number(this.modoAsignacionId) === 2) { // Aleatorio
-        console.log('Modo aleatorio');
-        this.botonAsignarManualDesactivado = true;
-        this.botonAsignarAleatorioDesactivado = false;
-        this.botonAsignarJuegoDesactivado = true;
-        this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-      } else if (Number(this.modoAsignacionId) === 3 && this.juegosDisponibles.length !== 0) { // JuegoPuntos
-        console.log('Modo puntos');
-        this.botonAsignarManualDesactivado = true;
-        this.botonAsignarAleatorioDesactivado = true;
-        this.botonAsignarJuegoDesactivado = false;
-        this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
-        this.ActualizarBotonJuego();
-      } else if (Number(this.modoAsignacionId) === 3 && this.juegosDisponibles.length === 0) { // JuegoPuntos
-        this.botonAsignarManualDesactivado = true;
-        this.botonAsignarAleatorioDesactivado = true;
-        this.botonAsignarJuegoDesactivado = true;
-        Swal.fire('Cuidado', 'No hay juegos disponibles para este este grupo', 'warning');
-      }
+        console.log(this.modoAsignacionId);
+        if (this.modoAsignacionId === undefined || this.jornadaId === undefined) {
+          this.botonAsignarAleatorioDesactivado = true;
+          this.botonAsignarManualDesactivado = true;
+          this.botonAsignarJuegoDesactivado = true;
+        } else if (Number(this.modoAsignacionId) === 1) { // Manual
+          console.log('Modo manual');
+          this.botonAsignarAleatorioDesactivado = true;
+          this.botonAsignarManualDesactivado = false;
+          this.botonAsignarJuegoDesactivado = true;
+          this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+        } else if (Number(this.modoAsignacionId) === 2) { // Aleatorio
+          console.log('Modo aleatorio');
+          this.botonAsignarManualDesactivado = true;
+          this.botonAsignarAleatorioDesactivado = false;
+          this.botonAsignarJuegoDesactivado = true;
+          this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+        } else if (Number(this.modoAsignacionId) === 3 && this.juegosDisponibles.length !== 0) { // JuegoPuntos
+          console.log('Modo puntos');
+          this.botonAsignarManualDesactivado = true;
+          this.botonAsignarAleatorioDesactivado = true;
+          this.botonAsignarJuegoDesactivado = false;
+          this.ObtenerEnfrentamientosDeCadaJornada(this.jornadaId);
+          this.ActualizarBotonJuego();
+        } else if (Number(this.modoAsignacionId) === 3 && this.juegosDisponibles.length === 0) { // JuegoPuntos
+          this.botonAsignarManualDesactivado = true;
+          this.botonAsignarAleatorioDesactivado = true;
+          this.botonAsignarJuegoDesactivado = true;
+          Swal.fire('Cuidado', 'No hay juegos disponibles para este este grupo', 'warning');
+        }
+    }
   }
 
   ActualizarBotonJuego() {

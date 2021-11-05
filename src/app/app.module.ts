@@ -126,6 +126,20 @@ import { GanadoresJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-
 import { EditarJornadasJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/editar-jornadas-juego-formula-uno/editar-jornadas-juego-formula-uno.component';
 // tslint:disable-next-line:max-line-length
 import { EditarPuntosJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/editar-puntos-juego-formula-uno/editar-puntos-juego-formula-uno.component';
+// tslint:disable-next-line:max-line-length
+import { EditarJornadasJuegoDeCompeticionTorneoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-torneo-seleccionado-activo/editar-jornadas-juego-de-competicion-torneo/editar-jornadas-juego-de-competicion-torneo.component';
+// tslint:disable-next-line:max-line-length
+import { GanadorJuegoDeCompeticionTorneoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-torneo-seleccionado-activo/ganador-juego-de-competicion-torneo/ganador-juego-de-competicion-torneo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeCompeticionTorneoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-torneo-seleccionado-activo/juego-de-competicion-torneo-seleccionado-activo.component';
+// tslint:disable-next-line:max-line-length
+import { JuegoDeCompeticionTorneoSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-torneo-seleccionado-inactivo/juego-torneo-seleccionado-inactivo.component';
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionTorneoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-torneo-seleccionado-activo/informacion-juego-torneo/informacion-juego-de-competicion-torneo.component';
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionTorneoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-torneo-seleccionado-inactivo/informacion-juego-torneo-inactivo/informacion-juego-torneo-inactivo.component';
+// tslint:disable-next-line:max-line-length
+
 
 // COMPONENTES EN COMPARTIDO
 import { DialogoConfirmacionComponent } from './paginas/COMPARTIDO/dialogo-confirmacion/dialogo-confirmacion.component';
@@ -351,6 +365,13 @@ import { AsignarRubricaComponent } from './paginas/juego/asignar-rubrica/asignar
     EditarPuntosJuegoDeCompeticionFormulaUnoComponent,
     InformacionJuegoDeCompeticionFormulaUnoInactivoComponent,
     JuegoDeCompeticionFormulaUnoSeleccionadoInactivoComponent,
+
+    EditarJornadasJuegoDeCompeticionTorneoComponent,
+    GanadorJuegoDeCompeticionTorneoComponent,
+    JuegoDeCompeticionTorneoSeleccionadoActivoComponent,
+    JuegoDeCompeticionTorneoSeleccionadoInactivoComponent,
+    InformacionJuegoDeCompeticionTorneoComponent,
+    InformacionJuegoDeCompeticionTorneoInactivoComponent,
 
     CrearEscenarioComponent,
     MisEscenariosComponent,

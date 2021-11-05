@@ -68,6 +68,14 @@ import { EditarJornadasJuegoDeCompeticionComponent } from './paginas/juego-selec
 import { GanadorJuegoDeCompeticionLigaComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-seleccionado-activo/ganador-juego-de-competicion-liga/ganador-juego-de-competicion-liga.component';
 
 // tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionTorneoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-torneo-seleccionado-activo/informacion-juego-torneo/informacion-juego-de-competicion-torneo.component';
+// tslint:disable-next-line:max-line-length
+import { InformacionJuegoDeCompeticionTorneoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-competicion-torneo-seleccionado-inactivo/informacion-juego-torneo-inactivo/informacion-juego-torneo-inactivo.component';
+// tslint:disable-next-line:max-line-length
+import { EditarJornadasJuegoDeCompeticionTorneoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-torneo-seleccionado-activo/editar-jornadas-juego-de-competicion-torneo/editar-jornadas-juego-de-competicion-torneo.component';
+// tslint:disable-next-line:max-line-length
+import { GanadorJuegoDeCompeticionTorneoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-torneo-seleccionado-activo/ganador-juego-de-competicion-torneo/ganador-juego-de-competicion-torneo.component';
+// tslint:disable-next-line:max-line-length
 import { InformacionJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/informacion-juego-formula-uno/informacion-juego-formula-uno.component';
 // tslint:disable-next-line:max-line-length
 import { GanadoresJuegoDeCompeticionFormulaUnoComponent } from './paginas/juego-seleccionado-activo/juego-de-competicion-formula-uno-seleccionado-activo/ganadores-juego-formula-uno/ganadores-juego-formula-uno.component';
@@ -272,6 +280,14 @@ const routes: Routes = [
   {path: 'grupo/:id/juegos/juegoSeleccionadoActivo/seleccionarGanadorJuegoDeCompeticionLiga', component: GanadorJuegoDeCompeticionLigaComponent},
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionJuegoDeCompeticionInactivo', component: InformacionJuegoDeCompeticionInactivoComponent },
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoDeCompeticionTorneo', component: InformacionJuegoDeCompeticionTorneoComponent },
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/editarjornadasJuegoDeCompeticionTorneo', component: EditarJornadasJuegoDeCompeticionTorneoComponent },
+  // tslint:disable-next-line:max-line-length
+  {path: 'grupo/:id/juegos/juegoSeleccionadoActivo/seleccionarGanadorJuegoDeCompeticionTorneo', component: GanadorJuegoDeCompeticionTorneoComponent},
+  // tslint:disable-next-line:max-line-length
+  { path: 'grupo/:id/juegos/juegoSeleccionadoInactivo/informacionJuegoDeCompeticionTorneoInactivo', component: InformacionJuegoDeCompeticionTorneoInactivoComponent },
   // tslint:disable-next-line:max-line-length
   { path: 'grupo/:id/juegos/juegoSeleccionadoActivo/informacionJuegoDeCompeticionFormulaUno', component: InformacionJuegoDeCompeticionFormulaUnoComponent },
   // tslint:disable-next-line:max-line-length
