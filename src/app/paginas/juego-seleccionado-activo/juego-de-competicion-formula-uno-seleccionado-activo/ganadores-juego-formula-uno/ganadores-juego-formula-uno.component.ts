@@ -267,14 +267,33 @@ export class GanadoresJuegoDeCompeticionFormulaUnoComponent implements OnInit {
 
   // Esta función se ejecuta al seleccionar una jornada
   SeleccionaJornada() {
-    this.ConstruirTabla();
-    if (this.Disputada(this.jornadaId)) {
-      // Si ya se ha disputado, los ganadores están en la información de la jornada
-      const ganadores = this.jornadasDelJuego.filter (jornada => jornada.id === Number (this.jornadaId))[0].GanadoresFormulaUno;
-      // Añadimos los ganadores a la tabla
-      this.AñadirResultados ( ganadores);
+    let jornadaAnterior : number;
+    jornadaAnterior = this.jornadaId -1;
+    console.log (this.jornadaId);
+    console.log (jornadaAnterior);
+    console.log (this.jornadasDelJuego[0].id);
+    if (this.jornadaId == this.jornadasDelJuego[0].id) {
+          this.ConstruirTabla();
+          if (this.Disputada(this.jornadaId)) {
+            // Si ya se ha disputado, los ganadores están en la información de la jornada
+            const ganadores = this.jornadasDelJuego.filter (jornada => jornada.id === Number (this.jornadaId))[0].GanadoresFormulaUno;
+            // Añadimos los ganadores a la tabla
+            this.AñadirResultados ( ganadores);
+          }
+          this.dataSourceJornada = new MatTableDataSource (this.tablaJornada);
+    } else if (!this.Disputada(jornadaAnterior)){
+      Swal.fire('Cuidado, no se ha jugado la jornada anterior');
+      this.location.back();
+    } else {
+      this.ConstruirTabla();
+      if (this.Disputada(this.jornadaId)) {
+        // Si ya se ha disputado, los ganadores están en la información de la jornada
+        const ganadores = this.jornadasDelJuego.filter (jornada => jornada.id === Number (this.jornadaId))[0].GanadoresFormulaUno;
+        // Añadimos los ganadores a la tabla
+        this.AñadirResultados ( ganadores);
+      }
+      this.dataSourceJornada = new MatTableDataSource (this.tablaJornada);
     }
-    this.dataSourceJornada = new MatTableDataSource (this.tablaJornada);
   }
 
   // Esta función se ejecuta al seleccionar el modo de asignación

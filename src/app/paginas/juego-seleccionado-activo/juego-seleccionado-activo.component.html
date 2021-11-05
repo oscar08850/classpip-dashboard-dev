@@ -20,6 +20,10 @@
   <app-juego-formula-uno-seleccionado-activo></app-juego-formula-uno-seleccionado-activo>
 </div>
 
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Competición Torneo'">
+  <app-juego-de-competicion-torneo-seleccionado-activo></app-juego-de-competicion-torneo-seleccionado-activo>
+</div>
+
 <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Cuentos'">
   <app-juego-de-cuento-seleccionado-activo></app-juego-de-cuento-seleccionado-activo>
 </div>

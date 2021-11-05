@@ -5,7 +5,7 @@ import { ComServerService} from './com-server.service';
 import { Grupo, Equipo, Juego, Alumno, Nivel, TablaAlumnoJuegoDePuntos, TablaHistorialPuntosAlumno, AlumnoJuegoDePuntos,
          TablaEquipoJuegoDePuntos, HistorialPuntosAlumno, HistorialPuntosEquipo, EquipoJuegoDePuntos, TablaHistorialPuntosEquipo,
          AlumnoJuegoDeColeccion, Album, Coleccion, EquipoJuegoDeColeccion, AlbumEquipo, Cromo, TablaJornadas, TablaAlumnoJuegoDeCompeticion,
-         TablaEquipoJuegoDeCompeticion, Jornada, EquipoJuegoDeCompeticionLiga, EnfrentamientoLiga, InformacionPartidosLiga,
+         TablaEquipoJuegoDeCompeticion, Jornada, EquipoJuegoDeCompeticionLiga, EnfrentamientoLiga,EnfrentamientoTorneo, InformacionPartidosLiga,
          AlumnoJuegoDeCompeticionLiga, AlumnoJuegoDeCompeticionFormulaUno, EquipoJuegoDeCompeticionFormulaUno,
          // tslint:disable-next-line:max-line-length
          TablaClasificacionJornada, TablaPuntosFormulaUno, AlumnoJuegoDeVotacionUnoATodos, TablaAlumnoJuegoDeVotacionUnoATodos,
@@ -51,6 +51,12 @@ export class CalculosService {
   AlumnoJuegoDeCompeticionLigaId: number;
   EquipoJuegoDeCompeticionLigaId: number;
   empateAsignado = 0;
+  JornadasTorneo: number;
+  numPartidosPorRonda: Array<number>;
+  numParticipantes: number;
+  participantesB2: number;
+  INTparticipantesB2: number;
+  booleano: boolean;
 
   constructor(
     private sesion: SesionService,
@@ -93,11 +99,12 @@ private async EliminaJuegos(): Promise<any> {
           this.EliminarJuegoDeCompeticionLiga (juego);
         } else if (juego.Tipo === 'Juego De Competición Fórmula Uno') {
           this.EliminarJuegoDeCompeticionFormulaUno (juego);
+        } else if (juego.Tipo === 'Juego De Competición Torneo') {
+          this.EliminarJuegoDeCompeticionTorneo (juego);
         } else if (juego.Tipo === 'Juego De Avatar') {
           this.EliminarJuegoDeAvatar (juego);
         } else if (juego.Tipo === 'Juego De Cuestionario') {
           this.EliminarJuegoDeCuestionario (juego);
-
         } else if (juego.Tipo === 'Juego De Geocaching') {
           this.EliminarJuegoDeGeocaching(juego);
         } else if (juego.Tipo === 'Juego De Votación Uno A Todos') {
@@ -254,6 +261,36 @@ public async EliminarJuegoDeCompeticionFormulaUno(juego: any) {
   // Borro el juego
   await this.peticionesAPI.BorraJuegoDeCompeticionFormulaUno (juego.id).toPromise();
 }
+public async EliminarJuegoDeCompeticionTorneo(juego: any) {
+  if (juego.Modo === 'Individual') {
+    const inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeCompeticionTorneo (juego.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionAlumnoJuegoDeCompeticionTorneo(inscripciones[i].id).toPromise();
+    }
+  } else {
+    const inscripciones = await this.peticionesAPI.DameInscripcionesEquipoJuegoDeCompeticionTorneo (juego.id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionEquipoJuegoDeCompeticionTorneo(inscripciones[i].id).toPromise();
+    }
+
+  }
+  // Borro las jornadas
+  const jornadas = await this.peticionesAPI.DameJornadasDeCompeticionTorneo (juego.id).toPromise();
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < jornadas.length ; i++ ) {
+    const enfrentamientos = await this.peticionesAPI.DameEnfrentamientosDeCadaJornadaTorneo (jornadas[i].id).toPromise();
+    // tslint:disable-next-line:prefer-for-of
+    for (let j = 0; j < enfrentamientos.length ; j++ ) {
+      await this.peticionesAPI.BorraEnfrentamientoTorneo (enfrentamientos[j]).toPromise();
+    }
+    await this.peticionesAPI.BorrarJornadaTorneo(jornadas[i]).toPromise();
+  }
+  // Borro el juego
+  await this.peticionesAPI.BorraJuegoDeCompeticionTorneo (juego.id).toPromise();
+}
+
 
 public async EliminarJuegoDeAvatar(juego: any) {
   let inscripciones;
@@ -1806,7 +1843,54 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
     }
     return jornadaFinalizada;
   }
-
+  public GenerarTablaJornadasTorneo(juegoSeleccionado, jornadas, enfrentamientosJuego: EnfrentamientoTorneo[][]) {
+    const TablaJornada: TablaJornadas [] = [];
+    console.log('juego seleccionado:');
+    console.log(juegoSeleccionado);
+    for (let i = 0; i < jornadas.length; i++) {
+      let jornada: Jornada;
+      const jornadaId = jornadas[i].id;
+      
+        jornada = jornadas.filter(res => res.id === jornadaId)[0];
+        const enfrentamientosJornada: EnfrentamientoTorneo[] = [];
+        enfrentamientosJuego[i].forEach(enfrentamientoDeLaJornada => {
+        console.log ('%%%%%%%%%%');
+        console.log (enfrentamientoDeLaJornada);
+        if (enfrentamientoDeLaJornada.JornadaDeCompeticionTorneoId === jornadaId) {
+          enfrentamientosJornada.push(enfrentamientoDeLaJornada);
+        }
+      
+        });
+        console.log('Los enfrentamientosJornada con id ' + jornadaId + ' son:');
+        console.log(enfrentamientosJornada);
+        const Disputada: boolean = this.JornadaFinalizadaTorneo(jornada, enfrentamientosJornada);
+        TablaJornada[i] = new TablaJornadas (i + 1, jornada.Fecha, jornada.CriterioGanador, jornada.id, undefined, undefined, Disputada);
+     
+    }
+    return TablaJornada;
+  }
+  public JornadaFinalizadaTorneo(jornadaSeleccionada: Jornada, EnfrentamientosJornada: EnfrentamientoTorneo[]) {
+    let HayGanador = true;
+    let jornadaFinalizada = true;
+      if (EnfrentamientosJornada.length === 0) {
+        console.log('La jornada con id' + jornadaSeleccionada.id + 'aun no tiene enfrentamientos');
+        jornadaFinalizada = false;
+      }
+      else if (jornadaSeleccionada.id === EnfrentamientosJornada[0].JornadaDeCompeticionTorneoId) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < EnfrentamientosJornada.length; i++) {
+          if (EnfrentamientosJornada[i].Ganador === undefined) {
+           HayGanador = false;
+          }
+        }
+       if (HayGanador === false) {
+          jornadaFinalizada = false;
+       }
+      }
+    
+    
+    return jornadaFinalizada;
+  }
  public FormarEquiposAleatorios(individuos: any[], tamEquipos: number): any[] {
     const listaInicial = individuos;
     const numeroGrupos = Math.ceil(listaInicial.length / tamEquipos);
@@ -2040,7 +2124,113 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
       }
     }
   }
+  DesordenarVector(vector: any[]) {
 
+    // genera una permutación aleatoria de los elementos del vector
+  
+   
+  
+    let currentIndex = vector.length;
+  
+    let temporaryValue;
+  
+    let randomIndex;
+  
+    // While there remain elements to shuffle...
+  
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+  
+      randomIndex = Math.floor(Math.random() * currentIndex);
+  
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+  
+      temporaryValue = vector[currentIndex];
+  
+      vector[currentIndex] = vector[randomIndex];
+  
+      vector[randomIndex] = temporaryValue;
+  
+    }
+  
+    console.log ('he terminado');
+  
+  }
+    public calcularCuadro(participantes: any) : any[] {
+  
+      console.log('Voy a calcular el cuadro del torneo en calculos');
+      this.booleano=false;
+      while (this.booleano==false) {
+        this.numParticipantes=participantes.length;
+        this.participantesB2=Math.log2(this.numParticipantes)
+        this.INTparticipantesB2=Math.floor(this.participantesB2);
+        if((this.participantesB2-this.INTparticipantesB2) !=0) {
+          participantes.push(undefined);
+        }
+        else{
+          this.booleano=true;
+        }
+      }
+      this.DesordenarVector(participantes);
+      //this.JornadasTorneo = Math.log2(participantes);
+      console.log ('Participantes:');
+      console.log (participantes);
+      return participantes;
+      
+      
+    
+    }
+    public CrearJornadasTorneo(participantes:any, juegoDeCompeticionTorneoID, ModeloTorneo:string): any  {
+      const jornadasObservables = new Observable ( obs => {
+        this.JornadasTorneo = Math.log2(participantes.length);
+        const jornadasNuevas = [];
+        let cont =0;
+        console.log (this.JornadasTorneo);
+        for (let i = 0; i < this.JornadasTorneo; i++) {
+          // tslint:disable-next-line:max-line-length '2000-01-01T01:01:01.000Z'
+          const jornada = new Jornada(undefined, 'Pendiente de determinar', undefined, undefined, juegoDeCompeticionTorneoID);
+          this.peticionesAPI.CrearJornadasTorneo(jornada, juegoDeCompeticionTorneoID)
+          .subscribe(jornadacreada => {
+            jornadasNuevas.push (jornadacreada);
+            cont = cont + 1;
+            if (cont === Number(this.JornadasTorneo)) {
+              obs.next(jornadasNuevas);
+            }
+          });
+        }
+      });   
+      
+      return jornadasObservables;
+    }
+
+    public CrearEnfrentamientosTorneo(participantes: any[], jornadas: Jornada[] ) {
+
+      const numEnfrentamientos = participantes.length / 2;
+      let EnfrentamientosTorneo: EnfrentamientoTorneo;
+      let a=0;
+  
+        for (let i = 0, j= 0; i < numEnfrentamientos ; i++,j=j+2) {
+          if (participantes[j] === undefined) {
+            EnfrentamientosTorneo= new EnfrentamientoTorneo (0, participantes[j+1].id, undefined, jornadas[a].id);
+          }
+          else if (participantes[j+1] === undefined) {
+            EnfrentamientosTorneo= new EnfrentamientoTorneo (participantes[j].id, 0, undefined, jornadas[a].id);
+          }
+          else {
+            EnfrentamientosTorneo= new EnfrentamientoTorneo (participantes[j].id, participantes[j+1].id, undefined, jornadas[a].id);
+          }
+          this.peticionesAPI.CrearEnfrentamientoTorneo(EnfrentamientosTorneo,jornadas[a].id)
+          .subscribe(enfrentamientocreado => {
+          console.log('enfrentamiento creado');
+          console.log(enfrentamientocreado);
+          });
+        }
+  
+      
+    }
   public DameTablaeditarPuntos(juegoSeleccionado: Juego) {
     this.TablaeditarPuntos = [];
 
@@ -3291,6 +3481,150 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
       });
     }
   }
+  //////////////////////////////////////// JUEGO DE COMPETICION TORNEO ///////////////////////////////////
+  public  ConstruirTablaEnfrentamientosTorneo(EnfrentamientosJornadaSeleccionada: EnfrentamientoTorneo[],
+    listaAlumnos: Alumno[],
+    listaEquipos: Equipo[],
+    juegoSeleccionado: Juego) {
+
+console.log ('Aquí tendré la tabla de enfrentamientos, los enfrentamientos son:');
+console.log(EnfrentamientosJornadaSeleccionada);
+console.log('Distinción entre Individual y equipos');
+if (juegoSeleccionado.Modo === 'Individual') {
+// tslint:disable-next-line:prefer-for-of
+for (let i = 0; i < EnfrentamientosJornadaSeleccionada.length; i++) {
+// tslint:disable-next-line:prefer-for-of
+for (let j = 0; j < listaAlumnos.length; j++) {
+if (EnfrentamientosJornadaSeleccionada[i].JugadorUno === 0) {
+EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = 'Jugador Fantasma';
+}
+if (EnfrentamientosJornadaSeleccionada[i].JugadorUno === listaAlumnos[j].id) {
+EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = listaAlumnos[j].Nombre + ' ' +
+                          listaAlumnos[j].PrimerApellido + ' ' +
+                          listaAlumnos[j].SegundoApellido;
+if (EnfrentamientosJornadaSeleccionada[i].Ganador === listaAlumnos[j].id) {
+EnfrentamientosJornadaSeleccionada[i].nombreGanador = listaAlumnos[j].Nombre + ' ' +
+                          listaAlumnos[j].PrimerApellido + ' ' +
+                          listaAlumnos[j].SegundoApellido;
+} 
+else if (EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+}
+} 
+if (EnfrentamientosJornadaSeleccionada[i].JugadorDos === 0) {
+EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = 'Jugador Fantasma';
+}
+else if (EnfrentamientosJornadaSeleccionada[i].JugadorDos === listaAlumnos[j].id) {
+EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = listaAlumnos[j].Nombre + ' ' +
+                            listaAlumnos[j].PrimerApellido + ' ' +
+                            listaAlumnos[j].SegundoApellido;
+if (EnfrentamientosJornadaSeleccionada[i].Ganador === listaAlumnos[j].id) {
+EnfrentamientosJornadaSeleccionada[i].nombreGanador = listaAlumnos[j].Nombre + ' ' +
+                          listaAlumnos[j].PrimerApellido + ' ' +
+                          listaAlumnos[j].SegundoApellido;
+
+} else if (EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+}
+}
+} 
+}
+
+} else {
+console.log('Estoy en ConstruirTablaEnfrentamientos() equipos');
+// tslint:disable-next-line:prefer-for-of
+for (let i = 0; i < EnfrentamientosJornadaSeleccionada.length; i++) {
+// tslint:disable-next-line:prefer-for-of
+for (let j = 0; j < listaEquipos.length; j++) {
+if (EnfrentamientosJornadaSeleccionada[i].JugadorUno === 0) {
+EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = 'Equipo Fantasma';
+}
+if (EnfrentamientosJornadaSeleccionada[i].JugadorUno === listaEquipos[j].id) {
+EnfrentamientosJornadaSeleccionada[i].nombreJugadorUno = listaEquipos[j].Nombre;
+if (EnfrentamientosJornadaSeleccionada[i].Ganador === listaEquipos[j].id) {
+EnfrentamientosJornadaSeleccionada[i].nombreGanador = listaEquipos[j].Nombre;
+} 
+else if (EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+}
+} 
+if (EnfrentamientosJornadaSeleccionada[i].JugadorDos === 0) {
+EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = 'Equipo Fantasma';
+}
+else if (EnfrentamientosJornadaSeleccionada[i].JugadorDos === listaEquipos[j].id) {
+EnfrentamientosJornadaSeleccionada[i].nombreJugadorDos = listaEquipos[j].Nombre;
+if (EnfrentamientosJornadaSeleccionada[i].Ganador === listaEquipos[j].id) {
+EnfrentamientosJornadaSeleccionada[i].nombreGanador = listaEquipos[j].Nombre;
+}
+else if (EnfrentamientosJornadaSeleccionada[i].Ganador === undefined) {
+EnfrentamientosJornadaSeleccionada[i].nombreGanador = '-';
+}
+}
+}
+}
+}
+return EnfrentamientosJornadaSeleccionada;
+}
+
+public AsignarResultadosJornadaTorneo(juego: Juego, jornadaId: number, resultados: number[]) {
+  const indexEnfrentamientosConResultadosPreviamente: number[] = [];
+  let tieneGanadores = false;
+  // Primero necesitamos los enfrentamientos de la jornada
+  this.peticionesAPI.DameEnfrentamientosDeCadaJornadaTorneo(jornadaId)
+  .subscribe(enfrentamientosJornadaSeleccionada => {
+    console.log('Los enfrentamientos de la jornada son: ');
+    console.log(enfrentamientosJornadaSeleccionada);
+
+    if (resultados.length === enfrentamientosJornadaSeleccionada.length) {
+
+      for (let indexEnfrentamientos = 0; indexEnfrentamientos < enfrentamientosJornadaSeleccionada.length; indexEnfrentamientos++) {
+        const numeroEnfrentamiento = indexEnfrentamientos + 1;
+        // Si el enfrentamiento no tenía ganadores
+        // --> actualizar enfrentamiento con los ganadores seleccionados y actualizar puntos de los particupantes
+        console.log('numeroEnfrentamiento' + numeroEnfrentamiento);
+        console.log('ganador = ' + enfrentamientosJornadaSeleccionada[indexEnfrentamientos].Ganador);
+        if (enfrentamientosJornadaSeleccionada[indexEnfrentamientos].Ganador === undefined) {
+
+          // Actualizamos el ganador en EnfrentamientoTorneo
+          this.GuardarGanadorEnfrentamientoTorneo(enfrentamientosJornadaSeleccionada[indexEnfrentamientos],
+                                            resultados[indexEnfrentamientos]);
+        
+        } else {  // el enfrentamiento tenía ganadores
+          indexEnfrentamientosConResultadosPreviamente.push(indexEnfrentamientos);
+          console.log('El enfrentamiento ya tenía ganadores');
+          tieneGanadores = true;
+
+        }
+      }
+    }
+  });
+}
+
+public GuardarGanadorEnfrentamientoTorneo(enfrentamiento: EnfrentamientoTorneo, resultado: number) {
+  let enfrentamientoActualizado: EnfrentamientoTorneo;
+
+  if (resultado === 1) {
+    enfrentamiento.Ganador = enfrentamiento.JugadorUno;
+  } else if (resultado === 2) {
+    enfrentamiento.Ganador = enfrentamiento.JugadorDos;
+  } else if (resultado === -1) {
+  }
+
+  if (resultado === 1 || resultado === 2) {
+    enfrentamientoActualizado = new EnfrentamientoTorneo(enfrentamiento.JugadorUno,
+                                                       enfrentamiento.JugadorDos,
+                                                       enfrentamiento.Ganador,
+                                                       enfrentamiento.JornadaDeCompeticionTorneoId,
+                                                       undefined, undefined,
+                                                       enfrentamiento.id);
+    console.log('enfrentamientoActualizado');
+    console.log(enfrentamientoActualizado);
+    this.peticionesAPI.PonGanadorDelEnfrentamientoTorneo(enfrentamientoActualizado).
+    subscribe(res => console.log(res));
+    console.log('El enfrentamiento con el ganador actualizado queda: ');
+    console.log(enfrentamientoActualizado);
+  }
+}
 
   //////////////////////////////////////// JUEGO DE VOTACION UNO A TODOS ///////////////////////////////////
   public PrepararTablaRankingIndividualVotacionUnoATodos(listaAlumnosOrdenadaPorPuntos: AlumnoJuegoDeVotacionUnoATodos[],

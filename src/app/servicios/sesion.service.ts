@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insignia, AlumnoJuegoDeCompeticionLiga,
          // tslint:disable-next-line:max-line-length
-         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion, TablaPuntosFormulaUno, Cuestionario, Pregunta, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeCuestionario,
+         TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion,AlumnoJuegoDeCompeticionTorneo,EquipoJuegoDeCompeticionTorneo,TablaPuntosFormulaUno, Cuestionario, Pregunta, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeCuestionario,
          TablaAlumnoJuegoDeCuestionario,
          FamiliaAvatares, CuestionarioSatisfaccion, TablaEquipoJuegoDeCuestionario, EquipoJuegoDeCuestionario} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
@@ -54,6 +54,8 @@ export class SesionService {
   JornadasCompeticion: any;
   TablaAlumnoJuegoDeCompeticion: TablaAlumnoJuegoDeCompeticion[];
   TablaEquipoJuegoDeCompeticion: TablaEquipoJuegoDeCompeticion[];
+  AlumnoJuegoDeCompeticionTorneo: Alumno[];
+  EquipoJuegoDeCompeticionTorneo: Equipo[];
   TablaeditarPuntos: TablaPuntosFormulaUno[];
   JuegosDePuntos: Juego[];
   JuegosDeCuestionariosAcabados: Juego[];
@@ -204,7 +206,12 @@ export class SesionService {
     this.alumnoSeleccionado = alumnoSeleccionado;
     this.inscripcionAlumnoJuego = inscripcionAlumnoJuego;
   }
-
+  public TomaDatosEvolucionAlumnoJuegoCompeticionTorneo( posicion: number,
+    alumnoSeleccionado: Alumno, inscripcionAlumnoJuego: AlumnoJuegoDeCompeticionTorneo ) {
+this.posicion = posicion;
+this.alumnoSeleccionado = alumnoSeleccionado;
+this.inscripcionAlumnoJuego = inscripcionAlumnoJuego;
+}
   public TomaDatosEvolucionAlumnoJuegoPuntos( posicion: any,
                                               tiposPuntosDelJuego: any,
                                               nivelesDelJuego: any,
@@ -515,6 +522,22 @@ public TomaTablaEquipoJuegoDeCompeticion(Tabla: TablaEquipoJuegoDeCompeticion[])
 public DameTablaEquipoJuegoDeCompeticion(): TablaEquipoJuegoDeCompeticion[] {
   const Tabla = this.TablaEquipoJuegoDeCompeticion;
   return Tabla;
+}
+public DameAlumnoJuegoDeCompeticionTorneo(): Alumno[] {
+  const Tabla = this.AlumnoJuegoDeCompeticionTorneo;
+  return Tabla;
+}
+
+public DameEquipoJuegoDeCompeticionTorneo(): Equipo[] {
+  const Tabla = this.EquipoJuegoDeCompeticionTorneo;
+  return Tabla;
+}
+public TomaEquipoJuegoDeCompeticionTorneo(Tabla: Equipo[]) {
+  this.EquipoJuegoDeCompeticionTorneo = Tabla;
+}
+
+public TomaAlumnoJuegoDeCompeticionTorneo(Tabla: Alumno[]) {
+  this.AlumnoJuegoDeCompeticionTorneo = Tabla;
 }
 
 public TomaJuegosDePuntos(juegosPuntos: Juego[]) {
