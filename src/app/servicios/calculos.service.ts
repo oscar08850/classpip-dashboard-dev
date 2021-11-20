@@ -111,6 +111,8 @@ private async EliminaJuegos(): Promise<any> {
           this.EliminarJuegoDeVotacionUnoATodos (juego);
         } else if (juego.Tipo === 'Juego De Votación Todos A Uno') {
           this.EliminarJuegoDeVotacionTodosAUno (juego);
+        } else if (juego.Tipo === 'Juego De Votación Votar opciones') {
+          this.EliminarJuegoDeVotacionAOpciones (juego);
         } else if (juego.Tipo === 'Juego De Evaluacion') {
           this.EliminarJuegoDeEvaluacion (juego);
         } else if (juego.Tipo === 'Control de trabajo en equipo') {
@@ -385,6 +387,27 @@ public async EliminarJuegoDeVotacionTodosAUno(juego: any) {
   }
   await this.peticionesAPI.BorraJuegoDeVotacionTodosAUno (juego.id).toPromise();
 }
+public async EliminarJuegoDeVotacionAOpciones(juego: any) {
+  let inscripciones;
+  if (juego.Modo === 'Individual') {
+    inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeVotacionAOpciones(juego.id).toPromise();
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionAOpciones (inscripciones[i].id).toPromise();
+    }
+  } else {
+    // AUN NO ES POSIBLE LA MODALIDAD DE EQUIPO EN ESTE JUEGO. CUANDO ESTÉ IMPLEMENTADA ENTONCES
+    // ESTE SERÁ EL CÓDIGO PARA ELIMINAR
+    // inscripciones = await this.peticionesAPI.DameInscripcionesEquiposJuegoDeVotacionTodosAUno(juego.id).toPromise();
+
+    // // tslint:disable-next-line:prefer-for-of
+    // for (let i = 0; i < inscripciones.length ; i++ ) {
+    //   await this.peticionesAPI.BorraInscripcionEquipoJuegoDeVotacionTodosAUno (inscripciones[i].id).toPromise();
+    // }
+  }
+  await this.peticionesAPI.BorraJuegoDeVotacionAOpciones (juego.id).toPromise();
+}
 public async EliminarJuegoDeVotacionUnoATodos(juego: any) {
   let inscripciones;
   if (juego.Modo === 'Individual') {
@@ -550,6 +573,20 @@ private async EliminarMatriculas(): Promise<any> {
       }
     }
 
+    console.log ('vamos a por los juegos de competicion torneo del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegoDeCompeticionTorneoGrupo(grupoID).toPromise();
+    console.log('He recibido los juegos de competición torneo');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+
+
 
     console.log ('vamos a por los juegos de avatar del grupo: ' + grupoID);
     juegos = await this.peticionesAPI.DameJuegoDeAvatarGrupo(grupoID).toPromise();
@@ -629,6 +666,21 @@ private async EliminarMatriculas(): Promise<any> {
         juegosActivos.push(juegos[i]);
       } else {
         juegos[i].Tipo = 'Juego De Votación Todos A Uno';
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+
+    console.log ('Vamos a por los juegos de votacion Votar opciones del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegosDeVotacionAOpciones(grupoID).toPromise();
+    console.log('He recibido los juegos de votacion Votar opciones');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegos[i].Tipo = 'Juego De Votación Votar opciones';
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegos[i].Tipo = 'Juego De Votación Votar opciones';
         juegosInactivos.push(juegos[i]);
       }
     }

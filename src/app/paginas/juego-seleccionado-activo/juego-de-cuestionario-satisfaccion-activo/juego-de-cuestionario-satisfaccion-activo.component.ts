@@ -188,14 +188,15 @@ export class JuegoDeCuestionarioSatisfaccionActivoComponent implements OnInit {
       doc.addPage('a4', 'p');
       doc.setFontSize(18);
       doc.setTextColor('blue');
-      doc.text(this.cuestionario.PreguntasAbiertas [i], margenIzquierdo,  margenSuperior);
+      let splittedText = doc.splitTextToSize(this.cuestionario.PreguntasAbiertas [i],  160);
+      doc.text(splittedText, margenIzquierdo,  margenSuperior);
       doc.line(margenIzquierdo, margenSuperior + 5, margenIzquierdo + 150, margenSuperior + 5);
-      let cont = interlineado * 4;
+      let cont = interlineado * (splittedText.length) * 4;
       let j;
       doc.setFontSize(12);
       doc.setTextColor('black');
       for (j = 0; j < this.respuestasPreguntasAbiertas[i].length; j++) {
-        const splittedText = doc.splitTextToSize(this.respuestasPreguntasAbiertas[i][j],  160);
+        splittedText = doc.splitTextToSize(this.respuestasPreguntasAbiertas[i][j],  160);
 
         doc.text(splittedText, margenIzquierdo,  margenSuperior + cont);
         cont = cont + interlineado * (splittedText.length);

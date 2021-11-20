@@ -282,8 +282,9 @@ import { JuegoDeEvaluacionSeleccionadoInactivoComponent } from './paginas/juego-
 // tslint:disable-next-line:max-line-length
 import { JuegoDeControlDeTrabajoEnEquipoSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-control-de-trabajo-en-equipo-seleccionado-activo/juego-de-control-de-trabajo-en-equipo-seleccionado-activo.component';
 import { AsignarRubricaComponent } from './paginas/juego/asignar-rubrica/asignar-rubrica.component';
+import { JuegoDeVotacionAOpcionesSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-votacion-aopciones-seleccionado-activo/juego-de-votacion-aopciones-seleccionado-activo.component';
 
-
+import { JuegoDeVotacionAOpcionesSeleccionadoInactivoComponent }  from './paginas/juego-seleccionado-inactivo/juego-de-votacion-aopciones-seleccionado-inactivo/juego-de-votacion-aopciones-seleccionado-inactivo.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -448,7 +449,9 @@ import { AsignarRubricaComponent } from './paginas/juego/asignar-rubrica/asignar
     AsignarRubricaComponent,
     ActividadRegistroComponent,
     ActividadGraficosComponent,
-    ActividadConfigComponent
+    ActividadConfigComponent,
+    JuegoDeVotacionAOpcionesSeleccionadoActivoComponent,
+    JuegoDeVotacionAOpcionesSeleccionadoInactivoComponent
 
   ],
   imports: [

@@ -36,6 +36,10 @@
 <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Votación Todos A Uno'">
   <app-juego-de-votacion-todos-auno-seleccionado-inactivo></app-juego-de-votacion-todos-auno-seleccionado-inactivo>
 </div>
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Votación Votar opciones'">
+  <app-juego-de-votacion-aopciones-seleccionado-inactivo></app-juego-de-votacion-aopciones-seleccionado-inactivo>
+</div>
+
 
 
 <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Avatar'">

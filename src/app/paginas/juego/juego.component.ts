@@ -25,7 +25,7 @@ import {
   JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos,
   JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, CuestionarioSatisfaccion,
   JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion, Rubrica,
-  JuegoDeControlDeTrabajoEnEquipo, AlumnoJuegoDeControlDeTrabajoEnEquipo, EquipoJuegoDeCuestionario, Evento, AlumnoJuegoDeCuento, JuegoDeCuento, RecursoCuento, RecursoCuentoJuego
+  JuegoDeControlDeTrabajoEnEquipo, AlumnoJuegoDeControlDeTrabajoEnEquipo, EquipoJuegoDeCuestionario, Evento, AlumnoJuegoDeCuento, JuegoDeCuento, RecursoCuento, RecursoCuentoJuego, JuegoDeVotacionAOpciones, AlumnoJuegoDeVotacionAOpciones
 } from '../../clases/index';
 
 
@@ -335,7 +335,8 @@ export class JuegoComponent implements OnInit {
   tipoDeVotacionSeleccionado: string;
   seleccionTipoDeVotacion: ChipColor[] = [
     { nombre: 'Uno A Todos', color: 'primary' },
-    { nombre: 'Todos A Uno', color: 'warn' }
+    { nombre: 'Todos A Uno', color: 'warn' },
+    { nombre: 'Votar opciones', color: 'accent' },
   ];
 
   modoDeRepartoSeleccionado: string;
@@ -348,14 +349,19 @@ export class JuegoComponent implements OnInit {
 
   tengoTipoDeVotacion = false;
   conceptos: string[];
+  opciones: string[];
   listaConceptos: any[] = [];
+  listaOpciones: any[] = [];
   dataSourceConceptos;
+  dataSourceOpciones;
   nombreConcepto;
   pesoConcepto;
   pesos: number[];
   totalPesos: number;
   conceptosAsignados = false;
+  opcionesAsignadas = false;
   displayedColumnsConceptos: string[] = ['nombreConcepto', 'pesoConcepto', ' '];
+  displayedColumnsOpciones: string[] = ['opcion', 'iconos'];
 
 
   // Información para el juego de cuestionario de satisfacción
@@ -503,6 +509,7 @@ export class JuegoComponent implements OnInit {
       c3: ['', Validators.required],
       NombreDelConcepto: ['', Validators.required],
       PesoDelConcepto: ['', Validators.required],
+      Opcion: ['', Validators.required],
       TiempoLimite: ['', Validators.required],
       descripcionCuento: ['', Validators.required],
       PreguntaAbierta:  ['', Validators.required],
@@ -1745,8 +1752,17 @@ export class JuegoComponent implements OnInit {
     this.tengoTipoDeCompeticion = true;
   }
   TipoDeTorneoSeleccionado(tipoTorneo: ChipColor) {
-    this.tipoDeTorneoSeleccionado = tipoTorneo.nombre;
-    this.tengoTipoDeTorneo = true;
+    if (tipoTorneo.nombre === 'Doble Eliminación') {
+      Swal.fire('Error', 'Tipo de torneo no disponible aún', 'error');
+    }
+    if (tipoTorneo.nombre === 'Suizo') {
+      Swal.fire('Error', 'Tipo de torneo no disponible aún', 'error');
+    }
+    if (tipoTorneo.nombre === 'Clásico') {
+      this.tipoDeTorneoSeleccionado = tipoTorneo.nombre;
+      this.tengoTipoDeTorneo = true;
+    }
+  
   }
   dropParticipantes(event: CdkDragDrop<any[]>) {
     moveItemInArray(this.ParticipantesTorneo, event.previousIndex, event.currentIndex);
@@ -1785,7 +1801,7 @@ export class JuegoComponent implements OnInit {
       for (let i = 0; i < this.dataSource.data.length; i++) {
         // Buscamos los alumnos que hemos seleccionado
         if (this.selection.isSelected(this.dataSource.data[i])) {
-          this.Puntuacion[i] = this.nuevaPuntuacion;
+          this.Puntuacion[i] = Number(this.nuevaPuntuacion);
           this.TablaPuntuacion[i].Puntuacion = this.nuevaPuntuacion;
         }
       }
@@ -1993,11 +2009,30 @@ export class JuegoComponent implements OnInit {
     }
     console.log('CUADRO',this.ParticipantesTorneo);
   }
+
+  EsEmparejamientoPar(n: number): boolean {
+    const res = Math.floor (n / 2) % 2;
+    if (res  === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  HayEnfrentamientoEntreFantasmas(): boolean {
+    for (let i = 0; i < this.ParticipantesTorneo.length; i = i + 2) {
+        if ((this.ParticipantesTorneo[i] === undefined) && (this.ParticipantesTorneo[i + 1] === undefined)) {
+          return true;
+        }
+    }
+    return false;
+  }
   
   CrearJuegoDeCompeticionTorneo() {
 
     // tslint:disable-next-line:max-line-lengtholean)
     console.log('voy a crear torneo');
+    console.log ('participantes ', this.ParticipantesTorneo);
     let nuevojuego = new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeCompeticionSeleccionado,
     this.modoDeJuegoSeleccionado, undefined, undefined, true, 3,
     this.tipoDeCompeticionSeleccionado, this.tipoDeTorneoSeleccionado,
@@ -2204,8 +2239,9 @@ export class JuegoComponent implements OnInit {
   // junto con las funciones asociadas, porque lo que hay que hacer es exactamente lo mismo
 
   TipoDeVotacionSeleccionado(tipoVotacion: ChipColor) {
-    if ((this.modoDeJuegoSeleccionado === 'Equipos') && (tipoVotacion.nombre === 'Todos A Uno')) {
-      Swal.fire('Alerta', 'Aún no es posible el juego de votación Todos A Uno en equipo', 'warning');
+    // tslint:disable-next-line:max-line-length
+    if ((this.modoDeJuegoSeleccionado === 'Equipos') && ((tipoVotacion.nombre === 'Todos A Uno') || (tipoVotacion.nombre === 'Votar opciones'))) {
+      Swal.fire('Alerta', 'Aún no es posible ete tipo de juego de votación en EQUIPO', 'warning');
     } else {
       this.tipoDeVotacionSeleccionado = tipoVotacion.nombre;
       this.tengoTipoDeVotacion = true;
@@ -2412,7 +2448,98 @@ export class JuegoComponent implements OnInit {
   }
 
 
-  ///////////////// FUNCIONES PARA CREAR JUEGO DE CUESTIONARIO DE SATISFACCION /////////////
+  
+  PonOpcion() {
+
+    this.listaOpciones.push(this.myForm.value.Opcion);
+    this.dataSourceOpciones = new MatTableDataSource(this.listaOpciones);
+
+    this.myForm.reset();
+
+  }
+
+
+  BorraOpcion(nombre) {
+    // tslint:disable-next-line:prefer-for-of
+    const pos = this.listaOpciones.indexOf (nombre);
+    this.listaOpciones.splice(pos, 1);
+   
+    this.dataSourceOpciones = new MatTableDataSource(this.listaOpciones);
+
+  }
+
+
+
+  AsignarOpciones() {
+    this.opciones = this.listaOpciones;
+    this.opcionesAsignadas = true;
+  }
+
+
+ 
+  CrearJuegoDeVotacionAOpciones() {
+    const juegoDeVotacion = new JuegoDeVotacionAOpciones(
+      this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeVotacionSeleccionado,
+      this.modoDeJuegoSeleccionado,
+      true,
+      this.opciones,
+      this.Puntuacion,
+      this.nombreDelJuego,
+      this.modoDeRepartoSeleccionado,
+      false,
+      this.grupo.id);
+    console.log('voy a crear juego: ');
+    console.log(juegoDeVotacion);
+    this.peticionesAPI.CreaJuegoDeVotacionAOpciones(juegoDeVotacion, this.grupo.id)
+      .subscribe(juegoCreado => {
+        this.juego = juegoCreado;
+        this.sesion.TomaJuego(this.juego);
+        this.juegoCreado = true;
+        // Registrar la Creación del Juego
+        // tslint:disable-next-line:max-line-length
+        const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Votación A Opciones');
+        this.calculos.RegistrarEvento(evento);
+
+
+        // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Votación Todos A Uno");
+        // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
+        //   console.log("Registrado evento: ", res);
+        // }, (err) => { 
+        //   console.log(err); 
+        // });
+
+        // Notificar a los Alumnos del Grupo
+        // tslint:disable-next-line:max-line-length
+        this.comService.EnviarNotificacionGrupo(1, this.grupo.id, `Nuevo Juego De Votación A Opciones para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
+
+
+        if (this.modoDeJuegoSeleccionado === 'Individual') {
+
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.alumnosGrupo.length; i++) {
+            // tslint:disable-next-line:max-line-length
+            this.peticionesAPI.InscribeAlumnoJuegoDeVotacionAOpciones(
+              new AlumnoJuegoDeVotacionAOpciones(this.alumnosGrupo[i].id, this.juego.id))
+              .subscribe();
+          }
+        }
+
+        Swal.fire('Juego de votación A Opciones creado correctamente', ' ', 'success');
+
+        // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+        if (this.juegosActivos === undefined) {
+          // Si la lista aun no se ha creado no podre hacer el push
+          this.juegosActivos = [];
+        }
+        this.juegosActivos.push(this.juego);
+        // Al darle al botón de finalizar limpiamos el formulario y reseteamos el stepper
+        this.Limpiar();
+        // Regresamos a la lista de equipos (mat-tab con índice 0)
+        this.tabGroup.selectedIndex = 0;
+
+      });
+  }
+  /////////////// FUNCIONES PARA CREAR JUEGO DE CUESTIONARIO DE SATISFACCION /////////////
 
   RecibeCuestionarioSatisfaccionElegido($event) {
     this.cuestionarioSatisfaccion = $event;
