@@ -1903,15 +1903,15 @@
 
                 </mat-list>
 
-                <div *ngIf = "formatoEvaluacion === 'con rúbrica'" class="btnCambiarStep">
+                <div  class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                   <button type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
-
+<!-- 
                 <div *ngIf = "formatoEvaluacion === 'solo preguntas abiertas'" class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
                   <button type="button" class="btn Aceptar" (click)="CrearJuegoEvaluacion()">Finalizar</button>
-                </div>
+                </div> -->
 
 
 
@@ -1966,7 +1966,7 @@
                 </div>
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button [disabled]="!pesosSuman100" type="button" class="btn Aceptar" (click)="CrearJuegoEvaluacion()">Finalizar</button>
+                  <button [disabled]="!pesosSuman100" type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
               </mat-step>
               <!-- Mas sobre forma de puntuar en caso de rubrica -->
@@ -2060,8 +2060,25 @@
                 </div>
                 <div class="btnCambiarStep">
                   <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                  <button type="button" class="btn Aceptar" (click)="CrearJuegoEvaluacion()">Finalizar</button>
+                  <button type="button" class="btn Next" matStepperNext>Siguiente</button>
                 </div>
+              </mat-step>
+              <!-- Qué va a poder ver el evaluado -->
+              <mat-step>
+                  <ng-template matStepLabel><div>Vista evaluado</div></ng-template>
+                  
+                  <mat-radio-group  class="radBtnProf" aria-label="Select an option">
+                    <mat-radio-button value="soloGlobal" [checked]="modoVistaistaEvaluado === 'soloGlobal'" (change)="ModoVistaEvaluadoChange($event.value)">  <b>La persona evaluada solo podrá ver el resultado global</b></mat-radio-button>
+                    <mat-radio-button value="todo" [checked]="modoVistaEvaluado === 'todo'" (change)="ModoVistaEvaluadoChange($event.value)">   <b>La persona evaluada podrá ver el resultado global y cada una de las evaluaciones recibidas</b></mat-radio-button>
+                  </mat-radio-group>
+
+                
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button  [disabled]="!tengoVistaEvaluado" type="button" class="btn Aceptar" (click)="CrearJuegoEvaluacion()">Finalizar</button>
+                  </div>
+  
+  
               </mat-step>
 
             </div>

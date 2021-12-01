@@ -19,39 +19,32 @@
           </mat-form-field>
           </div>
 
-          <table style = "width: 120%"  align="center"  mat-table [dataSource]="dataSourceAlumno" class="example-container mat-elevation-z8">
+          <table  align="center"  mat-table [dataSource]="dataSourceAlumno" class="mat-elevation-z8 listado">
               <ng-container matColumnDef="nombreAlumno">
                 <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">Nombre</th>
-                <td mat-cell  *matCellDef="let alumno">
-                  <p>{{alumno.nombre}} </p>
-                </td>
-
+                <td mat-cell  *matCellDef="let alumno"> {{alumno.nombre}}</td>
               </ng-container>
 
               <!-- Primer Apellido Column -->
               <ng-container matColumnDef="primerApellido">
                   <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">Primer Apellido</th>
-                  <td mat-cell  *matCellDef="let alumno">
-                    <p >{{alumno.primerApellido}} </p>
-                  </td>
+                  <td mat-cell  *matCellDef="let alumno">{{alumno.primerApellido}}</td>
               </ng-container>
 
               <!-- Segundo Apellido Column -->
               <ng-container matColumnDef="segundoApellido">
                   <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">Segundo Apellido</th>
-                  <td mat-cell  *matCellDef="let alumno">
-                    <p >{{alumno.segundoApellido}} </p>
-                  </td>
+                  <td mat-cell  *matCellDef="let alumno">{{alumno.segundoApellido}}</td>
               </ng-container>
 
               <!-- Puntos Column -->
-              <ng-container matColumnDef="nota" style = "width: 100px">
-                  <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" align="center">Nota</th>
+              <ng-container matColumnDef="nota">
+                  <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">Nota</th>
                   <td mat-cell  *matCellDef="let alumno">
-                    <p *ngIf = "alumno.contestado" style = "color: green; font-size:20px">{{alumno.nota}} </p>
+                    <span *ngIf = "alumno.contestado"  style = "color: green;">{{alumno.nota}} </span>
                   </td>
               </ng-container>
-
+ 
 <!-- 
               <ng-container matColumnDef=" ">
                 <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
@@ -61,7 +54,7 @@
                 </td>
               </ng-container> -->
               
-              <ng-container align="right" matColumnDef="iconos">
+              <!-- <ng-container align="right" matColumnDef="iconos">
                 <th  mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
                 <td  mat-cell *matCellDef="let alumno">
                 <div  style = "padding-left: 100px; display: flex; align-items: right">
@@ -77,8 +70,25 @@
                   </button>
                 </div>
                 </td>
-              </ng-container>
+              </ng-container> -->
 
+              <ng-container matColumnDef="iconos">
+                <th  mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                <td  mat-cell *matCellDef="let alumno">
+                <div>
+              
+                  <button *ngIf = "alumno.contestado" (click) = "MostrarRespuestasAlumno(alumno)" mat-icon-button matTooltip="Ver respuestas de {{alumno.Nombre}}">
+                    <i class="material-icons md-16">visibility</i>
+                  </button>
+                  <button *ngIf = "alumno.contestado" (click) = "EiminarRespuestasAlumno(alumno)" mat-icon-button matTooltip="Eliminar respuestas">
+                    <i class="material-icons red md-16">delete</i>
+                  </button>
+                  <button  (click) = "AsignarCalificacion(alumno)" mat-icon-button matTooltip="Asignar calificación">
+                    <i class="material-icons green md-16">edit</i>
+                  </button>
+                </div>
+                </td>
+              </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnos; sticky: true"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnos;"></tr>

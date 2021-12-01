@@ -265,6 +265,8 @@ export class JuegoComponent implements OnInit {
   dataSourcePreguntasAbiertas;
   preguntasAbiertasAsignadas = false;
   displayedColumnsPreguntasAbiertas: string[] = ['pregunta', ' '];
+  modoVistaEvaluado: string;
+  tengoVistaEvaluado = false;
 
 
   // Información para crear juego de competicion
@@ -975,6 +977,10 @@ export class JuegoComponent implements OnInit {
     this.profesorEvaluaModo = value;
   }
 
+  ModoVistaEvaluadoChange (value: string) {
+    this.modoVistaEvaluado = value;
+    this.tengoVistaEvaluado = true;
+  }
 
 
 
@@ -1120,6 +1126,7 @@ export class JuegoComponent implements OnInit {
     } else {
       rubrica = 0; // asi indico que el juego no tiene rubrica y por tanto es de preguntas abiertas
     }
+  
     const juego: JuegoDeEvaluacion = new JuegoDeEvaluacion(
       null,
       this.nombreDelJuego,
@@ -1137,10 +1144,12 @@ export class JuegoComponent implements OnInit {
       this.penalizacionArray,
       rubrica,
       this.listaPreguntasAbiertas,
+      this.modoVistaEvaluado,
       this.profesorId,
       this.grupo.id
     );
     console.log('Creando Juego de Evaluacion', juego);
+    console.log('Vista evaluado', this.modoVistaEvaluado);
     this.peticionesAPI.CrearJuegoDeEvaluacion(juego).subscribe(res => {
       this.juego = res;
       this.sesion.TomaJuego(this.juego);

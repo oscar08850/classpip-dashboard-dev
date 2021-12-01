@@ -302,7 +302,6 @@ export class JuegoDeEvaluacionActivoComponent implements OnInit {
     if (this.juego.rubricaId > 0) {
      // this.tmpDisplayedColumns = this.alumnos.map(item => [item.id, item.Nombre]);
       this.tmpDisplayedColumns = this.alumnos.map(item => [item.id, item.Username]);
-      console.log ('1111111111111111');
       console.log (this.tmpDisplayedColumns);
       this.alumnos.forEach((alumno) => {
         const row = {

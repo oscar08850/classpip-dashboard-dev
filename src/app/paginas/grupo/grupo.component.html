@@ -52,7 +52,7 @@
 
 
 
-        <table align = "center" text mat-table [dataSource]="dataSource" class="example-container mat-elevation-z8">
+        <table align = "center" text mat-table [dataSource]="dataSource" class="mat-elevation-z8 listado">
 
           <!--- Note that these columns can be defined in any order.
                 The actual rendered columns are set as a property on the row definition" -->
@@ -60,25 +60,25 @@
           <!-- Nombre Alumno Column -->
           <ng-container matColumnDef="nombreAlumno">
             <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Nombre </th>
-            <td mat-cell style= "text-align: left" *matCellDef="let alumno" > {{alumno.Nombre}} </td>
+            <td mat-cell  *matCellDef="let alumno" > {{alumno.Nombre}} </td>
           </ng-container>
 
           <!-- Primer Apellido Column -->
           <ng-container matColumnDef="primerApellido">
             <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Primer Apellido </th>
-            <td mat-cell style= "text-align: left" *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
+            <td mat-cell  *matCellDef="let alumno"> {{alumno.PrimerApellido}} </td>
           </ng-container>
 
           <!-- Segundo Apellido Column -->
           <ng-container matColumnDef="segundoApellido">
             <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Segundo Apellido </th>
-            <td mat-cell style= "text-align: left" *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
+            <td mat-cell  *matCellDef="let alumno"> {{alumno.SegundoApellido}} </td>
           </ng-container>
 
           <!-- alumnoId Column -->
           <ng-container matColumnDef="alumnoId">
-            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Identificador Alumno </th>
-            <td mat-cell style= "text-align: left" *matCellDef="let alumno"> {{alumno.id}} </td>
+            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> ID </th>
+            <td mat-cell  *matCellDef="let alumno"> {{alumno.id}} </td>
           </ng-container>
 
           <ng-container matColumnDef="imagen">
