@@ -364,7 +364,8 @@ export class JuegoComponent implements OnInit {
   opcionesAsignadas = false;
   displayedColumnsConceptos: string[] = ['nombreConcepto', 'pesoConcepto', ' '];
   displayedColumnsOpciones: string[] = ['opcion', 'iconos'];
-
+  autovotacion: boolean;
+  votanEquipos: boolean;
 
   // Información para el juego de cuestionario de satisfacción
   cuestionarioSatisfaccion: CuestionarioSatisfaccion;
@@ -2275,22 +2276,43 @@ export class JuegoComponent implements OnInit {
     this.puntosARepartir = event.value;
     this.Puntuacion[0] = this.puntosARepartir;
   }
+  GuardarQuienVota() {
+    let radio = document.getElementsByName('autovotacion')[0] as HTMLInputElement;
+    if (radio.checked ) {
+      this.autovotacion = true;
+    } else {
+      this.autovotacion = false;
+    }
+    if (this.modoDeJuegoSeleccionado === 'Equipos') {
+      radio = document.getElementsByName('quien')[0] as HTMLInputElement;
+      if (radio.checked ) {
+        this.votanEquipos = true;
+      } else {
+        this.votanEquipos = false;
+      }
+    }
+  }
 
   CrearJuegoDeVotacionUnoATodos() {
+    const jjj = new JuegoDeVotacionUnoATodos ()
     const juegoDeVotacion = new JuegoDeVotacionUnoATodos(
       this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeVotacionSeleccionado,
       this.modoDeJuegoSeleccionado,
       this.modoDeRepartoSeleccionado,
+      this.autoevaluacion,
       true,
       this.Puntuacion,
       this.nombreDelJuego,
       false,
-      this.grupo.id);
+      this.grupo.id,
+      this.votanEquipos);
+    console.log ('creo juego ', juegoDeVotacion);
     this.peticionesAPI.CreaJuegoDeVotacionUnoATodos(juegoDeVotacion, this.grupo.id)
       .subscribe((juegoCreado) => {
         this.juego = juegoCreado;
         this.sesion.TomaJuego(this.juego);
         this.juegoCreado = true;
+        console.log ('juego creado ', this.juego);
 
         // tslint:disable-next-line:max-line-length
         const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Votación Uno A Todos');
@@ -2321,6 +2343,7 @@ export class JuegoComponent implements OnInit {
             .subscribe();
           }
         } else {
+            console.log ('voy a inscribir a los equipos ', this.equiposGrupo);
             // tslint:disable-next-line:prefer-for-of
             for (let i = 0; i < this.equiposGrupo.length; i++) {
               // tslint:disable-next-line:max-line-length
@@ -2329,7 +2352,7 @@ export class JuegoComponent implements OnInit {
                   new EquipoJuegoDeVotacionUnoATodos(this.equiposGrupo[i].id, this.juego.id))
               .subscribe();
             }
-        }
+        } 
 
         Swal.fire('Juego de votación tipo Uno A Todos creado correctamente', ' ', 'success');
 

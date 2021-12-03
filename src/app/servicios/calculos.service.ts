@@ -1943,17 +1943,28 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
     
     return jornadaFinalizada;
   }
- public FormarEquiposAleatorios(individuos: any[], tamEquipos: number): any[] {
-    const listaInicial = individuos;
-    const numeroGrupos = Math.ceil(listaInicial.length / tamEquipos);
-    console.log ('Tamaño ' + tamEquipos);
+ public FormarEquiposAleatorios(individuos: any[], tamEquipos: number, ajuste: string ): any[] {
+    // Crea equipos de tamEquipos integrantes. El parámetro ajuste dice cómo hay que redondear. Si es "+" 
+    // crea los equipos necesarios de tamEquipos + 1. Si es "-" entonces crea los necesarios de tamEquipos - 1
+    let tamCadaEquipo: number[];
+    const G = Math.floor(individuos.length / tamEquipos);
+    const R = individuos.length % tamEquipos;
+    if (ajuste === '+') {
+      tamCadaEquipo = Array(G - R).fill(tamEquipos).concat (Array(R).fill(tamEquipos + 1));
+      console.log ('arriba');
+    } else {
+      tamCadaEquipo = Array(G - tamEquipos + R + 1).fill(tamEquipos).concat (Array(tamEquipos - R).fill(tamEquipos - 1));
+      console.log ('abajo');
+    }
 
-    console.log ('Numero de grupos ' + numeroGrupos);
+    console.log ('asi quedan los equipos ', tamCadaEquipo);
+
+    const listaInicial = individuos;
     const equipos: any [] = [];
-    for (let i = 0; i < numeroGrupos - 1; i++) {
+    for (let i = 0; i < tamCadaEquipo.length - 1; i++) {
       console.log ('grupo ' + i);
       const equipo: any[] = [];
-      for (let j = 0; j < tamEquipos; j++) {
+      for (let j = 0; j < tamCadaEquipo[i]; j++) {
         const n = Math.floor(Math.random() * listaInicial.length);
         console.log (n + ' ' + listaInicial[n]);
         equipo.push (listaInicial[n]);
