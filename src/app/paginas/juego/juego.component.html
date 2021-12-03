@@ -693,12 +693,16 @@
                 <mat-step>
                   <ng-template matStepLabel><div>Quién</div></ng-template>
                   <form action="">
+                    <label class = "LabelStepper">¿Pueden votarse a si mismos?</label>
                     <input type="radio" name="autovotacion" checked > Los participantes pueden votarse a si mismos<br>
                     <input type="radio" name="autovotacion"  > Los participantes NO pueden votarse a si mismos<br>
                   </form>
-                  <form *ngIf = "modoDeJuegoSeleccionado === 'Equipos'">
+                  <br>
+                  <br>
+                  <form  *ngIf = "modoDeJuegoSeleccionado === 'Equipos'">
+                    <label class = "LabelStepper">¿Quién vota?</label>
                     <input type="radio" name="quien" checked > Votan los equipos (un miembro de cada equipo)<br>
-                    <input type="radio" name="quien" > Votan todos los alumnos<br>
+                    <input type="radio" name="quien" > Vota cada uno de los alumnos<br>
                   </form>
                   <div class="btnCambiarStep">
                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
