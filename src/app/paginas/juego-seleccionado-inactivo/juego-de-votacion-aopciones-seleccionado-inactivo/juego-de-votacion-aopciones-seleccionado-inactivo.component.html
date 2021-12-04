@@ -1,0 +1,44 @@
+<div class="contenedor">
+ 
+  <div class="enColumna">
+
+    <div class="enFila" style="width:40%">
+      <button type="button" class="btn Aceptar" (click) = "Reactivar()">Reactivar<i class="material-icons">check_circle_outline</i></button>
+      <button type="button" class="btn Eliminar" (click) = "Eliminar()"> Eliminar<i class="material-icons">delete</i></button>
+    </div>
+    <br>
+    <div class= "enColumna" >
+      <br>
+      <br>
+      <h4><strong>Número de participantes:  </strong>{{numeroParticipantes}}</h4>
+      <h4><strong>Número de respuestas:  </strong>{{numeroRespuestas}} ({{((numeroRespuestas/numeroParticipantes)*100).toFixed(0)}}%)</h4>
+      <br>
+      <br>
+      <h3><strong>Resultados</strong></h3>
+      <br>
+      <button  type="button"  (click) = "GenerarInforme()" class="btn Aceptar" style = "width: 50%">Genera un informe en PDF con los resultados</button>
+      <br>
+      <table  mat-table [dataSource]="dataSource" class="mat-elevation-z8 resultados">
+
+            <ng-container matColumnDef="opcion" >
+              <th mat-header-cell  *matHeaderCellDef class="tituloColumnaTabla"> Opción  </th>
+              <td mat-cell style= "text-align: left"  *matCellDef="let dato"> {{dato.opcion}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="puntos" >
+              <!-- La clase header-align-right esta definida en el css local -->
+              <th mat-header-cell  *matHeaderCellDef class="tituloColumnaTabla"> Puntos </th>
+              <td mat-cell style= "text-align: right"  *matCellDef="let dato"> {{dato.puntos}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+
+    </div>
+  </div>
+
+</div>
+
+

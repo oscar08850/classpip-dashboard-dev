@@ -182,6 +182,13 @@ export class ComServerService {
       });
     });
   }
+  public EsperoRespuestasVotacionAOpciones(): any {
+    return Observable.create((observer) => {
+      this.socket.on('respuestaVotacionAOpciones', (respuesta) => {
+        observer.next(respuesta);
+      });
+    });
+  }
 
   public EsperoRespuestasCuestionarioRapido(): any {
     return Observable.create((observer) => {

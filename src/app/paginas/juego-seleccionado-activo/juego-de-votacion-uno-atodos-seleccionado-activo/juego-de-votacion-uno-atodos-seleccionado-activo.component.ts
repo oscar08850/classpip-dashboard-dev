@@ -28,9 +28,11 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
   alumnosEquipo: Alumno[];
 
   displayedColumnsAlumnos: string[] = ['posicion', 'nombreAlumno', 'primerApellido', 'segundoApellido', 'puntos', 'incremento', ' '];
-  displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'puntos', 'incremento', ' '];
+  displayedColumnsEquipos: string[] = ['posicion', 'nombreEquipo', 'miembros', 'puntos', 'incremento', 'cuantos'];
 
   interval;
+  alumnosQueYaHanVotado: Alumno[];
+  equiposConMiembros: any;
 
   constructor(
               public sesion: SesionService,
@@ -85,6 +87,16 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
           sound.play();
           console.log ('llega votacion');
           console.log (res.votacion);
+          if (!this.juegoSeleccionado.VotanEquipos) {
+            // tengo que quedarme solo con los nuevos votos del equipo (en el vector de votos puede haber votos de otros
+            // miembros del esquipo que ya han sido contabilizados)
+            // tslint:disable-next-line:max-line-length
+            res.votacion.Votos = res.votacion.Votos.filter (voto => !this.alumnosQueYaHanVotado.some (al => al.id === voto.alumnoId));
+            // y añado al alumno que ha votado a la lista de los que ya han votado
+            const alumno = this.alumnosDelJuego.find (a => a.id === res.votacion.Votos[0].alumnoId);
+            this.alumnosQueYaHanVotado.push (alumno);
+            console.log ('aluymnos que ya han votado ', this.alumnosQueYaHanVotado);
+          }
           // tslint:disable-next-line:prefer-for-of
           for (let i = 0; i < res.votacion.Votos.length; i++) {
             const votado = this.rankingEquipoJuegoDeVotacionUnoATodos.filter (eq => eq.id === res.votacion.Votos[i].equipoId)[0];
@@ -124,16 +136,65 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
       });
   }
 
-  EquiposDelJuego() {
-    console.log ('Vamos a pos los equipos');
-    this.peticionesAPI.DameEquiposJuegoDeVotacionUnoATodos(this.juegoSeleccionado.id)
-    .subscribe(equiposJuego => {
-      console.log ('Ya tengo los equipos');
-      console.log(equiposJuego);
-      this.equiposDelJuego = equiposJuego;
-      this.RecuperarInscripcionesEquipoJuego();
+  async EquiposDelJuego() {
+
+    // Voy a necesitar a los alumnos del grupo
+    this.peticionesAPI.DameAlumnosGrupo(this.juegoSeleccionado.grupoId)
+    .subscribe(alumnosJuego => {
+      console.log ('Ya tengo los alumnos');
+      console.log(alumnosJuego);
+      this.alumnosDelJuego = alumnosJuego;
+      console.log ('Vamos a pos los equipos');
+      this.peticionesAPI.DameEquiposJuegoDeVotacionUnoATodos(this.juegoSeleccionado.id)
+      .subscribe(equiposJuego => {
+        console.log ('Ya tengo los equipos');
+        console.log(equiposJuego);
+        this.equiposDelJuego = equiposJuego;
+        this.equiposConMiembros = [];
+        this.equiposDelJuego.forEach (async eq => {
+          const res = await this.peticionesAPI.DameAlumnosEquipo (eq.id).toPromise();
+          if (res !== undefined) {
+            this.equiposConMiembros.push ({
+              equipo: eq,
+              miembros: res
+            })
+          } else {
+            this.equiposConMiembros.push ({
+              equipo: eq,
+              miembros: undefined
+            })
+          }
+
+        })
+      
+        this.RecuperarInscripcionesEquipoJuego();
+      });  
     });
+  
 }
+  AlumnoHaVotado(alumno: Alumno) {
+    return this.alumnosQueYaHanVotado.some (al => al.id === alumno.id);
+  }
+  CuantosHanVotadoDelEquipo (equipo: Equipo): string {
+    // Hay que contar cuantos alumnos del equipo están en la lista de los que ya han votado
+    // Primero vemos si todas las listas implicadas están preparadas
+    if (this.equiposConMiembros && this.alumnosQueYaHanVotado && this.equiposConMiembros) {
+      const alumnosDelEquipo = this.equiposConMiembros.filter (eq => eq.equipo.id === equipo.id)[0].miembros;
+      console.log ('equipo ', equipo);
+      console.log ('alumnos del equipo ', alumnosDelEquipo);
+      console.log ('alumnos que ya han votado ', this.alumnosQueYaHanVotado);
+      const yaHanVotado = alumnosDelEquipo.filter(alumno => this.alumnosQueYaHanVotado.some(al => al.id === alumno.id));
+      console.log ('ya han votado ', yaHanVotado);
+      if (yaHanVotado) {
+        return yaHanVotado.length + '/' + alumnosDelEquipo.length;
+      } else {
+        return '0/' + alumnosDelEquipo.length;
+      }
+    } else {
+      return null
+    }
+
+  }
 
   RecuperarInscripcionesAlumnoJuego() {
     console.log ('vamos por las inscripciones ' + this.juegoSeleccionado.id);
@@ -159,6 +220,19 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
       this.listaEquiposOrdenadaPorPuntos = this.listaEquiposOrdenadaPorPuntos.sort(function(obj1, obj2) {
         return obj2.puntosTotales - obj1.puntosTotales;
       });
+      if (!this.juegoSeleccionado.VotanEquipos) {
+        console.log ('Estas son las inscripciones ', this.listaEquiposOrdenadaPorPuntos);
+        // preparo una lista con los alumnos que ya han votado
+        this.alumnosQueYaHanVotado = [];
+        this.listaEquiposOrdenadaPorPuntos.forEach ( inscripcion => {
+          if (inscripcion.Votos) {
+            // tslint:disable-next-line:max-line-length
+            const yaHanVotado = this.alumnosDelJuego.filter (alumno => inscripcion.Votos.some (voto => voto.alumnoId === alumno.id));
+            console.log (yaHanVotado);
+            this.alumnosQueYaHanVotado = this.alumnosQueYaHanVotado.concat (yaHanVotado);
+          }
+        });
+      }
       this.TablaClasificacionTotal();
     });
   }
@@ -199,11 +273,12 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
       let cont = 0;
       this.rankingIndividualJuegoDeVotacionUnoATodos.forEach (al => {if (al.votado) { cont++; } });
       return (cont === this.rankingIndividualJuegoDeVotacionUnoATodos.length);
-    } else {
+    } else if (this.juegoSeleccionado.VotanEquipos) {
       let cont = 0;
       this.rankingEquipoJuegoDeVotacionUnoATodos.forEach (eq => {if (eq.votado) { cont++; } });
       return (cont === this.rankingEquipoJuegoDeVotacionUnoATodos.length);
-
+    } else {
+      return (this.alumnosQueYaHanVotado.length === this.alumnosDelJuego.length);
     }
   }
 
@@ -251,20 +326,17 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
       this.dataSourceEquipo.filter = filterValue.trim().toLowerCase();
     }
   }
-  AlumnosDelEquipo(equipo: Equipo) {
+  async AlumnosDelEquipo(equipo: Equipo) {
     console.log(equipo);
 
-    this.peticionesAPI.DameAlumnosEquipo (equipo.id)
-    .subscribe(res => {
-      if (res[0] !== undefined) {
+    const res = await this.peticionesAPI.DameAlumnosEquipo (equipo.id).toPromise();
+    if (res[0] !== undefined) {
         this.alumnosEquipo = res;
-        console.log(res);
-      } else {
-        console.log('No hay alumnos en este equipo');
-        // Informar al usuario
-        this.alumnosEquipo = undefined;
-      }
-    });
+    } else {
+      console.log('No hay alumnos en este equipo');
+      // Informar al usuario
+      this.alumnosEquipo = undefined;
+    }
   }
 
 }

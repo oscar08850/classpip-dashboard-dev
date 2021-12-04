@@ -15,6 +15,8 @@ import { Howl } from 'howler';
 import { ActivatedRoute,NavigationExtras, Router} from '@angular/router';
 import { Subscription } from 'rxjs';
 import * as URL from '../../../URLs/urls';
+import { AutofillMonitor } from '@angular/cdk/text-field';
+import { RespuestasAlumnoJuegoDeCuestionarioComponent } from '../../juego-seleccionado-inactivo/juego-de-cuestionario-seleccionado-inactivo/respuestas-alumno-juego-de-cuestionario/respuestas-alumno-juego-de-cuestionario.component';
 
 @Component({
   selector: 'app-juego-de-cuestionario-seleccionado-activo',
@@ -44,7 +46,7 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
   mensajeFinalizar: string = 'Estas segura/o de que quieres finalizar: ';
 
   // Orden conlumnas de la tabla
-  displayedColumnsAlumnos: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'nota', ' '];
+  displayedColumnsAlumnos: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'nota', 'iconos'];
   displayedColumnsAlumnosKahoot: string[] = ['nombreAlumno', 'primerApellido', 'segundoApellido', 'conexion'];
   displayedColumnsEquipos: string[] = ['nombreEquipo', 'nota', ' '];
   displayedColumnsEquiposPrimero: string[] = ['nombreEquipo', 'nota'];
@@ -549,6 +551,112 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
   //     });
   // }
 
+  AsignarCalificacion (alumno: TablaAlumnoJuegoDeCuestionario) {
+    console.log ('ALUMNO ', alumno);
+    Swal.fire({
+      title: 'Introduce la calificación para',
+      text: alumno.nombre + ' ' + alumno.primerApellido + ' ' + alumno.segundoApellido,
+      input: 'number',
+      showCancelButton: true        
+    }).then(async (result) => {
+      if (result.value) {
+        console.log ('voy a ponerle un ', result.value);
+        const inscripcion = this.listaAlumnosOrdenadaPorNota.filter (al => al.alumnoId === alumno.id)[0];
+        inscripcion.Nota = Number (result.value);
+        inscripcion.Contestado = true;
+        console.log ('inscripcion ', inscripcion);
+        //cambir this.alumnosQueHanContestado.
+        await this.peticionesAPI.PonerNotaAlumnoJuegoDeCuestionario(inscripcion, inscripcion.id).toPromise();
+
+        
+        // Añado la información a la tabla con el ranking, que vuelvo a ordenar
+        const al = this.rankingAlumnosPorNota.filter (a => a.id === alumno.id )[0];
+        al.nota = inscripcion.Nota;
+        al.tiempoEmpleado = 0;
+        al.contestado = true;
+
+        // tslint:disable-next-line:only-arrow-functions
+        this.rankingAlumnosPorNota = this.rankingAlumnosPorNota.sort(function(a, b) {
+        if (b.nota !== a.nota) {
+          return b.nota - a.nota;
+        } else {
+              // en caso de empate en la nota, gana el que empleó menos tiempo
+            return a.tiempoEmpleado - b.tiempoEmpleado;
+          }
+        });
+        this.dataSourceAlumno = new MatTableDataSource(this.rankingAlumnosPorNota);
+
+      
+      }
+    });
+  }
+  EiminarRespuestasAlumno(alumno: TablaAlumnoJuegoDeCuestionario) {
+    Swal.fire({
+      title: '¿Estas seguro de que quieres eliminar las respuests de este aumno?',
+      text: alumno.nombre + ' ' + alumno.primerApellido + ' ' + alumno.segundoApellido,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro'
+    }).then( async (result) => {
+      if (result.value) {
+          const inscripcion = this.listaAlumnosOrdenadaPorNota.filter (al => al.alumnoId === alumno.id)[0];
+
+          const respuestas = await this.peticionesAPI.DameRespuestasAlumnoJuegoDeCuestionario (inscripcion.id).toPromise();
+          if (respuestas !== undefined) {
+            // tslint:disable-next-line:prefer-for-of
+            for (let j = 0; j < respuestas.length; j++) {
+              await this.peticionesAPI.BorraRespuestaAlumnoDelJuegoDeCuestionario(respuestas[j].id).toPromise();
+            }
+          }
+          inscripcion.Contestado = false;
+          inscripcion.Nota = 0;
+          //cambir this.alumnosQueHanContestado.
+          await this.peticionesAPI.PonerNotaAlumnoJuegoDeCuestionario(inscripcion, inscripcion.id).toPromise();
+
+            // Añado la información a la tabla con el ranking, que vuelvo a ordenar
+          const al = this.rankingAlumnosPorNota.filter (a => a.id === alumno.id )[0];
+          al.nota = 0;
+          al.tiempoEmpleado = 0;
+          al.contestado = false;
+
+          // tslint:disable-next-line:only-arrow-functions
+          this.rankingAlumnosPorNota = this.rankingAlumnosPorNota.sort(function(a, b) {
+          if (b.nota !== a.nota) {
+            return b.nota - a.nota;
+          } else {
+                // en caso de empate en la nota, gana el que empleó menos tiempo
+              return a.tiempoEmpleado - b.tiempoEmpleado;
+            }
+          });
+          this.dataSourceAlumno = new MatTableDataSource(this.rankingAlumnosPorNota);
+
+          // // Ahora actualizo la tabla
+          // this.rankingAlumnosPorNota = this.calculos.PrepararTablaRankingCuestionario(this.listaAlumnosOrdenadaPorNota,
+          //   this.alumnosDelJuego);
+          // this.dataSourceAlumno = new MatTableDataSource(this.rankingAlumnosPorNota);
+
+          Swal.fire('Respuestas eliminadas');
+      }
+    });
+  }
+
+  MostrarRespuestasAlumno(alumno: TablaAlumnoJuegoDeCuestionario): void {
+    this.sesion.TomaJuego (this.juegoSeleccionado);
+    console.log ('voy a guardar alumno');
+    console.log (alumno);
+    this.sesion.TomaAlumnoJuegoDeCuestionario (alumno);
+    const inscripcion = this.listaAlumnosOrdenadaPorNota.filter (al => al.alumnoId === alumno.id)[0];
+    this.sesion.TomaInscripcionAlumnoJuegoDeCuestionario (inscripcion);
+    const dialogRef = this.dialog.open(RespuestasAlumnoJuegoDeCuestionarioComponent, {
+      width: '60%',
+      height: '80%',
+      position: {
+        top: '0%'
+      }
+    });
+  }
   AbrirDialogoConfirmacionDesactivar(): void {
 
     Swal.fire({

@@ -1,3 +1,5 @@
+
+
 .example-form {
   min-width: 150px;
   max-width: 500px;
@@ -19,6 +21,12 @@ table {
 
 .example-full-width {
   width: 100%;
+}
+
+.mat-divider {
+  width: 40%;
+  margin-left : 5% !important;
+  border-style:solid;
 }
 
 td {

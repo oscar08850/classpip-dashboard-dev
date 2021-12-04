@@ -65,6 +65,10 @@ export * from './RespuestaJuegoDeCuestionario';
 export * from './TablaAlumnoJuegoDeCuestionario';
 export * from './TablaEquipoJuegoDeCuestionario';
 
+export * from './JuegoDeVotacionAOpciones';
+
+export * from './AlumnoJuegoDeVotacionAOpciones';
+
 export * from './JuegoDeVotacionUnoATodos';
 export * from './AlumnoJuegoDeVotacionUnoATodos';
 export * from './TablaAlumnoJuegoDeVotacionUnoATodos';

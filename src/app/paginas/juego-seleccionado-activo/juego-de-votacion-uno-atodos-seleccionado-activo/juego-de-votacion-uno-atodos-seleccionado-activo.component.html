@@ -107,12 +107,12 @@
       </mat-form-field>
     </div>
 
-    <table style="width: 80%"  align="center"  mat-table [dataSource]="dataSourceEquipo" class="example-container mat-elevation-z8">
+    <table style="width: 80%"  align="center"  mat-table [dataSource]="dataSourceEquipo" class="resultados mat-elevation-z8">
      
 
         <!-- Posición Column -->
         <ng-container matColumnDef="posicion">
-          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Posición Global</th>
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">Pos</th>
           <td mat-cell *matCellDef="let equipo; let i = index">
             <div *ngIf = "(i == 0) && (VotacionFinalizada())" style="color: green; font-size: xx-large;">{{i+1}} </div>
             <div *ngIf = "(i != 0) || (!VotacionFinalizada())">{{i+1}}</div>
@@ -121,7 +121,7 @@
 
         <!-- Nombre Alumno Column -->
         <ng-container matColumnDef="nombreEquipo">
-          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Nombre</th>
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">Nombre</th>
           <td mat-cell *matCellDef="let equipo; let i = index">
             <div *ngIf = "(i == 0) && (VotacionFinalizada())" style="color: green; font-size: xx-large;">{{equipo.nombre}} </div>
             <div *ngIf = "(i != 0) || (!VotacionFinalizada())">{{equipo.nombre}}</div>
@@ -129,7 +129,7 @@
         </ng-container>
           <!-- Miembros Column -->
         <ng-container matColumnDef="miembros">
-          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 18%"> Miembros </th>
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"> Miembros </th>
           <td mat-cell *matCellDef="let equipo"><button mat-icon-button matTooltip="Ver miembros de {{equipo.nombre}}" color="primary"
             [mdePopoverTriggerFor]="appPopover" (click) = "AlumnosDelEquipo(equipo)"
             mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
@@ -139,10 +139,15 @@
           <mde-popover #appPopover="mdePopover" [mdePopoverOverlapTrigger]="false">
               <mat-card style="max-width: 300px">
                 <mat-card-content>
-                  <mat-list>
+                  <mat-list *ngIf = "juegoSeleccionado.VotanEquipos">
                     <mat-list-item *ngFor="let alumno of alumnosEquipo">
-                      <!-- <mat-icon mat-list-icon>folder</mat-icon> -->
                       <p class="md-body-1" mat-line>{{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</p>
+                    </mat-list-item>
+                  </mat-list>
+                  <mat-list *ngIf = "!juegoSeleccionado.VotanEquipos">
+                    <mat-list-item *ngFor="let alumno of alumnosEquipo">
+                      <p *ngIf = "AlumnoHaVotado (alumno)" class="md-body-1" style="color: green;" mat-line>{{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</p>
+                      <p *ngIf = "!AlumnoHaVotado (alumno)" class="md-body-1" mat-line>{{alumno.Nombre}} {{alumno.PrimerApellido}} {{alumno.SegundoApellido}}</p>
                     </mat-list-item>
                   </mat-list>
                 </mat-card-content>
@@ -154,7 +159,7 @@
 
         <!-- Puntos Column -->
         <ng-container matColumnDef="puntos">
-            <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center">Puntos</th>
+            <th mat-header-cell *matHeaderCellDef align = "center" class="tituloColumnaTabla">Puntos</th>
             <td mat-cell *matCellDef="let equipo; let i = index">
               <div *ngIf = "(i == 0) && (VotacionFinalizada())" style="color: green; font-size: xx-large;">{{equipo.puntos}} </div>
               <div *ngIf = "(i != 0) || (!VotacionFinalizada())">{{equipo.puntos}}</div>
@@ -162,19 +167,26 @@
         </ng-container>
 
         <ng-container matColumnDef="incremento">
-          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"  style="width: 20%"  align="center"></th>
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
           <td mat-cell *matCellDef="let equipo; ">
             <div *ngIf = "equipo.incremento !==0 " class="blink">+{{equipo.incremento}}</div>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef=" ">
+        <ng-container *ngIf = "juegoSeleccionado.VotanEquipos" matColumnDef="cuantos">
           <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
-          <td mat-cell style= "text-align: right" *matCellDef="let equipo">
+          <td mat-cell *matCellDef="let equipo">
             <p *ngIf = "equipo.votado" style = "color: green;">
               <i class="material-icons green md-36">done</i> </p>
           </td>
         </ng-container>
+        <ng-container *ngIf = "!juegoSeleccionado.VotanEquipos" matColumnDef="cuantos">
+          <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">han votado...</th>
+          <td mat-cell  *matCellDef="let equipo">
+            <p style = "color: green;"> {{CuantosHanVotadoDelEquipo(equipo)}}</p>
+          </td>
+        </ng-container>
+
 
       
 

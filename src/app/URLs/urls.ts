@@ -20,6 +20,6 @@ export const LogosEquipos = host + ':3000/api/imagenes/LogosEquipos/download/';
 export const ImagenesPregunta = host + ':3000/api/imagenes/ImagenesPreguntas/download/';
 
 export const Servidor = hostServer + ':8200';
-//export const Servidor = "";
+// export const Servidor = "";
 
 

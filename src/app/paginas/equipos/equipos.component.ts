@@ -406,9 +406,18 @@ export class EquiposComponent implements OnInit {
         }
       });
   }
+ 
 
   CrearEquipos() {
-    const equipos = this.calculos.FormarEquiposAleatorios (this.alumnosGrupo, this.tamEquipos);
+    let ajuste;
+    const radio = document.getElementsByName('ajuste')[0] as HTMLInputElement;
+    if (radio.checked ) {
+      ajuste = '+';
+    } else {
+      ajuste = '-';
+    }
+
+    const equipos = this.calculos.FormarEquiposAleatorios (this.alumnosGrupo, this.tamEquipos, ajuste);
     this.listaEquipos = [];
     for (let i = 0 ; i < equipos.length; i++) {
       this.peticionesAPI.CreaEquipo(new Equipo('Equipo_' + i, undefined), this.grupoId)

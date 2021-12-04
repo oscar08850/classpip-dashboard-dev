@@ -1,6 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+// Etiquetas de los tabs
+.mat-tab-label .mat-tab-label-content {
+  font-size: x-large;
+  font-weight: bold;
+}
+// ::ng-deep .mat-tab-label .mat-tab-label-content {
+//   font-size: x-large;
+//   font-weight: bold;
+// }
 
 // Imagen del alumno
 .imagen {
@@ -230,7 +239,7 @@ input[type=text] {
 
 .tituloColumnaTabla{
   color:white;
-  text-align: left !important;
+  text-align: left;
   font-weight: bold;
   font-size: 90%;
 }

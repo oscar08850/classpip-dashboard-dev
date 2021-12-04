@@ -146,8 +146,7 @@ export class EditarEquipoComponent implements OnInit {
   AbrirDialogoAgregarAlumnosEquipo(): void {
 
     const dialogRef = this.dialog.open(AgregarAlumnoEquipoComponent, {
-      maxHeight: '95%',
-      maxWidth: '50%',
+      height: '95%',
 
       // LE ENVIAMOS LOS ALUMNOS QUE TIENE ACTUALMENTE EL EQUIPO Y LOS QUE PODEMOS AÑADIR, ADEMÁS DEL EQUIPO QUE NOS SERÁ
       // ÚTIL PARA SABER SU ID Y EL ID DEL GRUPO AL QUE PERTENCE
@@ -183,6 +182,47 @@ export class EditarEquipoComponent implements OnInit {
 
     });
  }
+
+//  AbrirDialogoAgregarAlumnosEquipo(): void {
+
+//   const dialogRef = this.dialog.open(AgregarAlumnoEquipoComponent, {
+//     height: '95%',
+
+//     // LE ENVIAMOS LOS ALUMNOS QUE TIENE ACTUALMENTE EL EQUIPO Y LOS QUE PODEMOS AÑADIR, ADEMÁS DEL EQUIPO QUE NOS SERÁ
+//     // ÚTIL PARA SABER SU ID Y EL ID DEL GRUPO AL QUE PERTENCE
+//     data: {
+//       alumnosEquipo: this.alumnosEquipoCreado,
+//       alumnosSinEquipo: this.alumnosSinEquipo,
+//       equipo: this.equipoCreado
+//     }
+//   });
+
+//   // RECUPERAREMOS LA NUEVA LISTA DE LOS ALUMNOS ASIGNABLES Y VOLVEREMOS A BUSCAR LOS ALUMNOS QUE TIENE EL EQUIPO
+//   dialogRef.afterClosed().subscribe(alumnosEquipo => {
+
+//     // Si el usuario clica a aceptar para cerrar el dialogo, se enviarán los alumnos del equipo
+//     if (alumnosEquipo !== undefined) {
+//       this.alumnosEquipoCreado = alumnosEquipo;
+
+//       // Si clica fuera del diálogo para cerrarlo, recuperaremos la lista de la base de datos
+//     } else {
+//       this.AlumnosEquipoCreado();
+//     }
+
+//     // Limpiamos las listas que teniamos antes
+//     this.alumnosConEquipo = [];
+//     this.alumnosSinEquipo = [];
+
+//     // Pedimos las listas de alumnos con y sin equipo
+//     this.calculos.DameListasAlumnosConYSinEquipo (this.equipoCreado, this.alumnosGrupo)
+//     .subscribe (res => {
+//                           this.alumnosConEquipo = res.con;
+//                           this.alumnosSinEquipo = res.sin;
+//     });
+
+//   });
+// }
+
 
 
   // NOS PERMITE MODIFICAR EL NOMBRE Y EL LOGO DEL EQUIPO

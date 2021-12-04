@@ -147,11 +147,18 @@
 
   <mat-tab label="Generar equipos aleatorios">
     <div *ngIf="listaEquipos===undefined; else Aviso_no_habilitado" class = 'enColumna'>
-      <div class="enFila" style = 'width: 40%'>
-          <div style = 'margin-top: 5%'>
-              <span>Tamaño de los equipos </span>
-              <input style="width:15%" type="number"   requiered [(ngModel)]="tamEquipos">
-          </div>
+      <div class="enColumna" style = 'width: 60%'>
+          <br>
+         
+          <span>Tamaño de los equipos </span>
+          <input style="width:10%" type="number"   requiered [(ngModel)]="tamEquipos">
+   
+          <br>
+          <form>
+            <input type="radio" name="ajuste" checked > Completar con equipos de {{tamEquipos + 1}}<br>
+            <input type="radio" name="ajuste" > Completar con equipos de {{tamEquipos - 1}}
+          </form>
+          <br>
           <button type="button" class="btn Aceptar" (click)="CrearEquipos()">Crear equipos </button>
       </div>
     </div>

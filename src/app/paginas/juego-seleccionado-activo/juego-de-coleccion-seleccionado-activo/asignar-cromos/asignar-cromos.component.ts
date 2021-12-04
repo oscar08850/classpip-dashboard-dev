@@ -64,17 +64,17 @@ export class AsignarCromosComponent implements OnInit {
 
 
 
-  // tslint:disable-next-line:no-inferrable-types
-  mensaje: string = 'Confirma que quieres asignar este cromo';
+  // // tslint:disable-next-line:no-inferrable-types
+  // mensaje: string = 'Confirma que quieres asignar este cromo';
 
-  // tslint:disable-next-line:no-inferrable-types
-  mensajeAleatorio: string = 'Confirma que quieres asignar este sobre de cromos aleatorios';
+  // // tslint:disable-next-line:no-inferrable-types
+  // mensajeAleatorio: string = 'Confirma que quieres asignar este sobre de cromos aleatorios';
 
-  // tslint:disable-next-line:no-inferrable-types
-  mensajeAsignacionAleatoria: string = 'Confirma que quieres asignar aleatoriamente este sobre de cromos aleatorios';
-  // tslint:disable-next-line:no-inferrable-types
-  mensajeAsignacionMejoresRanking: string = 'Confirma que quieres asignar cromos a los tres mejores del ranking';
-  // tslint:disable-next-line:ban-types
+  // // tslint:disable-next-line:no-inferrable-types
+  // mensajeAsignacionAleatoria: string = 'Confirma que quieres asignar aleatoriamente este sobre de cromos aleatorios';
+  // // tslint:disable-next-line:no-inferrable-types
+  // mensajeAsignacionMejoresRanking: string = 'Confirma que quieres asignar cromos a los tres mejores del ranking';
+  // // tslint:disable-next-line:ban-types
   isDisabled: Boolean = true;
 
 
@@ -1269,74 +1269,71 @@ export class AsignarCromosComponent implements OnInit {
   }
 
   AbrirDialogoConfirmacionAsignarCromo(): void {
-
     let cromo: Cromo;
     cromo = this.cromosColeccion.filter(res => res.id === Number(this.cromoSeleccionadoId))[0];
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
 
-      data: {
-        mensaje: this.mensaje,
-        nombre: cromo.Nombre
-      }
-    });
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    Swal.fire({
+      title: '¿Seguro que quieres asignar este cromo?',
+      text: cromo.Nombre,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
         this.AsignarCromo();
       }
     });
   }
 
   AbrirDialogoConfirmacionAsignarCromosAleatorios(): void {
-
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensajeAleatorio,
-        nombre: ''
-      }
-    });
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    Swal.fire({
+      title: '¿Seguro que quieres asignar un sobre de cromos aleatorios?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
         this.AsignarCromosAleatorios();
       }
     });
   }
 
   AbrirDialogoConfirmacionAsignarCromosAlumnoAleatorio(): void {
-
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensajeAsignacionAleatoria,
-        nombre: ''
-      }
-    });
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    Swal.fire({
+      title: '¿Seguro que quieres asignar aleatoriamente un sobre de cromos aleatorios?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
         this.AsignarAleatoriamenteCromosAleatorios();
       }
     });
   }
 
   AbrirDialogoConfirmacionAsignarCromosMejoresRanking() {
-    const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-      height: '150px',
-      data: {
-        mensaje: this.mensajeAsignacionMejoresRanking,
-        nombre: ''
-      }
-    });
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    Swal.fire({
+      title: '¿Seguro que quieres asignar cromos a los tres mejores del ranking?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
         this.AsignarCromosMejoresRanking();
       }
     });
-
   }
 
     // Busca la imagen que tiene el nombre del cromo.Imagen y lo carga en imagenCromo

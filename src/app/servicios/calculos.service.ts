@@ -111,6 +111,8 @@ private async EliminaJuegos(): Promise<any> {
           this.EliminarJuegoDeVotacionUnoATodos (juego);
         } else if (juego.Tipo === 'Juego De Votación Todos A Uno') {
           this.EliminarJuegoDeVotacionTodosAUno (juego);
+        } else if (juego.Tipo === 'Juego De Votación Votar opciones') {
+          this.EliminarJuegoDeVotacionAOpciones (juego);
         } else if (juego.Tipo === 'Juego De Evaluacion') {
           this.EliminarJuegoDeEvaluacion (juego);
         } else if (juego.Tipo === 'Control de trabajo en equipo') {
@@ -385,6 +387,27 @@ public async EliminarJuegoDeVotacionTodosAUno(juego: any) {
   }
   await this.peticionesAPI.BorraJuegoDeVotacionTodosAUno (juego.id).toPromise();
 }
+public async EliminarJuegoDeVotacionAOpciones(juego: any) {
+  let inscripciones;
+  if (juego.Modo === 'Individual') {
+    inscripciones = await this.peticionesAPI.DameInscripcionesAlumnoJuegoDeVotacionAOpciones(juego.id).toPromise();
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      await this.peticionesAPI.BorraInscripcionAlumnoJuegoDeVotacionAOpciones (inscripciones[i].id).toPromise();
+    }
+  } else {
+    // AUN NO ES POSIBLE LA MODALIDAD DE EQUIPO EN ESTE JUEGO. CUANDO ESTÉ IMPLEMENTADA ENTONCES
+    // ESTE SERÁ EL CÓDIGO PARA ELIMINAR
+    // inscripciones = await this.peticionesAPI.DameInscripcionesEquiposJuegoDeVotacionTodosAUno(juego.id).toPromise();
+
+    // // tslint:disable-next-line:prefer-for-of
+    // for (let i = 0; i < inscripciones.length ; i++ ) {
+    //   await this.peticionesAPI.BorraInscripcionEquipoJuegoDeVotacionTodosAUno (inscripciones[i].id).toPromise();
+    // }
+  }
+  await this.peticionesAPI.BorraJuegoDeVotacionAOpciones (juego.id).toPromise();
+}
 public async EliminarJuegoDeVotacionUnoATodos(juego: any) {
   let inscripciones;
   if (juego.Modo === 'Individual') {
@@ -550,6 +573,20 @@ private async EliminarMatriculas(): Promise<any> {
       }
     }
 
+    console.log ('vamos a por los juegos de competicion torneo del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegoDeCompeticionTorneoGrupo(grupoID).toPromise();
+    console.log('He recibido los juegos de competición torneo');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+
+
 
     console.log ('vamos a por los juegos de avatar del grupo: ' + grupoID);
     juegos = await this.peticionesAPI.DameJuegoDeAvatarGrupo(grupoID).toPromise();
@@ -629,6 +666,21 @@ private async EliminarMatriculas(): Promise<any> {
         juegosActivos.push(juegos[i]);
       } else {
         juegos[i].Tipo = 'Juego De Votación Todos A Uno';
+        juegosInactivos.push(juegos[i]);
+      }
+    }
+
+    console.log ('Vamos a por los juegos de votacion Votar opciones del grupo: ' + grupoID);
+    juegos = await this.peticionesAPI.DameJuegosDeVotacionAOpciones(grupoID).toPromise();
+    console.log('He recibido los juegos de votacion Votar opciones');
+    console.log(juegos);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < juegos.length; i++) {
+      if (juegos[i].JuegoActivo === true) {
+        juegos[i].Tipo = 'Juego De Votación Votar opciones';
+        juegosActivos.push(juegos[i]);
+      } else {
+        juegos[i].Tipo = 'Juego De Votación Votar opciones';
         juegosInactivos.push(juegos[i]);
       }
     }
@@ -1891,17 +1943,28 @@ public CrearJornadasLiga(NumeroDeJornadas, juegoDeCompeticionID): any  {
     
     return jornadaFinalizada;
   }
- public FormarEquiposAleatorios(individuos: any[], tamEquipos: number): any[] {
-    const listaInicial = individuos;
-    const numeroGrupos = Math.ceil(listaInicial.length / tamEquipos);
-    console.log ('Tamaño ' + tamEquipos);
+ public FormarEquiposAleatorios(individuos: any[], tamEquipos: number, ajuste: string ): any[] {
+    // Crea equipos de tamEquipos integrantes. El parámetro ajuste dice cómo hay que redondear. Si es "+" 
+    // crea los equipos necesarios de tamEquipos + 1. Si es "-" entonces crea los necesarios de tamEquipos - 1
+    let tamCadaEquipo: number[];
+    const G = Math.floor(individuos.length / tamEquipos);
+    const R = individuos.length % tamEquipos;
+    if (ajuste === '+') {
+      tamCadaEquipo = Array(G - R).fill(tamEquipos).concat (Array(R).fill(tamEquipos + 1));
+      console.log ('arriba');
+    } else {
+      tamCadaEquipo = Array(G - tamEquipos + R + 1).fill(tamEquipos).concat (Array(tamEquipos - R).fill(tamEquipos - 1));
+      console.log ('abajo');
+    }
 
-    console.log ('Numero de grupos ' + numeroGrupos);
+    console.log ('asi quedan los equipos ', tamCadaEquipo);
+
+    const listaInicial = individuos;
     const equipos: any [] = [];
-    for (let i = 0; i < numeroGrupos - 1; i++) {
+    for (let i = 0; i < tamCadaEquipo.length - 1; i++) {
       console.log ('grupo ' + i);
       const equipo: any[] = [];
-      for (let j = 0; j < tamEquipos; j++) {
+      for (let j = 0; j < tamCadaEquipo[i]; j++) {
         const n = Math.floor(Math.random() * listaInicial.length);
         console.log (n + ' ' + listaInicial[n]);
         equipo.push (listaInicial[n]);
