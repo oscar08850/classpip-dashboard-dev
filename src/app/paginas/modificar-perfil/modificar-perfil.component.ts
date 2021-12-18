@@ -54,9 +54,18 @@ export class ModificarPerfilComponent implements OnInit {
     return re.test(email);
   }
 
+  ValidaPass(pass) {
+    // La contraseña solo puede tener numeros y digitos
+    const re = /[^A-Za-z0-9]+/;
+    return !re.test(pass);
+  }
+
 
   Registrar() {
-      if (this.cambioPass && (this.contrasena !== this.contrasenaRepetida)) {
+    if ( !this.ValidaPass (this.contrasena)) {
+      Swal.fire('Error', 'La contraseña solo puede tener letras y dígitos', 'error');
+
+    } else if (this.cambioPass && (this.contrasena !== this.contrasenaRepetida)) {
       Swal.fire('Error', 'No coincide la contraseña con la contraseña repetida', 'error');
     } else if (!this.ValidaEmail (this.email)) {
       Swal.fire('Error', 'El email no es correcto', 'error');
