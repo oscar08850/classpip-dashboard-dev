@@ -59,6 +59,10 @@ export class LoginComponent implements OnInit {
     // envio un profesor undefined para que se notifique al componente navbar y desaparezca la barra
     // de navegación
     this.sesion.EnviaProfesor(this.profesor);
+
+    const regex = /[^A-Za-z0-9]+/;
+    console.log ('123adb: ' + regex.test ('123abc'));
+    console.log ('123*adb: ' + regex.test ('123*abc'));
   }
 
 
@@ -100,6 +104,11 @@ export class LoginComponent implements OnInit {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
   }
+  ValidaPass(pass) {
+    // La contraseña solo puede tener numeros y digitos
+    const re = /[^A-Za-z0-9]+/;
+    return !re.test(pass);
+  }
 
   Registrar() {
     this.peticionesAPI.BuscaNombreUsuario (this.username)
@@ -108,7 +117,9 @@ export class LoginComponent implements OnInit {
         Swal.fire('Error', 'Ya existe alguien con el mismo nombre de usuario en Classpip', 'error');
 
       } else {
-        if (this.contrasena !== this.contrasenaRepetida) {
+        if ( !this.ValidaPass (this.contrasena)) {
+          Swal.fire('Error', 'La contraseña solo puede tener letras y dígitos', 'error');
+        } else if (this.contrasena !== this.contrasenaRepetida) {
           Swal.fire('Error', 'No coincide la contraseña con la contraseña repetida', 'error');
         } else if (!this.ValidaEmail (this.email)) {
           Swal.fire('Error', 'El email no es correcto', 'error');
@@ -131,10 +142,11 @@ export class LoginComponent implements OnInit {
               (res) => Swal.fire('OK', 'Registro completado con éxito', 'success'),
               (err) => Swal.fire('Error', 'Fallo en la conexion con la base de datos', 'error')
           );
+          this.nombre = undefined;
+          this.contrasena = undefined;
+          this.mostrarLogin = true;
         }
-        this.nombre = undefined;
-        this.contrasena = undefined;
-        this.mostrarLogin = true;
+      
       }
 
     });

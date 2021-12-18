@@ -52,6 +52,13 @@ export class InicioComponent implements OnInit {
 
   ngOnInit() {
 
+    const vector = [];
+    console.log ('VECTOR 1', vector);
+    vector.push (3);
+    console.log ('VECTOR2', vector);
+    vector.push (6);
+    console.log ('VECTOR3', vector);
+
 
 
     this.profesor = this.sesion.DameProfesor();

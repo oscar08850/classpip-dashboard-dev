@@ -72,7 +72,7 @@ export class ComServerService {
   public EsperoVotacion(): any {
     return Observable.create((observer) => {
       this.socket.on('notificarVotacion', (votacion) => {
-        console.log('llega notificacion');
+        console.log('llega notificacion de VORACION ', votacion);
         observer.next(votacion);
       });
     });
