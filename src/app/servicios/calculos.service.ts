@@ -523,230 +523,289 @@ private async EliminarMatriculas(): Promise<any> {
     let juegos: any[];
 
     console.log ('vamos a por los juegos de puntos del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegoDePuntosGrupo(grupoID).toPromise();
-    console.log('He recibido los juegos de puntos');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DameJuegoDePuntosGrupo(grupoID).toPromise();
+      console.log('He recibido los juegos de puntos');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de puntos en el grupo: ' + grupoID);
     }
 
     console.log ('vamos a por los juegos de colección del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegoDeColeccionGrupo(grupoID).toPromise();
-    console.log('He recibido los juegos de coleccion');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DameJuegoDeColeccionGrupo(grupoID).toPromise();
+      console.log('He recibido los juegos de coleccion');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de colección en el grupo: ' + grupoID);
     }
 
     console.log ('vamos a por los juegos de competicion liga del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegoDeCompeticionLigaGrupo(grupoID).toPromise();
-    console.log('He recibido los juegos de coleccion');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DameJuegoDeCompeticionLigaGrupo(grupoID).toPromise();
+      console.log('He recibido los juegos de coleccion');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de competición liga en el grupo: ' + grupoID);
     }
+
     console.log ('vamos a por los juegos de competicion formula uno del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegoDeCompeticionFormulaUnoGrupo(grupoID).toPromise();
-    console.log('He recibido los juegos de competición formula uno');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DameJuegoDeCompeticionFormulaUnoGrupo(grupoID).toPromise();
+      console.log('He recibido los juegos de competición formula uno');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de competición formula uno en el grupo: ' + grupoID);
     }
 
     console.log ('vamos a por los juegos de competicion torneo del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegoDeCompeticionTorneoGrupo(grupoID).toPromise();
-    console.log('He recibido los juegos de competición torneo');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DameJuegoDeCompeticionTorneoGrupo(grupoID).toPromise();
+      console.log('He recibido los juegos de competición torneo');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de competición torneo en el grupo: ' + grupoID);
     }
 
 
 
     console.log ('vamos a por los juegos de avatar del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegoDeAvatarGrupo(grupoID).toPromise();
-    console.log('He recibido los juegos de avatar');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DameJuegoDeAvatarGrupo(grupoID).toPromise();
+      console.log('He recibido los juegos de avatar');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de avatar en el grupo: ' + grupoID);
     }
 
 
     console.log ('vamos a por los juegos de cuestionario del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegoDeCuestionario(grupoID).toPromise();
-    console.log('He recibido los juegos de cuestionario');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-        if (juegos[i].JuegoActivo === true) {
-          juegos[i].Tipo = 'Juego De Cuestionario';
-          juegosActivos.push(juegos[i]);
-        } else if (juegos[i].JuegoTerminado === false && juegos[i].JuegoActivo === false) {
-          juegos[i].Tipo = 'Juego De Cuestionario';
-          juegosPreparados.push(juegos[i]);
-        } else if (juegos[i].JuegoTerminado === true) {
-          juegos[i].Tipo = 'Juego De Cuestionario';
-          juegosInactivos.push(juegos[i]);
-        }
+    try {
+      juegos = await this.peticionesAPI.DameJuegoDeCuestionario(grupoID).toPromise();
+      console.log('He recibido los juegos de cuestionario');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+          if (juegos[i].JuegoActivo === true) {
+            juegos[i].Tipo = 'Juego De Cuestionario';
+            juegosActivos.push(juegos[i]);
+          } else if (juegos[i].JuegoTerminado === false && juegos[i].JuegoActivo === false) {
+            juegos[i].Tipo = 'Juego De Cuestionario';
+            juegosPreparados.push(juegos[i]);
+          } else if (juegos[i].JuegoTerminado === true) {
+            juegos[i].Tipo = 'Juego De Cuestionario';
+            juegosInactivos.push(juegos[i]);
+          }
+      }
+    } catch {
+      console.log ('No hay juegos de cuestionario  en el grupo: ' + grupoID);
     }
 
     console.log ('vamos a por los juegos de geocaching del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegoDeGeocaching(grupoID).toPromise();
-    console.log('He recibido los juegos de geocaching');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-        if (juegos[i].JuegoActivo === true) {
-          juegos[i].Tipo = 'Juego De Geocaching';
-          juegosActivos.push(juegos[i]);
-        } else if (juegos[i].JuegoTerminado === false && juegos[i].JuegoActivo === false) {
-          juegos[i].Tipo = 'Juego De Geocaching';
-          juegosPreparados.push(juegos[i]);
-        } else if (juegos[i].JuegoTerminado === true) {
-          juegos[i].Tipo = 'Juego De Geocaching';
-          juegosInactivos.push(juegos[i]);
-        }
+    try {
+      juegos = await this.peticionesAPI.DameJuegoDeGeocaching(grupoID).toPromise();
+      console.log('He recibido los juegos de geocaching');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+          if (juegos[i].JuegoActivo === true) {
+            juegos[i].Tipo = 'Juego De Geocaching';
+            juegosActivos.push(juegos[i]);
+          } else if (juegos[i].JuegoTerminado === false && juegos[i].JuegoActivo === false) {
+            juegos[i].Tipo = 'Juego De Geocaching';
+            juegosPreparados.push(juegos[i]);
+          } else if (juegos[i].JuegoTerminado === true) {
+            juegos[i].Tipo = 'Juego De Geocaching';
+            juegosInactivos.push(juegos[i]);
+          }
+      }
+    } catch {
+      console.log ('No hay juegos de geocaching  en el grupo: ' + grupoID);
     }
 
     console.log ('Vamos a por los juegos de votacion Uno a Todos del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegosDeVotacionUnoATodos(grupoID).toPromise();
-    console.log('He recibido los juegos de votacion Uno A Todos');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegos[i].Tipo = 'Juego De Votación Uno A Todos';
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegos[i].Tipo = 'Juego De Votación Uno A Todos';
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DameJuegosDeVotacionUnoATodos(grupoID).toPromise();
+      console.log('He recibido los juegos de votacion Uno A Todos');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegos[i].Tipo = 'Juego De Votación Uno A Todos';
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegos[i].Tipo = 'Juego De Votación Uno A Todos';
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de votacion uno a todos en el grupo: ' + grupoID);
     }
 
     console.log ('Vamos a por los juegos de votacion Todos A Uno del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegosDeVotacionTodosAUno(grupoID).toPromise();
-    console.log('He recibido los juegos de votacion Todos A Uno');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegos[i].Tipo = 'Juego De Votación Todos A Uno';
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegos[i].Tipo = 'Juego De Votación Todos A Uno';
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DameJuegosDeVotacionTodosAUno(grupoID).toPromise();
+      console.log('He recibido los juegos de votacion Todos A Uno');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegos[i].Tipo = 'Juego De Votación Todos A Uno';
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegos[i].Tipo = 'Juego De Votación Todos A Uno';
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de votacion Todos A Uno en el grupo: ' + grupoID);
     }
 
     console.log ('Vamos a por los juegos de votacion Votar opciones del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegosDeVotacionAOpciones(grupoID).toPromise();
-    console.log('He recibido los juegos de votacion Votar opciones');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegos[i].Tipo = 'Juego De Votación Votar opciones';
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegos[i].Tipo = 'Juego De Votación Votar opciones';
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DameJuegosDeVotacionAOpciones(grupoID).toPromise();
+      console.log('He recibido los juegos de votacion Votar opciones');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegos[i].Tipo = 'Juego De Votación Votar opciones';
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegos[i].Tipo = 'Juego De Votación Votar opciones';
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de votacion a opciones en el grupo: ' + grupoID);
     }
 
-
     console.log ('Vamos a por los juegos de cuestionario de satisfacción: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegosDeCuestionarioSatisfaccion(grupoID).toPromise();
-    console.log('He recibido los juegos de cuestionario de satisfacción');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DameJuegosDeCuestionarioSatisfaccion(grupoID).toPromise();
+      console.log('He recibido los juegos de cuestionario de satisfacción');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de cuestionario de satisfacción en el grupo: ' + grupoID);
     }
 
 
     console.log('Vamos a por los juegos de evaluacion del grupo ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegosDeEvaluacion(grupoID).toPromise();
-    console.log('He recibido los juegos de evaluacion');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegos[i].Tipo = 'Evaluacion';
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegos[i].Tipo = 'Evaluacion';
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DameJuegosDeEvaluacion(grupoID).toPromise();
+      console.log('He recibido los juegos de evaluacion');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegos[i].Tipo = 'Evaluacion';
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegos[i].Tipo = 'Evaluacion';
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de evaluacion  en el grupo: ' + grupoID);
     }
-    console.log ('asi esta la lista de juegos activos ', juegosActivos);
+  
 
     console.log ('Vamos a por los juegos de control de trabajo en equipo: ' + grupoID);
-    juegos = await this.peticionesAPI.DameJuegosDeControlDeTrabajoEnEquipo(grupoID).toPromise();
-    console.log('He recibido los juegos de control de trabajo en equipo');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      console.log ('entro ', juegos[i]);
-      if (juegos[i].JuegoActivo === true) {
-        console.log ('es activo');
-        juegosActivos.push(juegos[i]);
-      } else {
-        console.log ('es inactivo');
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DameJuegosDeControlDeTrabajoEnEquipo(grupoID).toPromise();
+      console.log('He recibido los juegos de control de trabajo en equipo');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        console.log ('entro ', juegos[i]);
+        if (juegos[i].JuegoActivo === true) {
+          console.log ('es activo');
+          juegosActivos.push(juegos[i]);
+        } else {
+          console.log ('es inactivo');
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de control de trabajo en equipo en el grupo: ' + grupoID);
     }
-    console.log ('asi esta la lista de juegos activos ', juegosActivos);
 
 
     console.log ('vamos a por los juegos de cuento del grupo: ' + grupoID);
-    juegos = await this.peticionesAPI.DamejuegosdeCuento(grupoID).toPromise();
-    console.log('He recibido los juegos de cuento');
-    console.log(juegos);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < juegos.length; i++) {
-      if (juegos[i].JuegoActivo === true) {
-        juegosActivos.push(juegos[i]);
-      } else {
-        juegosInactivos.push(juegos[i]);
+    try {
+      juegos = await this.peticionesAPI.DamejuegosdeCuento(grupoID).toPromise();
+      console.log('He recibido los juegos de cuento');
+      console.log(juegos);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegosInactivos.push(juegos[i]);
+        }
       }
+    } catch {
+      console.log ('No hay juegos de cuento en el grupo: ' + grupoID);
     }
-
+    
     console.log ('asi esta la lista de juegos activos ', juegosActivos);
     const resultado = { activos: juegosActivos, inactivos: juegosInactivos, preparados: juegosPreparados};
     return (resultado);
@@ -760,35 +819,48 @@ private async EliminarMatriculas(): Promise<any> {
     let juegosRapidos: any[] = [];
 
     let juegos;
-
     console.log ('voy a por los juegos de encuesta rapida');
-    juegos = await this.peticionesAPI.DameJuegosDeEncuestaRapida(profesorId).toPromise();
-    console.log ('ya tengo los juegos de encuesta rapida');
-    console.log (juegos);
-    juegosRapidos = juegosRapidos.concat (juegos);
+    try {
+      juegos = await this.peticionesAPI.DameJuegosDeEncuestaRapida(profesorId).toPromise();
+      console.log ('ya tengo los juegos de encuesta rapida');
+      console.log (juegos);
+      juegosRapidos = juegosRapidos.concat (juegos);
+    } catch {
+      console.log ('No hay juegos de encuesta rapida ');
+    }
 
 
     console.log ('voy a por los juegos de votación rápida');
-    juegos = await this.peticionesAPI.DameJuegosDeVotacionRapida(profesorId).toPromise();
-    console.log ('ya tengo los juegos de votación rápida');
-    console.log (juegos);
-    juegosRapidos = juegosRapidos.concat (juegos);
+    try {
+      juegos = await this.peticionesAPI.DameJuegosDeVotacionRapida(profesorId).toPromise();
+      console.log ('ya tengo los juegos de votación rápida');
+      console.log (juegos);
+      juegosRapidos = juegosRapidos.concat (juegos);
 
+    } catch {
+      console.log ('No hay juegos de votación rápida ');
+    }
 
     console.log ('voy a por los juegos de cuestionario rápido');
-    juegos = await this.peticionesAPI.DameJuegosDeCuestionarioRapido(profesorId).toPromise();
-    console.log ('ya tengo los juegos de cuestionario rápido');
-    console.log (juegos);
-    juegosRapidos = juegosRapidos.concat (juegos);
+    try {
+      juegos = await this.peticionesAPI.DameJuegosDeCuestionarioRapido(profesorId).toPromise();
+      console.log ('ya tengo los juegos de cuestionario rápido');
+      console.log (juegos);
+      juegosRapidos = juegosRapidos.concat (juegos);
+    } catch {
+      console.log ('No hay juegos de cuestionario rápido ');
+    }
 
     console.log ('voy a por los juegos de coger turno rápido');
+    try {
     juegos = await this.peticionesAPI.DameJuegosDeCogerTurnoRapido(profesorId).toPromise();
     console.log ('ya tengo los juegos de coger turno rápido');
     console.log (juegos);
     juegosRapidos = juegosRapidos.concat (juegos);
-
     return juegosRapidos;
-
+    } catch {
+      console.log ('No hay juegos de coger turno rápido ');
+    }
 }
 
 

@@ -72,7 +72,7 @@ export class ComServerService {
   public EsperoVotacion(): any {
     return Observable.create((observer) => {
       this.socket.on('notificarVotacion', (votacion) => {
-        console.log('llega notificacion');
+        console.log('llega notificacion de VORACION ', votacion);
         observer.next(votacion);
       });
     });
@@ -266,7 +266,10 @@ export class ComServerService {
   }
   public NotificarLanzarSiguientePreguntaGrupo(gId: number, info: any) {
     this.socket.emit ('lanzarSiguientePreguntaGrupo' , {grupoId: gId, opcionesDesordenadas: info});
-
+  }
+  
+  public NotificarPanelAbierto (gId: number) {
+    this.socket.emit ('panelAbierto' , gId);
   }
 
   public NotificarResultadoFinalKahoot(claveJuego: string, res: any) {

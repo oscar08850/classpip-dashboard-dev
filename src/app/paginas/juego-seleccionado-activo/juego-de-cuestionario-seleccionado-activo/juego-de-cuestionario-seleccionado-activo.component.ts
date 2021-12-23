@@ -113,6 +113,7 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
   donutsKahoot: any[] = [];
   equipos = [];
   respuestasPorEquipo = [];
+  numeroDeConectados = 0;
 
 
   constructor(  public dialog: MatDialog,
@@ -136,38 +137,9 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
     console.log(this.juegoSeleccionado.Modalidad);
 
     if (this.juegoSeleccionado.Modo === 'Individual') {
-      this.alumnosConectados = [];
-      this.listaAlumnos = [];
-
-      // Este procedimiento prepara la lista alumnosDelJuego (que son los que participan en el juego)
-      // y una lista que se llama alumnosConectados en la que cada item contiene el alumno y un boolean que indica si está conectado (necesario para
-      // la modalidad Kahoot)
-      this.AlumnosDelJuego();
-
-      // Aqui traemos el cuestionario, las preguntas y el histograma de aciertos
-      // Para cada pregunta preparamos la imagen si la tiene y el donut que usaremos para mostrar las respuestas
-      this.PreparaInfo();
-
-      if (this.juegoSeleccionado.Modalidad === 'Kahoot') {
-
-        // Cada alumno que quiera participar en el Kahoot enviara una notificación de que está preparado, enviando su identificador de alumno
-        this.comServer.EsperoConfirmacionPreparadoKahoot()
-        .subscribe((alId) => {
-          // el participante está listo para empezar el kahoot. Tomo nota de esto
-          const alum = this.alumnosConectados.find (al => al.alumno.id === alId);
-          alum.conectado = true;
-          // Actualizo la tabla de conectados (aparecerá el simbolo verde al lado del nombre del alumno)
-          this.dataSourceAlumnosConectados = new MatTableDataSource(this.alumnosConectados);
-
-          // Añado al alumno a la lista de alumnos que participan en el juego. En esa lista tendo los datos para hacer el seguimiento del juego
-          this.listaAlumnos.push ( {
-            alumno: alum.alumno,
-            incremento: 0,  // indica cuántos puntos suma con la última respuesta
-            puntos: 0,
-            aciertos: 0 // esto es para el histograma
-          })
-        });
-      }
+      this.PrepararJuegoIndividual();
+ 
+  
     } else if ((this.juegoSeleccionado.Modo === 'Equipos') && (this.juegoSeleccionado.Presentacion === 'Primero')) {
       // Hacemos lo mismo pero ahora con los equipos
       this.equiposConectados = [];
@@ -435,33 +407,60 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
 
   }
 
-  // HaContestado(alumnoId: number): boolean {
-  //   console.log ('voy a ver si ha contestado ' + alumnoId);
-  //   if (this.alumnosQueHanContestado.find (alumno => alumno.id === alumnoId) === undefined) {
-  //     console.log ('No');
-  //     return false;
-  //   } else {
-  //     console.log ('SI');
-  //     return true;
-  //   }
-  // }
+  async PrepararJuegoIndividual() {
+    this.alumnosConectados = [];
+    this.listaAlumnos = [];
 
-
-  AlumnosDelJuego() {
-    this.peticionesAPI.DameAlumnosJuegoDeCuestionario(this.juegoSeleccionado.id)
-    .subscribe(alumnosJuego => {
-      this.alumnosDelJuego = alumnosJuego;
-      this.alumnosDelJuego.forEach(al => {
+    console.log ('voy a por los alumnos');
+    this.alumnosDelJuego = await this.peticionesAPI.DameAlumnosJuegoDeCuestionario(this.juegoSeleccionado.id).toPromise();
+    this.alumnosDelJuego.forEach(al => {
         this.alumnosConectados.push({
           alumno: al,
           conectado: false
-        })
-      })
-
-      // Preparo la tabla en la que se irán viendo los alumnos que se van conectando
-      this.dataSourceAlumnosConectados = new MatTableDataSource(this.alumnosConectados);
-      this.RecuperarInscripcionesAlumnoJuego();
+        });
     });
+    console.log ('Ya tengo los alumnos conectados ', this.alumnosConectados);
+
+
+
+    if (this.juegoSeleccionado.Modalidad === 'Kahoot') {
+      console.log ('juego Kahoot');
+
+      // Cada alumno que quiera participar en el Kahoot enviara una notificación de que está preparado, enviando su identificador de alumno
+      this.comServer.EsperoConfirmacionPreparadoKahoot()
+      .subscribe((alId) => {
+        console.log ('recibo confirmacion ', alId);
+        // el participante está listo para empezar el kahoot. Tomo nota de esto
+        const alum = this.alumnosConectados.find (al => al.alumno.id === alId);
+        alum.conectado = true;
+        this.numeroDeConectados++;
+        // Actualizo la tabla de conectados (aparecerá el simbolo verde al lado del nombre del alumno)
+        this.dataSourceAlumnosConectados = new MatTableDataSource(this.alumnosConectados);
+
+        // Añado al alumno a la lista de alumnos que participan en el juego. En esa lista tendo los datos para hacer el seguimiento del juego
+        this.listaAlumnos.push ( {
+          alumno: alum.alumno,
+          incremento: 0,  // indica cuántos puntos suma con la última respuesta
+          puntos: 0,
+          aciertos: 0 // esto es para el histograma
+        });
+      });
+
+      // Informo a los alumnos que se han conectado al juego de que ya está abierto el panel en el Dash y pueden enviar sus
+      // identificadores para que se muestre en pantalla quuén está conectado. Algunos puede que lo hayan hecho antes de abrir el panel,
+      // con lo cual el tick verde no se habrá mostrado. Al recibir esta notificación volverán a enviar su identificador y 
+      // el tick aparecerá por fin
+
+      this.comServer.NotificarPanelAbierto (this.juegoSeleccionado.grupoId);
+    }
+
+    // Preparo la tabla en la que se irán viendo los alumnos que se van conectando
+    this.dataSourceAlumnosConectados = new MatTableDataSource(this.alumnosConectados);
+    this.RecuperarInscripcionesAlumnoJuego();
+    // Aqui traemos el cuestionario, las preguntas y el histograma de aciertos
+    // Para cada pregunta preparamos la imagen si la tiene y el donut que usaremos para mostrar las respuestas
+    this.PreparaInfo();
+
   }
 
   RecuperarInscripcionesAlumnoJuego() {
@@ -538,18 +537,7 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
     this.dataSourceEquipo = new MatTableDataSource(this.rankingEquiposPorNota);
   }
 
-  
-
-  // DesactivarJuego() {
-  //   // tslint:disable-next-line:max-line-length
-  //   this.peticionesAPI.ModificaJuegoDeCuestionario(new JuegoDeCuestionario(this.juegoSeleccionado.NombreJuego, this.juegoSeleccionado.Tipo, this.juegoSeleccionado.Modalidad, this.juegoSeleccionado.PuntuacionCorrecta,
-  //     this.juegoSeleccionado.PuntuacionIncorrecta, this.juegoSeleccionado.Presentacion, false, this.juegoSeleccionado.JuegoTerminado,
-  //     // tslint:disable-next-line:max-line-length
-  //     this.juegoSeleccionado.profesorId, this.juegoSeleccionado.grupoId, this.juegoSeleccionado.cuestionarioId), this.juegoSeleccionado.id, this.juegoSeleccionado.grupoId)
-  //     .subscribe(res => {
-  //       this.location.back();
-  //     });
-  // }
+ 
 
   AsignarCalificacion (alumno: TablaAlumnoJuegoDeCuestionario) {
     console.log ('ALUMNO ', alumno);
@@ -792,6 +780,9 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
           }
 
           this.contadorRespuestasKahoot++;
+          if (this.contadorRespuestasKahoot === this.numeroDeConectados) {
+            this.MostrarResultadosPregunta();
+          }
 
         });
         // Empezamos la cuenta atrás del tiempo para responder a la pregunta
@@ -799,44 +790,46 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
         this.interval2 = setInterval(() => {
           this.cuentaAtras2--;
           if (this.cuentaAtras2 === 0) {
-                // Se acabo el tiempo
-                clearInterval(this.interval2);
-                // Ya no recibo más respuesas
-                this.subscripcion.unsubscribe();
-                // Ordeno la lista
-                this.listaAlumnos = this.listaAlumnos.sort(function(a, b) {
-                  return b.puntos - a.puntos;
-                });
+                  // Se acabo el tiempo
+                this.MostrarResultadosPregunta();
+          
+                // clearInterval(this.interval2);
+                // // Ya no recibo más respuesas
+                // this.subscripcion.unsubscribe();
+                // // Ordeno la lista
+                // this.listaAlumnos = this.listaAlumnos.sort(function(a, b) {
+                //   return b.puntos - a.puntos;
+                // });
       
-                this.dataSourceKahoot =  new MatTableDataSource (this.listaAlumnos);
+                // this.dataSourceKahoot =  new MatTableDataSource (this.listaAlumnos);
 
-                // se acabo el tiempo
-                // voy a ver cuántos no han respondido
-                const sinRespuesta = this.listaAlumnos.length - this.contadorRespuestasKahoot;
-                // ahora introduzco tantas respuestas en blanco como gente sin responder
-                for (let i = 0; i < sinRespuesta; i++) {
-                  this.respuestasPreguntaActual.push (undefined);
-                }
-                // preparo el donut que muestra las respuestas de la pregunta actual
-                this.MostrarDonut (this.preguntaAMostrar, this.respuestasPreguntaActual );
+                // // se acabo el tiempo
+                // // voy a ver cuántos no han respondido
+                // const sinRespuesta = this.listaAlumnos.length - this.contadorRespuestasKahoot;
+                // // ahora introduzco tantas respuestas en blanco como gente sin responder
+                // for (let i = 0; i < sinRespuesta; i++) {
+                //   this.respuestasPreguntaActual.push (undefined);
+                // }
+                // // preparo el donut que muestra las respuestas de la pregunta actual
+                // this.MostrarDonut (this.preguntaAMostrar, this.respuestasPreguntaActual );
 
 
-                this.respuestas.push (this.respuestasPreguntaActual);
-                this.mostrarSiguientePregunta = false;
-                this.mostrarBotonLanzarPregunta = true;
-                this.siguientePregunta++;
+                // this.respuestas.push (this.respuestasPreguntaActual);
+                // this.mostrarSiguientePregunta = false;
+                // this.mostrarBotonLanzarPregunta = true;
+                // this.siguientePregunta++;
 
-                if (this.siguientePregunta === this.preguntas.length) {
-                  Swal.fire('Ya no hay más preguntas', '', 'success');
-                  this.finKahoot = true;
+                // if (this.siguientePregunta === this.preguntas.length) {
+                //   Swal.fire('Ya no hay más preguntas', '', 'success');
+                //   this.finKahoot = true;
 
-                  // Envio a todos los jugadores la lista con el resultado
-                  this.comServer.NotificarResultadoFinalKahootGrupo (this.juegoSeleccionado.grupoId, this.listaAlumnos);
+                //   // Envio a todos los jugadores la lista con el resultado
+                //   this.comServer.NotificarResultadoFinalKahootGrupo (this.juegoSeleccionado.grupoId, this.listaAlumnos);
 
-                  // QUIZA AQUI SERIA EL MOMENTO DE GUARDAR LAS NOTAS EN LAS INSCRIPCIONES DE LOS ALUMNOS
-                  // Y tambien las respuestas (que están en "respuestas") en el modelo del juego
-                  this.PrepararHistogramaKahoot ();
-                }
+                //   // QUIZA AQUI SERIA EL MOMENTO DE GUARDAR LAS NOTAS EN LAS INSCRIPCIONES DE LOS ALUMNOS
+                //   // Y tambien las respuestas (que están en "respuestas") en el modelo del juego
+                //   this.PrepararHistogramaKahoot ();
+                // }
 
           }
         }, 1000);
@@ -845,7 +838,46 @@ export class JuegoDeCuestionarioSeleccionadoActivoComponent implements OnInit {
   }
 
 
+MostrarResultadosPregunta() {
+    clearInterval(this.interval2);
+    // Ya no recibo más respuesas
+    this.subscripcion.unsubscribe();
+    // Ordeno la lista
+    this.listaAlumnos = this.listaAlumnos.sort(function(a, b) {
+      return b.puntos - a.puntos;
+    });
 
+    this.dataSourceKahoot =  new MatTableDataSource (this.listaAlumnos);
+
+    // se acabo el tiempo
+    // voy a ver cuántos no han respondido
+    const sinRespuesta = this.listaAlumnos.length - this.contadorRespuestasKahoot;
+    // ahora introduzco tantas respuestas en blanco como gente sin responder
+    for (let i = 0; i < sinRespuesta; i++) {
+      this.respuestasPreguntaActual.push (undefined);
+    }
+    // preparo el donut que muestra las respuestas de la pregunta actual
+    this.MostrarDonut (this.preguntaAMostrar, this.respuestasPreguntaActual );
+
+
+    this.respuestas.push (this.respuestasPreguntaActual);
+    this.mostrarSiguientePregunta = false;
+    this.mostrarBotonLanzarPregunta = true;
+    this.siguientePregunta++;
+
+    if (this.siguientePregunta === this.preguntas.length) {
+      Swal.fire('Ya no hay más preguntas', '', 'success');
+      this.finKahoot = true;
+
+      // Envio a todos los jugadores la lista con el resultado
+      this.comServer.NotificarResultadoFinalKahootGrupo (this.juegoSeleccionado.grupoId, this.listaAlumnos);
+
+      // QUIZA AQUI SERIA EL MOMENTO DE GUARDAR LAS NOTAS EN LAS INSCRIPCIONES DE LOS ALUMNOS
+      // Y tambien las respuestas (que están en "respuestas") en el modelo del juego
+      this.PrepararHistogramaKahoot ();
+    }
+
+}
 
 DesordenarVector(vector: any[]) {
   // genera una permutación aleatoria de los elementos del vector

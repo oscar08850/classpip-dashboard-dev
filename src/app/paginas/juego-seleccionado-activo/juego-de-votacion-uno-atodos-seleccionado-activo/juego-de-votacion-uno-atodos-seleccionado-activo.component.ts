@@ -32,6 +32,7 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
 
   interval;
   alumnosQueYaHanVotado: Alumno[];
+  equiposQueYaHanVotado: number[];
   equiposConMiembros: any;
 
   constructor(
@@ -82,44 +83,63 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
       });
     } else {
       this.EquiposDelJuego();
+      console.log ('VOY A ESPERAR VOTACION');
       this.comServer.EsperoVotacion()
       .subscribe((res: any) => {
           sound.play();
           console.log ('llega votacion');
-          console.log (res.votacion);
+          console.log (res);
+          console.log ('equipos que han votado', this.equiposQueYaHanVotado);
+
+
+          // voy a ver si ya ha votado alguien del mismo equipo
+          // tslint:disable-next-line:max-line-length
+          // const yaHanVotadoEnSuEquipo = res.votacion.Votos.filter (voto => this.alumnosQueYaHanVotado.some (al => al.id === voto.alumnoId)).length > 0;
+          // console.log ('Ya ha votado el equipo ', yaHanVotadoEnSuEquipo);
+    
           if (!this.juegoSeleccionado.VotanEquipos) {
+            // votan los alumnos a equipos
             // tengo que quedarme solo con los nuevos votos del equipo (en el vector de votos puede haber votos de otros
-            // miembros del esquipo que ya han sido contabilizados)
+            // miembros del equipo que ya han sido contabilizados)
             // tslint:disable-next-line:max-line-length
             res.votacion.Votos = res.votacion.Votos.filter (voto => !this.alumnosQueYaHanVotado.some (al => al.id === voto.alumnoId));
+            console.log ('votos filtrados ', res.votacion.Votos);
             // y añado al alumno que ha votado a la lista de los que ya han votado
             const alumno = this.alumnosDelJuego.find (a => a.id === res.votacion.Votos[0].alumnoId);
             this.alumnosQueYaHanVotado.push (alumno);
-            console.log ('aluymnos que ya han votado ', this.alumnosQueYaHanVotado);
+            console.log ('alumnos que ya han votado ', this.alumnosQueYaHanVotado);
           }
-          // tslint:disable-next-line:prefer-for-of
-          for (let i = 0; i < res.votacion.Votos.length; i++) {
-            const votado = this.rankingEquipoJuegoDeVotacionUnoATodos.filter (eq => eq.id === res.votacion.Votos[i].equipoId)[0];
-            console.log ('votado');
-            console.log (votado);
-            votado.puntos = votado.puntos + res.votacion.Votos[i].puntos;
-            votado.incremento = res.votacion.Votos[i].puntos;
-          }
-          // Tomo nota de que el alumno ya ha votado
-          this.rankingEquipoJuegoDeVotacionUnoATodos.filter (eq => eq.id === res.votacion.equipoId)[0].votado = true;
-          console.log ('ranking');
-          console.log (this.rankingEquipoJuegoDeVotacionUnoATodos);
-          // tslint:disable-next-line:only-arrow-functions
-          this.rankingEquipoJuegoDeVotacionUnoATodos = this.rankingEquipoJuegoDeVotacionUnoATodos.sort(function(obj1, obj2) {
-            return obj2.puntos - obj1.puntos;
-          });
-          this.dataSourceEquipo = new MatTableDataSource(this.rankingEquipoJuegoDeVotacionUnoATodos);
+     
+          if ((this.juegoSeleccionado.VotanEquipos) && (this.equiposQueYaHanVotado.includes (res.votacion.equipoId))) {
+            console.log ('El equipo ya ha votado');
+          } else {
+            console.log ('vota un miembro del equipo ', res.votacion.equipoId);
+            this.equiposQueYaHanVotado.push (res.votacion.equipoId);
+            console.log ('actualizo equipos que ya han votado ', this.equiposQueYaHanVotado);
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < res.votacion.Votos.length; i++) {
+                const votado = this.rankingEquipoJuegoDeVotacionUnoATodos.filter (eq => eq.id === res.votacion.Votos[i].equipoId)[0];
+                console.log ('votado');
+                console.log (votado);
+                votado.puntos = votado.puntos + res.votacion.Votos[i].puntos;
+                votado.incremento = res.votacion.Votos[i].puntos;
+            }
+            // Tomo nota de que el alumno ya ha votado
+            this.rankingEquipoJuegoDeVotacionUnoATodos.filter (eq => eq.id === res.votacion.equipoId)[0].votado = true;
+            console.log ('ranking');
+            console.log (this.rankingEquipoJuegoDeVotacionUnoATodos);
+            // tslint:disable-next-line:only-arrow-functions
+            this.rankingEquipoJuegoDeVotacionUnoATodos = this.rankingEquipoJuegoDeVotacionUnoATodos.sort(function(obj1, obj2) {
+                return obj2.puntos - obj1.puntos;
+            });
+            this.dataSourceEquipo = new MatTableDataSource(this.rankingEquipoJuegoDeVotacionUnoATodos);
 
-          // Haremos que se muestren los incrementos de esa votaciñón durante 5 segundos
-          this.interval = setInterval(() => {
-            this.rankingEquipoJuegoDeVotacionUnoATodos.forEach (eq => eq.incremento = 0);
-            clearInterval(this.interval);
-          }, 5000);
+            // Haremos que se muestren los incrementos de esa votaciñón durante 5 segundos
+            this.interval = setInterval(() => {
+                this.rankingEquipoJuegoDeVotacionUnoATodos.forEach (eq => eq.incremento = 0);
+                clearInterval(this.interval);
+            }, 5000);
+          }
       });
 
     }
@@ -220,12 +240,15 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
       this.listaEquiposOrdenadaPorPuntos = this.listaEquiposOrdenadaPorPuntos.sort(function(obj1, obj2) {
         return obj2.puntosTotales - obj1.puntosTotales;
       });
-      if (!this.juegoSeleccionado.VotanEquipos) {
+      if (true) {
+      //if (!this.juegoSeleccionado.VotanEquipos) {
         console.log ('Estas son las inscripciones ', this.listaEquiposOrdenadaPorPuntos);
         // preparo una lista con los alumnos que ya han votado
         this.alumnosQueYaHanVotado = [];
+        this.equiposQueYaHanVotado = [];
         this.listaEquiposOrdenadaPorPuntos.forEach ( inscripcion => {
           if (inscripcion.Votos) {
+            this.equiposQueYaHanVotado.push (inscripcion.equipoId);
             // tslint:disable-next-line:max-line-length
             const yaHanVotado = this.alumnosDelJuego.filter (alumno => inscripcion.Votos.some (voto => voto.alumnoId === alumno.id));
             console.log (yaHanVotado);
@@ -234,6 +257,8 @@ export class JuegoDeVotacionUnoATodosSeleccionadoActivoComponent implements OnIn
         });
       }
       this.TablaClasificacionTotal();
+      console.log ('Alumnos que ya han votado ', this.alumnosQueYaHanVotado);
+      console.log ('EQUIPOS QUE YA HAN VOTADO ', this.equiposQueYaHanVotado);
     });
   }
 
