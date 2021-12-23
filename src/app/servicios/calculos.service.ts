@@ -819,35 +819,48 @@ private async EliminarMatriculas(): Promise<any> {
     let juegosRapidos: any[] = [];
 
     let juegos;
-
     console.log ('voy a por los juegos de encuesta rapida');
-    juegos = await this.peticionesAPI.DameJuegosDeEncuestaRapida(profesorId).toPromise();
-    console.log ('ya tengo los juegos de encuesta rapida');
-    console.log (juegos);
-    juegosRapidos = juegosRapidos.concat (juegos);
+    try {
+      juegos = await this.peticionesAPI.DameJuegosDeEncuestaRapida(profesorId).toPromise();
+      console.log ('ya tengo los juegos de encuesta rapida');
+      console.log (juegos);
+      juegosRapidos = juegosRapidos.concat (juegos);
+    } catch {
+      console.log ('No hay juegos de encuesta rapida ');
+    }
 
 
     console.log ('voy a por los juegos de votación rápida');
-    juegos = await this.peticionesAPI.DameJuegosDeVotacionRapida(profesorId).toPromise();
-    console.log ('ya tengo los juegos de votación rápida');
-    console.log (juegos);
-    juegosRapidos = juegosRapidos.concat (juegos);
+    try {
+      juegos = await this.peticionesAPI.DameJuegosDeVotacionRapida(profesorId).toPromise();
+      console.log ('ya tengo los juegos de votación rápida');
+      console.log (juegos);
+      juegosRapidos = juegosRapidos.concat (juegos);
 
+    } catch {
+      console.log ('No hay juegos de votación rápida ');
+    }
 
     console.log ('voy a por los juegos de cuestionario rápido');
-    juegos = await this.peticionesAPI.DameJuegosDeCuestionarioRapido(profesorId).toPromise();
-    console.log ('ya tengo los juegos de cuestionario rápido');
-    console.log (juegos);
-    juegosRapidos = juegosRapidos.concat (juegos);
+    try {
+      juegos = await this.peticionesAPI.DameJuegosDeCuestionarioRapido(profesorId).toPromise();
+      console.log ('ya tengo los juegos de cuestionario rápido');
+      console.log (juegos);
+      juegosRapidos = juegosRapidos.concat (juegos);
+    } catch {
+      console.log ('No hay juegos de cuestionario rápido ');
+    }
 
     console.log ('voy a por los juegos de coger turno rápido');
+    try {
     juegos = await this.peticionesAPI.DameJuegosDeCogerTurnoRapido(profesorId).toPromise();
     console.log ('ya tengo los juegos de coger turno rápido');
     console.log (juegos);
     juegosRapidos = juegosRapidos.concat (juegos);
-
     return juegosRapidos;
-
+    } catch {
+      console.log ('No hay juegos de coger turno rápido ');
+    }
 }
 
 

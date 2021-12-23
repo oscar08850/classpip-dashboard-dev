@@ -266,7 +266,10 @@ export class ComServerService {
   }
   public NotificarLanzarSiguientePreguntaGrupo(gId: number, info: any) {
     this.socket.emit ('lanzarSiguientePreguntaGrupo' , {grupoId: gId, opcionesDesordenadas: info});
-
+  }
+  
+  public NotificarPanelAbierto (gId: number) {
+    this.socket.emit ('panelAbierto' , gId);
   }
 
   public NotificarResultadoFinalKahoot(claveJuego: string, res: any) {

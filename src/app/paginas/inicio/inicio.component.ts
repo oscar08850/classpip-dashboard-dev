@@ -41,6 +41,7 @@ export class InicioComponent implements OnInit {
       format: 'dd-MM-yyyy-hh:mm',
       defaultOpen: true
   }
+  alumnos: any[];
  
   constructor(  private peticionesAPI: PeticionesAPIService,
                 private sesion: SesionService,
@@ -51,21 +52,9 @@ export class InicioComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   ngOnInit() {
-
-    const vector = [];
-    console.log ('VECTOR 1', vector);
-    vector.push (3);
-    console.log ('VECTOR2', vector);
-    vector.push (6);
-    console.log ('VECTOR3', vector);
-
-
-
     this.profesor = this.sesion.DameProfesor();
     this.ObtenJuegosActivosDelProfesor();
-
   }
-
 
   // ObtenJuegosActivosDelProfesor_old() {
   //   this.peticionesAPI.DameGruposProfesor(this.profesor.id)
