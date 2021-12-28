@@ -104,4 +104,10 @@ export class CrearRubricaComponent implements OnInit {
     this.router.navigate(['/inicio/' + this.profesorId]);
   }
 
+  Crear() {
+    // rubrica indefinica para que la cree (el parametro indicando si se va a editar es true)
+    this.sesion.TomaRubrica(undefined, true);
+    this.router.navigate(['/inicio/' + this.profesorId + '/editarRubrica']);
+
+  }
 }

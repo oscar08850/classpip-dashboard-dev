@@ -1,0 +1,108 @@
+<div *ngIf = "editarRubrica" class="titulo">Editar Rúbrica</div>
+<div *ngIf = "!editarRubrica" class="titulo">Ver Rúbrica</div>
+<mat-divider class="lineaDivisoria"></mat-divider>
+<div *ngIf = "editarRubrica" class="contenedor">
+  <div class="enColumna">
+
+    <div class="enColumna">
+      <div class="texto" style=" text-align: left;">
+        <p>
+          <span style="font-weight: bold;">Nombre: </span>
+          <input (keyup) = "rubricaModificada = true" style="background-color: transparent" type="text" name="nombre" requiered [(ngModel)]="rubricaSeleccionada.Nombre">
+        </p>
+      </div>
+      <div class="texto" style=" text-align: left;">
+        <p>
+            <span  style="font-weight: bold;">Descripción: </span>
+            <input (keyup) = "rubricaModificada = true"  style="background-color: transparent; width: 450px;" type="text" name="descripcion"  requiered [(ngModel)]="rubricaSeleccionada.Descripcion">
+        </p>
+      </div>
+
+    </div>
+
+    <div class = "enColumna" *ngIf= "rubricaSeleccionada">
+      <h4><strong>Criterios</strong> (puedes reordenar arrastrando)</h4>
+      <div cdkDropList class="example-list" (cdkDropListDropped)="dropCriterio($event)">
+        <div style = "cursor: move" *ngFor="let criterio of rubricaSeleccionada.Criterios; let i=index" cdkDrag>
+          <div class = "enFila">
+            <span style="font-size: x-large; font-weight: bold">{{criterio.Nombre}}</span>
+            <div  style = "display: flex; align-items: right">
+              <button (click)= "EditarCriterio(i)" mat-icon-button matTooltip="Editar criterio">
+                <i class="material-icons green md-36">edit</i>
+              </button>
+              <button (click) = "EliminarCriterio(i)" mat-icon-button matTooltip="Eliminar criterio">
+                <i class="material-icons red md-36">delete</i>
+              </button>
+            </div>
+          </div>
+          <div style = "padding-left: 50px" cdkDropList class="example-list" (cdkDropListDropped)="dropElemento(i, $event)">
+            <div class="example-box" *ngFor="let elemento of rubricaSeleccionada.Criterios[i].Elementos; let j=index" cdkDrag>
+                {{elemento}}
+                <div  style = "display: flex; align-items: right; padding-right: 20px;">
+                  <button (click)= "EditarElemento(i,j)" mat-icon-button matTooltip="Editar elemento">
+                    <i class="material-icons green md-28">edit</i>
+                  </button>
+                  <button (click) = "EliminarElemento(i,j)" mat-icon-button matTooltip="Eliminar elemento">
+                    <i class="material-icons red md-28">delete</i>
+                  </button>
+                </div>
+            </div>
+          </div>
+          <div class= "enColumna">
+            <button  style = "width: 15%; font-size: x-small;" type="button"  class="btn Agregar" (click)= "NuevoElemento(i)"> Añadir elemento </button>
+          </div>
+        </div>
+
+      </div>
+      <button  style = "width: 20%" type="button"  class="btn Agregar" (click)= "NuevoCriterio()"> Añadir criterio </button>
+      <br>
+      <br>
+
+    </div>
+  <br>
+
+  <button *ngIf = "rubricaModificada" type="button"  class="btn Aceptar" (click)= "ModificarRubrica()"> Aceptar Cambios  </button>
+  <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+  </div>
+</div>
+<div *ngIf = "!editarRubrica" class="contenedor">
+  <div class="enColumna">
+
+    <div class="enColumna">
+      <div class="texto" style=" text-align: left;">
+        <p>
+          <span style="font-weight: bold;">Nombre: </span>
+          <input disabled style="background-color: transparent" type="text" name="nombre" requiered [(ngModel)]="rubricaSeleccionada.Nombre">
+        </p>
+      </div>
+      <div class="texto" style=" text-align: left;">
+        <p>
+            <span  style="font-weight: bold;">Descripción: </span>
+            <input disabled style="background-color: transparent; width: 450px;" type="text" name="descripcion"  requiered [(ngModel)]="rubricaSeleccionada.Descripcion">
+        </p>
+      </div>
+
+    </div>
+
+    <div class = "enColumna" *ngIf= "rubricaSeleccionada">
+      <h4><strong>Criterios</strong></h4>
+      <div class="example-list">
+        <div  *ngFor="let criterio of rubricaSeleccionada.Criterios; let i=index">
+          <span style="font-size: x-large; font-weight: bold">{{criterio.Nombre}}</span>
+
+          <div style = "padding-left: 50px"  class="example-list">
+            <div class="example-box" *ngFor="let elemento of rubricaSeleccionada.Criterios[i].Elementos; let j=index">
+                {{elemento}}
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <br>
+      <br>
+
+    </div>
+  <br>
+  <button type="button" class="btn Back" (click)="goBack()">Volver </button>
+  </div>
+</div>

@@ -285,6 +285,7 @@ import { AsignarRubricaComponent } from './paginas/juego/asignar-rubrica/asignar
 import { JuegoDeVotacionAOpcionesSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-votacion-aopciones-seleccionado-activo/juego-de-votacion-aopciones-seleccionado-activo.component';
 
 import { JuegoDeVotacionAOpcionesSeleccionadoInactivoComponent }  from './paginas/juego-seleccionado-inactivo/juego-de-votacion-aopciones-seleccionado-inactivo/juego-de-votacion-aopciones-seleccionado-inactivo.component';
+import { EditarRubricaComponent } from './paginas/editar-rubrica/editar-rubrica.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -451,7 +452,8 @@ import { JuegoDeVotacionAOpcionesSeleccionadoInactivoComponent }  from './pagina
     ActividadGraficosComponent,
     ActividadConfigComponent,
     JuegoDeVotacionAOpcionesSeleccionadoActivoComponent,
-    JuegoDeVotacionAOpcionesSeleccionadoInactivoComponent
+    JuegoDeVotacionAOpcionesSeleccionadoInactivoComponent,
+    EditarRubricaComponent
 
   ],
   imports: [
