@@ -170,6 +170,7 @@ import { CrearRecursosCuentoComponent } from './paginas/crear-recursos-cuento/cr
 import { MisRecursosCuentoComponent }  from './paginas/mis-recursos-cuento/mis-recursos-cuento.component';
 //import { ListadoCuentosComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
 import { ReproductorCuentoComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
+import { EditarRubricaComponent } from './paginas/editar-rubrica/editar-rubrica.component';
 
 const routes: Routes = [
 
@@ -350,6 +351,7 @@ const routes: Routes = [
   // Rubricas
   { path: 'inicio/:id/crearRubrica', component: CrearRubricaComponent},
   { path: 'inicio/:id/misRubricas', component: MisRubricasComponent},
+  { path: 'inicio/:id/editarRubrica', component: EditarRubricaComponent},
 
   // Familias de imagenes de perfil
   { path: 'inicio/:id/crearFamiliaDeImagenesDePerfil', component: CrearFamiliaImagenesPerfilComponent},

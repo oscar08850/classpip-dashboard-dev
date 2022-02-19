@@ -9,9 +9,59 @@
         <pre>
         <br>
         La información de las preguntas debe estar en un fichero <strong>JSON</strong>.<br>
-        Aquí puede descargarse un <a href="../assets/preguntasCuatroTipos.json">fichero ejemplo con preguntas de los 4 tipos posibles</a>.<br>
-        La imagen de la pregunta debe ser <strong>cuadrada</strong>.<br>
+        Aquí hay <strong>ejemplo</strong> con preguntas de los 4 tipos posibles.<br>
+        La imagen de la pregunta debe ser <strong>cuadrada</strong>. Si no hay imagen <strong>omitir</strong> la linea etiquetada con "Imagen".<br>
         Los elementos en las parejas de las preguntas de emparejamiento <strong>no pueden tener más de 15 caracteres</strong>.<br>
+        [
+        {{'{'}}
+            "Titulo": "Madrid",
+            "Tipo": "Cuatro opciones",
+            "Pregunta": "¿Qué ciudad es?",
+            "Tematica": "Ciudades",
+            "Imagen": "madrid.jpg",
+            "RespuestaCorrecta": "Madrid",
+            "RespuestaIncorrecta1": "Barcelona",
+            "RespuestaIncorrecta2": "Sevilla",
+            "RespuestaIncorrecta3": "Málaga",
+            "FeedbackCorrecto": "Correcto.",
+            "FeedbackIncorrecto": "No. A ver si viajas más."
+        {{'}'}},
+        {{'{'}}
+            "Titulo": "Barcelona",
+            "Tipo": "Respuesta abierta",
+            "Pregunta": "¿Qué ciudad es?",
+            "Tematica": "Ciudades",
+            "Imagen": "barcelona.jpg",
+            "RespuestaCorrecta": "Barcelona",
+            "FeedbackCorrecto": "Correcto.",
+            "FeedbackIncorrecto": "No. A ver si viajas más."
+        {{'}'}},
+        {{'{'}}
+            "Titulo": "Sevilla",
+            "Tipo": "Verdadero o falso",
+            "Pregunta": "Esta foto es de Barcelona",
+            "Tematica": "Ciudades",
+            "Imagen": "sevilla.jpg",
+            "RespuestaCorrecta": "falso",
+            "FeedbackCorrecto": "Correcto.",
+            "FeedbackIncorrecto": "No. A ver si viajas más."
+        {{'}'}},
+        {{'{'}}
+            "Titulo": "Empareja",
+            "Tipo": "Emparejamiento",
+            "Pregunta": "Empareja paises con sus capitales",
+            "Tematica": "Ciudades",
+            "Emparejamientos": [
+                {{'{'}}"l" : "Francia", "r" : "París" {{'}'}},
+                {{'{'}}"l" :"España", "r" : "Madrid" {{'}'}},
+                {{'{'}}"l" :"Italia", "r" :  "Roma" {{'}'}},
+                {{'{'}}"l" :"Portugal","r" :  "Lisboa" {{'}'}}
+            ],
+            "FeedbackCorrecto": "Correcto.",
+            "FeedbackIncorrecto": "No. A ver si viajas más."
+        {{'}'}}
+        ]  
+      
         </pre>
 
         <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
@@ -208,17 +258,14 @@
                            <!-- TERCER PASO -->
                       <mat-step *ngIf = "tipoDePreguntaSeleccionado === 'Verdadero o falso'">
                         <ng-template matStepLabel>Definir la respuesta</ng-template>
+                        <label class = "LabelStepper">Selecciona la respuesta correcta:</label>
 
-
-                        <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
-                          <mat-radio-button (click)="respuestaCorrecta = 'verdadero'" class="radio-button">
-                            <label style="color: black;">Verdadero</label>
-                          </mat-radio-button>
-                          <mat-radio-button (click)="respuestaCorrecta = 'falso'" class="radio-button">
-                            <label style="color: black;">Falso</label>
-                          </mat-radio-button>
-                        </mat-radio-group>
-
+                        <div style = "width : 50%">
+                          <mat-radio-group   class="radio-group" aria-label="Select an option">
+                            <mat-radio-button value="'false'" [checked]="respuestaCorrecta == 'verdadero'"  (change)="respuestaCorrecta = 'verdadero'"><b>verdadero</b></mat-radio-button>
+                            <mat-radio-button style = "padding-left: 20px" value="'false'" [checked]="respuestaCorrecta == 'falso'" (change)="respuestaCorrecta = 'falso'"><b>falso</b></mat-radio-button>
+                          </mat-radio-group>
+                        </div>
 
 
                         <div class="btnCambiarStep">

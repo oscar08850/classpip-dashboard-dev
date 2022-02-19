@@ -1910,6 +1910,16 @@ public ModificaInscripcionAlumnoJuegoDeVotacionAOpciones(inscripcion: AlumnoJueg
   public DameRubricasProfesor(profesorId: number): Observable<Rubrica[]> {
     return this.http.get<Rubrica[]>(this.APIUrlProfesores + '/' + profesorId + '/rubricas');
   }
+  
+  public DameRubricasPublicas(): Observable<Rubrica[]> {
+    return this.http.get<Rubrica[]>(this.APIURLRubricas
+      + '?filter[where][Publica]=true');
+  }
+
+
+  public ModificaRubrica(rubrica: Rubrica): Observable<Rubrica> {
+    return this.http.put<Rubrica>(this.APIURLRubricas, rubrica);
+  }
 
 
   // Imagenes de perfil

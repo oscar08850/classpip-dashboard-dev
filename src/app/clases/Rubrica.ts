@@ -5,6 +5,7 @@ export class Rubrica {
     id: number;
     profesorId: number;
     Criterios: Criterio[];
+    Publica: boolean;
 
     constructor(nombre?: string, descripcion?: string, criterios?: Criterio[], profesorId?: number) {
 
@@ -12,6 +13,7 @@ export class Rubrica {
       this.Descripcion = descripcion;
       this.Criterios = criterios;
       this.profesorId = profesorId;
+      this.Publica = false;
     }
 
   }

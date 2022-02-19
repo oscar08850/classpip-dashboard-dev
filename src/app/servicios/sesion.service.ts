@@ -3,7 +3,7 @@ import { Profesor, Grupo, Juego, Equipo, Alumno, Coleccion, Cromo, Punto, Insign
          // tslint:disable-next-line:max-line-length
          TablaJornadas, Jornada, TablaAlumnoJuegoDeCompeticion, TablaEquipoJuegoDeCompeticion,AlumnoJuegoDeCompeticionTorneo,EquipoJuegoDeCompeticionTorneo,TablaPuntosFormulaUno, Cuestionario, Pregunta, JuegoDeAvatar, AlumnoJuegoDeAvatar, AlumnoJuegoDeCuestionario,
          TablaAlumnoJuegoDeCuestionario,
-         FamiliaAvatares, CuestionarioSatisfaccion, TablaEquipoJuegoDeCuestionario, EquipoJuegoDeCuestionario} from '../clases';
+         FamiliaAvatares, CuestionarioSatisfaccion, TablaEquipoJuegoDeCuestionario, EquipoJuegoDeCuestionario, Rubrica} from '../clases';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
@@ -90,6 +90,8 @@ export class SesionService {
 
   idCuento: any;
   contenedor: any;
+  rubrica: Rubrica;
+  editarRubrica: boolean; // indica si la rubrica nos la pasan para editarla (true) o solo para verla.
 
   constructor() { }
   public TomaProfesor(profesor: Profesor) {
@@ -656,6 +658,19 @@ public getContenedor(){
   return this.contenedor;
 }
 
+public TomaRubrica (rubrica: Rubrica, editar: boolean) {
+  this.rubrica = rubrica;
+  // la rubrica nos la pasan para luego editarla (editar es true) o solo para verla 8editar es false
+  this.editarRubrica = editar;
+}
+
+public DameRubrica (): Rubrica {
+  return this.rubrica;
+}
+
+public RubricaParaEditar (): boolean {
+  return this.editarRubrica;
+}
 
 
 }

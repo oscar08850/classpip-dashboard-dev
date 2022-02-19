@@ -1712,7 +1712,7 @@
                     <button [disabled]="!formatoEvaluacion || descripcionJuegoEvaluacion.length === 0 " type="button" class="btn Next" matStepperNext>Siguiente</button>
                   </div>
                 </mat-step>
-                <!-- Seleccion de rubrica -->
+           
                 <mat-step *ngIf = "formatoEvaluacion === 'con rúbrica'">
                   <ng-template matStepLabel><div>Rúbrica</div></ng-template>
                   <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona la rúbrica</label>
@@ -1749,6 +1749,7 @@
                     <button [disabled]="!tengoRubrica || descripcionJuegoEvaluacion.length === 0 || !ParentPesosSuman100()" type="button" class="btn Next" matStepperNext>Siguiente</button>
                   </div>
                 </mat-step>
+
 
                 <!-- Seleccion de preguntas abiertas -->
                 <mat-step *ngIf = "formatoEvaluacion === 'solo preguntas abiertas'">
