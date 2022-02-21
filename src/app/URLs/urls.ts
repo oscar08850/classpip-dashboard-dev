@@ -1,8 +1,8 @@
-// export const host = 'http://147.83.118.92';
+export const host = 'http://147.83.118.92';
 // export const hostServer = 'http://147.83.249.79';
 // export const hostServer = 'http://147.83.118.92';
 // export const host = 'http://classpip.upc.edu';
-export const host = 'http://localhost';
+//export const host = 'http://localhost';
 
 //export const hostServer = 'http://classpip.upc.edu';
 //export const host = 'http://classpip.upc.edu';
