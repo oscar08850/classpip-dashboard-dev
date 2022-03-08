@@ -427,23 +427,26 @@ export class CrearColeccionComponent implements OnInit {
       return of (true);
     } else {
       const confirmacionObservable = new Observable <boolean>( obs => {
-          const dialogRef = this.dialog.open(DialogoConfirmacionComponent, {
-            height: '150px',
-            data: {
-              mensaje: 'Confirma que quieres abandonar el proceso de creación de coleccion',
-            }
-          });
 
-          dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-            if (confirmed) {
-              // Si confirma que quiere salir entonces eliminamos el grupo que se ha creado
+        Swal.fire({
+          title: '¿Seguro que quieres salir?',
+          text: 'No has completado el proceso de creación de la colección',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, estoy seguro',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.value) {
+             // Si confirma que quiere salir entonces eliminamos el grupo que se ha creado
               // this.sesion.TomaGrupo (this.grupo);
               // this.calculos.EliminarGrupo();
-              this.BorrarColeccion (this.coleccionCreada).subscribe ( () => obs.next (confirmed));
-            } else {
-              obs.next (confirmed);
-            }
-          });
+              this.BorrarColeccion (this.coleccionCreada).subscribe ( () => obs.next (true));
+          } else {
+            obs.next (false);
+          }
+        });
       });
       return confirmacionObservable;
     }

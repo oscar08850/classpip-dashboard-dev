@@ -58,7 +58,9 @@
 <div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Evaluacion'">
   <app-juego-de-evaluacion-seleccionado-inactivo></app-juego-de-evaluacion-seleccionado-inactivo>
 </div>
-
+<div class="contenedor" *ngIf= "juegoSeleccionado.Tipo === 'Juego De Memorama'">
+  <app-juego-de-memorama-seleccionado-inactivo></app-juego-de-memorama-seleccionado-inactivo>
+</div>
 <!-- En el caso de este tipo de juego la pantalla de juego activo es la misma que la de juego inactivo. Solo cambian los botones primeros
 Por eso reuso el mismo componente de juego activo, en el que con un *ngIf seleccion el conjunto de botones que quiero mostrar, según si el juego 
 está activo o inactivo. Pero el resto del componente es el mismo. Así ahorro componentes y no repito código. -->

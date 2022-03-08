@@ -171,6 +171,9 @@ import { MisRecursosCuentoComponent }  from './paginas/mis-recursos-cuento/mis-r
 //import { ListadoCuentosComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/listado-cuentos/listado-cuentos.component';
 import { ReproductorCuentoComponent }  from './paginas/juego-seleccionado-activo/juego-de-cuento-seleccionado-activo/reproductor-cuento/reproductor-cuento.component';
 import { EditarRubricaComponent } from './paginas/editar-rubrica/editar-rubrica.component';
+import { CrearFamiliasmemoramaComponent } from './paginas/crear-familiasmemorama/crear-familiasmemorama.component';
+import { MisFamiliasmemoramaComponent } from './paginas/mis-familiasmemorama/mis-familiasmemorama.component';
+import { DeactivateGuardCrearFamiliaMemorama } from './guardas/canExitCrearFamiliaMemorama.guard';
 
 const routes: Routes = [
 
@@ -357,17 +360,23 @@ const routes: Routes = [
   { path: 'inicio/:id/crearFamiliaDeImagenesDePerfil', component: CrearFamiliaImagenesPerfilComponent},
   { path: 'inicio/:id/misFamiliasDeImagenesDePerfil', component: MisFamiliasImagenesPerfilComponent},
 
+
+  // Familias para memorama
+  // tslint:disable-next-line:max-line-length
+  { path: 'inicio/:id/crearFamiliasmemorama', component: CrearFamiliasmemoramaComponent, canDeactivate: [DeactivateGuardCrearFamiliaMemorama]},
+  { path: 'inicio/:id/misFamiliasmemorama', component: MisFamiliasmemoramaComponent},
+
   // Cuestionarios de satisfacción
   { path: 'inicio/:id/crearCuestionarioDeSatisfaccion', component: CrearCuestionarioSatisfaccionComponent},
   { path: 'inicio/:id/misCuestionariosDeSatisfaccion', component: MisCuestionariosSatisfaccionComponent},
   { path: 'inicio/:id/editarCuestionarioDeSatisfaccion', component: EditarCuestionarioSatisfaccionComponent},
 
   // Cuentos
-  {path:'inicio/:id/crearRecursosCuento', component: CrearRecursosCuentoComponent},
-  {path:'inicio/:id/verRecursosCuento', component: MisRecursosCuentoComponent},
-  {path:'grupo/:id/juego/juegoSeleccionadoActivo/reproductorCuento', component: ReproductorCuentoComponent},
+  {path: 'inicio/:id/crearRecursosCuento', component: CrearRecursosCuentoComponent},
+  {path: 'inicio/:id/verRecursosCuento', component: MisRecursosCuentoComponent},
+  {path: 'grupo/:id/juego/juegoSeleccionadoActivo/reproductorCuento', component: ReproductorCuentoComponent},
 
-
+  
   // JUEGOS RAPIDOS
 
   { path: 'inicio/:id/misJuegosRapidos', component: MisJuegosRapidosComponent},
@@ -393,7 +402,8 @@ const routes: Routes = [
   // tslint:disable-next-line:max-line-length
   providers: [DeactivateGuardCrearGrupo, DeactivateGuardCrearColeccion, DeactivateGuardCrearJuego,
               DeactivateGuardCrearCuestionario, DeactivateGuardCrearEscenario, DeactivateGuardEncuestaRapida,
-              DeactivateGuardCogerTurnoRapido, DeactivateGuardCuestionarioRapido, DeactivateGuardVotacionRapida],
+              DeactivateGuardCogerTurnoRapido, DeactivateGuardCuestionarioRapido, DeactivateGuardVotacionRapida, 
+              DeactivateGuardCrearFamiliaMemorama],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule { } 

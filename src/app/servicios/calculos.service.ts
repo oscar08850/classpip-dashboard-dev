@@ -27,6 +27,7 @@ import { EquipoJuegoDeEvaluacion } from '../clases/EquipoJuegoDeEvaluacion';
 import { EquipoJuegoDeVotacionUnoATodos } from '../clases/EquipoJuegoDeVotacionUnoATodos';
 import { TablaEquipoJuegoDeVotacionUnoATodos } from '../clases/TablaEquipoJuegoDeVotacionUnoATodos';
 
+import { TablaAlumnoJuegoDeMemorama } from '../clases/TablaAlumnoJuegoDeMemorama';
 
 
 @Injectable({
@@ -119,12 +120,31 @@ private async EliminaJuegos(): Promise<any> {
           this.EliminarJuegoControlDeTrabajoEnEquipo (juego);
         } else if (juego.Tipo === 'Juego De Cuestionario de Satisfacción') {
           this.EliminarJuegoDeCuestionarioDeSatisfaccion (juego);
+        } else if (juego.Tipo === 'Juego De Memorama') {
+          this.EliminarJuegoDeMemorama (juego);
         }
+        
       });
     } else {
       console.log ('No hay juegos');
     }
 
+}
+public async EliminarJuegoDeMemorama(juego: any) {
+  // Primero borramos las inscripciones de alumnos 
+  if (juego.Modo === 'Individual') {
+
+    const inscripciones = await this.peticionesAPI.DamealumnosjuegoMemorama(juego.id).toPromise();
+
+    for (let i = 0; i < inscripciones.length ; i++ ) {
+      console.log("Inscripciones",inscripciones);
+
+      await this.peticionesAPI.BorraInscripcionAlumnoJuegoDeMemorama(inscripciones[i].id).toPromise();
+    }
+  } 
+  // Ahora borramos el juego
+  await this.peticionesAPI.BorraJuegoDeMemorama (juego.id).toPromise();
+  console.log("JUEGO DE MEMORAMA ELIMINADO");
 }
 
 public async EliminarJuegoDePuntos(juego: any) {
@@ -556,6 +576,24 @@ private async EliminarMatriculas(): Promise<any> {
       console.log ('No hay juegos de colección en el grupo: ' + grupoID);
     }
 
+
+    console.log ('vamos a por los juegos de MEMORAMA del grupo: ' + grupoID);
+    try {
+      juegos = await this.peticionesAPI.DameJuegoDeMemoramaGrupo(grupoID).toPromise();
+      console.log('He recibido los juegos de MEMORAMA');
+      console.log(juegos);
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegosInactivos.push(juegos[i]);
+        }
+      }
+    } catch {
+      console.log ('No hay juegos de MEMORAMA en el grupo: ' + grupoID);
+    }
+
+
     console.log ('vamos a por los juegos de competicion liga del grupo: ' + grupoID);
     try {
       juegos = await this.peticionesAPI.DameJuegoDeCompeticionLigaGrupo(grupoID).toPromise();
@@ -863,6 +901,25 @@ private async EliminarMatriculas(): Promise<any> {
     }
 }
 
+public PrepararTablaRankingIndividualMemorama(listaAlumnosOrdenadaPorPuntos, alumnosDelJuego){
+
+    const rankingJuegoDePuntos: any [] = [];
+
+    for (let i = 0; i < listaAlumnosOrdenadaPorPuntos.length; i++) {
+
+      let alumno: Alumno;
+      const alumnoId = listaAlumnosOrdenadaPorPuntos[i].alumnoId;
+
+      alumno = alumnosDelJuego.filter(res => res.id === alumnoId)[0];
+
+
+      rankingJuegoDePuntos[i] = new TablaAlumnoJuegoDeMemorama (i + 1, alumno.Nombre, alumno.PrimerApellido, alumno.SegundoApellido,
+        listaAlumnosOrdenadaPorPuntos[i].puntuacion,listaAlumnosOrdenadaPorPuntos[i].tiempo);
+
+    }
+
+    return (rankingJuegoDePuntos);
+  }
 
 
   public PrepararTablaRankingIndividual(  listaAlumnosOrdenadaPorPuntos,
@@ -4283,6 +4340,79 @@ return rankingJuegoDeCompeticion;
 
 //   });
 // }
+
+
+// Esta función identifica cuáles de los ficheros que hay en la lista ya están 
+// en la API. Devuelve una lista con los nombres de los ficheros que ya están
+// Se usa cuando se cargan recursos (colecciones, familias, imagenes de preguntas, etc)
+// para verificar que no hay ya en la api ficheros con
+// el mismo nombre que alguno de los que tiene el nuevo recurso
+// Devuelve la lista de ficheros de la familia que ya están en la base de datos
+// Se usa al cargar una familia nueva para asegurarnos de que no cargamos ficheros
+// que ya se usan en otros recursos, lo cual sería un problema al borrar un recurso
+
+
+public VerificarFicherosFamiliaMemorama(infoFamilia: any): any {
+  const listaFicherosObservable = new Observable ( obs => {
+    const lista: string [] = [];
+    // una familia para memorama tiene una imagen por cada carta, la imagen de la familia y la del dorso
+    const numeroFicheros = infoFamilia.cartas.length + 2;
+    let cont = 0;
+
+    this.peticionesAPI.DameImagenFamiliaMemorama (infoFamilia.ImagenFamilia)
+    .subscribe (
+        (imagen) => {
+          lista.push (infoFamilia.ImagenFamilia);
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+        },
+        (error) => {
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+    });
+  
+    this.peticionesAPI.DameImagenCarta (infoFamilia.ImagenDorso)
+    .subscribe (
+        (imagen) => {
+          lista.push (infoFamilia.ImagenDorso);
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+        },
+        (error) => {
+          cont++;
+          if (cont === numeroFicheros) {
+            obs.next (lista);
+          }
+    });
+
+    infoFamilia.cartas.forEach (carta => {
+        this.peticionesAPI.DameImagenCarta (carta.imagenDelante)
+        .subscribe (
+          (imagen) => {
+            lista.push (carta.imagenDelante);
+            cont++;
+            if (cont === numeroFicheros) {
+              obs.next (lista);
+            }
+          },
+          (error) => {
+            cont++;
+            if (cont === numeroFicheros) {
+              obs.next (lista);
+            }
+        });
+    });
+  });
+  return listaFicherosObservable;
+}
+
+
 
 // Devuelve la lista de ficheros de la familia que ya están en la base de datos
 // Se usa al cargar una familia nueva para asegurarnos de que no cargamos ficheros

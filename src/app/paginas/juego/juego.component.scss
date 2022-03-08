@@ -5,6 +5,10 @@
   max-width: 500px;
   width: 100%;
 }
+.imagenes{
+  height: 180px;
+  width:120px;
+}
 
 .input-porcentaje {
   width: 70px;
@@ -64,110 +68,7 @@ mat-slider {
   margin: 5px;
   color: black;
 }
-// /* Colores de iconos */
-// .material-icons.red { color: rgb(212, 57, 52); }
-// .material-icons.green { color: rgb(92, 184, 92); }
-// .material-icons.margin { margin-top: 10 px; margin-left: 10 px;}
 
-// .contenedor{
-
-//   width: 70%;
-//   margin-left: 15%;
-//   height: auto;
-//   padding: 10px;
-//   border: 10px solid transparent;
-//   background-color: transparent;
-
-// }
-
-
-// .contenedor2{
-
-//   border: 10px solid blue;
-
-//   display: flex;
-//   display: -webkit-flex;
-//   display: -ms-flexbox;
-
-//   // justify-content: space-between;
-//   // align-items: center;
-// }
-// .contenedor3{
-//   display: flex;
-//   display: -webkit-flex;
-//   display: -ms-flexbox;
-
-//   justify-content: left ;
-//   flex-direction: column;
-//   // align-items: flex-start;
-//   border: solid transparent;
-
-// }
-// .elemento{
-//   /* color:rgba(0,0,0,.87); */
-//   // margin: 5px;
-//   width: auto;
-//   height: auto;
-//   background-color:transparent;
-//   text-align: center;
-//   align-items: center;
-
-// }
-
-// .material-icons{
-//     width: 15px;
-//     height: 15px;
-// }
-
-// .CabeceraActivos {
-//   background-color: rgb(92, 184, 92);
-//   color: white;
-//   font-style: bold;
-//   width: 100%;
-//   font-size: 2em;
-// }
-
-// .CabeceraInactivos {
-//   background-color: rgb(212, 57, 52);
-//   color: white;
-//   font-style: bold;
-//   width: 100%;
-//   font-size: 1.5em;
-// }
-
-// .ItemsInactivos {
-//   font-style: oblique;
-//   color: grey;
-// }
-
-// .mat-list-item:hover {
-//   background-color: rgb(204, 197, 197);
-//   cursor: pointer;
-//   width: 100%;
-// }
-
-
-
-// .AvisoNoJuegosActivo {
-//   margin-top: 10px;
-//   margin-left: 10px;
-//   font-style: oblique;
-// }
-
-// .mat-chip {
-//   max-width: 200px;
-// }
-
-// .LabelStepper {
-//   font-style: oblique;
-//   color: rgb(73, 73, 73);
-// }
-// .panel{
-
-//   background-color: rgb(63, 81, 181);
-//   margin: 40px;
-//   width: 90%;
-// }
 
 .radio-group {
     display: flex;
@@ -202,4 +103,16 @@ label {
   margin-left: auto;
   margin-right: auto;
   width: 70%;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  padding: 10px;
+}
+.grid-item {
+  //background-color: rgba(255, 255, 255, 0.8);
+  //border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 0px;
+  text-align: center;
 }

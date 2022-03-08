@@ -1,0 +1,294 @@
+<div class="contenedor">
+  <mat-tab-group>
+    <mat-tab label="Crear familia paso a paso">
+
+      <!-- STEPPER -->
+
+        <mat-card class="panel" style= "width: 100%">
+
+          <mat-card-content>
+
+          <mat-horizontal-stepper #linearHorizontalStepper="matHorizontalStepper" [linear]="true" #stepper>
+
+
+            <!-- PRIMER PASO -->
+            <mat-step [stepControl]="myForm">
+
+            <form [formGroup]="myForm">
+              <ng-template matStepLabel>Nombre e imagen</ng-template>
+              <mat-form-field>
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="nombreFamilia" required>
+                <mat-error>Este campo es obligatorio</mat-error>
+              </mat-form-field>
+
+              <div>
+                
+                  <input #fileImagenFamilia id = "fileImagenFamilia" type="file" accept= 'image/*' (change)="ExaminarImagenFamilia($event)" style="display:none">
+                  <img class="imagenCromo" *ngIf="imagenFamilia" mat-card-image [src]="imagenFamilia"> 
+                  <button (click) = "fileImagenFamilia.click()" type="button" class="btn Agregar">
+                    Agregar Imagen<i class="material-icons">add_photo_alternate</i>
+                  </button>
+              </div>
+
+              <div class="btnCambiarStep">
+                <button *ngIf="imagenFamilia && myForm.value.nombreFamilia" class="btn Next"matStepperNext>Siguiente</button>
+              </div>
+            </form>
+            </mat-step>
+
+              <!-- AÑADIDO RELACIONES -->
+            <mat-step>
+            <ng-template matStepLabel>Relaciones</ng-template>
+            <div>
+              <label class = "LabelStepper">Indica si quieres que las cartas tengan relación entre ellas:</label>
+
+              <form action="">
+                <input id="relacion" type="radio" name="caras" checked > Con relación (Buscar cartas relacionadas)<br>
+                <input id="sinrelacion" type="radio" name="caras" > Sin relación (Buscar cartas iguales)
+              </form>
+
+            </div>
+
+            <div class="btnCambiarStep">
+              <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+              <button (click)="RegistrarRelacion()"  type="button" class="btn Next" matStepperNext>Siguiente</button>
+            </div>
+
+            </mat-step>
+   
+            <!-- PASO IMAGEN DORSO -->
+            <mat-step>
+                    
+              <form [formGroup]="myForm2">
+                <ng-template matStepLabel>Imagen dorso</ng-template>
+
+                <mat-card class="panel" >
+                  <mat-card-header>
+                    <mat-card-title>Imagen del dorso de las cartas</mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+
+                  </mat-card-content>
+                  <div class="enFila" style="width: 70%">
+                      <input #fileImagenDorso id = "fileImagenDorso" type="file" accept= 'imagen/*' (change)="ExaminarImagenDorso($event)" style="display:none">
+                      <img class="imagenCromo" *ngIf="imagenDorso"  mat-card-image [src]="imagenDorso">
+                      <button (click) = "fileImagenDorso.click()" type="button" class="btn Agregar">
+                      Imagen del dorso <i class="material-icons">add_photo_alternate</i>
+                      </button>
+                  </div>
+
+                  <mat-card-actions align="end">
+                    <button  (click) = "LimpiarCampos()" type="button" class="btn Back">Limpiar Campos</button>
+                    <button  (click) = "tengoImagenDorso=true"  class="btn Aceptar">Agregar imagen dorso</button>
+                  </mat-card-actions>
+
+                </mat-card>
+
+                <div class="btnCambiarStep" style="margin-top:10px;">
+                  <button mat-button matStepperPrevious type="button" class="btn Back" >Atrás</button>
+                  <button *ngIf="tengoImagenDorso" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </form>
+            </mat-step>
+
+            <!-- PASO AÑADIR CROMOS -->
+            <mat-step [stepControl]="myForm2">
+              
+              <form [formGroup]="myForm2">
+                <ng-template matStepLabel>Cartas</ng-template>
+
+                <mat-card class="panel" >
+                <mat-card-header>
+                  <mat-card-title>Crear nueva Carta</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+
+                  <div class="form-group" style="margin: 15px;">
+                      <label for="inputNombreCarta">Nombre</label>
+                      <input matInput formControlName="nombreCarta" required placeholder="Escribe el nombre de la carta">
+                      <mat-error>Este campo es obligatorio</mat-error>
+                  </div>
+
+                </mat-card-content>
+                <div class="enFila" style="width: 70%">
+                  <div>
+                    <input #fileImagenCarta id = "inputCarta" type="file" accept= 'imagen/*' (change)="ExaminarImagenCartaDelante($event)" style="display:none">
+                    <img class="imagenCromo" *ngIf="imagenCartaDelante" mat-card-image [src]="imagenCartaDelante">
+                    <button (click) = "fileImagenCarta.click()" type="button" class="btn Agregar">
+                    Imagen de delante <i class="material-icons">add_photo_alternate</i>
+                    </button>
+                  </div>
+                </div>
+
+                <mat-card-actions align="end">
+                  <button  (click) = "LimpiarCampos()" type="button" class="btn Back">Limpiar Campos</button>
+                  <button  (click) = "AgregarCartaFamilia()"  class="btn Aceptar">Agregar Carta</button>
+                </mat-card-actions>
+
+              </mat-card>
+
+              <div>
+                  <form *ngIf="listaCartas[0]">
+
+                    <div>
+                      <p style="margin: 10px">
+                        <span style="font-weight: bold;">Cartas creadas recientemente</span>
+                      </p>
+                    </div>
+
+                    <table  align="center" mat-table [dataSource]="dataSource" class="example-container mat-elevation-z8">
+
+                      <ng-container matColumnDef="nombreCarta">
+                        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 30%"> Nombre </th>
+                        <td mat-cell *matCellDef="let item"> {{item.carta.Nombre}} </td>
+                      </ng-container>
+
+                      <!-- Delete Column -->
+                      <ng-container matColumnDef=" ">
+                        <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla"></th>
+                        <td mat-cell *matCellDef="let item">
+                          <button (click) = "BorrarCarta(item)" mat-icon-button matTooltip="Borrar {{item.carta.Nombre}}">
+                            <i class="material-icons red md-36">delete</i>
+                          </button>
+                        </td>
+                      </ng-container>
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    </table>
+                  </form>
+              </div>
+
+              <div class="btnCambiarStep" style="margin-top:10px;">
+                  <button mat-button matStepperPrevious type="button" class="btn Back" >Atrás</button>
+                  <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </form>
+            </mat-step>
+
+            <!-- PASO FINALIZAR SI NO HAY QUE ESTABLECER RELACIONES -->
+            <mat-step *ngIf="!relacion">
+              <ng-template matStepLabel>Finalizar</ng-template>
+              <div>
+                <p> Daros de la familia creados correctamente. </p>
+                <p> Haga click en "Finalizar" para registrar la familia.</p>
+              </div>
+
+              <div class="btnCambiarStep">
+                <button  type="button" class="btn Back"  matStepperPrevious>Atrás</button>
+                <button  type="button" class="btn Aceptar" (click) = "RegistrarFamiliaCreadaPasoAPaso()">Finalizar</button>
+              </div>
+            </mat-step>
+            <!-- SIGUIENTE PASO SI HAY QUE ESTABLECER RELACIONES -->
+            <mat-step *ngIf="relacion">
+              <ng-template matStepLabel>Registrar familia</ng-template>
+              <div>
+                <p> Los datos de la familia ya están preparados. </p>
+                <p> Haz click en "Registrar familia"</p>
+                <p> Solo te quedará establecer las relaciones entre las cartas</p>
+              </div>
+
+              <div class="btnCambiarStep">
+                <button  type="button" class="btn Back"  matStepperPrevious>Atrás</button>
+                <button (click)="RegistrarFamiliaCreadaPasoAPaso()"  matStepperNext type="button" class="btn Next">Registrar familia</button>
+              </div>
+            </mat-step>
+            <!-- ULTIMO PASO: ESTABLECER RELACIONES -->
+            <mat-step *ngIf="relacion">
+              <ng-template matStepLabel>Establecer relaciones</ng-template>
+              <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona las cartas de dos en dos y establece la relación</label>
+              <div class ="grid-container">
+                <div (click)="CartaSeleccionada(i)"  class = "grid-item" *ngFor="let elem of listaCartas;let i = index" >
+                  <br>
+                    <img class="imagenes" id="carta{{i}}" [src]="imagenesCartas[i]" />
+                </div>
+              </div>
+              <button (click)="EstableceRelacion()" type="button" class="btn Agregar">Establecer relación</button>
+
+              <div class="btnCambiarStep">
+                <button  type="button" class="btn Back"  matStepperPrevious>Atrás</button>
+                <button (click)="FinalizarRelaciones()"  *ngIf = "cartasRelacionadas === listaCartas.length" type="button" class="btn Aceptar">Finalizar</button>
+              </div>
+            </mat-step> 
+          </mat-horizontal-stepper>
+        </mat-card-content>
+      </mat-card>
+
+
+    </mat-tab>
+
+    <mat-tab label="Cargar familia desde ficheros">
+      <div class= "enColumna" *ngIf ="advertencia" style = "border-color: red;">
+        <!-- para preservar los espacios y los tabs del texto -->
+        <pre>
+        <br>
+        La relación de aspecto de las imagenes debe ser <strong>312 X 450</strong>
+        La carpeta con los ficheros de la colección debe contener un fichero <strong>JSON</strong>
+        con el contenido mostrado en el siguiente ejemplo. En este ejemplo los cromos son de dos
+        caras. Si fuesen de una cara no tendrían el campo "nombreImagenCromoDetras".
+        Si no hay imagen de la colección entonces escribir "ImagenColeccion": "".
+        {{'{'}}
+          "Nombre": "Comandos Linux",
+          "ImagenColeccion": "linux.jpg",
+          "DosCaras": "true",
+          "cromos": [
+            {{'{'}}
+              "nombreCromo":"factor",
+              "nivelCromo": "Diamante",
+              "probabilidadCromo":"Muy Baja",
+              "nombreImagenCromoDelante": "factor_a.png",
+              "nombreImagenCromoDetras": "factor_b.png"
+            {{'}'}},
+            ... otros cromos ...
+          ]
+        {{'}'}}
+        </pre>
+
+        <button (click) = 'advertencia = false' style="width: 30%" type="button" class="btn Info">
+          Ocultar advertencia
+        </button>
+      </div>
+      <div class = "enFila">
+        <div style = "width: 40%">
+          <input #fileImagenes id = "inputImagenes" type="file" accept= 'image/*' (change)="SeleccionarImagenesFamilia($event)" style="display:none" multiple>
+          <input #fileInfo id = "inputInfo" type="file" accept= 'application/JSON' (change)="SeleccionarInfoFamilia($event)" style="display:none">
+          <button style = "height:100px; width:80%" (click) = "fileInfo.click()" type="button" class="btn Agregar">
+            Seleccionar fichero JSON<i class="material-icons">add_photo_alternate</i>
+          </button>
+        </div>
+        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "errorFicheros">
+          <h3 style = "color: red">ATENCION</h3>
+
+          <h5 style = "padding: 5%;"> Ya hay ficheros en la base de datos con nombres iguales a algunos de la familia que quieres cargar</h5>
+          <p *ngFor = "let fichero of ficherosRepetidos">{{fichero}}</p>
+
+          <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+              Cancelar
+          </button>
+        </div>
+        <div class = "enColumna" style = "border-color: red;width: 60%" *ngIf = "imagenCargado">
+          <h3>Datos de la familia</h3>
+          <div class = "enFila" style = "width: 90%">
+            <div>
+              <p> Nombre de la familua: <strong>{{infoFamilia.Nombre}}</strong></p>
+              <p> Número de cromos: <strong>{{infoFamilia.cartas.length}}</strong></p>
+            </div>
+            <img  *ngIf="imagenFamilia" mat-card-image  [src]="imagenFamilia" width="100" height="100">
+            <p *ngIf="!imagenFamilia"> <strong> No hay imagen de la familia</strong></p>
+          </div>
+          <div class = "enFila" style = "width:50%">
+            <button (click) = "RegistrarFamilia()" type="button" class="btn Agregar">
+              Registrar
+            </button>
+            <button (click) = "Cancelar()" type="button" class="btn Eliminar">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  
+  </mat-tab-group>
+</div>
