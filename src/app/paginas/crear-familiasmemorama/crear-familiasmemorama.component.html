@@ -224,24 +224,26 @@
         <!-- para preservar los espacios y los tabs del texto -->
         <pre>
         <br>
-        La relación de aspecto de las imagenes debe ser <strong>312 X 450</strong>
-        La carpeta con los ficheros de la colección debe contener un fichero <strong>JSON</strong>
-        con el contenido mostrado en el siguiente ejemplo. En este ejemplo los cromos son de dos
-        caras. Si fuesen de una cara no tendrían el campo "nombreImagenCromoDetras".
-        Si no hay imagen de la colección entonces escribir "ImagenColeccion": "".
+        Todas las imágenes deben ser <strong>cuadradas</strong>
+        La carpeta con los ficheros de la familia debe contener un fichero <strong>JSON</strong>
+        con el contenido mostrado en el siguiente ejemplo. En este ejemplo las cartas están relacionadas.
+        Para indicar cuáles son las relaciones, las dos cartas relacionadas tienen el mismo nombre, pero una acaba en "_a" 
+        y la otra en "_b". Si las cartas no están relacionadas entonces el nombre puede ser cualquiera.
         {{'{'}}
-          "Nombre": "Comandos Linux",
-          "ImagenColeccion": "linux.jpg",
-          "DosCaras": "true",
-          "cromos": [
+          "Nombre": "Escritores",
+          "ImagenFamilia": "escritores_fondo.jpg",
+          "ImagenDorso": "escritores_dorso.jpg"
+          "relacion": "true",
+          "cartas": [
             {{'{'}}
-              "nombreCromo":"factor",
-              "nivelCromo": "Diamante",
-              "probabilidadCromo":"Muy Baja",
-              "nombreImagenCromoDelante": "factor_a.png",
-              "nombreImagenCromoDetras": "factor_b.png"
+              "Nombre":"Dickens",
+              "imagenDelante": "dickens_a.jpg",
             {{'}'}},
-            ... otros cromos ...
+            {{'{'}}
+              "Nombre":"Libro de Dickens",
+              "imagenDelante": "dickens_b.jpg",
+            {{'}'}}
+            ... otras cartas ...
           ]
         {{'}'}}
         </pre>

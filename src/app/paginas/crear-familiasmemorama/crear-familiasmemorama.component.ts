@@ -285,7 +285,7 @@ export class CrearFamiliasmemoramaComponent implements OnInit {
           // Recojemos Nombre
           nombreFamilia = this.myForm.value.nombreFamilia;
           // tslint:disable-next-line:max-line-length
-          this.peticionesAPI.CreaFamilia(new Familia(nombreFamilia, this.fileImagenFamilia.name, this.dosCaras, this.profesorId, this.relacion), this.profesorId)
+          this.peticionesAPI.CreaFamilia(new Familia(nombreFamilia, this.fileImagenFamilia.name, this.profesorId, this.relacion), this.profesorId)
             .subscribe(async (res) => {
               if (res != null) {
                 console.log('Familia creada');
@@ -607,7 +607,7 @@ export class CrearFamiliasmemoramaComponent implements OnInit {
   RegistrarFamilia() {
 
     // tslint:disable-next-line:max-line-length
-    this.peticionesAPI.CreaFamilia(new Familia(this.infoFamilia.Nombre, this.infoFamilia.ImagenFamilia, this.infoFamilia.DosCaras, this.profesorId, this.infoFamilia.relacion), this.profesorId)
+    this.peticionesAPI.CreaFamilia(new Familia(this.infoFamilia.Nombre, this.infoFamilia.ImagenFamilia, this.profesorId, this.infoFamilia.relacion), this.profesorId)
       .subscribe((res) => {
         if (res != null) {
           this.familia = res;
