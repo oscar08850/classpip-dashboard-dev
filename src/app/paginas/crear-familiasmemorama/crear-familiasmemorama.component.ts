@@ -633,8 +633,10 @@ export class CrearFamiliasmemoramaComponent implements OnInit {
             .subscribe(() => {
               console.log('YA HE REGISTRADO LAS CARTAS');
               console.log(this.cartasCreadas);
+              console.log ('familiar ', this.familia)
               // ya estan todas las cartas creadas. Vamoa a establecer la relación, si la hay
               if (this.familia.relacion) {
+                console.log ('establecer relaciones')
                 this.cartasCreadas.forEach(carta => {
                   // tslint:disable-next-line:max-line-length
                   const cartaRelacionada = this.cartasCreadas.filter(c => carta.imagenDelante.includes(c.imagenDelante.split('_')[0]) && (c.Nombre !== carta.Nombre))[0];
