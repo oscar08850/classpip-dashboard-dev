@@ -104,5 +104,11 @@ export * from './JuegoDeEvaluacion';
 export * from './EquipoJuegoEvaluado';
 export * from './AlumnoJuegoEvaluado';
 
-
 export * from './Evento';
+
+export * from './AlumnoJuegoDeMemorama';
+export * from './Carta';
+export * from './Familia';
+export * from './JuegoMemorama';
+export * from './EquipoJuegoDeMemorama';
+export * from './TablaAlumnoJuegoDeMemorama';

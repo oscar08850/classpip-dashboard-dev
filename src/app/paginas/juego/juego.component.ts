@@ -18,7 +18,7 @@ import {
 
   AlumnoJuegoDePuntos, EquipoJuegoDePuntos, Grupo, AlumnoJuegoDeCompeticionLiga,
   EquipoJuegoDeCompeticionLiga, Jornada, AlumnoJuegoDeCompeticionFormulaUno,
-  EquipoJuegoDeCompeticionFormulaUno,AlumnoJuegoDeCompeticionTorneo,
+  EquipoJuegoDeCompeticionFormulaUno, AlumnoJuegoDeCompeticionTorneo,
   EquipoJuegoDeCompeticionTorneo, Cuestionario, JuegoDeAvatar, FamiliaAvatares,
   AlumnoJuegoDeAvatar, AsignacionPuntosJuego, Coleccion, AlumnoJuegoDeColeccion,
   EquipoJuegoDeColeccion, Escenario, JuegoDeGeocaching, AlumnoJuegoDeGeocaching, PuntoGeolocalizable,
@@ -29,7 +29,7 @@ import {
 } from '../../clases/index';
 
 
-
+import { JuegoMEMORAMA } from 'src/app/clases/JuegoMemorama';
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService, ComServerService } from '../../servicios/index';
@@ -56,7 +56,9 @@ import { EquipoJuegoDeVotacionUnoATodos } from 'src/app/clases/EquipoJuegoDeVota
 import { concursoLibro } from 'src/app/clases/clasesParaLibros/concursoLibro';
 import { RecursoLibroJuego } from 'src/app/clases/clasesParaLibros/recurosLibroJuego';
 import { RecursoLibro } from 'src/app/clases/clasesParaLibros/recursoLibro';
-
+import { AlumnoJuegoDeMemorama } from 'src/app/clases/AlumnoJuegoDeMemorama';
+import { EquipoJuegoDeMemorama } from 'src/app/clases/EquipoJuegoDeMemorama';
+import * as URL from '../../URLs/urls';
 
 export interface OpcionSeleccionada {
   nombre: string;
@@ -99,7 +101,7 @@ export class JuegoComponent implements OnInit {
   // que está abandonando el proceso de creación del juego
   creandoJuego = false;
 
-  //añadido classpipkids//
+  // añadido classpipkids//
 
   inscribirtemporada;
   nivel1 = false;
@@ -112,7 +114,7 @@ export class JuegoComponent implements OnInit {
 
   avanzo1 = false;
   avanzo2 = false;
-  //classpipkids//
+  // classpipkids//
 
   juego: any;
 
@@ -160,7 +162,11 @@ export class JuegoComponent implements OnInit {
 
   // información para crear un juego de colección
   coleccionSeleccionada: Coleccion;
+  familiaSeleccionada: any;
+
   tengoColeccion = false;
+  tengoFamilia = false;
+
   startDate = new Date(2019, 0, 1);
   startatpicker;
   modoAsignacion;
@@ -172,6 +178,7 @@ export class JuegoComponent implements OnInit {
   // tslint:disable-next-line:max-line-length
   puntuacionCorrecta = 0; // le doy un valor porque si elojo kahoot esto no entre en juego pero debe estar definido para que se cree el juego
   puntuacionIncorrecta = 0;
+  TiempoDuracion = 0;
   modoPresentacion = ' '; // Le pongo algo porque en caso de clasico en equipo no pongo nada aqui y el campo es obligatorio
   tengoModoPresentacion = false;
   seleccionModoPresentacion: string[] = ['Mismo orden para todos',
@@ -198,7 +205,7 @@ export class JuegoComponent implements OnInit {
   tengoFamilias = false;
 
 
-  //info para juego de libros
+  // info para juego de libros
 
   // recursoElegido: number[];
   // tengoRecurso = false;
@@ -284,7 +291,7 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Suizo', color: 'accent'}
   ];
   ParticipantesTorneo: Alumno[];
-  CuadroModificado= false;
+  CuadroModificado = false;
   tengoTipoDeCompeticion = false;
   tengoTipoDeTorneo = false;
   numeroDeJornadas: number;
@@ -323,7 +330,7 @@ export class JuegoComponent implements OnInit {
 
 
 
-   //info para juego de cuentos
+   // info para juego de cuentos
 
    recursoElegido: number[];
    tengoRecurso = false;
@@ -393,7 +400,15 @@ export class JuegoComponent implements OnInit {
   verRespuestasControl = false;
   tengoModoRespuestas = false;
 
+  Mododificultad: string;
+  numerocartas: any;
+  vectorimagen: any[] = [];
+  vectorcartas: any[] = [];
+  vectorcartaseleccionadas: any[] = [];
+  cartaseleccionada1: any;
+  cartaseleccionada2: any;
 
+  idcartas: any[] = [];
 
 
   constructor(
@@ -469,7 +484,7 @@ export class JuegoComponent implements OnInit {
     //   });
 
     this.DameListaJuegos();
- 
+
     // Peticion API Juego de Evaluacion
     this.peticionesAPI.DameRubricasProfesor(this.profesorId).subscribe(rubricas => {
       console.log('Tengo rubricas', rubricas);
@@ -484,6 +499,7 @@ export class JuegoComponent implements OnInit {
       DescripcionJuegoEvaluacion: ['', Validators.required],
       PuntuacionCorrecta: ['', Validators.required],
       PuntuacionIncorrecta: ['', Validators.required],
+      TiempoDuracion: ['', Validators.required],
       NumeroDeJornadas: ['', Validators.required],
       criterioPrivilegioComplemento1: ['', Validators.required],
       criterioPrivilegioComplemento2: ['', Validators.required],
@@ -533,9 +549,9 @@ export class JuegoComponent implements OnInit {
     this.totalPesos = 0;
 
   }
-  
+
   async DameListaJuegos() {
-    
+
     const listas =  await this.calculos.DameListaJuegos(this.grupo.id);
     this.juegosActivos = listas.activos;
     // Si la lista aun esta vacia la dejo como indefinida para que me
@@ -622,7 +638,7 @@ export class JuegoComponent implements OnInit {
   //     // }
   //   }
   // }
-  
+
 
   TipoDeJuegoSeleccionado(tipo: string) {
     if ((tipo === 'Control de trabajo en equipo') && (!this.equiposGrupo)) {
@@ -646,21 +662,14 @@ export class JuegoComponent implements OnInit {
     console.log(' tengo tipo ' + this.tipoDeJuegoSeleccionado);
     // if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuestionario') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
     //   Swal.fire('Alerta', 'Aún no es posible el juego de cuestionario en equipo', 'warning');
-    // } else 
-    
+    // } else
+
     if ((this.tipoDeJuegoSeleccionado === 'Juego De Avatar') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de avatares en equipo', 'warning');
-    }
-
-
-    else if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuentos') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Cuentos') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de libros en equipo', 'warning');
 
-    }
-
-
-
-    else if ((this.tipoDeJuegoSeleccionado === 'Juego De Geocaching') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
+    } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Geocaching') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
       Swal.fire('Alerta', 'Aún no es posible el juego de geocaching en equipo', 'warning');
    // } else if ((this.tipoDeJuegoSeleccionado === 'Juego De Votación') && (this.modoDeJuegoSeleccionado === 'Equipos')) {
      // Swal.fire('Alerta', 'Aún no es posible el juego de votación en equipo', 'warning');
@@ -676,8 +685,7 @@ export class JuegoComponent implements OnInit {
           this.tengoModo = true;
         }
 
-      }
-      else {
+      } else {
         if (this.equiposGrupo === undefined) {
           Swal.fire('Alerta', 'No hay ningún equipo en este grupo', 'warning');
           console.log('No se puede crear juego pq no hay equipos');
@@ -748,9 +756,9 @@ export class JuegoComponent implements OnInit {
       console.log (evaluados);
       console.log ('relacionAlumnosEquipos');
       console.log (this.relacionAlumnosEquipos);
-      
+
       this.relacionesMap = new Map();
-      let j=0;
+      let j = 0;
       for (let i = 0; i < evaluados.length; i++) {
           if (!fill) {
             this.relacionesMap.set(evaluados[i], []);
@@ -761,7 +769,7 @@ export class JuegoComponent implements OnInit {
             console.log (equipoEvaluado);
             const evaluadoresElegidos = [];
             let cont = 0;
-            //let j = i;
+            // let j = i;
             while ( cont < this.numeroDeMiembros) {
               console.log ('veamos que pasa con ' + evaluadoresDesordenados[j]);
               // Si el posible evaluador pertenece al equipo evaluado entonces no lo cogemos
@@ -790,7 +798,7 @@ export class JuegoComponent implements OnInit {
       console.log (evaluados);
       console.log ('evaluadores desordenados');
       console.log (evaluadoresDesordenados);
-  
+
 
       this.relacionesMap = new Map();
 
@@ -978,7 +986,7 @@ export class JuegoComponent implements OnInit {
     this.profesorEvaluaModo = value;
   }
 
-  ModoVistaEvaluadoChange (value: string) {
+  ModoVistaEvaluadoChange(value: string) {
     this.modoVistaEvaluado = value;
     this.tengoVistaEvaluado = true;
   }
@@ -999,10 +1007,10 @@ export class JuegoComponent implements OnInit {
     this.dataSourcePreguntasAbiertas = new MatTableDataSource(this.listaPreguntasAbiertas);
   }
 
-  
+
 
   AsignarPreguntasAbiertas() {
- 
+
     if (this.listaPreguntasAbiertas.length === 0) {
       Swal.fire('No hay preguntas abiertas', ' ', 'error');
     } else {
@@ -1051,7 +1059,7 @@ export class JuegoComponent implements OnInit {
     console.log('Slider changed to', value);
     this.numeroDeMiembros = value;
   }
-  
+
   GuardarDescripcionEvaluacion() {
     this.descripcionJuegoEvaluacion = this.myForm.value.DescripcionJuegoEvaluacion;
   }
@@ -1127,7 +1135,7 @@ export class JuegoComponent implements OnInit {
     } else {
       rubrica = 0; // asi indico que el juego no tiene rubrica y por tanto es de preguntas abiertas
     }
-  
+
     const juego: JuegoDeEvaluacion = new JuegoDeEvaluacion(
       null,
       this.nombreDelJuego,
@@ -1160,13 +1168,13 @@ export class JuegoComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Evaluación');
       this.calculos.RegistrarEvento(evento);
-     
+
       // Notificar a los Alumnos del Grupo
       // tslint:disable-next-line:max-line-length
       this.comService.EnviarNotificacionGrupo(1, this.grupo.id, `Nuevo Juego de Evaluación para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
 
       Swal.fire('Juego de Evaluación creado correctamente', ' ', 'success');
- 
+
       this.relacionesMap.forEach( (value: number[], key: number) => {
         if (this.modoDeJuegoSeleccionado === 'Equipos' && this.equiposEvaluacionSeleccionado === 'Por Equipos') {
           const equipo: EquipoJuegoDeEvaluacion = new EquipoJuegoDeEvaluacion(
@@ -1238,21 +1246,21 @@ export class JuegoComponent implements OnInit {
   CrearJuegoDePuntos() {
     // primero creamos el juego
     this.peticionesAPI.CreaJuegoDePuntos(new Juego (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado,
-      undefined, undefined, undefined, undefined, undefined, undefined,undefined, undefined, this.nombreDelJuego), this.grupo.id)
+      undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.nombreDelJuego), this.grupo.id)
     .subscribe(juegoCreado => {
       this.juego = juegoCreado;
       this.sesion.TomaJuego(this.juego);
       this.juegoCreado = true;
 
-      //Registrar la Creación del Juego
+      // Registrar la Creación del Juego
       // tslint:disable-next-line:max-line-length
       const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Puntos');
       this.calculos.RegistrarEvento(evento);
       // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Puntos");
       // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
       //   console.log("Registrado evento: ", res);
-      // }, (err) => { 
-      //   console.log(err); 
+      // }, (err) => {
+      //   console.log(err);
       // });
 
       // Notificar a los Alumnos del Grupo
@@ -1311,8 +1319,196 @@ export class JuegoComponent implements OnInit {
       this.tabGroup.selectedIndex = 0;
     });
   }
+  /// Funciones PARA LA CREACION DE JUEGO DE FAMILIA
 
-  
+  RecibeFamilia($event) {
+    console.log('EVENTO', $event);
+    this.familiaSeleccionada = $event;
+    this.tengoFamilia = true;
+  }
+
+
+
+
+  RegistraDificultad() {
+    console.log('Seleccion de Dificultad');
+    // const dif = document.getElementsByName('dificultad') as HTMLElement;
+
+    const radio1 = document.getElementById('radio1') as HTMLInputElement;
+    const radio2 = document.getElementById('radio2') as HTMLInputElement;
+    const radio3 = document.getElementById('radio3') as HTMLInputElement;
+
+    if (radio1.checked) {
+
+      console.log('FACIL');
+      this.numerocartas = '4';
+      this.Mododificultad = 'facil';
+   } else if (radio2.checked) {
+     console.log('MEDIA');
+     this.numerocartas = '5';
+     this.Mododificultad = 'media';
+
+  } else {
+    console.log('DIFICIL');
+    this.numerocartas = '6';
+    this.Mododificultad = 'dificil';
+
+
+   }
+    if (this.familiaSeleccionada.relacion === true) {
+     this.numerocartas = this.numerocartas * 2;
+     console.log('POOR 2');
+   } else {this.numerocartas = this.numerocartas; }
+
+    console.log('MODO DIFICULTAD', this.Mododificultad);
+    console.log('Familia SELECCIONADA', this.familiaSeleccionada.Nombre);
+
+    this.seleccionarcartas();
+
+  }
+
+  async seleccionarcartas() {
+
+    this.vectorcartas = await this.peticionesAPI.DameCartasFamilia(this.familiaSeleccionada.id).toPromise();
+    console.log(this.vectorcartas, this.vectorcartas.length);
+
+    this.preparaimagenes();
+
+  }
+
+  preparaimagenes() {
+
+    console.log('VECTORCRTAS:', this.vectorcartas);
+    console.log('LONGITUD VECTORCRTAS:', this.vectorcartas.length);
+
+    for (let i = 0; i < this.vectorcartas.length; i++) {
+
+      const elem = this.vectorcartas[i];
+      this.vectorimagen[i] = URL.ImagenesCartas + elem.imagenDelante;
+
+    }
+    console.log(this.vectorimagen);
+
+  }
+
+  CartaSeleccionada(i) {
+
+    console.log('CARTA SELECCIONADA', i);
+    const carta = document.getElementById('carta' + i);
+    console.log(this.vectorcartas[i]);
+    this.vectorcartaseleccionadas.push(this.vectorcartas[i]);
+    console.log('CARTAS SIN SELECCIONAR:', this.cartaseleccionada1, this.cartaseleccionada2);
+
+    if (this.cartaseleccionada1 === undefined) {
+      carta.style.border = '5px solid red';
+      this.cartaseleccionada1 = carta;
+      console.log('CARTA1', this.cartaseleccionada1);
+
+    } else {
+      this.cartaseleccionada2 = carta;
+      console.log('CARTA2', this.cartaseleccionada2);
+
+
+    }
+
+    console.log('CARTAS SELECCIONADAS:', this.cartaseleccionada1, this.cartaseleccionada2);
+
+
+    if (this.cartaseleccionada2 !== undefined) {
+
+
+
+      if (this.cartaseleccionada1 === this.cartaseleccionada2) {
+
+      console.log('MISMA CARTA');
+      carta.style.border = '';
+
+      } else {
+        console.log('DIFERENTE CARTA');
+        carta.style.border = '5px solid red';
+      }
+
+      this.cartaseleccionada1 = undefined;
+      this.cartaseleccionada2 = undefined;
+      console.log('CARTAS UNDEFINED:', this.cartaseleccionada1, this.cartaseleccionada2);
+
+
+    }
+
+
+
+    console.log(this.vectorcartaseleccionadas);
+
+
+  }
+
+  GuardarPuntuacionMemorama() {
+    this.puntuacionCorrecta = this.myForm.value.PuntuacionCorrecta;
+    this.puntuacionIncorrecta = this.myForm.value.PuntuacionIncorrecta;
+    this.TiempoDuracion = this.myForm.value.TiempoDuracion;
+  }
+  RegistraCartas() {
+
+    console.log('CARTAS QUE VAN A SER USADAS EN EL JUEGO:', this.vectorcartaseleccionadas);
+    for (let i = 0; this.vectorcartaseleccionadas.length > i; i++) {
+       this.idcartas.push(this.vectorcartaseleccionadas[i].id);
+     }
+
+    console.log(this.idcartas);
+
+  }
+
+  CrearJuegoDeMemorama() {
+
+    let JuegoMemoramaaentrtrar: JuegoMEMORAMA;
+
+    // tslint:disable-next-line:max-line-length
+    JuegoMemoramaaentrtrar = new JuegoMEMORAMA(this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.familiaSeleccionada.id, true, this.nombreDelJuego, this.idcartas, this.puntuacionCorrecta, this.puntuacionIncorrecta, this.Mododificultad, this.TiempoDuracion);
+
+    console.log('JuegoMemoramaaentrtrar:');
+    console.log('JuegoMemoramaaentrtrar:', JuegoMemoramaaentrtrar);
+
+    this.peticionesAPI.CreaJuegoDeMemorama(JuegoMemoramaaentrtrar, this.grupo.id)
+      .subscribe(juegoCreado => {
+                                this.juego = juegoCreado;
+                                console.log(juegoCreado);
+                                console.log('Juego creado correctamente');
+                                this.sesion.TomaJuego(this.juego);
+                                this.juegoCreado = true;
+
+                                // Registrar la Creación del Juego
+                                const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Memorama');
+                                this.calculos.RegistrarEvento(evento);
+                                this.comService.EnviarNotificacionGrupo(1, this.grupo.id, `Nuevo Juego de Memorama para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
+
+                                // Asignamos a los participantes en el juego
+                                if (this.modoDeJuegoSeleccionado === 'Individual') {
+                                  for (let i = 0; i < this.alumnosGrupo.length; i++) {
+                                    this.peticionesAPI.InscribeAlumnoJuegoDeMemorama(new AlumnoJuegoDeMemorama(this.alumnosGrupo[i].id, this.juego.id, 0, '00:00'))
+                                      .subscribe();
+
+                                    }
+                                  } else {
+                                    for (let i = 0; i < this.equiposGrupo.length; i++) {
+                                      this.peticionesAPI.InscribeEquipoJuegoDeMemorama(new EquipoJuegoDeMemorama(this.equiposGrupo[i].id, this.juego.id))
+                                        .subscribe();
+                                      }
+                                    }
+                                Swal.fire('Juego de Memorama creado correctamente', ' ', 'success');
+
+                                // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
+                                if (this.juegosActivos === undefined) {
+                                  // Si la lista aun no se ha creado no podre hacer el push
+                                  this.juegosActivos = [];
+                                }
+                                this.juegosActivos.push(this.juego);
+                                this.Limpiar();
+                                // Regresamos a la lista de equipos (mat-tab con índice 0)
+                                this.tabGroup.selectedIndex = 0;
+    });
+  }
+
+
 
   /// FUNCIONES PARA LA CREACION DE JUEGO DE COLECCIÓN
 
@@ -1324,14 +1520,14 @@ export class JuegoComponent implements OnInit {
 
   CrearJuegoDeColeccion() {
     this.peticionesAPI.CreaJuegoDeColeccion(new Juego(this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.modoAsignacion,
-      this.coleccionSeleccionada.id, undefined, undefined, undefined,undefined, undefined, undefined, this.nombreDelJuego), this.grupo.id)
+      this.coleccionSeleccionada.id, undefined, undefined, undefined, undefined, undefined, undefined, this.nombreDelJuego), this.grupo.id)
       .subscribe(juegoCreado => {
         this.juego = juegoCreado;
         console.log(juegoCreado);
         console.log('Juego creado correctamente');
         this.sesion.TomaJuego(this.juego);
         this.juegoCreado = true;
-          //Registrar la Creación del Juego
+          // Registrar la Creación del Juego
         // tslint:disable-next-line:max-line-length
         const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Colección');
 
@@ -1339,8 +1535,8 @@ export class JuegoComponent implements OnInit {
         // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Colección");
         // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
         //   console.log("Registrado evento: ", res);
-        // }, (err) => { 
-        //   console.log(err); 
+        // }, (err) => {
+        //   console.log(err);
         // });
 
         // Notificar a los Alumnos del Grupo
@@ -1403,7 +1599,7 @@ export class JuegoComponent implements OnInit {
   // }
 
   // Para habilitar el boton de guardar puntuaciones
-  
+
   TengoPuntuaciones() {
     if (this.myForm.value.PuntuacionCorrecta === '' || this.myForm.value.PuntuacionIncorrecta === '') {
       return false;
@@ -1423,16 +1619,16 @@ export class JuegoComponent implements OnInit {
 
   // El modo de puntuación solo se aplica en el caso de juego en equipo clasico.
   // En ese caso hay dos opciones: puntua el primero del equipo que responde o puntua la media de todos los del equipo
-  // En el primer caso ya  no hay que especificar nada mas porque todos los participantes van a recibir las 
+  // En el primer caso ya  no hay que especificar nada mas porque todos los participantes van a recibir las
   // preguntas y respuestas en el mismo orden. En el campo Presentacion del modelo del juego pondremos "Primero"
-  // En el segundo caso, todos los alumnos deben responder y entonces pueden pantearse los tres modos habituales 
+  // En el segundo caso, todos los alumnos deben responder y entonces pueden pantearse los tres modos habituales
   // de presentación de las preguntas/respuestas:
   //      'Mismo orden para todos',
   //      'Preguntas desordenadas',
   //      'Preguntas y respuestas desordenadas'];
-  //    
+  //
 
-  
+
   GuardarFormaDePuntuacion() {
     // Si hemos elegido que puntua el primero entonces hay que indicarlo en la variable modoPresentacion
     // En caso contrario, ya está bien lo que haya en esa variable
@@ -1487,8 +1683,8 @@ export class JuegoComponent implements OnInit {
         // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Cuestionario");
         // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
         //   console.log("Registrado evento: ", res);
-        // }, (err) => { 
-        //   console.log(err); 
+        // }, (err) => {
+        //   console.log(err);
         // });
 
         // Notificar a los Alumnos del Grupo
@@ -1497,7 +1693,7 @@ export class JuegoComponent implements OnInit {
 
         // tslint:disable-next-line:max-line-length
         if ((this.modoDeJuegoSeleccionado === 'Individual') || ((this.modoDeJuegoSeleccionado === 'Equipos') && (this.modoPresentacion !== 'Primero'))) {
-          // Aunque el juego sea en equipo, si la modalidad es que todos los del equipo responden y puntua la media entonces necesito 
+          // Aunque el juego sea en equipo, si la modalidad es que todos los del equipo responden y puntua la media entonces necesito
           // inscripciones individuales
           // tslint:disable-next-line:prefer-for-of
           for (let i = 0; i < this.alumnosGrupo.length; i++) {
@@ -1683,7 +1879,7 @@ export class JuegoComponent implements OnInit {
 
 
   //// FUNCIONES PARA LA CREACION DE UN JUEGO DE AVATARES
- 
+
   RecibeFamiliasElegidas($event) {
     this.familiasElegidas = $event;
     this.tengoFamilias = true;
@@ -1716,14 +1912,14 @@ export class JuegoComponent implements OnInit {
         // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juegoDeAvatar.id, this.nombreDelJuego, "Juego De Avatar");
         // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
         //    console.log("Registrado evento: ", res);
-        //  }, (err) => { 
-        //    console.log(err); 
+        //  }, (err) => {
+        //    console.log(err);
         //  });
- 
+
         // Notificar a los Alumnos del Grupo
         // tslint:disable-next-line:max-line-length
         this.comService.EnviarNotificacionGrupo(1, this.grupo.id, `Nuevo Juego de Avatar para el Grupo ${this.grupo.Nombre}: ${this.juegoDeAvatar.NombreJuego}`);
- 
+
         // Ahora inscribimos en el juego a los participantes
         if (this.modoDeJuegoSeleccionado === 'Individual') {
 
@@ -1772,7 +1968,7 @@ export class JuegoComponent implements OnInit {
       this.tipoDeTorneoSeleccionado = tipoTorneo.nombre;
       this.tengoTipoDeTorneo = true;
     }
-  
+
   }
   dropParticipantes(event: CdkDragDrop<any[]>) {
     moveItemInArray(this.ParticipantesTorneo, event.previousIndex, event.currentIndex);
@@ -1874,7 +2070,7 @@ export class JuegoComponent implements OnInit {
 
     this.peticionesAPI.CreaJuegoDeCompeticionLiga(new Juego(this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeCompeticionSeleccionado,
       this.modoDeJuegoSeleccionado, undefined, undefined, true, this.numeroDeJornadas,
-      this.tipoDeCompeticionSeleccionado,undefined,
+      this.tipoDeCompeticionSeleccionado, undefined,
       undefined, undefined, this.nombreDelJuego), this.grupo.id)
       .subscribe(juegoCreado => {
         this.juego = juegoCreado;
@@ -1888,8 +2084,8 @@ export class JuegoComponent implements OnInit {
         // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Competición Liga");
         // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
         //   console.log("Registrado evento: ", res);
-        // }, (err) => { 
-        //   console.log(err); 
+        // }, (err) => {
+        //   console.log(err);
         // });
 
         // Notificar a los Alumnos del Grupo
@@ -1946,7 +2142,7 @@ export class JuegoComponent implements OnInit {
 
     this.peticionesAPI.CreaJuegoDeCompeticionFormulaUno(new Juego(this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeCompeticionSeleccionado,
       this.modoDeJuegoSeleccionado, undefined, undefined, true, this.numeroDeJornadas,
-      undefined,undefined, this.Puntuacion.length,
+      undefined, undefined, this.Puntuacion.length,
       this.Puntuacion, this.nombreDelJuego), this.grupo.id)
       .subscribe(juegoCreado => {
         this.juego = juegoCreado;
@@ -1961,11 +2157,11 @@ export class JuegoComponent implements OnInit {
         // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Competición Fórmula Uno");
         // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
         //   console.log("Registrado evento: ", res);
-        // }, (err) => { 
-        //   console.log(err); 
+        // }, (err) => {
+        //   console.log(err);
         // });
 
-        //Notificar a los Alumnos del Grupo
+        // Notificar a los Alumnos del Grupo
         // tslint:disable-next-line:max-line-length
         this.comService.EnviarNotificacionGrupo(1, this.grupo.id, `Nuevo Juego De Competición Fórmula Uno para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
 
@@ -2007,17 +2203,16 @@ export class JuegoComponent implements OnInit {
       });
   }
 
-  CrearCuadroTorneo(){
+  CrearCuadroTorneo() {
 
     console.log('Voy a calcular el cuadro del torneo');
     if (this.modoDeJuegoSeleccionado === 'Individual') {
 
-        this.ParticipantesTorneo=this.calculos.calcularCuadro(this.alumnosGrupo);
+        this.ParticipantesTorneo = this.calculos.calcularCuadro(this.alumnosGrupo);
+    } else {
+        this.ParticipantesTorneo = this.calculos.calcularCuadro(this.equiposGrupo);
     }
-    else{
-        this.ParticipantesTorneo=this.calculos.calcularCuadro(this.equiposGrupo);
-    }
-    console.log('CUADRO',this.ParticipantesTorneo);
+    console.log('CUADRO', this.ParticipantesTorneo);
   }
 
   EsEmparejamientoPar(n: number): boolean {
@@ -2037,13 +2232,13 @@ export class JuegoComponent implements OnInit {
     }
     return false;
   }
-  
+
   CrearJuegoDeCompeticionTorneo() {
 
     // tslint:disable-next-line:max-line-lengtholean)
     console.log('voy a crear torneo');
     console.log ('participantes ', this.ParticipantesTorneo);
-    let nuevojuego = new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeCompeticionSeleccionado,
+    const nuevojuego = new Juego (this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeCompeticionSeleccionado,
     this.modoDeJuegoSeleccionado, undefined, undefined, true, 3,
     this.tipoDeCompeticionSeleccionado, this.tipoDeTorneoSeleccionado,
     undefined, undefined, this.nombreDelJuego, undefined , undefined, undefined, undefined, this.profesorId, undefined);
@@ -2088,19 +2283,19 @@ export class JuegoComponent implements OnInit {
               }
           }
         }
-          Swal.fire('Juego de competición tipo Torneo creado correctamente', ' ', 'success');
+        Swal.fire('Juego de competición tipo Torneo creado correctamente', ' ', 'success');
         // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
-          if (this.juegosActivos === undefined) {
+        if (this.juegosActivos === undefined) {
         // Si la lista aun no se ha creado no podre hacer el push
               this.juegosActivos = [];
           }
-          this.juegosActivos.push (this.juego);
-          this.Limpiar();
+        this.juegosActivos.push (this.juego);
+        this.Limpiar();
         // Regresamos a la lista de equipos (mat-tab con índice 0)
-          this.tabGroup.selectedIndex = 0;
+        this.tabGroup.selectedIndex = 0;
       });
     });
-    
+
   }
 
   /// Funciones para craar juego de Geocatching
@@ -2213,8 +2408,8 @@ export class JuegoComponent implements OnInit {
         // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Geocaching");
         // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
         //   console.log("Registrado evento: ", res);
-        // }, (err) => { 
-        //   console.log(err); 
+        // }, (err) => {
+        //   console.log(err);
         // });
 
         // Notificar a los Alumnos del Grupo
@@ -2294,7 +2489,7 @@ export class JuegoComponent implements OnInit {
   }
 
   CrearJuegoDeVotacionUnoATodos() {
-    const jjj = new JuegoDeVotacionUnoATodos ()
+    const jjj = new JuegoDeVotacionUnoATodos ();
     const juegoDeVotacion = new JuegoDeVotacionUnoATodos(
       this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeVotacionSeleccionado,
       this.modoDeJuegoSeleccionado,
@@ -2323,8 +2518,8 @@ export class JuegoComponent implements OnInit {
         // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Votación Uno A Todos");
         // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
         //   console.log("Registrado evento: ", res);
-        // }, (err) => { 
-        //   console.log(err); 
+        // }, (err) => {
+        //   console.log(err);
         // });
 
         // Notificar a los Alumnos del Grupo
@@ -2352,7 +2547,7 @@ export class JuegoComponent implements OnInit {
                   new EquipoJuegoDeVotacionUnoATodos(this.equiposGrupo[i].id, this.juego.id))
               .subscribe();
             }
-        } 
+        }
 
         Swal.fire('Juego de votación tipo Uno A Todos creado correctamente', ' ', 'success');
 
@@ -2388,8 +2583,8 @@ export class JuegoComponent implements OnInit {
   BorraConcepto(nombre) {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.listaConceptos.length; i++) {
-      if (this.listaConceptos[i]['nombre'] === nombre) {
-        this.totalPesos = this.totalPesos - this.listaConceptos[i]['peso'];
+      if (this.listaConceptos[i].nombre === nombre) {
+        this.totalPesos = this.totalPesos - this.listaConceptos[i].peso;
         this.listaConceptos.splice(i, 1);
       }
     }
@@ -2408,8 +2603,8 @@ export class JuegoComponent implements OnInit {
       Swal.fire('Los pesos no suman el 100%', ' ', 'error');
     } else {
       this.listaConceptos.forEach(concepto => {
-        this.conceptos.push(concepto['nombre']);
-        this.pesos.push(concepto['peso']);
+        this.conceptos.push(concepto.nombre);
+        this.pesos.push(concepto.peso);
       });
       this.conceptosAsignados = true;
     }
@@ -2443,8 +2638,8 @@ export class JuegoComponent implements OnInit {
         // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Votación Todos A Uno");
         // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
         //   console.log("Registrado evento: ", res);
-        // }, (err) => { 
-        //   console.log(err); 
+        // }, (err) => {
+        //   console.log(err);
         // });
 
         // Notificar a los Alumnos del Grupo
@@ -2480,7 +2675,7 @@ export class JuegoComponent implements OnInit {
   }
 
 
-  
+
   PonOpcion() {
 
     this.listaOpciones.push(this.myForm.value.Opcion);
@@ -2495,7 +2690,7 @@ export class JuegoComponent implements OnInit {
     // tslint:disable-next-line:prefer-for-of
     const pos = this.listaOpciones.indexOf (nombre);
     this.listaOpciones.splice(pos, 1);
-   
+
     this.dataSourceOpciones = new MatTableDataSource(this.listaOpciones);
 
   }
@@ -2508,7 +2703,7 @@ export class JuegoComponent implements OnInit {
   }
 
 
- 
+
   CrearJuegoDeVotacionAOpciones() {
     const juegoDeVotacion = new JuegoDeVotacionAOpciones(
       this.tipoDeJuegoSeleccionado + ' ' + this.tipoDeVotacionSeleccionado,
@@ -2536,8 +2731,8 @@ export class JuegoComponent implements OnInit {
         // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Votación Todos A Uno");
         // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
         //   console.log("Registrado evento: ", res);
-        // }, (err) => { 
-        //   console.log(err); 
+        // }, (err) => {
+        //   console.log(err);
         // });
 
         // Notificar a los Alumnos del Grupo
@@ -2616,8 +2811,8 @@ export class JuegoComponent implements OnInit {
         // let evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, "Juego De Cuestionario de Satisfacción");
         // this.peticionesAPI.CreaEvento(evento).subscribe((res) => {
         //   console.log("Registrado evento: ", res);
-        // }, (err) => { 
-        //   console.log(err); 
+        // }, (err) => {
+        //   console.log(err);
         // });
 
         // Notificar a los Alumnos del Grupo
@@ -2780,7 +2975,7 @@ export class JuegoComponent implements OnInit {
   }
 
 
- 
+
 
 
   ///////////////// FUNCIONES PARA CREAR JUEGO DE CUENTO /////////////
@@ -2792,7 +2987,7 @@ export class JuegoComponent implements OnInit {
       this.modoDeJuegoSeleccionado,
       true);
     juego.descripcion = this.myForm.value.descripcionCuento;
-    //juego.Temporada = 'SI';
+    // juego.Temporada = 'SI';
     juego.criterioprivilegio1 = this.myForm.value.criterioprivilegio1;
     juego.criterioprivilegio2 = this.myForm.value.criterioprivilegio2;
     juego.criterioprivilegio3 = this.myForm.value.criterioprivilegio3;
@@ -2816,7 +3011,7 @@ export class JuegoComponent implements OnInit {
               // tslint:disable-next-line:max-line-length
               console.log('inscribo');
 
-              var alumno = new AlumnoJuegoDeCuento;
+              const alumno = new AlumnoJuegoDeCuento;
               alumno.nivel1 = this.nivel1;
               alumno.nivel2 = this.nivel2;
               alumno.nivel3 = this.nivel3;
@@ -2826,7 +3021,7 @@ export class JuegoComponent implements OnInit {
 
 
 
-              var id = this.juegoDeCuento.id;
+              const id = this.juegoDeCuento.id;
 
               this.peticionesAPI.InscribeAlumnojuegoDeCuento(alumno, id)
                 .subscribe((res) => {
@@ -2856,7 +3051,7 @@ export class JuegoComponent implements OnInit {
   }
 
   public onDate(event): void {
-    var e = event;
+    const e = event;
     console.log(event);
   }
 
@@ -2866,7 +3061,7 @@ export class JuegoComponent implements OnInit {
 
       }, (err) => {
         console.log(err);
-      })
+      });
   }
 
   inscribir(inscribirt) {
@@ -2878,7 +3073,7 @@ export class JuegoComponent implements OnInit {
   RecibeRecursos($event) {
     this.recursoElegido = $event;
     this.tengoRecurso = true;
-    localStorage.setItem("idRecursoLibros", this.recursoElegido[0].toString());
+    localStorage.setItem('idRecursoLibros', this.recursoElegido[0].toString());
   }
 
   cargaRecursos($event) {
@@ -2895,18 +3090,20 @@ export class JuegoComponent implements OnInit {
     this.tengoRecursoCargadoParaGuardar = true;
   }
 
-  avanzoElegirRecursos(){
-    if(!this.avanzo1)
+  avanzoElegirRecursos() {
+    if (!this.avanzo1) {
     this.avanzo1 = true;
-    else
+    } else {
     this.avanzo1 = false;
+    }
   }
 
-  avanzoElegirEspeciales(){
-    if(!this.avanzo2)
+  avanzoElegirEspeciales() {
+    if (!this.avanzo2) {
     this.avanzo2 = true;
-    else
+    } else {
     this.avanzo2 = false;
+    }
   }
 
 
@@ -2944,7 +3141,7 @@ export class JuegoComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Control De Trabajo En Equipo');
       this.calculos.RegistrarEvento(evento);
-     
+
       // Notificar a los Alumnos del Grupo
       // tslint:disable-next-line:max-line-length
       this.comService.EnviarNotificacionGrupo(1, this.grupo.id, `Nuevo Juego de Control De Trabajo En Equipo para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);

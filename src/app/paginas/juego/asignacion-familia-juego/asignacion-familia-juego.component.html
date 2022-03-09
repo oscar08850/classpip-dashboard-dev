@@ -1,0 +1,52 @@
+
+<form *ngIf="familias">
+
+  <!-- <div class = "filter">
+    <mat-form-field style=" width: 50% !important;">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar colección...">
+        <i class="material-icons" matSuffix>search</i>
+      </mat-form-field>
+  </div> -->
+
+  <table align="center" mat-table [dataSource]="datasourceFamilias" class="example-container mat-elevation-z8">
+
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">
+      </th>
+ 
+      <td mat-cell *matCellDef="let row;">
+        <mat-checkbox
+                (click)="$event.stopPropagation()"
+                (change)="Marcar (row) "
+                [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nombreFamilia">
+      <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="text-align: left !important;"> Nombre </th>
+      <td mat-cell *matCellDef="let familia"> {{familia.Nombre}} </td>
+    </ng-container>
+
+    
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        (click)="selection.toggle(row)">
+    </tr>
+
+  </table>
+  <!-- <div class="enColumna">
+    <button style= "width: 50%" *ngIf ="!muestroPublicas" type="button" (click) = "MostrarPublicas()" class="btn Agregar">Mostrar también colecciones públicas</button>
+    <button style= "width: 50%" *ngIf ="muestroPublicas" type="button" (click) = "QuitarPublicas()" class="btn Agregar">Quitar colecciones públicas</button>
+  </div> -->
+
+
+</form>
+
+<div class = "enColumna">
+  <button style = "width: 20%" (click)="AsignarFamiliaAlJuego()" [disabled]="!HaSeleccionado()" type="button" class="btn Aceptar">Asignar familia</button>
+</div>
+
+
+
+

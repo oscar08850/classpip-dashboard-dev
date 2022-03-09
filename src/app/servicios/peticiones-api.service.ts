@@ -15,7 +15,7 @@ import { Profesor, Grupo, Alumno, Matricula, Juego, Punto, Nivel, AlumnoJuegoDeP
         RespuestaJuegoDeCuestionario, JuegoDeVotacionUnoATodos, AlumnoJuegoDeVotacionUnoATodos, Rubrica,
         JuegoDeVotacionTodosAUno, AlumnoJuegoDeVotacionTodosAUno, FamiliaDeImagenesDePerfil,
         CuestionarioSatisfaccion, JuegoDeCuestionarioSatisfaccion, AlumnoJuegoDeCuestionarioSatisfaccion,
-        JuegoDeEncuestaRapida, JuegoDeVotacionRapida, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido, JuegoDePuntos, AlumnoJuegoDeControlDeTrabajoEnEquipo, EquipoJuegoDeCuestionario, Evento, JuegoDeControlDeTrabajoEnEquipo, JuegoDeVotacionAOpciones, AlumnoJuegoDeVotacionAOpciones} from '../clases/index';
+        JuegoDeEncuestaRapida, JuegoDeVotacionRapida, JuegoDeCuestionarioRapido, JuegoDeCogerTurnoRapido, JuegoDePuntos, AlumnoJuegoDeControlDeTrabajoEnEquipo, EquipoJuegoDeCuestionario, Evento, JuegoDeControlDeTrabajoEnEquipo, JuegoDeVotacionAOpciones, AlumnoJuegoDeVotacionAOpciones, Familia} from '../clases/index';
 
 import { Escenario } from '../clases/Escenario';
 import { PuntoGeolocalizable } from '../clases/PuntoGeolocalizable';
@@ -34,7 +34,10 @@ import { EquipoJuegoDeEvaluacion } from '../clases/EquipoJuegoDeEvaluacion';
 import { AlumnoJuegoDeLibro } from '../clases/AlumnoJuegoDeLibro';
 import { RecursoLibro } from '../clases/clasesParaLibros/recursoLibro';
 import { JuegoDeLibros } from '../clases/JuegoDeLibros';
-
+import { AlumnoJuegoDeMemorama } from '../clases/AlumnoJuegoDeMemorama';
+import { EquipoJuegoDeMemorama } from '../clases/EquipoJuegoDeMemorama';
+import { JuegoMEMORAMA } from '../clases/JuegoMemorama';
+import{Carta} from 'src/app/clases/Carta';
 
 @Injectable({
   providedIn: 'root'
@@ -165,6 +168,17 @@ export class PeticionesAPIService {
   private APIUrlJuegoDeControlDeTrabajoEnEquipo = this.host + ':3000/api/juegosDeControlDeTrabajoEnEquipo';
   private APIUrlAlumnoJuegoDeControlDeTrabajoEnEquipo = this.host + ':3000/api/alumnosJuegoDeControlDeTrabajoEnEquipo';
   private APIUrlEventos = this.host + ':3000/api/Eventos';
+
+  private APIUrlAlumnoJuegoDeMemorama = this.host + ':3000/api/alumnosJuegoDeMemorama';
+  private APIUrlEquipoJuegoDeMemorama = this.host + ':3000/api/equiposJuegoDeMemorama';
+  private APIURLJuegoDeMemorama = this.host + ':3000/api/juegosDeMemorama'
+  private APIUrlFamiliasMemorama = this.host + ':3000/api/familiasMemorama';
+  private APIUrlCartaMemorama = this.host + ':3000/api/cartasMemorama';
+  // Para cargar y descargar imagenes
+  private APIUrlImagenesCartasMemorama = this.host + ':3000/api/imagenes/ImagenesCartasMemorama';
+  private APIUrlImagenesFamiliaMemorama = this.host + ':3000/api/imagenes/ImagenesFamiliasMemorama';
+
+
 
   constructor(
     private http: HttpClient,
@@ -2433,6 +2447,144 @@ public ModificaInscripcionAlumnoJuegoDeVotacionAOpciones(inscripcion: AlumnoJueg
   public BorraEvento(eventoId: number): Observable<Evento> {
     return this.http.delete<any>(this.APIUrlEventos + '/' + eventoId);
   } 
+
+   ///////////////////////////////////////////// GESTION JUEGO MEMORAMA //////////////////////////////////////////////
+
+    // SE USA PARA EDITAR LA COLECCIÓN DEL PROFESOR. AMBOS IDENTIFICADORES LOS PASAMOS COMO PARÁMETRO
+
+    public CreaFamilia(familia: any, profesorId: number): Observable<any> {
+      return this.http.post<any>(this.APIUrlProfesores + '/' + profesorId + '/familiasMemorama', familia);
+    }
+    public DameFamiliaMemorama(familiaId: number): Observable<any> {
+      return this.http.get<any>(this.APIUrlFamiliasMemorama + '/' + familiaId);
+    }
+    public PonImagenFamiliaMemorama(formData: FormData): Observable<any> {
+      return this.http.post<any>(this.APIUrlImagenesFamiliaMemorama + '/upload', formData);
+    }
+  
+    public DameImagenFamiliaMemorama(imagen: string): Observable<any> {
+      return this.httpImagenes.get(this.APIUrlImagenesFamiliaMemorama + '/download/' + imagen,
+        { responseType: ResponseContentType.Blob });
+    }
+
+    public BorraFamiliaMemorama(familiaId: number, profesorId: number): Observable<any> {
+
+      return this.http.delete<any>(this.APIUrlProfesores + '/' + profesorId + '/familiasMemorama/' + familiaId);
+    }
+  
+    // public PonCartaFamilia(carta: Carta, familiaId: number): Observable<Carta> {
+    //   return this.http.post<Carta>(this.APIUrlFamiliasMemorama + '/' + familiaId + '/cartasMemorama', carta);
+    // }
+
+    public PonCartaFamilia(carta: Carta): Observable<Carta> {
+      return this.http.post<Carta>(this.APIUrlCartaMemorama, carta);
+    }
+  
+    public PonImagenCarta(formData: FormData): Observable<any> {
+      return this.http.post<any>(this.APIUrlImagenesCartasMemorama + '/upload', formData);
+    }
+
+    public DameImagenCarta(imagen: string): Observable<any> {
+      return this.httpImagenes.get(this.APIUrlImagenesCartasMemorama + '/download/' + imagen,
+        { responseType: ResponseContentType.Blob });
+    }
+
+    public ModificaFamilia(familia: Familia): Observable<Familia> {
+      return this.http.put<Familia>(this.APIUrlFamiliasMemorama + '/' + familia.id, familia);
+    }
+  
+    public ModificaCartaFamilia(carta: any, familiaId: number, cartaId: number): Observable<Cromo> {
+      return this.http.put<Cromo>(this.APIUrlFamiliasMemorama + '/' + familiaId + '/cartasMemorama/' + cartaId, carta);
+    }
+  
+    public BorrarCarta(cartaId: number): Observable<any> {
+      return this.http.delete<any>(this.APIUrlCartaMemorama + '/' + cartaId);
+    }
+  
+    public DameCartasFamilia(familiaId: number): Observable<any[]> {
+      return this.http.get<any[]>(this.APIUrlFamiliasMemorama + '/' + familiaId + '/cartasMemorama');
+    }
+  
+    public BorrarImagenFamilia(ImagenFamilia: string): Observable<any> {
+  
+      return this.http.delete<any>(this.APIUrlImagenesFamiliaMemorama + '/files/' + ImagenFamilia);
+    }
+  
+    public BorrarImagenCarta(ImagenCarta: string): Observable<any> {
+      return this.http.delete<any>(this.APIUrlImagenesCartasMemorama + '/files/' + ImagenCarta);
+    }
+
+
+      // SE USA PARA EDITAR LA COLECCIÓN DEL PROFESOR. AMBOS IDENTIFICADORES LOS PASAMOS COMO PARÁMETRO
+    public ModificaFamiliaMemorama(familia: any, profesorId: number, familiaId: number): Observable<Coleccion> {
+      return this.http.put<Coleccion>(this.APIUrlProfesores + '/' + profesorId + '/familiasMemorama/' + familiaId, familia);
+    }
+
+    public DameFamiliasDelProfesor(profesorId: number): Observable<any[]> {
+      return this.http.get<any[]>(this.APIUrlProfesores + '/' + profesorId + '/familiasMemorama');
+    }
+    public DameFamiliasPublicas(): Observable<Familia[]> {
+      return this.http.get<Familia[]>(this.APIUrlFamiliasMemorama
+        + '?filter[where][Publica]=true');
+    }
+  
+
+
+    // SE USA PARA EDITAR UNA CARTA
+  public ModificaCarta(carta: Carta, cartaId:number): Observable<Carta> {
+    return this.http.put<Carta>(this.APIUrlCartaMemorama + '/' + cartaId, carta);
+  }
+
+
+  public DamealumnosjuegoMemorama(juegoid:number): Observable<any>{
+    console.log(this.APIUrlAlumnoJuegoDeMemorama + '?filter[where][juegoDeMemoramaId]='+juegoid);
+    return this.http.get<any>(this.APIUrlAlumnoJuegoDeMemorama + '?filter[where][juegoDeMemoramaId]='+juegoid);
+  }
+
+  public CambiaEstadoJuegoDeMemorama(juego: Juego): Observable<Juego> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.put<Juego>(this.APIURLJuegoDeMemorama + '/' + juego.id , juego);
+  }
+  public BorraJuegoDeMemorama(juegoDeMemoramaId: number): Observable<Juego> {
+    return this.http.delete<Juego>(this.APIURLJuegoDeMemorama + '/' + juegoDeMemoramaId);
+  }
+  
+  
+
+  public CreaJuegoDeMemorama(juego: JuegoMEMORAMA, grupoId: number): Observable<JuegoMEMORAMA> {
+    
+    return this.http.post<JuegoMEMORAMA>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeMemorama', juego);
+  }
+  
+  public DameJuegoDeMemoramaGrupo(grupoId: number): Observable<Juego[]> {
+    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeMemorama');
+  }
+  public BorraInscripcionAlumnoJuegoDeMemorama(inscripcionId: number): any {
+    return this.http.delete<any>(this.APIUrlAlumnoJuegoDeMemorama + '/' + inscripcionId);
+  }
+
+
+  public InscribeAlumnoJuegoDeMemorama(alumnoJuegoDeMemorama: AlumnoJuegoDeMemorama) {
+    return this.http.post<AlumnoJuegoDeMemorama>(this.APIUrlAlumnoJuegoDeMemorama, alumnoJuegoDeMemorama);
+  }
+  
+
+  public DameInfoAlumnosJuegoDeMemorama(juegoDeMemoramaId: number): Observable<any> {
+
+    return this.http.get<any>(this.APIURLJuegoDeMemorama + '/' + juegoDeMemoramaId + '/alumnos');
+  
+  }
+ 
+  public InscribeEquipoJuegoDeMemorama(equipoJuegoDeMemorama: EquipoJuegoDeMemorama) {
+    return this.http.post<EquipoJuegoDeMemorama>(this.APIUrlEquipoJuegoDeMemorama, equipoJuegoDeMemorama);
+
+  }
+
+  
+
+
+
+
 
 
 }

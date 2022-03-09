@@ -286,6 +286,14 @@ import { JuegoDeVotacionAOpcionesSeleccionadoActivoComponent } from './paginas/j
 
 import { JuegoDeVotacionAOpcionesSeleccionadoInactivoComponent }  from './paginas/juego-seleccionado-inactivo/juego-de-votacion-aopciones-seleccionado-inactivo/juego-de-votacion-aopciones-seleccionado-inactivo.component';
 import { EditarRubricaComponent } from './paginas/editar-rubrica/editar-rubrica.component';
+import { CrearFamiliasmemoramaComponent } from './paginas/crear-familiasmemorama/crear-familiasmemorama.component';
+import { MisFamiliasmemoramaComponent } from './paginas/mis-familiasmemorama/mis-familiasmemorama.component';
+import { JuegoDeMemoramaSeleccionadoInactivoComponent } from './paginas/juego-seleccionado-inactivo/juego-de-memorama-seleccionado-inactivo/juego-de-memorama-seleccionado-inactivo.component';
+import { JuegoDeMemoramaSeleccionadoActivoComponent } from './paginas/juego-seleccionado-activo/juego-de-memorama-seleccionado-activo/juego-de-memorama-seleccionado-activo.component';
+import { AsignacionFamiliaJuegoComponent } from './paginas/juego/asignacion-familia-juego/asignacion-familia-juego.component';
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -453,7 +461,12 @@ import { EditarRubricaComponent } from './paginas/editar-rubrica/editar-rubrica.
     ActividadConfigComponent,
     JuegoDeVotacionAOpcionesSeleccionadoActivoComponent,
     JuegoDeVotacionAOpcionesSeleccionadoInactivoComponent,
-    EditarRubricaComponent
+    EditarRubricaComponent,
+    CrearFamiliasmemoramaComponent,
+    MisFamiliasmemoramaComponent,
+    JuegoDeMemoramaSeleccionadoInactivoComponent,
+    JuegoDeMemoramaSeleccionadoActivoComponent,
+    AsignacionFamiliaJuegoComponent
 
   ],
   imports: [

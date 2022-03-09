@@ -229,10 +229,11 @@
                           <img src="../assets/cuentos.png" class = "imagenPanelJuegos" />
                         </div>
                       </div>
-                      <div class = "enColumna"  style = " width:22%">
-                        <div style = "height: 10%"><strong></strong></div>
+                      <div class = "enColumna" (click) = "TipoDeJuegoSeleccionado ('Juego De Memorama')" style = "background: rgb(50, 155, 94);  width:22%">
+                        <div style = "height: 10%"><strong>Juego de Memorama</strong></div>
                         <br>
                         <div style = "height: 40%" >
+                          <img src="../assets/memorama.png" class = "imagenPanelJuegos" />
                         </div>
                       </div>
                 
@@ -454,6 +455,132 @@
                   </mat-step>
 
             </div>
+
+            <!-- ////////////////////////////SI ESCOGEMOS EL JUEGO DE TIPO DE MEMORAMA ////////////////////////////////-->
+
+            <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Memorama' && tengoModo">
+
+              <!-- Aun no se si hare equipos!!!! -->
+              <!-- <mat-step *ngIf="modoDeJuegoSeleccionado  === 'Equipos'">
+                <ng-template matStepLabel><div>Asignación</div></ng-template>
+                <div>
+                  <label class = "LabelStepper">Selecciona el modo de asignación:</label>
+                  <mat-radio-group aria-labelledby="example-radio-group-label" class="radio-group">
+                      <mat-radio-button (click)="modoAsignacion = 'Equipo'" class="radio-button" [value]="'Equipo'" >
+                        <label style="color: black;">Asignacion al equipo</label>
+                      </mat-radio-button>
+                      <mat-radio-button (click)="modoAsignacion = 'Individual'" class="radio-button" [value]="'Individual'">
+                        <label style="color: black;">Asignación individual (los alumnos comparten album con sus compañeros de equipo) </label>
+                      </mat-radio-button>
+                  </mat-radio-group>
+
+                  <span *ngIf = "modoAsignacion" style ="font-weight: bold;color:green;"> Has elegido ... {{modoAsignacion}}</span>
+
+                </div>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!modoAsignacion" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step> -->
+
+                  <!-- TERCER PASO: ASIGNACIÓN DE FAMILIA AL JUEGO -->
+                <mat-step>
+                    <ng-template matStepLabel>
+                      <div>Familia</div>
+                    </ng-template>
+
+                
+                <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona una familia</label>
+              
+                <!-- Nos vamos al componente para asignar la familia -->
+                <app-asignacion-familia-juego (emisorFamilia)="RecibeFamilia ($event)"></app-asignacion-familia-juego>
+                <span *ngIf="tengoFamilia" style="font-weight: bold;color:green;"> Has elegido ...
+                  {{tipoDeJuegoSeleccionado}}: {{familiaSeleccionada.Nombre}} ... {{modoDeJuegoSeleccionado}}
+                </span>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+
+              <!-- DIFICULTAD JUEGO-->
+              <mat-step>
+                <ng-template matStepLabel>Dificultad</ng-template>
+                <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona una Dificultad:</label>
+                
+                <form action="">
+                  <input type="radio" id="radio1" name="dificultad" value="facil" checked > Fácil (4 Cartas/Parejas)<br>
+                  <input type="radio" id="radio2" name="dificultad" value="medio"> Media (5 Cartas/Parejas)<br>
+                  <input type="radio" id="radio3" name="dificultad" value="dificil"> Difícil (6 Cartas/Parejas)
+                </form>
+
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button (click)="RegistraDificultad()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+
+              </mat-step>
+
+                <!-- PUNTOS POR SELECCION DE CARTA -->
+
+              <mat-step>
+                <ng-template matStepLabel><div>Puntuación</div></ng-template>
+                  <!-- casilla para introducir puntuacion que sumamos -->
+                  <mat-form-field>
+                    <mat-label>Introduzca los puntos a sumar por respuesta correcta</mat-label>
+                    <input  matInput formControlName="PuntuacionCorrecta" placeholder="Escriba puntos a sumar" requiered>
+                  </mat-form-field>
+                  <!-- casilla para introducir puntuacion que restamos -->
+                  <mat-form-field>
+                    <mat-label>Introduzca los puntos a restar por respuesta incorrecta</mat-label>
+                    <input  matInput formControlName="PuntuacionIncorrecta" placeholder="Escriba puntos a restar" requiered>
+                  </mat-form-field>
+                    <!-- casilla para introducir tiempo -->
+                    <mat-form-field>
+                      <mat-label>Introduzca el tiempo de duración del juego</mat-label>
+                      <input  matInput formControlName="TiempoDuracion" placeholder="Escriba tiempo límite en segundos" requiered>
+                    </mat-form-field>
+
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button [disabled]="!TengoPuntuaciones()" (click) = "GuardarPuntuacionMemorama()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+
+
+              <!-- CARTAS A ESCOGER -->
+              <mat-step>
+                <ng-template matStepLabel>Seleccion de Cartas</ng-template>
+                <label class="LabelStepper" style = "font-size: larger; font-weight: bolder;">Selecciona {{numerocartas}} Cartas:</label>
+                <div class ="grid-container">
+                <div (click)="CartaSeleccionada(i)" class = "grid-item"  *ngFor="let elem of vectorimagen;let i = index" >
+                  <!-- <div style = "height: 10%"><strong>Juego de Cuentos</strong></div> -->
+                  <br>
+                  <!-- <div > -->
+                    <img class = "imagenes" id="carta{{i}}" [src]="vectorimagen[i]"/>
+                  <!-- </div> -->
+                </div>
+                </div>
+                <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                <button (click)="RegistraCartas()" type="button" class="btn Next" matStepperNext>Siguiente</button>
+
+
+
+              </mat-step>
+
+              <!-- ULTIMO PASO: CREACIÓN DEl JUEGO DE Memorama-->
+              <mat-step>
+                <ng-template matStepLabel>Fin</ng-template>
+                <span *ngIf="tengoFamilia" style="font-weight: bold;color:green;"> Has elegido ...
+                  {{tipoDeJuegoSeleccionado}}: {{familiaSeleccionada.Nombre}} ... {{modoDeJuegoSeleccionado}}
+                </span>
+                <div class="btnCambiarStep">
+                  <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                  <button style="width: 60%" type="button" class="btn Aceptar" (click)="CrearJuegoDeMemorama();">Crear juego de Memorama</button>
+                </div>
+              </mat-step>
+            </div>
+
 
             <!--/////////////////////// SI ESCOGEMOS EL JUEGO DE TIPO CUESTIONARIO //////////////////////////////////-->
             <div *ngIf="tipoDeJuegoSeleccionado === 'Juego De Cuestionario' && tengoModo">

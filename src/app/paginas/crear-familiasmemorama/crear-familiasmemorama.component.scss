@@ -1,0 +1,36 @@
+.enFilaMEMO{
+
+    // border: 5px solid black;
+  
+    display: flex;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    justify-content: space-between;
+    width: 240px;
+    align-items: baseline;
+  }
+  .carta{
+    vertical-align: middle;
+    border-style: none;
+    height: 90px;
+    margin-bottom: 5px;
+    border: 2px solid;
+    border-radius: 10px;
+    
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    padding: 10px;
+  }
+  .grid-item {
+    //background-color: rgba(255, 255, 255, 0.8);
+    //border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 0px;
+    text-align: center;
+  }
+  .imagenes{
+    height: 180px;
+    width:120px;
+  }

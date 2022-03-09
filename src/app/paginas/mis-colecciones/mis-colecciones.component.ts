@@ -199,7 +199,7 @@ Mostrar(coleccion: Coleccion) {
   AbrirDialogoConfirmacionBorrarColeccion(coleccion: Coleccion): void {
     Swal.fire({
       title: 'Eliminar',
-      text: "Estas segura/o de que quieres eliminar el equipo llamado: " + coleccion.Nombre,
+      text: "Estas segura/o de que quieres eliminar la colección: " + coleccion.Nombre,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

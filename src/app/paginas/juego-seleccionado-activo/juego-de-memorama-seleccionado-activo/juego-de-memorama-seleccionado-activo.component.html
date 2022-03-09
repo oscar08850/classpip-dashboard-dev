@@ -1,0 +1,78 @@
+<div class="enFila" style = "width: 80%">
+  <!-- <button type="button" class="btn Info" (click) = Informacion(); routerLink = "informacionJuego">Información<i class="material-icons">info</i></button> -->
+  <!-- <button type="button" class="btn Agregar" (click) = AsignarPuntos(); routerLink = "asignarPuntos">Asignar Puntos<i class="material-icons">add</i></button> -->
+  <button type="button" class="btn Eliminar" (click) = "AbrirDialogoConfirmacionDesactivar()"> Desactivar<i class="material-icons">history</i></button>
+</div>
+
+<form style="width: 100%"  *ngIf="juegoSeleccionado.Modo === 'Individual'">
+
+
+  <mat-form-field style="width: 60%">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro para buscar alumno...">
+      <i class="material-icons" matSuffix>search</i>
+    </mat-form-field>
+
+
+<table style="width: 100%" align="center" mat-table [dataSource]="datasourceAlumno" class="example-container mat-elevation-z8">
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Posición Column -->
+  <ng-container matColumnDef="posicion">
+    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla">  Posición Global </th>
+    <td mat-cell *matCellDef="let alumno"> {{alumno.posicion}} </td>
+  </ng-container>
+
+  <!-- Nombre Alumno Column -->
+  <ng-container matColumnDef="nombreAlumno">
+    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Nombre </th>
+    <td mat-cell *matCellDef="let alumno"> {{alumno.nombre}} </td>
+  </ng-container>
+
+  <!-- Primer Apellido Column -->
+  <ng-container matColumnDef="primerApellido">
+    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Primer Apellido </th>
+    <td mat-cell *matCellDef="let alumno"> {{alumno.primerApellido}} </td>
+  </ng-container>
+
+  <!-- Segundo Apellido Column -->
+  <ng-container matColumnDef="segundoApellido">
+    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Segundo Apellido </th>
+    <td mat-cell *matCellDef="let alumno"> {{alumno.segundoApellido}} </td>
+  </ng-container>
+
+  <!-- Puntos Column -->
+  <ng-container matColumnDef="puntuacion">
+    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Puntos </th>
+    <td mat-cell *matCellDef="let alumno"> {{alumno.puntuacion}} </td>
+  </ng-container>
+
+  <!-- Tiempo Column -->
+  <ng-container matColumnDef="tiempo">
+    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Tiempo </th>
+    <td mat-cell *matCellDef="let alumno"> {{alumno.tiempo}} </td>
+  </ng-container>
+
+
+  <!-- Nivel Column -->
+  <!-- <ng-container matColumnDef="nivel">
+    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 15%"> Nivel </th>
+    <td mat-cell *matCellDef="let alumno"> {{alumno.nivel}} </td>
+  </ng-container> -->
+
+      <!-- More Column -->
+  <!-- <ng-container matColumnDef=" ">
+    <th mat-header-cell *matHeaderCellDef class="tituloColumnaTabla" style="width: 10%"></th>
+    <td mat-cell *matCellDef="let alumno">
+        <button (click) = "AccederAlumno(alumno)" routerLink = "informacionAlumnoJuego" mat-icon-button matTooltip="Ver progreso de {{alumno.nombre}} en el juego">
+            <i class="material-icons">more_horiz</i>
+        </button>
+    </td>
+  </ng-container> -->
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumnsAlumnos; sticky: true"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumnsAlumnos;"></tr>
+
+</table>
+</form>
