@@ -137,7 +137,7 @@ export class JuegoComponent implements OnInit {
   seleccionTipoJuego: ChipColor[] = [
 
     { nombre: 'Juego De Cuentos', color: 'primary' },
-     { nombre: 'Juego De Competición', color: 'warn' },
+    { nombre: 'Juego De Competición', color: 'warn' },
     { nombre: 'Juego De Avatar', color: 'primary' },
     { nombre: 'Juego De Cuestionario', color: 'accent' },
     { nombre: 'Juego De Geocaching', color: 'warn' },
@@ -148,6 +148,7 @@ export class JuegoComponent implements OnInit {
     {nombre: 'Juego De Evaluación', color: 'accent'},
     {nombre: 'Juego De Cuentos', color: 'primary'},
     {nombre: 'Control de trabajo en equipo', color: 'primary'},
+    {nombre: 'Juego de Lingo', color: 'primary'},
   ];
   seleccionModoJuego: ChipColor[] = [
     { nombre: 'Individual', color: 'primary' },
@@ -1447,8 +1448,8 @@ export class JuegoComponent implements OnInit {
     this.puntuacionIncorrecta = this.myForm.value.PuntuacionIncorrecta;
     this.TiempoDuracion = this.myForm.value.TiempoDuracion;
   }
-  RegistraCartas() {
 
+  RegistraCartas() {
     console.log('CARTAS QUE VAN A SER USADAS EN EL JUEGO:', this.vectorcartaseleccionadas);
     for (let i = 0; this.vectorcartaseleccionadas.length > i; i++) {
        this.idcartas.push(this.vectorcartaseleccionadas[i].id);
