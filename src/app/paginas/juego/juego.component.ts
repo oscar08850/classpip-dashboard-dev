@@ -28,8 +28,11 @@ import {
   JuegoDeControlDeTrabajoEnEquipo, AlumnoJuegoDeControlDeTrabajoEnEquipo, EquipoJuegoDeCuestionario, Evento, AlumnoJuegoDeCuento, JuegoDeCuento, RecursoCuento, RecursoCuentoJuego, JuegoDeVotacionAOpciones, AlumnoJuegoDeVotacionAOpciones
 } from '../../clases/index';
 
+import {JuegoLINGO} from 'src/app/clases/JuegoLingo';
+
 
 import { JuegoMEMORAMA } from 'src/app/clases/JuegoMemorama';
+
 
 // Services
 import { SesionService, CalculosService, PeticionesAPIService, ComServerService } from '../../servicios/index';
@@ -1457,6 +1460,12 @@ export class JuegoComponent implements OnInit {
 
     console.log(this.idcartas);
 
+  }
+
+  CrearJuegodeLingo(){
+    let JuegoDeLingo: JuegoLINGO;
+
+    //JuegoLingoEntrar = new JuegoLINGO(this.)
   }
 
   CrearJuegoDeMemorama() {

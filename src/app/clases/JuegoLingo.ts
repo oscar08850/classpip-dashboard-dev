@@ -1,4 +1,5 @@
-export class JuegoDeLingo { //Juego de evaluacion
+export class JuegoLINGO 
+{ //Juego de evaluacion
     id: number;
     NombreJuego: string;
     Palabra: string;
