@@ -14,4 +14,4 @@ ng serve
 ```
 A partir de ese momento puede accederse al Dashboard conectandose a http://localhost:4200
 
-IMPORTANTE: Para poner en marcha Classpip-dashboard es necesario tener en marcha Classpip-server y Classpip-API.
+IMPORTANTE: Para poner en marcha Classpip-dashboard es necesario tener en marcha Classpip-server y Classpip-API. 
