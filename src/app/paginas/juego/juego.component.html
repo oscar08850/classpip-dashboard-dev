@@ -510,25 +510,37 @@
                   <ng-template matStepLabel>
                     <div>Palabra</div>
                   </ng-template>
-                  
+
                   <!-- casilla para introducir tiempo -->
                   <mat-form-field>
+                    <!--  -->
                     <mat-label>Introduzca la palabra secreta: </mat-label>
-                    <input matInput formControlName="TiempoDuracion" placeholder="Palabra secreta"
-                      requiered>
+                    <input matInput formControlName="PalabraSecreta" placeholder="Palabra secreta" requiered>
                   </mat-form-field>
 
                   <!-- casilla para introducir puntuacion que restamos -->
                   <mat-form-field>
                     <mat-label>Introduzca el número de intentos que tendrá el alumno</mat-label>
-                    <input matInput formControlName="PuntuacionIncorrecta" placeholder="Número de intentos"
-                      requiered>
+                    <input matInput formControlName="NumeroDeIntentos" placeholder="Número de intentos" requiered>
                   </mat-form-field>
 
                   <div class="btnCambiarStep">
                     <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
-                    <button [disabled]="!TengoPuntuaciones()" (click)="GuardarPuntuacionMemorama()" type="button"
+                    <button [disabled]="!TengoDatosLingo()" (click)="GuardarPuntuacionLingo()" type="button"
                       class="btn Next" matStepperNext>Siguiente</button>
+                  </div>
+                </mat-step>
+
+                <!-- ULTIMO PASO: CREACIÓN DEl JUEGO DE LINGO-->
+                <mat-step>
+                  <ng-template matStepLabel>Fin</ng-template>
+                  <span *ngIf="tengoFamilia" style="font-weight: bold;color:green;"> Has elegido ...
+                    {{tipoDeJuegoSeleccionado}}: ... {{modoDeJuegoSeleccionado}}
+                  </span>
+                  <div class="btnCambiarStep">
+                    <button type="button" class="btn Back" matStepperPrevious>Atrás</button>
+                    <button style="width: 60%" type="button" class="btn Aceptar" (click)="CrearJuegoDeLingo();">Crear
+                      juego de Lingo</button>
                   </div>
                 </mat-step>
 

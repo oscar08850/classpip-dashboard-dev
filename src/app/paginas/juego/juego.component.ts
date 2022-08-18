@@ -175,6 +175,9 @@ export class JuegoComponent implements OnInit {
   startatpicker;
   modoAsignacion;
 
+  //Lingo
+  PalabraSecreta = ""
+  NumeroDeIntentos
 
   // información para crear un juego de cuestionario
   cuestionario: Cuestionario;
@@ -504,6 +507,8 @@ export class JuegoComponent implements OnInit {
       PuntuacionCorrecta: ['', Validators.required],
       PuntuacionIncorrecta: ['', Validators.required],
       TiempoDuracion: ['', Validators.required],
+      PalabraSecreta: ['', Validators.required],
+      NumeroDeIntentos: ['', Validators.required],
       NumeroDeJornadas: ['', Validators.required],
       criterioPrivilegioComplemento1: ['', Validators.required],
       criterioPrivilegioComplemento2: ['', Validators.required],
@@ -1468,12 +1473,42 @@ export class JuegoComponent implements OnInit {
     //JuegoLingoEntrar = new JuegoLINGO(this.)
   }
 
+  GuardarPuntuacionLingo() {
+    this.PalabraSecreta = this.myForm.value.PalabraSecreta;
+    this.NumeroDeIntentos = this.myForm.value.NumeroDeIntentos;
+  }
+
+  CrearJuegoDeLingo() {
+
+    let JuegoDeLingo: JuegoLINGO;
+
+    // tslint:disable-next-line:max-line-length
+    //JuegoDeLingo = new JuegoLINGO (this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.familiaSeleccionada.id, true, this.nombreDelJuego, this.idcartas, this.puntuacionCorrecta, this.puntuacionIncorrecta, this.Mododificultad, this.TiempoDuracion);
+    
+    //JuegoDeLingo = new JuegoLINGO (this.tipoDeJuegoSeleccionado, this.PalabraSecreta)
+
+    JuegoDeLingo = new JuegoLINGO(this.modoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.PalabraSecreta, true, 6, 5)
+  
+    console.log('JuegoMemoramaaentrtrar:', JuegoDeLingo);
+
+  
+  }
+
+
+
+
   CrearJuegoDeMemorama() {
 
     let JuegoMemoramaaentrtrar: JuegoMEMORAMA;
 
+    console.log("AQUI EMPIEZAN LAS VARIABLES")
+    console.log(this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.familiaSeleccionada.id, true, this.nombreDelJuego, this.idcartas, this.puntuacionCorrecta, this.puntuacionIncorrecta, this.Mododificultad, this.TiempoDuracion);
+    console.log("AQUI ACABAN LAS VARIABLES")
+
     // tslint:disable-next-line:max-line-length
     JuegoMemoramaaentrtrar = new JuegoMEMORAMA(this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.familiaSeleccionada.id, true, this.nombreDelJuego, this.idcartas, this.puntuacionCorrecta, this.puntuacionIncorrecta, this.Mododificultad, this.TiempoDuracion);
+
+
 
     console.log('JuegoMemoramaaentrtrar:');
     console.log('JuegoMemoramaaentrtrar:', JuegoMemoramaaentrtrar);
@@ -1609,6 +1644,15 @@ export class JuegoComponent implements OnInit {
   // }
 
   // Para habilitar el boton de guardar puntuaciones
+
+  TengoDatosLingo() {
+    if (this.myForm.value.PalabraSecreta === '' || this.myForm.value.NumeroDeIntentos === '') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
 
   TengoPuntuaciones() {
     if (this.myForm.value.PuntuacionCorrecta === '' || this.myForm.value.PuntuacionIncorrecta === '') {
