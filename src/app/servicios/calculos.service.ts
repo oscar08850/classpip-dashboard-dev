@@ -28,6 +28,7 @@ import { EquipoJuegoDeVotacionUnoATodos } from '../clases/EquipoJuegoDeVotacionU
 import { TablaEquipoJuegoDeVotacionUnoATodos } from '../clases/TablaEquipoJuegoDeVotacionUnoATodos';
 
 import { TablaAlumnoJuegoDeMemorama } from '../clases/TablaAlumnoJuegoDeMemorama';
+import { TablaAlumnoJuegoDeLingo } from '../clases/TablaAlumnoJuegoDeLingo';
 
 
 @Injectable({

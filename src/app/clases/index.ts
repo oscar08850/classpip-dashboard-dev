@@ -111,4 +111,9 @@ export * from './Carta';
 export * from './Familia';
 export * from './JuegoMemorama';
 export * from './EquipoJuegoDeMemorama';
-export * from './TablaAlumnoJuegoDeMemorama';
+export * from './TablaAlumnoJuegoDeMemorama'; 
+
+//export * from './AlumnoJuegoDeLingo';
+export * from './JuegoLingo';
+//export * from './Lingo';
+export * from './TablaAlumnoJuegoDeLingo'; 

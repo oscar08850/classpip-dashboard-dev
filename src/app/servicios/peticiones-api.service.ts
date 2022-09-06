@@ -37,6 +37,9 @@ import { JuegoDeLibros } from '../clases/JuegoDeLibros';
 import { AlumnoJuegoDeMemorama } from '../clases/AlumnoJuegoDeMemorama';
 import { EquipoJuegoDeMemorama } from '../clases/EquipoJuegoDeMemorama';
 import { JuegoMEMORAMA } from '../clases/JuegoMemorama';
+import { AlumnoJuegoDeLingo } from '../clases/AlumnoJuegoDeLingo';
+//import { EquipoJuegoDeLingo } from '../clases/EquipoJuegoDeLingo';
+import { JuegoLINGO } from '../clases/JuegoLingo';
 import{Carta} from 'src/app/clases/Carta';
 
 @Injectable({
@@ -177,6 +180,11 @@ export class PeticionesAPIService {
   // Para cargar y descargar imagenes
   private APIUrlImagenesCartasMemorama = this.host + ':3000/api/imagenes/ImagenesCartasMemorama';
   private APIUrlImagenesFamiliaMemorama = this.host + ':3000/api/imagenes/ImagenesFamiliasMemorama';
+
+
+  private APIUrlAlumnoJuegoDeLingo = this.host + ':3000/api/alumnosJuegoDeLingo';
+  private APIUrlEquipoJuegoDeLingo = this.host + ':3000/api/equiposJuegoDeLingo';
+  private APIURLJuegoDeLingo = this.host + ':3000/api/juegosDeLingo'
 
 
 
@@ -2549,7 +2557,15 @@ public ModificaInscripcionAlumnoJuegoDeVotacionAOpciones(inscripcion: AlumnoJueg
     return this.http.delete<Juego>(this.APIURLJuegoDeMemorama + '/' + juegoDeMemoramaId);
   }
   
-  
+  public CreaJuegoDeLingo(juego: JuegoLINGO, grupoId: number): Observable<JuegoLINGO>{
+    console.log("Estamos en la función CreaJuegoDeLingo:")
+
+    console.log("Esto es el JuegoLINGO:" + JuegoLINGO)
+    console.log("Esto es el grupoId:" + grupoId)
+    console.log("Esto es this.APIUrlGrupos:" + this.APIUrlGrupos)
+
+    return this.http.post<JuegoLINGO>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeLingo', juego)
+  }
 
   public CreaJuegoDeMemorama(juego: JuegoMEMORAMA, grupoId: number): Observable<JuegoMEMORAMA> {
     
@@ -2568,6 +2584,9 @@ public ModificaInscripcionAlumnoJuegoDeVotacionAOpciones(inscripcion: AlumnoJueg
     return this.http.post<AlumnoJuegoDeMemorama>(this.APIUrlAlumnoJuegoDeMemorama, alumnoJuegoDeMemorama);
   }
   
+  public InscribeAlumnoJuegoDeLingo(AlumnoJuegoDeLingo: AlumnoJuegoDeLingo) {
+    return this.http.post<AlumnoJuegoDeLingo>(this.APIUrlAlumnoJuegoDeLingo, AlumnoJuegoDeLingo);
+  }
 
   public DameInfoAlumnosJuegoDeMemorama(juegoDeMemoramaId: number): Observable<any> {
 
@@ -2580,7 +2599,13 @@ public ModificaInscripcionAlumnoJuegoDeVotacionAOpciones(inscripcion: AlumnoJueg
 
   }
 
-  
+
+  /*
+  public InscribeEquipoJuegoDeLingo(equipoJuegoDeLingo: EquipoJuegoDeLingo) {
+    return this.http.post<EquipoJuegoDeLingo>(this.APIUrlEquipoJuegoDeLingo, equipoJuegoDeLingo);
+  }
+
+  */
 
 
 
