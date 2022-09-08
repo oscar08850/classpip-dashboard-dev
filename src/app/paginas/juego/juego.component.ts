@@ -1514,7 +1514,7 @@ export class JuegoComponent implements OnInit {
               .subscribe();
           }
         }
-        Swal.fire('Juego de Memorama creado correctamente', ' ', 'success');
+        Swal.fire('Juego de Lingo creado correctamente', ' ', 'success');
 
         // El juego se ha creado como activo. Lo añadimos a la lista correspondiente
         if (this.juegosActivos === undefined) {
