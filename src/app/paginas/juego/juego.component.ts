@@ -1483,7 +1483,7 @@ export class JuegoComponent implements OnInit {
 
     //JuegoDeLingo = new JuegoLINGO (this.tipoDeJuegoSeleccionado, this.PalabraSecreta)
 
-    JuegoDeLingo = new JuegoLINGO(this.modoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.PalabraSecreta, true, 6, 5)
+    JuegoDeLingo = new JuegoLINGO(this.modoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.PalabraSecreta, true, this.PalabraSecreta.length, this.NumeroDeIntentos, this.nombreDelJuego)
 
     console.log('JuegoLingoentrar:', JuegoDeLingo);
 

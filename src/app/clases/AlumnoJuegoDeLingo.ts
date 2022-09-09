@@ -9,7 +9,7 @@ export class AlumnoJuegoDeLingo {
   juegoDeLingoId: number;
 
 
-  constructor(Contestado?: boolean, juegodeLingoId?: number, alumnoId?: number) {
+  constructor(Contestado?: boolean, alumnoId?: number, juegodeLingoId?: number) {
       this.Contestado = Contestado;
       this.alumnoId = alumnoId;
       this.juegoDeLingoId = juegodeLingoId;

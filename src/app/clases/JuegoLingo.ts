@@ -20,17 +20,18 @@ export class JuegoLINGO {
     Palabra: string,
     JuegoActivo: boolean,
     letras: number,
-    intentos: number
+    intentos: number,
+    NombreJuego: string
   ) {
-    this.NombreJuego = "TestNombreJuego";
+    this.NombreJuego = NombreJuego;
     this.palabraSecreta = Palabra;
     this.Tipo = Tipo;
     this.Modo = Modo;
     this.JuegoActivo = JuegoActivo;
     this.letras = letras;
     this.intentos = intentos;
-    this.JuegoTerminado = true;
-     //this.profesorId = profesorId;
+    this.JuegoTerminado = false;
+    //this.profesorId = profesorId;
     //this.grupoId = grupoId;
   }
 }
