@@ -2567,6 +2567,10 @@ public ModificaInscripcionAlumnoJuegoDeVotacionAOpciones(inscripcion: AlumnoJueg
     return this.http.post<JuegoLINGO>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeLingo', juego)
   }
 
+  public DameJuegoDeLingoGrupo(grupoId: number): Observable<Juego[]> {
+    return this.http.get<Juego[]>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeLingo');
+  }
+
   public CreaJuegoDeMemorama(juego: JuegoMEMORAMA, grupoId: number): Observable<JuegoMEMORAMA> {
     
     return this.http.post<JuegoMEMORAMA>(this.APIUrlGrupos + '/' + grupoId + '/juegosDeMemorama', juego);

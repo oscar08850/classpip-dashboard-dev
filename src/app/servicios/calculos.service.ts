@@ -595,6 +595,22 @@ private async EliminarMatriculas(): Promise<any> {
     }
 
 
+    console.log ('vamos a por los juegos de LINGO del grupo: ' + grupoID);
+    try {
+      juegos = await this.peticionesAPI.DameJuegoDeLingoGrupo(grupoID).toPromise();
+      console.log('He recibido los juegos de LINGO');
+      console.log(juegos);
+      for (let i = 0; i < juegos.length; i++) {
+        if (juegos[i].JuegoActivo === true) {
+          juegosActivos.push(juegos[i]);
+        } else {
+          juegosInactivos.push(juegos[i]);
+        }
+      }
+    } catch {
+      console.log ('No hay juegos de LINGO en el grupo: ' + grupoID);
+    }
+
     console.log ('vamos a por los juegos de competicion liga del grupo: ' + grupoID);
     try {
       juegos = await this.peticionesAPI.DameJuegoDeCompeticionLigaGrupo(grupoID).toPromise();
