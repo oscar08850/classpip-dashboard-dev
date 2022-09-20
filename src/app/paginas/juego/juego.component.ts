@@ -1497,7 +1497,8 @@ export class JuegoComponent implements OnInit {
         this.juegoCreado = true;
 
         // Registrar la Creación del Juego
-        const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, 'Juego De Lingo');
+        const evento: Evento = new Evento(1, new Date(), this.profesorId, undefined, undefined, this.juego.id, this.nombreDelJuego, this.tipoDeJuegoSeleccionado);
+        console.log("El tipo de juego es: (propierty) " + this.tipoDeJuegoSeleccionado);
         this.calculos.RegistrarEvento(evento);
         this.comService.EnviarNotificacionGrupo(1, this.grupo.id, `Nuevo Juego de Lingo para el Grupo ${this.grupo.Nombre}: ${this.nombreDelJuego}`);
 
