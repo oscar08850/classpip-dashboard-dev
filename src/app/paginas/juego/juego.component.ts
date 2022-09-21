@@ -1483,7 +1483,7 @@ export class JuegoComponent implements OnInit {
 
     //JuegoDeLingo = new JuegoLINGO (this.tipoDeJuegoSeleccionado, this.PalabraSecreta)
 
-    JuegoDeLingo = new JuegoLINGO(this.modoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.PalabraSecreta, true, this.PalabraSecreta.length, this.NumeroDeIntentos, this.nombreDelJuego)
+    JuegoDeLingo = new JuegoLINGO(this.tipoDeJuegoSeleccionado, this.modoDeJuegoSeleccionado, this.PalabraSecreta, true, this.PalabraSecreta.length, this.NumeroDeIntentos, this.nombreDelJuego)
 
     console.log('JuegoLingoentrar:', JuegoDeLingo);
 
@@ -1510,10 +1510,13 @@ export class JuegoComponent implements OnInit {
 
           }
         } else {
+          Swal.fire('Juego de Lingo no dispone actualmente de Juego de Equipo', ' ', 'success');
+          /*
           for (let i = 0; i < this.equiposGrupo.length; i++) {
             this.peticionesAPI.InscribeEquipoJuegoDeMemorama(new EquipoJuegoDeMemorama(this.equiposGrupo[i].id, this.juego.id))
               .subscribe();
           }
+          */
         }
         Swal.fire('Juego de Lingo creado correctamente', ' ', 'success');
 
